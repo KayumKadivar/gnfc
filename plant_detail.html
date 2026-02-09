@@ -62,6 +62,8 @@
 <body
   class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-grafana-blue selection:text-white">
 
+
+  <script src="js/theme_manager.js"></script>
   <script src="js/sidebar.js"></script>
   <div id="sidebar-container"></div>
   <script>
@@ -84,56 +86,41 @@
       </div>
 
       <div class="flex items-center gap-3">
+        <div class="relative hidden md:block">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
+          <input type="text" placeholder="Global Search..."
+            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
+        </div>
         <button onclick="window.location.href='technician_logbook.html'"
           class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
           <i class="ph-bold ph-arrow-left"></i> Back
         </button>
-        <div
-          class="flex items-center gap-2 bg-dark-panel border border-dark-border px-3 py-1.5 rounded-sm text-xs font-medium text-grafana-orange">
-          <i class="ph-fill ph-calendar-blank"></i>
-          <span id="current-date">--/--/----</span>
-        </div>
       </div>
     </header>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-dark-bg">
+    <div class="p-4 bg-dark-bg">
 
       <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm">
-        <div
-          class="p-4 border-b border-dark-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div class="flex items-center gap-4">
-            <div
-              class="w-10 h-10 rounded bg-gradient-to-br from-grafana-blue/20 to-grafana-blue/5 border border-grafana-blue/30 flex items-center justify-center text-grafana-blue">
-              <i class="ph-fill ph-factory text-xl"></i>
-            </div>
-            <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">ACETIC ACID</h2>
-              <div class="flex items-center gap-2 mt-0.5">
-                <span class="w-2 h-2 rounded-full bg-grafana-green animate-pulse"></span>
-                <span class="text-xs text-dark-muted font-mono">UNIT: AA-01</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="relative w-full md:w-64">
-            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted"></i>
-            <input type="text" placeholder="Search Tag / O.T."
-              class="w-full pl-9 pr-4 py-1.5 bg-dark-bg border border-dark-border rounded-sm text-sm text-white placeholder-dark-muted focus:outline-none focus:border-grafana-blue transition-colors">
-          </div>
-        </div>
-
         <div class="bg-dark-panel border-b border-dark-border px-2">
           <div class="flex overflow-x-auto gap-1 py-2 scrollbar-none">
             <button onclick="window.location.href='job_types.html'"
-               class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type Of Job</button>
+              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type
+              Of Job</button>
             <button onclick="window.location.href='instrument_types.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type Of Inst</button>
+              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type
+              Of Inst</button>
             <button onclick="window.location.href='remark_reports.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Remark Report</button>
+              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Remark
+              Report</button>
             <button onclick="window.location.href='tagwise_filter.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">TagWise Filter</button>
+              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">TagWise
+              Filter</button>
             <button onclick="window.location.href='monthly_report.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Monthly Report</button>
+              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Monthly
+              Report</button>
+            <button onclick="window.location.href='job_history.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Job
+              History</button>
             <button
               class="px-3 py-1.5 text-xs font-bold text-grafana-red border border-transparent hover:border-grafana-red/50 hover:bg-grafana-red/10 rounded-sm transition-colors whitespace-nowrap flex items-center gap-1">
               <i class="ph-bold ph-siren"></i> EMG Call
@@ -252,26 +239,26 @@
     // Plant Mock Data
     const plantLogData = {
       today: [
-        { sr: '01', date: '06/02/2026', area: 'FA', tag: 'N.A', tagSubtitle: 'Checking', jobType: 'Routine checkup', jobRef: 'Ref:PHS : 06/02/2026', tech: 'NRK', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks:'' },
+        { sr: '01', date: '06/02/2026', area: 'FA', tag: 'N.A', tagSubtitle: 'Checking', jobType: 'Routine checkup', jobRef: 'Ref:PHS : 06/02/2026', tech: 'NRK', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks: '' },
 
-        { sr: '02', date: '06/02/2026', area: 'MF', tag: 'Loop-202', tagSubtitle: 'PT5087K', jobType: 'Pressure transmitter', jobRef: 'By:AMS : 06/02/2026', jobLabel: 'PM', tech: 'DPB', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks:'' },
+        { sr: '02', date: '06/02/2026', area: 'MF', tag: 'Loop-202', tagSubtitle: 'PT5087K', jobType: 'Pressure transmitter', jobRef: 'By:AMS : 06/02/2026', jobLabel: 'PM', tech: 'DPB', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks: '' },
 
-        { sr: '03', date: '06/02/2026', area: 'DCS', tag: 'N.A', tagSubtitle: 'NOTAG', jobType: 'ESD System', jobRef: 'By:PHB : 06/02/2026', jobLabel: 'PM', tech: 'NRK', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks:'' }
+        { sr: '03', date: '06/02/2026', area: 'DCS', tag: 'N.A', tagSubtitle: 'NOTAG', jobType: 'ESD System', jobRef: 'By:PHB : 06/02/2026', jobLabel: 'PM', tech: 'NRK', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks: '' }
       ],
       tomorrow: [],
       prev: [
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green',remarks:'' },
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks:'' },
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks:'' },
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks:'Job completed as requested' },
+        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
+        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
+        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
+        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
       ],
       weekly: [
-        { sr: '01', date: '05/02/2026', area: 'FA', tag: 'FT5021A', tagSubtitle: 'Calib', jobType: 'Routine Check', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Routine checkup completed.', engineer: '', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks:'Job completed as requested' },
-        { sr: '02', date: '04/02/2026', area: 'MF', tag: 'PT5087K', tagSubtitle: 'PT5082', jobType: 'Calibration', jobRef: 'Ref:PHS', tech: 'DPB', desc: 'Calibration work completed.', engineer: 'DPB', engInitials: 'AMS', status: '✓ OVER', statusColor: 'green',remarks:'' },
-        { sr: '01', date: '03/02/2026', area: 'DCS', tag: 'SYS-1', tagSubtitle: 'DCS', jobType: 'Backups', jobRef: 'Ref:System', tech: 'IT', desc: 'System backup taken.', engineer: 'IT', engInitials: 'IT', status: '✓ OVER', statusColor: 'green',remarks:'Job completed as requested' }
+        { sr: '01', date: '05/02/2026', area: 'FA', tag: 'FT5021A', tagSubtitle: 'Calib', jobType: 'Routine Check', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Routine checkup completed.', engineer: '', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
+        { sr: '02', date: '04/02/2026', area: 'MF', tag: 'PT5087K', tagSubtitle: 'PT5082', jobType: 'Calibration', jobRef: 'Ref:PHS', tech: 'DPB', desc: 'Calibration work completed.', engineer: 'DPB', engInitials: 'AMS', status: '✓ OVER', statusColor: 'green', remarks: '' },
+        { sr: '01', date: '03/02/2026', area: 'DCS', tag: 'SYS-1', tagSubtitle: 'DCS', jobType: 'Backups', jobRef: 'Ref:System', tech: 'IT', desc: 'System backup taken.', engineer: 'IT', engInitials: 'IT', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' }
       ],
       monthly: [
-        { sr: '01', date: '01/02/2026', area: 'DCS', tag: 'SYS-MAIN', tagSubtitle: 'SYS', jobType: 'Monthly Maint', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Full system backup taken.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks:'' },
+        { sr: '01', date: '01/02/2026', area: 'DCS', tag: 'SYS-MAIN', tagSubtitle: 'SYS', jobType: 'Monthly Maint', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Full system backup taken.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
         { sr: '02', date: '25/01/2026', area: 'UTIL', tag: 'Air', tagSubtitle: 'Comp', jobType: 'Service', jobRef: 'Ref:Mec', tech: 'Mec', desc: 'Air compressor service.', engineer: 'ME', engInitials: 'XY', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested.' }
       ]
     };

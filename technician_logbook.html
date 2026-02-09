@@ -17,6 +17,7 @@
 
 <body class="bg-[#111217] text-[#c7d0d9] font-sans h-screen flex overflow-hidden">
 
+  <script src="js/theme_manager.js"></script>
   <script src="js/sidebar.js"></script>
   <div id="sidebar-container"></div>
   <script>renderSidebar('technician_logbook');</script>
@@ -30,11 +31,18 @@
         <span>Technician's Logbook</span>
       </div>
 
-      <button onclick="window.history.back()"
-        class="flex items-center gap-2 bg-[#181b1f] border border-[#2c3235] text-sm px-3 py-1.5 rounded-sm hover:text-white transition">
-        <i class="ph-bold ph-arrow-left"></i>
-        Back
-      </button>
+      <div class="flex items-center gap-2">
+        <div class="relative hidden md:block mr-1">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#8e8e9e] text-xs"></i>
+          <input type="text" placeholder="Global Search..."
+            class="bg-[#181b1f] border border-[#2c3235] text-[#c7d0d9] text-xs rounded-sm pl-8 pr-3 h-8 focus:border-[#5794F2] focus:outline-none transition-colors w-64 placeholder-[#8e8e9e]">
+        </div>
+        <button onclick="window.history.back()"
+          class="flex items-center gap-2 bg-[#181b1f] border border-[#2c3235] text-sm px-3 py-1.5 rounded-sm hover:text-white transition">
+          <i class="ph-bold ph-arrow-left"></i>
+          Back
+        </button>
+      </div>
 
     </header>
 
@@ -85,40 +93,44 @@
       </div>
 
       <div class="mt-8 mb-4">
-        
+
         <div class="flex items-center justify-center relative mb-6">
-            <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-[#2c3235]"></div>
-            </div>
-            <div class="relative bg-[#111217] px-6 py-1">
-                <span class="text-[#5794F2] font-bold uppercase tracking-[0.2em] text-sm">
-                    SHIFT LOGBOOK (OFFICER)
-                </span>
-            </div>
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-[#2c3235]"></div>
+          </div>
+          <div class="relative bg-[#111217] px-6 py-1">
+            <span class="text-[#5794F2] font-bold uppercase tracking-[0.2em] text-sm">
+              SHIFT LOGBOOK (OFFICER)
+            </span>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            
-            <button class="h-12 bg-[#73BF69]/10 border border-[#73BF69] text-[#73BF69] font-bold text-sm rounded-sm uppercase tracking-widest hover:bg-[#73BF69]/20 transition-all shadow-[0_0_10px_rgba(115,191,105,0.1)]">
-                TODAY
-            </button>
 
-            <button class="h-12 bg-[#181b1f] border border-[#2c3235] text-[#8e8e9e] font-bold text-sm rounded-sm uppercase tracking-widest hover:border-[#5794F2] hover:text-white transition-all">
-                PREV DAY
-            </button>
+          <button
+            class="h-12 bg-[#73BF69]/10 border border-[#73BF69] text-[#73BF69] font-bold text-sm rounded-sm uppercase tracking-widest hover:bg-[#73BF69]/20 transition-all shadow-[0_0_10px_rgba(115,191,105,0.1)]">
+            TODAY
+          </button>
 
-            <button class="h-12 bg-[#181b1f] border border-[#2c3235] text-[#8e8e9e] font-bold text-sm rounded-sm uppercase tracking-widest hover:border-[#5794F2] hover:text-white transition-all">
-                WEEKLY
-            </button>
+          <button
+            class="h-12 bg-[#181b1f] border border-[#2c3235] text-[#8e8e9e] font-bold text-sm rounded-sm uppercase tracking-widest hover:border-[#5794F2] hover:text-white transition-all">
+            PREV DAY
+          </button>
 
-            <button class="h-12 bg-[#181b1f] border border-[#2c3235] text-[#8e8e9e] font-bold text-sm rounded-sm uppercase tracking-widest hover:border-[#5794F2] hover:text-white transition-all">
-                MONTHLY
-            </button>
+          <button
+            class="h-12 bg-[#181b1f] border border-[#2c3235] text-[#8e8e9e] font-bold text-sm rounded-sm uppercase tracking-widest hover:border-[#5794F2] hover:text-white transition-all">
+            WEEKLY
+          </button>
+
+          <button
+            class="h-12 bg-[#181b1f] border border-[#2c3235] text-[#8e8e9e] font-bold text-sm rounded-sm uppercase tracking-widest hover:border-[#5794F2] hover:text-white transition-all">
+            MONTHLY
+          </button>
 
         </div>
 
       </div>
-      </div>
+    </div>
 
   </main>
 

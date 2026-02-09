@@ -1,116 +1,133 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Analysis | GNFC</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script>window.activePage = 'job_types';</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Analysis | GNFC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>window.activePage = 'job_types';</script>
 </head>
+
 <body class="bg-[#111217] text-[#c7d0d9] font-sans h-screen flex overflow-hidden">
 
-    <script src="js/sidebar.js"></script>
-    <div id="sidebar-container"></div>
-    <script>renderSidebar('job_types');</script>
+  <script src="js/theme_manager.js"></script>
+  <script src="js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('job_types');</script>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        
-        <header class="h-14 bg-[#111217] border-b border-[#2c3235] flex items-center justify-between px-6 shrink-0">
-            <div class="flex items-center gap-2 text-lg font-medium text-white">
-                <i class="ph ph-wrench text-[#8e8e9e]"></i>
-                <span>Job Type Analysis</span>
-            </div>
-             <button onclick="window.history.back()" class="flex items-center gap-2 bg-[#181b1f] border border-[#2c3235] text-sm px-3 py-1.5 rounded-sm hover:text-white transition">
-                <i class="ph-bold ph-arrow-left"></i> Back
-            </button>
-        </header>
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-        <div class="flex-1 overflow-y-auto p-4 bg-[#111217]">
+    <header class="h-14 bg-[#111217] border-b border-[#2c3235] flex items-center justify-between px-6 shrink-0">
+      <div class="flex items-center gap-2 text-lg font-medium text-white">
+        <i class="ph ph-wrench text-[#8e8e9e]"></i>
+        <span>Job Type Analysis</span>
+      </div>
 
-            <div class="bg-[#181b1f] border border-[#2c3235] rounded-sm mb-4">
-                <div class="px-4 py-2 border-b border-[#2c3235] flex justify-between items-center bg-[#22252b]">
-                    <div class="flex items-center gap-2 text-sm font-bold text-white">
-                        <i class="ph-bold ph-caret-down"></i> Filter Query
-                    </div>
-                </div>
-                <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-[#8e8e9e] mb-1">Time Range</label>
-                        <div class="flex bg-[#111217] border border-[#2c3235] rounded-sm h-9 items-center px-2">
-                             <input type="date" class="bg-transparent text-sm text-white focus:outline-none w-full appearance-none">
-                             <span class="px-2 text-[#8e8e9e]">-</span>
-                             <input type="date" class="bg-transparent text-sm text-white focus:outline-none w-full appearance-none">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-[#8e8e9e] mb-1">Job Type</label>
-                         <div class="relative">
-                            <select class="bg-[#111217] border border-[#2c3235] text-white text-sm rounded-sm h-9 w-full px-3 appearance-none focus:border-[#5794F2] outline-none">
-                                <option>All Job Types</option>
-                                <option>Preventive Maint</option>
-                                <option>Breakdown</option>
-                            </select>
-                            <i class="ph-bold ph-caret-down absolute right-3 top-2.5 text-[#8e8e9e] pointer-events-none"></i>
-                         </div>
-                    </div>
-                    <div class="flex items-end gap-2">
-                        <button class="h-9 px-4 bg-[#5794F2] hover:bg-blue-500 text-white text-sm font-bold rounded-sm transition">Run Query</button>
-                        <button class="h-9 px-4 bg-transparent border border-[#2c3235] text-[#8e8e9e] hover:text-white text-sm font-bold rounded-sm transition">Clear</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#181b1f] border border-[#2c3235] rounded-sm">
-                <div class="px-4 py-2 border-b border-[#2c3235] flex justify-between items-center">
-                    <h3 class="font-medium text-[#5794F2] text-sm">Job Type Report</h3>
-                    <span class="text-xs text-[#8e8e9e]">4 items found</span>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-[#22252b] text-[10px] font-bold text-[#8e8e9e] uppercase tracking-wider">
-                                <th class="px-4 py-2 border-b border-[#2c3235] w-12">#</th>
-                                <th class="px-4 py-2 border-b border-[#2c3235] w-20">Area</th>
-                                <th class="px-4 py-2 border-b border-[#2c3235] w-32">Loop/Tag</th>
-                                <th class="px-4 py-2 border-b border-[#2c3235] w-40">Job Type</th>
-                                <th class="px-4 py-2 border-b border-[#2c3235]">Description</th>
-                                <th class="px-4 py-2 border-b border-[#2c3235] w-24">Tech</th>
-                                <th class="px-4 py-2 border-b border-[#2c3235] w-24 text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-xs font-mono">
-                            <tr class="hover:bg-[#2c3235] border-b border-[#2c3235] transition">
-                                <td class="px-4 py-3 text-[#8e8e9e]">01</td>
-                                <td class="px-4 py-3 text-[#5794F2]">FA</td>
-                                <td class="px-4 py-3">
-                                    <div class="text-white">N.A</div>
-                                    <div class="text-[#8e8e9e]">FVC0208A</div>
-                                </td>
-                                <td class="px-4 py-3 text-[#FF9900]">Routine Check</td>
-                                <td class="px-4 py-3 text-gray-300">Valve stroke checked. Found stuck at 75%.</td>
-                                <td class="px-4 py-3 text-white">GAZ</td>
-                                <td class="px-4 py-3 text-center"><span class="text-[#73BF69]">DONE</span></td>
-                            </tr>
-                            <tr class="hover:bg-[#2c3235] border-b border-[#2c3235] transition">
-                                <td class="px-4 py-3 text-[#8e8e9e]">02</td>
-                                <td class="px-4 py-3 text-[#5794F2]">400</td>
-                                <td class="px-4 py-3">
-                                    <div class="text-white">LV412B</div>
-                                    <div class="text-[#8e8e9e]">Control Vlv</div>
-                                </td>
-                                <td class="px-4 py-3 text-[#F2495C]">Breakdown</td>
-                                <td class="px-4 py-3 text-gray-300">Positioner replacement required.</td>
-                                <td class="px-4 py-3 text-white">MR_</td>
-                                <td class="px-4 py-3 text-center"><span class="text-[#FF9900]">PENDING</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+      <div class="flex items-center gap-3">
+        <div class="relative hidden md:block">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
+          <input type="text" placeholder="Global Search..."
+            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
         </div>
-    </main>
+        <button onclick="window.location.href='technician_logbook.html'"
+          class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
+          <i class="ph-bold ph-arrow-left"></i> Back
+        </button>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-4 bg-[#111217]">
+
+      <div class="bg-[#181b1f] border border-[#2c3235] rounded-sm mb-4">
+        <div class="px-4 py-2 border-b border-[#2c3235] flex justify-between items-center bg-[#22252b]">
+          <div class="flex items-center gap-2 text-sm font-bold text-white">
+            <i class="ph-bold ph-caret-down"></i> Filter Query
+          </div>
+        </div>
+        <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-[10px] uppercase font-bold text-[#8e8e9e] mb-1">Time Range</label>
+            <div class="flex bg-[#111217] border border-[#2c3235] rounded-sm h-9 items-center px-2">
+              <input type="date" class="bg-transparent text-sm text-white focus:outline-none w-full appearance-none">
+              <span class="px-2 text-[#8e8e9e]">-</span>
+              <input type="date" class="bg-transparent text-sm text-white focus:outline-none w-full appearance-none">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] uppercase font-bold text-[#8e8e9e] mb-1">Job Type</label>
+            <div class="relative">
+              <select
+                class="bg-[#111217] border border-[#2c3235] text-white text-sm rounded-sm h-9 w-full px-3 appearance-none focus:border-[#5794F2] outline-none">
+                <option>All Job Types</option>
+                <option>Preventive Maint</option>
+                <option>Breakdown</option>
+              </select>
+              <i class="ph-bold ph-caret-down absolute right-3 top-2.5 text-[#8e8e9e] pointer-events-none"></i>
+            </div>
+          </div>
+          <div class="flex items-end gap-2">
+            <button
+              class="h-9 px-4 bg-[#5794F2] hover:bg-blue-500 text-white text-sm font-bold rounded-sm transition">Run
+              Query</button>
+            <button
+              class="h-9 px-4 bg-transparent border border-[#2c3235] text-[#8e8e9e] hover:text-white text-sm font-bold rounded-sm transition">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#181b1f] border border-[#2c3235] rounded-sm">
+        <div class="px-4 py-2 border-b border-[#2c3235] flex justify-between items-center">
+          <h3 class="font-medium text-[#5794F2] text-sm">Job Type Report</h3>
+          <span class="text-xs text-[#8e8e9e]">4 items found</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-[#22252b] text-[10px] font-bold text-[#8e8e9e] uppercase tracking-wider">
+                <th class="px-4 py-2 border-b border-[#2c3235] w-12">#</th>
+                <th class="px-4 py-2 border-b border-[#2c3235] w-20">Area</th>
+                <th class="px-4 py-2 border-b border-[#2c3235] w-32">Loop/Tag</th>
+                <th class="px-4 py-2 border-b border-[#2c3235] w-40">Job Type</th>
+                <th class="px-4 py-2 border-b border-[#2c3235]">Description</th>
+                <th class="px-4 py-2 border-b border-[#2c3235] w-24">Tech</th>
+                <th class="px-4 py-2 border-b border-[#2c3235] w-24 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-xs font-mono">
+              <tr class="hover:bg-[#2c3235] border-b border-[#2c3235] transition">
+                <td class="px-4 py-3 text-[#8e8e9e]">01</td>
+                <td class="px-4 py-3 text-[#5794F2]">FA</td>
+                <td class="px-4 py-3">
+                  <div class="text-white">N.A</div>
+                  <div class="text-[#8e8e9e]">FVC0208A</div>
+                </td>
+                <td class="px-4 py-3 text-[#FF9900]">Routine Check</td>
+                <td class="px-4 py-3 text-gray-300">Valve stroke checked. Found stuck at 75%.</td>
+                <td class="px-4 py-3 text-white">GAZ</td>
+                <td class="px-4 py-3 text-center"><span class="text-[#73BF69]">DONE</span></td>
+              </tr>
+              <tr class="hover:bg-[#2c3235] border-b border-[#2c3235] transition">
+                <td class="px-4 py-3 text-[#8e8e9e]">02</td>
+                <td class="px-4 py-3 text-[#5794F2]">400</td>
+                <td class="px-4 py-3">
+                  <div class="text-white">LV412B</div>
+                  <div class="text-[#8e8e9e]">Control Vlv</div>
+                </td>
+                <td class="px-4 py-3 text-[#F2495C]">Breakdown</td>
+                <td class="px-4 py-3 text-gray-300">Positioner replacement required.</td>
+                <td class="px-4 py-3 text-white">MR_</td>
+                <td class="px-4 py-3 text-center"><span class="text-[#FF9900]">PENDING</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
 </body>
+
 </html>

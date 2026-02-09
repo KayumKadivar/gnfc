@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Job History</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            dark: {
+              bg: '#111217',
+              panel: '#181B1F',
+              border: '#2C3235',
+              text: '#CCCCDD',
+              muted: '#8E8E9E'
+            },
+            grafana: {
+              orange: '#FF9900',
+              blue: '#5794F2',
+              green: '#73BF69',
+              red: '#F2495C',
+              purple: '#A352CC'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111217;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2C3235;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+
+    /* Remove default arrow */
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-dark-panel text-dark-text font-sans h-screen flex overflow-hidden selection:bg-grafana-blue selection:text-white">
+
+  <script src="js/theme_manager.js"></script>
+  <script src="js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>try { renderSidebar('job_history'); } catch (e) { }</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <header class="h-14 bg-dark-bg border-b border-dark-border flex items-center justify-between px-6 shrink-0 z-10">
+      <div class="flex items-center gap-3">
+        <!-- <i class="ph-bold ph-clock-counter-clockwise text-grafana-blue text-xl"></i> -->
+        <h2 class="text-lg font-bold text-white tracking-tight">Job History Analysis</h2>
+      </div>
+
+      <div class="flex items-center gap-3">
+
+        <div class="relative hidden md:block mr-1">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#8e8e9e] text-xs"></i>
+          <input type="text" placeholder="Global Search..."
+            class="bg-[#181b1f] border border-[#2c3235] text-[#c7d0d9] text-xs rounded-sm pl-8 pr-3 h-8 focus:border-[#5794F2] focus:outline-none transition-colors w-64 placeholder-[#8e8e9e]">
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.history.back()"
+            class="flex items-center gap-2 bg-dark-panel border border-dark-border text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
+            <i class="ph-bold ph-arrow-left"></i> Back
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm">
+        <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex justify-between items-center">
+          <h3 class="text-xs font-bold text-grafana-blue uppercase tracking-widest flex items-center gap-2">
+            <i class="ph-bold ph-sliders-horizontal"></i> Search Criteria
+          </h3>
+          <div class="flex gap-2">
+            <button
+              class="text-[10px] bg-dark-bg border border-dark-border hover:border-grafana-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">Default
+              Date</button>
+            <button
+              class="text-[10px] bg-dark-bg border border-dark-border hover:border-grafana-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">Prev
+              Year</button>
+            <button
+              class="text-[10px] bg-dark-bg border border-dark-border hover:border-grafana-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">This
+              Year</button>
+          </div>
+        </div>
+
+        <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-dark-muted uppercase">Loop</label>
+            <div class="relative">
+              <select
+                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none cursor-pointer">
+                <option>ALL</option>
+                <option>100</option>
+                <option>200</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-dark-muted uppercase">Tag</label>
+            <div class="relative">
+              <select id="tagSelect"
+                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none cursor-pointer">
+                <option value="">ALL</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-dark-muted uppercase">Type of Job</label>
+            <div class="relative">
+              <select
+                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none cursor-pointer">
+                <option>ALL</option>
+                <option>CMS JOB</option>
+                <option>PM JOB</option>
+                <option>BREAKDOWN</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-dark-muted uppercase">Instrument Type</label>
+            <div class="relative">
+              <select
+                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none cursor-pointer">
+                <option>ALL</option>
+                <option>C/V (Control Valve)</option>
+                <option>PT (Pressure Tx)</option>
+                <option>FT (Flow Tx)</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-dark-muted uppercase">Start Date</label>
+            <input type="date" value="2025-02-09"
+              class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none">
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-dark-muted uppercase">End Date</label>
+            <input type="date" value="2026-02-09"
+              class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none">
+          </div>
+
+          <div class="flex items-end gap-2">
+            <div class="space-y-1 flex-1">
+              <label class="text-[10px] font-bold text-dark-muted uppercase">Filter Options</label>
+              <div class="flex gap-2">
+                <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
+                  <input type="checkbox" class="accent-grafana-blue">
+                  <span class="text-xs text-dark-text">Remark</span>
+                </div>
+                <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
+                  <input type="checkbox" class="accent-grafana-blue">
+                  <span class="text-xs text-dark-text">Attach</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-end gap-2">
+            <button
+              class="flex-1 bg-grafana-blue hover:bg-blue-600 text-white font-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide"
+              onclick="renderTable()">
+              <i class="ph-bold ph-lightning"></i> Run Query
+            </button>
+            <button
+              class="w-1/3 bg-dark-bg border border-dark-border hover:border-grafana-green hover:text-grafana-green text-dark-muted font-bold h-[34px] rounded-sm transition-all text-xs flex items-center justify-center"
+              title="Add New Job">
+              <i class="ph-bold ph-plus text-lg"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col min-h-[500px]">
+        <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex justify-between items-center">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <i class="ph-fill ph-table text-grafana-orange"></i> Job Records
+          </h3>
+          <span class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono"
+            id="recordCount">0 Records Found</span>
+        </div>
+
+        <div class="overflow-x-auto flex-1">
+          <table class="w-full text-left border-collapse">
+            <thead class="sticky top-0 z-10">
+              <tr
+                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-10">Sr</th>
+                <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Area</th>
+
+                <th class="border-r border-dark-border px-3 py-2 w-32 border-b border-dark-border/50 text-white">Loop
+                </th>
+                <th
+                  class="border-r border-dark-border px-3 py-2 min-w-[120px] border-b border-dark-border/50 text-white">
+                  Inst Type</th>
+                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Date</th>
+
+                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[400px] text-left">Description of Job
+                </th>
+
+                <th class="border-r border-dark-border px-2 py-2 w-20 border-b border-dark-border/50 text-white">Tech
+                </th>
+                <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-12">Att</th>
+                <th rowspan="2" class="px-4 py-3 min-w-[200px]">Remarks</th>
+              </tr>
+              <tr
+                class="bg-dark-header text-[9px] font-bold text-grafana-blue uppercase text-center border-b border-dark-border">
+                <th class="border-r border-dark-border px-3 py-1">Tag</th>
+                <th class="border-r border-dark-border px-3 py-1">Job Type</th>
+                <th class="border-r border-dark-border px-2 py-1">Eng</th>
+              </tr>
+            </thead>
+            <tbody id="jobTableBody" class="text-xs font-mono">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Set Current Date
+    const now = new Date();
+    document.getElementById('current-date').textContent = now.toLocaleDateString('en-GB').toUpperCase();
+
+    // Sample Data based on image_593482.png
+    const jobData = [
+      { sr: 1, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '13/01/2026', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 2, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '09/01/2026', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 3, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '13/12/2025', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 4, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '13/12/2025', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: Wrong entry. ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 5, area: '300', loop: '0301', tag: 'FV301A', instType: 'C/V', jobType: 'CMS JOB', date: '15/11/2025', desc: 'Defect: DROPPED FOR HEAVY VIBRATION IN VALVE. PLUG+STEM IS BROKEN. NEW STEM TO BE MFG. PLUG TO BE REPAIRED.\nJob Done: Valve was sent to Micron due to heavy vibration and plug broken issues. After dismantling and inspection, it was found that the body, bonnet were damaged and required repairs. Machining of the bonnet (including welding) was carried out. Plug, stem and metal seat ring were found damaged and replaced.', tech: '', eng: 'MAJ', attach: true, remark: 'URGENT REQUIREMENT' },
+      { sr: 6, area: '300', loop: '3101', tag: 'FV3101A', instType: 'C/V', jobType: 'CMS JOB', date: '15/11/2025', desc: 'Defect: C/V Passing and jerky operation.\nJob Done: *Late job entry* Valve sent to Micron due to passing and jerking. Metal seat ring and Soft seat provided by micron (PTFE) replaced in control valve. valve was tested and found ok.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 7, area: '600', loop: '0606', tag: 'FV606', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: FV606 act dropped for overhauling.\nJob Done: Actuator was sent to Micron due to a passing issue. After dismantling and inspecting the valve, Replaced seal kit (By micron), rework of stem, actuator casing bolt SS M6 size 18 nos., Rework of body by Drilling, tapping.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 8, area: '700', loop: '0710', tag: 'HV710', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: Control valve Passing 1X2500\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, stem, plug and metal seat ring were damaged and required repair. Machining carried out.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 9, area: '700', loop: '7508', tag: 'HV7508', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: Control valve passing 2X600\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, plug and metal seat ring were damaged and required repair.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 10, area: '200', loop: '0203', tag: 'FV0203BA', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: C/V having noise below 70% MV.\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that plug was damaged and required repair. Machining of the plug along with lapping work (for the plug only), was carried out. Also Bottom bushing and new key were replaced.', tech: '', eng: 'MAJ', attach: false, remark: '' }
+    ];
+
+    // Populate Dropdowns
+    const uniqueTags = [...new Set(jobData.map(item => item.tag))];
+    const tagSelect = document.getElementById('tagSelect');
+    uniqueTags.forEach(tag => {
+      const option = document.createElement('option');
+      option.value = tag;
+      option.text = tag;
+      tagSelect.appendChild(option);
+    });
+
+    // Render Table
+    function renderTable() {
+      const tbody = document.getElementById('jobTableBody');
+      tbody.innerHTML = '';
+
+      // Update Count
+      document.getElementById('recordCount').innerText = `${jobData.length} Records Found`;
+
+      jobData.forEach(item => {
+        const row = `
+                <tr class="hover:bg-white/5 transition-colors border-b border-dark-border/50 group align-top">
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center text-dark-muted font-mono">${item.sr}</td>
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center font-bold text-white">${item.area}</td>
+
+                    <td class="border-r border-dark-border/30 px-3 py-3">
+                        <div class="text-xs text-dark-muted">${item.loop}</div>
+                        <div class="text-xs font-bold text-grafana-blue mt-1">${item.tag}</div>
+                    </td>
+
+                    <td class="border-r border-dark-border/30 px-3 py-3">
+                        <div class="text-xs text-white font-bold">${item.instType}</div>
+                        <div class="text-[10px] text-grafana-orange mt-1 font-mono">${item.jobType}</div>
+                    </td>
+
+                    <td class="border-r border-dark-border/30 px-3 py-3 font-mono text-dark-muted whitespace-nowrap">${item.date}</td>
+
+                    <td class="border-r border-dark-border/30 px-4 py-3 text-xs text-dark-text leading-relaxed">
+                        ${item.desc.replace(/\n/g, '<br>')}
+                    </td>
+
+                    <td class="border-r border-dark-border/30 px-2 py-3">
+                        <div class="text-[10px] text-dark-muted text-center">${item.tech}</div>
+                        <div class="text-xs font-bold text-white text-center mt-1">${item.eng}</div>
+                    </td>
+
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center">
+                        ${item.attach ? '<i class="ph-bold ph-paperclip text-grafana-blue cursor-pointer"></i>' : '-'}
+                    </td>
+
+                    <td class="px-4 py-3 text-xs text-grafana-red italic">
+                        ${item.remark}
+                    </td>
+                </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    // Initial Load
+    renderTable();
+
+  </script>
+</body>
+
+</html>
