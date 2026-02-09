@@ -13,7 +13,7 @@ function renderSidebar(activePageId) {
     const sidebarHTML = `
       <aside id="app-sidebar" class="${widthClass} bg-[#0b0c0e] flex flex-col shrink-0 border-r border-[#2c3235] z-50 h-screen font-sans transition-all duration-300 relative group/sidebar">
           
-          <div class="h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-center px-4'} bg-[#0b0c0e] border-b border-[#2c3235] relative">
+          <div class="h-14 flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-center px-4'} bg-[#0b0c0e] border-b border-[#2c3235] relative">
               <div class="flex items-center gap-2 transition-all duration-300">
                   <div class="flex items-center cursor-pointer bg-white rounded-md" onclick="toggleSidebar()">
                       <!-- <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-6 w-auto object-contain" alt="GNFC Logo"> -->
