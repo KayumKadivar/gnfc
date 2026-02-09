@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Monthly Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            dark: {
+              bg: '#111217',
+              panel: '#181B1F',
+              border: '#2C3235',
+              text: '#CCCCDD',
+              muted: '#8E8E9E'
+            },
+            grafana: {
+              orange: '#FF9900',
+              blue: '#5794F2',
+              green: '#73BF69',
+              red: '#F2495C',
+              purple: '#A352CC'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111217;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2C3235;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+  </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>try { renderSidebar('monthly_report'); } catch (e) { }</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <header class="h-14 bg-[#111217] border-b border-[#2c3235] flex items-center justify-between px-6 shrink-0">
+      <div class="flex flex-col">
+        <h2 class="text-lg font-bold text-white tracking-tight leading-none">Acetic Acid Logbook</h2>
+        <div class="flex items-center gap-1 text-xs text-dark-muted mt-1">
+          <a href="technician_logbook.html" class="hover:text-grafana-blue transition-colors">Technician Log</a>
+          <i class="ph-bold ph-caret-right text-[10px]"></i>
+          <a href="plant_detail.html" class="hover:text-grafana-blue transition-colors">Plant Detail</a>
+          <i class="ph-bold ph-caret-right text-[10px]"></i>
+          <span>Monthly Maintenance Report</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="relative hidden md:block">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
+          <input type="text" placeholder="Global Search..."
+            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
+        </div>
+        <button onclick="window.location.href='plant_detail.html'"
+          class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
+          <i class="ph-bold ph-arrow-left"></i> Back
+        </button>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <div class="bg-dark-panel border border-dark-border rounded-sm p-4 shadow-sm">
+        <div class="flex flex-col md:flex-row items-end gap-4">
+
+          <div class="w-full md:w-48">
+            <label class="block text-[10px] uppercase font-bold text-dark-muted mb-1.5">Plant Area</label>
+            <div class="relative">
+              <select
+                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 appearance-none focus:border-grafana-blue outline-none">
+                <option>AMMONIA</option>
+                <option>UREA</option>
+                <option>METHANOL</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+            </div>
+          </div>
+
+          <div class="w-full md:w-auto flex-1">
+            <label class="block text-[10px] uppercase font-bold text-dark-muted mb-1.5">Report
+              Period</label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <input type="date" value="2026-02-01"
+                  class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none">
+              </div>
+              <span class="text-dark-muted text-xs">to</span>
+              <div class="relative flex-1">
+                <input type="date" value="2026-02-28"
+                  class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-grafana-blue outline-none">
+              </div>
+            </div>
+          </div>
+
+          <button onclick="generateReport()"
+            class="w-full md:w-auto bg-grafana-green hover:bg-green-600 text-white text-xs font-bold px-6 py-2 rounded-sm shadow-md transition-all flex items-center justify-center gap-2 h-[34px]">
+            <i class="ph-bold ph-lightning"></i> GENERATE
+          </button>
+        </div>
+      </div>
+
+      <div id="report-content" class="space-y-6 animate-fade-in-up">
+
+        <div class="flex items-center justify-between border-b border-dark-border pb-2">
+          <div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">AMMONIA : Monthly Report</h1>
+            <p class="text-xs text-grafana-orange font-mono mt-1">Period: February 2026</p>
+          </div>
+          <div class="text-right">
+            <span
+              class="text-[10px] bg-dark-panel border border-dark-border px-2 py-1 rounded text-dark-muted">Generated:
+              Just now</span>
+          </div>
+        </div>
+
+        <div class="bg-dark-panel border border-dark-border rounded-sm overflow-hidden">
+          <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex items-center gap-2">
+            <i class="ph-fill ph-cpu text-grafana-blue"></i>
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">DCS / ESD Systems</h3>
+          </div>
+          <div class="p-0">
+            <div class="flex items-start gap-4 p-3 border-b border-dark-border/50 hover:bg-white/5 transition-colors">
+              <div class="min-w-[80px] text-xs font-bold text-grafana-blue font-mono">GENERAL</div>
+              <div class="text-xs text-dark-text leading-relaxed">System diagnostic checks performed. No
+                major anomalies found.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-panel border border-dark-border rounded-sm overflow-hidden">
+          <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex items-center gap-2">
+            <i class="ph-fill ph-chart-line-up text-grafana-purple"></i>
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Analyzers</h3>
+          </div>
+          <div class="p-0" id="analyzers-list">
+          </div>
+        </div>
+
+        <div class="bg-dark-panel border border-dark-border rounded-sm overflow-hidden">
+          <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex items-center gap-2">
+            <i class="ph-fill ph-wrench text-grafana-orange"></i>
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Preventive Maintenance (PM)
+            </h3>
+          </div>
+          <div class="p-0" id="pm-list">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Data parsed from your image
+    const analyzerData = [
+      { tag: 'QT113', desc: 'Zero-span checked and it is ok.' },
+      { tag: 'QT702', desc: 'Zero calibration found 0.78% Higher side so calibration done. Span calibration found 0.1% higher. Calibration done.' },
+      { tag: 'QT703', desc: 'Zero calibration found ok. Span calibration found 0.1% higher. Calibration done. Sample taken in line.' },
+      { tag: 'QT0207', desc: 'ABB analyzer engineer visited and checked. Installed spare SSI card but no result. Upgraded software version of AMC card.' },
+      { tag: 'LV1056', desc: 'Sample point in C/V D/S line found choked. Whole tube disconnected and found needle valve chocked. New valve provided.' },
+      { tag: 'QT606', desc: 'Zero calibration checked with N2 cylinder. Calibration found ok. Span calibration checked and it is ok.' },
+      { tag: 'QT114', desc: 'It was observed that indication is higher side (18%). Zero calibration checked and found 0.81% higher. Recalibrated.' }
+    ];
+
+    const pmData = [
+      { tag: 'DCS-FOXBORO', desc: 'Documentation related job is U/P.' },
+      { tag: 'DCS-YOKOGAWA', desc: 'FCS301, FCS302, FCS304 stand by (RIGHT) controller batteries are replaced. FCS703, FCS707 stand by (LEFT) batteries replaced.' },
+      { tag: 'MOLSIEVE', desc: 'A104A/B Molsieve adsorber condensate flushing was done.' },
+      { tag: 'ANA-A1', desc: 'Analyzer Sample/Bypass Flow and Pressure checked.' },
+      { tag: 'ANALYZER', desc: 'Analyzer round taken and no abnormality found.' },
+      { tag: 'ANA-A5', desc: 'Zero calibration checked and it is ok.' },
+      { tag: 'HV0207B', desc: 'HV0207B related booster checking setup done. Functionality checked and found working ok.' },
+      { tag: 'SPARE REPAIR', desc: 'Temperature Tx removed from TT111 connected on testbench for checking purpose. Job is U/P.' }
+    ];
+
+    // Function to render rows
+    function renderSection(elementId, data, colorClass) {
+      const container = document.getElementById(elementId);
+      container.innerHTML = '';
+
+      data.forEach(item => {
+        const html = `
+                <div class="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4 p-3 border-b border-dark-border/50 hover:bg-white/5 transition-colors group">
+                    <div class="min-w-[120px] pt-0.5">
+                        <span class="text-[11px] font-bold ${colorClass} bg-dark-bg border border-dark-border px-1.5 py-0.5 rounded font-mono">
+                            ${item.tag}
+                        </span>
+                    </div>
+                    <div class="flex-1 text-xs text-dark-text leading-relaxed group-hover:text-gray-200">
+                        ${item.desc}
+                    </div>
+                </div>`;
+        container.innerHTML += html;
+      });
+    }
+
+    // Render Initial Data
+    renderSection('analyzers-list', analyzerData, 'text-grafana-purple');
+    renderSection('pm-list', pmData, 'text-grafana-orange');
+
+    function generateReport() {
+      // Animation for visual feedback
+      const content = document.getElementById('report-content');
+      content.style.opacity = '0.5';
+      setTimeout(() => {
+        content.style.opacity = '1';
+        // Logic to fetch new data would go here
+      }, 300);
+    }
+  </script>
+</body>
+
+</html>

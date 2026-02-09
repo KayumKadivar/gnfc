@@ -12,8 +12,8 @@
 
 <body class="bg-[#111217] text-[#c7d0d9] font-sans h-screen flex overflow-hidden">
 
-  <script src="js/theme_manager.js"></script>
-  <script src="js/sidebar.js"></script>
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
   <div id="sidebar-container"></div>
   <script>renderSidebar('job_types');</script>
 
@@ -21,8 +21,18 @@
 
     <header class="h-14 bg-[#111217] border-b border-[#2c3235] flex items-center justify-between px-6 shrink-0">
       <div class="flex items-center gap-2 text-lg font-medium text-white">
-        <i class="ph ph-wrench text-[#8e8e9e]"></i>
-        <span>Job Type Analysis</span>
+        <div class="flex items-center gap-3">
+          <div class="flex flex-col">
+            <h2 class="text-lg font-bold text-white tracking-tight leading-none">Acetic Acid Logbook</h2>
+            <div class="flex items-center gap-1 text-xs text-dark-muted mt-1">
+              <a href="technician_logbook.html" class="hover:text-grafana-blue transition-colors">Technician Log</a>
+              <i class="ph-bold ph-caret-right text-[10px]"></i>
+              <a href="plant_detail.html" class="hover:text-grafana-blue transition-colors">Plant Detail</a>
+              <i class="ph-bold ph-caret-right text-[10px]"></i>
+              <span>Job Type Analysis</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
@@ -31,7 +41,7 @@
           <input type="text" placeholder="Global Search..."
             class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
         </div>
-        <button onclick="window.location.href='technician_logbook.html'"
+        <button onclick="window.location.href='plant_detail.html'"
           class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
           <i class="ph-bold ph-arrow-left"></i> Back
         </button>

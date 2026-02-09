@@ -1,6 +1,7 @@
+const SIDEBAR_COLLAPSED_CLASS = 'w-12';
+const SIDEBAR_EXPANDED_CLASS = 'w-48';
+
 function renderSidebar(activePageId) {
-    const SIDEBAR_COLLAPSED_CLASS = 'w-16';
-    const SIDEBAR_EXPANDED_CLASS = 'w-56';
     window.activePage = activePageId || window.activePage || '';
 
     // 1. Get state from localStorage
@@ -15,11 +16,11 @@ function renderSidebar(activePageId) {
           <div class="h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-between px-5'} bg-[#0b0c0e] border-b border-[#2c3235] relative">
               <div class="flex items-center gap-3 overflow-hidden">
                   <div class="w-9 h-9 flex-shrink-0 cursor-pointer bg-white rounded p-0.5" onclick="toggleSidebar()">
-                      <img src="src/assets/images/gnfc-sidebar-logo.png" onerror="this.onerror=null;this.src='src/assets/images/gnfc-logo.png';" class="w-full h-full object-contain" alt="GNFC">
+                      <img src="/src/assets/images/gnfc-sidebar-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="w-full h-full object-contain" alt="GNFC">
                   </div>
               </div>
               
-               <button onclick="toggleSidebar()" class="absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-10 bg-dark-panel rounded-full border border-dark-border text-white hover:text-white flex items-center justify-center transition-transform hover:scale-110 z-50 shadow-md ${isCollapsed ? 'rotate-180' : ''}">
+               <button onclick="toggleSidebar()" class="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-dark-panel rounded-full border border-dark-border text-white hover:text-white flex items-center justify-center transition-transform hover:scale-110 z-50 shadow-md ${isCollapsed ? 'rotate-180' : ''}">
                   <i class="ph-bold ph-caret-left text-xs"></i>
               </button>
           </div>
@@ -28,22 +29,22 @@ function renderSidebar(activePageId) {
               
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-2'}">Dashboards</div>
               
-              ${createLink("dashboard", "dashboard.html", "ph-squares-four", "Plant Status", isCollapsed)}
+              ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Plant Status", isCollapsed)}
   
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Logs</div>
               
-              ${createLink("shift_logbook_officer", "shift_logbook_officer.html", "ph-notebook", "Officer Logs", isCollapsed)}
+              ${createLink("shift_logbook_officer", "/src/pages/shift_logbook_officer.html", "ph-notebook", "Officer Logs", isCollapsed)}
               
-              ${createLink("technician_logbook", "technician_logbook.html", "ph-factory", "Technician Logs", isCollapsed)}
+              ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logs", isCollapsed)}
               
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Analysis</div>
               
-              ${createLink("job_types", "job_types.html", "ph-wrench", "Job Analysis", isCollapsed)}
-              ${createLink("instrument_types", "instrument_types.html", "ph-faders", "Instrument Types", isCollapsed)}
+              ${createLink("job_types", "/src/pages/job_types.html", "ph-wrench", "Job Analysis", isCollapsed)}
+              ${createLink("instrument_types", "/src/pages/instrument_types.html", "ph-faders", "Instrument Types", isCollapsed)}
 
             <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">System</div>
 
-            ${createLink("settings", "settings.html", "ph-gear", "Settings", isCollapsed)}
+            ${createLink("settings", "/src/pages/settings.html", "ph-gear", "Settings", isCollapsed)}
      
           </nav>
   
@@ -91,11 +92,14 @@ function toggleSidebar() {
     const sidebar = document.getElementById('app-sidebar');
     if (!sidebar) return;
 
-    const isCollapsed = sidebar.classList.contains('w-16');
+    // Use the constant to check
+    const isCollapsed = sidebar.classList.contains(SIDEBAR_COLLAPSED_CLASS);
     const willBeCollapsed = !isCollapsed;
 
     localStorage.setItem('sidebarCollapsed', willBeCollapsed);
     hideSidebarTooltip();
+    
+    // Pass the current active page to re-render properly
     renderSidebar(window.activePage || '');
 }
 

@@ -67,32 +67,35 @@
 <body
   class="bg-dark-panel text-dark-text font-sans h-screen flex overflow-hidden selection:bg-grafana-blue selection:text-white">
 
-  <script src="js/theme_manager.js"></script>
-  <script src="js/sidebar.js"></script>
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
   <div id="sidebar-container"></div>
   <script>try { renderSidebar('job_history'); } catch (e) { }</script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-    <header class="h-14 bg-dark-bg border-b border-dark-border flex items-center justify-between px-6 shrink-0 z-10">
-      <div class="flex items-center gap-3">
-        <!-- <i class="ph-bold ph-clock-counter-clockwise text-grafana-blue text-xl"></i> -->
-        <h2 class="text-lg font-bold text-white tracking-tight">Job History Analysis</h2>
+    <header class="h-14 bg-[#111217] border-b border-[#2c3235] flex items-center justify-between px-6 shrink-0">
+      <div class="flex flex-col">
+        <h2 class="text-lg font-bold text-white tracking-tight leading-none">Acetic Acid Logbook</h2>
+        <div class="flex items-center gap-1 text-xs text-dark-muted mt-1">
+          <a href="technician_logbook.html" class="hover:text-grafana-blue transition-colors">Technician Log</a>
+          <i class="ph-bold ph-caret-right text-[10px]"></i>
+          <a href="plant_detail.html" class="hover:text-grafana-blue transition-colors">Plant Detail</a>
+          <i class="ph-bold ph-caret-right text-[10px]"></i>
+          <span>Job History Analysis</span>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
-
-        <div class="relative hidden md:block mr-1">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#8e8e9e] text-xs"></i>
+        <div class="relative hidden md:block">
+          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
           <input type="text" placeholder="Global Search..."
-            class="bg-[#181b1f] border border-[#2c3235] text-[#c7d0d9] text-xs rounded-sm pl-8 pr-3 h-8 focus:border-[#5794F2] focus:outline-none transition-colors w-64 placeholder-[#8e8e9e]">
+            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="window.history.back()"
-            class="flex items-center gap-2 bg-dark-panel border border-dark-border text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
-            <i class="ph-bold ph-arrow-left"></i> Back
-          </button>
-        </div>
+        <button onclick="window.location.href='plant_detail.html'"
+          class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
+          <i class="ph-bold ph-arrow-left"></i> Back
+        </button>
       </div>
     </header>
 
