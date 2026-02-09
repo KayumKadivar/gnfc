@@ -32,6 +32,19 @@
       </div>
 
       <div class="flex items-center gap-2">
+        <div class="flex items-center bg-dark-panel border border-dark-border rounded-sm">
+          <button onclick="ThemeManager.decreaseFontSize()"
+            class="w-8 h-8 flex items-center justify-center text-dark-text hover:text-white hover:bg-dark-border/50 transition-colors border-r border-dark-border"
+            title="Decrease Font Size">
+            <i class="ph-bold ph-minus text-xs"></i>
+          </button>
+          <div class="w-px h-4 bg-dark-border"></div>
+          <button onclick="ThemeManager.increaseFontSize()"
+            class="w-8 h-8 flex items-center justify-center text-dark-text hover:text-white hover:bg-dark-border/50 transition-colors"
+            title="Increase Font Size">
+            <i class="ph-bold ph-plus text-xs"></i>
+          </button>
+        </div>
         <div class="relative hidden md:block mr-1">
           <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#8e8e9e] text-xs"></i>
           <input type="text" placeholder="Global Search..."

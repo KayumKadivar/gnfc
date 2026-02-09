@@ -34,37 +34,14 @@
       }
     }
   </script>
-  <style>
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #111217;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #2c3235;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #444;
-    }
-
-    select {
-      background-image: none;
-    }
-  </style>
 </head>
 
 <body
   class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-grafana-blue selection:text-white">
-
-
+  
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
   <script>
     // Try render sidebar if script exists
@@ -73,78 +50,64 @@
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-    <header class="h-14 bg-dark-bg border-b border-dark-border flex items-center justify-between px-6 shrink-0 z-10">
-      <div class="flex items-center gap-3">
-        <div class="flex flex-col">
-          <h2 class="text-lg font-bold text-white tracking-tight leading-none">Acetic Acid Logbook</h2>
-          <div class="flex items-center gap-1 text-xs text-dark-muted mt-1">
-            <a href="technician_logbook.html" class="hover:text-grafana-blue transition-colors">Technician Log</a>
-            <i class="ph-bold ph-caret-right text-[10px]"></i>
-            <span>Plant Detail</span>
-          </div>
-        </div>
-      </div>
+    <div id="header-container"></div>
+    <script>
+        renderHeader({
+            title: "Acetic Acid Logbook",
+            breadcrumbs: [
+                { label: "Technician Log", href: "technician_logbook.html" },
+                { label: "Plant Detail" }
+            ],
+            backLink: "technician_logbook.html"
+        });
+    </script>
 
-      <div class="flex items-center gap-3">
-        <div class="relative hidden md:block">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
-          <input type="text" placeholder="Global Search..."
-            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
-        </div>
-        <button onclick="window.location.href='technician_logbook.html'"
-          class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
-          <i class="ph-bold ph-arrow-left"></i> Back
-        </button>
-      </div>
-    </header>
-
-    <div class="p-4 bg-dark-bg">
-
-      <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm">
+    <div class="p-3 bg-dark-bg space-y-3">
+      <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm ">
         <div class="bg-dark-panel border-b border-dark-border px-2">
           <div class="flex overflow-x-auto gap-1 py-2 scrollbar-none">
-            <button onclick="window.location.href='job_types.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type
+            <button onclick="window.location.href='job_types.html'" data-target="job_types.html"
+               class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Type
               Of Job</button>
-            <button onclick="window.location.href='instrument_types.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type
+            <button onclick="window.location.href='instrument_types.html'" data-target="instrument_types.html"
+              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Type
               Of Inst</button>
-            <button onclick="window.location.href='remark_reports.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Remark
+            <button onclick="window.location.href='remark_reports.html'" data-target="remark_reports.html"
+              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Remark
               Report</button>
-            <button onclick="window.location.href='tagwise_filter.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">TagWise
+            <button onclick="window.location.href='tagwise_filter.html'" data-target="tagwise_filter.html"
+              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">TagWise
               Filter</button>
-            <button onclick="window.location.href='monthly_report.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Monthly
+            <button onclick="window.location.href='monthly_report.html'" data-target="monthly_report.html"
+              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Monthly
               Report</button>
-            <button onclick="window.location.href='job_history.html'"
-              class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Job
+            <button onclick="window.location.href='job_history.html'" data-target="job_history.html"
+              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Job
               History</button>
             <button
-              class="px-3 py-1.5 text-xs font-bold text-grafana-red border border-transparent hover:border-grafana-red/50 hover:bg-grafana-red/10 rounded-sm transition-colors whitespace-nowrap flex items-center gap-1">
+              class="px-3 py-1.5 text-xs font-bold rounded-sm whitespace-nowrap flex items-center gap-1 bg-red-600 text-white hover:bg-red-700 dark:bg-red-200 dark:text-red-900 dark:hover:bg-slate-500 transition-colors">
               <i class="ph-bold ph-siren"></i> EMG Call
             </button>
           </div>
         </div>
 
-        <div class="p-3 bg-dark-bg/30 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
+        <div class="p-3 bg-white dark:bg-dark-panel flex flex-wrap items-center justify-between gap-3 ">
+          <div class="flex bg-slate-100 dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm p-0.5">
             <button id="btn-tomorrow"
-              class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors"
+              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
               onclick="switchView(this, 'tomorrow')">Tomorrow</button>
             <button id="btn-today"
-              class="tab-btn px-4 py-1 text-xs font-bold text-grafana-orange bg-dark-panel shadow-sm border border-dark-border rounded-sm transition-colors"
+              class="tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-grafana-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors"
               onclick="switchView(this, 'today')">Today</button>
             <button id="btn-prev"
-              class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors"
+              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
               onclick="switchView(this, 'prev')">PrevDay</button>
-            <div class="w-px bg-dark-border my-1 mx-1"></div>
+            <div class="w-px bg-slate-300 dark:bg-dark-border my-1 mx-1"></div>
             <button id="btn-weekly"
-              class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors"
+              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
               onclick="switchView(this, 'weekly')">Weekly</button>
             <button id="btn-monthly"
-              class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors"
+              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
               onclick="switchView(this, 'monthly')">Monthly</button>
           </div>
 
@@ -160,7 +123,7 @@
         </div>
       </div>
 
-      <div id="job-filter-bar" class="hidden bg-dark-panel border border-dark-border rounded-sm p-3">
+      <div id="job-filter-bar" class="hidden bg-dark-panel border border-dark-border rounded-sm p-3 ">
         <div class="flex flex-col md:flex-row items-center gap-4">
           <div class="flex items-center gap-2 w-full md:w-auto">
             <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide">Start</label>
@@ -194,47 +157,79 @@
         </div>
       </div>
 
-      <div class="flex justify-end">
+      <!-- <div class="flex justify-end">
         <button onclick="toggleJobFilter()"
           class="text-xs font-medium text-dark-muted hover:text-grafana-blue flex items-center gap-1 transition-colors">
           <i class="ph-bold ph-funnel"></i> Show Filters
         </button>
-      </div>
+      </div> -->
 
-      <div id="dynamic-view-container" class="bg-dark-panel border border-dark-border rounded-sm flex flex-col">
-        <div class="px-4 py-2 border-b border-dark-border flex justify-between items-center bg-dark-panel">
+      <div id="dynamic-view-container" class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+        <div class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
           <div class="flex items-center gap-2">
-            <i class="ph-fill ph-table text-grafana-blue"></i>
-            <span id="view-title" class="text-sm font-bold text-white">Today Log Book</span>
+            <i class="ph-fill ph-table text-blue-600 dark:text-grafana-blue"></i>
+            <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
+            <span id="record-count" class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0 Records</span>
           </div>
-          <span id="view-date" class="text-xs font-mono text-grafana-orange">06.02.2026</span>
+           
+           <div class="flex items-center gap-3">
+               <div class="relative">
+                 <i class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
+                 <input type="text" id="table-search" placeholder="Search logs..." 
+                   onkeyup="plantLogTable.setSearch(this.value)"
+                   class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-grafana-blue focus:outline-none w-48 transition-colors">
+               </div>
+               <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-grafana-orange">06.02.2026</span>
+           </div>
         </div>
 
         <div class="overflow-x-auto flex-1">
-          <table class="w-full text-left border-collapse">
+          <table id="plant-table" class="w-full text-left border-collapse">
             <thead>
               <tr
-                class="bg-[#1e2126] text-[10px] font-bold text-dark-muted uppercase tracking-wider border-b border-dark-border">
-                <th class="px-4 py-3 w-12 text-center border-r border-dark-border">Sr</th>
-                <th class="px-4 py-3 w-20 border-r border-dark-border">Area</th>
-                <th class="px-4 py-3 w-40 border-r border-dark-border">Loop / Tag</th>
-                <th class="px-4 py-3 min-w-[200px] border-r border-dark-border">Job Type</th>
-                <th class="px-4 py-3 w-16 text-center border-r border-dark-border">Tech</th>
-                <th class="px-4 py-3 min-w-[300px] border-r border-dark-border">Description</th>
-                <th class="px-4 py-3 w-24 text-center border-r border-dark-border">Eng</th>
-                <th class="px-4 py-3 w-28 text-center border-r border-dark-border">Status</th>
-                <th class="px-4 py-3">Remarks</th>
+                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-12 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-20 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th class="border-r border-b px-3 py-2 w-40 border-slate-200 dark:border-dark-border dark:border-dark-border/50 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th class="border-r border-b px-3 py-2 min-w-[200px] border-slate-200 dark:border-dark-border dark:border-dark-border/50 font-black cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-16 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
+                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 min-w-[300px]">Description</th>
+                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-24 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-28 relative group/th">
+                    <div class="flex items-center justify-between cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors p-1 rounded" onclick="plantLogTable.sort('status')">
+                        <span>Status</span>
+                        <!-- <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i> -->
+                    </div>
+                    <button onclick="toggleStatusFilter(event)" class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-slate-200 dark:hover:bg-dark-border/50">
+                        <i class="ph-bold ph-funnel text-xs"></i>
+                    </button>
+                    <!-- Filter Dropdown -->
+                    <div id="status-filter-dropdown" class="hidden absolute top-14 right-0 w-20 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
+                        <!-- Options injected by JS -->
+                    </div>
+                </th>
+                <th rowspan="2" class="p-2 min-w-[120px]">Remarks</th>
+              </tr>
+              <tr
+                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th class="border-r border-slate-200 dark:border-dark-border p-2">Tag Detail</th>
+                <th class="border-r border-slate-200 dark:border-dark-border p-2">Instrument Detail</th>
               </tr>
             </thead>
             <tbody id="plantTableBody" class="text-xs font-mono">
             </tbody>
           </table>
         </div>
+        
+        <!-- Pagination Container -->
+        <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
+        
       </div>
 
     </div>
   </main>
 
+  <script src="/src/js/plant_log_core.js"></script>
   <script>
     // Plant Mock Data
     const plantLogData = {
@@ -248,9 +243,9 @@
       tomorrow: [],
       prev: [
         { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
+        { sr: '02', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
+        { sr: '03', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
+        { sr: '04', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
       ],
       weekly: [
         { sr: '01', date: '05/02/2026', area: 'FA', tag: 'FT5021A', tagSubtitle: 'Calib', jobType: 'Routine Check', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Routine checkup completed.', engineer: '', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
@@ -264,6 +259,15 @@
     };
 
     let currentView = 'today';
+    let plantLogTable;
+
+    function initTable() {
+         plantLogTable = new PlantLogTable({
+            containerId: '#plant-table',
+            data: plantLogData['today'],
+            itemsPerPage: 5 // Example low number to demonstrate pagination
+        });
+    }
 
     function toggleJobFilter() {
       const filterBar = document.getElementById('job-filter-bar');
@@ -297,7 +301,12 @@
       const jobType = document.getElementById('job-type-select').value;
       const startDate = document.getElementById('start-date').value;
       const endDate = document.getElementById('end-date').value;
-
+      
+      // We process date filtering here before passing to table
+      // because the table filter is generic key-value
+      // Actually, for advanced date ranges + exact matches, 
+      // it's easier to filter the RAW data first, then pass to table.
+      
       let filteredData = plantLogData[currentView] || [];
 
       if (jobType) filteredData = filteredData.filter(item => item.jobType === jobType);
@@ -321,85 +330,48 @@
           return true;
         });
       }
-      renderPlantTable(filteredData, currentView);
+      
+      // Update table data
+      plantLogTable.setData(filteredData);
+    }
+    
+    function filterStatus(status) {
+        if (!plantLogTable) return;
+        plantLogTable.setFilter('status', status);
+        document.getElementById('status-filter-dropdown').classList.add('hidden');
     }
 
-    function renderPlantTable(data, view) {
-      const tbody = document.getElementById('plantTableBody');
-      tbody.innerHTML = '';
+    function toggleStatusFilter(event) {
+        event.stopPropagation(); // Prevent sorting when clicking filter
+        const dropdown = document.getElementById('status-filter-dropdown');
+        dropdown.classList.toggle('hidden');
+        
+        if (!dropdown.classList.contains('hidden')) {
+            populateStatusDropdown();
+            
+            // Close when clicking outside
+            const closeDropdown = (e) => {
+                if (!e.target.closest('#status-filter-dropdown') && !e.target.closest('button[onclick="toggleStatusFilter(event)"]')) {
+                    dropdown.classList.add('hidden');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            };
+            document.addEventListener('click', closeDropdown);
+        }
+    }
 
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries found for this view.</td></tr>`;
-        return;
-      }
-
-      const createRow = (item) => {
-        // Color logic for status
-        const statusClass = item.statusColor === 'green'
-          ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20'
-          : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
-
-        return `
-                <tr class="hover:bg-dark-border/50 transition-colors border-b border-dark-border/50 group">
-                    <td class="px-4 py-3 text-center text-dark-muted font-mono border-r border-dark-border/30">${item.sr}</td>
-                    <td class="px-4 py-3 font-bold text-white border-r border-dark-border/30">${item.area}</td>
-                    <td class="px-4 py-3 border-r border-dark-border/30">
-                        <div class="text-xs text-grafana-blue font-bold">${item.tag}</div>
-                        <span class="inline-block mt-1 text-[10px] text-dark-muted bg-dark-bg px-1.5 py-0.5 rounded border border-dark-border font-mono">${item.tagSubtitle}</span>
-                    </td>
-                    <td class="px-4 py-3 border-r border-dark-border/30">
-                        <div class="font-medium text-gray-300 line-clamp-1">${item.jobType}</div>
-                        <div class="text-[10px] text-dark-muted mt-0.5">${item.jobRef}</div>
-                        ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-grafana-blue/10 text-grafana-blue border border-grafana-blue/20">${item.jobLabel}</span>` : ''}
-                    </td>
-                    <td class="px-4 py-3 text-center font-bold text-dark-muted border-r border-dark-border/30">${item.tech}</td>
-                    <td class="px-4 py-3 text-gray-400 border-r border-dark-border/30 leading-relaxed">${item.desc}</td>
-                    <td class="px-4 py-3 text-center border-r border-dark-border/30">
-                        <div class="font-bold text-gray-300">${item.engineer}</div>
-                        <div class="text-[10px] text-dark-muted">${item.engInitials}</div>
-                    </td>
-                    <td class="px-4 py-3 text-center border-r border-dark-border/30">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-bold border ${statusClass}">
-                            ${item.status}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3">${item.remarks}</td>
-                </tr>
-                `;
-      }
-
-      if (view === 'weekly' || view === 'monthly') {
-        const grouped = data.reduce((acc, item) => {
-          const date = item.date;
-          if (!acc[date]) acc[date] = [];
-          acc[date].push(item);
-          return acc;
-        }, {});
-
-        const dates = Object.keys(grouped).sort((a, b) => {
-          const [d1, m1, y1] = a.split('/').map(Number);
-          const [d2, m2, y2] = b.split('/').map(Number);
-          return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
+    function populateStatusDropdown() {
+        if (!plantLogTable) return;
+        const uniqueStatuses = plantLogTable.getUniqueValues('status');
+        const dropdown = document.getElementById('status-filter-dropdown');
+        
+        let html = `<div class="px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border cursor-pointer select-none border-b border-slate-100 dark:border-dark-border d-flex align-start" onclick="filterStatus('')">All</div>`;
+        
+        uniqueStatuses.forEach(status => {
+            html += `<div class="px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border cursor-pointer select-none d-flex align-start" onclick="filterStatus('${status}')">${status}</div>`;
         });
-
-        dates.forEach(date => {
-          const headerRow = `
-                        <tr class="bg-[#181b1f] border-y border-dark-border">
-                            <td colspan="9" class="px-4 py-1.5 text-[10px] font-bold text-grafana-orange uppercase tracking-wider flex items-center gap-2">
-                                <i class="ph-fill ph-calendar-blank"></i> ${date}
-                            </td>
-                        </tr>
-                    `;
-          tbody.innerHTML += headerRow;
-          grouped[date].forEach(item => {
-            tbody.innerHTML += createRow(item);
-          });
-        });
-      } else {
-        data.forEach(item => {
-          tbody.innerHTML += createRow(item);
-        });
-      }
+        
+        dropdown.innerHTML = html;
     }
 
     function switchView(btn, viewName) {
@@ -407,10 +379,10 @@
 
       // Reset Tabs
       document.querySelectorAll('.tab-btn').forEach(b => {
-        b.className = "tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors";
+        b.className = "tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors";
       });
       // Active Tab
-      btn.className = "tab-btn px-4 py-1 text-xs font-bold text-grafana-orange bg-dark-panel shadow-sm border border-dark-border rounded-sm transition-colors";
+      btn.className = "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-grafana-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
 
       // Update Header
       const titleMap = {
@@ -435,17 +407,59 @@
       document.getElementById('job-type-select').value = "";
       document.getElementById('start-date').value = "";
       document.getElementById('end-date').value = "";
+      document.getElementById('table-search').value = ""; // Clear search input
 
-      renderPlantTable(plantLogData[viewName], viewName);
+      // Update Table Data
+      plantLogTable.setData(plantLogData[viewName]);
+      plantLogTable.setSearch(""); // Reset internal search state
     }
 
     // Init
     const dateEl = document.getElementById('current-date');
-    const now = new Date();
-    const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
-    dateEl.textContent = now.toLocaleDateString('en-GB', options);
+    if (dateEl) {
+         const now = new Date();
+         const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+         dateEl.textContent = now.toLocaleDateString('en-GB', options);
+    }
 
-    renderPlantTable(plantLogData['today'], 'today');
+    function initReportNavState() {
+      const navButtons = Array.from(document.querySelectorAll('.report-nav-btn[data-target]'));
+      if (!navButtons.length) return;
+
+      const currentFile = (window.location.pathname.split('/').pop() || '').toLowerCase();
+      const lastSelected = (sessionStorage.getItem('plantDetailReportNav') || '').toLowerCase();
+      let hasExactMatch = false;
+
+      navButtons.forEach((btn) => {
+        const target = (btn.dataset.target || '').toLowerCase();
+        const isActive = target && target === currentFile;
+        if (isActive) {
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-current', 'page');
+          hasExactMatch = true;
+        } else {
+          btn.classList.remove('is-active');
+          btn.removeAttribute('aria-current');
+        }
+
+        btn.addEventListener('click', () => {
+          sessionStorage.setItem('plantDetailReportNav', target);
+        });
+      });
+
+      // On plant_detail page, keep the last visited report visually active.
+      if (!hasExactMatch && currentFile === 'plant_detail.html' && lastSelected) {
+        const remembered = navButtons.find((btn) => (btn.dataset.target || '').toLowerCase() === lastSelected);
+        if (remembered) remembered.classList.add('is-active');
+      }
+    }
+
+    // Init Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        initReportNavState();
+        initTable();
+    });
+    
   </script>
 </body>
 

@@ -11,12 +11,14 @@ function renderSidebar(activePageId) {
 
     // 2. Build HTML
     const sidebarHTML = `
-      <aside id="app-sidebar" class="${widthClass} bg-[#0b0c0e] flex flex-col flex-shrink-0 border-r border-[#2c3235] z-50 h-screen font-sans transition-all duration-300 relative group/sidebar">
+      <aside id="app-sidebar" class="${widthClass} bg-[#0b0c0e] flex flex-col shrink-0 border-r border-[#2c3235] z-50 h-screen font-sans transition-all duration-300 relative group/sidebar">
           
-          <div class="h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-between px-5'} bg-[#0b0c0e] border-b border-[#2c3235] relative">
-              <div class="flex items-center gap-3 overflow-hidden">
-                  <div class="w-9 h-9 flex-shrink-0 cursor-pointer bg-white rounded p-0.5" onclick="toggleSidebar()">
-                      <img src="/src/assets/images/gnfc-sidebar-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="w-full h-full object-contain" alt="GNFC">
+          <div class="h-16 flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-center px-4'} bg-[#0b0c0e] border-b border-[#2c3235] relative">
+              <div class="flex items-center gap-2 transition-all duration-300">
+                  <div class="flex items-center cursor-pointer bg-white rounded-md" onclick="toggleSidebar()">
+                      <!-- <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-6 w-auto object-contain" alt="GNFC Logo"> -->
+                     <!-- <img src="/src/assets/images/gnfc-sidebar-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="${isCollapsed ? 'hidden' : 'block'} h-6 w-auto object-contain" alt="GNFC Text"> -->
+                     <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-12 w-auto object-contain" alt="GNFC Logo">
                   </div>
               </div>
               
@@ -33,14 +35,14 @@ function renderSidebar(activePageId) {
   
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Logs</div>
               
-              ${createLink("shift_logbook_officer", "/src/pages/shift_logbook_officer.html", "ph-notebook", "Officer Logs", isCollapsed)}
+              ${createLink("shift_logbook_officer", "#", "ph-notebook", "Officer Logs", isCollapsed)}
               
               ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logs", isCollapsed)}
               
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Analysis</div>
               
-              ${createLink("job_types", "/src/pages/job_types.html", "ph-wrench", "Job Analysis", isCollapsed)}
-              ${createLink("instrument_types", "/src/pages/instrument_types.html", "ph-faders", "Instrument Types", isCollapsed)}
+              ${createLink("job_types", "#", "ph-wrench", "Job Analysis", isCollapsed)}
+              ${createLink("instrument_types", "#", "ph-faders", "Instrument Types", isCollapsed)}
 
             <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">System</div>
 
@@ -50,18 +52,18 @@ function renderSidebar(activePageId) {
   
           <div class="p-4 border-t border-[#2c3235] bg-[#0b0c0e]">
               <div class="flex items-center gap-3 text-[#c7d0d9] hover:text-white cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
-                  <img src="https://ui-avatars.com/api/?name=Admin&background=2c3235&color=fff" class="w-8 h-8 rounded-full border border-[#2c3235] flex-shrink-0">
+                  <img src="https://ui-avatars.com/api/?name=Admin&background=2c3235&color=fff" class="w-8 h-8 rounded-full border border-[#2c3235] shrink-0">
                   <div class="flex-1 ${textClass} whitespace-nowrap transition-opacity duration-300">
                       <p class="text-sm font-medium leading-none">Admin User</p>
-                      <p class="text-[#5794F2] text-xs">Sign out</p>
+                      <p class="text-[#5794F2] text-xs" onclick="logout()">Sign out</p>
                   </div>
-                  <i class="ph-bold ph-sign-out ${textClass}"></i>
+                  <i class="ph-bold ph-sign-out ${textClass}" onclick="logout()"></i>
               </div>
           </div>
       </aside>
       
       <!-- Custom Tooltip Element -->
-      <div id="sidebar-tooltip" class="fixed z-[100] hidden px-3 py-1.5 bg-[#181b1f] text-white text-xs font-medium rounded border border-[#2c3235] shadow-xl pointer-events-none whitespace-nowrap transition-opacity duration-200"></div>
+      <div id="sidebar-tooltip" class="fixed z-100 hidden px-3 py-1.5 bg-[#181b1f] text-white text-xs font-medium rounded border border-[#2c3235] shadow-xl pointer-events-none whitespace-nowrap transition-opacity duration-200"></div>
       `;
 
     const container = document.getElementById("sidebar-container");
@@ -83,7 +85,7 @@ function createLink(id, url, icon, text, isCollapsed) {
          onmouseenter="showSidebarTooltip(event, '${text}')" 
          onmouseleave="hideSidebarTooltip()"
          class="flex items-center gap-3 px-4 py-2.5 transition-all duration-200 group ${activeClass} ${justifyClass}">
-          <i class="ph ${icon} text-lg ${isActive ? "text-[#FF9900]" : ""} flex-shrink-0"></i>
+          <i class="ph ${icon} text-lg ${isActive ? "text-[#FF9900]" : ""} shrink-0"></i>
           <span class="font-medium text-sm whitespace-nowrap transition-opacity duration-300 ${spanClass} sidebar-text">${text}</span>
       </a>`;
 }
@@ -127,4 +129,9 @@ function showSidebarTooltip(event, text) {
 function hideSidebarTooltip() {
     const tooltip = document.getElementById('sidebar-tooltip');
     if (tooltip) tooltip.classList.add('hidden');
+}
+
+function logout() {
+    localStorage.removeItem('sidebarCollapsed');
+    window.location.href = '/src/pages/index.html';
 }

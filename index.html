@@ -4,321 +4,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GNFC | Instrument Control Center</title>
+    <title>GNFC | Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient-shift 8s ease infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(2deg)' },
+                        },
+                        'gradient-shift': {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' },
+                        }
                     }
                 }
             }
         }
     </script>
-    <script src="/src/js/theme_manager.js"></script>
 </head>
 
-<body class="bg-slate-50 font-sans text-slate-600 h-screen flex overflow-hidden">
+<body class="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-sky-50 to-teal-50 font-sans text-slate-800">
 
-    <!-- Sidebar (same admin style as dashboard) -->
-    <aside class="w-64 bg-slate-900 flex flex-col flex-shrink-0 transition-all duration-300 z-20">
-        <!-- Brand -->
-        <div class="h-16 flex items-center gap-3 px-6 bg-slate-950/50 border-b border-white/10">
-            <div class="w-8 h-8 bg-teal-500 rounded flex items-center justify-center shadow-lg shadow-teal-500/20">
-                <span class="text-white font-bold text-lg">G</span>
-            </div>
-            <div>
-                <h1 class="text-white font-bold tracking-wide text-sm">GNFC INSTRUMENT</h1>
-                <p class="text-slate-400 text-[10px] uppercase tracking-wider">Control Center</p>
-            </div>
-        </div>
+    <div class="absolute w-72 h-72 bg-teal-500/20 rounded-full blur-3xl -top-24 -right-24 animate-float pointer-events-none"></div>
+    <div class="absolute w-48 h-48 bg-cyan-500/15 rounded-full blur-3xl -bottom-12 -left-12 animate-float pointer-events-none"
+        style="animation-delay: 2s;"></div>
+    <div class="absolute w-36 h-36 bg-blue-500/10 rounded-full blur-3xl top-1/2 left-1/5 animate-float pointer-events-none"
+        style="animation-delay: 4s;"></div>
 
-        <!-- Navigation -->
-        <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
-            <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Main</p>
+    <main class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10">
+        <div class="w-full max-w-md">
 
-            <!-- Home (this page) -->
-            <a href="index.html"
-                class="flex items-center gap-3 px-3 py-2 text-teal-400 bg-white/5 rounded-lg border border-white/5">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6" />
-                </svg>
-                <span class="font-medium text-sm">Home</span>
-            </a>
+            <div class="bg-white/95 backdrop-blur-xl border border-black/5 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-black/5">
 
-            <a href="src/pages/dashboard.html"
-                class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg:white/5 rounded-lg transition-colors group">
-                <svg class="w-5 h-5 group-hover:text-teal-400 transition-colors" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-                <span class="font-medium text-sm">Dashboard</span>
-            </a>
-
-            <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2">Modules</p>
-
-            <!-- Module shortcuts (go to same login sections as before) -->
-            <a href="src/pages/login.html?section=iims"
-                class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-                <span
-                    class="w-6 h-6 rounded bg-teal-500/20 text-teal-300 flex items-center justify-center text-xs font-bold">I</span>
-                <span class="font-medium text-sm">IIMS</span>
-            </a>
-            <a href="src/pages/login.html?section=utility"
-                class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
-                <span
-                    class="w-6 h-6 rounded bg-amber-500/20 text-amber-300 flex items-center justify-center text-xs font-bold">U</span>
-                <span class="font-medium text-sm">UTILITY</span>
-            </a>
-            <a href="src/pages/login.html?section=oprjob"
-                class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg:white/5 rounded-lg transition-colors group">
-                <span
-                    class="w-6 h-6 rounded bg-sky-500/20 text-sky-300 flex items-center justify-center text-[10px] font-bold">OP</span>
-                <span class="font-medium text-sm">OPRJOB REG</span>
-            </a>
-            <a href="src/pages/login.html?section=eng-doc"
-                class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg:white/5 rounded-lg transition-colors group">
-                <span
-                    class="w-6 h-6 rounded bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-[10px] font-bold">ED</span>
-                <span class="font-medium text-sm">ENG_DOC</span>
-            </a>
-            <a href="src/pages/login.html?section=help"
-                class="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg:white/5 rounded-lg transition-colors group">
-                <span
-                    class="w-6 h-6 rounded bg-rose-500/20 text-rose-300 flex items-center justify-center text-xs font-bold">?</span>
-                <span class="font-medium text-sm">HELP</span>
-            </a>
-        </nav>
-
-        <!-- User Profile (Bottom) -->
-        <div class="p-4 border-t border-white/10 bg-slate-950/30">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-9 h-9 rounded-full bg-gradient-to-tr from-teal-400 to-blue-500 flex items-center justify-center text-white font-bold text-xs shadow-md">
-                    ADM</div>
-                <div class="flex-1 overflow-hidden">
-                    <p class="text-white text-sm font-medium truncate">System Admin</p>
-                    <p class="text-slate-400 text-xs truncate">admin@gnfc.in</p>
+                <div class="">
+                  <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="w-32 h-32 mx-auto object-contain" alt="GNFC Logo">
                 </div>
-                <button onclick="window.location.href='src/pages/login.html?section=iims'"
-                    class="text-slate-400 hover:text-white transition-colors text-xs font-medium border border-white/10 px-3 py-1 rounded-full">
-                    Login
-                </button>
-            </div>
-        </div>
-    </aside>
 
-    <!-- Main Content (admin layout) -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-
-        <!-- Top Bar -->
-        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 shrink-0">
-            <div class="flex items-center gap-4">
-                <div class="hidden sm:flex items-center gap-3">
-                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 px-2 py-1">
-                        <img src="/src/assets/images/gnfc-logo.png" class="h-10 w-auto" alt="GNFC">
-                    </div>
-                    <div>
-                        <h1 class="text-slate-900 text-sm sm:text-base font-bold tracking-wide">
-                            Gujarat Narmada Valley Fertilizers & Chemicals Limited
-                        </h1>
-                        <p class="text-teal-600 text-xs font-medium">Instrument Department</p>
-                    </div>
-                </div>
-                <h2 class="sm:hidden text-base font-bold text-slate-800">Instrument Portal</h2>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <span id="current-date"
-                    class="text-xs sm:text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
-                    --/--/----
-                </span>
-            </div>
-        </header>
-
-        <!-- Scrollable Content -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-6">
-
-            <!-- Welcome / Mission -->
-            <section class="grid gap-6 lg:grid-cols-[2fr_1.3fr]">
-                <!-- Left: Welcome + Mission -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                    <h2 class="text-xl font-bold text-teal-600 mb-2">
-                        Welcome to the web world of Instrument department!
-                    </h2>
-                    <p class="text-slate-600 mb-6 text-sm">
-                        This web site provides comprehensive support for every activity carried out by instrumentation
-                        professionals in GNFC.
+                <div class="px-8 py-8 bg-white">
+                    <p id="login-subtitle" class="text-slate-500 text-sm mb-8 leading-relaxed">
+                        Welcome back. Please enter your credentials to access the system.
                     </p>
 
-                    <div class="bg-slate-50 rounded-xl border border-slate-200 p-5">
-                        <div class="flex items-start gap-3 mb-3">
-                            <div
-                                class="w-7 h-7 rounded-full border-2 border-teal-500 flex items-center justify-center mt-0.5">
-                                <div class="w-2.5 h-2.5 bg-teal-500 rounded-full"></div>
+                    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+
+                        <div class="space-y-1.5">
+                            <label for="ec-no" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
+                                EC Number
+                            </label>
+                            <div class="relative group">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
+                                    <i class="ph-bold ph-user text-lg"></i>
+                                </span>
+                                <input type="text" id="ec-no" name="ec-no" placeholder="e.g. 123456" required
+                                    class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
                             </div>
-                            <h3 class="text-base font-bold text-slate-800">Mission Statement</h3>
                         </div>
-                        <p class="text-slate-600 text-sm leading-relaxed pl-10">
-                            100% computerization of all our work practices on a single platform, built on a standard
-                            DBMS software, easy to navigate, meeting customized work requirements, platform free as far
-                            as the applications are concerned, and 100% secured and authentic with respect to data
-                            security and integrity.
-                        </p>
-                    </div>
+
+                        <div class="space-y-1.5">
+                            <label for="password" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
+                                Password
+                            </label>
+                            <div class="relative group">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
+                                    <i class="ph-bold ph-lock-key text-lg"></i>
+                                </span>
+                                <input type="password" id="password" name="password" placeholder="••••••••" required
+                                    class="w-full pl-10 pr-10 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
+                                
+                                <button type="button" onclick="togglePassword('password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
+                                    <i class="ph-bold ph-eye" id="password-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="email-row" class="space-y-1.5 hidden">
+                            <label for="email-password" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
+                                Email Password
+                            </label>
+                            <div class="relative group">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
+                                    <i class="ph-bold ph-envelope-simple text-lg"></i>
+                                </span>
+                                <input type="password" id="email-password" name="email-password" placeholder="Email Password"
+                                    class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" id="submitBtn"
+                                class="w-full relative overflow-hidden bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2 group">
+                                <span>Sign In</span>
+                                <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                            
+                            <button type="button" id="view-btn"
+                                class="hidden mt-3 w-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg border border-slate-200 transition-all">
+                                View As Guest
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
-                <!-- Right: Quick Access Card -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">
-                            Quick Entry
-                        </h3>
-                        <p class="text-slate-600 text-sm mb-4">
-                            Start directly with the IIMS portal for daily instrumentation workflows.
-                        </p>
-                    </div>
-                    <button onclick="window.location.href='src/pages/login.html?section=iims'"
-                        class="inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold text-sm rounded-xl shadow-md shadow-teal-500/30 hover:shadow-lg hover:shadow-teal-500/40 hover:-translate-y-0.5 transition-all">
-                        Access IIMS Portal
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
+                <!-- <div class="bg-slate-50/80 border-t border-slate-200 px-8 py-4 flex items-center justify-between">
+                    <a href="index.html" class="text-slate-500 hover:text-teal-600 font-medium text-xs flex items-center gap-1.5 transition-colors group">
+                        <i class="ph-bold ph-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                        Back to Home
+                    </a>
+                    <div id="section-chip" class="bg-white px-3 py-1 rounded-full border border-slate-200 text-[10px] font-bold uppercase tracking-wide text-slate-500 shadow-sm">
+                        SECTION: IIMS
+                    </div> -->
                 </div>
-            </section>
+            </div>
 
-            <!-- Module Overview Cards -->
-            <section>
-                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-4">
-                    Instrument Department Modules
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-                    <!-- IIMS -->
-                    <a href="src/pages/login.html?section=iims"
-                        class="bg-white rounded-2xl border-l-4 border-teal-500 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-5 flex flex-col gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-lg bg-teal-500 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800">IIMS</h4>
-                                <p class="text-xs text-slate-400 font-medium">Core instrumentation workflow</p>
-                            </div>
-                        </div>
-                        <p class="text-slate-600 text-sm">
-                            Online operation job register, e-log book, engineering documentation, maintenance records
-                            and history.
-                        </p>
-                    </a>
-
-                    <!-- Utility -->
-                    <a href="src/pages/login.html?section=utility"
-                        class="bg-white rounded-2xl border-l-4 border-amber-500 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-5 flex flex-col gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-lg bg-amber-500 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800">UTILITY</h4>
-                                <p class="text-xs text-slate-400 font-medium">Reference information</p>
-                            </div>
-                        </div>
-                        <p class="text-slate-600 text-sm">
-                            Personnel details, engineering standards, and technical literature to support field work.
-                        </p>
-                    </a>
-
-                    <!-- HELP -->
-                    <a href="src/pages/login.html?section=help"
-                        class="bg-white rounded-2xl border-l-4 border-orange-500 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-5 flex flex-col gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-lg bg-orange-500 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800">HELP</h4>
-                                <p class="text-xs text-slate-400 font-medium">Guides & procedures</p>
-                            </div>
-                        </div>
-                        <p class="text-slate-600 text-sm">
-                            Detailed documents describing all features and procedures to put every module to maximum
-                            use.
-                        </p>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Additional modules row -->
-            <section>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <a href="src/pages/login.html?section=oprjob"
-                        class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-5 flex items-center justify-between">
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm mb-1">OPRJOB Register</h4>
-                            <p class="text-slate-500 text-xs">
-                                Online operation job register for process jobs and follow-ups.
-                            </p>
-                        </div>
-                        <span
-                            class="px-3 py-1 text-[11px] font-bold rounded-full bg-sky-50 text-sky-700 border border-sky-200">
-                            Access
-                        </span>
-                    </a>
-
-                    <a href="src/pages/login.html?section=eng-doc"
-                        class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-5 flex items-center justify-between">
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-sm mb-1">ENG_DOC</h4>
-                            <p class="text-slate-500 text-xs">
-                                Central engineering documentation and drawing repository.
-                            </p>
-                        </div>
-                        <span
-                            class="px-3 py-1 text-[11px] font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                            Access
-                        </span>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Footer (inside main scroll area for admin feel) -->
-            <footer class="pt-4 border-t border-slate-200 text-center text-xs text-slate-400">
-                © 2026 Gujarat Narmada Valley Fertilizers & Chemicals Limited
-            </footer>
+            <!-- <div class="mt-8 text-center space-y-2">
+                <p class="text-slate-400 text-xs flex items-center justify-center gap-1.5">
+                    <i class="ph-fill ph-lock-key text-slate-400"></i>
+                    Secure SSL Connection
+                </p>
+                <p class="text-slate-400/60 text-[10px]">
+                    &copy; 2026 GNFC Instrument Dept. All rights reserved.
+                </p>
+            </div> -->
         </div>
     </main>
 
     <script>
-        // Set Date in top bar
-        const dateEl = document.getElementById('current-date');
-        const now = new Date();
-        const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
-        if (dateEl) {
-            dateEl.textContent = now.toLocaleDateString('en-US', options);
+        // URL Parameter Logic
+        const params = new URLSearchParams(window.location.search);
+        const section = (params.get('section') || 'iims').toLowerCase();
+
+        const config = {
+            iims: { title: 'IIMS Login', subtitle: 'Secure access to instrumentation workflows.', chip: 'IIMS', showEmail: true, showView: false },
+            utility: { title: 'Utility Login', subtitle: 'Access standards and contact directory.', chip: 'UTILITY', showEmail: false, showView: true },
+            oprjob: { title: 'OPRJOB Login', subtitle: 'Manage operation job logs and shifts.', chip: 'OPRJOB', showEmail: false, showView: false },
+            'eng-doc': { title: 'Engineering Docs', subtitle: 'Retrieve technical drawings and manuals.', chip: 'ENG_DOC', showEmail: false, showView: false },
+            help: { title: 'Help Login', subtitle: 'Support guides and procedures.', chip: 'HELP', showEmail: false, showView: false }
+        };
+
+        const current = config[section] || config.iims;
+        
+        // Update UI Text
+        document.getElementById('login-title').textContent = current.title;
+        document.getElementById('login-subtitle').textContent = current.subtitle;
+        document.getElementById('section-chip').textContent = `SECTION: ${current.chip}`;
+
+        // Toggle Fields
+        if (!current.showEmail) document.getElementById('email-row').classList.add('hidden');
+        else document.getElementById('email-row').classList.remove('hidden');
+
+        if (current.showView) {
+            const viewBtn = document.getElementById('view-btn');
+            viewBtn.classList.remove('hidden');
+            viewBtn.onclick = () => window.location.href = 'dashboard.html'; // Mock action
+        }
+
+        // Feature: Toggle Password Visibility
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + '-icon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('ph-eye');
+                icon.classList.add('ph-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('ph-eye-slash');
+                icon.classList.add('ph-eye');
+            }
+        }
+
+        // Feature: Simulate Login Loading
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const originalContent = btn.innerHTML;
+            
+            // Loading State
+            btn.disabled = true;
+            btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-lg"></i><span>Verifying...</span>`;
+            
+            // Simulate API delay
+            setTimeout(() => {
+                btn.innerHTML = `<i class="ph-bold ph-check text-lg"></i><span>Success</span>`;
+                btn.classList.remove('from-teal-600', 'to-cyan-600');
+                btn.classList.add('from-emerald-500', 'to-green-600');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 500);
+            }, 1000);
         }
     </script>
 </body>
-
 </html>

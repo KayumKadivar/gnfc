@@ -186,6 +186,22 @@ const ThemeManager = {
                 background-color: var(--app-panel-alt) !important;
             }
 
+            [class~="hover:bg-white\\/5"]:hover,
+            [class~="hover:bg-dark-border\\/50"]:hover {
+                background-color: var(--app-panel-alt) !important;
+            }
+
+            html[data-theme-mode="light"] tr[class~="hover:bg-white\\/5"]:hover,
+            html[data-theme-mode="light"] tr[class~="hover:bg-dark-border\\/50"]:hover {
+                background: linear-gradient(90deg, rgba(37, 99, 235, 0.08), rgba(14, 165, 233, 0.04)) !important;
+                box-shadow: inset 2px 0 0 rgba(37, 99, 235, 0.5);
+            }
+
+            html[data-theme-mode="light"] tr[class~="hover:bg-white\\/5"]:hover td,
+            html[data-theme-mode="light"] tr[class~="hover:bg-dark-border\\/50"]:hover td {
+                border-color: rgba(148, 163, 184, 0.45) !important;
+            }
+
             [class~="hover:text-white"]:hover {
                 color: var(--app-text-strong) !important;
             }
@@ -281,6 +297,21 @@ const ThemeManager = {
             g: parseInt(value.slice(2, 4), 16),
             b: parseInt(value.slice(4, 6), 16),
         };
+    },
+    increaseFontSize() {
+        const current = this.getSettings();
+        const newSize = Math.min(24, current.fontSize + 1); // Max 24px
+        if (newSize !== current.fontSize) {
+            this.saveSettings({ ...current, fontSize: newSize });
+        }
+    },
+
+    decreaseFontSize() {
+        const current = this.getSettings();
+        const newSize = Math.max(12, current.fontSize - 1); // Min 12px
+        if (newSize !== current.fontSize) {
+            this.saveSettings({ ...current, fontSize: newSize });
+        }
     },
 };
 
