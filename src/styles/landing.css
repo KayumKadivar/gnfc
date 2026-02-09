@@ -1,0 +1,332 @@
+/* ========================================
+   GNFC Landing Page - Classic Layout
+   Modern styling for 30-60 age group
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.8;
+    color: #000;
+    background: #e8f0f8;
+    font-size: 17px;
+}
+
+/* Header Section */
+.header {
+    background: white;
+    border-bottom: 3px solid #2a5298;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    gap: 20px;
+}
+
+.logo img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+/* Logo Fallback/Placeholder */
+.logo {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 28px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    border: 3px solid white;
+    letter-spacing: 1px;
+}
+
+.logo::before {
+    content: 'GNFC';
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.title-section {
+    flex: 1;
+}
+
+.title-bar {
+    background: linear-gradient(to right, #1e5fa8, #3b7dc4);
+    color: white;
+    padding: 12px 20px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    background: linear-gradient(to right, #28a745, #34ce57);
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* Welcome Bar */
+.welcome-bar {
+    background: linear-gradient(to right, #0d7f5c, #0e9668);
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 2px solid #0a5c45;
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    min-height: calc(100vh - 180px);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    background: white;
+    border-right: 2px solid #ccc;
+    padding: 20px 0;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-link {
+    display: block;
+    padding: 15px 25px;
+    text-decoration: none;
+    color: #0066cc;
+    font-size: 17px;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.nav-link:hover {
+    background: #f0f8ff;
+    color: #0052a3;
+    padding-left: 30px;
+}
+
+/* Content Area */
+.content {
+    flex: 1;
+    background: white;
+    padding: 30px 40px;
+}
+
+.content-title {
+    color: #0066cc;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0066cc;
+}
+
+.intro-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.content p {
+    font-size: 17px;
+    line-height: 1.9;
+    margin-bottom: 18px;
+    color: #222;
+    text-align: justify;
+}
+
+.section-heading {
+    color: #000;
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/* Links */
+.inline-link {
+    color: #0066cc;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.inline-link:hover {
+    color: #0052a3;
+    text-decoration: none;
+}
+
+/* Ending Section */
+.enjoy-text {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #000;
+}
+
+.signature {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 30px;
+}
+
+/* Action Links */
+.action-links {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #ccc;
+}
+
+.action-row {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+
+.action-link {
+    display: inline-block;
+    padding: 15px 35px;
+    background: #f0f0f0;
+    border: 2px solid #0066cc;
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: all 0.3s;
+    min-width: 150px;
+    text-align: center;
+}
+
+.action-link:hover {
+    background: #0066cc;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,102,204,0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid #ccc;
+    }
+    
+    .nav-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .nav-link {
+        flex: 1;
+        min-width: 150px;
+        text-align: center;
+        border-right: 1px solid #e0e0e0;
+        border-bottom: none;
+    }
+    
+    .title-bar {
+        font-size: 18px;
+        padding: 10px 15px;
+    }
+    
+    .subtitle {
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+    
+    .action-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-link {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+    
+    .content p {
+        text-align: left;
+    }
+    
+    .title-bar {
+        font-size: 16px;
+    }
+    
+    .subtitle {
+        font-size: 15px;
+    }
+    
+    .welcome-bar {
+        font-size: 16px;
+    }
+}
+
+/* High Contrast for Better Readability */
+@media (prefers-contrast: high) {
+    body {
+        background: white;
+    }
+    
+    .content p {
+        color: #000;
+    }
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | GNFC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>window.activePage = 'dashboard';</script>
+    <script src="config.js"></script>
+</head>
+<body class="bg-[#111217] text-[#c7d0d9] font-sans h-screen flex overflow-hidden">
+
+    <script src="js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('dashboard');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <header class="h-14 bg-[#111217] border-b border-[#2c3235] flex items-center justify-between px-6 shrink-0">
+            <div class="flex items-center gap-2 text-lg font-medium text-white">
+                <i class="ph ph-squares-four text-[#8e8e9e]"></i>
+                <span>Plant Status Overview</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                 <div class="hidden md:flex items-center bg-[#181b1f] border border-[#2c3235] rounded-sm overflow-hidden h-8">
+                    <button class="px-3 h-full flex items-center gap-2 hover:bg-[#22252b] text-sm border-r border-[#2c3235] transition">
+                        <i class="ph ph-clock text-[#FF9900]"></i> Last 5 minutes
+                    </button>
+                    <button class="px-2 h-full hover:bg-[#22252b] text-[#8e8e9e] hover:text-white transition">
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                </div>
+                <button class="h-8 w-8 flex items-center justify-center bg-[#181b1f] border border-[#2c3235] rounded-sm text-[#5794F2] hover:text-white hover:bg-[#22252b] transition">
+                    <i class="ph-bold ph-arrows-clockwise"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 bg-[#111217]">
+            
+            <div class="bg-[#181b1f] border border-[#2c3235] rounded-sm mb-4 shadow-sm">
+                <div class="flex items-center justify-between px-4 py-2 border-b border-[#2c3235] bg-[#181b1f]">
+                    <h3 class="font-medium text-[#5794F2] flex items-center gap-2 text-sm cursor-pointer hover:text-white transition">
+                        <i class="ph-bold ph-caret-down"></i> Live Status Units
+                    </h3>
+                    <span class="text-[10px] bg-[#73BF69]/10 text-[#73BF69] px-2 py-0.5 rounded uppercase font-bold border border-[#73BF69]/20">14 Active</span>
+                </div>
+                
+                <div id="units-grid" class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const units = [
+            { name: "M1 Unit", status: "Operational", color: "#73BF69" },
+            { name: "M2 Unit", status: "Maintenance", color: "#FF9900" },
+            { name: "AA Section", status: "Operational", color: "#73BF69" },
+            { name: "FA Section", status: "Operational", color: "#73BF69" },
+            { name: "BOILER", status: "Critical", color: "#F2495C" },
+            { name: "AMM", status: "Operational", color: "#73BF69" },
+            { name: "UREA", status: "Operational", color: "#73BF69" },
+            { name: "NPP", status: "Offline", color: "#8e8e9e" },
+            { name: "DM Plant", status: "Operational", color: "#73BF69" },
+            { name: "BAGG", status: "Operational", color: "#73BF69" },
+            { name: "INST WS", status: "Active", color: "#5794F2" },
+            { name: "CMS", status: "Operational", color: "#73BF69" }
+        ];
+
+        const grid = document.getElementById('units-grid');
+        units.forEach(u => {
+            // Card BG is same as Panel BG (#181b1f) but has hover effect (#22252b)
+            const cardHTML = `
+            <div class="bg-[#181b1f] border border-[#2c3235] hover:border-[#5794F2] hover:bg-[#22252b] rounded-sm p-3 relative group cursor-pointer transition-all duration-200 h-24 flex flex-col justify-between shadow-sm">
+                <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-sm" style="background-color: ${u.color}"></div>
+                
+                <div class="flex justify-between items-start pl-3">
+                    <h4 class="font-bold text-gray-200 text-sm group-hover:text-white tracking-tight">${u.name}</h4>
+                    <i class="ph-fill ph-circle text-[8px] animate-pulse" style="color: ${u.color}"></i>
+                </div>
+                
+                <div class="pl-3 flex items-end justify-between border-t border-white/5 pt-2 mt-1">
+                    <span class="text-xs font-mono font-medium" style="color: ${u.color}">${u.status}</span>
+                    <span class="text-[10px] text-[#8e8e9e] group-hover:text-[#5794F2] flex items-center gap-1">
+                        View <i class="ph-bold ph-caret-right"></i>
+                    </span>
+                </div>
+            </div>`;
+            grid.innerHTML += cardHTML;
+        });
+    </script>
+</body>
+</html>

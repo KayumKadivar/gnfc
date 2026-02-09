@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Instrument Type Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            dark: {
+              bg: '#111217',      // Grafana Main BG
+              panel: '#181b1f',   // Panel BG
+              border: '#2c3235',  // Borders
+              text: '#ccccdd',    // Main Text
+              muted: '#8e8e9e',   // Muted Text
+              header: '#0b0c0e'   // Top Bar
+            },
+            grafana: {
+              orange: '#FF9900',
+              blue: '#5794F2',
+              green: '#73BF69',
+              red: '#F2495C'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #111217; }
+    ::-webkit-scrollbar-thumb { background: #2c3235; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #444; }
+    select { background-image: none; }
+  </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+
+  <script src="js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>
+    try { renderSidebar('instrument_types'); } catch(e) { console.warn("Sidebar script not found"); }
+  </script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <header class="h-14 bg-dark-header border-b border-dark-border flex items-center justify-between px-6 shrink-0 z-10 shadow-lg">
+        <div class="flex items-center gap-4">
+             <div class="flex items-center gap-2 text-lg font-medium text-white">
+                <i class="ph ph-star text-dark-muted hover:text-grafana-orange cursor-pointer transition-colors"></i>
+                <span>Instrument Type Analysis</span>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-xs text-dark-muted border-l border-dark-border pl-4">
+                <span>GNFC</span> <i class="ph ph-caret-right text-[10px]"></i> <span>Plant Detail</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <button onclick="window.history.back()" class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
+                <i class="ph-bold ph-arrow-left"></i> BACK
+            </button>
+            <div class="flex items-center gap-2 bg-dark-panel border border-dark-border px-3 py-1.5 rounded-sm text-xs font-mono font-medium text-grafana-orange">
+                <i class="ph-fill ph-calendar-blank"></i>
+                <span id="current-date">--/--/----</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+    <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm overflow-hidden">
+      <div class="bg-[#22252b] px-4 py-2 border-b border-dark-border flex justify-between items-center">
+        <h2 class="text-xs font-bold text-grafana-blue uppercase tracking-widest flex items-center gap-2">
+          <i class="ph-bold ph-funnel"></i> Filter Query
+        </h2>
+        <span class="text-[10px] font-mono text-dark-muted">v2.4.0</span>
+      </div>
+
+      <div class="p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-4">
+            <label class="block text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1.5">Time Range Selection</label>
+            <div class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center px-2 group focus-within:border-grafana-blue transition-colors">
+                 <input type="date" id="start-date" onchange="applyFilters()" 
+                     class="bg-transparent text-xs text-white focus:outline-none w-full appearance-none py-1">
+                 <span class="px-2 text-dark-border">|</span>
+                 <input type="date" id="end-date" onchange="applyFilters()" 
+                     class="bg-transparent text-xs text-white focus:outline-none w-full appearance-none py-1">
+            </div>
+        </div>
+
+        <div class="lg:col-span-5">
+            <label class="block text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1.5">Select Type of Instrument</label>
+            <div class="relative">
+                <select id="job-type-select" onchange="applyFilters()" 
+                    class="w-full h-9 bg-dark-bg border border-dark-border text-white text-xs rounded-sm pl-3 pr-8 focus:border-grafana-blue outline-none cursor-pointer appearance-none font-medium transition-colors group">
+                    <option value="">All Instrument Types</option>
+                </select>
+                <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs group-hover:text-white"></i>
+            </div>
+        </div>
+
+        <div class="lg:col-span-3 flex items-end gap-2">
+            <button onclick="applyFilters()" class="flex-1 h-9 bg-grafana-blue hover:bg-blue-500 text-white text-xs font-bold rounded-sm shadow-lg shadow-blue-500/10 transition-all">RUN QUERY</button>
+            <button onclick="resetFilters()" class="h-9 px-4 bg-transparent border border-dark-border text-dark-muted hover:text-white hover:bg-white/5 text-xs font-bold rounded-sm transition-all">RESET</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-dark-panel rounded-sm border border-dark-border overflow-hidden min-h-[400px]">
+        <div class="bg-[#22252b] border-b border-dark-border px-4 py-2 flex justify-between items-center">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <i class="ph-fill ph-table text-grafana-green"></i> Type of Instrument Report
+            </h3>
+            <span class="text-[10px] bg-grafana-green/10 text-grafana-green px-2 py-0.5 rounded border border-grafana-green/20">LIVE DATA</span>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                        <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
+                        <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
+                        <th class="border-r border-dark-border px-3 py-2 w-40 border-b border-dark-border/50 text-white">Loop / Tag</th>
+                        <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border/50 text-white font-black">Job Type</th>
+                        <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
+                        <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px]">Description</th>
+                        <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Tech/Eng</th>
+                        <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Status</th>
+                        <th rowspan="2" class="px-3 py-3 min-w-[120px]">Remarks</th>
+                    </tr>
+                    <tr class="bg-dark-header text-[9px] font-bold text-grafana-blue uppercase text-center border-b border-dark-border">
+                        <th class="border-r border-dark-border px-3 py-1">Tag Detail</th>
+                        <th class="border-r border-dark-border px-3 py-1">Instrument Detail</th>
+                    </tr>
+                </thead>
+                <tbody id="plantTableBody" class="text-xs font-mono">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Data Source (Same as original)
+    const plantLogData = {
+      today: [
+        { sr: '1', date: '01/01/2026', area: '200', tag: 'N.A', tagSubtitle: 'FVC0208A', jobType: 'To be checked as reported CV is not open beyond 75% of MV (By MAJ: 01/01/2026)(Reassign by MAJ 01/01/2026)\nCIV', jobRef: '', tech: 'GAZ', desc: 'Reported That CV is not getting close more than 75%. -Actuator tube removed and checked valve close up to 75% and than stuck up. -Valve isolated and Drain by process and operation was checked and operation was found ok, it was found getting open and close 0-100%. When valve taken in line and checked by process how it was stopped at 75% position.', engineer: 'GAZ', engInitials: '', status: 'U/P', statusClass: 'text-amber-600' }
+      ],
+      tomorrow: [],
+      prev: [
+        { sr: '2', date: '31/12/2025', area: '400', tag: 'N.A', tagSubtitle: 'LV412B', jobType: 'C/V', jobRef: '', tech: 'MR_', desc: 'Process reported that valve not response to signal so checked at field and found that its CAM was out of line and its mounting screw was loose, tightening is done -After that response checked output was not responding so both output port opened and air supply on off done and response checked now positioner is responding to signal -thread sealant to be provide in cam mounting screw as preventive action.', engineer: 'MR_', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
+        { sr: '3', date: '31/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'HV0207B', jobType: 'C/V', jobRef: '', tech: 'PJR', desc: 'Control valve are Fully open on Handwheel So R0201B Shutdown taken by process and required to close it so Hand wheel Made Release. Now valve is fully close.', engineer: 'PJR', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
+        { sr: '4', date: '30/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Spare CV received from Store related PM to be done.(By:DKV : 30/12/2025)\nC/V', jobRef: '', tech: 'MRL', desc: '1/2 inch NPT machining is done for hydro test in both 6 inch 300 flange -Passing with water test taken at 10 bar no passing found -Body hydro test taken at 25bar. no leakage is found. Air passing test taken at 6 bar pressure from both side one by one not a single bubble found as leakage. -Stopper bolt provided', engineer: 'MR_', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
+        { sr: '5', date: '29/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'V4A-XV0209A', jobType: 'V4A related shutdown simulation defect to be attend.(By:MAJ : 29/12/2025)\nC/V', jobRef: '', tech: 'GAZ', desc: 'V4Avalve was found slight slow in closing so its Pnumatic SOV vent port was checked, it was found block so spare brand new 2 vent port issued and installed in both Pupet valve(1 Inch size) and operation time was checked now it was found ok.', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
+        { sr: '6', date: '29/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Spare CV received from Store related PM to be done.(By:MAJ : 29/12/2025)\nC/V', jobRef: '', tech: 'MRL', desc: 'Flange issued machining in flange is required so sent to central workshop.', engineer: 'MR_', engInitials: '', status: 'U/P', statusClass: 'text-amber-600' },
+        { sr: '7', date: '200', tag: 'N.A', tagSubtitle: 'FV003AB', jobType: 'C/V', jobRef: '', tech: 'GAZ', desc: 'Reported that valve was not getting operate in between 0-35% so checked it was Air to close valve and its span was found higher side, span slight adjusted and set and 50% and further stroke was checked and found matching -Start open at 9%', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
+        { sr: '8', date: '29/12/2025', area: '700', tag: 'N.A', tagSubtitle: 'FV791', jobType: 'To be checked as reported CV having gland leakage (By:MAJ : 29/12/2025)(Reassign by:MAJ 29/12/2025)\nC/V', jobRef: '', tech: 'PJR', desc: 'After process clearance and valve put on MANUAL From DCS, online Gland Tightening done. Now there is no any leakage found in it.', engineer: 'PJR', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' }
+      ],
+      weekly: [],
+      monthly: []
+    };
+
+    function getAllData() {
+        return [...plantLogData.today, ...plantLogData.prev, ...plantLogData.weekly, ...plantLogData.monthly];
+    }
+
+    function populateJobTypeDropdown() {
+        const allData = getAllData();
+        const jobTypes = [...new Set(allData.map(item => item.jobType).filter(Boolean))].sort();
+        const select = document.getElementById('job-type-select');
+        select.innerHTML = '<option value="">All Instrument Types</option>';
+        jobTypes.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            select.appendChild(option);
+        });
+    }
+
+    function resetFilters() {
+        document.getElementById('start-date').value = '';
+        document.getElementById('end-date').value = '';
+        document.getElementById('job-type-select').value = '';
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const jobType = document.getElementById('job-type-select').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        let filteredData = getAllData();
+
+        if (jobType) filteredData = filteredData.filter(item => item.jobType === jobType);
+
+        if (startDate || endDate) {
+             filteredData = filteredData.filter(item => {
+                 if (!item.date) return false;
+                 const [d, m, y] = item.date.split('/').map(Number);
+                 const itemDate = new Date(y, m - 1, d);
+                 if (startDate) {
+                    const start = new Date(startDate);
+                    start.setHours(0,0,0,0);
+                    if (itemDate < start) return false;
+                 }
+                 if (endDate) {
+                    const end = new Date(endDate);
+                    end.setHours(0,0,0,0);
+                    if (itemDate > end) return false;
+                 }
+                 return true;
+             });
+        }
+        renderPlantTable(filteredData);
+    }
+
+    function renderPlantTable(data) {
+      const tbody = document.getElementById('plantTableBody');
+      tbody.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
+        return;
+      }
+
+      const groupedData = data.reduce((acc, item) => {
+          if (!acc[item.date]) acc[item.date] = [];
+          acc[item.date].push(item);
+          return acc;
+      }, {});
+
+      const sortedDates = Object.keys(groupedData).sort((a, b) => {
+          const [d1, m1, y1] = a.split('/').map(Number);
+          const [d2, m2, y2] = b.split('/').map(Number);
+          return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
+      });
+
+      sortedDates.forEach(date => {
+          // Date Header Row
+          tbody.innerHTML += `
+            <tr class="bg-dark-bg/80 border-y border-dark-border">
+                <td colspan="9" class="px-4 py-1.5 font-bold text-[10px] text-grafana-orange uppercase flex items-center gap-2">
+                    <i class="ph-fill ph-calendar-blank"></i> ${date}
+                </td>
+            </tr>`;
+
+          groupedData[date].forEach(item => {
+              const statusColor = item.status === '✓ OVER' ? 'text-grafana-green' : 'text-grafana-orange';
+              const row = `
+                <tr class="hover:bg-white/5 transition-colors border-b border-dark-border/50 group">
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center text-dark-muted font-mono text-[10px]">${item.sr}</td>
+                    <td class="border-r border-dark-border/30 px-2 py-3 font-bold text-grafana-blue text-xs text-center">${item.area}</td>
+                    <td class="border-r border-dark-border/30 px-3 py-3">
+                        <div class="text-xs font-bold text-white tracking-tighter">${item.tag}</div>
+                        <div class="text-[9px] text-dark-muted mt-1 uppercase">${item.tagSubtitle}</div>
+                    </td>
+                    <td class="border-r border-dark-border/30 px-3 py-3">
+                        <div class="text-xs font-semibold text-gray-200 leading-tight">${item.jobType}</div>
+                    </td>
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center font-bold text-white text-[10px]">${item.tech}</td>
+                    <td class="border-r border-dark-border/30 px-4 py-3 text-xs text-dark-text leading-relaxed opacity-80">${item.desc}</td>
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center text-[10px] font-bold text-white">${item.engineer}</td>
+                    <td class="border-r border-dark-border/30 px-2 py-3 text-center">
+                        <span class="text-[10px] font-black uppercase tracking-widest ${statusColor} px-2 py-1 bg-dark-bg border border-dark-border">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td class="px-2 py-3"></td>
+                </tr>`;
+              tbody.innerHTML += row;
+          });
+      });
+    }
+
+    // Initialize Page
+    const now = new Date();
+    document.getElementById('current-date').textContent = now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
+    populateJobTypeDropdown();
+    applyFilters(); 
+  </script>
+</body>
+</html> 

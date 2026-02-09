@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNFC | Acetic Acid Logbook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        dark: {
+                            bg: '#111217',
+                            panel: '#181b1f',
+                            border: '#2c3235',
+                            text: '#ccccdd',
+                            muted: '#8e8e9e'
+                        },
+                        grafana: {
+                            orange: '#FF9900',
+                            blue: '#5794F2',
+                            green: '#73BF69',
+                            red: '#F2495C'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #111217; }
+        ::-webkit-scrollbar-thumb { background: #2c3235; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        select { background-image: none; }
+    </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-grafana-blue selection:text-white">
+
+    <script src="js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>
+        // Try render sidebar if script exists
+        try { renderSidebar('technician_logbook'); } catch(e) {}
+    </script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <header class="h-14 bg-dark-bg border-b border-dark-border flex items-center justify-between px-6 shrink-0 z-10">
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col">
+                    <h2 class="text-lg font-bold text-white tracking-tight leading-none">Acetic Acid Logbook</h2>
+                    <div class="flex items-center gap-1 text-xs text-dark-muted mt-1">
+                        <a href="technician_logbook.html" class="hover:text-grafana-blue transition-colors">Technician Log</a>
+                        <i class="ph-bold ph-caret-right text-[10px]"></i>
+                        <span>Plant Detail</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.href='technician_logbook.html'" class="flex items-center gap-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all">
+                    <i class="ph-bold ph-arrow-left"></i> Back
+                </button>
+                <div class="flex items-center gap-2 bg-dark-panel border border-dark-border px-3 py-1.5 rounded-sm text-xs font-medium text-grafana-orange">
+                    <i class="ph-fill ph-calendar-blank"></i>
+                    <span id="current-date">--/--/----</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-dark-bg">
+
+            <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm">
+                <div class="p-4 border-b border-dark-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded bg-gradient-to-br from-grafana-blue/20 to-grafana-blue/5 border border-grafana-blue/30 flex items-center justify-center text-grafana-blue">
+                            <i class="ph-fill ph-factory text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white tracking-tight">ACETIC ACID</h2>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="w-2 h-2 rounded-full bg-grafana-green animate-pulse"></span>
+                                <span class="text-xs text-dark-muted font-mono">UNIT: AA-01</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full md:w-64">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted"></i>
+                        <input type="text" placeholder="Search Tag / O.T."
+                            class="w-full pl-9 pr-4 py-1.5 bg-dark-bg border border-dark-border rounded-sm text-sm text-white placeholder-dark-muted focus:outline-none focus:border-grafana-blue transition-colors">
+                    </div>
+                </div>
+
+                <div class="bg-dark-panel border-b border-dark-border px-2">
+                    <div class="flex overflow-x-auto gap-1 py-2 scrollbar-none">
+                        <button onclick="window.location.href='job_types.html'" class="px-3 py-1.5 text-xs font-bold text-grafana-blue bg-grafana-blue/10 border border-grafana-blue/30 rounded-sm hover:bg-grafana-blue/20 transition-colors whitespace-nowrap">Type Of Job</button>
+                        <button onclick="window.location.href='instrument_types.html'" class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Type Of Inst</button>
+                        <button class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Remark Report</button>
+                        <button class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Tag-Wise Filter</button>
+                        <button class="px-3 py-1.5 text-xs font-medium text-dark-text hover:text-white hover:bg-white/5 rounded-sm transition-colors whitespace-nowrap">Monthly Report</button>
+                        <button class="px-3 py-1.5 text-xs font-bold text-grafana-red border border-transparent hover:border-grafana-red/50 hover:bg-grafana-red/10 rounded-sm transition-colors whitespace-nowrap flex items-center gap-1">
+                            <i class="ph-bold ph-siren"></i> EMG Call
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-dark-bg/30 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
+                        <button id="btn-tomorrow" class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors" onclick="switchView(this, 'tomorrow')">Tomorrow</button>
+                        <button id="btn-today" class="tab-btn px-4 py-1 text-xs font-bold text-grafana-orange bg-dark-panel shadow-sm border border-dark-border rounded-sm transition-colors" onclick="switchView(this, 'today')">Today</button>
+                        <button id="btn-prev" class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors" onclick="switchView(this, 'prev')">PrevDay</button>
+                        <div class="w-px bg-dark-border my-1 mx-1"></div>
+                        <button id="btn-weekly" class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors" onclick="switchView(this, 'weekly')">Weekly</button>
+                        <button id="btn-monthly" class="tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors" onclick="switchView(this, 'monthly')">Monthly</button>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1.5 bg-grafana-orange/10 text-grafana-orange border border-grafana-orange/30 rounded-sm text-xs font-bold hover:bg-grafana-orange/20 transition-colors">Pending Jobs</button>
+                        <button class="flex items-center gap-2 px-4 py-1.5 bg-grafana-blue hover:bg-blue-600 text-white rounded-sm text-xs font-bold shadow-lg shadow-blue-500/10 transition-all">
+                            <i class="ph-bold ph-plus"></i> Add New
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="job-filter-bar" class="hidden bg-dark-panel border border-dark-border rounded-sm p-3">
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide">Start</label>
+                        <input type="date" id="start-date" onchange="applyFilters()" class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-grafana-blue outline-none">
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide">End</label>
+                        <input type="date" id="end-date" onchange="applyFilters()" class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-grafana-blue outline-none">
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full md:w-auto flex-1">
+                        <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide whitespace-nowrap">Filter Type</label>
+                        <div class="relative w-full">
+                            <select id="job-type-select" onchange="applyFilters()" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 appearance-none focus:border-grafana-blue outline-none cursor-pointer">
+                                <option value="">All Jobs</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleJobFilter()" class="text-xs font-bold text-grafana-red hover:text-white transition-colors flex items-center gap-1">
+                        <i class="ph-bold ph-x"></i> Close
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="toggleJobFilter()" class="text-xs font-medium text-dark-muted hover:text-grafana-blue flex items-center gap-1 transition-colors">
+                    <i class="ph-bold ph-funnel"></i> Show Filters
+                </button>
+            </div>
+
+            <div id="dynamic-view-container" class="bg-dark-panel border border-dark-border rounded-sm flex flex-col">
+                <div class="px-4 py-2 border-b border-dark-border flex justify-between items-center bg-dark-panel">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-fill ph-table text-grafana-blue"></i>
+                        <span id="view-title" class="text-sm font-bold text-white">Today Log Book</span>
+                    </div>
+                    <span id="view-date" class="text-xs font-mono text-grafana-orange">06.02.2026</span>
+                </div>
+                
+                <div class="overflow-x-auto flex-1">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-[#1e2126] text-[10px] font-bold text-dark-muted uppercase tracking-wider border-b border-dark-border">
+                                <th class="px-4 py-3 w-12 text-center border-r border-dark-border">Sr</th>
+                                <th class="px-4 py-3 w-20 border-r border-dark-border">Area</th>
+                                <th class="px-4 py-3 w-40 border-r border-dark-border">Loop / Tag</th>
+                                <th class="px-4 py-3 min-w-[200px] border-r border-dark-border">Job Type</th>
+                                <th class="px-4 py-3 w-16 text-center border-r border-dark-border">Tech</th>
+                                <th class="px-4 py-3 min-w-[300px] border-r border-dark-border">Description</th>
+                                <th class="px-4 py-3 w-24 text-center border-r border-dark-border">Eng</th>
+                                <th class="px-4 py-3 w-28 text-center border-r border-dark-border">Status</th>
+                                <th class="px-4 py-3">Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plantTableBody" class="text-xs font-mono">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Plant Mock Data
+        const plantLogData = {
+            today: [
+                { sr: '01', date: '06/02/2026', area: 'FA', tag: 'N.A', tagSubtitle: 'Checking', jobType: 'Routine checkup', jobRef: 'Ref:PHS : 06/02/2026', tech: 'NRK', desc: 'Routine checkup of the field instruments.', engineer: 'NRK', engInitials: 'PHB', status: 'U/P', statusColor: 'orange' },
+                { sr: '02', date: '06/02/2026', area: 'MF', tag: 'Loop-202', tagSubtitle: 'PT5087K', jobType: 'Pressure transmitter', jobRef: 'By:AMS : 06/02/2026', jobLabel: 'PM', tech: 'DPB', desc: 'Pressure transmitter checked and recalibrated as per schedule.', engineer: 'DPB', engInitials: 'AMS', status: '✓ OVER', statusColor: 'green' },
+                { sr: '03', date: '06/02/2026', area: 'DCS', tag: 'N.A', tagSubtitle: 'NOTAG', jobType: 'ESD System', jobRef: 'By:PHB : 06/02/2026', jobLabel: 'PM', tech: 'NRK', desc: 'ESD system daily round taken. All diagnostic messages checked.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green' }
+            ],
+            tomorrow: [],
+            prev: [
+                { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green' }
+            ],
+            weekly: [
+                { sr: '01', date: '05/02/2026', area: 'FA', tag: 'FT5021A', tagSubtitle: 'Calib', jobType: 'Routine Check', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Routine checkup completed.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green' },
+                { sr: '02', date: '04/02/2026', area: 'MF', tag: 'PT5087K', tagSubtitle: 'PT5082', jobType: 'Calibration', jobRef: 'Ref:PHS', tech: 'DPB', desc: 'Calibration work completed.', engineer: 'DPB', engInitials: 'AMS', status: '✓ OVER', statusColor: 'green' },
+                { sr: '01', date: '03/02/2026', area: 'DCS', tag: 'SYS-1', tagSubtitle: 'DCS', jobType: 'Backups', jobRef: 'Ref:System', tech: 'IT', desc: 'System backup taken.', engineer: 'IT', engInitials: 'IT', status: '✓ OVER', statusColor: 'green' }
+            ],
+            monthly: [
+                { sr: '01', date: '01/02/2026', area: 'DCS', tag: 'SYS-MAIN', tagSubtitle: 'SYS', jobType: 'Monthly Maint', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Full system backup taken.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green' },
+                { sr: '02', date: '25/01/2026', area: 'UTIL', tag: 'Air', tagSubtitle: 'Comp', jobType: 'Service', jobRef: 'Ref:Mec', tech: 'Mec', desc: 'Air compressor service.', engineer: 'ME', engInitials: 'XY', status: '✓ OVER', statusColor: 'green' }
+            ]
+        };
+
+        let currentView = 'today';
+
+        function toggleJobFilter() {
+            const filterBar = document.getElementById('job-filter-bar');
+            filterBar.classList.toggle('hidden');
+            if (!filterBar.classList.contains('hidden')) {
+                populateJobTypeDropdown();
+            }
+        }
+
+        function populateJobTypeDropdown() {
+            const allData = [
+                ...plantLogData.today, 
+                ...plantLogData.prev, 
+                ...plantLogData.weekly, 
+                ...plantLogData.monthly
+            ];
+            
+            const jobTypes = [...new Set(allData.map(item => item.jobType).filter(Boolean))].sort();
+            const select = document.getElementById('job-type-select');
+            select.innerHTML = '<option value="">All Jobs</option>';
+            
+            jobTypes.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                select.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
+            const jobType = document.getElementById('job-type-select').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            let filteredData = plantLogData[currentView] || [];
+
+            if (jobType) filteredData = filteredData.filter(item => item.jobType === jobType);
+
+            if (startDate || endDate) {
+                filteredData = filteredData.filter(item => {
+                    if (!item.date) return false;
+                    const [d, m, y] = item.date.split('/').map(Number);
+                    const itemDate = new Date(y, m - 1, d);
+                    
+                    if (startDate) {
+                        const start = new Date(startDate);
+                        start.setHours(0,0,0,0);
+                        if (itemDate < start) return false;
+                    }
+                    if (endDate) {
+                        const end = new Date(endDate);
+                        end.setHours(0,0,0,0);
+                        if (itemDate > end) return false;
+                    }
+                    return true;
+                });
+            }
+            renderPlantTable(filteredData, currentView);
+        }
+
+        function renderPlantTable(data, view) {
+            const tbody = document.getElementById('plantTableBody');
+            tbody.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries found for this view.</td></tr>`;
+                return;
+            }
+
+            const createRow = (item) => {
+                // Color logic for status
+                const statusClass = item.statusColor === 'green' 
+                    ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20' 
+                    : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
+
+                return `
+                <tr class="hover:bg-dark-border/50 transition-colors border-b border-dark-border/50 group">
+                    <td class="px-4 py-3 text-center text-dark-muted font-mono border-r border-dark-border/30">${item.sr}</td>
+                    <td class="px-4 py-3 font-bold text-white border-r border-dark-border/30">${item.area}</td>
+                    <td class="px-4 py-3 border-r border-dark-border/30">
+                        <div class="text-xs text-grafana-blue font-bold">${item.tag}</div>
+                        <span class="inline-block mt-1 text-[10px] text-dark-muted bg-dark-bg px-1.5 py-0.5 rounded border border-dark-border font-mono">${item.tagSubtitle}</span>
+                    </td>
+                    <td class="px-4 py-3 border-r border-dark-border/30">
+                        <div class="font-medium text-gray-300 line-clamp-1">${item.jobType}</div>
+                        <div class="text-[10px] text-dark-muted mt-0.5">${item.jobRef}</div>
+                        ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-grafana-blue/10 text-grafana-blue border border-grafana-blue/20">${item.jobLabel}</span>` : ''}
+                    </td>
+                    <td class="px-4 py-3 text-center font-bold text-dark-muted border-r border-dark-border/30">${item.tech}</td>
+                    <td class="px-4 py-3 text-gray-400 border-r border-dark-border/30 leading-relaxed">${item.desc}</td>
+                    <td class="px-4 py-3 text-center border-r border-dark-border/30">
+                        <div class="font-bold text-gray-300">${item.engineer}</div>
+                        <div class="text-[10px] text-dark-muted">${item.engInitials}</div>
+                    </td>
+                    <td class="px-4 py-3 text-center border-r border-dark-border/30">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-bold border ${statusClass}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3"></td>
+                </tr>
+                `;
+            }
+
+            if (view === 'weekly' || view === 'monthly') {
+                const grouped = data.reduce((acc, item) => {
+                    const date = item.date;
+                    if (!acc[date]) acc[date] = [];
+                    acc[date].push(item);
+                    return acc;
+                }, {});
+
+                const dates = Object.keys(grouped).sort((a, b) => {
+                    const [d1, m1, y1] = a.split('/').map(Number);
+                    const [d2, m2, y2] = b.split('/').map(Number);
+                    return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
+                });
+
+                dates.forEach(date => {
+                    const headerRow = `
+                        <tr class="bg-[#181b1f] border-y border-dark-border">
+                            <td colspan="9" class="px-4 py-1.5 text-[10px] font-bold text-grafana-orange uppercase tracking-wider flex items-center gap-2">
+                                <i class="ph-fill ph-calendar-blank"></i> ${date}
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += headerRow;
+                    grouped[date].forEach(item => {
+                        tbody.innerHTML += createRow(item);
+                    });
+                });
+            } else {
+                data.forEach(item => {
+                    tbody.innerHTML += createRow(item);
+                });
+            }
+        }
+
+        function switchView(btn, viewName) {
+            currentView = viewName;
+            
+            // Reset Tabs
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.className = "tab-btn px-4 py-1 text-xs font-medium text-dark-muted hover:text-white transition-colors";
+            });
+            // Active Tab
+            btn.className = "tab-btn px-4 py-1 text-xs font-bold text-grafana-orange bg-dark-panel shadow-sm border border-dark-border rounded-sm transition-colors";
+
+            // Update Header
+            const titleMap = {
+                'today': 'Today Log Book',
+                'tomorrow': 'Tomorrow Log Book',
+                'prev': 'Prev Day Log Book',
+                'weekly': 'Weekly Log Book',
+                'monthly': 'Monthly Log Book'
+            };
+            const dateMap = {
+                'today': '06.02.2026',
+                'tomorrow': '07.02.2026',
+                'prev': '05.02.2026',
+                'weekly': '30.01 - 06.02',
+                'monthly': 'Feb 2026'
+            };
+            
+            document.getElementById('view-title').innerText = titleMap[viewName];
+            document.getElementById('view-date').innerText = dateMap[viewName];
+            
+            // Reset Filters
+            document.getElementById('job-type-select').value = "";
+            document.getElementById('start-date').value = "";
+            document.getElementById('end-date').value = "";
+            
+            renderPlantTable(plantLogData[viewName], viewName);
+        }
+
+        // Init
+        const dateEl = document.getElementById('current-date');
+        const now = new Date();
+        const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+        dateEl.textContent = now.toLocaleDateString('en-GB', options);
+        
+        renderPlantTable(plantLogData['today'], 'today');
+    </script>
+</body>
+</html>
