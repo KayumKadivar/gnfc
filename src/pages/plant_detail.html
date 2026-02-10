@@ -50,7 +50,7 @@
 
     html[data-theme-mode="dark"] .theme-contrast-lock,
     html[data-theme-mode="dark"] .theme-contrast-lock * {
-      color: #ffffff !important;
+      color: #ffffff;
     }
 
     html[data-theme-mode="light"] .theme-contrast-lock input::placeholder,
@@ -69,27 +69,9 @@
       color: #ffffff !important;
     }
 
-    /* Table hover: clear visual feedback in both light and dark themes */
+    /* Keep row transition only; hover look comes from table row utility classes */
     #plant-table tbody tr {
-      transition: background-color .18s ease, box-shadow .18s ease;
-    }
-
-    html[data-theme-mode="light"] #plant-table tbody tr:hover {
-      background: linear-gradient(90deg, rgba(37, 99, 235, 0.10), rgba(56, 189, 248, 0.05));
-      box-shadow: inset 2px 0 0 rgba(37, 99, 235, 0.55);
-    }
-
-    html[data-theme-mode="dark"] #plant-table tbody tr:hover {
-      background: rgba(87, 148, 242, 0.16);
-      box-shadow: inset 2px 0 0 rgba(87, 148, 242, 0.55);
-    }
-
-    html[data-theme-mode="light"] #plant-table tbody tr:hover td {
-      border-color: rgba(59, 130, 246, 0.35) !important;
-    }
-
-    html[data-theme-mode="dark"] #plant-table tbody tr:hover td {
-      border-color: rgba(87, 148, 242, 0.30) !important;
+      transition: background-color .18s ease;
     }
   </style>
   <script src="/src/js/tailwind_config.js"></script>
@@ -240,26 +222,26 @@
             <thead>
               <tr
                 class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
 
-                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
 
-                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
 
-                <th class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
 
-                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
 
-                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px]">Description</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">Description</th>
 
-                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
                 
                 <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                    <div class="flex items-center justify-between cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors p-1 rounded" onclick="plantLogTable.sort('status')">
+                    <div class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded" onclick="plantLogTable.sort('status')">
                         <span>Status</span>
                         <!-- <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i> -->
                     </div>
-                    <button onclick="toggleStatusFilter(event)" class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-slate-200 dark:hover:bg-dark-border/50">
+                    <button onclick="toggleStatusFilter(event)" class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
                         <i class="ph-bold ph-funnel text-xs"></i>
                     </button>
                     <!-- Filter Dropdown -->
@@ -267,12 +249,12 @@
                         <!-- Options injected by JS -->
                     </div>
                 </th>
-                <th rowspan="2" class="p-2 min-w-[120px]">Remarks</th>
+                <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
               </tr>
               <tr
                 class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th class="border-r border-dark-border p-2">Tag Detail</th>
-                <th class="border-r border-dark-border p-2">Instrument Detail</th>
+                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
+                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
               </tr>
             </thead>
             <tbody id="plantTableBody" class="text-xs font-mono">

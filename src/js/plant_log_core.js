@@ -122,7 +122,7 @@ class PlantLogTable {
             const activeClass = this.sortColumn === col.key ? 'text-grafana-blue' : 'text-slate-500 dark:text-dark-muted';
 
             return `
-                <th class="${col.class} cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
+                <th class="${col.class} cursor-pointer hover:bg-white/5 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
                     <div class="flex items-center gap-1 justify-between">
                         <span>${col.label}</span>
                         <i class="ph-fill ${icon} ${activeClass}"></i>
@@ -189,7 +189,7 @@ class PlantLogTable {
           : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
 
         return `
-            <tr class="hover:bg-slate-100 dark:hover:bg-dark-border/50 transition-colors border-b border-dark-border group">
+            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
                 <td class="p-2 text-center text-slate-500 dark:text-dark-muted font-mono border-r border-dark-border">${item.sr}</td>
                 <td class="p-2 font-bold text-slate-700 dark:text-white border-r border-dark-border">${item.area}</td>
                 <td class="p-2 border-r border-dark-border">
@@ -199,7 +199,7 @@ class PlantLogTable {
                 <td class="p-2 border-r border-dark-border">
                     <div class="font-medium text-slate-600 dark:text-gray-300 line-clamp-1">${item.jobType}</div>
                     <div class="text-[10px] text-slate-400 dark:text-dark-muted mt-0.5">${item.jobRef}</div>
-                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-grafana-blue/10 text-blue-600 dark:text-grafana-blue border border-dark-border">${item.jobLabel}</span>` : ''}
+                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-grafana-blue/10 !text-blue-600 dark:text-grafana-blue border border-dark-border">${item.jobLabel}</span>` : ''}
                 </td>
                 <td class="p-2 text-center font-bold text-slate-500 dark:text-dark-muted border-r border-dark-border">${item.tech}</td>
                 <td class="p-2 text-slate-500 dark:text-gray-400 border-r border-dark-border leading-relaxed">${item.desc}</td>
