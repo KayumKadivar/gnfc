@@ -133,5 +133,5 @@ function hideSidebarTooltip() {
 
 function logout() {
     localStorage.removeItem('sidebarCollapsed');
-    window.location.href = '/src/pages/index.html';
+    window.location.href = '/index.html';
 }

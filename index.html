@@ -171,7 +171,7 @@
         if (current.showView) {
             const viewBtn = document.getElementById('view-btn');
             viewBtn.classList.remove('hidden');
-            viewBtn.onclick = () => window.location.href = 'dashboard.html'; // Mock action
+            viewBtn.onclick = () => window.location.href = '/src/pages/dashboard.html'; // Mock action
         }
 
         // Feature: Toggle Password Visibility
@@ -206,7 +206,7 @@
                 btn.classList.add('from-emerald-500', 'to-green-600');
                 
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/src/pages/dashboard.html';
                 }, 500);
             }, 1000);
         }

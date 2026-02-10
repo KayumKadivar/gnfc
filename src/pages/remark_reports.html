@@ -20,12 +20,12 @@
           },
           colors: {
             dark: {
-              bg: '#111217', // Grafana Main BG
-              panel: '#181B1F', // Panel BG
-              border: '#2C3235', // Borders
-              text: '#CCCCDD', // Main Text
-              muted: '#8E8E9E', // Muted Text
-              header: '#0B0C0E' // Top Bar
+              bg: '#111217', 
+              panel: '#181B1F', 
+              border: '#2C3235', 
+              text: '#CCCCDD',
+              muted: '#8E8E9E',
+              header: '#0B0C0E' 
             },
             grafana: {
               orange: '#FF9900',
@@ -98,9 +98,6 @@
           </h2>
           <div class="flex items-center gap-2">
             <span class="text-[10px] font-mono text-dark-muted">Year: 2026</span>
-            <span
-              class="text-[10px] bg-grafana-green/10 text-grafana-green px-2 py-0.5 rounded border border-grafana-green/20">LIVE
-              DATA</span>
           </div>
         </div>
 
@@ -150,7 +147,6 @@
       }).toUpperCase();
     }
 
-    // Sample Data mimicking the image
     const reportData = [
       {
         sr: 1, area: '300', loopNo: 'N.A', tagNo: 'PT310', job: 'To be checked as reported PT showing Zero value. (By:MAJ : 08/02/2026)', typeOfJob: 'DEFECT MAINTENANCE', tech1: 'NND',
@@ -228,7 +224,6 @@
       });
     }
 
-    // Initial Render
     renderTable(reportData);
 
   </script>
