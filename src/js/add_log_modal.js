@@ -1,6 +1,10 @@
 const AddLogModal = {
     initialized: false,
 
+    shouldDelegateToElogbookFlow() {
+        return typeof window.openJobModal === "function";
+    },
+
     init() {
         this.ensureModalStructure();
         if (this.initialized) return;
@@ -190,6 +194,12 @@ const AddLogModal = {
     },
 
     open() {
+        if (this.shouldDelegateToElogbookFlow()) {
+            const targetView = (typeof window.currentView === "string" && window.currentView) ? window.currentView : "today";
+            window.openJobModal("add", targetView);
+            return;
+        }
+
         this.init();
         this.resetDefaults();
 

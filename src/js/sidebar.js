@@ -35,7 +35,7 @@ function renderSidebar(activePageId) {
   
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Logs</div>
               
-              ${createLink("shift_logbook_officer", "/src/pages/shift_logbook.html", "ph-notebook", "Officer Logs", isCollapsed)}
+              ${createLink("shift_logbook_officer", "#", "ph-notebook", "Officer Logs", isCollapsed)}
               
               ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logs", isCollapsed)}
               
@@ -50,7 +50,7 @@ function renderSidebar(activePageId) {
      
           </nav>
   
-          <div class="p-4 border-t border-[#2c3235] bg-[#0b0c0e]">
+          <div class="${isCollapsed ? 'p-2' : 'p-4'} border-t border-[#2c3235] bg-[#0b0c0e]">
               <div onmouseenter="showSidebarTooltip(event, 'Admin User')" onmouseleave="hideSidebarTooltip()" class="flex items-center gap-3 text-[#c7d0d9] hover:text-white cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
                   <img src="https://ui-avatars.com/api/?name=Admin&background=2c3235&color=fff" class="w-8 h-8 rounded-full border border-[#2c3235] shrink-0">
                   <div class="flex-1 ${textClass} whitespace-nowrap transition-opacity duration-300">
@@ -104,7 +104,7 @@ function toggleSidebar() {
 
     localStorage.setItem('sidebarCollapsed', willBeCollapsed);
     hideSidebarTooltip();
-    
+
     // Pass the current active page to re-render properly
     renderSidebar(window.activePage || '');
 }
@@ -120,10 +120,10 @@ function showSidebarTooltip(event, text) {
 
     const textEl = document.getElementById('sidebar-tooltip-text');
     if (textEl) textEl.textContent = text;
-    
+
     // Position calculation
     const rect = event.currentTarget.getBoundingClientRect();
-    
+
     // Initial reveal to get height/width if needed, but since it's hidden we calc first
     tooltip.classList.remove('hidden');
 
@@ -132,7 +132,7 @@ function showSidebarTooltip(event, text) {
 
     tooltip.style.top = `${top}px`;
     tooltip.style.left = `${left}px`;
-    
+
     // Trigger animation
     requestAnimationFrame(() => {
         tooltip.style.opacity = '1';

@@ -4,45 +4,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GNFC | Acetic Acid Logbook</title>
+  <title>GNFC | Plant Logbook</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
-    /* MicroModal Animation Styles */
-    .modal { display: none; }
-    .modal.is-open { display: block; }
-    
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
     .modal__overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6); display: flex;
-      justify-content: center; align-items: center; z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
       backdrop-filter: blur(4px);
     }
-    
+
     .modal__container {
-      background-color: var(--app-panel);
-      max-width: 90vw; max-height: 90vh; border-radius: 4px;
-      overflow-y: auto; box-sizing: border-box; border: 1px solid var(--app-border);
-      color: var(--app-text);
+      background-color: var(--app-panel, #ffffff);
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 6px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      border: 1px solid var(--app-border, #e5e7eb);
+      color: var(--app-text, #111827);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
-    @keyframes mmfadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes mmfadeOut { from { opacity: 1; } to { opacity: 0; } }
-    @keyframes mmslideIn { from { transform: translateY(15%); } to { transform: translateY(0); } }
-    @keyframes mmslideOut { from { transform: translateY(0); } to { transform: translateY(-10%); } }
+    html.dark .modal__container {
+      background-color: #111217;
+      border-color: #2c3235;
+      color: #ffffff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
 
-    .micromodal-slide { display: none; }
-    .micromodal-slide.is-open { display: block; }
-    .micromodal-slide[aria-hidden="false"] .modal__overlay { animation: mmfadeIn .3s cubic-bezier(0.0, 0.0, 0.2, 1); }
-    .micromodal-slide[aria-hidden="false"] .modal__container { animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1); }
-    .micromodal-slide[aria-hidden="true"] .modal__overlay { animation: mmfadeOut .3s cubic-bezier(0.0, 0.0, 0.2, 1); }
-    .micromodal-slide[aria-hidden="true"] .modal__container { animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1); }
-    .micromodal-slide .modal__container, .micromodal-slide .modal__overlay { will-change: transform; }
+    @keyframes mmfadeIn {
+      from {
+        opacity: 0;
+      }
 
-    /* Force full-contrast typography for this page across theme modes */
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes mmfadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes mmslideIn {
+      from {
+        transform: translateY(15%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes mmslideOut {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-10%);
+      }
+    }
+
+    .micromodal-slide {
+      display: none;
+    }
+
+    .micromodal-slide.is-open {
+      display: block;
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__overlay {
+      animation: mmfadeIn .3s cubic-bezier(0.0, 0.0, 0.2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__container {
+      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__overlay {
+      animation: mmfadeOut .3s cubic-bezier(0.0, 0.0, 0.2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__container {
+      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide .modal__container,
+    .micromodal-slide .modal__overlay {
+      will-change: transform;
+    }
+
     html[data-theme-mode="light"] .theme-contrast-lock,
     html[data-theme-mode="light"] .theme-contrast-lock * {
       color: #000000 !important;
@@ -53,25 +131,63 @@
       color: #ffffff;
     }
 
-    html[data-theme-mode="light"] .theme-contrast-lock input::placeholder,
-    html[data-theme-mode="light"] .theme-contrast-lock textarea::placeholder {
-      color: rgba(0, 0, 0, 0.7) !important;
-    }
-
-    html[data-theme-mode="dark"] .theme-contrast-lock input::placeholder,
-    html[data-theme-mode="dark"] .theme-contrast-lock textarea::placeholder {
-      color: rgba(255, 255, 255, 0.7) !important;
-    }
-
-    /* High-Specificity Override: Force white text even inside theme-contrast-lock */
-    html[data-theme-mode] .theme-contrast-lock .text-white-force,
-    html[data-theme-mode] .theme-contrast-lock .text-white-force * {
-      color: #ffffff !important;
-    }
-
-    /* Keep row transition only; hover look comes from table row utility classes */
     #plant-table tbody tr {
       transition: background-color .18s ease;
+    }
+
+    .elog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(3px);
+    }
+
+    .elog-overlay.is-open {
+      display: flex;
+    }
+
+    .elog-modal-panel {
+      width: min(980px, 96vw);
+      max-height: 92vh;
+      overflow: auto;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      color: #111827;
+    }
+
+    html.dark .elog-modal-panel {
+      background: #111217;
+      border-color: #2c3235;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      color: #ffffff;
+    }
+
+    .elog-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 10px;
+      font-weight: 700;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    html.dark .elog-chip {
+      background: #111217;
+      border-color: #2c3235;
+      color: #9ca3af;
     }
   </style>
   <script src="/src/js/tailwind_config.js"></script>
@@ -79,426 +195,630 @@
 
 <body
   class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
-  
+
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
   <script>
-    // Try render sidebar if script exists
-    try { renderSidebar('technician_logbook'); } catch (e) { }
+    try {
+      renderSidebar('technician_logbook');
+    } catch (e) {
+      // noop
+    }
   </script>
 
   <main class="theme-contrast-lock flex-1 flex flex-col h-screen overflow-hidden">
 
     <div id="header-container"></div>
     <script>
-        renderHeader({
-            title: "Acetic Acid Logbook",
-            breadcrumbs: [
-                { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
-                { label: "Plant Detail" }
-            ],
-            backLink: "/src/pages/technician_logbook.html"
-        });
+      renderHeader({
+        title: "Plant Logbook",
+        breadcrumbs: [
+          { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
+          { label: "Plant Detail" }
+        ],
+        backLink: "/src/pages/technician_logbook.html"
+      });
     </script>
 
-    <div class="p-3 bg-dark-bg space-y-3">
+    <div class="p-3 bg-dark-bg space-y-3 overflow-y-scroll">
       <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm ">
-        <div class="bg-dark-panel border-b border-dark-border px-2">
-          <div class="flex overflow-x-auto gap-1 py-2 scrollbar-none">
-            <button onclick="window.location.href='/src/pages/job_types.html'" data-target="job_types.html"
-               class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Type
-              Of Job</button>
-            <button onclick="window.location.href='/src/pages/instrument_types.html'" data-target="instrument_types.html"
-              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Type
-              Of Inst</button>
-            <button onclick="window.location.href='/src/pages/remark_reports.html'" data-target="remark_reports.html"
-              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Remark
-              Report</button>
-            <button onclick="window.location.href='/src/pages/tagwise_filter.html'" data-target="tagwise_filter.html"
-              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">TagWise
-              Filter</button>
-            <button onclick="window.location.href='/src/pages/monthly_report.html'" data-target="monthly_report.html"
-              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Monthly
-              Report</button>
-            <button onclick="window.location.href='/src/pages/job_history.html'" data-target="job_history.html"
-              class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Job
-              History</button>
-            <button onclick="EmgCallModal.open()" data-target="emg_modal.html"
-              class="text-white-force px-3 py-1.5 text-xs font-bold rounded-sm whitespace-nowrap flex items-center gap-1 bg-red-600 hover:bg-red-700 transition-colors">
-              <i class="ph-bold ph-siren"></i> EMG Call
+        <!-- Top Navigation Bar -->
+        <div
+          class="bg-dark-panel border-b border-dark-border px-4 py-2 flex items-center justify-between gap-4 overflow-x-auto scrollbar-none">
+          <div class="flex items-center gap-2">
+            <button onclick="window.location.href='/src/pages/job_types.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-muted hover:text-white hover:bg-white/5 rounded-sm transition-colors border border-transparent hover:border-dark-border">
+              Type Of Job
             </button>
+            <button onclick="window.location.href='/src/pages/instrument_types.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-muted hover:text-white hover:bg-white/5 rounded-sm transition-colors border border-transparent hover:border-dark-border">
+              Type Of Inst
+            </button>
+            <button onclick="window.location.href='/src/pages/remark_reports.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-muted hover:text-white hover:bg-white/5 rounded-sm transition-colors border border-transparent hover:border-dark-border">
+              Remark Report
+            </button>
+            <button onclick="window.location.href='/src/pages/tagwise_filter.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-muted hover:text-white hover:bg-white/5 rounded-sm transition-colors border border-transparent hover:border-dark-border">
+              TagWise Filter
+            </button>
+            <button onclick="window.location.href='/src/pages/monthly_report.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-muted hover:text-white hover:bg-white/5 rounded-sm transition-colors border border-transparent hover:border-dark-border">
+              Monthly Report
+            </button>
+            <button onclick="window.location.href='/src/pages/job_history.html'"
+              class="px-3 py-1.5 text-xs font-medium text-dark-muted hover:text-white hover:bg-white/5 rounded-sm transition-colors border border-transparent hover:border-dark-border">
+              Job History
+            </button>
+          </div>
+
+          <button onclick="EmgCallModal.open()"
+            class="ml-auto text-white-force px-3 py-1.5 text-xs font-bold rounded-sm whitespace-nowrap flex items-center gap-2 bg-red-600/90 hover:bg-red-600 transition-colors shadow-lg shadow-red-900/20">
+            <i class="ph-bold ph-siren animate-pulse"></i> EMG Call
+          </button>
+        </div>
+
+        <!-- Unified Action Toolbar -->
+        <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4">
+
+          <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+
+            <!-- Left: Period Selector & Plant Info -->
+            <div class="flex items-center gap-4 w-full xl:w-auto">
+              <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border overflow-x-auto max-w-full">
+                <button id="btn-tomorrow" onclick="switchView(this, 'tomorrow')"
+                  class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Tomorrow</button>
+                <button id="btn-today" onclick="switchView(this, 'today')"
+                  class="tab-btn px-3 py-1 text-[11px] font-bold text-gnfc-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
+                <button id="btn-prev" onclick="switchView(this, 'prev')"
+                  class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">PrevDay</button>
+                <div class="w-px bg-dark-border mx-1 my-1"></div>
+                <button id="btn-weekly" onclick="switchView(this, 'weekly')"
+                  class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Weekly</button>
+                <button id="btn-monthly" onclick="switchView(this, 'monthly')"
+                  class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Monthly</button>
+              </div>
+            </div>
+
+            <!-- Right: Actions & Tools -->
+            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
+
+              <!-- Quick Actions Group -->
+              <div class="flex items-center gap-1">
+                <button onclick="AddLogModal.open()"
+                  class="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+                  <i class="ph-bold ph-plus"></i> Add Direct Job
+                </button>
+
+                <div class="relative group">
+                  <!-- <button
+                    class="flex items-center gap-2 px-3 py-1.5 bg-gnfc-blue/10 hover:bg-gnfc-blue/20 text-gnfc-blue border border-gnfc-blue/30 text-xs font-bold rounded-sm transition-colors">
+                    <i class="ph-bold ph-user-plus"></i> Assign
+                    <i class="ph-bold ph-caret-down text-[10px]"></i>
+                  </button> -->
+                  <!-- Dropdown for Assign -->
+                  <div
+                    class="absolute right-0 top-full mt-1 w-40 bg-dark-panel border border-dark-border shadow-xl rounded-sm p-1 hidden group-hover:block z-20">
+                    <button id="assign-today-btn" onclick="openJobModal('assign', 'today')"
+                      class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
+                      Assign Today
+                    </button>
+                    <button id="assign-tomorrow-btn" onclick="openJobModal('assign', 'tomorrow')"
+                      class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
+                      Assign Tomorrow
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+
+              <!-- Tools Group -->
+              <div class="flex items-center gap-2">
+                <button id="toggle-pending-btn" onclick="togglePendingMode()"
+                  class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-gnfc-orange text-xs font-bold rounded-sm transition-colors"
+                  title="Show Pending Logs">
+                  <i class="ph-bold ph-clock"></i> Pending
+                </button>
+
+                <button id="job-reminder-btn" onclick="openReminderModal()"
+                  class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-purple-400 text-xs font-bold rounded-sm transition-colors"
+                  title="Job Planner / Reminders">
+                  <i class="ph-bold ph-calendar-check"></i> Planner
+                </button>
+
+                <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
+                  class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-sm transition-colors animate-pulse">
+                  <i class="ph-bold ph-warning"></i> Acknowledge
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
 
-        <div class="p-3 bg-white dark:bg-dark-panel flex flex-wrap items-center justify-between gap-3 ">
-          <div class="flex bg-slate-100 dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm p-0.5">
-            <button id="btn-tomorrow"
-              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
-              onclick="switchView(this, 'tomorrow')">Tomorrow</button>
-            <button id="btn-today"
-              class="tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors"
-              onclick="switchView(this, 'today')">Today</button>
-            <button id="btn-prev"
-              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
-              onclick="switchView(this, 'prev')">PrevDay</button>
-            <div class="w-px bg-slate-300 dark:bg-dark-border my-1 mx-1"></div>
-            <button id="btn-weekly"
-              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
-              onclick="switchView(this, 'weekly')">Weekly</button>
-            <button id="btn-monthly"
-              class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
-              onclick="switchView(this, 'monthly')">Monthly</button>
-          </div>
+        <!-- Filters Drawer (Collapsible) -->
+        <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
+          <div class="flex flex-col md:flex-row items-center gap-4 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-dark-muted font-mono uppercase">Range:</span>
+              <input type="date" id="start-date" onchange="applyFilters()"
+                class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+              <span class="text-dark-muted">-</span>
+              <input type="date" id="end-date" onchange="applyFilters()"
+                class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+            </div>
 
-          <div class="flex gap-2">
-            <button
-              class="px-3 py-1.5 bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/30 rounded-sm text-xs font-bold hover:bg-gnfc-orange/20 transition-colors">Pending
-              Jobs</button>
-            <button onclick="AddLogModal.open()"
-              class="text-white-force flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-gnfc-blue rounded-sm text-xs font-bold shadow-lg shadow-blue-500/10 transition-all">
-              <i class="ph-bold ph-plus"></i> Add New
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div id="job-filter-bar" class="hidden bg-dark-panel border border-dark-border rounded-sm p-3 ">
-        <div class="flex flex-col md:flex-row items-center gap-4">
-          <div class="flex items-center gap-2 w-full md:w-auto">
-            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Start</label>
-            <input type="date" id="start-date" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none">
-          </div>
-
-          <div class="flex items-center gap-2 w-full md:w-auto">
-            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">End</label>
-            <input type="date" id="end-date" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none">
-          </div>
-
-          <div class="flex items-center gap-2 w-full md:w-auto flex-1">
-            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide whitespace-nowrap">Filter
-              Type</label>
-            <div class="relative w-full">
+            <div class="flex items-center gap-2 flex-1">
+              <span class="text-dark-muted font-mono uppercase">Type:</span>
               <select id="job-type-select" onchange="applyFilters()"
-                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 appearance-none focus:border-gnfc-blue outline-none cursor-pointer">
+                class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
                 <option value="">All Jobs</option>
               </select>
-              <i
-                class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+            </div>
+
+            <button onclick="toggleJobFilter()" class="text-dark-muted hover:text-white"><i
+                class="ph-bold ph-x"></i></button>
+          </div>
+        </div>
+
+        <div id="dynamic-view-container"
+          class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+          <div
+            class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+            <div class="flex items-center gap-2">
+              <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
+              <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
+              <span id="record-count"
+                class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0
+                Records</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <i
+                  class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
+                <input type="text" id="table-search" placeholder="Search logs..."
+                  onkeyup="plantLogTable.setSearch(this.value)"
+                  class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+              </div>
+              <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">--.--.----</span>
             </div>
           </div>
 
-          <button onclick="toggleJobFilter()"
-            class="text-xs font-bold text-gnfc-red hover:text-white transition-colors flex items-center gap-1">
-            <i class="ph-bold ph-x"></i> Close
-          </button>
-        </div>
-      </div>
-
-      <div id="dynamic-view-container" class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
-        <div class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
-          <div class="flex items-center gap-2">
-            <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
-            <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
-            <span id="record-count" class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0 Records</span>
-          </div>
-           
-           <div class="flex items-center gap-3">
-               <div class="relative">
-                 <i class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
-                 <input type="text" id="table-search" placeholder="Search logs..." 
-                   onkeyup="plantLogTable.setSearch(this.value)"
-                   class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
-               </div>
-               <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">06.02.2026</span>
-           </div>
-        </div>
-
-        <div class="overflow-x-auto flex-1">
-          <table id="plant-table" class="w-full text-left border-collapse">
-            <thead>
-              <tr
-                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-
-                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-
-                <th class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">Description</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-                
-                <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                    <div class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded" onclick="plantLogTable.sort('status')">
-                        <span>Status</span>
-                        <!-- <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i> -->
+          <div class="overflow-x-auto flex-1">
+            <table id="plant-table" class="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                  <th rowspan="2"
+                    class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors"
+                    onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                  <th rowspan="2"
+                    class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors"
+                    onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+                  </th>
+                  <th
+                    class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors"
+                    onclick="plantLogTable.sort('tag')">Loop / Tag <i
+                      class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                  <th
+                    class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors"
+                    onclick="plantLogTable.sort('jobType')">Job Type <i
+                      class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                  <th rowspan="2"
+                    class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors"
+                    onclick="plantLogTable.sort('tech')">Tech</th>
+                  <th rowspan="2"
+                    class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">Description
+                  </th>
+                  <th rowspan="2"
+                    class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors"
+                    onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                  <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
+                    <div
+                      class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded"
+                      onclick="plantLogTable.sort('status')">
+                      <span>Status</span>
                     </div>
-                    <button onclick="toggleStatusFilter(event)" class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
-                        <i class="ph-bold ph-funnel text-xs"></i>
+                    <button onclick="toggleStatusFilter(event)"
+                      class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
+                      <i class="ph-bold ph-funnel text-xs"></i>
                     </button>
-                    <!-- Filter Dropdown -->
-                    <div id="status-filter-dropdown" class="hidden absolute top-14 right-0 w-20 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
-                        <!-- Options injected by JS -->
+                    <div id="status-filter-dropdown"
+                      class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
                     </div>
-                </th>
-                <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
-              </tr>
-              <tr
-                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
-                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
-              </tr>
-            </thead>
-            <tbody id="plantTableBody" class="text-xs font-mono">
-            </tbody>
-          </table>
+                  </th>
+                  <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
+                </tr>
+                <tr
+                  class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                  <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
+                  <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
+                </tr>
+              </thead>
+              <tbody id="plantTableBody" class="text-xs font-mono"></tbody>
+            </table>
+          </div>
+
+          <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
         </div>
-        
-        <!-- Pagination Container -->
-        <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
-        
+      </div>
+  </main>
+
+  <div id="job-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="elog-modal-panel">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-dark-border bg-dark-panel">
+        <h3 id="job-modal-title" class="text-sm font-bold text-gnfc-blue">Assign Job</h3>
+        <button onclick="closeJobModal()" class="text-dark-muted hover:text-white"><i
+            class="ph-bold ph-x text-lg"></i></button>
+      </div>
+      <form id="job-modal-form" class="p-4 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Date (Server)</label>
+            <input id="job-date" type="text" readonly
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Technician</label>
+            <select id="job-tech"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Or Enter Tech</label>
+            <input id="job-tech-custom" type="text" placeholder="Optional"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Loop</label>
+            <select id="job-loop" onchange="filterTagsForLoop()"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tag</label>
+            <select id="job-tag"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Area</label>
+            <select id="job-area"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type Of Job</label>
+            <select id="job-type"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type Of Inst</label>
+            <select id="job-inst"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Description</label>
+            <textarea id="job-desc" rows="3"
+              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"
+              placeholder="Enter job description"></textarea>
+          </div>
+        </div>
+
+        <div id="job-modal-ojr" class="border border-dark-border rounded-sm overflow-hidden">
+          <div
+            class="px-3 py-2 border-b border-dark-border bg-dark-panel text-[10px] font-bold text-gnfc-blue uppercase">
+            Operation Job Register / Weekly Pending</div>
+          <div class="max-h-32 overflow-auto divide-y divide-dark-border" id="ojr-pending-list"></div>
+        </div>
+
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeJobModal()"
+            class="px-3 py-1.5 border border-dark-border rounded-sm text-xs font-bold text-dark-muted hover:text-white">Cancel</button>
+          <button type="submit"
+            class="px-4 py-1.5 bg-blue-600 hover:bg-gnfc-blue rounded-sm text-xs font-bold">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="edit-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div
+      class="elog-modal-panel max-w-3xl w-full mx-4 shadow-2xl shadow-black/50 overflow-hidden transform transition-all scale-100 rounded-md border border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-bg">
+
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21]">
+        <div>
+          <h3 class="text-sm font-bold text-gray-900 dark:text-white tracking-wide">Edit Assigned Job</h3>
+          <p class="text-[10px] text-gray-500 dark:text-dark-muted mt-0.5 font-mono opacity-80">JOB ID: <span
+              id="edit-job-id-display" class="text-blue-600 dark:text-gnfc-blue">--</span></p>
+        </div>
+        <button onclick="closeEditModal()"
+          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white transition-colors p-1 hover:bg-gray-100 dark:hover:bg-white/5 rounded-sm">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
       </div>
 
+      <form id="edit-modal-form" class="flex flex-col h-full bg-gray-50 dark:bg-dark-bg">
+        <input id="edit-job-id" type="hidden">
+
+        <!-- Scrollable Content -->
+        <div class="p-6 space-y-6 overflow-y-auto max-h-[70vh]">
+
+          <!-- Top Context Strip -->
+          <div
+            class="grid grid-cols-3 gap-px bg-gray-200 dark:bg-dark-border border border-gray-200 dark:border-dark-border rounded-sm overflow-hidden text-xs shadow-sm">
+            <div class="bg-gray-100 dark:bg-[#22252b] p-3">
+              <label
+                class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider mb-1">Date</label>
+              <input id="edit-job-date" type="text" readonly
+                class="w-full bg-transparent border-none p-0 text-gray-900 dark:text-white font-mono focus:ring-0 cursor-default placeholder-gray-400 dark:placeholder-dark-muted/30">
+            </div>
+            <div class="bg-gray-100 dark:bg-[#22252b] p-3 border-l border-gray-200 dark:border-dark-border">
+              <label
+                class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider mb-1">Assigned
+                To</label>
+              <input id="edit-job-assigned-to" type="text" readonly
+                class="w-full bg-transparent border-none p-0 text-blue-600 dark:text-gnfc-blue font-bold focus:ring-0 cursor-default">
+            </div>
+            <div class="bg-gray-100 dark:bg-[#22252b] p-3 border-l border-gray-200 dark:border-dark-border">
+              <label
+                class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider mb-1">Assigned
+                By</label>
+              <input id="edit-job-by" type="text" readonly
+                class="w-full bg-transparent border-none p-0 text-gray-900 dark:text-white focus:ring-0 cursor-default">
+            </div>
+          </div>
+
+          <!-- Job Details Card -->
+          <div class="space-y-2">
+            <h4
+              class="text-[10px] font-bold text-blue-600 dark:text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-gnfc-blue"></span> Job Context
+            </h4>
+            <div
+              class="bg-white dark:bg-[#1e2126] border border-gray-200 dark:border-dark-border rounded-sm p-4 space-y-4 shadow-sm">
+              <!-- Summary -->
+              <div>
+                <label class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1.5">Job
+                  Summary</label>
+                <textarea id="edit-job-summary" rows="1" readonly
+                  class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-3 py-2 text-xs text-gray-700 dark:text-white/90 resize-none focus:outline-none font-medium"></textarea>
+              </div>
+
+              <!-- Detail Grid -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <label
+                    class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Date</label>
+                  <input id="edit-job-detail-date" type="text" readonly
+                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-500 dark:text-dark-muted">
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Loop /
+                    Tag</label>
+                  <input id="edit-job-loop-tag" type="text" readonly
+                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-blue-600 dark:text-gnfc-blue font-mono font-medium">
+                </div>
+                <div>
+                  <label
+                    class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Type</label>
+                  <input id="edit-job-type" type="text" readonly
+                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white">
+                  <input id="edit-job-inst" type="hidden">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Execution / Update Section -->
+          <div class="space-y-3">
+            <h4
+              class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Execution Update
+            </h4>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[10px] font-bold text-gray-900 dark:text-white uppercase mb-1.5">Description /
+                  Remarks <span class="text-red-500 dark:text-red-400">*</span></label>
+                <textarea id="edit-job-desc" rows="4"
+                  class="w-full bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-dark-border rounded-sm px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue focus:ring-1 focus:ring-blue-500/50 dark:focus:ring-gnfc-blue/50 outline-none placeholder-gray-400 dark:placeholder-dark-muted/40 transition-all font-mono leading-relaxed"
+                  placeholder="Enter detailed job description..."></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Status -->
+                <div>
+                  <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1.5">Current
+                    Status</label>
+                  <div class="relative">
+                    <select id="edit-job-status"
+                      class="w-full bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-dark-border rounded-sm pl-3 pr-8 py-2 text-xs font-bold text-gray-900 dark:text-white appearance-none focus:border-blue-500 dark:focus:border-gnfc-blue outline-none cursor-pointer hover:border-gray-300 dark:hover:border-white/20 transition-colors h-9">
+                      <option value="IN PROGRESS" class="text-amber-600 dark:text-amber-400">IN PROGRESS</option>
+                      <option value="✓ OVER" class="text-emerald-600 dark:text-emerald-400">✓ OVER</option>
+                      <option value="HOLD" class="text-red-600 dark:text-red-400">HOLD</option>
+                    </select>
+                    <i
+                      class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-dark-muted pointer-events-none"></i>
+                  </div>
+                </div>
+
+                <!-- Extra Hours -->
+                <div>
+                  <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1.5">Extra
+                    Duty (Hrs)</label>
+                  <input id="edit-job-extra-hours" type="number" min="0" step="1"
+                    class="w-full bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-dark-border rounded-sm px-3 py-2 text-xs text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue outline-none h-9 font-mono">
+                </div>
+              </div>
+
+              <!-- Accordion / Secondary Fields -->
+              <div class="pt-4 border-t border-gray-200 dark:border-dark-border/50">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Technician</label>
+                    <div class="relative">
+                      <select id="edit-job-tech"
+                        class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue outline-none appearance-none"></select>
+                      <i
+                        class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-dark-muted text-[10px] pointer-events-none"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Engineer</label>
+                    <div class="relative">
+                      <select id="edit-job-engineer"
+                        class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue outline-none appearance-none"></select>
+                      <i
+                        class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-dark-muted text-[10px] pointer-events-none"></i>
+                    </div>
+                  </div>
+                  <div class="hidden">
+                    <select id="edit-job-area"></select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Emergency Toggle -->
+              <div class="pt-2 flex justify-end">
+                <label class="flex items-center gap-3 cursor-pointer group select-none">
+                  <span
+                    class="text-xs font-bold text-gray-500 dark:text-dark-muted group-hover:text-orange-500 dark:group-hover:text-gnfc-orange transition-colors">Emergency
+                    Call</span>
+                  <div class="relative">
+                    <input id="edit-job-emergency" type="checkbox" class="sr-only peer">
+                    <div
+                      class="w-9 h-5 bg-gray-300 dark:bg-dark-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500 dark:peer-checked:bg-gnfc-orange/90 transition-colors">
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+          <div id="edit-warning"
+            class="hidden p-3 bg-amber-50 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 rounded-sm flex items-start gap-2">
+            <i class="ph-bold ph-warning text-amber-600 dark:text-amber-500 mt-0.5"></i>
+            <p class="text-xs text-amber-700 dark:text-amber-200" id="edit-warning-text"></p>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="px-5 py-4 border-t border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21] flex justify-end gap-3 rounded-b-md">
+          <button type="button" onclick="closeEditModal()"
+            class="px-4 py-2 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Cancel</button>
+          <button type="submit"
+            class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-lg shadow-blue-900/20 transition-all transform active:scale-[0.98]">Save
+            Changes</button>
+        </div>
+      </form>
     </div>
-  </main>
+  </div>
+
+  <div id="remark-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="elog-modal-panel">
+      <div
+        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-panel">
+        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">Remarks</h3>
+        <button onclick="closeRemarkModal()"
+          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white"><i
+            class="ph-bold ph-x text-lg"></i></button>
+      </div>
+      <form id="remark-modal-form" class="p-4 space-y-3">
+        <input id="remark-job-id" type="hidden">
+        <div id="remark-history"
+          class="max-h-40 overflow-auto border border-gray-200 dark:border-dark-border rounded-sm divide-y divide-gray-100 dark:divide-dark-border">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Remark
+              Type</label>
+            <select id="remark-type"
+              class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white">
+              <option value="engineer">Engineer</option>
+              <option value="executive">Executive</option>
+            </select>
+          </div>
+          <label class="flex items-center gap-2 text-xs mt-5 text-gray-700 dark:text-gray-300">
+            <input id="remark-ack-tech" type="checkbox" class="accent-gnfc-blue">
+            Ack by Technician
+          </label>
+          <label class="flex items-center gap-2 text-xs mt-5 text-gray-700 dark:text-gray-300">
+            <input id="remark-ack-eng" type="checkbox" class="accent-gnfc-blue">
+            Ack by Engineer
+          </label>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">New
+            Remark</label>
+          <textarea id="remark-text" rows="3"
+            class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-dark-muted/50"
+            placeholder="Remarks are append-only"></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeRemarkModal()"
+            class="px-3 py-1.5 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Close</button>
+          <button type="submit"
+            class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-sm">Append
+            Remark</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="ack-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="elog-modal-panel">
+      <div
+        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-panel">
+        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">Pending Remark Acknowledgement</h3>
+        <button onclick="closeAckModal()"
+          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white"><i
+            class="ph-bold ph-x text-lg"></i></button>
+      </div>
+      <div class="p-4 space-y-3">
+        <div id="ack-list"
+          class="max-h-64 overflow-auto border border-gray-200 dark:border-dark-border rounded-sm divide-y divide-gray-100 dark:divide-dark-border">
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeAckModal()"
+            class="px-3 py-1.5 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Close</button>
+          <button type="button" onclick="acknowledgeSelectedRemarks()"
+            class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-sm">Acknowledge
+            Selected</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="reminder-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="elog-modal-panel">
+      <div
+        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-panel">
+        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">Job Planner / ISO14001 Due Jobs</h3>
+        <button onclick="closeReminderModal()"
+          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white"><i
+            class="ph-bold ph-x text-lg"></i></button>
+      </div>
+      <div id="reminder-list" class="p-4 space-y-2"></div>
+      <div class="px-4 pb-4 flex justify-end">
+        <button type="button" onclick="closeReminderModal()"
+          class="px-3 py-1.5 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Close</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/src/js/plant_log_core.js"></script>
   <script src="/src/js/emg_call_modal.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
+  <script src="/src/js/elogbook_plant_flow.js"></script>
   <script src="/src/js/add_log_modal.js"></script>
-  <script>
-    // Plant Mock Data
-    const plantLogData = {
-      today: [
-        { sr: '01', date: '06/02/2026', area: 'FA', tag: 'N.A', tagSubtitle: 'Checking', jobType: 'Routine checkup', jobRef: 'Ref:PHS : 06/02/2026', tech: 'NRK', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks: '' },
-
-        { sr: '02', date: '06/02/2026', area: 'MF', tag: 'Loop-202', tagSubtitle: 'PT5087K', jobType: 'Pressure transmitter', jobRef: 'By:AMS : 06/02/2026', jobLabel: 'PM', tech: 'DPB', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks: '' },
-
-        { sr: '03', date: '06/02/2026', area: 'DCS', tag: 'N.A', tagSubtitle: 'NOTAG', jobType: 'ESD System', jobRef: 'By:PHB : 06/02/2026', jobLabel: 'PM', tech: 'NRK', desc: '', engineer: '', engInitials: '', status: '', statusColor: '', remarks: '' }
-      ],
-      tomorrow: [],
-      prev: [
-        { sr: '01', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '02', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '03', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '04', date: '05/02/2026', area: 'N.A', tag: 'ISJ47FB', tagSubtitle: 'Repair', jobType: 'Field Job', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Job completed as requested.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
-      ],
-      weekly: [
-        { sr: '01', date: '05/02/2026', area: 'FA', tag: 'FT5021A', tagSubtitle: 'Calib', jobType: 'Routine Check', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Routine checkup completed.', engineer: '', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' },
-        { sr: '02', date: '04/02/2026', area: 'MF', tag: 'PT5087K', tagSubtitle: 'PT5082', jobType: 'Calibration', jobRef: 'Ref:PHS', tech: 'DPB', desc: 'Calibration work completed.', engineer: 'DPB', engInitials: 'AMS', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '01', date: '03/02/2026', area: 'DCS', tag: 'SYS-1', tagSubtitle: 'DCS', jobType: 'Backups', jobRef: 'Ref:System', tech: 'IT', desc: 'System backup taken.', engineer: 'IT', engInitials: 'IT', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested' }
-      ],
-      monthly: [
-        { sr: '01', date: '01/02/2026', area: 'DCS', tag: 'SYS-MAIN', tagSubtitle: 'SYS', jobType: 'Monthly Maint', jobRef: 'Ref:PHS', tech: 'NRK', desc: 'Full system backup taken.', engineer: 'NRK', engInitials: 'PHB', status: '✓ OVER', statusColor: 'green', remarks: '' },
-        { sr: '02', date: '25/01/2026', area: 'UTIL', tag: 'Air', tagSubtitle: 'Comp', jobType: 'Service', jobRef: 'Ref:Mec', tech: 'Mec', desc: 'Air compressor service.', engineer: 'ME', engInitials: 'XY', status: '✓ OVER', statusColor: 'green', remarks: 'Job completed as requested.' }
-      ]
-    };
-
-    let currentView = 'today';
-    let plantLogTable;
-
-    function initTable() {
-         plantLogTable = new PlantLogTable({
-            containerId: '#plant-table',
-            data: plantLogData['today'],
-            itemsPerPage: 5
-        });
-    }
-
-    function toggleJobFilter() {
-      const filterBar = document.getElementById('job-filter-bar');
-      filterBar.classList.toggle('hidden');
-      if (!filterBar.classList.contains('hidden')) {
-        populateJobTypeDropdown();
-      }
-    }
-
-    function populateJobTypeDropdown() {
-      const allData = [
-        ...plantLogData.today,
-        ...plantLogData.prev,
-        ...plantLogData.weekly,
-        ...plantLogData.monthly
-      ];
-
-      const jobTypes = [...new Set(allData.map(item => item.jobType).filter(Boolean))].sort();
-      const select = document.getElementById('job-type-select');
-      select.innerHTML = '<option value="">All Jobs</option>';
-
-      jobTypes.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.textContent = type;
-        select.appendChild(option);
-      });
-    }
-
-    function applyFilters() {
-      const jobType = document.getElementById('job-type-select').value;
-      const startDate = document.getElementById('start-date').value;
-      const endDate = document.getElementById('end-date').value;
-   
-      let filteredData = plantLogData[currentView] || [];
-
-      if (jobType) filteredData = filteredData.filter(item => item.jobType === jobType);
-
-      if (startDate || endDate) {
-        filteredData = filteredData.filter(item => {
-          if (!item.date) return false;
-          const [d, m, y] = item.date.split('/').map(Number);
-          const itemDate = new Date(y, m - 1, d);
-
-          if (startDate) {
-            const start = new Date(startDate);
-            start.setHours(0, 0, 0, 0);
-            if (itemDate < start) return false;
-          }
-          if (endDate) {
-            const end = new Date(endDate);
-            end.setHours(0, 0, 0, 0);
-            if (itemDate > end) return false;
-          }
-          return true;
-        });
-      }
-      
-      // Update table data
-      plantLogTable.setData(filteredData);
-    }
-    
-    function filterStatus(status) {
-        if (!plantLogTable) return;
-        plantLogTable.setFilter('status', status);
-        document.getElementById('status-filter-dropdown').classList.add('hidden');
-    }
-
-    function toggleStatusFilter(event) {
-        event.stopPropagation(); // Prevent sorting when clicking filter
-        const dropdown = document.getElementById('status-filter-dropdown');
-        dropdown.classList.toggle('hidden');
-        
-        if (!dropdown.classList.contains('hidden')) {
-            populateStatusDropdown();
-            
-            // Close when clicking outside
-            const closeDropdown = (e) => {
-                if (!e.target.closest('#status-filter-dropdown') && !e.target.closest('button[onclick="toggleStatusFilter(event)"]')) {
-                    dropdown.classList.add('hidden');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            };
-            document.addEventListener('click', closeDropdown);
-        }
-    }
-
-    function populateStatusDropdown() {
-        if (!plantLogTable) return;
-        const uniqueStatuses = plantLogTable.getUniqueValues('status');
-        const dropdown = document.getElementById('status-filter-dropdown');
-        
-        let html = `<div class="px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border cursor-pointer select-none border-b border-slate-100 dark:border-dark-border d-flex align-start" onclick="filterStatus('')">All</div>`;
-        
-        uniqueStatuses.forEach(status => {
-            html += `<div class="px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border cursor-pointer select-none d-flex align-start" onclick="filterStatus('${status}')">${status}</div>`;
-        });
-        
-        dropdown.innerHTML = html;
-    }
-
-    function switchView(btn, viewName) {
-      currentView = viewName;
-
-      // Reset Tabs
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.className = "tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors";
-      });
-      // Active Tab
-      btn.className = "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
-
-      // Update Header
-      const titleMap = {
-        'today': 'Today Log Book',
-        'tomorrow': 'Tomorrow Log Book',
-        'prev': 'Prev Day Log Book',
-        'weekly': 'Weekly Log Book',
-        'monthly': 'Monthly Log Book'
-      };
-      const dateMap = {
-        'today': '06.02.2026',
-        'tomorrow': '07.02.2026',
-        'prev': '05.02.2026',
-        'weekly': '30.01 - 06.02',
-        'monthly': 'Feb 2026'
-      };
-
-      document.getElementById('view-title').innerText = titleMap[viewName];
-      document.getElementById('view-date').innerText = dateMap[viewName];
-
-      // Reset Filters
-      document.getElementById('job-type-select').value = "";
-      document.getElementById('start-date').value = "";
-      document.getElementById('end-date').value = "";
-      document.getElementById('table-search').value = ""; // Clear search input
-
-      // Update Table Data
-      plantLogTable.setData(plantLogData[viewName]);
-      plantLogTable.setSearch(""); // Reset internal search state
-    }
-
-    // Init
-    const dateEl = document.getElementById('current-date');
-    if (dateEl) {
-         const now = new Date();
-         const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
-         dateEl.textContent = now.toLocaleDateString('en-GB', options);
-    }
-
-    function initReportNavState() {
-      const navButtons = Array.from(document.querySelectorAll('.report-nav-btn[data-target]'));
-      if (!navButtons.length) return;
-
-      const currentFile = (window.location.pathname.split('/').pop() || '').toLowerCase();
-      const lastSelected = (sessionStorage.getItem('plantDetailReportNav') || '').toLowerCase();
-      let hasExactMatch = false;
-
-      navButtons.forEach((btn) => {
-        const target = (btn.dataset.target || '').toLowerCase();
-        const isActive = target && target === currentFile;
-        if (isActive) {
-          btn.classList.add('is-active');
-          btn.setAttribute('aria-current', 'page');
-          hasExactMatch = true;
-        } else {
-          btn.classList.remove('is-active');
-          btn.removeAttribute('aria-current');
-        }
-
-        btn.addEventListener('click', () => {
-          sessionStorage.setItem('plantDetailReportNav', target);
-        });
-      });
-
-      // On plant_detail page, keep the last visited report visually active.
-      if (!hasExactMatch && currentFile === 'plant_detail.html' && lastSelected) {
-        const remembered = navButtons.find((btn) => (btn.dataset.target || '').toLowerCase() === lastSelected);
-        if (remembered) remembered.classList.add('is-active');
-      }
-    }
-
-    // Init Logic
-    document.addEventListener('DOMContentLoaded', () => {
-        initReportNavState();
-        initTable();
-    });
-    
-  </script>
 </body>
 
 </html>

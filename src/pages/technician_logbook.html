@@ -19,71 +19,56 @@
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
   <div id="sidebar-container"></div>
   <script>renderSidebar('technician_logbook');</script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-    <header class="h-14 bg-dark-bg border-b border-dark-border flex items-center justify-between px-6 shrink-0">
-
-      <div class="flex items-center gap-2 text-lg font-medium text-white">
-        <!-- <i class="ph ph-factory "></i> -->
-        <span>Technician's Logbook</span>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <div class="flex items-center bg-dark-panel border border-dark-border rounded-sm">
-          <button onclick="ThemeManager.decreaseFontSize()"
-            class="w-8 h-8 flex items-center justify-center text-dark-text hover:text-white hover:bg-dark-border/50 transition-colors border-r border-dark-border"
-            title="Decrease Font Size">
-            <i class="ph-bold ph-minus text-xs"></i>
-          </button>
-          <div class="w-px h-4 bg-dark-border"></div>
-          <button onclick="ThemeManager.increaseFontSize()"
-            class="w-8 h-8 flex items-center justify-center text-dark-text hover:text-white hover:bg-dark-border/50 transition-colors"
-            title="Increase Font Size">
-            <i class="ph-bold ph-plus text-xs"></i>
-          </button>
-        </div>
-        <div class="relative hidden md:block mr-1">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
-          <input type="text" placeholder="Global Search..."
-            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 h-8 focus:border-gnfc-blue focus:outline-none transition-colors w-64 placeholder-dark-muted">
-        </div>
-      </div>
-
-    </header>
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Technician's Logbook",
+        breadcrumbs: [
+          { label: "Technician's Logbook" } // Single level for main page
+        ],
+        // backLink not needed for top level or can point to home
+        backLink: "/index.html"
+      });
+    </script>
 
 
     <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
 
-      <div class="flex items-center gap-4 mb-4 bg-dark-panel p-2 border border-dark-border rounded-sm">
+      <div
+        class="flex items-center justify-between mb-6 bg-dark-panel p-2 border border-dark-border rounded-md shadow-sm">
 
-        <div class="flex items-center gap-2 px-2">
-
-          <label class="text-[#5794F2] font-bold text-xs">
-            Time Range:
-          </label>
-
-          <div class="flex bg-dark-bg rounded-sm border border-dark-border">
-
-            <button
-              class="time-btn px-3 py-1 text-xs font-bold border-r border-dark-border text-gnfc-orange bg-dark-header transition-colors"
-              aria-pressed="true">
-              Today </button>
-
-            <button
-              class="time-btn px-3 py-1 text-xs font-bold border-r border-dark-border text-dark-muted hover:text-white hover:bg-dark-header transition-colors"
-              aria-pressed="false">
-              Yesterday </button>
-
-            <button class="time-btn px-3 py-1 text-xs font-bold text-dark-muted hover:text-white hover:bg-dark-header transition-colors"
-              aria-pressed="false"> Weekly </button>
-
+        <div class="flex items-center gap-3 px-2">
+          <div class="flex items-center gap-2 text-gnfc-blue">
+            <i class="ph-fill ph-calendar-blank"></i>
+            <span class="text-xs font-bold uppercase tracking-wide">Time Range</span>
           </div>
+          <div class="h-4 w-px bg-dark-border"></div>
 
+          <div class="flex bg-dark-bg p-0.5 rounded-md border border-dark-border">
+            <button data-view="today"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent"
+              aria-pressed="true">
+              Today
+            </button>
+            <button data-view="prev"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              aria-pressed="false">
+              Prev Day
+            </button>
+            <button data-view="weekly"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              aria-pressed="false">
+              Weekly
+            </button>
+          </div>
         </div>
-
       </div>
 
 
@@ -100,36 +85,50 @@
 
       </div>
 
-      <section class="mt-8 mb-4 border border-dark-border rounded-sm bg-dark-panel/60 p-4">
+      <section class="mt-6 mb-4">
 
-        <div class="flex items-center gap-3 mb-5">
-          <span class="h-px flex-1 bg-dark-border"></span>
-          <h3 class="text-gnfc-blue font-bold uppercase tracking-[0.2em] text-xs sm:text-sm text-center">
-            SHIFT LOGBOOK (OFFICER)
-          </h3>
-          <span class="h-px flex-1 bg-dark-border"></span>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="h-8 w-1 bg-gnfc-blue rounded-full"></div>
+          <h3 class="text-white font-bold text-sm tracking-wide">Officer Logbook Quick Access</h3>
+          <div class="h-px flex-1 bg-dark-border"></div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=today'"
-            class="shift-btn h-12 bg-dark-bg border border-dark-border text-dark-muted font-bold text-sm rounded-sm uppercase tracking-widest hover:bg-gnfc-blue hover:text-white hover:border-gnfc-blue transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gnfc-blue/70">
-            TODAY
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-calendar-check text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Today</h4>
           </button>
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=prev'"
-            class="shift-btn h-12 bg-dark-bg border border-dark-border text-dark-muted font-bold text-sm rounded-sm uppercase tracking-widest hover:bg-gnfc-blue hover:text-white hover:bg-blue-600  hover:border-gnfc-blue transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gnfc-blue/70">
-            PREV DAY
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-clock-counter-clockwise text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Previous Day</h4>
           </button>
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=weekly'"
-            class="shift-btn h-12 bg-dark-bg border border-dark-border text-dark-muted font-bold text-sm rounded-sm uppercase tracking-widest hover:bg-gnfc-blue hover:text-white hover:border-gnfc-blue transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gnfc-blue/70">
-            WEEKLY
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-calendar-plus text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Weekly</h4>
           </button>
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=monthly'"
-            class="shift-btn h-12 bg-dark-bg border border-dark-border text-dark-muted font-bold text-sm rounded-sm uppercase tracking-widest hover:bg-gnfc-blue hover:text-white hover:border-gnfc-blue transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gnfc-blue/70">
-            MONTHLY
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-calendar text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Monthly</h4>
           </button>
 
         </div>
@@ -142,25 +141,41 @@
 
   <script>
     const timeButtons = document.querySelectorAll(".time-btn");
+    let selectedView = "today";
 
-    timeButtons.forEach(button => {
-      button.addEventListener("click", function () {
-        timeButtons.forEach(btn => {
-          btn.classList.remove("text-gnfc-orange", "bg-dark-header");
-          btn.classList.add("text-dark-muted");
+    function setSelectedView(viewName, persist = true) {
+      selectedView = ["today", "prev", "weekly"].includes(viewName) ? viewName : "today";
+
+      timeButtons.forEach((btn) => {
+        const btnView = btn.dataset.view || "";
+        const isActive = btnView === selectedView;
+
+        // Reset classes
+        btn.className = "time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent";
+
+        if (isActive) {
+          btn.classList.add("bg-gnfc-blue", "text-white", "shadow-sm");
+          btn.setAttribute("aria-pressed", "true");
+        } else {
+          btn.classList.add("text-dark-muted", "hover:text-white", "hover:bg-white/5");
           btn.setAttribute("aria-pressed", "false");
-        });
+        }
+      });
 
-        this.classList.remove("text-dark-muted");
-        this.classList.add("text-gnfc-orange", "bg-dark-header");
-        this.setAttribute("aria-pressed", "true");
+      if (persist && window.ElogbookStore && typeof window.ElogbookStore.setTechnicianSelectedView === "function") {
+        window.ElogbookStore.setTechnicianSelectedView(selectedView);
+      }
+      renderPlantCards();
+    }
+
+    timeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setSelectedView(button.dataset.view || "today", true);
       });
     });
-    
   </script>
 
   <script>
-    // FIX 3: Plant Grid Generation
     const units = [
       'AA', 'AAQM', 'AMM', 'ANIPF', 'ANITDI',
       'ASGP', 'BAGG', 'BOILER', 'CMS', 'CPSU',
@@ -169,32 +184,44 @@
 
     const grid = document.getElementById('plant-grid');
 
-    // Performance Fix: Create an accumulator string instead of writing to DOM in loop
-    let gridContent = '';
+    function renderPlantCards() {
+      let gridContent = '';
+      units.forEach((code, i) => {
+        // Mock status logic for demo
+        const status = i % 4 === 0 ? 'Maintenance' : 'Operational';
+        const color = status === 'Operational' ? '#73BF69' : '#FF9900';
+        const unitNumber = (i + 1).toString().padStart(2, '0');
+        const href = `/src/pages/plant_detail.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
 
-    units.forEach((code, i) => {
-      const status = i % 4 === 0 ? 'Maint' : 'Run';
-      const color = status === 'Run' ? '#73BF69' : '#FF9900';
-      const unitNumber = (i + 1).toString().padStart(2, '0');
+        // Refined Card Design (Dashboard-like)
+        gridContent += `
+          <a href="${href}"
+             class="relative bg-dark-panel border border-dark-border hover:border-gnfc-blue
+                    rounded-sm p-4 h-24 flex flex-col justify-between
+                    group transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 overflow-hidden">
+              
+              <!-- Colored Left Border Strip -->
+              <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: ${color}"></div>
 
-      gridContent += `
-        <a href="/src/pages/plant_detail.html"
-           class="bg-dark-bg border border-dark-border hover:border-gnfc-blue
-                  p-3 rounded-sm flex items-center justify-between
-                  group transition">
-            <div class="flex items-center gap-3">
-                <div class="text-[10px] font-mono  group-hover:text-white">
-                    ${unitNumber}
-                </div>
-                <div class="font-bold text-sm group-hover:text-[#5794F2]">${code}</div>
-            </div>
-            <div class="w-2 h-2 rounded-full" style="background-color: ${color}"></div>
-        </a>
-      `;
-    });
+              <div class="flex justify-between items-start pl-2">
+                  <span class="text-[10px] font-mono text-dark-muted font-bold tracking-wider">${unitNumber}</span>
+                  <div class="w-1.5 h-1.5 rounded-full" style="background-color: ${color}; box-shadow: 0 0 4px ${color}"></div>
+              </div>
 
-    // Write to DOM once
-    grid.innerHTML = gridContent;
+              <div class="pl-2 flex items-end justify-between">
+                  <h3 class="text-lg font-bold text-white tracking-tight group-hover:text-gnfc-blue transition-colors">${code}</h3>
+                  <span class="text-[9px] uppercase font-bold text-dark-muted tracking-wider" style="color: ${color}">${status}</span>
+              </div>
+          </a>
+        `;
+      });
+      grid.innerHTML = gridContent;
+    }
+
+    const persistedView = (window.ElogbookStore && typeof window.ElogbookStore.getTechnicianSelectedView === "function")
+      ? window.ElogbookStore.getTechnicianSelectedView()
+      : "today";
+    setSelectedView(persistedView, false);
   </script>
 
 

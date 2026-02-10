@@ -295,7 +295,7 @@ const ThemeManager = {
     },
     increaseFontSize() {
         const current = this.getSettings();
-        const newSize = Math.min(24, current.fontSize + 1); // Max 24px
+        const newSize = Math.min(28, current.fontSize + 1); // Max 24px
         if (newSize !== current.fontSize) {
             this.saveSettings({ ...current, fontSize: newSize });
         }

@@ -1,1330 +1,1226 @@
-/* global PlantLogTable, renderHeader */
+/* global PlantLogTable, renderHeader, ElogbookStore */
 
-var currentView = "today";
-var plantLogTable;
+(function initElogbookPlantFlow(global) {
+  "use strict";
 
-const ELOGBOOK_VIEWS = ["today", "tomorrow", "prev", "weekly", "monthly"];
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-const STATUS_FILTER_ALL = "__all__";
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const STATUS_FILTER_ALL = "__all__";
+  const VIEW_KEYS = ["today", "tomorrow", "prev", "weekly", "monthly"];
 
-const elogbookState = {
-  selectedPlant: "AA",
-  activeUser: {
-    name: "PHS",
-    role: "engineer",
-  },
-  pendingOnlyMode: false,
-  selectedStatus: "",
-  modalMode: "assign",
-  modalTargetView: "today",
-  jobsByView: {},
-  technicians: ["PHS", "NRK", "DPB", "AMS", "PHB", "IT", "KBP"],
-  engineers: ["PHS", "AMS", "PHB", "MIV", "VAA"],
-  areas: ["FA", "MF", "DCS", "UTIL", "AA", "INST"],
-  jobTypes: ["Routine Check", "Calibration", "Breakdown", "Abnormality", "ISO14001", "Shutdown"],
-  instrumentTypes: ["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER", "DCS", "OTHERS"],
-  loopTagMap: {
-    "Loop-202": ["PT5087K", "PT5082A", "PT5091F"],
-    "Loop-101": ["FT5021A", "FT5021B", "FT5023K"],
-    "Loop-DCS": ["SYS-1", "SYS-MAIN", "ESD-CHK"],
-    "Loop-UTIL": ["AIR-COMP", "COND-VALVE", "LT38358"],
-  },
-  ojrPending: [],
-  jobPlannerDue: [],
-};
+  let currentView = "today";
+  let plantLogTable = null;
 
-function normalizeView(viewName) {
-  return ELOGBOOK_VIEWS.includes(viewName) ? viewName : "today";
-}
-
-function pad2(value) {
-  return String(value).padStart(2, "0");
-}
-
-function formatDateSlash(date) {
-  return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()}`;
-}
-
-function formatDateDot(date) {
-  return `${pad2(date.getDate())}.${pad2(date.getMonth() + 1)}.${date.getFullYear()}`;
-}
-
-function formatDateIso(date) {
-  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
-}
-
-function parseSlashDate(dateText) {
-  if (!dateText) return null;
-  const [dd, mm, yyyy] = dateText.split("/").map(Number);
-  if (!dd || !mm || !yyyy) return null;
-  return new Date(yyyy, mm - 1, dd);
-}
-
-function dateOffsetFromNow(days) {
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  return new Date(now.getTime() + days * ONE_DAY_MS);
-}
-
-function viewTitle(viewName) {
-  const map = {
-    today: "Today Log Book",
-    tomorrow: "Tomorrow Log Book",
-    prev: "Prev Day Log Book",
-    weekly: "Weekly Log Book",
-    monthly: "Monthly Log Book",
-  };
-  return map[viewName] || map.today;
-}
-
-function viewDateText(viewName) {
-  const today = dateOffsetFromNow(0);
-  const tomorrow = dateOffsetFromNow(1);
-  const prev = dateOffsetFromNow(-1);
-  if (viewName === "today") return formatDateDot(today);
-  if (viewName === "tomorrow") return formatDateDot(tomorrow);
-  if (viewName === "prev") return formatDateDot(prev);
-  if (viewName === "weekly") return `${formatDateDot(dateOffsetFromNow(-6))} - ${formatDateDot(today)}`;
-  return today.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
-}
-
-function showNotice(message, intent) {
-  const tone = intent || "info";
-  const containerId = "elogbook-toast-container";
-  let container = document.getElementById(containerId);
-  if (!container) {
-    container = document.createElement("div");
-    container.id = containerId;
-    container.className = "fixed top-4 right-4 z-[150] flex flex-col gap-2";
-    document.body.appendChild(container);
-  }
-
-  const bgClass =
-    tone === "error"
-      ? "bg-red-600/90 border-red-500"
-      : tone === "warn"
-      ? "bg-amber-600/90 border-amber-500"
-      : "bg-blue-600/90 border-blue-500";
-  const toast = document.createElement("div");
-  toast.className = `text-xs font-bold border ${bgClass} text-white px-3 py-2 rounded shadow-lg`;
-  toast.textContent = message;
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 2600);
-}
-
-function makeInitials(name) {
-  const tokenized = String(name || "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((t) => t[0].toUpperCase());
-  return tokenized.slice(0, 3).join("") || "NA";
-}
-
-function makeJob(partial) {
-  const payload = partial || {};
-  const id = payload.id || `J-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-  const remarks = Array.isArray(payload.remarks) ? payload.remarks : [];
-  return {
-    id,
-    sr: payload.sr || "00",
-    date: payload.date || formatDateSlash(new Date()),
-    area: payload.area || "N.A",
-    loop: payload.loop || "N.A",
-    tag: payload.tag || "N.A",
-    tagSubtitle: payload.tagSubtitle || payload.typeOfInst || "NOTAG",
-    jobType: payload.jobType || "Routine Check",
-    typeOfInst: payload.typeOfInst || "OTHERS",
-    jobRef: payload.jobRef || `By:${payload.assignedBy || elogbookState.activeUser.name} : ${payload.date || formatDateSlash(new Date())}`,
-    jobLabel: payload.jobLabel || "",
-    tech: payload.tech || elogbookState.activeUser.name,
-    desc: payload.desc || "",
-    engineer: payload.engineer || "",
-    engInitials: payload.engInitials || "",
-    status: payload.status || "",
-    statusColor: payload.statusColor || "",
-    remarks,
-    pendingWrite: Boolean(payload.pendingWrite),
-    emergency: Boolean(payload.emergency),
-    abnormality: Boolean(payload.abnormality),
-    locked: Boolean(payload.locked),
-    extraDutyHours: Number(payload.extraDutyHours || 0),
-    assignedBy: payload.assignedBy || elogbookState.activeUser.name,
-    source: payload.source || "Manual",
-  };
-}
-
-function cloneJobForReassign(job) {
-  return makeJob({
-    date: formatDateSlash(dateOffsetFromNow(0)),
-    area: job.area,
-    loop: job.loop,
-    tag: job.tag,
-    tagSubtitle: job.tagSubtitle,
-    jobType: job.jobType,
-    typeOfInst: job.typeOfInst,
-    jobRef: `Re-Assign:${elogbookState.activeUser.name} : ${formatDateSlash(dateOffsetFromNow(0))}`,
-    jobLabel: job.jobLabel,
-    tech: job.tech,
-    desc: "",
-    engineer: "",
-    engInitials: "",
-    status: "",
-    statusColor: "",
-    remarks: [],
-    pendingWrite: true,
-    emergency: false,
-    abnormality: job.jobType === "Abnormality",
-    locked: false,
-    assignedBy: elogbookState.activeUser.name,
-    source: "Re-Assigned",
-  });
-}
-
-function seedMockData() {
-  const today = formatDateSlash(dateOffsetFromNow(0));
-  const prev = formatDateSlash(dateOffsetFromNow(-1));
-  const older = formatDateSlash(dateOffsetFromNow(-2));
-  const oldMonth = formatDateSlash(dateOffsetFromNow(-18));
-
-  const jobs = {
-    today: [
-      makeJob({
-        id: "J-1001",
-        date: today,
-        area: "FA",
-        loop: "Loop-202",
-        tag: "PT5087K",
-        tagSubtitle: "TRANSMITTER",
-        jobType: "Routine Check",
-        typeOfInst: "TRANSMITTER",
-        jobRef: `By:PHS : ${today}`,
-        tech: "NRK",
-        pendingWrite: true,
-        source: "Assign(Today)",
-      }),
-      makeJob({
-        id: "J-1002",
-        date: today,
-        area: "MF",
-        loop: "Loop-101",
-        tag: "FT5021A",
-        tagSubtitle: "CONTROL VALVE",
-        jobType: "Abnormality",
-        typeOfInst: "CONTROL VALVE",
-        jobRef: `By:AMS : ${today}`,
-        tech: "DPB",
-        desc: "Valve position hunting observed near 44%.",
-        engineer: "AMS",
-        engInitials: "AMS",
-        status: "IN PROGRESS",
-        statusColor: "orange",
-        abnormality: true,
-      }),
-      makeJob({
-        id: "J-1003",
-        date: today,
-        area: "DCS",
-        loop: "Loop-DCS",
-        tag: "SYS-1",
-        tagSubtitle: "DCS",
-        jobType: "ISO14001",
-        typeOfInst: "SWITCH",
-        jobRef: `By:PHB : ${today}`,
-        tech: "KBP",
-        desc: "Routine ISO check complete.",
-        engineer: "PHB",
-        engInitials: "PHB",
-        status: "✓ OVER",
-        statusColor: "green",
-        locked: true,
-        remarks: [
-          {
-            id: "RMK-1",
-            type: "executive",
-            text: "Check acknowledgement from technician.",
-            author: "VAA",
-            date: `${today} 08:40`,
-            ackTech: true,
-            ackEng: true,
-            ackByTech: false,
-            ackByEng: false,
-          },
-        ],
-      }),
-    ],
-    tomorrow: [
-      makeJob({
-        id: "J-2001",
-        date: formatDateSlash(dateOffsetFromNow(1)),
-        area: "AA",
-        loop: "Loop-UTIL",
-        tag: "AIR-COMP",
-        tagSubtitle: "ANALYZER",
-        jobType: "Calibration",
-        typeOfInst: "ANALYZER",
-        jobRef: `By:PHS : ${today}`,
-        tech: "AMS",
-        pendingWrite: true,
-        source: "Assign(Tomorrow)",
-      }),
-    ],
-    prev: [
-      makeJob({
-        id: "J-3001",
-        date: prev,
+  const elogbookState = {
+    selectedPlant: "AA",
+    pendingOnlyMode: false,
+    selectedStatus: "",
+    modalMode: "assign",
+    modalTargetView: "today",
+    activeUser: {
+      name: "PHS",
+      role: "engineer"
+    },
+    allJobs: [],
+    jobsByView: {
+      today: [],
+      tomorrow: [],
+      prev: [],
+      weekly: [],
+      monthly: []
+    },
+    technicians: ["PHS", "NRK", "DPB", "AMS", "PHB", "IT", "KBP"],
+    engineers: ["PHS", "AMS", "PHB", "MIV", "VAA"],
+    areas: ["FA", "MF", "DCS", "UTIL", "AA", "INST"],
+    jobTypes: ["Routine Check", "Calibration", "Breakdown", "Abnormality", "ISO14001", "Shutdown"],
+    instrumentTypes: ["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER", "DCS", "OTHERS"],
+    loopTagMap: {
+      "Loop-202": ["PT5087K", "PT5082A", "PT5091F"],
+      "Loop-101": ["FT5021A", "FT5021B", "FT5023K"],
+      "Loop-DCS": ["SYS-1", "SYS-MAIN", "ESD-CHK"],
+      "Loop-UTIL": ["AIR-COMP", "COND-VALVE", "LT38358"]
+    },
+    ojrPending: [
+      {
+        id: "OJR-1",
         area: "FA",
         loop: "Loop-101",
-        tag: "FT5021B",
-        tagSubtitle: "TRANSMITTER",
+        tag: "FT5023K",
         jobType: "Breakdown",
-        typeOfInst: "TRANSMITTER",
-        jobRef: `Ref:PHS : ${prev}`,
-        tech: "NRK",
-        desc: "Process alarm was due to loose cable. Tightened and tested.",
-        engineer: "PHS",
-        engInitials: "PHS",
-        status: "✓ OVER",
-        statusColor: "green",
-        locked: true,
-      }),
-      makeJob({
-        id: "J-3002",
-        date: prev,
-        area: "MF",
-        loop: "Loop-202",
-        tag: "PT5091F",
-        tagSubtitle: "TRANSMITTER",
-        jobType: "Routine Check",
-        typeOfInst: "TRANSMITTER",
-        jobRef: `Ref:AMS : ${prev}`,
-        tech: "DPB",
-        pendingWrite: true,
-        source: "Pending",
-      }),
-    ],
-    weekly: [
-      makeJob({
-        id: "J-4001",
-        date: prev,
-        area: "DCS",
-        loop: "Loop-DCS",
-        tag: "ESD-CHK",
-        tagSubtitle: "DCS",
-        jobType: "Shutdown",
-        typeOfInst: "DCS",
-        jobRef: `Ref:PHB : ${prev}`,
-        tech: "IT",
-        desc: "Shutdown interlock simulation completed.",
-        engineer: "PHB",
-        engInitials: "PHB",
-        status: "✓ OVER",
-        statusColor: "green",
-        locked: true,
-      }),
-      makeJob({
-        id: "J-4002",
-        date: older,
+        instType: "TRANSMITTER",
+        desc: "Operation observed unstable flow trend in shift A.",
+        source: "OJR"
+      },
+      {
+        id: "OJR-2",
         area: "UTIL",
         loop: "Loop-UTIL",
-        tag: "COND-VALVE",
-        tagSubtitle: "CONTROL VALVE",
+        tag: "AIR-COMP",
         jobType: "Routine Check",
-        typeOfInst: "CONTROL VALVE",
-        jobRef: `Ref:PHS : ${older}`,
-        tech: "NRK",
-        pendingWrite: true,
-        source: "Weekly Pending",
-      }),
+        instType: "ANALYZER",
+        desc: "Compressor pressure fluctuations reported by operations.",
+        source: "OJR"
+      }
     ],
-    monthly: [
-      makeJob({
-        id: "J-5001",
-        date: oldMonth,
-        area: "AA",
-        loop: "Loop-202",
-        tag: "PT5082A",
-        tagSubtitle: "TRANSMITTER",
-        jobType: "Calibration",
-        typeOfInst: "TRANSMITTER",
-        jobRef: `Ref:PHS : ${oldMonth}`,
-        tech: "AMS",
-        desc: "Monthly loop calibration done and documented.",
-        engineer: "PHS",
-        engInitials: "PHS",
-        status: "✓ OVER",
-        statusColor: "green",
-        locked: true,
-      }),
-    ],
+    jobPlannerDue: []
   };
 
-  Object.keys(jobs).forEach((view) => resequenceJobs(view, jobs));
-
-  elogbookState.ojrPending = [
-    {
-      id: "OJR-1",
-      area: "FA",
-      loop: "Loop-101",
-      tag: "FT5023K",
-      jobType: "Breakdown",
-      instType: "TRANSMITTER",
-      desc: "Operation observed unstable flow trend in shift A.",
-      source: "OJR",
-    },
-    {
-      id: "OJR-2",
-      area: "UTIL",
-      loop: "Loop-UTIL",
-      tag: "AIR-COMP",
-      jobType: "Routine Check",
-      instType: "ANALYZER",
-      desc: "Compressor pressure fluctuations reported by operations.",
-      source: "OJR",
-    },
-  ];
-
-  elogbookState.jobPlannerDue = [
-    {
-      id: "JP-1",
-      area: "MF",
-      loop: "Loop-202",
-      tag: "PT5087K",
-      jobType: "ISO14001",
-      instType: "TRANSMITTER",
-      dueDate: formatDateSlash(dateOffsetFromNow(0)),
-      desc: "ISO planned PM due today.",
-    },
-    {
-      id: "JP-2",
-      area: "DCS",
-      loop: "Loop-DCS",
-      tag: "SYS-MAIN",
-      jobType: "ISO14001",
-      instType: "SWITCH",
-      dueDate: formatDateSlash(dateOffsetFromNow(1)),
-      desc: "Switch panel compliance check due tomorrow.",
-    },
-  ];
-
-  return jobs;
-}
-
-function resequenceJobs(viewName, store) {
-  const container = store || elogbookState.jobsByView;
-  const jobs = container[viewName] || [];
-  jobs.forEach((job, index) => {
-    job.sr = pad2(index + 1);
-  });
-}
-
-function parseQueryContext() {
-  const params = new URLSearchParams(window.location.search);
-  const plant = (params.get("plant") || "").trim();
-  if (plant) elogbookState.selectedPlant = plant;
-  currentView = normalizeView(params.get("view") || "today");
-}
-
-function initHeaderAndChips() {
-  document.title = `GNFC | ${elogbookState.selectedPlant} Logbook`;
-
-  if (typeof renderHeader === "function") {
-    renderHeader({
-      title: `${elogbookState.selectedPlant} Logbook`,
-      breadcrumbs: [
-        { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
-        { label: `${elogbookState.selectedPlant} Plant Detail` },
-      ],
-      backLink: "/src/pages/technician_logbook.html",
-    });
+  function pad2(value) {
+    return String(value).padStart(2, "0");
   }
 
-  const chipLabel = document.querySelector("#plant-unit-chip span:last-child");
-  if (chipLabel) chipLabel.textContent = `Plant: ${elogbookState.selectedPlant}`;
-}
+  function isoDateToSlash(isoDate) {
+    if (!isoDate) return "--/--/----";
+    const date = ElogbookStore.parseIsoDate(isoDate);
+    if (!date) return "--/--/----";
+    return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()}`;
+  }
 
-function escapeHTML(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
+  function toIsoDate(date) {
+    return ElogbookStore.toIsoDate(date);
+  }
 
-function getStatusClass(statusColor) {
-  if (statusColor === "green") return "text-gnfc-green bg-gnfc-green/10 border-gnfc-green/20";
-  if (statusColor === "orange") return "text-gnfc-orange bg-gnfc-orange/10 border-gnfc-orange/20";
-  return "text-slate-500 dark:text-dark-muted bg-slate-100 dark:bg-dark-bg border-slate-300 dark:border-dark-border";
-}
+  function startOfDay(date) {
+    return ElogbookStore.startOfDay(date);
+  }
 
-function hasPendingAckForUser(job) {
-  if (!Array.isArray(job.remarks) || !job.remarks.length) return false;
-  return job.remarks.some((remark) => {
-    if (elogbookState.activeUser.role === "technician") {
-      return remark.ackTech && !remark.ackByTech;
+  function normalizeView(viewName) {
+    return VIEW_KEYS.includes(viewName) ? viewName : "today";
+  }
+
+  function safeText(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function makeInitials(name) {
+    const tokenized = String(name || "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((token) => token[0].toUpperCase());
+    return tokenized.slice(0, 3).join("") || "NA";
+  }
+
+  function getStatusClass(color) {
+    if (color === "green") return "text-gnfc-green bg-gnfc-green/10 border-gnfc-green/20";
+    if (color === "orange") return "text-gnfc-orange bg-gnfc-orange/10 border-gnfc-orange/20";
+    return "text-slate-500 dark:text-dark-muted bg-slate-100 dark:bg-dark-bg border-slate-300 dark:border-dark-border";
+  }
+
+  function statusColor(status) {
+    if (status === "✓ OVER") return "green";
+    if (!status) return "";
+    return "orange";
+  }
+
+  function showNotice(message, intent) {
+    const tone = intent || "info";
+    const containerId = "elogbook-toast-container";
+    let container = document.getElementById(containerId);
+
+    if (!container) {
+      container = document.createElement("div");
+      container.id = containerId;
+      container.className = "fixed top-4 right-4 z-[150] flex flex-col gap-2";
+      document.body.appendChild(container);
     }
-    return remark.ackEng && !remark.ackByEng;
-  });
-}
 
-function renderJobRow(job) {
-  const rowTint = job.emergency ? "bg-amber-500/10" : "";
-  const srTint = job.pendingWrite ? "bg-pink-500/20 text-pink-200 cursor-pointer" : "";
-  const descWrapClass = job.abnormality ? "border border-red-500/60 rounded-sm px-1.5 py-1 text-red-200" : "";
-  const statusClass = getStatusClass(job.statusColor);
-  const canEdit = !job.locked;
-  const remarksCount = Array.isArray(job.remarks) ? job.remarks.length : 0;
-  const pendingAck = hasPendingAckForUser(job);
-  const srClick = canEdit ? `onclick="openEditModal('${job.id}')"` : "";
-  const isPendingStatus = job.pendingWrite && !job.desc;
+    const toneClass = tone === "error"
+      ? "bg-red-600/90 border-red-500"
+      : tone === "warn"
+        ? "bg-amber-600/90 border-amber-500"
+        : "bg-blue-600/90 border-blue-500";
 
-  return `
-    <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group ${rowTint}">
-      <td class="p-2 text-center font-mono border-r border-dark-border ${srTint}" ${srClick}>${escapeHTML(job.sr)}</td>
-      <td class="p-2 font-bold text-slate-700 dark:text-white border-r border-dark-border">${escapeHTML(job.area)}</td>
-      <td class="p-2 border-r border-dark-border">
-        <div class="flex items-start justify-between gap-2">
-          <div>
-            <div class="text-xs text-blue-600 dark:text-gnfc-blue font-bold">${escapeHTML(job.loop)}</div>
-            <span class="inline-block mt-1 text-[10px] text-slate-500 dark:text-dark-muted bg-slate-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-dark-border font-mono">${escapeHTML(job.tag)}</span>
-          </div>
-          ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="text-[10px] px-1 py-0.5 border border-red-500/50 text-red-300 rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
-        </div>
-      </td>
-      <td class="p-2 border-r border-dark-border">
-        <div class="font-medium text-slate-600 dark:text-gray-300">${escapeHTML(job.jobType)}</div>
-        <div class="text-[10px] text-slate-400 dark:text-dark-muted mt-0.5">${escapeHTML(job.jobRef)}</div>
-        ${job.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-gnfc-blue/10 text-blue-600 dark:text-gnfc-blue border border-dark-border">${escapeHTML(job.jobLabel)}</span>` : ""}
-      </td>
-      <td class="p-2 text-center font-bold text-slate-500 dark:text-dark-muted border-r border-dark-border">${escapeHTML(job.tech)}</td>
-      <td class="p-2 text-slate-500 dark:text-gray-300 border-r border-dark-border leading-relaxed">
-        <div class="${descWrapClass}">${escapeHTML(job.desc || (isPendingStatus ? "Assigned. Awaiting technician log entry." : ""))}</div>
-      </td>
-      <td class="p-2 text-center border-r border-dark-border">
-        <div class="font-bold text-slate-600 dark:text-gray-300">${escapeHTML(job.engineer || "--")}</div>
-        <div class="text-[10px] text-slate-400 dark:text-dark-muted">${escapeHTML(job.engInitials || "--")}</div>
-      </td>
-      <td class="p-2 text-center border-r border-dark-border">
-        ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-bold border ${statusClass}">${escapeHTML(job.status)}</span>` : `<span class="text-[10px] text-pink-300">ASSIGNED</span>`}
-        ${canEdit ? `<button onclick="event.stopPropagation(); openEditModal('${job.id}')" class="mt-1 text-[10px] px-1.5 py-0.5 rounded border border-dark-border text-slate-400 hover:text-white hover:border-gnfc-blue">Edit</button>` : `<div class="mt-1 text-[10px] text-slate-500">Locked</div>`}
-      </td>
-      <td class="p-2 text-slate-600 dark:text-gray-400">
-        <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 border border-dark-border rounded-sm hover:border-gnfc-blue hover:text-white">
-          <i class="ph-bold ph-chat-circle-dots"></i> ${remarksCount}
-        </button>
-        ${pendingAck ? `<div class="mt-1 text-[10px] text-amber-300">Ack pending</div>` : ""}
-      </td>
-    </tr>
-  `;
-}
-
-function getCurrentViewJobs() {
-  return elogbookState.jobsByView[currentView] || [];
-}
-
-function getFilteredJobs(includeStatus) {
-  let rows = [...getCurrentViewJobs()];
-  const selectedType = document.getElementById("job-type-select")?.value || "";
-  const startDate = document.getElementById("start-date")?.value || "";
-  const endDate = document.getElementById("end-date")?.value || "";
-
-  if (elogbookState.pendingOnlyMode) {
-    rows = rows.filter((job) => job.pendingWrite);
+    const toast = document.createElement("div");
+    toast.className = `text-xs font-bold border ${toneClass} text-white px-3 py-2 rounded shadow-lg`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 2600);
   }
 
-  if (selectedType) {
-    rows = rows.filter((job) => job.jobType === selectedType);
+  function parseQueryContext() {
+    const params = new URLSearchParams(global.location.search);
+    const plant = (params.get("plant") || "").trim();
+    if (plant) {
+      elogbookState.selectedPlant = plant;
+    }
+
+    const queryView = params.get("view");
+    if (queryView) {
+      currentView = normalizeView(queryView);
+    } else {
+      currentView = normalizeView(ElogbookStore.getTechnicianSelectedView() || "today");
+    }
+
+    global.currentView = currentView;
   }
 
-  if (startDate || endDate) {
-    const start = startDate ? new Date(startDate) : null;
-    const end = endDate ? new Date(endDate) : null;
-    if (start) start.setHours(0, 0, 0, 0);
-    if (end) end.setHours(23, 59, 59, 999);
+  function refreshLocalData() {
+    elogbookState.allJobs = ElogbookStore.getPlantJobs(elogbookState.selectedPlant);
+    elogbookState.jobsByView = ElogbookStore.getPlantJobsByView(elogbookState.selectedPlant, new Date());
+  }
 
-    rows = rows.filter((job) => {
-      const d = parseSlashDate(job.date);
-      if (!d) return false;
-      if (start && d < start) return false;
-      if (end && d > end) return false;
-      return true;
+  function persistLocalData() {
+    ElogbookStore.setPlantJobs(elogbookState.selectedPlant, elogbookState.allJobs);
+    refreshLocalData();
+  }
+
+  function getCurrentViewJobs() {
+    return elogbookState.jobsByView[currentView] || [];
+  }
+
+  function parseDateInput(value) {
+    if (!value) return null;
+    const parsed = ElogbookStore.parseIsoDate(value);
+    return parsed ? startOfDay(parsed) : null;
+  }
+
+  function getFilteredJobs(includeStatus) {
+    let rows = [...getCurrentViewJobs()];
+
+    const jobType = document.getElementById("job-type-select")?.value || "";
+    const startDate = parseDateInput(document.getElementById("start-date")?.value || "");
+    const endDate = parseDateInput(document.getElementById("end-date")?.value || "");
+
+    if (elogbookState.pendingOnlyMode) {
+      rows = rows.filter((job) => job.pendingWrite);
+    }
+
+    if (jobType) {
+      rows = rows.filter((job) => job.jobType === jobType);
+    }
+
+    if (startDate || endDate) {
+      rows = rows.filter((job) => {
+        const date = ElogbookStore.parseIsoDate(job.targetDate);
+        if (!date) return false;
+        if (startDate && date < startDate) return false;
+        if (endDate && date > new Date(endDate.getTime() + DAY_MS - 1)) return false;
+        return true;
+      });
+    }
+
+    if (includeStatus && elogbookState.selectedStatus) {
+      rows = rows.filter((job) => job.status === elogbookState.selectedStatus);
+    }
+
+    return rows.map((job, index) => ({
+      ...job,
+      sr: pad2(index + 1)
+    }));
+  }
+
+  function hasPendingAck(job) {
+    if (!Array.isArray(job.remarks) || !job.remarks.length) return false;
+    return job.remarks.some((remark) => {
+      if (elogbookState.activeUser.role === "technician") {
+        return remark.ackTech && !remark.ackByTech;
+      }
+      return remark.ackEng && !remark.ackByEng;
     });
   }
 
-  if (includeStatus && elogbookState.selectedStatus) {
-    rows = rows.filter((job) => job.status === elogbookState.selectedStatus);
+  function renderJobRow(job) {
+    const rowClass = job.emergency ? "bg-amber-500/10" : "";
+    const srClass = job.pendingWrite ? "bg-pink-500/20 text-pink-200 cursor-pointer" : "";
+    const descClass = job.abnormality ? "border border-red-500/60 rounded-sm px-1.5 py-1 text-red-200" : "";
+    const badgeClass = getStatusClass(statusColor(job.status));
+    const canEdit = !job.locked;
+    const pendingAck = hasPendingAck(job);
+    const ref = `By:${job.engineer || elogbookState.activeUser.name} : ${isoDateToSlash(job.targetDate)}`;
+
+    return `
+      <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-200 dark:border-dark-border group ${rowClass}">
+        <td class="p-2 text-center font-mono border-r border-gray-200 dark:border-dark-border ${srClass}" ${canEdit ? `onclick="openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
+        <td class="p-2 font-bold text-gray-900 dark:text-white border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
+        <td class="p-2 border-r border-gray-200 dark:border-dark-border">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="text-xs text-blue-600 dark:text-gnfc-blue font-bold">${safeText(job.loop)}</div>
+              <span class="inline-block mt-1 text-[10px] text-gray-500 dark:text-dark-muted bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border font-mono">${safeText(job.tag)}</span>
+            </div>
+            ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="text-[10px] px-1 py-0.5 border border-red-500/50 text-red-600 dark:text-red-300 rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
+          </div>
+        </td>
+        <td class="p-2 border-r border-gray-200 dark:border-dark-border">
+          <div class="font-medium text-gray-700 dark:text-gray-300">${safeText(job.jobType)}</div>
+          <div class="text-[10px] text-gray-400 dark:text-dark-muted mt-0.5">${safeText(ref)}</div>
+          <span class="inline-block mt-1 text-[10px] text-gray-400 dark:text-dark-muted bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border font-mono">${safeText(job.typeOfInst)}</span>
+        </td>
+        <td class="p-2 text-center font-bold text-gray-500 dark:text-dark-muted border-r border-gray-200 dark:border-dark-border">${safeText(job.tech)}</td>
+        <td class="p-2 text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-dark-border leading-relaxed">
+          <div class="${descClass}">${safeText(job.desc || (job.pendingWrite ? "Assigned. Awaiting technician log entry." : ""))}</div>
+        </td>
+        <td class="p-2 text-center border-r border-gray-200 dark:border-dark-border">
+          <div class="font-bold text-gray-600 dark:text-gray-300">${safeText(job.engineer || "--")}</div>
+          <div class="text-[10px] text-gray-400 dark:text-dark-muted">${safeText(makeInitials(job.engineer || ""))}</div>
+        </td>
+        <td class="p-2 text-center border-r border-gray-200 dark:border-dark-border">
+          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-bold border ${badgeClass}">${safeText(job.status)}</span>` : `<span class="text-[10px] text-pink-600 dark:text-pink-300">ASSIGNED</span>`}
+          ${canEdit ? `<button onclick="event.stopPropagation(); openEditModal('${job.id}')" class="mt-1 text-[10px] px-1.5 py-0.5 rounded border border-gray-300 dark:border-dark-border text-gray-400 hover:text-blue-600 dark:text-slate-400 dark:hover:text-white hover:border-blue-600 dark:hover:border-gnfc-blue shadow-sm">Edit</button>` : `<div class="mt-1 text-[10px] text-gray-400 dark:text-slate-500">Locked</div>`}
+        </td>
+        <td class="p-2 text-gray-600 dark:text-gray-400">
+          <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 border border-gray-300 dark:border-dark-border rounded-sm hover:border-blue-600 dark:hover:border-gnfc-blue hover:text-blue-600 dark:hover:text-white transition-colors shadow-sm">
+            <i class="ph-bold ph-chat-circle-dots"></i> ${Array.isArray(job.remarks) ? job.remarks.length : 0}
+          </button>
+          ${pendingAck ? `<div class="mt-1 text-[10px] text-amber-600 dark:text-amber-300">Ack pending</div>` : ""}
+        </td>
+      </tr>
+    `;
   }
 
-  return rows.map((job, index) => ({
-    ...job,
-    sr: pad2(index + 1),
-  }));
-}
-
-function refreshTable() {
-  if (!plantLogTable) return;
-  const rows = getFilteredJobs(true);
-  plantLogTable.setData(rows);
-
-  const searchValue = document.getElementById("table-search")?.value || "";
-  plantLogTable.setSearch(searchValue);
-  populateStatusDropdown();
-  updatePendingModeButton();
-  updateAcknowledgeButton();
-}
-
-function updatePendingModeButton() {
-  const button = document.getElementById("toggle-pending-btn");
-  if (!button) return;
-  if (elogbookState.pendingOnlyMode) {
-    button.textContent = "Pending Log (ON)";
-    button.classList.add("bg-gnfc-orange/20");
-  } else {
-    button.textContent = "Pending Log";
-    button.classList.remove("bg-gnfc-orange/20");
+  function populateJobTypeDropdown() {
+    const select = document.getElementById("job-type-select");
+    if (!select) return;
+    select.innerHTML = '<option value="">All Jobs</option>';
+    elogbookState.jobTypes
+      .slice()
+      .sort()
+      .forEach((type) => {
+        const option = document.createElement("option");
+        option.value = type;
+        option.textContent = type;
+        select.appendChild(option);
+      });
   }
-}
 
-function initTable() {
-  plantLogTable = new PlantLogTable({
-    containerId: "#plant-table",
-    data: getFilteredJobs(true),
-    itemsPerPage: 6,
-    onRender: renderJobRow,
-  });
-  refreshTable();
-}
+  function populateStatusDropdown() {
+    const dropdown = document.getElementById("status-filter-dropdown");
+    if (!dropdown) return;
+    const statuses = [...new Set(getFilteredJobs(false).map((job) => job.status).filter(Boolean))].sort();
 
-function populateJobTypeDropdown() {
-  const select = document.getElementById("job-type-select");
-  if (!select) return;
-  const unique = [...new Set(elogbookState.jobTypes)].sort();
-  select.innerHTML = '<option value="">All Jobs</option>';
-  unique.forEach((type) => {
-    const option = document.createElement("option");
-    option.value = type;
-    option.textContent = type;
-    select.appendChild(option);
-  });
-}
+    let html = `<button class="w-full text-left px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border ${elogbookState.selectedStatus ? "" : "text-blue-600 dark:text-gnfc-blue"}" onclick="filterStatus('${STATUS_FILTER_ALL}')">All</button>`;
+    statuses.forEach((status) => {
+      const selectedClass = elogbookState.selectedStatus === status ? "text-blue-600 dark:text-gnfc-blue" : "";
+      html += `<button class="w-full text-left px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border ${selectedClass}" onclick="filterStatus('${safeText(status)}')">${safeText(status)}</button>`;
+    });
+    dropdown.innerHTML = html;
+  }
 
-function populateStatusDropdown() {
-  const dropdown = document.getElementById("status-filter-dropdown");
-  if (!dropdown) return;
-  const statuses = [...new Set(getFilteredJobs(false).map((row) => row.status).filter(Boolean))].sort();
+  function updatePendingModeButton() {
+    const button = document.getElementById("toggle-pending-btn");
+    if (!button) return;
+    button.textContent = elogbookState.pendingOnlyMode ? "Pending Log (ON)" : "Pending Log";
+    button.classList.toggle("bg-gnfc-orange/20", elogbookState.pendingOnlyMode);
+  }
 
-  let html = `<button class="w-full text-left px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border ${elogbookState.selectedStatus ? "" : "text-blue-600 dark:text-gnfc-blue"}" onclick="filterStatus('${STATUS_FILTER_ALL}')">All</button>`;
-  statuses.forEach((status) => {
-    const escaped = escapeHTML(status);
-    const active = elogbookState.selectedStatus === status ? "text-blue-600 dark:text-gnfc-blue" : "";
-    html += `<button class="w-full text-left px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border ${active}" onclick="filterStatus('${escaped}')">${escaped}</button>`;
-  });
+  function collectPendingAcks() {
+    const pending = [];
+    VIEW_KEYS.forEach((viewName) => {
+      (elogbookState.jobsByView[viewName] || []).forEach((job) => {
+        (job.remarks || []).forEach((remark) => {
+          if (elogbookState.activeUser.role === "technician") {
+            if (remark.ackTech && !remark.ackByTech) pending.push({ viewName, job, remark });
+          } else if (remark.ackEng && !remark.ackByEng) {
+            pending.push({ viewName, job, remark });
+          }
+        });
+      });
+    });
+    return pending;
+  }
 
-  dropdown.innerHTML = html;
-}
+  function updateAcknowledgeButton() {
+    const button = document.getElementById("acknowledge-btn");
+    if (!button) return;
+    const pending = collectPendingAcks();
+    if (!pending.length) {
+      button.classList.add("hidden");
+      return;
+    }
 
-function toggleStatusFilter(event) {
-  event.stopPropagation();
-  const dropdown = document.getElementById("status-filter-dropdown");
-  if (!dropdown) return;
-  dropdown.classList.toggle("hidden");
+    button.classList.remove("hidden");
+    button.textContent = `Pending Acknowledgement (${pending.length})`;
+  }
 
-  if (!dropdown.classList.contains("hidden")) {
-    const closeDropdown = (e) => {
+  function refreshTable() {
+    if (!plantLogTable) return;
+    const rows = getFilteredJobs(true);
+    plantLogTable.setData(rows);
+
+    const searchInput = document.getElementById("table-search");
+    if (searchInput) {
+      plantLogTable.setSearch(searchInput.value || "");
+    }
+
+    populateStatusDropdown();
+    updatePendingModeButton();
+    updateAcknowledgeButton();
+  }
+
+  function getViewTitle(viewName) {
+    if (viewName === "today") return "Today Log Book";
+    if (viewName === "tomorrow") return "Tomorrow Log Book";
+    if (viewName === "prev") return "Prev Day Log Book";
+    if (viewName === "weekly") return "Weekly Log Book";
+    return "Monthly Log Book";
+  }
+
+  function getViewDateText(viewName) {
+    const now = startOfDay(new Date());
+    if (viewName === "today") return isoDateToSlash(toIsoDate(now)).replaceAll("/", ".");
+    if (viewName === "tomorrow") return isoDateToSlash(toIsoDate(new Date(now.getTime() + DAY_MS))).replaceAll("/", ".");
+    if (viewName === "prev") return isoDateToSlash(toIsoDate(new Date(now.getTime() - DAY_MS))).replaceAll("/", ".");
+    if (viewName === "weekly") {
+      const start = new Date(now.getTime() - 6 * DAY_MS);
+      return `${isoDateToSlash(toIsoDate(start)).replaceAll("/", ".")} - ${isoDateToSlash(toIsoDate(now)).replaceAll("/", ".")}`;
+    }
+    return now.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+  }
+
+  function activateView(viewName, buttonEl) {
+    currentView = normalizeView(viewName);
+    global.currentView = currentView;
+    elogbookState.pendingOnlyMode = false;
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.className = "tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors";
+    });
+
+    if (buttonEl) {
+      buttonEl.className = "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
+    }
+
+    const viewTitleEl = document.getElementById("view-title");
+    const viewDateEl = document.getElementById("view-date");
+    if (viewTitleEl) viewTitleEl.textContent = getViewTitle(currentView);
+    if (viewDateEl) viewDateEl.textContent = getViewDateText(currentView);
+
+    if (["today", "prev", "weekly"].includes(currentView)) {
+      ElogbookStore.setTechnicianSelectedView(currentView);
+    }
+
+    const searchInput = document.getElementById("table-search");
+    if (searchInput) searchInput.value = "";
+    refreshTable();
+  }
+
+  function switchView(btn, viewName) {
+    activateView(viewName, btn);
+  }
+
+  function applyFilters() {
+    refreshTable();
+  }
+
+  function toggleJobFilter() {
+    const bar = document.getElementById("job-filter-bar");
+    if (!bar) return;
+    bar.classList.toggle("hidden");
+  }
+
+  function toggleStatusFilter(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById("status-filter-dropdown");
+    if (!dropdown) return;
+
+    dropdown.classList.toggle("hidden");
+    if (dropdown.classList.contains("hidden")) return;
+
+    const onOutsideClick = (e) => {
       if (!e.target.closest("#status-filter-dropdown") && !e.target.closest('button[onclick="toggleStatusFilter(event)"]')) {
         dropdown.classList.add("hidden");
-        document.removeEventListener("click", closeDropdown);
+        document.removeEventListener("click", onOutsideClick);
       }
     };
-    document.addEventListener("click", closeDropdown);
-  }
-}
-
-function filterStatus(statusValue) {
-  const normalized = statusValue === STATUS_FILTER_ALL ? "" : statusValue;
-  elogbookState.selectedStatus = normalized;
-  const dropdown = document.getElementById("status-filter-dropdown");
-  if (dropdown) dropdown.classList.add("hidden");
-  refreshTable();
-}
-
-function applyFilters() {
-  refreshTable();
-}
-
-function toggleJobFilter() {
-  const filterBar = document.getElementById("job-filter-bar");
-  if (!filterBar) return;
-  filterBar.classList.toggle("hidden");
-}
-
-function activateView(viewName, activeButton) {
-  currentView = normalizeView(viewName);
-  window.currentView = currentView;
-  elogbookState.pendingOnlyMode = false;
-
-  document.querySelectorAll(".tab-btn").forEach((btn) => {
-    btn.className = "tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors";
-  });
-
-  if (activeButton) {
-    activeButton.className =
-      "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
+    document.addEventListener("click", onOutsideClick);
   }
 
-  const viewTitleEl = document.getElementById("view-title");
-  const viewDateEl = document.getElementById("view-date");
-  if (viewTitleEl) viewTitleEl.textContent = viewTitle(currentView);
-  if (viewDateEl) viewDateEl.textContent = viewDateText(currentView);
-
-  document.getElementById("table-search").value = "";
-  refreshTable();
-}
-
-function switchView(btn, viewName) {
-  activateView(viewName, btn);
-}
-
-function togglePendingMode() {
-  elogbookState.pendingOnlyMode = !elogbookState.pendingOnlyMode;
-  refreshTable();
-}
-
-function getJobById(jobId) {
-  for (const viewName of ELOGBOOK_VIEWS) {
-    const found = (elogbookState.jobsByView[viewName] || []).find((job) => job.id === jobId);
-    if (found) return { job: found, viewName };
-  }
-  return null;
-}
-
-function renderOjrPendingList() {
-  const listEl = document.getElementById("ojr-pending-list");
-  if (!listEl) return;
-
-  const weeklyPending = (elogbookState.jobsByView.weekly || []).filter((job) => job.pendingWrite);
-  const allRows = [
-    ...elogbookState.ojrPending.map((item) => ({ ...item, rowType: "ojr" })),
-    ...weeklyPending.map((item) => ({
-      id: item.id,
-      area: item.area,
-      loop: item.loop,
-      tag: item.tag,
-      jobType: item.jobType,
-      instType: item.typeOfInst,
-      desc: item.desc || "Pending from weekly logbook",
-      rowType: "weekly",
-    })),
-  ];
-
-  if (!allRows.length) {
-    listEl.innerHTML = '<div class="px-3 py-2 text-xs text-dark-muted">No OJR / Weekly pending jobs.</div>';
-    return;
+  function filterStatus(statusValue) {
+    elogbookState.selectedStatus = statusValue === STATUS_FILTER_ALL ? "" : statusValue;
+    const dropdown = document.getElementById("status-filter-dropdown");
+    if (dropdown) dropdown.classList.add("hidden");
+    refreshTable();
   }
 
-  listEl.innerHTML = allRows
-    .map(
-      (item) => `
-      <div class="px-3 py-2 text-xs flex items-start justify-between gap-3">
-        <div class="space-y-0.5">
-          <div class="font-bold text-white">${escapeHTML(item.tag)} <span class="text-dark-muted">(${escapeHTML(item.loop)})</span></div>
-          <div class="text-dark-muted">${escapeHTML(item.jobType)} | ${escapeHTML(item.desc)}</div>
-        </div>
-        <button onclick="assignFromPendingSource('${item.id}', '${item.rowType}')" class="shrink-0 text-[10px] px-2 py-0.5 border border-gnfc-blue/40 text-gnfc-blue rounded-sm hover:bg-gnfc-blue/20">Assign</button>
-      </div>`
-    )
-    .join("");
-}
-
-function populateJobModalLookups() {
-  const techSelect = document.getElementById("job-tech");
-  const loopSelect = document.getElementById("job-loop");
-  const areaSelect = document.getElementById("job-area");
-  const typeSelect = document.getElementById("job-type");
-  const instSelect = document.getElementById("job-inst");
-  const editEng = document.getElementById("edit-job-engineer");
-  const editArea = document.getElementById("edit-job-area");
-
-  if (techSelect) {
-    techSelect.innerHTML = elogbookState.technicians.map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join("");
+  function togglePendingMode() {
+    elogbookState.pendingOnlyMode = !elogbookState.pendingOnlyMode;
+    refreshTable();
   }
 
-  if (loopSelect) {
-    loopSelect.innerHTML = Object.keys(elogbookState.loopTagMap)
-      .map((loopName) => `<option value="${escapeHTML(loopName)}">${escapeHTML(loopName)}</option>`)
-      .join("");
+  function getJobById(jobId) {
+    const index = elogbookState.allJobs.findIndex((job) => job.id === jobId);
+    if (index < 0) return null;
+    return {
+      index,
+      job: elogbookState.allJobs[index]
+    };
   }
 
-  if (areaSelect) {
-    areaSelect.innerHTML = elogbookState.areas.map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join("");
-  }
+  function renderOjrPendingList() {
+    const listEl = document.getElementById("ojr-pending-list");
+    if (!listEl) return;
 
-  if (typeSelect) {
-    typeSelect.innerHTML = elogbookState.jobTypes.map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join("");
-  }
+    const weeklyPending = (elogbookState.jobsByView.weekly || []).filter((job) => job.pendingWrite);
+    const rows = [
+      ...elogbookState.ojrPending.map((item) => ({ ...item, rowType: "ojr" })),
+      ...weeklyPending.map((item) => ({
+        id: item.id,
+        area: item.area,
+        loop: item.loop,
+        tag: item.tag,
+        jobType: item.jobType,
+        instType: item.typeOfInst,
+        desc: item.desc || "Pending from weekly logbook",
+        tech: item.tech,
+        rowType: "weekly"
+      }))
+    ];
 
-  if (instSelect) {
-    instSelect.innerHTML = elogbookState.instrumentTypes
-      .map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`)
-      .join("");
-  }
-
-  if (editEng) {
-    editEng.innerHTML = elogbookState.engineers.map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join("");
-  }
-
-  if (editArea) {
-    editArea.innerHTML = elogbookState.areas.map((name) => `<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join("");
-  }
-
-  filterTagsForLoop();
-  renderOjrPendingList();
-}
-
-function filterTagsForLoop() {
-  const loopName = document.getElementById("job-loop")?.value;
-  const tagSelect = document.getElementById("job-tag");
-  if (!tagSelect) return;
-  const tags = elogbookState.loopTagMap[loopName] || [];
-  tagSelect.innerHTML = tags.map((tag) => `<option value="${escapeHTML(tag)}">${escapeHTML(tag)}</option>`).join("");
-}
-
-function openOverlay(overlayId) {
-  const overlay = document.getElementById(overlayId);
-  if (!overlay) return;
-  overlay.classList.add("is-open");
-  overlay.setAttribute("aria-hidden", "false");
-}
-
-function closeOverlay(overlayId) {
-  const overlay = document.getElementById(overlayId);
-  if (!overlay) return;
-  overlay.classList.remove("is-open");
-  overlay.setAttribute("aria-hidden", "true");
-}
-
-function openJobModal(mode, targetView, prefill) {
-  elogbookState.modalMode = mode === "add" ? "add" : "assign";
-  elogbookState.modalTargetView = normalizeView(targetView || currentView);
-  const effectivePrefill = prefill || {};
-
-  const title = document.getElementById("job-modal-title");
-  if (title) {
-    title.textContent = elogbookState.modalMode === "add" ? "Add Job By Technician" : `Assign Job (${elogbookState.modalTargetView})`;
-  }
-
-  const dateInput = document.getElementById("job-date");
-  if (dateInput) {
-    const targetDate = elogbookState.modalTargetView === "tomorrow" ? dateOffsetFromNow(1) : dateOffsetFromNow(0);
-    dateInput.value = `${formatDateSlash(targetDate)} (server stamp)`;
-  }
-
-  document.getElementById("job-tech-custom").value = "";
-  document.getElementById("job-desc").value = "";
-
-  document.getElementById("job-tech").value = effectivePrefill.tech || elogbookState.technicians[0];
-  document.getElementById("job-loop").value = effectivePrefill.loop || Object.keys(elogbookState.loopTagMap)[0];
-  filterTagsForLoop();
-  document.getElementById("job-tag").value = effectivePrefill.tag || (elogbookState.loopTagMap[document.getElementById("job-loop").value] || [])[0];
-  document.getElementById("job-area").value = effectivePrefill.area || elogbookState.areas[0];
-  document.getElementById("job-type").value = effectivePrefill.jobType || elogbookState.jobTypes[0];
-  document.getElementById("job-inst").value = effectivePrefill.instType || elogbookState.instrumentTypes[0];
-  document.getElementById("job-desc").value = effectivePrefill.desc || "";
-
-  const techSelect = document.getElementById("job-tech");
-  const techCustom = document.getElementById("job-tech-custom");
-  const ojrPanel = document.getElementById("job-modal-ojr");
-  if (elogbookState.modalMode === "add") {
-    techSelect.value = elogbookState.activeUser.name;
-    techSelect.disabled = true;
-    techCustom.disabled = true;
-    ojrPanel.classList.add("hidden");
-  } else {
-    techSelect.disabled = false;
-    techCustom.disabled = false;
-    ojrPanel.classList.remove("hidden");
-  }
-
-  openOverlay("job-modal");
-}
-
-function closeJobModal() {
-  closeOverlay("job-modal");
-}
-
-function assignFromPendingSource(sourceId, rowType) {
-  let payload = null;
-  if (rowType === "ojr") {
-    payload = elogbookState.ojrPending.find((row) => row.id === sourceId);
-  } else {
-    const weeklyRow = (elogbookState.jobsByView.weekly || []).find((row) => row.id === sourceId);
-    if (weeklyRow) {
-      payload = {
-        area: weeklyRow.area,
-        loop: weeklyRow.loop,
-        tag: weeklyRow.tag,
-        jobType: weeklyRow.jobType,
-        instType: weeklyRow.typeOfInst,
-        desc: weeklyRow.desc || "Re-assigned from weekly pending",
-        tech: weeklyRow.tech,
-      };
+    if (!rows.length) {
+      listEl.innerHTML = '<div class="px-3 py-2 text-xs text-dark-muted">No OJR / Weekly pending jobs.</div>';
+      return;
     }
+
+    // listEl.innerHTML = rows.map((item) => `
+    //   <div class="px-3 py-2 text-xs flex items-start justify-between gap-3">
+    //     <div class="space-y-0.5">
+    //       <div class="font-bold text-white">${safeText(item.tag)} <span class="text-dark-muted">(${safeText(item.loop)})</span></div>
+    //       <div class="text-dark-muted">${safeText(item.jobType)} | ${safeText(item.desc)}</div>
+    //     </div>
+    //     <button onclick="assignFromPendingSource('${safeText(item.id)}', '${safeText(item.rowType)}')" class="shrink-0 text-[10px] px-2 py-0.5 border border-gnfc-blue/40 text-gnfc-blue rounded-sm hover:bg-gnfc-blue/20">Assign</button>
+    //   </div>
+    // `).join("");
   }
 
-  if (!payload) return;
-  openJobModal("assign", "today", payload);
-}
+  function populateJobModalLookups() {
+    const techSelect = document.getElementById("job-tech");
+    const loopSelect = document.getElementById("job-loop");
+    const areaSelect = document.getElementById("job-area");
+    const typeSelect = document.getElementById("job-type");
+    const instSelect = document.getElementById("job-inst");
+    const editTech = document.getElementById("edit-job-tech");
+    const editEngineer = document.getElementById("edit-job-engineer");
+    const editArea = document.getElementById("edit-job-area");
 
-function saveJobFromModal(event) {
-  event.preventDefault();
+    if (techSelect) {
+      techSelect.innerHTML = elogbookState.technicians.map((tech) => `<option value="${safeText(tech)}">${safeText(tech)}</option>`).join("");
+    }
 
-  const techFromList = document.getElementById("job-tech").value;
-  const techFromInput = document.getElementById("job-tech-custom").value.trim();
-  const techName = (techFromInput || techFromList || "").trim();
-  const loopName = document.getElementById("job-loop").value;
-  const tagName = document.getElementById("job-tag").value;
-  const areaName = document.getElementById("job-area").value;
-  const typeName = document.getElementById("job-type").value;
-  const instName = document.getElementById("job-inst").value;
-  const description = document.getElementById("job-desc").value.trim();
+    if (loopSelect) {
+      loopSelect.innerHTML = Object.keys(elogbookState.loopTagMap)
+        .map((loop) => `<option value="${safeText(loop)}">${safeText(loop)}</option>`)
+        .join("");
+    }
 
-  if (!techName || !loopName || !tagName || !areaName || !typeName || !instName || !description) {
-    showNotice("All fields are compulsory for job save.", "error");
-    return;
+    if (areaSelect) {
+      areaSelect.innerHTML = elogbookState.areas.map((area) => `<option value="${safeText(area)}">${safeText(area)}</option>`).join("");
+    }
+
+    if (typeSelect) {
+      typeSelect.innerHTML = elogbookState.jobTypes.map((type) => `<option value="${safeText(type)}">${safeText(type)}</option>`).join("");
+    }
+
+    if (instSelect) {
+      instSelect.innerHTML = elogbookState.instrumentTypes.map((inst) => `<option value="${safeText(inst)}">${safeText(inst)}</option>`).join("");
+    }
+
+    if (editTech) {
+      editTech.innerHTML = elogbookState.technicians.map((tech) => `<option value="${safeText(tech)}">${safeText(tech)}</option>`).join("");
+    }
+
+    if (editEngineer) {
+      editEngineer.innerHTML = elogbookState.engineers.map((engineer) => `<option value="${safeText(engineer)}">${safeText(engineer)}</option>`).join("");
+    }
+
+    if (editArea) {
+      editArea.innerHTML = elogbookState.areas.map((area) => `<option value="${safeText(area)}">${safeText(area)}</option>`).join("");
+    }
+
+    filterTagsForLoop();
+    renderOjrPendingList();
   }
 
-  const targetDate = elogbookState.modalTargetView === "tomorrow" ? dateOffsetFromNow(1) : dateOffsetFromNow(0);
-  const dateText = formatDateSlash(targetDate);
-  const mode = elogbookState.modalMode;
+  function filterTagsForLoop() {
+    const loopName = document.getElementById("job-loop")?.value || "";
+    const tagSelect = document.getElementById("job-tag");
+    if (!tagSelect) return;
 
-  const newJob = makeJob({
-    date: dateText,
-    area: areaName,
-    loop: loopName,
-    tag: tagName,
-    tagSubtitle: instName,
-    jobType: typeName,
-    typeOfInst: instName,
-    tech: techName,
-    desc: mode === "assign" ? "" : description,
-    jobRef: `By:${elogbookState.activeUser.name} : ${formatDateSlash(dateOffsetFromNow(0))}`,
-    pendingWrite: mode === "assign",
-    status: mode === "assign" ? "" : "IN PROGRESS",
-    statusColor: mode === "assign" ? "" : "orange",
-    abnormality: typeName === "Abnormality",
-    locked: false,
-    source: mode === "assign" ? `Assign(${elogbookState.modalTargetView})` : "Technician Add",
-    assignedBy: elogbookState.activeUser.name,
-  });
-
-  elogbookState.jobsByView[elogbookState.modalTargetView].push(newJob);
-  resequenceJobs(elogbookState.modalTargetView);
-  closeJobModal();
-
-  if (currentView === elogbookState.modalTargetView) refreshTable();
-  showNotice(mode === "assign" ? "Job assigned successfully." : "Job added successfully.", "info");
-}
-
-function reassignJob(jobId) {
-  const located = getJobById(jobId);
-  if (!located) return;
-  const cloned = cloneJobForReassign(located.job);
-  elogbookState.jobsByView.today.push(cloned);
-  resequenceJobs("today");
-  if (currentView === "today") refreshTable();
-  showNotice("Pending job re-assigned to same technician.", "info");
-}
-
-function openEditModal(jobId) {
-  const located = getJobById(jobId);
-  if (!located) return;
-  const job = located.job;
-
-  if (job.locked) {
-    showNotice("Saved jobs are locked and cannot be edited.", "warn");
-    return;
+    const tags = elogbookState.loopTagMap[loopName] || [];
+    tagSelect.innerHTML = tags.map((tag) => `<option value="${safeText(tag)}">${safeText(tag)}</option>`).join("");
   }
 
-  const warningEl = document.getElementById("edit-warning");
-  if (warningEl) {
-    if (job.tech !== elogbookState.activeUser.name) {
-      warningEl.classList.remove("hidden");
-      warningEl.textContent = `Warning: this job is assigned to ${job.tech}. Continue only if required.`;
+  function openOverlay(overlayId) {
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) return;
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+  }
+
+  function closeOverlay(overlayId) {
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) return;
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+  }
+
+  function openJobModal(mode, targetView, prefill) {
+    elogbookState.modalMode = mode === "add" ? "add" : "assign";
+    elogbookState.modalTargetView = normalizeView(targetView || currentView);
+
+    const titleEl = document.getElementById("job-modal-title");
+    if (titleEl) {
+      titleEl.textContent = elogbookState.modalMode === "add"
+        ? "Add Job By Technician"
+        : `Assign Job (${elogbookState.modalTargetView})`;
+    }
+
+    const baseDate = startOfDay(new Date());
+    const targetDate = elogbookState.modalTargetView === "tomorrow"
+      ? new Date(baseDate.getTime() + DAY_MS)
+      : baseDate;
+
+    const pre = prefill || {};
+
+    const dateInput = document.getElementById("job-date");
+    if (dateInput) dateInput.value = `${isoDateToSlash(toIsoDate(targetDate))} (server stamp)`;
+
+    const techSelect = document.getElementById("job-tech");
+    const techCustom = document.getElementById("job-tech-custom");
+    const loopSelect = document.getElementById("job-loop");
+    const areaSelect = document.getElementById("job-area");
+    const typeSelect = document.getElementById("job-type");
+    const instSelect = document.getElementById("job-inst");
+    const descInput = document.getElementById("job-desc");
+    const ojrPanel = document.getElementById("job-modal-ojr");
+
+    if (techSelect) techSelect.value = pre.tech || elogbookState.technicians[0];
+    if (techCustom) techCustom.value = "";
+    if (loopSelect) loopSelect.value = pre.loop || Object.keys(elogbookState.loopTagMap)[0];
+    filterTagsForLoop();
+
+    const tagSelect = document.getElementById("job-tag");
+    if (tagSelect) {
+      const defaultTag = pre.tag || (elogbookState.loopTagMap[loopSelect?.value || ""] || [])[0] || "";
+      tagSelect.value = defaultTag;
+    }
+
+    if (areaSelect) areaSelect.value = pre.area || elogbookState.areas[0];
+    if (typeSelect) typeSelect.value = pre.jobType || elogbookState.jobTypes[0];
+    if (instSelect) instSelect.value = pre.instType || elogbookState.instrumentTypes[0];
+    if (descInput) descInput.value = pre.desc || "";
+
+    if (elogbookState.modalMode === "add") {
+      if (techSelect) {
+        techSelect.value = elogbookState.activeUser.name;
+        techSelect.disabled = true;
+      }
+      if (techCustom) techCustom.disabled = true;
+      if (ojrPanel) ojrPanel.classList.add("hidden");
     } else {
-      warningEl.classList.add("hidden");
-      warningEl.textContent = "";
+      if (techSelect) techSelect.disabled = false;
+      if (techCustom) techCustom.disabled = false;
+      if (ojrPanel) ojrPanel.classList.remove("hidden");
+    }
+
+    openOverlay("job-modal");
+  }
+
+  function closeJobModal() {
+    closeOverlay("job-modal");
+  }
+
+  function createJobPayloadFromModal() {
+    const techFromList = document.getElementById("job-tech")?.value || "";
+    const techFromInput = document.getElementById("job-tech-custom")?.value.trim() || "";
+    const loop = document.getElementById("job-loop")?.value || "";
+    const tag = document.getElementById("job-tag")?.value || "";
+    const area = document.getElementById("job-area")?.value || "";
+    const jobType = document.getElementById("job-type")?.value || "";
+    const inst = document.getElementById("job-inst")?.value || "";
+    const desc = document.getElementById("job-desc")?.value.trim() || "";
+
+    return {
+      tech: (techFromInput || techFromList || "").trim(),
+      loop,
+      tag,
+      area,
+      jobType,
+      inst,
+      desc
+    };
+  }
+
+  function saveJobFromModal(event) {
+    event.preventDefault();
+
+    const payload = createJobPayloadFromModal();
+    if (!payload.tech || !payload.loop || !payload.tag || !payload.area || !payload.jobType || !payload.inst || !payload.desc) {
+      showNotice("All fields are compulsory for job save.", "error");
+      return;
+    }
+
+    const baseDate = startOfDay(new Date());
+    const targetDate = elogbookState.modalTargetView === "tomorrow"
+      ? new Date(baseDate.getTime() + DAY_MS)
+      : baseDate;
+
+    const now = new Date().toISOString();
+    const newJob = {
+      id: `J-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      targetDate: toIsoDate(targetDate),
+      createdAt: now,
+      updatedAt: now,
+      area: payload.area,
+      loop: payload.loop,
+      tag: payload.tag,
+      typeOfInst: payload.inst,
+      jobType: payload.jobType,
+      tech: payload.tech,
+      engineer: "",
+      status: elogbookState.modalMode === "assign" ? "" : "IN PROGRESS",
+      pendingWrite: elogbookState.modalMode === "assign",
+      emergency: false,
+      abnormality: payload.jobType === "Abnormality",
+      extraDutyHours: 0,
+      shift: "A",
+      source: elogbookState.modalMode === "assign" ? `Assign(${elogbookState.modalTargetView})` : "Technician Add",
+      desc: payload.desc,
+      remarks: []
+    };
+
+    elogbookState.allJobs.unshift(newJob);
+    persistLocalData();
+    closeJobModal();
+
+    if (currentView === elogbookState.modalTargetView || elogbookState.modalMode === "add") {
+      refreshTable();
+    }
+
+    showNotice(elogbookState.modalMode === "assign" ? "Job assigned successfully." : "Job added successfully.", "info");
+  }
+
+  function cloneJobForReassign(job) {
+    const now = new Date().toISOString();
+    return {
+      id: `J-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      targetDate: toIsoDate(new Date()),
+      createdAt: now,
+      updatedAt: now,
+      area: job.area,
+      loop: job.loop,
+      tag: job.tag,
+      typeOfInst: job.typeOfInst,
+      jobType: job.jobType,
+      tech: job.tech,
+      engineer: "",
+      status: "",
+      pendingWrite: true,
+      emergency: false,
+      abnormality: job.jobType === "Abnormality",
+      extraDutyHours: 0,
+      shift: job.shift || "A",
+      source: "Re-Assigned",
+      desc: "",
+      remarks: []
+    };
+  }
+
+  function reassignJob(jobId) {
+    const located = getJobById(jobId);
+    if (!located) return;
+
+    elogbookState.allJobs.unshift(cloneJobForReassign(located.job));
+    persistLocalData();
+    if (currentView === "today") refreshTable();
+    showNotice("Pending job re-assigned to same technician.", "info");
+  }
+
+  function openEditModal(jobId) {
+    const located = getJobById(jobId);
+    if (!located) return;
+    const job = located.job;
+
+    if (job.locked) {
+      showNotice("Saved jobs are locked and cannot be edited.", "warn");
+      return;
+    }
+
+    // const warning = document.getElementById("edit-warning");
+    // if (warning) {
+    //   if (job.tech !== elogbookState.activeUser.name) {
+    //     warning.classList.remove("hidden");
+    //     warning.textContent = `Warning: this job is assigned to ${job.tech}. Continue only if required.`;
+    //   } else {
+    //     warning.classList.add("hidden");
+    //     warning.textContent = "";
+    //   }
+    // }
+
+    const setVal = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    };
+    const setSelect = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const nextValue = String(value || "");
+      const hasOption = Array.from(el.options || []).some((option) => option.value === nextValue);
+      if (nextValue && !hasOption) {
+        const option = document.createElement("option");
+        option.value = nextValue;
+        option.textContent = nextValue;
+        el.appendChild(option);
+      }
+      el.value = nextValue || (el.options[0]?.value || "");
+    };
+
+    const displayDate = isoDateToSlash(job.targetDate || toIsoDate(new Date()));
+    const summaryPrefix = [job.loop, job.tag, job.jobType].filter(Boolean).join(" | ");
+    const summaryText = summaryPrefix && job.desc ? `${summaryPrefix} - ${job.desc}` : (summaryPrefix || job.desc || "");
+
+    setVal("edit-job-id", job.id);
+    const displayId = document.getElementById("edit-job-id-display");
+    if (displayId) displayId.textContent = job.id;
+    setVal("edit-job-date", displayDate);
+    setVal("edit-job-assigned-to", job.tech || "");
+    setVal("edit-job-by", job.engineer || elogbookState.activeUser.name);
+    setVal("edit-job-summary", summaryText);
+    setVal("edit-job-detail-date", displayDate);
+    setVal("edit-job-loop-tag", `${job.loop || "N.A"} / ${job.tag || "N.A"}`);
+    setVal("edit-job-type", job.jobType || "N.A");
+    setVal("edit-job-inst", job.typeOfInst || "N.A");
+    setVal("edit-job-desc", job.desc || "");
+    setSelect("edit-job-status", job.status || "IN PROGRESS");
+    setSelect("edit-job-tech", job.tech || elogbookState.technicians[0]);
+    setSelect("edit-job-engineer", job.engineer || elogbookState.engineers[0]);
+    setSelect("edit-job-area", job.area || elogbookState.areas[0]);
+    setVal("edit-job-extra-hours", String(job.extraDutyHours || 0));
+
+    const emergency = document.getElementById("edit-job-emergency");
+    if (emergency) emergency.checked = Boolean(job.emergency);
+
+    openOverlay("edit-modal");
+  }
+
+  function closeEditModal() {
+    closeOverlay("edit-modal");
+  }
+
+  function saveEditedJob(event) {
+    event.preventDefault();
+
+    const jobId = document.getElementById("edit-job-id")?.value || "";
+    const located = getJobById(jobId);
+    if (!located) return;
+
+    const job = located.job;
+    if (job.locked) {
+      showNotice("This job is already locked.", "warn");
+      return;
+    }
+
+    const desc = document.getElementById("edit-job-desc")?.value.trim() || "";
+    const status = document.getElementById("edit-job-status")?.value || "IN PROGRESS";
+    const tech = document.getElementById("edit-job-tech")?.value || job.tech || "";
+    const engineer = document.getElementById("edit-job-engineer")?.value || "";
+    const area = document.getElementById("edit-job-area")?.value || "N.A";
+    const extraHours = Number(document.getElementById("edit-job-extra-hours")?.value || 0);
+    const emergency = Boolean(document.getElementById("edit-job-emergency")?.checked);
+
+    if (!desc) {
+      showNotice("Description is required before save.", "error");
+      return;
+    }
+
+    job.desc = desc;
+    job.status = status;
+    job.tech = tech;
+    job.engineer = engineer;
+    job.area = area;
+    job.emergency = emergency;
+    job.pendingWrite = false;
+    job.extraDutyHours = Number.isFinite(extraHours) ? Math.max(0, Math.trunc(extraHours)) : 0;
+    job.abnormality = job.jobType === "Abnormality";
+    job.updatedAt = new Date().toISOString();
+
+    if (status === "✓ OVER") {
+      job.locked = true;
+      ElogbookStore.upsertOfficerEntryFromJob(elogbookState.selectedPlant, job);
+    }
+
+    persistLocalData();
+    closeEditModal();
+    refreshTable();
+
+    if (job.jobType === "ISO14001" && status === "✓ OVER") {
+      const instUpper = String(job.typeOfInst || "").toUpperCase();
+      if (["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER"].includes(instUpper)) {
+        showNotice(`PM detail form popup (${instUpper}) is required in backend flow.`, "warn");
+      }
     }
   }
 
-  document.getElementById("edit-job-id").value = job.id;
-  document.getElementById("edit-job-ref").textContent = `${job.loop} / ${job.tag}`;
-  document.getElementById("edit-job-tech").textContent = job.tech;
-  document.getElementById("edit-job-desc").value = job.desc || "";
-  document.getElementById("edit-job-status").value = job.status || "IN PROGRESS";
-  document.getElementById("edit-job-engineer").value = job.engineer || elogbookState.engineers[0];
-  document.getElementById("edit-job-area").value = job.area || elogbookState.areas[0];
-  document.getElementById("edit-job-extra-hours").value = String(job.extraDutyHours || 0);
-  document.getElementById("edit-job-emergency").checked = Boolean(job.emergency);
+  function renderRemarkHistory(job) {
+    const history = document.getElementById("remark-history");
+    if (!history) return;
 
-  openOverlay("edit-modal");
-}
+    const remarks = Array.isArray(job.remarks) ? job.remarks : [];
+    if (!remarks.length) {
+      history.innerHTML = '<div class="px-3 py-2 text-xs text-gray-500 dark:text-dark-muted">No remarks yet.</div>';
+      return;
+    }
 
-function closeEditModal() {
-  closeOverlay("edit-modal");
-}
+    history.innerHTML = remarks.map((remark) => {
+      const tone = remark.type === "executive" ? "text-green-600 dark:text-green-300" : "text-purple-600 dark:text-purple-300";
+      const pending = [];
+      if (remark.ackTech && !remark.ackByTech) pending.push("Tech Ack Pending");
+      if (remark.ackEng && !remark.ackByEng) pending.push("Eng Ack Pending");
+      const state = pending.length ? pending.join(" | ") : "Acknowledged";
 
-function saveEditedJob(event) {
-  event.preventDefault();
-  const jobId = document.getElementById("edit-job-id").value;
-  const located = getJobById(jobId);
-  if (!located) return;
-
-  const job = located.job;
-  if (job.locked) {
-    showNotice("This job is already locked.", "warn");
-    return;
-  }
-
-  const newDesc = document.getElementById("edit-job-desc").value.trim();
-  const status = document.getElementById("edit-job-status").value;
-  const engineer = document.getElementById("edit-job-engineer").value;
-  const area = document.getElementById("edit-job-area").value;
-  const extraHours = Number(document.getElementById("edit-job-extra-hours").value || 0);
-  const emergency = document.getElementById("edit-job-emergency").checked;
-
-  if (!newDesc) {
-    showNotice("Description is required before save.", "error");
-    return;
-  }
-
-  job.desc = newDesc;
-  job.status = status;
-  job.statusColor = status === "✓ OVER" ? "green" : "orange";
-  job.engineer = engineer;
-  job.engInitials = makeInitials(engineer);
-  job.area = area;
-  job.extraDutyHours = Number.isFinite(extraHours) ? Math.max(0, Math.trunc(extraHours)) : 0;
-  job.pendingWrite = false;
-  job.emergency = emergency;
-  job.abnormality = job.jobType === "Abnormality";
-  if (status === "✓ OVER") {
-    job.locked = true;
-  }
-
-  closeEditModal();
-  refreshTable();
-
-  const instUpper = String(job.typeOfInst || "").toUpperCase();
-  const pmForms = ["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER"];
-  if (job.jobType === "ISO14001" && status === "✓ OVER" && pmForms.includes(instUpper)) {
-    showNotice(`PM detail form popup (${instUpper}) is required in backend flow.`, "warn");
-  }
-}
-
-function openRemarkModal(jobId) {
-  const located = getJobById(jobId);
-  if (!located) return;
-
-  document.getElementById("remark-job-id").value = jobId;
-  document.getElementById("remark-text").value = "";
-  document.getElementById("remark-ack-tech").checked = false;
-  document.getElementById("remark-ack-eng").checked = false;
-  renderRemarkHistory(located.job);
-  openOverlay("remark-modal");
-}
-
-function closeRemarkModal() {
-  closeOverlay("remark-modal");
-}
-
-function remarkToneClass(type) {
-  return type === "executive" ? "text-green-300" : "text-purple-300";
-}
-
-function renderRemarkHistory(job) {
-  const container = document.getElementById("remark-history");
-  if (!container) return;
-
-  if (!Array.isArray(job.remarks) || !job.remarks.length) {
-    container.innerHTML = '<div class="px-3 py-2 text-xs text-dark-muted">No remarks yet.</div>';
-    return;
-  }
-
-  container.innerHTML = job.remarks
-    .map((remark) => {
-      const ackFlags = [];
-      if (remark.ackTech && !remark.ackByTech) ackFlags.push("Tech Ack Pending");
-      if (remark.ackEng && !remark.ackByEng) ackFlags.push("Eng Ack Pending");
-      const ackText = ackFlags.length ? ackFlags.join(" | ") : "Acknowledged";
       return `
         <div class="px-3 py-2 text-xs">
           <div class="flex items-center justify-between">
-            <span class="font-bold ${remarkToneClass(remark.type)}">${escapeHTML(remark.type.toUpperCase())}</span>
-            <span class="text-dark-muted">${escapeHTML(remark.author)} | ${escapeHTML(remark.date)}</span>
+            <span class="font-bold ${tone}">${safeText(String(remark.type || "engineer").toUpperCase())}</span>
+            <span class="text-gray-500 dark:text-dark-muted">${safeText(remark.author)} | ${safeText(remark.date)}</span>
           </div>
-          <div class="mt-1">${escapeHTML(remark.text)}</div>
-          <div class="mt-1 text-[10px] text-amber-300">${escapeHTML(ackText)}</div>
-        </div>`;
-    })
-    .join("");
-}
-
-function appendRemark(event) {
-  event.preventDefault();
-  const jobId = document.getElementById("remark-job-id").value;
-  const located = getJobById(jobId);
-  if (!located) return;
-
-  const text = document.getElementById("remark-text").value.trim();
-  const type = document.getElementById("remark-type").value;
-  const ackTech = document.getElementById("remark-ack-tech").checked;
-  const ackEng = document.getElementById("remark-ack-eng").checked;
-
-  if (!text) {
-    showNotice("Remark text is required.", "error");
-    return;
-  }
-
-  const now = new Date();
-  const stamp = `${formatDateSlash(now)} ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
-  located.job.remarks.push({
-    id: `RMK-${Date.now()}`,
-    type,
-    text,
-    author: elogbookState.activeUser.name,
-    date: stamp,
-    ackTech,
-    ackEng,
-    ackByTech: false,
-    ackByEng: false,
-  });
-
-  renderRemarkHistory(located.job);
-  document.getElementById("remark-text").value = "";
-  refreshTable();
-  showNotice("Remark appended. Existing remarks remain immutable.", "info");
-}
-
-function collectPendingAcks() {
-  const pending = [];
-  ELOGBOOK_VIEWS.forEach((viewName) => {
-    (elogbookState.jobsByView[viewName] || []).forEach((job) => {
-      (job.remarks || []).forEach((remark) => {
-        if (elogbookState.activeUser.role === "technician") {
-          if (remark.ackTech && !remark.ackByTech) pending.push({ viewName, job, remark });
-        } else if (remark.ackEng && !remark.ackByEng) {
-          pending.push({ viewName, job, remark });
-        }
-      });
-    });
-  });
-  return pending;
-}
-
-function updateAcknowledgeButton() {
-  const button = document.getElementById("acknowledge-btn");
-  if (!button) return;
-  const pending = collectPendingAcks();
-  if (pending.length) {
-    button.classList.remove("hidden");
-    button.textContent = `Pending Acknowledgement (${pending.length})`;
-  } else {
-    button.classList.add("hidden");
-  }
-}
-
-function openAckModal() {
-  const pending = collectPendingAcks();
-  const list = document.getElementById("ack-list");
-  if (!list) return;
-
-  if (!pending.length) {
-    list.innerHTML = '<div class="px-3 py-2 text-xs text-dark-muted">No pending acknowledgements.</div>';
-    openOverlay("ack-modal");
-    return;
-  }
-
-  list.innerHTML = pending
-    .map(
-      ({ job, remark }) => `
-      <label class="flex items-start gap-2 px-3 py-2 text-xs">
-        <input type="checkbox" class="mt-0.5 ack-check" data-job-id="${escapeHTML(job.id)}" data-remark-id="${escapeHTML(remark.id)}">
-        <div>
-          <div class="font-bold text-white">${escapeHTML(job.tag)} | ${escapeHTML(job.jobType)}</div>
-          <div class="text-dark-muted mt-0.5">${escapeHTML(remark.text)}</div>
-          <div class="text-[10px] text-amber-300 mt-1">${escapeHTML(remark.author)} | ${escapeHTML(remark.date)}</div>
+          <div class="mt-1 text-gray-700 dark:text-gray-300">${safeText(remark.text)}</div>
+          <div class="mt-1 text-[10px] text-amber-600 dark:text-amber-300">${safeText(state)}</div>
         </div>
-      </label>`
-    )
-    .join("");
-
-  openOverlay("ack-modal");
-}
-
-function closeAckModal() {
-  closeOverlay("ack-modal");
-}
-
-function acknowledgeSelectedRemarks() {
-  const checks = Array.from(document.querySelectorAll(".ack-check:checked"));
-  if (!checks.length) {
-    showNotice("Select at least one remark to acknowledge.", "warn");
-    return;
+      `;
+    }).join("");
   }
 
-  checks.forEach((checkbox) => {
-    const jobId = checkbox.getAttribute("data-job-id");
-    const remarkId = checkbox.getAttribute("data-remark-id");
+  function openRemarkModal(jobId) {
     const located = getJobById(jobId);
     if (!located) return;
-    const remark = (located.job.remarks || []).find((r) => r.id === remarkId);
-    if (!remark) return;
 
-    if (elogbookState.activeUser.role === "technician") {
-      remark.ackByTech = true;
-    } else {
-      remark.ackByEng = true;
-    }
-  });
+    const setVal = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    };
 
-  closeAckModal();
-  refreshTable();
-  showNotice("Selected remarks acknowledged.", "info");
-}
+    setVal("remark-job-id", jobId);
+    setVal("remark-text", "");
 
-function openReminderModal() {
-  const list = document.getElementById("reminder-list");
-  if (!list) return;
+    const ackTech = document.getElementById("remark-ack-tech");
+    const ackEng = document.getElementById("remark-ack-eng");
+    if (ackTech) ackTech.checked = false;
+    if (ackEng) ackEng.checked = false;
 
-  if (!elogbookState.jobPlannerDue.length) {
-    list.innerHTML = '<div class="text-xs text-dark-muted">No due jobs from Job Planner.</div>';
-  } else {
-    list.innerHTML = elogbookState.jobPlannerDue
-      .map(
-        (job) => `
-        <div class="border border-dark-border rounded-sm p-3 flex items-start justify-between gap-3">
-          <div>
-            <div class="text-xs font-bold text-white">${escapeHTML(job.tag)} <span class="text-purple-300">(${escapeHTML(job.jobType)})</span></div>
-            <div class="text-xs text-dark-muted mt-1">${escapeHTML(job.desc)}</div>
-            <div class="text-[10px] text-amber-300 mt-1">Due: ${escapeHTML(job.dueDate)}</div>
-          </div>
-          <button onclick="assignReminder('${job.id}')" class="text-[10px] px-2 py-1 rounded-sm border border-purple-500/40 text-purple-200 hover:bg-purple-500/20">Assign</button>
-        </div>`
-      )
-      .join("");
+    renderRemarkHistory(located.job);
+    openOverlay("remark-modal");
   }
 
-  openOverlay("reminder-modal");
-}
+  function closeRemarkModal() {
+    closeOverlay("remark-modal");
+  }
 
-function closeReminderModal() {
-  closeOverlay("reminder-modal");
-}
+  function appendRemark(event) {
+    event.preventDefault();
 
-function assignReminder(reminderId) {
-  const reminder = elogbookState.jobPlannerDue.find((job) => job.id === reminderId);
-  if (!reminder) return;
-  closeReminderModal();
-  openJobModal("assign", "today", reminder);
-}
+    const jobId = document.getElementById("remark-job-id")?.value || "";
+    const located = getJobById(jobId);
+    if (!located) return;
 
-function initModalEvents() {
-  document.getElementById("job-modal-form").addEventListener("submit", saveJobFromModal);
-  document.getElementById("edit-modal-form").addEventListener("submit", saveEditedJob);
-  document.getElementById("remark-modal-form").addEventListener("submit", appendRemark);
+    const text = document.getElementById("remark-text")?.value.trim() || "";
+    const type = document.getElementById("remark-type")?.value || "engineer";
+    const ackTech = Boolean(document.getElementById("remark-ack-tech")?.checked);
+    const ackEng = Boolean(document.getElementById("remark-ack-eng")?.checked);
 
-  ["job-modal", "edit-modal", "remark-modal", "ack-modal", "reminder-modal"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener("click", (event) => {
-      if (event.target !== el) return;
-      if (id === "job-modal") closeJobModal();
-      if (id === "edit-modal") closeEditModal();
-      if (id === "remark-modal") closeRemarkModal();
-      if (id === "ack-modal") closeAckModal();
-      if (id === "reminder-modal") closeReminderModal();
-    });
-  });
-}
-
-function initReportNavState() {
-  const navButtons = Array.from(document.querySelectorAll(".report-nav-btn[data-target]"));
-  if (!navButtons.length) return;
-
-  const currentFile = (window.location.pathname.split("/").pop() || "").toLowerCase();
-  const lastSelected = (sessionStorage.getItem("plantDetailReportNav") || "").toLowerCase();
-  let hasExactMatch = false;
-
-  navButtons.forEach((btn) => {
-    const target = (btn.dataset.target || "").toLowerCase();
-    const isActive = target && target === currentFile;
-    if (isActive) {
-      btn.classList.add("is-active");
-      btn.setAttribute("aria-current", "page");
-      hasExactMatch = true;
-    } else {
-      btn.classList.remove("is-active");
-      btn.removeAttribute("aria-current");
+    if (!text) {
+      showNotice("Remark text is required.", "error");
+      return;
     }
 
-    btn.addEventListener("click", () => {
-      sessionStorage.setItem("plantDetailReportNav", target);
-    });
-  });
+    const remark = {
+      id: `RMK-${Date.now()}`,
+      type,
+      text,
+      author: elogbookState.activeUser.name,
+      date: isoDateToSlash(toIsoDate(new Date())) + ` ${pad2(new Date().getHours())}:${pad2(new Date().getMinutes())}`,
+      ackTech,
+      ackEng,
+      ackByTech: false,
+      ackByEng: false
+    };
 
-  if (!hasExactMatch && currentFile === "plant_detail.html" && lastSelected) {
-    const remembered = navButtons.find((btn) => (btn.dataset.target || "").toLowerCase() === lastSelected);
-    if (remembered) remembered.classList.add("is-active");
+    if (!Array.isArray(located.job.remarks)) {
+      located.job.remarks = [];
+    }
+    located.job.remarks.push(remark);
+    located.job.updatedAt = new Date().toISOString();
+
+    persistLocalData();
+    renderRemarkHistory(located.job);
+
+    const remarkText = document.getElementById("remark-text");
+    if (remarkText) remarkText.value = "";
+
+    refreshTable();
+    showNotice("Remark appended. Existing remarks remain immutable.", "info");
   }
-}
 
-function initInitialView() {
-  const targetId = currentView === "prev" ? "btn-prev" : `btn-${currentView}`;
-  const button = document.getElementById(targetId) || document.getElementById("btn-today");
-  if (button) {
+  function openAckModal() {
+    const pending = collectPendingAcks();
+    const list = document.getElementById("ack-list");
+    if (!list) return;
+
+    if (!pending.length) {
+      list.innerHTML = '<div class="px-3 py-2 text-xs text-gray-500 dark:text-dark-muted">No pending acknowledgements.</div>';
+      openOverlay("ack-modal");
+      return;
+    }
+
+    list.innerHTML = pending.map(({ job, remark }) => `
+      <label class="flex items-start gap-2 px-3 py-2 text-xs hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
+        <input type="checkbox" class="mt-0.5 ack-check accent-blue-600" data-job-id="${safeText(job.id)}" data-remark-id="${safeText(remark.id)}">
+        <div>
+          <div class="font-bold text-gray-900 dark:text-white">${safeText(job.tag)} | ${safeText(job.jobType)}</div>
+          <div class="text-gray-600 dark:text-dark-muted mt-0.5">${safeText(remark.text)}</div>
+          <div class="text-[10px] text-amber-600 dark:text-amber-300 mt-1">${safeText(remark.author)} | ${safeText(remark.date)}</div>
+        </div>
+      </label>
+    `).join("");
+
+    openOverlay("ack-modal");
+  }
+
+  function closeAckModal() {
+    closeOverlay("ack-modal");
+  }
+
+  function acknowledgeSelectedRemarks() {
+    const selected = Array.from(document.querySelectorAll(".ack-check:checked"));
+    if (!selected.length) {
+      showNotice("Select at least one remark to acknowledge.", "warn");
+      return;
+    }
+
+    selected.forEach((checkbox) => {
+      const jobId = checkbox.getAttribute("data-job-id");
+      const remarkId = checkbox.getAttribute("data-remark-id");
+      const located = getJobById(jobId);
+      if (!located || !Array.isArray(located.job.remarks)) return;
+
+      const remark = located.job.remarks.find((item) => item.id === remarkId);
+      if (!remark) return;
+
+      if (elogbookState.activeUser.role === "technician") {
+        remark.ackByTech = true;
+      } else {
+        remark.ackByEng = true;
+      }
+    });
+
+    persistLocalData();
+    closeAckModal();
+    refreshTable();
+    showNotice("Selected remarks acknowledged.", "info");
+  }
+
+  function openReminderModal() {
+    const list = document.getElementById("reminder-list");
+    if (!list) return;
+
+    if (!elogbookState.jobPlannerDue.length) {
+      list.innerHTML = '<div class="text-xs text-gray-500 dark:text-dark-muted">No due jobs from Job Planner.</div>';
+      openOverlay("reminder-modal");
+      return;
+    }
+
+    list.innerHTML = elogbookState.jobPlannerDue.map((job) => `
+      <div class="border border-gray-200 dark:border-dark-border rounded-sm p-3 flex items-start justify-between gap-3 bg-gray-50 dark:bg-transparent">
+        <div>
+          <div class="text-xs font-bold text-gray-900 dark:text-white">${safeText(job.tag)} <span class="text-purple-600 dark:text-purple-300">(${safeText(job.jobType)})</span></div>
+          <div class="text-xs text-gray-600 dark:text-dark-muted mt-1">${safeText(job.desc)}</div>
+          <div class="text-[10px] text-amber-600 dark:text-amber-300 mt-1">Due: ${safeText(isoDateToSlash(job.dueDate))}</div>
+        </div>
+        <button onclick="assignReminder('${safeText(job.id)}')" class="text-[10px] px-2 py-1 rounded-sm border border-purple-200 dark:border-purple-500/40 text-purple-600 dark:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-500/20 transition-colors">Assign</button>
+      </div>
+    `).join("");
+
+    openOverlay("reminder-modal");
+  }
+
+  function closeReminderModal() {
+    closeOverlay("reminder-modal");
+  }
+
+  function assignReminder(reminderId) {
+    const reminder = elogbookState.jobPlannerDue.find((item) => item.id === reminderId);
+    if (!reminder) return;
+    closeReminderModal();
+    openJobModal("assign", "today", reminder);
+  }
+
+  function assignFromPendingSource(sourceId, rowType) {
+    let payload = null;
+
+    if (rowType === "ojr") {
+      payload = elogbookState.ojrPending.find((item) => item.id === sourceId) || null;
+    } else {
+      const weekly = (elogbookState.jobsByView.weekly || []).find((item) => item.id === sourceId);
+      if (weekly) {
+        payload = {
+          area: weekly.area,
+          loop: weekly.loop,
+          tag: weekly.tag,
+          jobType: weekly.jobType,
+          instType: weekly.typeOfInst,
+          desc: weekly.desc || "Re-assigned from weekly pending",
+          tech: weekly.tech
+        };
+      }
+    }
+
+    if (!payload) return;
+    openJobModal("assign", "today", payload);
+  }
+
+  function checkPendingThresholdAlerts() {
+    const pendingCount = elogbookState.allJobs.filter((job) => job.pendingWrite).length;
+    if (pendingCount > 150) {
+      showNotice("Pending jobs exceeded 150. Pending log opened automatically.", "error");
+      elogbookState.pendingOnlyMode = true;
+      refreshTable();
+      return;
+    }
+    if (pendingCount > 50) {
+      showNotice("Pending jobs exceeded 50.", "warn");
+    }
+  }
+
+  function initHeaderAndPlantChip() {
+    if (typeof renderHeader === "function") {
+      renderHeader({
+        title: `${elogbookState.selectedPlant} Logbook`,
+        breadcrumbs: [
+          { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
+          { label: `${elogbookState.selectedPlant} Plant Detail` }
+        ],
+        backLink: "/src/pages/technician_logbook.html"
+      });
+    }
+
+    const chip = document.getElementById("plant-unit-chip");
+    if (chip) {
+      chip.textContent = `Plant: ${elogbookState.selectedPlant}`;
+    }
+
+    document.title = `GNFC | ${elogbookState.selectedPlant} Logbook`;
+  }
+
+  function initReminders() {
+    const today = toIsoDate(new Date());
+    const tomorrow = toIsoDate(new Date(startOfDay(new Date()).getTime() + DAY_MS));
+    elogbookState.jobPlannerDue = [
+      {
+        id: "JP-1",
+        area: "MF",
+        loop: "Loop-202",
+        tag: "PT5087K",
+        jobType: "ISO14001",
+        instType: "TRANSMITTER",
+        dueDate: today,
+        desc: "ISO planned PM due today."
+      },
+      {
+        id: "JP-2",
+        area: "DCS",
+        loop: "Loop-DCS",
+        tag: "SYS-MAIN",
+        jobType: "ISO14001",
+        instType: "SWITCH",
+        dueDate: tomorrow,
+        desc: "Switch panel compliance check due tomorrow."
+      }
+    ];
+  }
+
+  function initModalEvents() {
+    const jobForm = document.getElementById("job-modal-form");
+    const editForm = document.getElementById("edit-modal-form");
+    const remarkForm = document.getElementById("remark-modal-form");
+    const editTech = document.getElementById("edit-job-tech");
+    const editAssignedTo = document.getElementById("edit-job-assigned-to");
+    const editEngineer = document.getElementById("edit-job-engineer");
+    const editBy = document.getElementById("edit-job-by");
+
+    if (jobForm) jobForm.addEventListener("submit", saveJobFromModal);
+    if (editForm) editForm.addEventListener("submit", saveEditedJob);
+    if (remarkForm) remarkForm.addEventListener("submit", appendRemark);
+    if (editTech && editAssignedTo) {
+      editTech.addEventListener("change", () => {
+        editAssignedTo.value = editTech.value || "";
+      });
+    }
+    if (editEngineer && editBy) {
+      editEngineer.addEventListener("change", () => {
+        editBy.value = editEngineer.value || elogbookState.activeUser.name;
+      });
+    }
+
+    ["job-modal", "edit-modal", "remark-modal", "ack-modal", "reminder-modal"].forEach((id) => {
+      const overlay = document.getElementById(id);
+      if (!overlay) return;
+      overlay.addEventListener("click", (event) => {
+        if (event.target !== overlay) return;
+        if (id === "job-modal") closeJobModal();
+        if (id === "edit-modal") closeEditModal();
+        if (id === "remark-modal") closeRemarkModal();
+        if (id === "ack-modal") closeAckModal();
+        if (id === "reminder-modal") closeReminderModal();
+      });
+    });
+  }
+
+  function initTable() {
+    plantLogTable = new PlantLogTable({
+      containerId: "#plant-table",
+      data: getFilteredJobs(true),
+      itemsPerPage: 6,
+      onRender: renderJobRow
+    });
+
+    global.plantLogTable = plantLogTable;
+    refreshTable();
+  }
+
+  function initInitialView() {
+    const targetId = currentView === "prev" ? "btn-prev" : `btn-${currentView}`;
+    const button = document.getElementById(targetId) || document.getElementById("btn-today");
     activateView(currentView, button);
-  } else {
-    refreshTable();
   }
-}
 
-function maybePromptPendingAck() {
-  const pending = collectPendingAcks();
-  if (!pending.length) return;
-  setTimeout(() => {
-    openAckModal();
-  }, 500);
-}
-
-function checkPendingThresholdAlerts() {
-  const pendingCount = ELOGBOOK_VIEWS.reduce((acc, viewName) => {
-    return acc + (elogbookState.jobsByView[viewName] || []).filter((job) => job.pendingWrite).length;
-  }, 0);
-
-  if (pendingCount > 150) {
-    showNotice("Pending jobs exceeded 150. Pending log should be reviewed immediately.", "error");
-    elogbookState.pendingOnlyMode = true;
-    refreshTable();
-    return;
+  function bootstrap() {
+    parseQueryContext();
+    refreshLocalData();
+    initReminders();
+    initHeaderAndPlantChip();
+    populateJobTypeDropdown();
+    populateJobModalLookups();
+    initModalEvents();
+    initTable();
+    initInitialView();
+    updateAcknowledgeButton();
+    checkPendingThresholdAlerts();
   }
-  if (pendingCount > 50) {
-    showNotice("Pending jobs exceeded 50.", "warn");
-  }
-}
 
-document.addEventListener("DOMContentLoaded", () => {
-  parseQueryContext();
-  elogbookState.jobsByView = seedMockData();
-  window.currentView = currentView;
+  global.switchView = switchView;
+  global.applyFilters = applyFilters;
+  global.toggleJobFilter = toggleJobFilter;
+  global.toggleStatusFilter = toggleStatusFilter;
+  global.filterStatus = filterStatus;
+  global.togglePendingMode = togglePendingMode;
+  global.filterTagsForLoop = filterTagsForLoop;
+  global.openJobModal = openJobModal;
+  global.closeJobModal = closeJobModal;
+  global.assignFromPendingSource = assignFromPendingSource;
+  global.reassignJob = reassignJob;
+  global.openEditModal = openEditModal;
+  global.closeEditModal = closeEditModal;
+  global.openRemarkModal = openRemarkModal;
+  global.closeRemarkModal = closeRemarkModal;
+  global.openAckModal = openAckModal;
+  global.closeAckModal = closeAckModal;
+  global.acknowledgeSelectedRemarks = acknowledgeSelectedRemarks;
+  global.openReminderModal = openReminderModal;
+  global.closeReminderModal = closeReminderModal;
+  global.assignReminder = assignReminder;
 
-  initHeaderAndChips();
-  initReportNavState();
-  populateJobTypeDropdown();
-  populateJobModalLookups();
-  initModalEvents();
-  initTable();
-  initInitialView();
-  updateAcknowledgeButton();
-  maybePromptPendingAck();
-  checkPendingThresholdAlerts();
-});
+  document.addEventListener("DOMContentLoaded", bootstrap);
+})(window);
