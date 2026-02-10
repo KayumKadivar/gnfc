@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Officer's Shift Log Book | GNFC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>
+    window.activePage = 'shift_logbook_officer';
+  </script>
+</head>
+
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+  <div id="sidebar-container"></div>
+  <script>
+    try { renderSidebar('shift_logbook_officer'); } catch (e) { }
+  </script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <div id="header-container"></div>
+    <script>
+      try {
+        renderHeader({
+          title: "Officer's Shift Log Book",
+          breadcrumbs: [
+            { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
+            { label: "Officer Logbook" }
+          ],
+          backLink: "/src/pages/technician_logbook.html"
+        });
+      } catch (e) { }
+    </script>
+
+    <div class="flex-1 min-h-0 p-3 bg-dark-bg flex flex-col gap-3">
+      <section class="bg-dark-panel border border-dark-border rounded-sm p-3 flex flex-col md:flex-row md:items-end md:justify-between gap-3 shrink-0">
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide block">Time Range</label>
+          <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
+            <button id="tab-today" onclick="switchView('today')" type="button"
+              class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Today</button>
+            <button id="tab-prev" onclick="switchView('prev')" type="button"
+              class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Prev Day</button>
+            <button id="tab-weekly" onclick="switchView('weekly')" type="button"
+              class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Weekly</button>
+            <button id="tab-monthly" onclick="switchView('monthly')" type="button"
+              class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Monthly</button>
+          </div>
+        </div>
+
+        <div class="bg-dark-bg border border-dark-border rounded-sm px-4 py-2 min-w-[140px] block items-end justify-between gap-4">
+          <span class="text-[10px] uppercase text-dark-muted font-bold tracking-wide">Total Entries :</span>
+          <span id="record-count" class="text-lg font-mono font-bold text-gnfc-blue">0</span>
+        </div>
+      </section>
+
+      <section class="bg-dark-panel border border-dark-border rounded-sm flex flex-col overflow-hidden">
+        <div class="px-4 py-2 border-b border-dark-border flex justify-between items-center bg-dark-header shrink-0">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-table text-gnfc-blue"></i>
+            <h3 class="text-sm font-bold text-dark-text" id="report-title">Today Log Report</h3>
+          </div>
+          <span id="report-date" class="text-[10px] font-mono text-dark-muted"></span>
+        </div>
+
+        <div class="flex-1 overflow-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
+                <th rowspan="2" class="w-10 p-2 border-r border-dark-border">Sr</th>
+                <th class="w-24 p-2 border-r border-dark-border border-b border-dark-border/50">Shift</th>
+                <th class="w-32 p-2 border-r border-dark-border border-b border-dark-border/50">Tag No</th>
+                <th rowspan="2" class="p-2 border-r border-dark-border text-left min-w-[280px]">Description</th>
+                <th rowspan="2" class="w-32 p-2 border-r border-dark-border">Officer</th>
+                <th rowspan="2" class="w-20 p-2 border-r border-dark-border">Status</th>
+                <th rowspan="2" class="min-w-[180px] p-2">Remarks</th>
+              </tr>
+              <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
+                <th class="p-2 border-r border-dark-border">Time</th>
+                <th class="p-2 border-r border-dark-border">TypeOfJob</th>
+              </tr>
+            </thead>
+            <tbody id="log-table-body" class="text-xs font-mono"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <footer class="h-8 bg-dark-panel border-t border-dark-border px-4 flex items-center justify-between text-[10px] text-dark-muted uppercase tracking-wider shrink-0">
+      <span>GNFC Instrumentation Dept.</span>
+      <span>Officer Logbook</span>
+    </footer>
+  </main>
+
+  <script>
+    const logData = {
+      today: [
+        { sr: 1, shift: "B", time: "17:00 - 19:00", tagNo: "VT38132A", jobType: "MAINTENANCE", description: "As per process requirement vibration probe installation is done.", name: "C. KVARIA", status: "OVER", remarks: "" },
+        { sr: 2, shift: "B", time: "17:00 - 20:00", tagNo: "TT374405", jobType: "MAINTENANCE", description: "Temperature transmitter removed for mechanical work.", name: "C. KVARIA", status: "OVER", remarks: "" },
+        { sr: 3, shift: "B", time: "17:00 - 19:00", tagNo: "TT374406", jobType: "MAINTENANCE", description: "TT removed for mechanical work.", name: "C. KVARIA", status: "OVER", remarks: "" },
+        { sr: 4, shift: "B", time: "16:00 - 20:00", tagNo: "LT374413", jobType: "MAINTENANCE", description: "As per process requirement for tapping cleaning LT chamber and LT removed and kept aside.", name: "C. KVARIA", status: "PENDING", remarks: "Waiting for permit" }
+      ],
+      prev: [
+        { sr: 1, shift: "A", time: "06:00 - 14:00", tagNo: "QT702", jobType: "PM", description: "Zero calibration found 0.78% higher side so calibration done.", name: "P.J. Rana", status: "OVER", remarks: "" },
+        { sr: 2, shift: "B", time: "14:00 - 22:00", tagNo: "HV0207B", jobType: "PROCESS", description: "HV0207B related booster checking setup done.", name: "P.S. Gohil", status: "OVER", remarks: "" }
+      ],
+      weekly: [
+        { sr: 1, shift: "A", time: "06:00 - 14:00", tagNo: "PT310", jobType: "DEFECT", description: "Rosemount remote seal PT found defective so removed it.", name: "N.N. Dhanani", status: "OVER", remarks: "" }
+      ],
+      monthly: [
+        { sr: 1, shift: "A", time: "06:00 - 14:00", tagNo: "DCS-FOX", jobType: "PM", description: "FCS301, FCS302 standby batteries replaced.", name: "P.S. Gohil", status: "OVER", remarks: "" }
+      ]
+    };
+
+    const tbody = document.getElementById('log-table-body');
+    const countSpan = document.getElementById('record-count');
+    const reportTitle = document.getElementById('report-title');
+    const reportDate = document.getElementById('report-date');
+    const tabs = ['today', 'prev', 'weekly', 'monthly'];
+
+    const TAB_ACTIVE_CLASS = 'tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors bg-dark-panel text-gnfc-orange border border-dark-border shadow-sm';
+    const TAB_INACTIVE_CLASS = 'tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors text-dark-muted hover:text-white hover:bg-dark-header';
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatReportDate(view) {
+      const today = new Date();
+
+      if (view === 'prev') {
+        today.setDate(today.getDate() - 1);
+        return `${today.toLocaleDateString('en-GB')} Log Report`;
+      }
+
+      if (view === 'weekly') {
+        const day = today.getDay();
+        const diffToMonday = (day + 6) % 7;
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - diffToMonday);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        return `${monday.toLocaleDateString('en-GB')} - ${sunday.toLocaleDateString('en-GB')}`;
+      }
+
+      if (view === 'monthly') {
+        return today.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      }
+
+      return `${today.toLocaleDateString('en-GB')} Log Report`;
+    }
+
+    function renderTable(view) {
+      const entries = logData[view] || [];
+      countSpan.textContent = String(entries.length);
+
+      if (!entries.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries found for this range.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = entries.map((entry) => {
+        const status = String(entry.status || '').toUpperCase();
+        const statusBadgeClass = status === 'OVER'
+          ? 'bg-gnfc-green/15 text-gnfc-green border border-gnfc-green/30'
+          : 'bg-gnfc-orange/15 text-gnfc-orange border border-gnfc-orange/30';
+
+        return `
+          <tr data-entry="${entry.sr}" class="log-row border-b border-dark-border/50 transition-colors duration-150">
+            <td rowspan="2" class="p-2 text-center text-dark-muted font-mono border-r border-dark-border/30">${escapeHtml(entry.sr)}</td>
+            <td class="p-2 text-center font-bold text-dark-text border-r border-dark-border/30">${escapeHtml(entry.shift)}</td>
+            <td class="p-2 font-semibold text-gnfc-blue border-r border-dark-border/30">${escapeHtml(entry.tagNo)}</td>
+            <td rowspan="2" class="p-2 text-dark-text leading-relaxed border-r border-dark-border/30">${escapeHtml(entry.description)}</td>
+            <td rowspan="2" class="p-2 text-dark-text font-bold border-r border-dark-border/30 whitespace-nowrap">${escapeHtml(entry.name)}</td>
+            <td rowspan="2" class="p-2 text-center border-r border-dark-border/30">
+              <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold ${statusBadgeClass}">${escapeHtml(status || 'NA')}</span>
+            </td>
+            <td rowspan="2" class="p-2 text-dark-muted">${escapeHtml(entry.remarks || '--')}</td>
+          </tr>
+          <tr data-entry="${entry.sr}" class="log-row border-b border-dark-border/50 transition-colors duration-150">
+            <td class="p-2 text-center text-[10px] text-dark-muted border-r border-dark-border/30">${escapeHtml(entry.time)}</td>
+            <td class="p-2 text-[10px] border-r border-dark-border/30">
+              <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-dark-bg border border-dark-border text-dark-muted">${escapeHtml(entry.jobType)}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Add hover effect to paired rows
+      const rows = tbody.querySelectorAll('.log-row');
+      rows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+          const entryId = this.getAttribute('data-entry');
+          const pairedRows = tbody.querySelectorAll(`[data-entry="${entryId}"]`);
+          pairedRows.forEach(r => r.classList.add('bg-gnfc-blue/5', 'dark:bg-gnfc-blue/5'));
+        });
+        
+        row.addEventListener('mouseleave', function() {
+          const entryId = this.getAttribute('data-entry');
+          const pairedRows = tbody.querySelectorAll(`[data-entry="${entryId}"]`);
+          pairedRows.forEach(r => r.classList.remove('bg-gnfc-blue/5', 'dark:bg-gnfc-blue/5'));
+        });
+      });
+    }
+
+    function switchView(view) {
+      if (!tabs.includes(view)) {
+        return;
+      }
+
+      tabs.forEach((tab) => {
+        const tabEl = document.getElementById(`tab-${tab}`);
+        if (!tabEl) return;
+        tabEl.className = tab === view ? TAB_ACTIVE_CLASS : TAB_INACTIVE_CLASS;
+      });
+
+      const titleMap = {
+        today: 'Today Log Report',
+        prev: 'Prev Day Log Report',
+        weekly: 'Weekly Log Report',
+        monthly: 'Monthly Log Report'
+      };
+
+      reportTitle.textContent = titleMap[view] || 'Log Report';
+      reportDate.textContent = formatReportDate(view);
+      renderTable(view);
+    }
+
+    const viewParam = new URLSearchParams(window.location.search).get('view');
+    const initialView = tabs.includes(viewParam) ? viewParam : 'today';
+    switchView(initialView);
+  </script>
+</body>
+
+</html>

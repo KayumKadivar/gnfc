@@ -68,6 +68,29 @@
     html[data-theme-mode] .theme-contrast-lock .text-white-force * {
       color: #ffffff !important;
     }
+
+    /* Table hover: clear visual feedback in both light and dark themes */
+    #plant-table tbody tr {
+      transition: background-color .18s ease, box-shadow .18s ease;
+    }
+
+    html[data-theme-mode="light"] #plant-table tbody tr:hover {
+      background: linear-gradient(90deg, rgba(37, 99, 235, 0.10), rgba(56, 189, 248, 0.05));
+      box-shadow: inset 2px 0 0 rgba(37, 99, 235, 0.55);
+    }
+
+    html[data-theme-mode="dark"] #plant-table tbody tr:hover {
+      background: rgba(87, 148, 242, 0.16);
+      box-shadow: inset 2px 0 0 rgba(87, 148, 242, 0.55);
+    }
+
+    html[data-theme-mode="light"] #plant-table tbody tr:hover td {
+      border-color: rgba(59, 130, 246, 0.35) !important;
+    }
+
+    html[data-theme-mode="dark"] #plant-table tbody tr:hover td {
+      border-color: rgba(87, 148, 242, 0.30) !important;
+    }
   </style>
   <script src="/src/js/tailwind_config.js"></script>
 </head>
@@ -151,8 +174,8 @@
             <button
               class="px-3 py-1.5 bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/30 rounded-sm text-xs font-bold hover:bg-gnfc-orange/20 transition-colors">Pending
               Jobs</button>
-            <button
-              class="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-gnfc-blue rounded-sm text-xs font-bold shadow-lg shadow-blue-500/10 transition-all">
+            <button onclick="AddLogModal.open()"
+              class="text-white-force flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-gnfc-blue rounded-sm text-xs font-bold shadow-lg shadow-blue-500/10 transition-all">
               <i class="ph-bold ph-plus"></i> Add New
             </button>
           </div>
@@ -218,12 +241,19 @@
               <tr
                 class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
                 <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+
                 <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+
                 <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+
                 <th class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+
                 <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
+
                 <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px]">Description</th>
+
                 <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                
                 <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
                     <div class="flex items-center justify-between cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors p-1 rounded" onclick="plantLogTable.sort('status')">
                         <span>Status</span>
@@ -260,6 +290,7 @@
 
   <script src="/src/js/plant_log_core.js"></script>
   <script src="/src/js/emg_call_modal.js"></script>
+  <script src="/src/js/add_log_modal.js"></script>
   <script>
     // Plant Mock Data
     const plantLogData = {

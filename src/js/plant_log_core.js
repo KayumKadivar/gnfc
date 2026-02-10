@@ -1,7 +1,4 @@
-/**
- * Plant Log Table Component
- * Handles sorting, filtering, pagination, and rendering for plant logs.
- */
+
 class PlantLogTable {
     constructor(config) {
         this.containerId = config.containerId;
@@ -122,7 +119,7 @@ class PlantLogTable {
                 ? (this.sortDirection === 'asc' ? 'ph-caret-up' : 'ph-caret-down')
                 : 'ph-caret-up-down'; // distinct 'inactive' state could be just ph-caret-up-down opacity-50
             
-            const activeClass = this.sortColumn === col.key ? 'text-gnfc-blue' : 'text-slate-500 dark:text-dark-muted';
+            const activeClass = this.sortColumn === col.key ? 'text-grafana-blue' : 'text-slate-500 dark:text-dark-muted';
 
             return `
                 <th class="${col.class} cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
@@ -156,7 +153,7 @@ class PlantLogTable {
         for (let i = 1; i <= totalPages; i++) {
             // Simple logic: show all. For many pages, you'd want ellipsis logic.
             const activeClass = i === this.currentPage 
-                ? 'bg-blue-600 dark:bg-gnfc-blue text-white border-blue-600 dark:border-gnfc-blue' 
+                ? 'bg-blue-600 dark:bg-grafana-blue text-white border-blue-600 dark:border-gnfc-blue' 
                 : 'border-slate-200 dark:border-dark-border hover:bg-slate-100 dark:hover:bg-dark-border text-slate-600 dark:text-gray-300';
             
             html += `
@@ -188,21 +185,21 @@ class PlantLogTable {
 
     createRow(item) {
          const statusClass = item.statusColor === 'green'
-          ? 'text-gnfc-green bg-gnfc-green/10 border-gnfc-green/20'
-          : 'text-gnfc-orange bg-gnfc-orange/10 border-gnfc-orange/20';
+          ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20'
+          : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
 
         return `
-            <tr class="hover:bg-slate-50 dark:hover:bg-dark-border/50 transition-colors border-b border-dark-border group">
+            <tr class="hover:bg-slate-100 dark:hover:bg-dark-border/50 transition-colors border-b border-dark-border group">
                 <td class="p-2 text-center text-slate-500 dark:text-dark-muted font-mono border-r border-dark-border">${item.sr}</td>
                 <td class="p-2 font-bold text-slate-700 dark:text-white border-r border-dark-border">${item.area}</td>
                 <td class="p-2 border-r border-dark-border">
-                    <div class="text-xs text-blue-600 dark:text-gnfc-blue font-bold">${item.tag}</div>
-                    <span class="inline-block mt-1 text-[10px] text-slate-500 dark:text-dark-muted bg-slate-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-dark-border font-mono">${item.tagSubtitle}</span>
+                    <div class="text-xs text-blue-600 dark:text-grafana-blue font-bold">${item.tag}</div>
+                    <span class="inline-block mt-1 text-[10px] text-slate-500 dark:text-dark-muted bg-slate-100  px-1.5 py-0.5 rounded border border-dark-border font-mono">${item.tagSubtitle}</span>
                 </td>
                 <td class="p-2 border-r border-dark-border">
                     <div class="font-medium text-slate-600 dark:text-gray-300 line-clamp-1">${item.jobType}</div>
                     <div class="text-[10px] text-slate-400 dark:text-dark-muted mt-0.5">${item.jobRef}</div>
-                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-gnfc-blue/10 text-blue-600 dark:text-gnfc-blue border border-dark-border">${item.jobLabel}</span>` : ''}
+                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-grafana-blue/10 text-blue-600 dark:text-grafana-blue border border-dark-border">${item.jobLabel}</span>` : ''}
                 </td>
                 <td class="p-2 text-center font-bold text-slate-500 dark:text-dark-muted border-r border-dark-border">${item.tech}</td>
                 <td class="p-2 text-slate-500 dark:text-gray-400 border-r border-dark-border leading-relaxed">${item.desc}</td>

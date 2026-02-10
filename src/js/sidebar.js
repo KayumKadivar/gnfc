@@ -35,7 +35,7 @@ function renderSidebar(activePageId) {
   
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Logs</div>
               
-              ${createLink("shift_logbook_officer", "#", "ph-notebook", "Officer Logs", isCollapsed)}
+              ${createLink("shift_logbook_officer", "/src/pages/shift_logbook.html", "ph-notebook", "Officer Logs", isCollapsed)}
               
               ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logs", isCollapsed)}
               
