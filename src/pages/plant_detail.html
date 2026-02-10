@@ -9,35 +9,71 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
-          colors: {
-            dark: {
-              bg: '#111217',
-              panel: '#181b1f',
-              border: '#2c3235',
-              text: '#ccccdd',
-              muted: '#8e8e9e'
-            },
-            grafana: {
-              orange: '#FF9900',
-              blue: '#5794F2',
-              green: '#73BF69',
-              red: '#F2495C'
-            }
-          }
-        }
-      }
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <style>
+    /* MicroModal Animation Styles */
+    .modal { display: none; }
+    .modal.is-open { display: block; }
+    
+    .modal__overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6); display: flex;
+      justify-content: center; align-items: center; z-index: 100;
+      backdrop-filter: blur(4px);
     }
-  </script>
+    
+    .modal__container {
+      background-color: var(--app-panel);
+      max-width: 90vw; max-height: 90vh; border-radius: 4px;
+      overflow-y: auto; box-sizing: border-box; border: 1px solid var(--app-border);
+      color: var(--app-text);
+    }
+
+    @keyframes mmfadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes mmfadeOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes mmslideIn { from { transform: translateY(15%); } to { transform: translateY(0); } }
+    @keyframes mmslideOut { from { transform: translateY(0); } to { transform: translateY(-10%); } }
+
+    .micromodal-slide { display: none; }
+    .micromodal-slide.is-open { display: block; }
+    .micromodal-slide[aria-hidden="false"] .modal__overlay { animation: mmfadeIn .3s cubic-bezier(0.0, 0.0, 0.2, 1); }
+    .micromodal-slide[aria-hidden="false"] .modal__container { animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1); }
+    .micromodal-slide[aria-hidden="true"] .modal__overlay { animation: mmfadeOut .3s cubic-bezier(0.0, 0.0, 0.2, 1); }
+    .micromodal-slide[aria-hidden="true"] .modal__container { animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1); }
+    .micromodal-slide .modal__container, .micromodal-slide .modal__overlay { will-change: transform; }
+
+    /* Force full-contrast typography for this page across theme modes */
+    html[data-theme-mode="light"] .theme-contrast-lock,
+    html[data-theme-mode="light"] .theme-contrast-lock * {
+      color: #000000 !important;
+    }
+
+    html[data-theme-mode="dark"] .theme-contrast-lock,
+    html[data-theme-mode="dark"] .theme-contrast-lock * {
+      color: #ffffff !important;
+    }
+
+    html[data-theme-mode="light"] .theme-contrast-lock input::placeholder,
+    html[data-theme-mode="light"] .theme-contrast-lock textarea::placeholder {
+      color: rgba(0, 0, 0, 0.7) !important;
+    }
+
+    html[data-theme-mode="dark"] .theme-contrast-lock input::placeholder,
+    html[data-theme-mode="dark"] .theme-contrast-lock textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    /* High-Specificity Override: Force white text even inside theme-contrast-lock */
+    html[data-theme-mode] .theme-contrast-lock .text-white-force,
+    html[data-theme-mode] .theme-contrast-lock .text-white-force * {
+      color: #ffffff !important;
+    }
+  </style>
+  <script src="/src/js/tailwind_config.js"></script>
 </head>
 
 <body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-grafana-blue selection:text-white">
+  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
   
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -48,7 +84,7 @@
     try { renderSidebar('technician_logbook'); } catch (e) { }
   </script>
 
-  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+  <main class="theme-contrast-lock flex-1 flex flex-col h-screen overflow-hidden">
 
     <div id="header-container"></div>
     <script>
@@ -84,10 +120,10 @@
             <button onclick="window.location.href='/src/pages/job_history.html'" data-target="job_history.html"
               class="px-3 py-1.5 text-xs font-medium rounded-sm whitespace-nowrap bg-slate-200 text-slate-900 hover:bg-slate-700 hover:text-slate-200 dark:bg-slate-600 dark:text-slate-900 dark:hover:bg-slate-500 transition-colors">Job
               History</button>
-            <!-- <button onclick="window.location.href='emg_modal.html'" data-target="emg_modal.html"
-              class="px-3 py-1.5 text-xs font-bold rounded-sm whitespace-nowrap flex items-center gap-1 bg-red-600 text-white hover:bg-red-700 dark:bg-red-200 dark:text-red-900 dark:hover:bg-slate-500 transition-colors">
+            <button onclick="EmgCallModal.open()" data-target="emg_modal.html"
+              class="text-white-force px-3 py-1.5 text-xs font-bold rounded-sm whitespace-nowrap flex items-center gap-1 bg-red-600 hover:bg-red-700 transition-colors">
               <i class="ph-bold ph-siren"></i> EMG Call
-            </button> -->
+            </button>
           </div>
         </div>
 
@@ -97,7 +133,7 @@
               class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
               onclick="switchView(this, 'tomorrow')">Tomorrow</button>
             <button id="btn-today"
-              class="tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-grafana-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors"
+              class="tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors"
               onclick="switchView(this, 'today')">Today</button>
             <button id="btn-prev"
               class="tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors"
@@ -113,10 +149,10 @@
 
           <div class="flex gap-2">
             <button
-              class="px-3 py-1.5 bg-grafana-orange/10 text-grafana-orange border border-grafana-orange/30 rounded-sm text-xs font-bold hover:bg-grafana-orange/20 transition-colors">Pending
+              class="px-3 py-1.5 bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/30 rounded-sm text-xs font-bold hover:bg-gnfc-orange/20 transition-colors">Pending
               Jobs</button>
             <button
-              class="flex items-center gap-2 px-4 py-1.5 bg-grafana-blue hover:bg-blue-600 text-white rounded-sm text-xs font-bold shadow-lg shadow-blue-500/10 transition-all">
+              class="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-gnfc-blue rounded-sm text-xs font-bold shadow-lg shadow-blue-500/10 transition-all">
               <i class="ph-bold ph-plus"></i> Add New
             </button>
           </div>
@@ -126,23 +162,23 @@
       <div id="job-filter-bar" class="hidden bg-dark-panel border border-dark-border rounded-sm p-3 ">
         <div class="flex flex-col md:flex-row items-center gap-4">
           <div class="flex items-center gap-2 w-full md:w-auto">
-            <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide">Start</label>
+            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Start</label>
             <input type="date" id="start-date" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-grafana-blue outline-none">
+              class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none">
           </div>
 
           <div class="flex items-center gap-2 w-full md:w-auto">
-            <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide">End</label>
+            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">End</label>
             <input type="date" id="end-date" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-grafana-blue outline-none">
+              class="bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none">
           </div>
 
           <div class="flex items-center gap-2 w-full md:w-auto flex-1">
-            <label class="text-[10px] font-bold text-grafana-blue uppercase tracking-wide whitespace-nowrap">Filter
+            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide whitespace-nowrap">Filter
               Type</label>
             <div class="relative w-full">
               <select id="job-type-select" onchange="applyFilters()"
-                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 appearance-none focus:border-grafana-blue outline-none cursor-pointer">
+                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-2 py-1 appearance-none focus:border-gnfc-blue outline-none cursor-pointer">
                 <option value="">All Jobs</option>
               </select>
               <i
@@ -151,23 +187,16 @@
           </div>
 
           <button onclick="toggleJobFilter()"
-            class="text-xs font-bold text-grafana-red hover:text-white transition-colors flex items-center gap-1">
+            class="text-xs font-bold text-gnfc-red hover:text-white transition-colors flex items-center gap-1">
             <i class="ph-bold ph-x"></i> Close
           </button>
         </div>
       </div>
 
-      <!-- <div class="flex justify-end">
-        <button onclick="toggleJobFilter()"
-          class="text-xs font-medium text-dark-muted hover:text-grafana-blue flex items-center gap-1 transition-colors">
-          <i class="ph-bold ph-funnel"></i> Show Filters
-        </button>
-      </div> -->
-
       <div id="dynamic-view-container" class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
         <div class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
           <div class="flex items-center gap-2">
-            <i class="ph-fill ph-table text-blue-600 dark:text-grafana-blue"></i>
+            <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
             <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
             <span id="record-count" class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0 Records</span>
           </div>
@@ -177,9 +206,9 @@
                  <i class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
                  <input type="text" id="table-search" placeholder="Search logs..." 
                    onkeyup="plantLogTable.setSearch(this.value)"
-                   class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-grafana-blue focus:outline-none w-48 transition-colors">
+                   class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
                </div>
-               <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-grafana-orange">06.02.2026</span>
+               <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">06.02.2026</span>
            </div>
         </div>
 
@@ -188,14 +217,14 @@
             <thead>
               <tr
                 class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-12 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-20 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-                <th class="border-r border-b px-3 py-2 w-40 border-slate-200 dark:border-dark-border dark:border-dark-border/50 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-                <th class="border-r border-b px-3 py-2 min-w-[200px] border-slate-200 dark:border-dark-border dark:border-dark-border/50 font-black cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-16 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
-                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 min-w-[300px]">Description</th>
-                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-24 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-                <th rowspan="2" class="border-r border-slate-200 dark:border-dark-border p-2 w-28 relative group/th">
+                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('jobType')">Job Type <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('tech')">Tech</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px]">Description</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors" onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
                     <div class="flex items-center justify-between cursor-pointer hover:bg-slate-200 dark:hover:bg-dark-border/50 transition-colors p-1 rounded" onclick="plantLogTable.sort('status')">
                         <span>Status</span>
                         <!-- <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i> -->
@@ -212,8 +241,8 @@
               </tr>
               <tr
                 class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th class="border-r border-slate-200 dark:border-dark-border p-2">Tag Detail</th>
-                <th class="border-r border-slate-200 dark:border-dark-border p-2">Instrument Detail</th>
+                <th class="border-r border-dark-border p-2">Tag Detail</th>
+                <th class="border-r border-dark-border p-2">Instrument Detail</th>
               </tr>
             </thead>
             <tbody id="plantTableBody" class="text-xs font-mono">
@@ -266,7 +295,7 @@
          plantLogTable = new PlantLogTable({
             containerId: '#plant-table',
             data: plantLogData['today'],
-            itemsPerPage: 5 // Example low number to demonstrate pagination
+            itemsPerPage: 5
         });
     }
 
@@ -302,12 +331,7 @@
       const jobType = document.getElementById('job-type-select').value;
       const startDate = document.getElementById('start-date').value;
       const endDate = document.getElementById('end-date').value;
-      
-      // We process date filtering here before passing to table
-      // because the table filter is generic key-value
-      // Actually, for advanced date ranges + exact matches, 
-      // it's easier to filter the RAW data first, then pass to table.
-      
+   
       let filteredData = plantLogData[currentView] || [];
 
       if (jobType) filteredData = filteredData.filter(item => item.jobType === jobType);
@@ -383,7 +407,7 @@
         b.className = "tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors";
       });
       // Active Tab
-      btn.className = "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-grafana-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
+      btn.className = "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
 
       // Update Header
       const titleMap = {

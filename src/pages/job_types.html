@@ -7,10 +7,11 @@
   <title>Job Analysis | GNFC</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
   <script>window.activePage = 'job_types';</script>
 </head>
 
-<body class="bg-[#111217] text-[#c7d0d9] font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
 
 
   <script src="/src/js/theme_manager.js"></script>
@@ -93,29 +94,29 @@
               </tr>
             </thead>
             <tbody class="text-xs font-mono">
-              <tr class="hover:bg-[#2c3235] border-b border-[#2c3235] transition">
-                <td class="px-4 py-3 text-[#8e8e9e]">01</td>
-                <td class="px-4 py-3 text-[#5794F2]">FA</td>
-                <td class="px-4 py-3">
+            <tr class="hover:bg-dark-border/50 border-b border-dark-border transition">
+                <td class="px-4 py-3 text-dark-muted">01</td>
+                <td class="px-4 py-3 text-gnfc-blue">FA</td>
+                <td class="px-4 py-3 border-r border-dark-border">
                   <div class="text-white">N.A</div>
-                  <div class="text-[#8e8e9e]">FVC0208A</div>
+                  <div class="text-dark-muted">FVC0208A</div>
                 </td>
-                <td class="px-4 py-3 text-[#FF9900]">Routine Check</td>
-                <td class="px-4 py-3 text-gray-300">Valve stroke checked. Found stuck at 75%.</td>
-                <td class="px-4 py-3 text-white">GAZ</td>
-                <td class="px-4 py-3 text-center"><span class="text-[#73BF69]">DONE</span></td>
+                <td class="px-4 py-3 text-gnfc-orange border-r border-dark-border">Routine Check</td>
+                <td class="px-4 py-3 text-dark-text border-r border-dark-border">Valve stroke checked. Found stuck at 75%.</td>
+                <td class="px-4 py-3 text-white border-r border-dark-border">GAZ</td>
+                <td class="px-4 py-3 text-center"><span class="text-gnfc-green">DONE</span></td>
               </tr>
-              <tr class="hover:bg-[#2c3235] border-b border-[#2c3235] transition">
-                <td class="px-4 py-3 text-[#8e8e9e]">02</td>
-                <td class="px-4 py-3 text-[#5794F2]">400</td>
-                <td class="px-4 py-3">
+              <tr class="hover:bg-dark-border/50 border-b border-dark-border transition">
+                <td class="px-4 py-3 text-dark-muted">02</td>
+                <td class="px-4 py-3 text-gnfc-blue">400</td>
+                <td class="px-4 py-3 border-r border-dark-border">
                   <div class="text-white">LV412B</div>
-                  <div class="text-[#8e8e9e]">Control Vlv</div>
+                  <div class="text-dark-muted">Control Vlv</div>
                 </td>
-                <td class="px-4 py-3 text-[#F2495C]">Breakdown</td>
-                <td class="px-4 py-3 text-gray-300">Positioner replacement required.</td>
-                <td class="px-4 py-3 text-white">MR_</td>
-                <td class="px-4 py-3 text-center"><span class="text-[#FF9900]">PENDING</span></td>
+                <td class="px-4 py-3 text-gnfc-red border-r border-dark-border">Breakdown</td>
+                <td class="px-4 py-3 text-dark-text border-r border-dark-border">Positioner replacement required.</td>
+                <td class="px-4 py-3 text-white border-r border-dark-border">MR_</td>
+                <td class="px-4 py-3 text-center"><span class="text-gnfc-orange">PENDING</span></td>
               </tr>
             </tbody>
           </table>

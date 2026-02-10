@@ -1,8 +1,3 @@
-/**
- * Theme Manager for GNFC Monitor
- * Handles persisting and applying UI settings (font size + dark/light mode) globally.
- */
-
 const ThemeManager = {
     storageKey: 'gnfc_theme_settings',
 
@@ -20,9 +15,9 @@ const ThemeManager = {
             panel: '#181b1f',
             panelAlt: '#22252b',
             border: '#2c3235',
-            text: '#c7d0d9',
+            text: '#ffffff',
             textStrong: '#ffffff',
-            muted: '#8e8e9e',
+            muted: '#a3a3a3',
             sidebar: '#0b0c0e',
             sidebarBorder: '#2c3235',
         },
@@ -32,9 +27,9 @@ const ThemeManager = {
             panel: '#ffffff',
             panelAlt: '#edf2f8',
             border: '#d6deea',
-            text: '#1f2937',
-            textStrong: '#0f172a',
-            muted: '#64748b',
+            text: '#000000',
+            textStrong: '#000000',
+            muted: '#4b5563',
             sidebar: '#ffffff',
             sidebarBorder: '#d6deea',
         },
@@ -209,9 +204,9 @@ const ThemeManager = {
             html[data-theme-mode="light"] .text-white {
                 color: var(--app-text-strong) !important;
             }
-            html[data-theme-mode="light"] .text-gray-200,
-            html[data-theme-mode="light"] .text-gray-300,
-            html[data-theme-mode="light"] .text-gray-400 {
+            html[data-theme-mode="light"] .text-white,
+            html[data-theme-mode="light"] .text-white,
+            html[data-theme-mode="light"] .text-white {
                 color: var(--app-muted) !important;
             }
 

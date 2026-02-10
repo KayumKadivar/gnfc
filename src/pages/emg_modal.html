@@ -7,20 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/theme_manager.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-                    colors: {
-                        dark: { bg: '#111217', panel: '#181b1f', header: '#22252b', border: '#2c3235', text: '#ccccdd' },
-                        grafana: { orange: '#FF9900', blue: '#5794F2', green: '#73BF69', red: '#F2495C' }
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="/src/js/tailwind_config.js"></script>
     <style>
         /* Modern Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -42,7 +29,7 @@
     </style>
 </head>
 <body class="font-sans h-screen flex overflow-hidden">
-    <!-- <button onclick="openModal()" class="px-6 py-3 bg-grafana-orange hover:bg-orange-600 text-black font-bold rounded-sm shadow-[0_0_20px_rgba(255,153,0,0.3)] transition-all flex items-center gap-2">
+    <!-- <button onclick="openModal()" class="px-6 py-3 bg-gnfc-orange hover:bg-orange-600 text-black font-bold rounded-sm shadow-[0_0_20px_rgba(255,153,0,0.3)] transition-all flex items-center gap-2">
         <i class="ph-bold ph-warning-circle"></i> VIEW EMERGENCY LOGS
     </button> -->
 
@@ -52,7 +39,7 @@
             
             <div class="h-16 border-b border-dark-border flex items-center justify-between px-6 bg-dark-header/80">
                 <div class="flex items-center gap-4">
-                    <div class="w-8 h-8 rounded bg-grafana-red/20 border border-grafana-red/40 flex items-center justify-center text-grafana-red shadow-[0_0_10px_rgba(242,73,92,0.2)]">
+                    <div class="w-8 h-8 rounded bg-gnfc-red/20 border border-gnfc-red/40 flex items-center justify-center text-gnfc-red shadow-[0_0_10px_rgba(242,73,92,0.2)]">
                         <i class="ph-fill ph-siren text-lg animate-pulse"></i>
                     </div>
                     <div>
@@ -67,8 +54,8 @@
                 
                 <div class="flex items-center gap-3">
                     <div class="hidden md:flex items-center px-3 py-1.5 bg-dark-bg border border-dark-border rounded-sm gap-2">
-                        <span class="w-2 h-2 rounded-full bg-grafana-green animate-pulse"></span>
-                        <span class="text-xs font-mono text-grafana-green">Connected</span>
+                        <span class="w-2 h-2 rounded-full bg-gnfc-green animate-pulse"></span>
+                        <span class="text-xs font-mono text-gnfc-green">Connected</span>
                     </div>
                     <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
                         <i class="ph-bold ph-x text-lg"></i>
@@ -78,7 +65,7 @@
 
             <div class="px-6 py-4 border-b border-dark-border flex flex-wrap items-end gap-4 bg-dark-bg/40">
                 <div class="flex flex-col gap-1.5">
-                    <label class="text-[10px] font-bold text-grafana-blue uppercase">Date Range</label>
+                    <label class="text-[10px] font-bold text-gnfc-blue uppercase">Date Range</label>
                     <div class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center p-1">
                         <input type="date" class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full" id="filter-start">
                         <span class="text-dark-border px-1">to</span>
@@ -87,14 +74,14 @@
                 </div>
 
                 <div class="flex-1 min-w-[200px] flex flex-col gap-1.5">
-                    <label class="text-[10px] font-bold text-grafana-blue uppercase">Search Logs</label>
+                    <label class="text-[10px] font-bold text-gnfc-blue uppercase">Search Logs</label>
                     <div class="relative h-9">
                         <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="search-logs" placeholder="Search tag, tech, or description..." class="w-full h-full bg-dark-bg border border-dark-border rounded-sm pl-9 pr-4 text-xs text-white focus:border-grafana-blue focus:ring-1 focus:ring-grafana-blue outline-none transition-all placeholder-gray-600">
+                        <input type="text" id="search-logs" placeholder="Search tag, tech, or description..." class="w-full h-full bg-dark-bg border border-dark-border rounded-sm pl-9 pr-4 text-xs text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all placeholder-gray-600">
                     </div>
                 </div>
 
-                <button class="h-9 px-4 bg-grafana-blue/10 border border-grafana-blue/50 text-grafana-blue hover:bg-grafana-blue hover:text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2">
+                <button class="h-9 px-4 bg-gnfc-blue/10 border border-gnfc-blue/50 text-gnfc-blue hover:bg-gnfc-blue hover:text-white text-xs font-bold rounded-sm transition-all flex items-center gap-2">
                     <i class="ph-bold ph-download-simple"></i> EXPORT
                 </button>
             </div>
@@ -119,11 +106,11 @@
             <div class="h-12 border-t border-dark-border bg-dark-header/80 px-6 flex items-center justify-between text-xs text-gray-500">
                 <div class="flex gap-4">
                     <span>Rows: <b class="text-white" id="row-count">0</b></span>
-                    <span>Filtered by: <b class="text-grafana-orange">All</b></span>
+                    <span>Filtered by: <b class="text-gnfc-orange">All</b></span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="uppercase tracking-wider font-bold">Total OT:</span>
-                    <span class="bg-grafana-orange text-black px-2 py-0.5 rounded-sm font-bold shadow-[0_0_10px_rgba(255,153,0,0.4)]" id="total-ot">0.0</span>
+                    <span class="bg-gnfc-orange text-black px-2 py-0.5 rounded-sm font-bold shadow-[0_0_10px_rgba(255,153,0,0.4)]" id="total-ot">0.0</span>
                 </div>
             </div>
 
@@ -152,19 +139,19 @@
                 
                 // Color Logic
                 let typeClass = 'bg-gray-800 text-gray-300 border-gray-600';
-                if(log.type.includes('ABNORMALITY')) typeClass = 'bg-grafana-red/10 text-grafana-red border-grafana-red/30';
-                if(log.type.includes('PROCESS')) typeClass = 'bg-grafana-blue/10 text-grafana-blue border-grafana-blue/30';
-                if(log.type.includes('CALIBRATION')) typeClass = 'bg-grafana-green/10 text-grafana-green border-grafana-green/30';
+                if(log.type.includes('ABNORMALITY')) typeClass = 'bg-gnfc-red/10 text-gnfc-red border-gnfc-red/30';
+                if(log.type.includes('PROCESS')) typeClass = 'bg-gnfc-blue/10 text-gnfc-blue border-gnfc-blue/30';
+                if(log.type.includes('CALIBRATION')) typeClass = 'bg-gnfc-green/10 text-gnfc-green border-gnfc-green/30';
 
                 const row = `
                     <tr class="hover:bg-white/5 transition-colors group">
-                        <td class="px-6 py-3 border-r border-dark-border/30 text-gray-400">${log.date}</td>
-                        <td class="px-4 py-3 border-r border-dark-border/30 font-bold text-white">${log.tech}</td>
-                        <td class="px-4 py-3 border-r border-dark-border/30 text-grafana-blue font-bold">${log.tag}</td>
-                        <td class="px-4 py-3 border-r border-dark-border/30">
+                        <td class="px-6 py-3 border-r border-dark-border text-gray-400">${log.date}</td>
+                        <td class="px-4 py-3 border-r border-dark-border font-bold text-white">${log.tech}</td>
+                        <td class="px-4 py-3 border-r border-dark-border text-gnfc-blue font-bold">${log.tag}</td>
+                        <td class="px-4 py-3 border-r border-dark-border">
                             <span class="inline-block px-2 py-0.5 border ${typeClass} rounded-[2px] text-[10px] font-bold tracking-wide">${log.type}</span>
                         </td>
-                        <td class="px-6 py-3 border-r border-dark-border/30 text-gray-300 relative group-hover:text-white transition-colors">
+                        <td class="px-6 py-3 border-r border-dark-border text-gray-300 relative group-hover:text-white transition-colors">
                             <div class="line-clamp-2 hover:line-clamp-none cursor-help leading-relaxed" title="${log.desc}">
                                 ${log.desc}
                             </div>

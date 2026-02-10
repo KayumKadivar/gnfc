@@ -51,7 +51,7 @@ function renderSidebar(activePageId) {
           </nav>
   
           <div class="p-4 border-t border-[#2c3235] bg-[#0b0c0e]">
-              <div class="flex items-center gap-3 text-[#c7d0d9] hover:text-white cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
+              <div onmouseenter="showSidebarTooltip(event, 'Admin User')" onmouseleave="hideSidebarTooltip()" class="flex items-center gap-3 text-[#c7d0d9] hover:text-white cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
                   <img src="https://ui-avatars.com/api/?name=Admin&background=2c3235&color=fff" class="w-8 h-8 rounded-full border border-[#2c3235] shrink-0">
                   <div class="flex-1 ${textClass} whitespace-nowrap transition-opacity duration-300">
                       <p class="text-sm font-medium leading-none">Admin User</p>
@@ -63,7 +63,11 @@ function renderSidebar(activePageId) {
       </aside>
       
       <!-- Custom Tooltip Element -->
-      <div id="sidebar-tooltip" class="fixed z-100 hidden px-3 py-1.5 bg-[#181b1f] text-white text-xs font-medium rounded border border-[#2c3235] shadow-xl pointer-events-none whitespace-nowrap transition-opacity duration-200"></div>
+      <div id="sidebar-tooltip" class="fixed z-9999 hidden px-3 py-1.5 bg-dark-panel text-dark-text text-xs font-bold rounded border border-dark-border shadow-2xl pointer-events-none whitespace-nowrap transition-all duration-200 opacity-0 transform translate-x-2">
+          <span id="sidebar-tooltip-text"></span>
+          <!-- Arrow -->
+          <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 bg-dark-panel border-l border-b border-dark-border"></div>
+      </div>
       `;
 
     const container = document.getElementById("sidebar-container");
@@ -108,27 +112,46 @@ function toggleSidebar() {
 // Tooltip Functions logic
 function showSidebarTooltip(event, text) {
     const sidebar = document.getElementById('app-sidebar');
-    // Only show if collapsed (width is w-16)
-    if (!sidebar || !sidebar.classList.contains('w-16')) return;
+    // Only show if collapsed
+    if (!sidebar || !sidebar.classList.contains(SIDEBAR_COLLAPSED_CLASS)) return;
 
     const tooltip = document.getElementById('sidebar-tooltip');
     if (!tooltip) return;
 
-    tooltip.textContent = text;
-    tooltip.classList.remove('hidden');
-
+    const textEl = document.getElementById('sidebar-tooltip-text');
+    if (textEl) textEl.textContent = text;
+    
     // Position calculation
     const rect = event.currentTarget.getBoundingClientRect();
-    const top = rect.top + (rect.height / 2) - (tooltip.offsetHeight / 2); // Center vertically
-    const left = rect.right + 8; // 8px default gap
+    
+    // Initial reveal to get height/width if needed, but since it's hidden we calc first
+    tooltip.classList.remove('hidden');
+
+    const top = rect.top + (rect.height / 2) - (tooltip.offsetHeight / 2);
+    const left = rect.right + 12;
 
     tooltip.style.top = `${top}px`;
     tooltip.style.left = `${left}px`;
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+        tooltip.style.opacity = '1';
+        tooltip.style.transform = 'translateX(0)';
+    });
 }
 
 function hideSidebarTooltip() {
     const tooltip = document.getElementById('sidebar-tooltip');
-    if (tooltip) tooltip.classList.add('hidden');
+    if (tooltip) {
+        tooltip.style.opacity = '0';
+        tooltip.style.transform = 'translateX(2px)';
+        // Wait for transition before hiding
+        setTimeout(() => {
+            if (tooltip.style.opacity === '0') {
+                tooltip.classList.add('hidden');
+            }
+        }, 200);
+    }
 }
 
 function logout() {

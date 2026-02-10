@@ -13,7 +13,7 @@ function renderHeader(config) {
         }
         // Previous items are links + separator
         return `
-            <a href="${crumb.href}" class="hover:text-grafana-blue transition-colors">${crumb.label}</a>
+            <a href="${crumb.href}" class="hover:text-gnfc-blue transition-colors">${crumb.label}</a>
             <i class="ph-bold ph-caret-right text-[10px]"></i>
         `;
     }).join('');
@@ -33,7 +33,7 @@ function renderHeader(config) {
         <div class="relative hidden md:block">
           <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-dark-muted text-xs"></i>
           <input type="text" placeholder="Global Search..."
-            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-grafana-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
+            class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm pl-8 pr-3 py-1.5 focus:border-gnfc-blue focus:outline-none transition-colors w-48 lg:w-64 placeholder-dark-muted">
         </div>
         
         <!-- Font Size Controls -->
@@ -48,7 +48,7 @@ function renderHeader(config) {
         </div>
 
         <button onclick="window.location.href='${backLink}'"
-          class="flex items-center gap-1 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-grafana-blue transition-all align-middle">
+          class="flex items-center gap-1 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold px-3 py-1.5 rounded-sm hover:text-white hover:border-gnfc-blue transition-all align-baseline">
           <i class="ph-bold ph-arrow-left"></i> Back
         </button>
       </div>

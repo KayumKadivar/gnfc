@@ -10,34 +10,7 @@
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif']
-          },
-          colors: {
-            dark: {
-              bg: '#111217', 
-              panel: '#181B1F', 
-              border: '#2C3235', 
-              text: '#CCCCDD',
-              muted: '#8E8E9E',
-              header: '#0B0C0E' 
-            },
-            grafana: {
-              orange: '#FF9900',
-              blue: '#5794F2',
-              green: '#73BF69',
-              red: '#F2495C'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <script src="/src/js/tailwind_config.js"></script>
   <style>
     ::-webkit-scrollbar {
       width: 8px;
@@ -93,7 +66,7 @@
 
       <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm overflow-hidden flex flex-col h-full">
         <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex justify-between items-center shrink-0">
-          <h2 class="text-xs font-bold text-grafana-blue uppercase tracking-widest flex items-center gap-2">
+          <h2 class="text-xs font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
             <i class="ph-bold ph-table"></i> Detailed Remark Report
           </h2>
           <div class="flex items-center gap-2">
@@ -121,7 +94,7 @@
                 <th rowspan="2" class="px-4 py-3 min-w-[250px]">Remarks</th>
               </tr>
               <tr
-                class="bg-dark-header text-[9px] font-bold text-grafana-blue uppercase text-center border-b border-dark-border">
+                class="bg-dark-header text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
                 <th class="border-r border-dark-border px-2 py-1">TagNo</th>
                 <th class="border-r border-dark-border px-2 py-1">TypeOfJob</th>
               </tr>
@@ -190,31 +163,31 @@
       tbody.innerHTML = '';
 
       data.forEach((item, index) => {
-        const statusClass = item.status === 'OVER' ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20' : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
+        const statusClass = item.status === 'OVER' ? 'text-gnfc-green bg-gnfc-green/10 border-gnfc-green/20' : 'text-gnfc-orange bg-gnfc-orange/10 border-gnfc-orange/20';
         const row = `
-                    <tr class="hover:bg-white/5 transition-colors border-b border-dark-border/50 group">
-                        <td class="border-r border-dark-border/30 px-2 py-3 text-center text-dark-muted font-mono">${item.sr}</td>
-                        <td class="border-r border-dark-border/30 px-2 py-3 font-bold text-grafana-blue text-center">${item.area}</td>
-                        <td class="border-r border-dark-border/30 px-2 py-3">
+                    <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
+                        <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted font-mono">${item.sr}</td>
+                        <td class="border-r border-dark-border px-2 py-3 font-bold text-gnfc-blue text-center">${item.area}</td>
+                        <td class="border-r border-dark-border px-2 py-3">
                             <div class="text-white">${item.loopNo}</div>
-                            <div class="text-grafana-blue mt-1 font-bold">${item.tagNo}</div>
+                            <div class="text-gnfc-blue mt-1 font-bold">${item.tagNo}</div>
                         </td>
-                        <td class="border-r border-dark-border/30 px-2 py-3">
+                        <td class="border-r border-dark-border px-2 py-3">
                             <div class="text-gray-300 line-clamp-2 hover:line-clamp-none" title="${item.job}">${item.job}</div>
-                            <div class="text-grafana-orange mt-1 font-medium">${item.typeOfJob}</div>
+                            <div class="text-gnfc-orange mt-1 font-medium">${item.typeOfJob}</div>
                         </td>
-                        <td class="border-r border-dark-border/30 px-2 py-3 text-center font-bold text-white">${item.tech1}</td>
-                        <td class="border-r border-dark-border/30 px-4 py-3 text-dark-text leading-relaxed overflow-hidden text-ellipsis relative" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;" title="${item.description}">
+                        <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white">${item.tech1}</td>
+                        <td class="border-r border-dark-border px-4 py-3 text-dark-text leading-relaxed overflow-hidden text-ellipsis relative" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;" title="${item.description}">
                             ${item.description}
                         </td>
-                        <td class="border-r border-dark-border/30 px-2 py-3 text-center font-bold text-white">${item.tech2}</td>
-                        <td class="border-r border-dark-border/30 px-2 py-3 text-center">
+                        <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white">${item.tech2}</td>
+                        <td class="border-r border-dark-border px-2 py-3 text-center">
                             <span class="text-[10px] font-black uppercase tracking-widest ${statusClass} px-2 py-1 rounded-sm border">
                                 ${item.status}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-dark-text leading-snug">
-                            <div class="p-2 bg-dark-bg/50 rounded border border-dark-border/30">
+                            <div class="p-2 bg-dark-bg/50 rounded border border-dark-border">
                                 ${item.remarks}
                             </div>
                         </td>
