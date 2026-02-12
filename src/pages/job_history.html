@@ -35,19 +35,63 @@
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
+      background-image: none;
+    }
+
+    /* Modal Styles */
+    .shift-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 130;
+      padding: 1rem;
+      backdrop-filter: blur(2px);
+    }
+    .shift-overlay.is-open { display: flex; }
+    
+    .shift-modal {
+      width: min(900px, 96vw);
+      max-height: 92vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Table Fixes */
+    table { border-collapse: separate; border-spacing: 0; }
+    th { position: sticky; top: 0; z-index: 20; }
+    
+    /* Input autofill fix for dark mode */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+      -webkit-text-fill-color: #f1f5f9;
+      -webkit-box-shadow: 0 0 0px 1000px #0f172a inset;
+      transition: background-color 5000s ease-in-out 0s;
     }
   </style>
 </head>
 
-<body
-  class="bg-dark-panel text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
-
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
-  <script>try { renderSidebar('job_history'); } catch (e) { }</script>
+  <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
@@ -58,29 +102,30 @@
             breadcrumbs: [
                 { label: "Technician Log", href: "technician_logbook.html" },
                 { label: "Plant Detail", href: "plant_detail.html" },
-                { label: "Job History Analysis" }
+                { label: "Job History" }
             ],
             backLink: "plant_detail.html"
         });
     </script>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
 
-      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm">
-        <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex justify-between items-center">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('job_history');
+      </script>
+
+      <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm mb-6">
+        <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
           <h3 class="text-xs font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
             <i class="ph-bold ph-sliders-horizontal"></i> Search Criteria
           </h3>
           <div class="flex gap-2">
-            <button
-              class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">Default
-              Date</button>
-            <button
-              class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">Prev
-              Year</button>
-            <button
-              class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">This
-              Year</button>
+            <button class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">Default Date</button>
+            <button class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">Prev Year</button>
+            <button class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted hover:text-white transition-colors">This Year</button>
           </div>
         </div>
 
@@ -89,69 +134,59 @@
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-dark-muted uppercase">Loop</label>
             <div class="relative">
-              <select
-                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+              <select class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
                 <option>ALL</option>
                 <option>100</option>
                 <option>200</option>
               </select>
-              <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
             </div>
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-dark-muted uppercase">Tag</label>
             <div class="relative">
-              <select id="tagSelect"
-                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+              <select id="tagSelect" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
                 <option value="">ALL</option>
               </select>
-              <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
             </div>
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-dark-muted uppercase">Type of Job</label>
             <div class="relative">
-              <select
-                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+              <select class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
                 <option>ALL</option>
                 <option>CMS JOB</option>
                 <option>PM JOB</option>
                 <option>BREAKDOWN</option>
               </select>
-              <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
             </div>
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-dark-muted uppercase">Instrument Type</label>
             <div class="relative">
-              <select
-                class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+              <select class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
                 <option>ALL</option>
                 <option>C/V (Control Valve)</option>
                 <option>PT (Pressure Tx)</option>
                 <option>FT (Flow Tx)</option>
               </select>
-              <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
             </div>
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-dark-muted uppercase">Start Date</label>
-            <input type="date" value="2025-02-09"
-              class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <input type="date" value="2025-02-09" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] font-bold text-dark-muted uppercase">End Date</label>
-            <input type="date" value="2026-02-09"
-              class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <input type="date" value="2026-02-09" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
 
           <div class="flex items-end gap-2">
@@ -171,9 +206,7 @@
           </div>
 
           <div class="flex items-end gap-2">
-            <button
-              class="flex-1 bg-gnfc-blue hover:bg-blue-600 font-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide"
-              onclick="renderTable()">
+            <button class="flex-1 bg-gnfc-blue hover:bg-blue-600 font-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide text-white" onclick="renderTable()">
               <i class="ph-bold ph-lightning"></i> Apply
             </button>
           </div>
@@ -181,47 +214,37 @@
         </div>
       </div>
 
-      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col min-h-[500px]">
-        <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex justify-between items-center">
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col flex-1 overflow-hidden">
+        <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center shrink-0">
           <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
             <i class="ph-fill ph-table text-gnfc-orange"></i> Job Records
           </h3>
-          <span class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono"
-            id="recordCount">0 Records Found</span>
+          <span class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono" id="recordCount">0 Records Found</span>
         </div>
 
-        <div class="overflow-x-auto flex-1">
+        <div class="overflow-auto flex-1 relative">
           <table class="w-full text-left border-collapse">
-            <thead class="sticky top-0 z-10">
-              <tr
-                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-10">Sr</th>
-                <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Area</th>
-
-                <th class="border-r border-dark-border px-3 py-2 w-32 border-b border-dark-border/50 text-white">Loop
-                </th>
-                <th
-                  class="border-r border-dark-border px-3 py-2 min-w-[120px] border-b border-dark-border/50 text-white">
-                  Inst Type</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Date</th>
-
-                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[400px] text-left">Description of Job
-                </th>
-
-                <th class="border-r border-dark-border px-2 py-2 w-20 border-b border-dark-border/50 text-white">Tech
-                </th>
-                <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-12">Att</th>
-                <th rowspan="2" class="px-4 py-3 min-w-[200px]">Remarks</th>
+            <thead class="bg-dark-header z-10">
+              <tr class="text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-12 sticky left-0 z-20 shadow-[1px_0_0_0_#334155]">Sr</th>
+                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-16">Area</th>
+                <th class="bg-dark-header border-r border-dark-border px-3 py-2 w-32 border-b border-dark-border/50 text-white">Loop</th>
+                <th class="bg-dark-header border-r border-dark-border px-3 py-2 min-w-[120px] border-b border-dark-border/50 text-white">Inst Type</th>
+                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-3 py-3 w-28">Date</th>
+                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-4 py-3 min-w-[400px] text-left">Description of Job</th>
+                <th class="bg-dark-header border-r border-dark-border px-2 py-2 w-20 border-b border-dark-border/50 text-white">Tech</th>
+                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-12">Attch</th>
+                <th rowspan="1" class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Eng Remark</th>
               </tr>
-              <tr
-                class="bg-dark-header text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
-                <th class="border-r border-dark-border px-3 py-1">Tag</th>
-                <th class="border-r border-dark-border px-3 py-1">Job Type</th>
-                <th class="border-r border-dark-border px-2 py-1">Eng</th>
+              <tr class="text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
+                <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Tag</th>
+                <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Job Type</th>
+                <th class="bg-dark-header border-r border-dark-border border-b px-2 py-1">Eng</th>
+                <th class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Exec Remark</th>
               </tr>
             </thead>
             <tbody id="jobTableBody" class="text-xs font-mono">
-            </tbody>
+              </tbody>
           </table>
         </div>
       </div>
@@ -229,29 +252,127 @@
     </div>
   </main>
 
-  <script>
-    // Set Current Date
-    const dateEl = document.getElementById('current-date');
-    if (dateEl) {
-      const now = new Date();
-      dateEl.textContent = now.toLocaleDateString('en-GB').toUpperCase();
-    }
+  <div id="job-detail-overlay" class="shift-overlay" aria-hidden="true">
+    <div class="shift-modal">
+      <div class="px-4 py-3 border-b border-dark-border bg-dark-header flex items-center justify-between shrink-0">
+        <h3 class="text-sm font-bold text-gnfc-blue uppercase tracking-wide">Job History Detail</h3>
+        <button onclick="closeJobDetailModal()" class="text-dark-muted hover:text-white transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1 bg-dark-panel">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Area</label>
+            <select id="modal-area" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              <option>400</option>
+              <option>200</option>
+              <option>300</option>
+              <option>600</option>
+              <option>700</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Loop PLM</label>
+            <input type="text" id="modal-loop" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tag No</label>
+            <input type="text" id="modal-tag" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+          </div>
+        </div>
 
-    // Sample Data based on image_593482.png
+        <div>
+          <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Description of Job</label>
+          <textarea id="modal-description" rows="5" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none leading-relaxed font-mono"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Date</label>
+            <input type="date" id="modal-date" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tech</label>
+            <input type="text" id="modal-tech" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type of Job</label>
+            <select id="modal-jobtype" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              <option>CMS JOB</option>
+              <option>PM JOB</option>
+              <option>BREAKDOWN</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Eng</label>
+            <select id="modal-eng" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              <option>MAJ</option>
+              <option>CKV</option>
+              <option>MDM</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-dark-bg border border-dark-border p-3 rounded-sm">
+          <label class="block text-[10px] font-bold text-dark-muted uppercase mb-2">Attachments</label>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="modal-attach-1" class="accent-gnfc-blue bg-dark-bg border-dark-border w-4 h-4 rounded-sm">
+              <span class="text-xs text-dark-text">Report.pdf</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="modal-attach-2" class="accent-gnfc-blue bg-dark-bg border-dark-border w-4 h-4 rounded-sm">
+              <span class="text-xs text-dark-text">Image_001.jpg</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Engineer's Remark</label>
+            <textarea id="modal-eng-remark" rows="3" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Executive Remark</label>
+            <textarea id="modal-exec-remark" rows="3" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 p-4 border-t border-dark-border bg-dark-header shrink-0">
+        <button onclick="deleteJob()" class="px-4 py-2 bg-transparent border border-dark-border text-gnfc-red text-xs font-bold rounded-sm hover:bg-gnfc-red/10 hover:border-gnfc-red transition-colors mr-auto">
+            Delete Entry
+        </button>
+        <button onclick="closeJobDetailModal()" class="px-4 py-2 bg-dark-bg border border-dark-border text-dark-muted text-xs font-bold rounded-sm hover:text-white hover:border-gnfc-blue transition-colors">
+          Cancel
+        </button>
+        <button onclick="saveJobDetails()" class="px-6 py-2 bg-gnfc-blue text-white text-xs font-bold rounded-sm hover:bg-blue-600 transition-colors shadow-lg shadow-blue-900/20">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample Data Mocking
     const jobData = [
-      { sr: 1, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '13/01/2026', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 2, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '09/01/2026', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 3, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '13/12/2025', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 4, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '13/12/2025', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: Wrong entry. ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 5, area: '300', loop: '0301', tag: 'FV301A', instType: 'C/V', jobType: 'CMS JOB', date: '15/11/2025', desc: 'Defect: DROPPED FOR HEAVY VIBRATION IN VALVE. PLUG+STEM IS BROKEN. NEW STEM TO BE MFG. PLUG TO BE REPAIRED.\nJob Done: Valve was sent to Micron due to heavy vibration and plug broken issues. After dismantling and inspection, it was found that the body, bonnet were damaged and required repairs. Machining of the bonnet (including welding) was carried out. Plug, stem and metal seat ring were found damaged and replaced.', tech: '', eng: 'MAJ', attach: true, remark: 'URGENT REQUIREMENT' },
-      { sr: 6, area: '300', loop: '3101', tag: 'FV3101A', instType: 'C/V', jobType: 'CMS JOB', date: '15/11/2025', desc: 'Defect: C/V Passing and jerky operation.\nJob Done: *Late job entry* Valve sent to Micron due to passing and jerking. Metal seat ring and Soft seat provided by micron (PTFE) replaced in control valve. valve was tested and found ok.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 7, area: '600', loop: '0606', tag: 'FV606', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: FV606 act dropped for overhauling.\nJob Done: Actuator was sent to Micron due to a passing issue. After dismantling and inspecting the valve, Replaced seal kit (By micron), rework of stem, actuator casing bolt SS M6 size 18 nos., Rework of body by Drilling, tapping.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 8, area: '700', loop: '0710', tag: 'HV710', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: Control valve Passing 1X2500\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, stem, plug and metal seat ring were damaged and required repair. Machining carried out.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 9, area: '700', loop: '7508', tag: 'HV7508', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: Control valve passing 2X600\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, plug and metal seat ring were damaged and required repair.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 10, area: '200', loop: '0203', tag: 'FV0203BA', instType: 'C/V', jobType: 'CMS JOB', date: '13/11/2025', desc: 'Defect: C/V having noise below 70% MV.\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that plug was damaged and required repair. Machining of the plug along with lapping work (for the plug only), was carried out. Also Bottom bushing and new key were replaced.', tech: '', eng: 'MAJ', attach: false, remark: '' }
+      { sr: 1, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '2026-01-13', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 2, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '2026-01-09', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 3, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-12-13', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 4, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-12-13', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: Wrong entry. ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 5, area: '300', loop: '0301', tag: 'FV301A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-15', desc: 'Defect: DROPPED FOR HEAVY VIBRATION IN VALVE. PLUG+STEM IS BROKEN. NEW STEM TO BE MFG. PLUG TO BE REPAIRED.\nJob Done: Valve was sent to Micron due to heavy vibration and plug broken issues. After dismantling and inspection, it was found that the body, bonnet were damaged and required repairs. Machining of the bonnet (including welding) was carried out. Plug, stem and metal seat ring were found damaged and replaced.', tech: '', eng: 'MAJ', attach: true, remark: 'URGENT REQUIREMENT' },
+      { sr: 6, area: '300', loop: '3101', tag: 'FV3101A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-15', desc: 'Defect: C/V Passing and jerky operation.\nJob Done: *Late job entry* Valve sent to Micron due to passing and jerking. Metal seat ring and Soft seat provided by micron (PTFE) replaced in control valve. valve was tested and found ok.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 7, area: '600', loop: '0606', tag: 'FV606', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: FV606 act dropped for overhauling.\nJob Done: Actuator was sent to Micron due to a passing issue. After dismantling and inspecting the valve, Replaced seal kit (By micron), rework of stem, actuator casing bolt SS M6 size 18 nos., Rework of body by Drilling, tapping.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 8, area: '700', loop: '0710', tag: 'HV710', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: Control valve Passing 1X2500\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, stem, plug and metal seat ring were damaged and required repair. Machining carried out.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 9, area: '700', loop: '7508', tag: 'HV7508', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: Control valve passing 2X600\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, plug and metal seat ring were damaged and required repair.', tech: '', eng: 'MAJ', attach: false, remark: '' },
+      { sr: 10, area: '200', loop: '0203', tag: 'FV0203BA', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: C/V having noise below 70% MV.\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that plug was damaged and required repair. Machining of the plug along with lapping work (for the plug only), was carried out. Also Bottom bushing and new key were replaced.', tech: '', eng: 'MAJ', attach: false, remark: '' }
     ];
 
-    // Populate Dropdowns
+    // --- Logic ---
+
+    // Populate "Tag" dropdown based on unique tags in data
     const uniqueTags = [...new Set(jobData.map(item => item.tag))];
     const tagSelect = document.getElementById('tagSelect');
     uniqueTags.forEach(tag => {
@@ -260,6 +381,16 @@
       option.text = tag;
       tagSelect.appendChild(option);
     });
+
+    // Helper to format date for display (DD/MM/YYYY)
+    function formatDateDisplay(isoDate) {
+        if(!isoDate) return '';
+        const d = new Date(isoDate);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
 
     // Render Table
     function renderTable() {
@@ -271,39 +402,39 @@
 
       jobData.forEach(item => {
         const row = `
-                <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group align-top">
-                    <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted font-mono">${item.sr}</td>
-                    <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white">${item.area}</td>
+            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group align-top">
+                <td class="border-r border-dark-border px-2 py-3 text-center text-gnfc-blue font-mono font-bold cursor-pointer hover:underline hover:text-blue-400 transition-colors sticky left-0 bg-dark-panel z-10 shadow-[1px_0_0_0_#334155]" onclick="openJobDetailModal(${item.sr})">${item.sr}</td>
+                <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white">${item.area}</td>
 
-                    <td class="border-r border-dark-border px-3 py-3">
-                        <div class="text-xs text-dark-muted">${item.loop}</div>
-                        <div class="text-xs font-bold text-gnfc-blue mt-1">${item.tag}</div>
-                    </td>
+                <td class="border-r border-dark-border px-3 py-3">
+                    <div class="text-xs text-dark-muted">${item.loop}</div>
+                    <div class="text-xs font-bold text-gnfc-blue mt-1">${item.tag}</div>
+                </td>
 
-                    <td class="border-r border-dark-border px-3 py-3">
-                        <div class="text-xs text-white font-bold">${item.instType}</div>
-                        <div class="text-[10px] text-gnfc-orange mt-1 font-mono">${item.jobType}</div>
-                    </td>
+                <td class="border-r border-dark-border px-3 py-3">
+                    <div class="text-xs text-white font-bold">${item.instType}</div>
+                    <div class="text-[10px] text-gnfc-orange mt-1 font-mono">${item.jobType}</div>
+                </td>
 
-                    <td class="border-r border-dark-border px-3 py-3 font-mono text-dark-muted whitespace-nowrap">${item.date}</td>
+                <td class="border-r border-dark-border px-3 py-3 font-mono text-dark-muted whitespace-nowrap">${formatDateDisplay(item.date)}</td>
 
-                    <td class="border-r border-dark-border px-4 py-3 text-xs text-dark-text leading-relaxed">
-                        ${item.desc.replace(/\n/g, '<br>')}
-                    </td>
+                <td class="border-r border-dark-border px-4 py-3 text-xs text-dark-text leading-relaxed cursor-pointer hover:text-white" onclick="openJobDetailModal(${item.sr})">
+                    ${item.desc.replace(/\n/g, '<br>')}
+                </td>
 
-                    <td class="border-r border-dark-border px-2 py-3">
-                        <div class="text-[10px] text-dark-muted text-center">${item.tech}</div>
-                        <div class="text-xs font-bold text-white text-center mt-1">${item.eng}</div>
-                    </td>
+                <td class="border-r border-dark-border px-2 py-3">
+                    <div class="text-[10px] text-dark-muted text-center">${item.tech || '-'}</div>
+                    <div class="text-xs font-bold text-white text-center mt-1">${item.eng}</div>
+                </td>
 
-                    <td class="border-r border-dark-border px-2 py-3 text-center">
-                        ${item.attach ? '<i class="ph-bold ph-paperclip text-gnfc-blue cursor-pointer"></i>' : '-'}
-                    </td>
+                <td class="border-r border-dark-border px-2 py-3 text-center">
+                    ${item.attach ? '<i class="ph-bold ph-paperclip text-gnfc-blue cursor-pointer"></i>' : '<span class="text-dark-muted opacity-30">-</span>'}
+                </td>
 
-                    <td class="px-4 py-3 text-xs text-gnfc-red italic">
-                        ${item.remark}
-                    </td>
-                </tr>`;
+                <td class="px-4 py-3 text-xs text-gnfc-red italic">
+                    ${item.remark}
+                </td>
+            </tr>`;
         tbody.innerHTML += row;
       });
     }
@@ -311,7 +442,83 @@
     // Initial Load
     renderTable();
 
+    // --- Modal Functions ---
+    let currentJobId = null;
+
+    function openJobDetailModal(srNumber) {
+      const job = jobData.find(j => j.sr === srNumber);
+      if (!job) return;
+
+      currentJobId = srNumber;
+      
+      // Populate form fields
+      document.getElementById('modal-area').value = job.area;
+      document.getElementById('modal-loop').value = job.loop;
+      document.getElementById('modal-tag').value = job.tag;
+      document.getElementById('modal-description').value = job.desc;
+      document.getElementById('modal-date').value = job.date; // Expects YYYY-MM-DD
+      document.getElementById('modal-tech').value = job.tech || '';
+      document.getElementById('modal-jobtype').value = job.jobType;
+      document.getElementById('modal-eng').value = job.eng;
+      
+      // Set attachments (mock logic)
+      document.getElementById('modal-attach-1').checked = job.attach;
+      document.getElementById('modal-attach-2').checked = false;
+      
+      // Set remarks
+      document.getElementById('modal-eng-remark').value = job.remark || '';
+      document.getElementById('modal-exec-remark').value = '';
+      
+      // Open modal
+      const overlay = document.getElementById('job-detail-overlay');
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeJobDetailModal() {
+      const overlay = document.getElementById('job-detail-overlay');
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      currentJobId = null;
+    }
+
+    function saveJobDetails() {
+      if(currentJobId !== null) {
+          // Update local mock data
+          const idx = jobData.findIndex(j => j.sr === currentJobId);
+          if(idx > -1) {
+              jobData[idx].desc = document.getElementById('modal-description').value;
+              jobData[idx].remark = document.getElementById('modal-eng-remark').value;
+              jobData[idx].tag = document.getElementById('modal-tag').value;
+              renderTable();
+          }
+      }
+      closeJobDetailModal();
+    }
+
+    function deleteJob() {
+      if (confirm('Are you sure you want to delete this job entry?')) {
+        const idx = jobData.findIndex(j => j.sr === currentJobId);
+        if(idx > -1) {
+            jobData.splice(idx, 1);
+            renderTable();
+        }
+        closeJobDetailModal();
+      }
+    }
+
+    // Click outside to close modal
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('job-detail-overlay');
+      if (overlay) {
+        overlay.addEventListener('click', (event) => {
+          if (event.target === overlay) {
+            closeJobDetailModal();
+          }
+        });
+      }
+    });
+
   </script>
 </body>
-
 </html>

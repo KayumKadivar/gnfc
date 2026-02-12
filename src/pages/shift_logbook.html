@@ -81,41 +81,22 @@
       } catch (e) { }
     </script>
 
-    <div class="flex-1 min-h-0 p-3 bg-dark-bg flex flex-col gap-3">
+    <div class="flex-1 p-3 bg-dark-bg flex flex-col gap-3">
       <section class="bg-dark-panel border border-dark-border rounded-sm p-3 flex flex-col gap-3 shrink-0">
-        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
-          <div class="space-y-1">
-            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide block">Time Range</label>
-            <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
-              <button id="tab-today" onclick="switchView('today')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Today</button>
-              <button id="tab-prev" onclick="switchView('prev')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Prev Day</button>
-              <button id="tab-weekly" onclick="switchView('weekly')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Weekly</button>
-              <button id="tab-monthly" onclick="switchView('monthly')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Monthly</button>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Time Range</label>
+                <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
+                    <button id="tab-today" onclick="switchView('today')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Today</button>
+                    <button id="tab-prev" onclick="switchView('prev')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Prev Day</button>
+                    <button id="tab-weekly" onclick="switchView('weekly')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Weekly</button>
+                    <button id="tab-monthly" onclick="switchView('monthly')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Monthly</button>
+                </div>
             </div>
-          </div>
-
-          <div class="flex flex-wrap items-end gap-2">
-            <div class="bg-dark-bg border border-dark-border rounded-sm px-3 h-9 min-w-[140px]">
-              <span class="text-[10px] uppercase text-dark-muted font-bold tracking-wide">Total Entries :</span>
-              <span id="record-count" class="ml-2 text-lg font-mono font-bold text-gnfc-blue">0</span>
-            </div>
-            <button onclick="openAddModal()" class="h-9 px-3 bg-gnfc-blue text-white text-xs font-bold rounded-sm hover:bg-blue-600 transition-colors">Add Entry</button>
-            <button onclick="exportCsv()" class="h-9 px-3 border border-dark-border text-xs font-bold rounded-sm text-dark-muted hover:text-white hover:border-gnfc-blue transition-colors">Export CSV</button>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-3">
-          <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Plant</label>
-          <select id="plant-select" onchange="onPlantChange()" class="bg-dark-bg border border-dark-border text-xs rounded-sm px-2 py-1.5">
-            <option value="AA">AA</option>
-            <option value="FA">FA</option>
-            <option value="MF">MF</option>
-            <option value="DCS">DCS</option>
-            <option value="UTIL">UTIL</option>
-            <option value="M1">M1</option>
-            <option value="M2">M2</option>
-          </select>
-          <span id="report-date" class="text-[10px] font-mono text-dark-muted"></span>
+            
+            <button onclick="openAddModal()" class="bg-gnfc-blue hover:bg-blue-600 text-white px-3 py-1.5 rounded-sm text-xs font-bold flex items-center gap-1">
+                <i class="ph-bold ph-plus"></i> Add Entry
+            </button>
         </div>
       </section>
 
@@ -123,9 +104,12 @@
         <div class="px-4 py-2 border-b border-dark-border flex justify-between items-center bg-dark-header shrink-0">
           <div class="flex items-center gap-2">
             <i class="ph-fill ph-table text-gnfc-blue"></i>
-            <h3 class="text-sm font-bold text-dark-text" id="report-title">Today Log Report</h3>
+            <h3 class="text-sm font-bold text-dark-text" id="report-title">Log Report</h3>
+            <span class="text-xs text-dark-muted ml-2" id="report-date"></span>
           </div>
-          <span id="report-context" class="text-[10px] font-mono text-dark-muted">Plant: AA</span>
+          <div class="text-xs font-mono text-dark-muted">
+             Count: <span id="record-count" class="text-white font-bold">0</span>
+          </div>
         </div>
 
         <div class="flex-1 overflow-auto">
@@ -133,16 +117,16 @@
             <thead>
               <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
                 <th rowspan="2" class="w-10 p-2 border-r border-dark-border">Sr</th>
-                <th class="w-24 p-2 border-r border-dark-border border-b border-dark-border/50">Shift</th>
-                <th class="w-32 p-2 border-r border-dark-border border-b border-dark-border/50">Tag No</th>
-                <th rowspan="2" class="p-2 border-r border-dark-border text-left min-w-[280px]">Description</th>
-                <th rowspan="2" class="w-32 p-2 border-r border-dark-border">Officer</th>
+                <th class="w-24 p-2 border-r border-dark-border border-b border-dark-border">Shift</th>
+                <th class="w-32 p-2 border-r border-dark-border border-b border-dark-border">Tag No</th>
+                <th rowspan="2" class="p-2 border-r border-dark-border text-center min-w-[280px]">Description</th>
+                <th rowspan="2" class="w-32 p-2 border-r border-dark-border">Eng</th>
                 <th rowspan="2" class="w-20 p-2 border-r border-dark-border">Status</th>
                 <th rowspan="2" class="min-w-[180px] p-2">Remarks</th>
               </tr>
               <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
                 <th class="p-2 border-r border-dark-border">Time</th>
-                <th class="p-2 border-r border-dark-border">TypeOfJob</th>
+                <th class="p-2 border-r border-dark-border">Type Of Job</th>
               </tr>
             </thead>
             <tbody id="log-table-body" class="text-xs font-mono"></tbody>
@@ -167,11 +151,11 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Date</label>
-            <input id="add-date" type="date" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+            <input id="add-date" type="date" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
           </div>
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Shift</label>
-            <select id="add-shift" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs" onchange="syncTimeFromShift()">
+            <select id="add-shift" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
               <option value="A">A</option>
               <option value="B">B</option>
               <option value="C">C</option>
@@ -179,40 +163,39 @@
           </div>
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Time</label>
-            <input id="add-time" type="text" readonly class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+            <input id="add-time" type="text" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
           </div>
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tag No</label>
-            <input id="add-tag" type="text" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs" placeholder="e.g. PT5087K">
+            <input id="add-tag" type="text" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="e.g. PT5087K">
           </div>
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type Of Job</label>
-            <select id="add-job-type" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+            <select id="add-job-type" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
               <option>MAINTENANCE</option>
               <option>CALIBRATION</option>
               <option>PM</option>
               <option>BREAKDOWN</option>
-              <option>PROCESS</option>
             </select>
           </div>
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Officer</label>
-            <input id="add-officer" type="text" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs" placeholder="Officer name">
+            <input id="add-officer" type="text" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="Officer name">
           </div>
           <div class="md:col-span-2">
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Description</label>
-            <textarea id="add-description" rows="4" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs" placeholder="Describe the work"></textarea>
+            <textarea id="add-description" rows="4" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="Describe the work"></textarea>
           </div>
           <div>
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Status</label>
-            <select id="add-status" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+            <select id="add-status" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
               <option value="OVER">OVER</option>
               <option value="PENDING">PENDING</option>
             </select>
           </div>
           <div class="md:col-span-3">
             <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Remarks</label>
-            <input id="add-remarks" type="text" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs" placeholder="Optional remarks">
+            <input id="add-remarks" type="text" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="Optional remarks">
           </div>
         </div>
         <div class="flex justify-end gap-2">
@@ -223,13 +206,75 @@
     </div>
   </div>
 
+  <!-- Remark Modal -->
+  <div id="remark-overlay" class="shift-overlay" aria-hidden="true">
+    <div class="shift-modal" style="max-width: 600px;">
+      <div class="px-4 py-3 border-b border-dark-border bg-dark-panel flex items-center justify-between">
+        <h3 class="text-sm font-bold text-gnfc-blue">Officer's Log Book (Instrument)</h3>
+        <button onclick="closeRemarkModal()" class="text-dark-muted hover:text-white">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+      <div class="p-4 space-y-3 bg-dark-panel">
+        <div>
+          <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Remark By: TESTER</label>
+          <textarea id="remark-text" rows="6" class="w-full bg-dark-bg border border-dark-border rounded-sm px-3 py-2 text-xs text-white" placeholder="Enter remarks..."></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button onclick="saveRemark()" class="px-4 py-1.5 bg-gnfc-blue text-white rounded-sm text-xs font-bold hover:bg-blue-600 transition-colors">
+            Save
+          </button>
+          <button onclick="closeRemarkModal()" class="px-3 py-1.5 border border-dark-border rounded-sm text-xs font-bold text-dark-muted hover:text-white transition-colors">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    /* ================= DATA STORE (MOCKED FOR DEMO) ================= */
+    
+    // Data extracted from the provided images
+    const mockData = [
+      {
+        id: 1, date: '2026-02-11', shift: 'A', time: '6 AM To 8 AM', tagNo: 'HY36502', jobType: 'MAINTENANCE',
+        description: 'Open feedback issue, checked and found valve working ok but proxy not proper so same set and stroke check found ok.',
+        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+      },
+      {
+        id: 2, date: '2026-02-10', shift: 'C', time: '11 PM To 3 AM', tagNo: 'LT96028', jobType: 'MAINTENANCE',
+        description: 'Process reported LT-96028 was showing sudden increase in level so LT checked and after dropped and its Zero showing found disturb so its Zero Calibration done and LT Boxup done.',
+        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+      },
+      {
+        id: 3, date: '2026-02-10', shift: 'A', time: '6 AM To 2 PM', tagNo: 'LT36353', jobType: 'MAINTENANCE',
+        description: 'LT36353 (TDI Ground and 1st floor): Process engineer having doubt on LT as the tank was overflow but LT was showing 1.27%, so checked in DCS but No errors observed. Physically checked its tapping and response in field... (Shortened for view)',
+        officer: 'M.D.MODI', status: 'OVER', remarks: ''
+      },
+      {
+        id: 4, date: '2026-02-10', shift: 'C', time: '11 PM To 4 AM', tagNo: 'PT96002B', jobType: 'MAINTENANCE',
+        description: 'PT box-up done as per process requirements.',
+        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+      },
+      {
+        id: 5, date: '2026-02-10', shift: 'C', time: '4 AM To 5 AM', tagNo: 'VT36132A', jobType: 'MAINTENANCE',
+        description: 'Process reported reading fluctuating so sensor removed and again inserted properly after that found working ok.',
+        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+      },
+      {
+        id: 6, date: '2026-02-10', shift: 'C', time: '10 PM To 12 AM', tagNo: 'HY36255', jobType: 'MAINTENANCE',
+        description: 'As per process requirement valve is closed by applying air in spring side.',
+        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+      }
+    ];
+
     const tabs = ['today', 'prev', 'weekly', 'monthly'];
     const TAB_ACTIVE_CLASS = 'tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors bg-dark-panel text-gnfc-orange border border-dark-border shadow-sm';
     const TAB_INACTIVE_CLASS = 'tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors text-dark-muted hover:text-white hover:bg-dark-header';
 
     const state = {
-      view: 'today',
+      view: 'weekly', // Default to weekly to show the data from images
       plant: 'AA'
     };
 
@@ -242,22 +287,23 @@
         .replaceAll("'", '&#39;');
     }
 
-    function formatReportDate(view) {
-      const today = ElogbookStore.startOfDay(new Date());
-      if (view === 'today') return `${today.toLocaleDateString('en-GB')} Log Report`;
-      if (view === 'prev') {
-        const prev = new Date(today.getTime() - ElogbookStore.DAY_MS);
-        return `${prev.toLocaleDateString('en-GB')} Log Report`;
-      }
-      if (view === 'weekly') {
-        const start = new Date(today.getTime() - 6 * ElogbookStore.DAY_MS);
-        return `${start.toLocaleDateString('en-GB')} - ${today.toLocaleDateString('en-GB')}`;
-      }
-      return today.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    // Helper to format Date string
+    function formatDateFriendly(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
     }
 
     function getRows() {
-      return ElogbookStore.getOfficerEntriesByView(state.view, state.plant, new Date());
+      // Logic to filter the mock data based on the selected view
+      // Note: In a real app this would query the backend/store
+      const today = '2026-02-11'; // Fixed to match image date for demo
+      const prev = '2026-02-10';
+      
+      if (state.view === 'today') return mockData.filter(d => d.date === today);
+      if (state.view === 'prev') return mockData.filter(d => d.date === prev);
+      
+      // Weekly/Monthly returns everything for this demo
+      return mockData.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
 
     function renderTable() {
@@ -265,18 +311,14 @@
       const rows = getRows();
       const count = document.getElementById('record-count');
       const reportDate = document.getElementById('report-date');
-      const reportContext = document.getElementById('report-context');
       const reportTitle = document.getElementById('report-title');
 
       count.textContent = String(rows.length);
-      reportDate.textContent = formatReportDate(state.view);
-      reportContext.textContent = `Plant: ${state.plant}`;
-      reportTitle.textContent = state.view === 'today'
-        ? 'Today Log Report'
-        : state.view === 'prev'
-        ? 'Prev Day Log Report'
-        : state.view === 'weekly'
-        ? 'Weekly Log Report'
+      
+      // Update Title Text
+      reportTitle.textContent = state.view === 'today' ? 'Today Log Report'
+        : state.view === 'prev' ? 'Prev Day Log Report'
+        : state.view === 'weekly' ? 'Weekly Log Report'
         : 'Monthly Log Report';
 
       if (!rows.length) {
@@ -284,32 +326,83 @@
         return;
       }
 
-      tbody.innerHTML = rows.map((entry, index) => {
+      /* ================= GROUPING LOGIC START ================= */
+      // If Weekly or Monthly, we want to group by Date
+      const isGroupedView = state.view === 'weekly' || state.view === 'monthly';
+      
+      let html = '';
+      let processedDates = new Set();
+
+      rows.forEach((entry, index) => {
+        
+        // 1. Inject Date Header if needed
+        if (isGroupedView && !processedDates.has(entry.date)) {
+           html += `
+             <tr class="date-header-row">
+               <td colspan="7">
+                 <div class="flex items-center gap-2 border-b border-dark-border px-4 py-1.5 font-bold text-[10px] text-gnfc-orange uppercase">
+                   <i class="ph-fill ph-calendar-blank"></i>
+                   ${formatDateFriendly(entry.date)}
+                 </div>
+               </td>
+             </tr>
+           `;
+           processedDates.add(entry.date);
+        }
+
+        // 2. Render Row
         const status = String(entry.status || '').toUpperCase();
         const statusBadgeClass = status === 'OVER'
           ? 'bg-gnfc-green/15 text-gnfc-green border border-gnfc-green/30'
           : 'bg-gnfc-orange/15 text-gnfc-orange border border-gnfc-orange/30';
 
-        return `
-          <tr data-entry="${safeText(entry.id)}" class="log-row hover:bg-white/5 transition-colors border-b border-dark-border group">
-            <td rowspan="2" class="p-2 text-center text-dark-muted font-mono border-r border-dark-border/30">${index + 1}</td>
-            <td class="p-2 text-center font-bold text-dark-text border-r border-dark-border/30">${safeText(entry.shift)}</td>
-            <td class="p-2 font-semibold text-gnfc-blue border-r border-dark-border/30">${safeText(entry.tagNo)}</td>
-            <td rowspan="2" class="p-2 text-dark-text leading-relaxed border-r border-dark-border/30">${safeText(entry.description)}</td>
-            <td rowspan="2" class="p-2 text-dark-text font-bold border-r border-dark-border/30 whitespace-nowrap">${safeText(entry.officer)}</td>
-            <td rowspan="2" class="p-2 text-center border-r border-dark-border/30">
+        // Reset serial number logic for display if needed, or keep global index
+        const srNo = index + 1;
+
+        html += `
+          <tr data-entry-id="${entry.id}" class="log-row-1 transition-colors border-b border-dark-border group">
+            <td rowspan="2" class="p-2 text-center text-dark-muted font-mono border-r border-dark-border">${srNo}</td>
+            <td class="p-2 text-center font-bold text-dark-text border-r border-dark-border">${safeText(entry.shift)}</td>
+            <td class="p-2 font-semibold text-gnfc-blue border-r border-dark-border">${safeText(entry.tagNo)}</td>
+            <td rowspan="2" class="p-2 text-dark-text leading-relaxed border-r border-dark-border">${safeText(entry.description)}</td>
+            <td rowspan="2" class="p-2 text-dark-text font-bold border-r border-dark-border whitespace-nowrap">${safeText(entry.officer)}</td>
+            <td rowspan="2" class="p-2 text-center border-r border-dark-border">
               <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold ${statusBadgeClass}">${safeText(status || 'NA')}</span>
             </td>
-            <td rowspan="2" class="p-2 text-dark-muted">${safeText(entry.remarks || '--')}</td>
+            <td rowspan="2" class="p-2 text-center">
+              <button onclick="openRemarkModal(${entry.id}, '${safeText(entry.remarks || '')}')" class="text-gnfc-blue hover:text-blue-400 transition-colors">
+                <i class="ph-fill ph-note-pencil text-lg"></i>
+              </button>
+            </td>
           </tr>
-          <tr data-entry="${safeText(entry.id)}" class="log-row hover:bg-white/5 transition-colors border-b border-dark-border group">
-            <td class="p-2 text-center text-[10px] text-dark-muted border-r border-dark-border/30">${safeText(entry.time)}</td>
-            <td class="p-2 text-[10px] border-r border-dark-border/30">
+          <tr data-entry-id="${entry.id}" class="log-row-2 transition-colors border-b border-dark-border group">
+            <td class="p-2 text-center text-[10px] text-dark-muted border-r border-dark-border">${safeText(entry.time)}</td>
+            <td class="p-2 text-[10px] border-r border-dark-border">
               <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-dark-bg border border-dark-border text-dark-muted">${safeText(entry.jobType)}</span>
             </td>
           </tr>
         `;
-      }).join('');
+      });
+
+
+      tbody.innerHTML = html;
+      
+      // Add hover effect to both rows of each entry
+      const allRows = tbody.querySelectorAll('tr[data-entry-id]');
+      allRows.forEach(row => {
+        const entryId = row.getAttribute('data-entry-id');
+        
+        row.addEventListener('mouseenter', () => {
+          const matchingRows = tbody.querySelectorAll(`tr[data-entry-id="${entryId}"]`);
+          matchingRows.forEach(r => r.classList.add('bg-white/5'));
+        });
+        
+        row.addEventListener('mouseleave', () => {
+          const matchingRows = tbody.querySelectorAll(`tr[data-entry-id="${entryId}"]`);
+          matchingRows.forEach(r => r.classList.remove('bg-white/5'));
+        });
+      });
+      /* ================= GROUPING LOGIC END ================= */
     }
 
     function switchView(view) {
@@ -325,29 +418,8 @@
       renderTable();
     }
 
-    function onPlantChange() {
-      state.plant = document.getElementById('plant-select').value;
-      renderTable();
-    }
-
-    function syncTimeFromShift() {
-      const shift = document.getElementById('add-shift').value;
-      document.getElementById('add-time').value = ElogbookStore.shiftToTime(shift);
-    }
-
     function openAddModal() {
       const overlay = document.getElementById('shift-add-overlay');
-      const dateInput = document.getElementById('add-date');
-      const now = ElogbookStore.toIsoDate(new Date());
-      dateInput.value = now;
-      document.getElementById('add-tag').value = '';
-      document.getElementById('add-description').value = '';
-      document.getElementById('add-officer').value = '';
-      document.getElementById('add-remarks').value = '';
-      document.getElementById('add-status').value = 'OVER';
-      document.getElementById('add-shift').value = 'A';
-      syncTimeFromShift();
-
       overlay.classList.add('is-open');
       overlay.setAttribute('aria-hidden', 'false');
     }
@@ -360,79 +432,44 @@
 
     function saveEntry(event) {
       event.preventDefault();
-
-      const date = document.getElementById('add-date').value;
-      const shift = document.getElementById('add-shift').value;
-      const time = document.getElementById('add-time').value;
-      const tagNo = document.getElementById('add-tag').value.trim();
-      const jobType = document.getElementById('add-job-type').value;
-      const description = document.getElementById('add-description').value.trim();
-      const officer = document.getElementById('add-officer').value.trim();
-      const status = document.getElementById('add-status').value;
-      const remarks = document.getElementById('add-remarks').value.trim();
-
-      if (!date || !tagNo || !description || !officer) {
-        return;
-      }
-
-      ElogbookStore.addOfficerEntry({
-        date,
-        plant: state.plant,
-        shift,
-        time,
-        tagNo,
-        jobType,
-        description,
-        officer,
-        status,
-        remarks,
-        sourceJobId: null
-      });
-
+      // Mock save functionality
+      alert("Entry saved locally (Mock)");
       closeAddModal();
-      renderTable();
     }
 
-    function exportCsv() {
-      const rows = getRows();
-      if (!rows.length) return;
+    // Remark Modal Functions
+    let currentRemarkEntryId = null;
 
-      const headers = ['Sr', 'Date', 'Plant', 'Shift', 'Time', 'Tag No', 'Job Type', 'Description', 'Officer', 'Status', 'Remarks'];
-      const lines = rows.map((entry, index) => {
-        const values = [
-          index + 1,
-          entry.date,
-          entry.plant,
-          entry.shift,
-          entry.time,
-          entry.tagNo,
-          entry.jobType,
-          entry.description,
-          entry.officer,
-          entry.status,
-          entry.remarks || ''
-        ];
+    function openRemarkModal(entryId, currentRemark) {
+      currentRemarkEntryId = entryId;
+      const overlay = document.getElementById('remark-overlay');
+      const textarea = document.getElementById('remark-text');
+      textarea.value = currentRemark || '';
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
 
-        return values.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(',');
-      });
+    function closeRemarkModal() {
+      const overlay = document.getElementById('remark-overlay');
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      currentRemarkEntryId = null;
+    }
 
-      const csv = [headers.join(','), ...lines].join('\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `shift_logbook_${state.plant}_${state.view}.csv`;
-      link.click();
-      URL.revokeObjectURL(url);
+    function saveRemark() {
+      const remarkText = document.getElementById('remark-text').value.trim();
+      
+      // Find and update the entry in mockData
+      const entry = mockData.find(e => e.id === currentRemarkEntryId);
+      if (entry) {
+        entry.remarks = remarkText;
+        alert('Remark saved successfully!');
+        closeRemarkModal();
+        renderTable();
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      const requestedView = params.get('view');
-      if (tabs.includes(requestedView)) {
-        state.view = requestedView;
-      }
-
       const form = document.getElementById('shift-add-form');
       form.addEventListener('submit', saveEntry);
 
@@ -443,10 +480,15 @@
         }
       });
 
-      document.getElementById('plant-select').value = state.plant;
+      const remarkOverlay = document.getElementById('remark-overlay');
+      remarkOverlay.addEventListener('click', (event) => {
+        if (event.target === remarkOverlay) {
+          closeRemarkModal();
+        }
+      });
+
       switchView(state.view);
     });
   </script>
 </body>
-
 </html>

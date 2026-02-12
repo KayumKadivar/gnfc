@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | OT Hours Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111217;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2C3235;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+  </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+  <div id="sidebar-container"></div>
+  <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <div id="header-container"></div>
+    <script>
+      renderHeader({
+        title: "Acetic Acid Logbook",
+        breadcrumbs: [
+          { label: "Technician Log", href: "technician_logbook.html" },
+          { label: "Plant Detail", href: "plant_detail.html" },
+          { label: "OT Hours Report" }
+        ],
+        backLink: "plant_detail.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('ot_hours');
+      </script>
+
+      <!-- Search Criteria Panel -->
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm">
+        <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
+            <h3 class="text-xs font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
+                <i class="ph-bold ph-clock"></i> OT Report Criteria
+            </h3>
+        </div>
+        <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-dark-muted uppercase">Start Date</label>
+                <input type="date" value="2026-02-01" id="startDate" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-dark-muted uppercase">End Date</label>
+                <input type="date" value="2026-02-28" id="endDate" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-dark-muted uppercase">Select Name</label>
+                <div class="relative">
+                    <select id="techSelect" class="w-full bg-dark-bg border border-dark-border text-white text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer appearance-none">
+                        <option value="ALL">ALL</option>
+                        <option value="DVP">DVP</option>
+                        <option value="JKP">JKP</option>
+                        <option value="RKM">RKM</option>
+                        <option value="NND">NND</option>
+                    </select>
+                     <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+                </div>
+            </div>
+             <button onclick="renderTable()" class="bg-gnfc-blue hover:bg-blue-600 text-white font-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide">
+                <i class="ph-bold ph-lightning"></i> Generate Report
+            </button>
+        </div>
+      </div>
+
+      <!-- Report Table -->
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col flex-1 overflow-hidden min-h-[400px]">
+         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
+             <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                 <i class="ph-fill ph-file-text text-gnfc-orange"></i> Report Data
+             </h3>
+             <span class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono" id="totalHours">Total Hours: 0</span>
+         </div>
+         <div class="overflow-auto flex-1 relative">
+             <table class="w-full text-left border-collapse">
+                 <thead class="bg-dark-header z-10 sticky top-0">
+                     <tr class="text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                         <th class="border-r border-dark-border px-3 py-2 w-24">Date</th>
+                         <th class="border-r border-dark-border px-2 py-2 w-16">Tech</th>
+                         <th class="border-r border-dark-border px-3 py-2 w-32">TagNo</th>
+                         <th class="border-r border-dark-border px-3 py-2 w-24">Type Of Job</th>
+                         <th class="border-r border-dark-border px-4 py-2 text-left">Description</th>
+                         <th class="px-3 py-2 w-20">OT Hour</th>
+                     </tr>
+                 </thead>
+                 <tbody id="reportTableBody" class="text-xs font-mono">
+                     <!-- Rows will be injected here -->
+                 </tbody>
+             </table>
+         </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Sample Data
+    const dataset = [
+        { date: '2026-02-04', tech: 'DVP', tag: 'DCS-YOKOGAWA', jobType: 'PM', desc: 'C/r ESD console-32 checked all switch resistance and defective micro switch as per availability and requirement replaced (resistance noted down). Also PVC truff provided for cable support. For console-32 job completed. For 2 more console job started and job u/p.', hours: 7.0 },
+        { date: '2026-02-05', tech: 'JKP', tag: 'FV-101', jobType: 'BD', desc: 'Valve stuck at 50%. Free movement checked. Positioner calibration done. Found OK.', hours: 2.5 },
+        { date: '2026-02-06', tech: 'RKM', tag: 'PT-202', jobType: 'PM', desc: 'Routine preventative maintenance check. Transmitter zero check done. Connections tightened.', hours: 1.5 },
+        { date: '2026-02-08', tech: 'DVP', tag: 'DCS-FOXBORO', jobType: 'PM', desc: 'System health check up. Backup of configuration files initiated.', hours: 4.0 },
+        { date: '2026-02-08', tech: 'NND', tag: 'HV-303', jobType: 'CM', desc: 'Leakage attended. Gland packing replaced. Stroke check done from field and DCS.', hours: 3.0 }
+    ];
+
+    function renderTable() {
+        const tbody = document.getElementById('reportTableBody');
+        const techFilter = document.getElementById('techSelect').value;
+        const totalHoursEl = document.getElementById('totalHours');
+        
+        tbody.innerHTML = '';
+        let total = 0;
+
+        const filteredData = dataset.filter(item => {
+            return techFilter === 'ALL' || item.tech === techFilter;
+        });
+
+        if (filteredData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-dark-muted italic">No records found for selected criteria</td></tr>';
+            totalHoursEl.textContent = `Total Hours: 0`;
+            return;
+        }
+
+        filteredData.forEach(item => {
+            total += item.hours;
+            const row = `
+                <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
+                    <td class="border-r border-dark-border px-3 py-3 text-center text-white">${formatDateDisplay(item.date)}</td>
+                    <td class="border-r border-dark-border px-2 py-3 text-center text-gnfc-blue font-bold">${item.tech}</td>
+                    <td class="border-r border-dark-border px-3 py-3 text-center text-white">${item.tag}</td>
+                    <td class="border-r border-dark-border px-3 py-3 text-center text-gnfc-orange">${item.jobType}</td>
+                    <td class="border-r border-dark-border px-4 py-3 text-dark-text leading-relaxed text-left">${item.desc}</td>
+                    <td class="px-3 py-3 text-center font-bold text-gnfc-blue">${item.hours.toFixed(1)}</td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+
+        totalHoursEl.textContent = `Total Hours: ${total.toFixed(1)}`;
+    }
+
+    function formatDateDisplay(isoDate) {
+        if(!isoDate) return '';
+        const d = new Date(isoDate);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    // Initial Render
+    renderTable();
+
+  </script>
+</body>
+</html>

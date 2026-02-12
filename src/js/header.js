@@ -4,6 +4,8 @@ function renderHeader(config) {
   const backLink = config.backLink || "#";
   const breadcrumbs = config.breadcrumbs || [];
 
+  const searchPlaceholder = config.searchPlaceholder || "Search logbook...";
+
   // Helper to generate breadcrumbs HTML
   const breadcrumbsHTML = breadcrumbs.map((crumb, index) => {
     const isLast = index === breadcrumbs.length - 1;
@@ -35,7 +37,7 @@ function renderHeader(config) {
         <!-- Search -->
         <div class="relative hidden md:block group">
           <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#5a6069] group-focus-within:text-blue-500 dark:group-focus-within:text-gnfc-blue transition-colors"></i>
-          <input type="text" placeholder="Search logbook..."
+          <input type="text" placeholder="${searchPlaceholder}"
             class="bg-gray-50 dark:bg-[#0b0c0e] border border-gray-200 dark:border-[#2c3235] text-gray-900 dark:text-white text-xs rounded-md pl-9 pr-10 h-9 w-64 focus:border-blue-500 dark:focus:border-gnfc-blue focus:ring-1 focus:ring-blue-500/20 dark:focus:ring-gnfc-blue/20 focus:outline-none transition-all placeholder-gray-400 dark:placeholder-[#5a6069]">
           <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
              <kbd class="hidden font-sans text-[10px] font-bold text-gray-400 dark:text-[#8e8e9e] bg-gray-100 dark:bg-[#1a1d21] border border-gray-200 dark:border-[#2c3235] px-1.5 py-0.5 rounded">AUTO</kbd>

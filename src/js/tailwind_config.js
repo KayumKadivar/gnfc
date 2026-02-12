@@ -6,7 +6,7 @@ if (typeof tailwind !== 'undefined') {
       extend: {
         fontFamily: {
           sans: [
-            'DM Serif Text',
+            'inter',
             'serif',
             'Georgia',
             'Times New Roman',

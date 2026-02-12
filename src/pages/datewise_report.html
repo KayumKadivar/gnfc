@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datewise Log Report | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+</head>
+
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+  
+  <div id="sidebar-container"></div>
+  <script>
+    try {
+      renderSidebar('technician_logbook');
+    } catch (e) {
+      // noop
+    }
+  </script>
+
+  <main class="theme-contrast-lock flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <div id="header-container"></div>
+    <script>
+      renderHeader({
+        title: "Acetic Acid Logbook",
+        breadcrumbs: [
+          { label: "Technician Log", href: "technician_logbook.html" },
+          { label: "Plant Detail", href: "plant_detail.html" },
+          { label: "Date Wise Report" }
+        ],
+        backLink: "plant_detail.html"
+      });
+    </script>
+
+    <div class="p-4 bg-dark-bg overflow-y-auto">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('datewise_report');
+      </script>
+      <div class="w-full">
+        <!-- Compact Horizontal Filter Bar -->
+        <div class="bg-dark-panel border-b border-dark-border">
+          <div class="bg-dark-panel border border-dark-border rounded-sm p-4 shadow-sm flex gap-5">
+            
+            <!-- Plant Area / Tag No -->
+            <div class="flex items-center gap-3">
+              <label class="text-[10px] font-bold text-white uppercase tracking-wider">Tag No</label>
+              <select id="tagNoFilter" class="bg-dark-bg border border-dark-border text-white text-xs rounded px-3 py-1.5 min-w-[140px] focus:border-gnfc-blue outline-none transition-all">
+                <option value="">All Tags</option>
+                <option value="FVC0208A">FVC0208A</option>
+                <option value="LV412B">LV412B</option>
+                <option value="PT-101A">PT-101A</option>
+                <option value="FT-205C">FT-205C</option>
+                <option value="TIC-305">TIC-305</option>
+                <option value="PIC-401">PIC-401</option>
+              </select>
+            </div>
+
+            <!-- Report Period -->
+            <div class="flex items-center gap-3">
+              <label class="text-[10px] font-bold text-white uppercase tracking-wider">Report Period</label>
+              <div class="flex items-center gap-2">
+                <input type="date" id="startDateFilter" class="bg-dark-bg border border-dark-border text-white text-xs rounded px-3 py-1.5 focus:border-gnfc-blue outline-none transition-all">
+                <span class="text-dark-muted text-xs">to</span>
+                <input type="date" id="endDateFilter" class="bg-dark-bg border border-dark-border text-white text-xs rounded px-3 py-1.5 focus:border-gnfc-blue outline-none transition-all">
+              </div>
+            </div>
+
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+              <button onclick="resetFilters()" class="px-3 py-1.5 bg-transparent border border-dark-border text-dark-muted hover:text-white hover:border-white/30 text-[11px] font-bold rounded transition-all">
+                <i class="ph-bold ph-x mr-1"></i>RESET
+              </button>
+              <button onclick="generateReport()" class="px-4 py-1.5 bg-gnfc-blue hover:bg-blue-500 text-white text-[11px] font-bold rounded transition-all shadow-lg shadow-gnfc-blue/20">
+                <i class="ph-bold ph-sparkle mr-1"></i>GENERATE
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Report Results Section -->
+        <div id="reportResults" class="bg-dark-panel border border-dark-border rounded-sm shadow-lg mt-6">
+          <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="ph-fill ph-calendar-check text-gnfc-blue"></i>
+              <h3 class="text-white font-bold text-sm" id="reportTitle">Prev Day Log Book 11/02/2026</h3>
+            </div>
+            <div class="flex items-center gap-3">
+              <span id="recordCount" class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono">0 Records</span>
+              <button onclick="exportReport()" class="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm transition-all">
+                <i class="ph-bold ph-download-simple"></i>Export
+              </button>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                  <th rowspan="2" class="border-r border-dark-border p-2 w-12">Sr<br/>Area</th>
+                  <th colspan="2" class="border-r border-b border-dark-border p-2">Loop/Tag</th>
+                  <th rowspan="2" class="border-r border-dark-border p-2 min-w-[200px]">Description</th>
+                  <th colspan="2" class="border-r border-b border-dark-border p-2">Tech</th>
+                  <th rowspan="2" class="border-r border-dark-border p-2 min-w-[120px]">Remarks</th>
+                  <th rowspan="2" class="p-2 w-16">Add</th>
+                </tr>
+                <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                  <th class="border-r border-dark-border p-2">Tag No</th>
+                  <th class="border-r border-dark-border p-2">Type/Date</th>
+                  <th class="border-r border-dark-border p-2">Eng</th>
+                  <th class="border-r border-dark-border p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody" class="text-xs text-white">
+                <!-- Report data will be populated here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set default dates (last 7 days)
+      const today = new Date();
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      
+      document.getElementById('endDateFilter').valueAsDate = today;
+      document.getElementById('startDateFilter').valueAsDate = lastWeek;
+
+      // Auto-populate table on page load
+      generateReport();
+    });
+
+    function resetFilters() {
+      const today = new Date();
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      
+      document.getElementById('tagNoFilter').value = '';
+      document.getElementById('startDateFilter').valueAsDate = lastWeek;
+      document.getElementById('endDateFilter').valueAsDate = today;
+      document.getElementById('reportResults').style.display = 'none';
+    }
+
+    function generateReport() {
+      const tagNo = document.getElementById('tagNoFilter').value;
+      const startDate = document.getElementById('startDateFilter').value;
+      const endDate = document.getElementById('endDateFilter').value;
+      
+      console.log('Generating Datewise Report:', { tagNo, startDate, endDate });
+      
+      // Show report results section
+      document.getElementById('reportResults').style.display = 'block';
+      
+      // Update report title with date range
+      const formattedStartDate = new Date(startDate).toLocaleDateString('en-GB');
+      const formattedEndDate = new Date(endDate).toLocaleDateString('en-GB');
+      document.getElementById('reportTitle').textContent = `Datewise Log Book: ${formattedStartDate} to ${formattedEndDate}`;
+      
+      // Sample data matching screenshot format
+      const sampleData = [
+        { 
+          sr: 1, area: 'FA', tagNo: 'FVC0208A', 
+          typeDate: 'Routine Check\nSys FB : 19/02/2026', 
+          desc: 'TFAB AR not meter correct required The meter has been in input other while flow.', 
+          tech: 'NRK', eng: 'MJ', status: 'OVER', remarks: 'Ø 0'
+        },
+        { 
+          sr: 2, area: 'FA', tagNo: 'N.A.', 
+          typeDate: 'N.A.', 
+          desc: 'Job is declared - shutdown established and The other of equipment is disturbed including all other. Contact OccS / E would ALL information checked with fire team all...', 
+          tech: 'NRK', eng: 'MJ', status: 'OVER', remarks: ''
+        },
+        { 
+          sr: 3, area: 'FA', tagNo: 'N.A.', 
+          typeDate: 'DCS PT-FI shutdown\nFI', 
+          desc: 'I was in any action manually 24-72/ Panel improbable indicating, panel/monitor functionality was checked, panel are in process and the connection of details RCCTUA Corrected FA0, such DCEA...', 
+          tech: 'NRK', eng: 'MJ', status: 'OVER', remarks: ''
+        },
+        { 
+          sr: 4, area: 'FA', tagNo: 'N.A.', 
+          typeDate: 'DCS PT-FI shutdown\nFI', 
+          desc: 'Discharge/Alarm from the/lamps were not in accordance when in indication only it was the level down of work. All location indicated were shutdown from other...', 
+          tech: 'R.R.\nMJ', eng: '', status: 'OVER', remarks: ''
+        },
+        { 
+          sr: 5, area: 'FA', tagNo: 'N.A.', 
+          typeDate: 'IT\nFA', 
+          desc: 'Valve action reading to be distributed and charged tested must be reduced so any product electric shutdown dropped flow other communication should be....', 
+          tech: 'MR', eng: '', status: 'OVER', remarks: ''
+        },
+      ];
+      
+      const tbody = document.getElementById('reportTableBody');
+      tbody.innerHTML = sampleData.map((row, idx) => `
+        <tr class="border-b border-dark-border hover:bg-white/5 transition-colors ${idx % 2 === 0 ? 'bg-dark-bg/30' : ''}">
+          <td class="border-r border-dark-border p-2 text-center">
+            <div class="font-bold">${row.sr}</div>
+            <div class="text-gnfc-blue">${row.area}</div>
+          </td>
+          <td class="border-r border-dark-border p-2 font-mono text-dark-muted">${row.tagNo}</td>
+          <td class="border-r border-dark-border p-2 text-[10px] whitespace-pre-line">${row.typeDate}</td>
+          <td class="border-r border-dark-border p-2 text-[11px] leading-relaxed">${row.desc}</td>
+          <td class="border-r border-dark-border p-2 text-center text-[10px] whitespace-pre-line">${row.tech}</td>
+          <td class="border-r border-dark-border p-2 text-center">
+            <span class="px-2 py-1 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">${row.status}</span>
+          </td>
+          <td class="border-r border-dark-border p-2 text-[10px]">${row.remarks}</td>
+          <td class="p-2 text-center">
+            <button class="text-gnfc-blue hover:text-blue-400 transition-colors">
+              <i class="ph-bold ph-plus-circle text-lg"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+      
+      document.getElementById('recordCount').textContent = `${sampleData.length} Records`;
+      
+      // Scroll to results
+      document.getElementById('reportResults').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function exportReport() {
+      console.log('Exporting report to CSV...');
+      alert('CSV Export functionality will be implemented here');
+    }
+  </script>
+
+</body>
+
+</html>

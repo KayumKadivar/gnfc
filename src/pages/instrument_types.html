@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GNFC | Instrument Type Analysis</title>
+  <title>GNFC | Monthly Report</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
@@ -22,50 +22,51 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #2c3235;
+      background: #2C3235;
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
       background: #444;
     }
-
-    select {
-      background-image: none;
-    }
   </style>
 </head>
 
 <body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
-
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
   <script>
-    try { renderSidebar('instrument_types'); } catch (e) { console.warn("Sidebar script not found"); }
+    try { renderSidebar('technician_logbook'); } catch (e) { console.warn("Sidebar script not found"); }
   </script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
     <div id="header-container"></div>
     <script>
-        renderHeader({
-            title: "Acetic Acid Logbook",
-            breadcrumbs: [
-                { label: "Technician Log", href: "technician_logbook.html" },
-                { label: "Plant Detail", href: "plant_detail.html" },
-                { label: "Instrument Type Analysis" }
-            ],
-            backLink: "plant_detail.html"
-        });
+      renderHeader({
+        title: "Acetic Acid Logbook",
+        breadcrumbs: [
+          { label: "Technician Log", href: "technician_logbook.html" },
+          { label: "Plant Detail", href: "plant_detail.html" },
+          { label: "Instrument Type Analysis" }
+        ],
+        backLink: "plant_detail.html"
+      });
     </script>
 
     <div class="flex-1 overflow-y-auto p-4 space-y-4">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('instrument_types');
+      </script>
 
       <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm overflow-hidden">
-        <div class="bg-[#22252b] px-4 py-2 border-b border-dark-border flex justify-between items-center">
+        <div class="px-4 py-2 border-b border-dark-border flex justify-between items-center">
           <h2 class="text-xs font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
             <i class="ph-bold ph-funnel"></i> Apply
           </h2>
@@ -121,8 +122,11 @@
                 class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
-                <th class="border-r border-dark-border px-3 py-2 w-40 border-b border-dark-border/50 text-white">Loop / Tag</th>
-                <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border/50 text-white font-black">  Job Type</th>
+                <th class="border-r border-dark-border px-3 py-2 w-40 border-b border-dark-border/50 text-white">Loop /
+                  Tag</th>
+                <th
+                  class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border/50 text-white font-black">
+                  Job Type</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
                 <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px]">Description</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Tech/Eng</th>

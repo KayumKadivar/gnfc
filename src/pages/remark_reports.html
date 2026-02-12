@@ -32,7 +32,7 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
 
 
     <script src="/src/js/theme_manager.js"></script>
@@ -41,10 +41,8 @@
   <div id="sidebar-container"></div>
   <script>
     try {
-      renderSidebar('remark_report');
-    } catch (e) {
-      console.warn("Sidebar script not found");
-    }
+      renderSidebar('technician_logbook');
+    } catch (e) { }
   </script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
@@ -63,6 +61,12 @@
     </script>
 
     <div class="flex-1 overflow-y-auto p-4 space-y-4">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('remark_reports');
+      </script>
 
       <div class="bg-dark-panel rounded-sm border border-dark-border shadow-sm overflow-hidden flex flex-col h-full">
         <div class="bg-[#22252B] px-4 py-2 border-b border-dark-border flex justify-between items-center shrink-0">

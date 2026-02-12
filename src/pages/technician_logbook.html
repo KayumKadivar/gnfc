@@ -146,7 +146,7 @@
     let selectedView = "today";
 
     function setSelectedView(viewName, persist = true) {
-      selectedView = ["today", "prev", "weekly"].includes(viewName) ? viewName : "today";
+      selectedView = ["today", "prev", "weekly", "monthly"].includes(viewName) ? viewName : "today";
 
       timeButtons.forEach((btn) => {
         const btnView = btn.dataset.view || "";

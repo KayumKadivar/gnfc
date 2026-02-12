@@ -32,14 +32,14 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
 
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
-  <script>try { renderSidebar('monthly_report'); } catch (e) { }</script>
+  <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
@@ -50,13 +50,19 @@
             breadcrumbs: [
                 { label: "Technician Log", href: "technician_logbook.html" },
                 { label: "Plant Detail", href: "plant_detail.html" },
-                { label: "Monthly Maintenance Report" }
+                { label: "Monthly Report" }
             ],
             backLink: "plant_detail.html"
         });
     </script>
 
-    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div class="flex-1 overflow-y-auto p-4 space-y-6">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('monthly_report');
+      </script>
 
       <div class="bg-dark-panel border border-dark-border rounded-sm p-4 shadow-sm">
         <div class="flex flex-col md:flex-row items-end gap-4">
