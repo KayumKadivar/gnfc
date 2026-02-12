@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Font Comparison - iOS vs Inter</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #0f1115;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .comparison-box {
+      background: #181b21;
+      border: 1px solid #2a2e36;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+
+    .ios-font {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 
+                   'Helvetica Neue', 'Segoe UI', Arial, sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .inter-font {
+      font-family: 'Inter', sans-serif !important;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .label {
+      display: inline-block;
+      background: #3b82f6;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .numbers {
+      font-size: 48px;
+      font-weight: 700;
+      color: #3b82f6;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="comparison-box ios-font">
+      <span class="label">iOS SYSTEM FONT (San Francisco)</span>
+      <h1>GNFC Officer's Logbook</h1>
+      <h2>Instrument Department Dashboard</h2>
+      <p>This is using iOS San Francisco font family. Notice the clean, modern look with perfect spacing.</p>
+      <p class="numbers">0123456789</p>
+      <p><strong>Plant Units:</strong> AA, AAQM, AMM, BOILER, CMS, DM, FA, M1, M2, UREA</p>
+    </div>
+
+    <div class="comparison-box inter-font">
+      <span class="label">INTER FONT (Previous)</span>
+      <h1>GNFC Officer's Logbook</h1>
+      <h2>Instrument Department Dashboard</h2>
+      <p>This is using Inter font family. Compare the letter shapes and spacing with the iOS font above.</p>
+      <p class="numbers">0123456789</p>
+      <p><strong>Plant Units:</strong> AA, AAQM, AMM, BOILER, CMS, DM, FA, M1, M2, UREA</p>
+    </div>
+
+    <div class="comparison-box ios-font">
+      <h2>✅ iOS Font Features:</h2>
+      <ul style="line-height: 2;">
+        <li>Tighter letter spacing (-0.02em)</li>
+        <li>Smoother font rendering (antialiasing)</li>
+        <li>More rounded characters</li>
+        <li>Better weight distribution</li>
+        <li>Native Apple feel</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

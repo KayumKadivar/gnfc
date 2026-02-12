@@ -1,0 +1,53 @@
+/* Import Inter Font from Google Fonts - Crystal Clear & Professional */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Global Font Smoothing for Crystal Clear Text */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Apply Inter to Body - Crystal Clear Readability */
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* Headings - Bold and Clear */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* Bold text */
+strong, b, .font-bold {
+  font-weight: 700 !important;
+}
+
+/* Buttons and interactive elements */
+button, input, select, textarea {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+  font-weight: 500;
+  letter-spacing: -0.011em;
+}
+
+/* Tables - Enhanced Clarity */
+table, th, td {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+  letter-spacing: -0.011em;
+}
+
+/* All text elements */
+p, span, div, a, li {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+}
+
+/* Monospace for code */
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+}

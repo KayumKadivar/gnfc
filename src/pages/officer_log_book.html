@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Officer's Logbook | GNFC</title>
+
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>
+    window.activePage = 'shift_logbook_officer';
+  </script>
+
+</head>
+
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('shift_logbook_officer');</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Officer's Logbook",
+        breadcrumbs: [
+          { label: "Officer's Logbook" }
+        ],
+        backLink: "/index.html"
+      });
+    </script>
+
+
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+
+      <div
+        class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6 bg-dark-panel p-3 border border-dark-border rounded-md shadow-sm">
+
+        <div class="flex items-center gap-3 px-2">
+          <div class="flex items-center gap-2 text-gnfc-blue">
+            <i class="ph-fill ph-calendar-blank"></i>
+            <span class="text-xs font-bold uppercase tracking-wide">Time Range</span>
+          </div>
+          <div class="h-4 w-px bg-dark-border"></div>
+
+          <div class="flex bg-dark-bg p-0.5 rounded-md border border-dark-border">
+            <button data-view="today"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent"
+              aria-pressed="true">
+              Today
+            </button>
+            <button data-view="prev"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              aria-pressed="false">
+              Prev Day
+            </button>
+            <button data-view="weekly"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              aria-pressed="false">
+              Weekly
+            </button>
+            <button data-view="monthly"
+              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              aria-pressed="false">
+              Monthly
+            </button>
+          </div>
+        </div>
+
+        <!-- Engineer Dropdown and Links -->
+        <div class="flex items-center gap-4 px-2">
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-bold text-dark-muted uppercase tracking-wide">Manager and Above:</label>
+            <select id="engineer-select" class="bg-dark-bg border border-dark-border text-white text-xs rounded-md px-3 py-1.5 cursor-pointer hover:border-gnfc-blue transition-colors">
+              <option value="">Select Name</option>
+              <option value="DVP">DVP</option>
+              <option value="HNP">HNP</option>
+              <option value="JSP">JSP</option>
+              <option value="KSR">KSR</option>
+              <option value="LIPIKA">LIPIKA</option>
+              <option value="MMD">MMD</option>
+              <option value="MMS">MMS</option>
+              <option value="MSM">MSM</option>
+              <option value="PKT">PKT</option>
+              <option value="PMP">PMP</option>
+              <option value="RAR">RAR</option>
+              <option value="RBL">RBL</option>
+              <option value="RDC">RDC</option>
+              <option value="SPP">SPP</option>
+              <option value="TESTER">TESTER</option>
+              <option value="VBS">VBS</option>
+              <option value="ATH">ATH</option>
+              <option value="BPB">BPB</option>
+              <option value="GMP">GMP</option>
+              <option value="HDP">HDP</option>
+              <option value="MKD">MKD</option>
+              <option value="NVR">NVR</option>
+              <option value="PHA">PHA</option>
+              <option value="RDP">RDP</option>
+              <option value="SPR">SPR</option>
+              <option value="VMF">VMF</option>
+            </select>
+          </div>
+
+          <div class="h-4 w-px bg-dark-border"></div>
+
+          <a href="#" onclick="openOldReportsModal(); return false;" class="text-xs font-bold text-gnfc-blue hover:text-blue-400 transition-colors uppercase tracking-wide">
+            Old Reports
+          </a>
+        </div>
+      </div>
+
+
+      <div class="bg-dark-panel border border-dark-border rounded-sm">
+
+        <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border">
+          <h3 class="font-medium text-gnfc-blue text-sm">
+            Select Plant Unit
+          </h3>
+        </div>
+
+        <div id="plant-grid" class="p-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+        </div>
+
+      </div>
+
+      <section class="mt-6 mb-4">
+
+        <div class="flex items-center gap-3 mb-4">
+          <div class="h-8 w-1 bg-gnfc-blue rounded-full"></div>
+          <h3 class="text-white font-bold text-sm tracking-wide">Quick Access</h3>
+          <div class="h-px flex-1 bg-dark-border"></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=today'"
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-calendar-check text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Today</h4>
+          </button>
+
+          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=prev'"
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-clock-counter-clockwise text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Previous Day</h4>
+          </button>
+
+          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=weekly'"
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-calendar-plus text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Weekly</h4>
+          </button>
+
+          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=monthly'"
+            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-calendar text-4xl text-gnfc-blue"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Monthly</h4>
+          </button>
+
+          <!-- Old Shift Log Button -->
+          <button onclick="alert('Old Shift Log feature coming soon!')"
+            class="relative overflow-hidden bg-dark-panel border border-gnfc-orange/50 hover:border-gnfc-orange p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+              <i class="ph-fill ph-folder-open text-4xl text-gnfc-orange"></i>
+            </div>
+            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">Archive</p>
+            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-orange transition-colors">Old Shift Log</h4>
+          </button>
+
+        </div>
+
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-panel border-t border-dark-border py-3">
+      <div class="text-center">
+        <p class="text-xs text-dark-muted font-semibold">Instrument Department</p>
+        <p class="text-xs text-dark-muted">Gujarat Narmada Valley Fertilizers Co. Ltd.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Old Reports Modal -->
+  <div class="modal micromodal-slide" id="modal-old-reports" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+      <div class="modal__container w-full max-w-3xl glass-panel border border-dark-border rounded-lg shadow-2xl overflow-hidden animate-slide-up" role="dialog" aria-modal="true" aria-labelledby="modal-old-reports-title">
+        
+        <!-- Modal Header -->
+        <div class="h-16 border-b border-dark-border flex items-center justify-between px-6 bg-dark-header/80">
+          <div class="flex items-center gap-4">
+            <div class="w-8 h-8 rounded bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+              <i class="ph-fill ph-archive-box text-lg"></i>
+            </div>
+            <div>
+              <h2 id="modal-old-reports-title" class="text-white font-bold text-lg tracking-tight">Old Report Archives</h2>
+              <div class="flex items-center gap-2 text-[10px] text-dark-text/60 uppercase tracking-widest font-mono">
+                <span>Officer's Logbook</span>
+                <span class="w-1 h-1 rounded-full bg-dark-border"></span>
+                <span>GNFC IIMS</span>
+              </div>
+            </div>
+          </div>
+          
+          <button data-micromodal-close class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-white/10 text-gray-400 hover:text-white transition-colors" aria-label="Close modal">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="px-6 py-6 bg-dark-bg/40">
+          
+          <!-- Filters Row -->
+          <div class="flex flex-wrap items-end gap-4 mb-6">
+            
+            <!-- Engineer Dropdown -->
+            <div class="flex flex-col gap-1.5 flex-1 min-w-[200px]">
+              <label class="text-[10px] font-bold text-gnfc-blue uppercase">Select Engineer</label>
+              <select id="oldReportsEngineer" class="h-9 bg-dark-bg border border-dark-border rounded-sm px-3 text-sm text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
+                <option value="">-- Select Name --</option>
+                <option value="DVP">DVP</option>
+                <option value="HNP">HNP</option>
+                <option value="JSP">JSP</option>
+                <option value="KSR">KSR</option>
+                <option value="LIPIKA">LIPIKA</option>
+                <option value="MMD">MMD</option>
+                <option value="MMS">MMS</option>
+                <option value="MSM">MSM</option>
+                <option value="PKT">PKT</option>
+                <option value="PMP">PMP</option>
+                <option value="RAR">RAR</option>
+                <option value="RBL">RBL</option>
+                <option value="RDC">RDC</option>
+                <option value="SPP">SPP</option>
+                <option value="TESTER">TESTER</option>
+                <option value="VBS">VBS</option>
+                <option value="ATH">ATH</option>
+                <option value="BPB">BPB</option>
+                <option value="GMP">GMP</option>
+                <option value="HDP">HDP</option>
+                <option value="MKD">MKD</option>
+                <option value="NVR">NVR</option>
+                <option value="PHA">PHA</option>
+                <option value="RDP">RDP</option>
+                <option value="SPR">SPR</option>
+                <option value="VMF">VMF</option>
+              </select>
+            </div>
+
+            <!-- Date Range -->
+            <div class="flex flex-col gap-1.5">
+              <label class="text-[10px] font-bold text-gnfc-blue uppercase">Date Range</label>
+              <div class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center p-1">
+                <input type="date" id="oldReportsStartDate" class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
+                <span class="text-dark-border px-1">to</span>
+                <input type="date" id="oldReportsEndDate" class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center justify-center gap-4">
+            <button onclick="submitOldReports()" class="h-9 px-6 bg-purple-600 hover:bg-purple-700 border border-purple-500 text-white text-sm font-bold rounded-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+              <i class="ph-bold ph-magnifying-glass"></i>
+              Search Reports
+            </button>
+            <button data-micromodal-close class="h-9 px-6 bg-dark-bg border border-dark-border text-dark-text hover:text-white hover:border-white/20 text-sm font-bold rounded-sm transition-all">
+              Cancel
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Glass Effect for Modal */
+    .glass-panel { 
+      background: var(--app-panel, rgba(24, 27, 31, 0.95)); 
+      backdrop-filter: blur(12px); 
+      -webkit-backdrop-filter: blur(12px); 
+    }
+    
+    /* Slide Up Animation */
+    @keyframes slideUp { 
+      from { transform: translateY(20px); opacity: 0; } 
+      to { transform: translateY(0); opacity: 1; } 
+    }
+    .animate-slide-up { 
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
+
+    /* MicroModal Classes */
+    .modal {
+      display: none;
+    }
+    .modal.is-open {
+      display: block;
+    }
+    .modal__overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal__container {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  </style>
+
+
+  <script>
+    const timeButtons = document.querySelectorAll(".time-btn");
+    let selectedView = "today";
+
+    function setSelectedView(viewName, persist = true) {
+      selectedView = ["today", "prev", "weekly", "monthly"].includes(viewName) ? viewName : "today";
+
+      timeButtons.forEach((btn) => {
+        const btnView = btn.dataset.view || "";
+        const isActive = btnView === selectedView;
+
+        // Reset classes
+        btn.className = "time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent";
+
+        if (isActive) {
+          btn.classList.add("bg-gnfc-blue", "text-white", "shadow-sm");
+          btn.setAttribute("aria-pressed", "true");
+        } else {
+          btn.classList.add("text-dark-muted", "hover:text-white", "hover:bg-white/5");
+          btn.setAttribute("aria-pressed", "false");
+        }
+      });
+
+      if (persist && window.ElogbookStore && typeof window.ElogbookStore.setOfficerSelectedView === "function") {
+        window.ElogbookStore.setOfficerSelectedView(selectedView);
+      }
+      renderPlantCards();
+    }
+
+    timeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setSelectedView(button.dataset.view || "today", true);
+      });
+    });
+  </script>
+
+  <script>
+    const units = [
+      'AA', 'AAQM', 'AMM', 'ANIPF', 'ANITDI',
+      'ASGP', 'BAGG', 'BOILER', 'CMS', 'CPSU',
+      'DM', 'EA', 'FA', 'INST WS', 'M1', 'M2', 'UREA'
+    ];
+
+    const grid = document.getElementById('plant-grid');
+
+    function renderPlantCards() {
+      let gridContent = '';
+      units.forEach((code, i) => {
+        // Mock status logic for demo
+        const status = i % 4 === 0 ? 'Maintenance' : 'Operational';
+        const color = status === 'Operational' ? '#73BF69' : '#FF9900';
+        const unitNumber = (i + 1).toString().padStart(2, '0');
+        const href = `/src/pages/shift_logbook.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
+
+        // Refined Card Design (Dashboard-like)
+        gridContent += `
+          <a href="${href}"
+             class="relative bg-dark-panel border border-dark-border hover:border-gnfc-blue
+                    rounded-sm p-4 h-24 flex flex-col justify-between
+                    group transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 overflow-hidden">
+              
+              <!-- Colored Left Border Strip -->
+              <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: ${color}"></div>
+
+              <div class="flex justify-between items-start pl-2">
+                  <span class="text-[10px] font-mono text-dark-muted font-bold tracking-wider">${unitNumber}</span>
+                  <div class="w-1.5 h-1.5 rounded-full" style="background-color: ${color}; box-shadow: 0 0 4px ${color}"></div>
+              </div>
+
+              <div class="pl-2 flex items-end justify-between">
+                  <h3 class="text-lg font-bold text-white tracking-tight group-hover:text-gnfc-blue transition-colors">${code}</h3>
+                  <span class="text-[9px] uppercase font-bold text-dark-muted tracking-wider" style="color: ${color}">${status}</span>
+              </div>
+          </a>
+        `;
+      });
+      grid.innerHTML = gridContent;
+    }
+
+    const persistedView = (window.ElogbookStore && typeof window.ElogbookStore.getOfficerSelectedView === "function")
+      ? window.ElogbookStore.getOfficerSelectedView()
+      : "today";
+    setSelectedView(persistedView, false);
+  </script>
+
+
+  <script>
+    // Initialize MicroModal
+    MicroModal.init({
+      onShow: modal => console.info(`${modal.id} is shown`),
+      onClose: modal => console.info(`${modal.id} is hidden`),
+      openTrigger: 'data-micromodal-trigger',
+      closeTrigger: 'data-micromodal-close',
+      disableScroll: true,
+      awaitOpenAnimation: true,
+      awaitCloseAnimation: true,
+      debugMode: false
+    });
+
+    // Old Reports Modal Functions using MicroModal
+    function openOldReportsModal() {
+      MicroModal.show('modal-old-reports');
+    }
+
+    function closeOldReportsModal() {
+      MicroModal.close('modal-old-reports');
+    }
+
+    function submitOldReports() {
+      const engineer = document.getElementById('oldReportsEngineer').value;
+      const startDate = document.getElementById('oldReportsStartDate').value;
+      const endDate = document.getElementById('oldReportsEndDate').value;
+
+      if (!engineer) {
+        alert('Please select an engineer name.');
+        return;
+      }
+
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates.');
+        return;
+      }
+
+      // Here you can redirect to old reports page or make an API call
+      console.log('Searching reports for:', { engineer, startDate, endDate });
+      alert(`Searching reports for ${engineer} from ${startDate} to ${endDate}`);
+      
+      // Close the modal
+      closeOldReportsModal();
+    }
+
+    // ESC key support (MicroModal handles this, but keeping for reference)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeOldReportsModal();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

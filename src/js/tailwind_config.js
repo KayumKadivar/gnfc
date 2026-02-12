@@ -5,8 +5,15 @@ if (typeof tailwind !== 'undefined') {
     theme: {
       extend: {
         fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace']
+          sans: [
+            'DM Serif Text',
+            'serif',
+            'Georgia',
+            'Times New Roman',
+            'Times',
+            'serif'
+          ],
+          mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace']
         },
         zIndex: {
             '9999': '9999',
