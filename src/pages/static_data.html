@@ -11,16 +11,131 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
-      ::-webkit-scrollbar-track { background: var(--app-bg, #111217); }
-      ::-webkit-scrollbar-thumb { background: var(--app-border, #2c3235); border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: var(--app-muted, #8e8e9e); }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--app-bg, #111217);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--app-border, #2c3235);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--app-muted, #8e8e9e);
+    }
+
+    /* MicroModal styles */
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal__overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal__container {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 6px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .micromodal-slide {
+      display: none;
+    }
+
+    .micromodal-slide.is-open {
+      display: block;
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__overlay {
+      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__container {
+      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__overlay {
+      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__container {
+      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide .modal__container,
+    .micromodal-slide .modal__overlay {
+      will-change: transform;
+    }
+
+    @keyframes mmfadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes mmfadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes mmslideIn {
+      from {
+        transform: translateY(15%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes mmslideOut {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-10%);
+      }
+    }
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
-  
+<body
+  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
+
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
@@ -56,25 +171,31 @@
             <p class="text-sm text-dark-muted mt-1">Static records are scoped to selected system and frequency.</p>
           </div>
           <div class="flex gap-2 flex-wrap text-[11px] font-bold uppercase tracking-wider">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-                System <strong id="sy-chip-system" class="text-dark-text">-</strong>
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              System <strong id="sy-chip-system" class="text-dark-text">-</strong>
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-                Frequency <strong id="sy-chip-frequency" class="text-dark-text">-</strong>
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              Frequency <strong id="sy-chip-frequency" class="text-dark-text">-</strong>
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-                Rows <strong id="static-record-count" class="text-dark-text">0 records</strong>
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              Rows <strong id="static-record-count" class="text-dark-text">0 records</strong>
             </span>
           </div>
         </div>
         <div class="flex gap-3 mt-5 flex-wrap">
-          <button id="btn-add-record" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
+          <button id="btn-add-record" type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
             <i class="ph-bold ph-plus text-sm"></i> Add Row
           </button>
-          <button id="btn-edit-instruction" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
+          <button id="btn-edit-instruction" type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
             <i class="ph-bold ph-note-pencil text-sm"></i> Edit Instruction
           </button>
-          <button id="btn-go-report" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-gnfc-orange border border-gnfc-orange/30 text-xs font-bold rounded-lg transition-all active:scale-95">
+          <button id="btn-go-report" type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-gnfc-orange border border-gnfc-orange/30 text-xs font-bold rounded-lg transition-all active:scale-95">
             <i class="ph-bold ph-file-text text-sm"></i> Open Report Workspace
           </button>
         </div>
@@ -94,7 +215,7 @@
               </tr>
             </thead>
             <tbody id="static-table-body" class="divide-y divide-dark-border text-dark-text">
-                <!-- Rows injected by JS -->
+              <!-- Rows injected by JS -->
             </tbody>
           </table>
         </div>
@@ -106,23 +227,30 @@
         <div class="flex justify-between items-center mb-3">
           <div>
             <h3 class="text-sm font-bold text-white">General Instruction</h3>
-            <p class="text-xs text-dark-muted mt-0.5">Instruction content is shared with report generation and blank format print.</p>
+            <p class="text-xs text-dark-muted mt-0.5">Instruction content is shared with report generation and blank
+              format print.</p>
           </div>
           <div class="text-[10px] text-dark-muted font-mono" id="instruction-updated-at">Updated: -</div>
         </div>
-        <div id="instruction-preview" class="p-3 rounded-lg bg-dark-bg border border-dark-border text-xs text-dark-text leading-relaxed font-mono whitespace-pre-wrap min-h-[60px]"></div>
+        <div id="instruction-preview"
+          class="p-3 rounded-lg bg-dark-bg border border-dark-border text-xs text-dark-text leading-relaxed font-mono whitespace-pre-wrap min-h-[60px]">
+        </div>
       </section>
 
     </div>
   </main>
 
   <!-- Add/Edit Modal (Tailwind + Theme) -->
-  <div id="static-row-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text" aria-hidden="true">
-    <div class="w-full max-w-2xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+  <div id="static-row-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text"
+    aria-hidden="true">
+    <div
+      class="w-full max-w-2xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
       <div class="px-5 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
-        <h3 id="static-row-modal-title" class="text-sm font-bold text-white uppercase tracking-wide">Add Static Record</h3>
+        <h3 id="static-row-modal-title" class="text-sm font-bold text-white uppercase tracking-wide">Add Static Record
+        </h3>
         <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
-            <i class="ph-bold ph-x text-lg"></i>
+          <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
       <form id="static-row-form" class="flex flex-col flex-1 overflow-hidden">
@@ -130,52 +258,71 @@
           <input type="hidden" id="static-row-id">
           <div>
             <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-item">Item</label>
-            <input id="static-item" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted" type="text" maxlength="250" placeholder="Enter checklist item">
+            <input id="static-item"
+              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted"
+              type="text" maxlength="250" placeholder="Enter checklist item">
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-action">Action</label>
-              <input id="static-action" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted" type="text" maxlength="250" placeholder="Action guidance">
+              <input id="static-action"
+                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted"
+                type="text" maxlength="250" placeholder="Action guidance">
             </div>
             <div>
-              <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-reference">Reference Value</label>
-              <input id="static-reference" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted" type="text" maxlength="180" placeholder="Reference value">
+              <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-reference">Reference
+                Value</label>
+              <input id="static-reference"
+                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted"
+                type="text" maxlength="180" placeholder="Reference value">
             </div>
           </div>
         </div>
         <div class="px-5 py-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
-          <button type="button" data-close-modal="true" class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
-          <button type="submit" class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Save</button>
+          <button type="button" data-close-modal="true"
+            class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
+          <button type="submit"
+            class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Save</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Instruction Modal (Tailwind + Theme) -->
-  <div id="instruction-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text" aria-hidden="true">
-    <div class="w-full max-w-xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+  <div id="instruction-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text"
+    aria-hidden="true">
+    <div
+      class="w-full max-w-xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
       <div class="px-5 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
         <h3 class="text-sm font-bold text-white uppercase tracking-wide">Edit Instruction</h3>
         <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
-            <i class="ph-bold ph-x text-lg" data-close-modal="true"></i>
+          <i class="ph-bold ph-x text-lg" data-close-modal="true"></i>
         </button>
       </div>
       <form id="instruction-form" class="flex flex-col flex-1 overflow-hidden">
         <div class="p-6 overflow-y-auto">
           <div>
-            <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="instruction-input">Instruction Text</label>
-            <textarea id="instruction-input" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted min-h-[150px]" placeholder="Enter report instruction"></textarea>
+            <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="instruction-input">Instruction
+              Text</label>
+            <textarea id="instruction-input"
+              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted min-h-[150px]"
+              placeholder="Enter report instruction"></textarea>
           </div>
         </div>
         <div class="px-5 py-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
-          <button type="button" data-close-modal="true" class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
-          <button type="submit" class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Update Instruction</button>
+          <button type="button" data-close-modal="true"
+            class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
+          <button type="submit"
+            class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Update
+            Instruction</button>
         </div>
       </form>
     </div>
   </div>
 
   <script type="module" src="/src/js/sy_pm/page_static.js"></script>
+  <script src="/src/js/emg_call_modal.js"></script>
 </body>
 
 </html>

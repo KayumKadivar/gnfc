@@ -42,19 +42,21 @@ function renderPlantNav(activePageId) {
             id: 'reports_group',
             label: 'Reports',
             icon: 'ph-chart-bar',
-            activeIds: ['remark_reports', 'tagwise_filter', 'monthly_report', 'datewise_report'],
+            activeIds: ['remark_reports', 'tagwise_filter', 'monthly_report', 'datewise_report', 'namewise_report'],
             items: [
                 { id: 'remark_reports', label: 'Remark Report', icon: 'ph-note', href: '/src/pages/remark_reports.html' },
                 { id: 'tagwise_filter', label: 'TagWise Filter', icon: 'ph-funnel', href: '/src/pages/tagwise_filter.html' },
                 { id: 'monthly_report', label: 'Monthly Report', icon: 'ph-calendar-blank', href: '/src/pages/monthly_report.html' },
-                { id: 'datewise_report', label: 'Date Wise Report', icon: 'ph-calendar-dots', href: '/src/pages/datewise_report.html' }
+                { id: 'datewise_report', label: 'Date Wise Report', icon: 'ph-calendar-dots', href: '/src/pages/datewise_report.html' },
+                { id: 'namewise_report', label: 'Name Wise Report', icon: 'ph-user-list', href: '/src/pages/namewise_report.html' }
             ]
         },
         // Group 4 — Analysis
         {
             items: [
                 { id: 'job_history', label: 'Job History', icon: 'ph-clock-counter-clockwise', href: '/src/pages/job_history.html' },
-                { id: 'ot_hours', label: 'OT Hrs', icon: 'ph-timer', href: '/src/pages/ot_hours.html' }
+                { id: 'ot_hours', label: 'OT Hrs', icon: 'ph-timer', href: '/src/pages/ot_hours.html' },
+                { id: 'pending_log', label: 'Pending Log', icon: 'ph-hourglass-medium', href: '/src/pages/pending_log.html' }
             ]
         },
         // Group 5 — System PM (dropdown with children)

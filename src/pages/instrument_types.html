@@ -11,6 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
     ::-webkit-scrollbar {
       width: 8px;
@@ -28,6 +29,106 @@
 
     ::-webkit-scrollbar-thumb:hover {
       background: #444;
+    }
+
+    /* MicroModal styles */
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal__overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal__container {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 6px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .micromodal-slide {
+      display: none;
+    }
+
+    .micromodal-slide.is-open {
+      display: block;
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__overlay {
+      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__container {
+      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__overlay {
+      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__container {
+      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide .modal__container,
+    .micromodal-slide .modal__overlay {
+      will-change: transform;
+    }
+
+    @keyframes mmfadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes mmfadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes mmslideIn {
+      from {
+        transform: translateY(15%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes mmslideOut {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-10%);
+      }
     }
   </style>
 </head>
@@ -74,7 +175,7 @@
 
         <div class="p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-4">
-            <label class="block text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1.5">Time Range
+            <label class="block text-[10px] font-bold  uppercase tracking-wider mb-1.5">Time Range
               Selection</label>
             <div
               class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center px-2 group focus-within:border-gnfc-blue transition-colors">
@@ -87,7 +188,7 @@
           </div>
 
           <div class="lg:col-span-5">
-            <label class="block text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1.5">Select Type of
+            <label class="block text-[10px] font-bold  uppercase tracking-wider mb-1.5">Select Type of
               Instrument</label>
             <div class="relative">
               <select id="job-type-select" onchange="applyFilters()"
@@ -95,7 +196,7 @@
                 <option value="">All Instrument Types</option>
               </select>
               <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs group-hover:"></i>
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2  pointer-events-none text-xs group-hover:"></i>
             </div>
           </div>
 
@@ -103,7 +204,7 @@
             <button onclick="applyFilters()"
               class="flex-1 h-9 bg-gnfc-blue hover:bg-blue-500  text-xs font-bold rounded-sm shadow-lg shadow-blue-500/10 transition-all">APPLY</button>
             <button onclick="resetFilters()"
-              class="h-9 px-4 bg-transparent border border-dark-border text-dark-muted hover: hover:bg-white/5 text-xs font-bold rounded-sm transition-all">RESET</button>
+              class="h-9 px-4 bg-transparent border border-dark-border  hover: hover:bg-white/5 text-xs font-bold rounded-sm transition-all">RESET</button>
           </div>
         </div>
       </div>
@@ -119,7 +220,7 @@
           <table class="w-full text-left border-collapse">
             <thead>
               <tr
-                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                class="bg-dark-header text-[10px] font-bold  uppercase tracking-widest text-center border-b border-dark-border">
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
                 <th class="border-r border-dark-border px-3 py-2 w-40 border-b border-dark-border/50 ">Loop /
@@ -226,7 +327,7 @@
       tbody.innerHTML = '';
 
       if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center  italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
         return;
       }
 
@@ -255,14 +356,14 @@
           const statusColor = item.status === '✓ OVER' ? 'text-gnfc-green' : 'text-gnfc-orange';
           const row = `
                 <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
-                    <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted font-mono text-[10px]">${item.sr}</td>
+                    <td class="border-r border-dark-border px-2 py-3 text-center  font-mono text-[10px]">${item.sr}</td>
                     <td class="border-r border-dark-border px-2 py-3 font-bold text-gnfc-blue text-xs text-center">${item.area}</td>
                     <td class="border-r border-dark-border px-3 py-3">
                         <div class="text-xs font-bold  tracking-tighter">${item.tag}</div>
-                        <div class="text-[9px] text-dark-muted mt-1 uppercase">${item.tagSubtitle}</div>
+                        <div class="text-[9px]  mt-1 uppercase">${item.tagSubtitle}</div>
                     </td>
                     <td class="border-r border-dark-border px-3 py-3">
-                        <div class="text-xs font-semibold text-gray-200 leading-tight">${item.jobType}</div>
+                        <div class="text-xs leading-tight">${item.jobType}</div>
                     </td>
                     <td class="border-r border-dark-border px-2 py-3 text-center font-bold  text-[10px]">${item.tech}</td>
                     <td class="border-r border-dark-border px-4 py-3 text-xs text-dark-text leading-relaxed opacity-80">${item.desc}</td>
@@ -288,6 +389,7 @@
     populateJobTypeDropdown();
     applyFilters(); 
   </script>
+  <script src="/src/js/emg_call_modal.js"></script>
 </body>
 
 </html>

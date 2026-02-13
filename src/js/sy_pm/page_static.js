@@ -36,9 +36,9 @@ function showToast(message, tone = "info") {
 
   const root = getToastRoot();
   const toast = document.createElement("div");
-  
+
   let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 font-medium text-sm border backdrop-blur-md";
-  
+
   if (tone === "error") {
     baseClasses += " bg-rose-950/90 text-rose-100 border-rose-800 shadow-rose-900/20";
   } else if (tone === "warn") {
@@ -50,7 +50,7 @@ function showToast(message, tone = "info") {
   }
 
   toast.className = baseClasses + " translate-y-4 opacity-0";
-  
+
   let icon = "";
   if (tone === "error") icon = '<i class="ph-bold ph-warning-circle text-lg shrink-0"></i>';
   else if (tone === "warn") icon = '<i class="ph-bold ph-warning text-lg shrink-0"></i>';
@@ -83,6 +83,7 @@ function openModal(target) {
   const modal = typeof target === "string" ? document.getElementById(target) : target;
   if (!modal) return;
   modal.classList.remove("hidden");
+  modal.classList.remove("pointer-events-none");
   requestAnimationFrame(() => {
     modal.classList.add("opacity-100");
   });
@@ -93,6 +94,7 @@ function closeModal(target) {
   const modal = typeof target === "string" ? document.getElementById(target) : target;
   if (!modal) return;
   modal.classList.remove("opacity-100");
+  modal.classList.add("pointer-events-none");
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
 }

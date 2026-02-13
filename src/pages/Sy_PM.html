@@ -11,28 +11,67 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+
   <style>
-      /* Active state for frequency buttons (handled by JS toggling class, but we need the utilities available) */
-      .sy-frequency-btn.is-active {
-          border-color: rgba(87, 148, 242, 0.9);
-          box-shadow: 0 0 0 1px rgba(87, 148, 242, 0.4), 0 16px 24px rgba(30, 64, 175, 0.18);
-          color: #dbeafe;
-          background-image: linear-gradient(160deg, rgba(30, 64, 175, 0.45), rgba(15, 23, 42, 0.72));
-          background-color: transparent;
-      }
-      /* Ensure scrollbars look good */
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
-      ::-webkit-scrollbar-track { background: #0f172a; }
-      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--app-bg, #111217);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--app-border, #2c3235);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--app-muted, #8e8e9e);
+    }
+
+    .sy-frequency-btn {
+      border: 1px solid var(--app-border, #2c3235);
+      background: var(--app-panel-alt, #22252b);
+      color: var(--app-muted, #8e8e9e);
+      transition: all 0.16s ease;
+    }
+
+    .sy-frequency-btn:hover {
+      border-color: #5794f2;
+      color: var(--app-text, #ffffff);
+      transform: translateY(-1px);
+    }
+
+    .sy-frequency-btn.is-active {
+      border-color: rgba(87, 148, 242, 0.9);
+      box-shadow: 0 0 0 1px rgba(87, 148, 242, 0.35), 0 12px 20px rgba(30, 64, 175, 0.2);
+      color: #eff6ff;
+      background-image: linear-gradient(145deg, rgba(37, 99, 235, 0.92), rgba(59, 130, 246, 0.84));
+      background-color: transparent;
+    }
+
+    html[data-theme-mode="light"] .sy-frequency-btn {
+      background: #ffffff;
+      color: #334155;
+      border-color: var(--app-border, #d6deea);
+    }
+
+    html[data-theme-mode="light"] .sy-frequency-btn:hover {
+      color: #0f172a;
+      border-color: #5794f2;
+      background: #f8fbff;
+    }
+
+    html[data-theme-mode="light"] .sy-frequency-btn.is-active {
+      color: #ffffff;
+    }
   </style>
 </head>
 
-<body class="bg-slate-900 text-slate-200 font-sans h-screen flex overflow-hidden selection:bg-blue-500 selection:text-white relative">
-  
-  <!-- Background Effects -->
-  <div class="fixed -right-[120px] -top-[100px] w-[360px] h-[360px] rounded-full blur-[72px] bg-blue-500/20 pointer-events-none z-0"></div>
-  <div class="fixed -left-[140px] -bottom-[100px] w-[320px] h-[320px] rounded-full blur-[72px] bg-teal-500/15 pointer-events-none z-0"></div>
+<body
+  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -47,10 +86,10 @@
     }
   </script>
 
-  <main class="p-4 bg-dark-bg">
+  <main class="flex-1 flex flex-col overflow-hidden relative z-10">
     <div id="header-container"></div>
 
-    <div class="overflow-y-auto p-4 relative">
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth bg-dark-bg">
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
       <script>
@@ -61,74 +100,89 @@
         }
       </script>
 
-      <div class="flex flex-col gap-4 mt-4 relative z-10">
-        <!-- Top Section -->
-        <section class="rounded-xl border border-slate-400/20 bg-slate-900/70 backdrop-blur-xl shadow-2xl p-4">
-          <div class="flex justify-between items-start gap-4 flex-wrap">
-            <div>
-              <h2 id="sy-system-title" class="text-slate-200 text-lg font-bold tracking-wide">FOXBORO DCS</h2>
-              <p id="sy-system-subtitle" class="text-slate-400 text-sm mt-0.5">Control performance workflow</p>
-            </div>
-            <div class="flex gap-2 flex-wrap items-center">
-              <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-400/20 bg-slate-900/50 text-slate-400 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
-                Selected Frequency <strong id="sy-selected-frequency" class="text-slate-200 font-bold">Daily</strong>
-              </span>
-              <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-400/20 bg-slate-900/50 text-slate-400 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
-                Mode <strong class="text-slate-200 font-bold">SY_PM</strong>
-              </span>
-            </div>
+      <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h2 id="sy-system-title" class="text-lg font-bold text-dark-text">FOXBORO DCS</h2>
+            <p id="sy-system-subtitle" class="text-sm text-dark-muted mt-1">Control performance workflow</p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <article class="rounded-lg border border-slate-400/20 bg-slate-800/70 p-4">
-              <h3 class="text-slate-200 text-sm font-bold">Static Data Management</h3>
-              <p class="text-slate-400 text-xs leading-relaxed mt-1">Maintain checklist items, action instructions, and reference values for each system and frequency.</p>
-            </article>
-            <article class="rounded-lg border border-slate-400/20 bg-slate-800/70 p-4">
-              <h3 class="text-slate-200 text-sm font-bold">Report Generation</h3>
-              <p class="text-slate-400 text-xs leading-relaxed mt-1">Create report instances based on static templates and maintain observation and remark history.</p>
-            </article>
-            <article class="rounded-lg border border-slate-400/20 bg-slate-800/70 p-4">
-              <h3 class="text-slate-200 text-sm font-bold">Blank Format Printing</h3>
-              <p class="text-slate-400 text-xs leading-relaxed mt-1">Open printable blank format for shift usage and hardcopy audit workflows.</p>
-            </article>
+          <div class="flex items-center gap-2 flex-wrap text-[11px] font-bold uppercase tracking-wider">
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              Selected Frequency
+              <strong id="sy-selected-frequency" class="text-dark-text">Daily</strong>
+            </span>
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              Module
+              <strong class="text-dark-text">SY_PM</strong>
+            </span>
           </div>
-        </section>
+        </div>
 
-        <!-- Frequency Section -->
-        <section class="rounded-xl border border-slate-400/20 bg-slate-900/70 backdrop-blur-xl shadow-2xl p-4">
-          <div class="flex justify-between items-start gap-4 flex-wrap mb-2">
-            <div>
-              <h3 class="text-slate-200 text-lg font-bold tracking-wide">Monitoring Frequency</h3>
-              <p class="text-slate-400 text-sm mt-0.5">Select report type before opening static data or report workspace.</p>
-            </div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+          <article class="rounded-lg border border-dark-border bg-dark-header p-4">
+            <h3 class="text-sm font-bold text-dark-text">Static Data Setup</h3>
+            <p class="text-xs leading-relaxed text-dark-muted mt-1">Maintain item, action, and reference values per
+              system and frequency.</p>
+          </article>
+          <article class="rounded-lg border border-dark-border bg-dark-header p-4">
+            <h3 class="text-sm font-bold text-dark-text">Report Workflow</h3>
+            <p class="text-xs leading-relaxed text-dark-muted mt-1">Generate report instances and capture
+              observation/remark records.</p>
+          </article>
+          <article class="rounded-lg border border-dark-border bg-dark-header p-4">
+            <h3 class="text-sm font-bold text-dark-text">Blank Format</h3>
+            <p class="text-xs leading-relaxed text-dark-muted mt-1">Open printable blank format for checklist and shift
+              documentation.</p>
+          </article>
+        </div>
+      </section>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
-            <button type="button" data-frequency="daily" class="sy-frequency-btn rounded-lg border border-slate-400/20 bg-slate-900/40 text-slate-400 text-left p-3 text-xs font-bold uppercase tracking-wider hover:border-slate-400/40 hover:text-slate-200 hover:-translate-y-px transition-all">Daily</button>
-            <button type="button" data-frequency="weekly" class="sy-frequency-btn rounded-lg border border-slate-400/20 bg-slate-900/40 text-slate-400 text-left p-3 text-xs font-bold uppercase tracking-wider hover:border-slate-400/40 hover:text-slate-200 hover:-translate-y-px transition-all">Weekly</button>
-            <button type="button" data-frequency="monthly" class="sy-frequency-btn rounded-lg border border-slate-400/20 bg-slate-900/40 text-slate-400 text-left p-3 text-xs font-bold uppercase tracking-wider hover:border-slate-400/40 hover:text-slate-200 hover:-translate-y-px transition-all">Monthly</button>
-            <button type="button" data-frequency="quarterly" class="sy-frequency-btn rounded-lg border border-slate-400/20 bg-slate-900/40 text-slate-400 text-left p-3 text-xs font-bold uppercase tracking-wider hover:border-slate-400/40 hover:text-slate-200 hover:-translate-y-px transition-all">Quarterly</button>
-            <button type="button" data-frequency="halfyearly" class="sy-frequency-btn rounded-lg border border-slate-400/20 bg-slate-900/40 text-slate-400 text-left p-3 text-xs font-bold uppercase tracking-wider hover:border-slate-400/40 hover:text-slate-200 hover:-translate-y-px transition-all">Half Yearly</button>
-            <button type="button" data-frequency="shutdown" class="sy-frequency-btn rounded-lg border border-slate-400/20 bg-slate-900/40 text-slate-400 text-left p-3 text-xs font-bold uppercase tracking-wider hover:border-slate-400/40 hover:text-slate-200 hover:-translate-y-px transition-all">Shutdown</button>
+      <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h3 class="text-lg font-bold text-dark-text">Monitoring Frequency</h3>
+            <p class="text-sm text-dark-muted mt-1">Select frequency then open Static Data or Report workspace.</p>
           </div>
+        </div>
 
-          <div class="flex gap-3 flex-wrap mt-5">
-            <button id="sy-action-static" class="rounded-lg border border-blue-400/80 bg-gradient-to-br from-blue-600/90 to-blue-500/85 text-blue-50 text-xs font-bold tracking-wide px-3.5 py-2 transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-800/30" type="button">
-              <i class="ph-bold ph-database mr-1"></i>
-              Open Static Data
-            </button>
-            <button id="sy-action-report" class="rounded-lg border border-emerald-400/80 bg-gradient-to-br from-emerald-600/90 to-emerald-500/85 text-emerald-50 text-xs font-bold tracking-wide px-3.5 py-2 transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-emerald-900/20" type="button">
-              <i class="ph-bold ph-file-text mr-1"></i>
-              Open Report Workspace
-            </button>
-          </div>
-        </section>
-      </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 mt-4">
+          <button type="button" data-frequency="daily"
+            class="sy-frequency-btn rounded-lg p-3 text-xs font-bold uppercase tracking-wider text-left">Daily</button>
+          <button type="button" data-frequency="weekly"
+            class="sy-frequency-btn rounded-lg p-3 text-xs font-bold uppercase tracking-wider text-left">Weekly</button>
+          <button type="button" data-frequency="monthly"
+            class="sy-frequency-btn rounded-lg p-3 text-xs font-bold uppercase tracking-wider text-left">Monthly</button>
+          <button type="button" data-frequency="quarterly"
+            class="sy-frequency-btn rounded-lg p-3 text-xs font-bold uppercase tracking-wider text-left">Quarterly</button>
+          <button type="button" data-frequency="halfyearly"
+            class="sy-frequency-btn rounded-lg p-3 text-xs font-bold uppercase tracking-wider text-left">Half
+            Yearly</button>
+          <button type="button" data-frequency="shutdown"
+            class="sy-frequency-btn rounded-lg p-3 text-xs font-bold uppercase tracking-wider text-left">Shutdown</button>
+        </div>
+
+        <div class="flex gap-3 flex-wrap mt-5">
+          <button id="sy-action-static" type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
+            <i class="ph-bold ph-database text-sm"></i>
+            Open Static Data
+          </button>
+
+          <button id="sy-action-report" type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-gnfc-orange border border-gnfc-orange/30 text-xs font-bold rounded-lg transition-all active:scale-95">
+            <i class="ph-bold ph-file-text text-sm"></i>
+            Open Report Workspace
+          </button>
+        </div>
+      </section>
     </div>
   </main>
 
   <script type="module" src="/src/js/sy_pm/page_selection.js"></script>
+  <script src="/src/js/emg_call_modal.js"></script>
 </body>
 
 </html>

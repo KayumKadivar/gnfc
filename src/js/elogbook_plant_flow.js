@@ -268,6 +268,9 @@
           </button>
           ${pendingAck ? `<div class="mt-1 text-[10px] text-amber-600 dark:text-amber-300">Ack pending</div>` : ""}
         </td>
+        <td class="p-2 text-center border-l border-gray-200 dark:border-dark-border">
+          ${job.status === "✓ OVER" ? `<a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="text-blue-600 dark:text-gnfc-blue font-bold text-xs hover:underline cursor-pointer" title="Add to History">H</a>` : ""}
+        </td>
       </tr>
     `;
   }
@@ -1154,7 +1157,7 @@
       });
     }
 
-    ["job-modal", "edit-modal", "remark-modal", "ack-modal", "reminder-modal"].forEach((id) => {
+    ["job-modal", "edit-modal", "remark-modal", "ack-modal", "reminder-modal", "history-type-modal", "general-history-modal"].forEach((id) => {
       const overlay = document.getElementById(id);
       if (!overlay) return;
       overlay.addEventListener("click", (event) => {
@@ -1164,6 +1167,8 @@
         if (id === "remark-modal") closeRemarkModal();
         if (id === "ack-modal") closeAckModal();
         if (id === "reminder-modal") closeReminderModal();
+        if (id === "history-type-modal") closeHistoryTypeModal();
+        if (id === "general-history-modal") closeGeneralHistoryModal();
       });
     });
   }
@@ -1200,6 +1205,115 @@
     checkPendingThresholdAlerts();
   }
 
+  /* ── Add To History Flow ───────────────────────── */
+
+  let historyTargetJobId = null;
+
+  function openAddToHistoryModal(jobId) {
+    historyTargetJobId = jobId;
+    openOverlay("history-type-modal");
+  }
+
+  function closeHistoryTypeModal() {
+    closeOverlay("history-type-modal");
+  }
+
+  function selectHistoryType(type) {
+    closeHistoryTypeModal();
+
+    if (type === "system") {
+      // System History — auto-export and redirect
+      const located = getJobById(historyTargetJobId);
+      if (!located) { showNotice("Job not found.", "error"); return; }
+      const job = located.job;
+
+      const record = {
+        id: `SH-${Date.now()}`,
+        type: "system",
+        area: job.area || "",
+        loop: job.loop || "",
+        tag: job.tag || "",
+        instType: job.typeOfInst || "",
+        jobType: job.jobType || "",
+        date: job.targetDate || toIsoDate(new Date()),
+        desc: job.desc || "",
+        tech: job.tech || "",
+        eng: job.engineer || elogbookState.activeUser.name,
+        status: "OVER",
+        exportedAt: new Date().toISOString()
+      };
+
+      const saved = JSON.parse(localStorage.getItem("gnfc_job_history") || "[]");
+      saved.unshift(record);
+      localStorage.setItem("gnfc_job_history", JSON.stringify(saved));
+      showNotice("System History record exported successfully.", "info");
+      return;
+    }
+
+    // General History — open the form modal pre-filled
+    const located = getJobById(historyTargetJobId);
+    if (!located) { showNotice("Job not found.", "error"); return; }
+    const job = located.job;
+
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
+    const setSelect = (id, val) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const v = String(val || "");
+      const has = Array.from(el.options).some(o => o.value === v);
+      if (v && !has) { const opt = document.createElement("option"); opt.value = v; opt.textContent = v; el.appendChild(opt); }
+      el.value = v || (el.options[0]?.value || "");
+    };
+
+    setVal("hist-date", job.targetDate || toIsoDate(new Date()));
+    setVal("hist-loop", job.loop || "");
+    setVal("hist-insttype", job.typeOfInst || "");
+    setSelect("hist-insttag", job.typeOfInst || "");
+    setSelect("hist-jobtype", job.jobType || "");
+    setVal("hist-desc", job.desc || "");
+    setSelect("hist-status", "OVER");
+    setSelect("hist-tech", job.tech || "");
+    setSelect("hist-eng", job.engineer || elogbookState.activeUser.name);
+    setSelect("hist-area", job.area || "");
+
+    openOverlay("general-history-modal");
+  }
+
+  function closeGeneralHistoryModal() {
+    closeOverlay("general-history-modal");
+  }
+
+  function addToHistory() {
+    const record = {
+      id: `GH-${Date.now()}`,
+      type: "general",
+      date: document.getElementById("hist-date")?.value || "",
+      loop: document.getElementById("hist-loop")?.value || "",
+      tag: "",
+      instType: document.getElementById("hist-insttype")?.value || "",
+      instTag: document.getElementById("hist-insttag")?.value || "",
+      jobType: document.getElementById("hist-jobtype")?.value || "",
+      desc: document.getElementById("hist-desc")?.value || "",
+      status: document.getElementById("hist-status")?.value || "",
+      tech: document.getElementById("hist-tech")?.value || "",
+      eng: document.getElementById("hist-eng")?.value || "",
+      area: document.getElementById("hist-area")?.value || "",
+      exportedAt: new Date().toISOString()
+    };
+
+    if (!record.desc) {
+      showNotice("Job Description is required.", "error");
+      return;
+    }
+
+    const saved = JSON.parse(localStorage.getItem("gnfc_job_history") || "[]");
+    saved.unshift(record);
+    localStorage.setItem("gnfc_job_history", JSON.stringify(saved));
+
+    closeGeneralHistoryModal();
+    showNotice("General History record added successfully.", "info");
+  }
+
   global.switchView = switchView;
   global.applyFilters = applyFilters;
   global.toggleJobFilter = toggleJobFilter;
@@ -1221,6 +1335,11 @@
   global.openReminderModal = openReminderModal;
   global.closeReminderModal = closeReminderModal;
   global.assignReminder = assignReminder;
+  global.openAddToHistoryModal = openAddToHistoryModal;
+  global.closeHistoryTypeModal = closeHistoryTypeModal;
+  global.selectHistoryType = selectHistoryType;
+  global.closeGeneralHistoryModal = closeGeneralHistoryModal;
+  global.addToHistory = addToHistory;
 
   document.addEventListener("DOMContentLoaded", bootstrap);
 })(window);

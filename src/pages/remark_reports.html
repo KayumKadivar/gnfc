@@ -11,6 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
     ::-webkit-scrollbar {
       width: 8px;
@@ -29,15 +30,115 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #444;
     }
+
+    /* MicroModal styles */
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal__overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal__container {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 6px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .micromodal-slide {
+      display: none;
+    }
+
+    .micromodal-slide.is-open {
+      display: block;
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__overlay {
+      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="false"] .modal__container {
+      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__overlay {
+      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] .modal__container {
+      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide .modal__container,
+    .micromodal-slide .modal__overlay {
+      will-change: transform;
+    }
+
+    @keyframes mmfadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes mmfadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes mmslideIn {
+      from {
+        transform: translateY(15%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes mmslideOut {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-10%);
+      }
+    }
   </style>
 </head>
 
 <body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
 
 
-    <script src="/src/js/theme_manager.js"></script>
-    <script src="/src/js/sidebar.js"></script>
-    <script src="/src/js/header.js"></script>
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
   <script>
     try {
@@ -49,15 +150,15 @@
 
     <div id="header-container"></div>
     <script>
-        renderHeader({
-            title: "Acetic Acid Logbook",
-            breadcrumbs: [
-                { label: "Technician Log", href: "technician_logbook.html" },
-                { label: "Plant Detail", href: "plant_detail.html" },
-                { label: "Remark Report" }
-            ],
-            backLink: "plant_detail.html"
-        });
+      renderHeader({
+        title: "Acetic Acid Logbook",
+        breadcrumbs: [
+          { label: "Technician Log", href: "technician_logbook.html" },
+          { label: "Plant Detail", href: "plant_detail.html" },
+          { label: "Remark Report" }
+        ],
+        backLink: "plant_detail.html"
+      });
     </script>
 
     <div class="flex-1 overflow-y-auto p-4 space-y-4">
@@ -87,8 +188,7 @@
                 <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Area</th>
                 <th class="border-r border-dark-border px-2 py-1 w-32 border-b border-dark-border/50 ">
                   LoopNo</th>
-                <th
-                  class="border-r border-dark-border px-2 py-1 min-w-[200px] border-b border-dark-border/50 ">
+                <th class="border-r border-dark-border px-2 py-1 min-w-[200px] border-b border-dark-border/50 ">
                   Job</th>
                 <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Tech</th>
                 <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[300px]">Description
@@ -204,6 +304,7 @@
     renderTable(reportData);
 
   </script>
+  <script src="/src/js/emg_call_modal.js"></script>
 </body>
 
 </html>

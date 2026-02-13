@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Log Report | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--app-bg, #111217);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--app-border, #2c3235);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--app-muted, #8e8e9e);
+        }
+
+        /* MicroModal styles */
+        .modal {
+            display: none;
+        }
+
+        .modal.is-open {
+            display: block;
+        }
+
+        .modal__overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal__container {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 6px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .micromodal-slide {
+            display: none;
+        }
+
+        .micromodal-slide.is-open {
+            display: block;
+        }
+
+        .micromodal-slide[aria-hidden="false"] .modal__overlay {
+            animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
+        }
+
+        .micromodal-slide[aria-hidden="false"] .modal__container {
+            animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+        }
+
+        .micromodal-slide[aria-hidden="true"] .modal__overlay {
+            animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
+        }
+
+        .micromodal-slide[aria-hidden="true"] .modal__container {
+            animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+        }
+
+        .micromodal-slide .modal__container,
+        .micromodal-slide .modal__overlay {
+            will-change: transform;
+        }
+
+        @keyframes mmfadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes mmfadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes mmslideIn {
+            from {
+                transform: translateY(15%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes mmslideOut {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-10%);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <script src="/src/js/header.js"></script>
+
+    <div id="sidebar-container"></div>
+    <script>
+        try {
+            renderSidebar('technician_logbook');
+        } catch (e) {
+            // noop
+        }
+    </script>
+
+    <main class="theme-contrast-lock flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script>
+            renderHeader({
+                title: "Acetic Acid Logbook",
+                breadcrumbs: [
+                    { label: "Technician Log", href: "technician_logbook.html" },
+                    { label: "Plant Detail", href: "plant_detail.html" },
+                    { label: "Pending Log" }
+                ],
+                backLink: "plant_detail.html"
+            });
+        </script>
+
+        <div class="p-4 bg-dark-bg overflow-y-auto flex-1">
+            <!-- Top Navigation Bar -->
+            <div id="plant-nav-container"></div>
+            <script src="/src/js/plant_nav.js"></script>
+            <script>
+                renderPlantNav('pending_log');
+            </script>
+
+            <div class="w-full">
+                <!-- Pending Log Report -->
+                <div class="bg-dark-panel border border-dark-border rounded-sm shadow-lg">
+                    <!-- Header with title and Delete All -->
+                    <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="ph-fill ph-hourglass-medium text-gnfc-orange"></i>
+                            <h3 class="font-bold text-sm">Pending Log Report</h3>
+                            <span id="pendingCount"
+                                class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono ml-2">0
+                                Pending</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="deleteAllPending()"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-sm transition-all shadow-lg shadow-red-500/20">
+                                <i class="ph-bold ph-trash"></i>Delete All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alert banner (shown when pending > 50) -->
+                    <div id="alertBanner"
+                        class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 flex items-center gap-2 text-amber-400 text-xs">
+                        <i class="ph-bold ph-warning text-sm"></i>
+                        <span id="alertMessage"></span>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                                    <th class="border-r border-dark-border p-2 w-10">Sr</th>
+                                    <th class="border-r border-dark-border p-2 min-w-[80px]">TagNo</th>
+                                    <th class="border-r border-dark-border p-2 min-w-[180px]">Job</th>
+                                    <th class="border-r border-dark-border p-2 w-14">Tech</th>
+                                    <th class="border-r border-dark-border p-2 min-w-[250px]">Description</th>
+                                    <th class="border-r border-dark-border p-2 w-20">Tech<br>Status</th>
+                                    <th class="border-r border-dark-border p-2 min-w-[120px]">Remarks</th>
+                                    <th class="p-2 w-14">Del</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody" class="text-xs">
+                                <!-- Pending log data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Sample pending log data
+        let pendingData = [
+            {
+                sr: 1, tagNo: 'HV_1402',
+                job: 'C/V to be calibrated after installation of positioner. (By:SHC : 20/01/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 2, tagNo: 'C_3401R',
+                job: 'SOUTHSIDE CYLINDER SUCTION PRESSURE INDICATION IS FAULTY. (By:SHC : 20/01/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 3, tagNo: 'NOTAG',
+                job: 'INSTRUMENT INSTALLATION HOOK UP TO BE PREPARED for MBU. (By:SHC : 03/02/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 4, tagNo: 'NOTAG',
+                job: 'Field round to be taken. (By:SHC : 10/02/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+        ];
+
+        function renderTable() {
+            const tbody = document.getElementById('pendingTableBody');
+            if (pendingData.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="p-8 text-center text-dark-muted">
+              <i class="ph-bold ph-check-circle text-3xl text-emerald-400 mb-2 block"></i>
+              <span class="text-sm font-bold">No pending jobs</span>
+              <p class="text-[11px] mt-1">All assigned jobs have been completed by technicians.</p>
+            </td>
+          </tr>
+        `;
+            } else {
+                tbody.innerHTML = pendingData.map((row, idx) => `
+          <tr class="border-b border-dark-border hover:bg-white/5 transition-colors ${idx % 2 === 0 ? 'bg-dark-bg/30' : ''}" id="row-${idx}">
+            <td class="border-r border-dark-border p-2 text-center font-bold">${row.sr}</td>
+            <td class="border-r border-dark-border p-2 font-mono text-gnfc-orange font-bold">${row.tagNo}</td>
+            <td class="border-r border-dark-border p-2 text-[11px] leading-relaxed">${row.job}</td>
+            <td class="border-r border-dark-border p-2 text-center font-bold">${row.tech}</td>
+            <td class="border-r border-dark-border p-2 text-[11px] leading-relaxed">${row.desc || '-'}</td>
+            <td class="border-r border-dark-border p-2 text-center">${row.techStatus || '-'}</td>
+            <td class="border-r border-dark-border p-2 text-[10px]">${row.remarks || '-'}</td>
+            <td class="p-2 text-center">
+              <button onclick="deletePending(${idx})" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-1 rounded transition-all" title="Delete this pending job">
+                <i class="ph-fill ph-trash text-base"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+            }
+
+            document.getElementById('pendingCount').textContent = `${pendingData.length} Pending`;
+
+            // Show alert banner if pending > 50
+            const alertBanner = document.getElementById('alertBanner');
+            const alertMessage = document.getElementById('alertMessage');
+            if (pendingData.length > 150) {
+                alertBanner.classList.remove('hidden');
+                alertMessage.textContent = `Critical: ${pendingData.length} pending jobs! Pending log report will open automatically every time an engineer opens any logbook report.`;
+            } else if (pendingData.length > 50) {
+                alertBanner.classList.remove('hidden');
+                alertMessage.textContent = `Warning: ${pendingData.length} pending jobs! An alert will popup every time an engineer opens the logbook report.`;
+            } else {
+                alertBanner.classList.add('hidden');
+            }
+        }
+
+        function deletePending(index) {
+            const row = document.getElementById(`row-${index}`);
+            if (row) {
+                row.style.transition = 'all 0.3s ease';
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    pendingData.splice(index, 1);
+                    // Re-number sr values
+                    pendingData.forEach((item, i) => item.sr = i + 1);
+                    renderTable();
+                }, 300);
+            }
+        }
+
+        function deleteAllPending() {
+            if (pendingData.length === 0) return;
+
+            const confirmed = confirm(`Are you sure you want to delete all ${pendingData.length} pending jobs? This action cannot be undone.`);
+            if (confirmed) {
+                // Animate all rows out
+                const rows = document.querySelectorAll('#pendingTableBody tr');
+                rows.forEach((row, i) => {
+                    row.style.transition = `all 0.3s ease ${i * 0.05}s`;
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(20px)';
+                });
+
+                setTimeout(() => {
+                    pendingData = [];
+                    renderTable();
+                }, rows.length * 50 + 300);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            renderTable();
+        });
+    </script>
+    <script src="/src/js/emg_call_modal.js"></script>
+
+</body>
+
+</html>

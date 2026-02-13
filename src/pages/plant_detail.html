@@ -223,199 +223,202 @@
       });
     </script>
 
-   
+
     <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
       <!-- Top Navigation Bar -->
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
-    <script> try { renderPlantNav('logs'); } catch(e){} </script>
+      <script> try { renderPlantNav('logs'); } catch (e) { } </script>
 
 
-    <!-- Unified Action Toolbar -->
-    <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4">
+      <!-- Unified Action Toolbar -->
+      <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4">
 
-      <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+        <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
 
-        <!-- Left: Period Selector & Plant Info -->
-        <div class="flex items-center gap-4 w-full xl:w-auto">
-          <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border overflow-x-auto max-w-full">
-            <button id="btn-tomorrow" onclick="switchView(this, 'tomorrow')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Tomorrow</button>
-            <button id="btn-today" onclick="switchView(this, 'today')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-gnfc-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
-            <button id="btn-prev" onclick="switchView(this, 'prev')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">PrevDay</button>
-            <div class="w-px bg-dark-border mx-1 my-1"></div>
-            <button id="btn-weekly" onclick="switchView(this, 'weekly')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Weekly</button>
-            <button id="btn-monthly" onclick="switchView(this, 'monthly')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Monthly</button>
+          <!-- Left: Period Selector & Plant Info -->
+          <div class="flex items-center gap-4 w-full xl:w-auto">
+            <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border overflow-x-auto max-w-full">
+              <button id="btn-tomorrow" onclick="switchView(this, 'tomorrow')"
+                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Tomorrow</button>
+              <button id="btn-today" onclick="switchView(this, 'today')"
+                class="tab-btn px-3 py-1 text-[11px] font-bold text-gnfc-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
+              <button id="btn-prev" onclick="switchView(this, 'prev')"
+                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">PrevDay</button>
+              <div class="w-px bg-dark-border mx-1 my-1"></div>
+              <button id="btn-weekly" onclick="switchView(this, 'weekly')"
+                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Weekly</button>
+              <button id="btn-monthly" onclick="switchView(this, 'monthly')"
+                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Monthly</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Right: Actions & Tools -->
-        <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
+          <!-- Right: Actions & Tools -->
+          <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
 
-          <!-- Quick Actions Group -->
-          <div class="flex items-center gap-1">
-            <button onclick="AddLogModal.open()"
-              class="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
-              <i class="ph-bold ph-plus"></i> Add Direct Job
-            </button>
+            <!-- Quick Actions Group -->
+            <div class="flex items-center gap-1">
+              <button onclick="AddLogModal.open()"
+                class="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+                <i class="ph-bold ph-plus"></i> Add Direct Job
+              </button>
 
-            <div class="relative group">
-              <!-- <button
+              <div class="relative group">
+                <!-- <button
                     class="flex items-center gap-2 px-3 py-1.5 bg-gnfc-blue/10 hover:bg-gnfc-blue/20 text-gnfc-blue border border-gnfc-blue/30 text-xs font-bold rounded-sm transition-colors">
                     <i class="ph-bold ph-user-plus"></i> Assign
                     <i class="ph-bold ph-caret-down text-[10px]"></i>
                   </button> -->
-              <!-- Dropdown for Assign -->
-              <div
-                class="absolute right-0 top-full mt-1 w-40 bg-dark-panel border border-dark-border shadow-xl rounded-sm p-1 hidden group-hover:block z-20">
-                <button id="assign-today-btn" onclick="openJobModal('assign', 'today')"
-                  class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
-                  Assign Today
-                </button>
-                <button id="assign-tomorrow-btn" onclick="openJobModal('assign', 'tomorrow')"
-                  class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
-                  Assign Tomorrow
-                </button>
+                <!-- Dropdown for Assign -->
+                <div
+                  class="absolute right-0 top-full mt-1 w-40 bg-dark-panel border border-dark-border shadow-xl rounded-sm p-1 hidden group-hover:block z-20">
+                  <button id="assign-today-btn" onclick="openJobModal('assign', 'today')"
+                    class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
+                    Assign Today
+                  </button>
+                  <button id="assign-tomorrow-btn" onclick="openJobModal('assign', 'tomorrow')"
+                    class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
+                    Assign Tomorrow
+                  </button>
+                </div>
               </div>
             </div>
+
+            <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+
+            <!-- Tools Group -->
+            <div class="flex items-center gap-2">
+              <button id="toggle-pending-btn" onclick="togglePendingMode()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-gnfc-orange text-xs font-bold rounded-sm transition-colors"
+                title="Show Pending Logs">
+                <i class="ph-bold ph-clock"></i> Pending
+              </button>
+
+              <button id="job-reminder-btn" onclick="openReminderModal()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-purple-400 text-xs font-bold rounded-sm transition-colors"
+                title="Job Planner / Reminders">
+                <i class="ph-bold ph-calendar-check"></i> Planner
+              </button>
+
+              <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
+                class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-sm transition-colors animate-pulse">
+                <i class="ph-bold ph-warning"></i> Acknowledge
+              </button>
+            </div>
+
           </div>
+        </div>
+      </div>
 
-          <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
-
-          <!-- Tools Group -->
+      <!-- Filters Drawer (Collapsible) -->
+      <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
+        <div class="flex flex-col md:flex-row items-center gap-4 text-xs">
           <div class="flex items-center gap-2">
-            <button id="toggle-pending-btn" onclick="togglePendingMode()"
-              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-gnfc-orange text-xs font-bold rounded-sm transition-colors"
-              title="Show Pending Logs">
-              <i class="ph-bold ph-clock"></i> Pending
-            </button>
-
-            <button id="job-reminder-btn" onclick="openReminderModal()"
-              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-purple-400 text-xs font-bold rounded-sm transition-colors"
-              title="Job Planner / Reminders">
-              <i class="ph-bold ph-calendar-check"></i> Planner
-            </button>
-
-            <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
-              class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-sm transition-colors animate-pulse">
-              <i class="ph-bold ph-warning"></i> Acknowledge
-            </button>
+            <span class="text-dark-muted font-mono uppercase">Range:</span>
+            <input type="date" id="start-date" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+            <span class="text-dark-muted">-</span>
+            <input type="date" id="end-date" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
           </div>
 
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters Drawer (Collapsible) -->
-    <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
-      <div class="flex flex-col md:flex-row items-center gap-4 text-xs">
-        <div class="flex items-center gap-2">
-          <span class="text-dark-muted font-mono uppercase">Range:</span>
-          <input type="date" id="start-date" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-          <span class="text-dark-muted">-</span>
-          <input type="date" id="end-date" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-        </div>
-
-        <div class="flex items-center gap-2 flex-1">
-          <span class="text-dark-muted font-mono uppercase">Type:</span>
-          <select id="job-type-select" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
-            <option value="">All Jobs</option>
-          </select>
-        </div>
-
-        <button onclick="toggleJobFilter()" class="text-dark-muted hover:text-white"><i
-            class="ph-bold ph-x"></i></button>
-      </div>
-    </div>
-
-    <div id="dynamic-view-container"
-      class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
-      <div
-        class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
-        <div class="flex items-center gap-2">
-          <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
-          <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
-          <span id="record-count"
-            class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0
-            Records</span>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div class="relative">
-            <i
-              class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
-            <input type="text" id="table-search" placeholder="Search logs..."
-              onkeyup="plantLogTable.setSearch(this.value)"
-              class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+          <div class="flex items-center gap-2 flex-1">
+            <span class="text-dark-muted font-mono uppercase">Type:</span>
+            <select id="job-type-select" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
+              <option value="">All Jobs</option>
+            </select>
           </div>
-          <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">--.--.----</span>
+
+          <button onclick="toggleJobFilter()" class="text-dark-muted hover:text-white"><i
+              class="ph-bold ph-x"></i></button>
         </div>
       </div>
 
-      <div class="overflow-x-auto flex-1">
-        <table id="plant-table" class="w-full text-left border-collapse">
-          <thead>
-            <tr
-              class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th
-                class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th
-                class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('jobType')">Job Type <i
-                  class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('tech')">Tech</th>
-              <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">
-                Description
-              </th>
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-              <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                <div
-                  class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded"
-                  onclick="plantLogTable.sort('status')">
-                  <span>Status</span>
-                </div>
-                <button onclick="toggleStatusFilter(event)"
-                  class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
-                  <i class="ph-bold ph-funnel text-xs"></i>
-                </button>
-                <div id="status-filter-dropdown"
-                  class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
-                </div>
-              </th>
-              <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
-            </tr>
-            <tr
-              class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-              <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
-              <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
-            </tr>
-          </thead>
-          <tbody id="plantTableBody" class="text-xs font-mono"></tbody>
-        </table>
-      </div>
+      <div id="dynamic-view-container"
+        class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+        <div
+          class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
+            <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
+            <span id="record-count"
+              class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0
+              Records</span>
+          </div>
 
-      <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
-    </div>
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <i
+                class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
+              <input type="text" id="table-search" placeholder="Search logs..."
+                onkeyup="plantLogTable.setSearch(this.value)"
+                class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+            </div>
+            <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">--.--.----</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto flex-1">
+          <table id="plant-table" class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th rowspan="2"
+                  class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors"
+                  onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2"
+                  class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors"
+                  onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+                </th>
+                <th
+                  class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors"
+                  onclick="plantLogTable.sort('tag')">Loop / Tag <i
+                    class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+                </th>
+                <th
+                  class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors"
+                  onclick="plantLogTable.sort('jobType')">Job Type <i
+                    class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2"
+                  class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors"
+                  onclick="plantLogTable.sort('tech')">Tech</th>
+                <th rowspan="2"
+                  class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">
+                  Description
+                </th>
+                <th rowspan="2"
+                  class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors"
+                  onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
+                  <div
+                    class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded"
+                    onclick="plantLogTable.sort('status')">
+                    <span>Status</span>
+                  </div>
+                  <button onclick="toggleStatusFilter(event)"
+                    class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
+                    <i class="ph-bold ph-funnel text-xs"></i>
+                  </button>
+                  <div id="status-filter-dropdown"
+                    class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
+                  </div>
+                </th>
+                <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
+                <th rowspan="2" class="p-2 w-10 hover:bg-white/5 transition-colors" title="Add To History">H</th>
+              </tr>
+              <tr
+                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
+                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
+              </tr>
+            </thead>
+            <tbody id="plantTableBody" class="text-xs font-mono"></tbody>
+          </table>
+        </div>
+
+        <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
+      </div>
     </div>
   </main>
 
@@ -499,7 +502,7 @@
 
       <!-- Header -->
       <div
-        class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21]">
+        class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21]">
         <div>
           <h3 class="text-sm font-bold text-gray-900 dark:text-white tracking-wide">Edit Assigned Job</h3>
           <p class="text-[10px] text-gray-500 dark:text-dark-muted mt-0.5 font-mono opacity-80">JOB ID: <span
@@ -515,7 +518,7 @@
         <input id="edit-job-id" type="hidden">
 
         <!-- Scrollable Content -->
-        <div class="p-6 space-y-6 overflow-y-auto max-h-[70vh]">
+        <div class="p-4 space-y-6 overflow-y-auto max-h-[70vh]">
 
           <!-- Top Context Strip -->
           <div
@@ -682,7 +685,7 @@
 
         <!-- Footer -->
         <div
-          class="px-5 py-4 border-t border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21] flex justify-end gap-3 rounded-b-md">
+          class="p-4 border-t border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21] flex justify-end gap-3 rounded-b-md">
           <button type="button" onclick="closeEditModal()"
             class="px-4 py-2 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Cancel</button>
           <button type="submit"
@@ -705,7 +708,7 @@
       <form id="remark-modal-form" class="p-4 space-y-3">
         <input id="remark-job-id" type="hidden">
         <div id="remark-history"
-          class="max-h-40 overflow-auto border border-gray-200 dark:border-dark-border rounded-sm divide-y divide-gray-100 dark:divide-dark-border">
+          class="max-h-40 overflow-auto border border-gray-200 dark:border-dark-border rounded-sm divide-y divide-gray-100 dark:divide-dark-border !mt-0">
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
@@ -786,6 +789,167 @@
   </div>
 
   <script src="/src/js/plant_log_core.js"></script>
+
+  <!-- Add To History — Type Selection Modal (Fig 5.32.1) -->
+  <div id="history-type-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div
+      class="elog-modal-panel max-w-sm w-full mx-4 shadow-2xl shadow-black/50 overflow-hidden rounded-md border border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-panel">
+      <div class="px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-header text-center">
+        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">METHANOL-1</h3>
+        <p class="text-xs font-bold text-gray-600 dark:text-dark-muted mt-1">Add To History</p>
+      </div>
+      <div class="p-5 text-center space-y-4">
+        <p class="text-xs font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wide">Select History Type</p>
+        <div class="flex items-center justify-center gap-3">
+          <button onclick="selectHistoryType('system')"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-sm shadow-sm transition-all">
+            System History
+          </button>
+          <button onclick="selectHistoryType('general')"
+            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm shadow-sm transition-all">
+            General History
+          </button>
+        </div>
+        <button onclick="closeHistoryTypeModal()"
+          class="px-4 py-1.5 border border-gray-300 dark:border-dark-border text-gray-500 dark:text-dark-muted text-xs font-bold rounded-sm hover:text-gray-900 dark:hover:text-white transition-colors">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- General History Form Modal (Fig 5.33) -->
+  <div id="general-history-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div
+      class="elog-modal-panel max-w-3xl w-full mx-4 shadow-2xl shadow-black/50 overflow-hidden rounded-md border border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-bg">
+      <div
+        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-header">
+        <div>
+          <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue uppercase">Add To History</h3>
+          <span class="text-[10px] text-gray-400 dark:text-dark-muted font-mono">METHANOL-1</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="history-type-badge"
+            class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-sm font-bold">General
+            History</span>
+          <button onclick="closeGeneralHistoryModal()"
+            class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white transition-colors p-1 hover:bg-gray-100 dark:hover:bg-white/5 rounded-sm">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-4 overflow-y-auto max-h-[70vh]">
+        <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400">New Record</p>
+
+        <!-- Row 1: Date/Loop, InstTag, Type of Job, Type of Inst -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Date</label>
+            <input type="date" id="hist-date"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mt-1 block">Loop
+              Name</label>
+            <input type="text" id="hist-loop" readonly
+              class="w-full bg-gray-100 dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 text-gray-500 dark:text-dark-muted">
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">InstTag</label>
+            <select id="hist-insttag"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+              <option>DCS</option>
+              <option>TRANSMITTER</option>
+              <option>CONTROL VALVE</option>
+              <option>SWITCH</option>
+              <option>ANALYZER</option>
+              <option>OTHERS</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Type of Job</label>
+            <select id="hist-jobtype"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+              <option>PROCESS REQMT</option>
+              <option>CMS JOB</option>
+              <option>PM JOB</option>
+              <option>BREAKDOWN</option>
+              <option>N.A.</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Type of Inst</label>
+            <input type="text" id="hist-insttype" readonly
+              class="w-full bg-gray-100 dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 text-gray-500 dark:text-dark-muted">
+          </div>
+        </div>
+
+        <!-- Job Description -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold text-red-600 dark:text-red-400 uppercase">Job Description</label>
+          <textarea id="hist-desc" rows="4"
+            class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none font-mono leading-relaxed"></textarea>
+        </div>
+
+        <!-- Row 2: Job Status, Tech Name, Eng, Area -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Job Status</label>
+            <select id="hist-status"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+              <option>OVER</option>
+              <option>IN PROGRESS</option>
+              <option>U/P</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Tech Name</label>
+            <select id="hist-tech"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+              <option>BPB</option>
+              <option>PBS</option>
+              <option>NRK</option>
+              <option>SHC</option>
+              <option>NHP</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Eng</label>
+            <select id="hist-eng"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+              <option>SHC</option>
+              <option>MAJ</option>
+              <option>CKV</option>
+              <option>MDM</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase">Area</label>
+            <select id="hist-area"
+              class="w-full bg-white dark:bg-dark-bg border border-gray-200 dark:border-dark-border text-xs rounded-sm px-3 py-2 focus:border-blue-500 dark:focus:border-gnfc-blue outline-none">
+              <option>METH</option>
+              <option>FA</option>
+              <option>AA</option>
+              <option>DCS</option>
+              <option>UTIL</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="flex justify-end gap-3 p-4 border-t border-gray-200 dark:border-dark-border bg-white dark:bg-dark-header">
+        <button onclick="closeGeneralHistoryModal()"
+          class="px-3 py-1.5 border border-gray-300 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white transition-colors">Cancel</button>
+        <button onclick="addToHistory()"
+          class="px-5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-sm transition-all">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+
+
   <script src="/src/js/emg_call_modal.js"></script>
   <script src="/src/js/elogbook_store.js"></script>
   <script src="/src/js/elogbook_plant_flow.js"></script>
