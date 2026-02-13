@@ -22,7 +22,7 @@ function renderSidebar(activePageId) {
                   </div>
               </div>
               
-               <button onclick="toggleSidebar()" class="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-dark-panel rounded-full border border-dark-border text-white hover:text-white flex items-center justify-center transition-transform hover:scale-110 z-50 shadow-md ${isCollapsed ? 'rotate-180' : ''}">
+               <button onclick="toggleSidebar()" class="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-dark-panel rounded-full border border-dark-borde flex items-center justify-center transition-transform hover:scale-110 z-50 shadow-md ${isCollapsed ? 'rotate-180' : ''}">
                   <i class="ph-bold ph-caret-left text-xs"></i>
               </button>
           </div>
@@ -31,7 +31,8 @@ function renderSidebar(activePageId) {
               
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-2'}">Dashboards</div>
               
-              ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Plant Status", isCollapsed)}
+              ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard", isCollapsed)}
+              ${createLink("plant_status", "/src/pages/plant_status.html", "ph-factory", "Plant Status", isCollapsed)}
   
               <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Logs</div>
               
@@ -46,6 +47,7 @@ function renderSidebar(activePageId) {
 
             <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">System</div>
 
+            ${createLink("user_info", "/src/pages/user_info.html", "ph-users", "User Info", isCollapsed)}
             ${createLink("settings", "/src/pages/settings.html", "ph-gear", "Settings", isCollapsed)}
      
           </nav>

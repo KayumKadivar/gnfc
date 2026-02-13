@@ -122,16 +122,6 @@
       will-change: transform;
     }
 
-    html[data-theme-mode="light"] .theme-contrast-lock,
-    html[data-theme-mode="light"] .theme-contrast-lock * {
-      color: #000000 !important;
-    }
-
-    html[data-theme-mode="dark"] .theme-contrast-lock,
-    html[data-theme-mode="dark"] .theme-contrast-lock * {
-      color: #ffffff;
-    }
-
     #plant-table tbody tr {
       transition: background-color .18s ease;
     }
@@ -232,9 +222,9 @@
 
 
       <!-- Unified Action Toolbar -->
-      <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4">
+      <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4 my-4">
 
-        <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+        <div class="flex flex-wrap justify-between gap-4">
 
           <!-- Left: Period Selector & Plant Info -->
           <div class="flex items-center gap-4 w-full xl:w-auto">
@@ -257,9 +247,9 @@
           <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
 
             <!-- Quick Actions Group -->
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 flex-wrap">
               <button onclick="AddLogModal.open()"
-                class="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+                class="flex items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white text-xs font-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
                 <i class="ph-bold ph-plus"></i> Add Direct Job
               </button>
 
@@ -720,11 +710,11 @@
               <option value="executive">Executive</option>
             </select>
           </div>
-          <label class="flex items-center gap-2 text-xs mt-5 text-gray-700 dark:text-gray-300">
+          <label class="flex items-center gap-2 text-xs mt-5">
             <input id="remark-ack-tech" type="checkbox" class="accent-gnfc-blue">
             Ack by Technician
           </label>
-          <label class="flex items-center gap-2 text-xs mt-5 text-gray-700 dark:text-gray-300">
+          <label class="flex items-center gap-2 text-xs mt-5">
             <input id="remark-ack-eng" type="checkbox" class="accent-gnfc-blue">
             Ack by Engineer
           </label>

@@ -4,18 +4,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard | GNFC</title>
+  <title>Dashboard | GNFC E-Logbook</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <script>window.activePage = 'dashboard';</script>
-  <script src="config.js"></script>
+  <style>
+    /* Animated gradient border for KPI cards */
+    .kpi-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--kpi-color, #5794F2);
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+
+    .kpi-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Pulse dot animation */
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.4);
+      }
+    }
+
+    .pulse-dot {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    /* Activity timeline */
+    .activity-item {
+      position: relative;
+    }
+
+    .activity-item::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 32px;
+      bottom: -12px;
+      width: 1px;
+      background: var(--app-border, #2c3235);
+    }
+
+    .activity-item:last-child::before {
+      display: none;
+    }
+
+    /* Counter animation */
+    .counter-value {
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Bar chart animation */
+    .chart-bar {
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Glassmorphism quick-action */
+    .quick-action {
+      backdrop-filter: blur(8px);
+      transition: all 0.25s ease;
+    }
+
+    .quick-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Smooth scrollbar */
+    .dashboard-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .dashboard-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .dashboard-scroll::-webkit-scrollbar-thumb {
+      background: #2c3235;
+      border-radius: 4px;
+    }
+
+    .dashboard-scroll::-webkit-scrollbar-thumb:hover {
+      background: #5794F2;
+    }
+  </style>
 </head>
 
 <body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
   <div id="sidebar-container"></div>
   <script>renderSidebar('dashboard');</script>
 
@@ -25,7 +126,7 @@
     <script src="/src/js/header.js"></script>
     <script>
       renderHeader({
-        title: "Plant Status Overview",
+        title: "Dashboard",
         breadcrumbs: [
           { label: "Dashboard" }
         ],
@@ -33,62 +134,392 @@
       });
     </script>
 
-    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+    <!-- ═══════ SCROLLABLE CONTENT ═══════ -->
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg dashboard-scroll space-y-5">
 
-      <div class="bg-dark-panel border border-dark-border rounded-sm mb-4 shadow-sm">
-        <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border bg-dark-panel">
-          <h3
-            class="font-medium text-gnfc-blue flex items-center gap-2 text-sm cursor-pointer hover:text-white transition">
-            Plant Status
-          </h3>
-          <span
-            class="text-[10px] bg-gnfc-green/10 text-gnfc-green px-2 py-0.5 rounded uppercase font-bold border border-gnfc-green/20">14
-            Active</span>
+      <!-- ─── Top Bar: Welcome + Clock ─── -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold  tracking-tight">Good <span id="greeting-time">Morning</span>, Admin
+          </h2>
+          <p class="text-xs text-dark-muted mt-0.5">Plant operations overview for today</p>
         </div>
-
-        <div id="units-grid" class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 bg-dark-panel border border-dark-border rounded-md px-3 py-2">
+            <i class="ph ph-calendar-blank text-gnfc-blue"></i>
+            <span id="live-date" class="text-xs font-mono font-bold text-dark-text">--</span>
+          </div>
+          <div class="flex items-center gap-2 bg-dark-panel border border-dark-border rounded-md px-3 py-2">
+            <i class="ph ph-clock text-gnfc-orange"></i>
+            <span id="live-clock" class="text-xs font-mono font-bold text-dark-text tabular-nums">--:--:--</span>
+          </div>
         </div>
       </div>
+
+      <!-- ─── KPI STAT CARDS ─── -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+
+        <!-- Total Jobs Today -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-blue/40 transition-all cursor-default"
+          style="--kpi-color: #5794F2">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-blue/10 flex items-center justify-center">
+              <i class="ph-fill ph-briefcase text-lg text-gnfc-blue"></i>
+            </div>
+            <span class="text-[10px] font-bold text-dark-muted uppercase tracking-wider">Today</span>
+          </div>
+          <div class="text-2xl font-bold  counter-value" id="kpi-total">0</div>
+          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">Total Jobs</p>
+        </div>
+
+        <!-- Completed -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-green/40 transition-all cursor-default"
+          style="--kpi-color: #73BF69">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-green/10 flex items-center justify-center">
+              <i class="ph-fill ph-check-circle text-lg text-gnfc-green"></i>
+            </div>
+            <span class="text-[10px] font-bold text-gnfc-green bg-gnfc-green/10 px-1.5 py-0.5 rounded-sm"
+              id="kpi-completed-pct">0%</span>
+          </div>
+          <div class="text-2xl font-bold  counter-value" id="kpi-completed">0</div>
+          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">Completed</p>
+        </div>
+
+        <!-- In Progress -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-orange/40 transition-all cursor-default"
+          style="--kpi-color: #FF9900">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-orange/10 flex items-center justify-center">
+              <i class="ph-fill ph-hourglass-medium text-lg text-gnfc-orange"></i>
+            </div>
+            <i class="ph-fill ph-arrow-up text-gnfc-orange text-xs"></i>
+          </div>
+          <div class="text-2xl font-bold  counter-value" id="kpi-progress">0</div>
+          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">In Progress</p>
+        </div>
+
+        <!-- Pending -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-red/40 transition-all cursor-default"
+          style="--kpi-color: #F2495C">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-red/10 flex items-center justify-center">
+              <i class="ph-fill ph-warning-circle text-lg text-gnfc-red"></i>
+            </div>
+            <i class="ph-fill ph-arrow-down text-gnfc-red text-xs"></i>
+          </div>
+          <div class="text-2xl font-bold  counter-value" id="kpi-pending">0</div>
+          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">Pending</p>
+        </div>
+      </div>
+
+      <!-- ─── TWO COLUMN: Activity + Distribution ─── -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+
+        <!-- Left: Recent Activity (3 cols) -->
+        <div class="lg:col-span-3 bg-dark-panel border border-dark-border rounded-md shadow-sm flex flex-col">
+          <div class="flex items-center justify-between px-4 py-2.5 border-b border-dark-border shrink-0">
+            <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+              <i class="ph-fill ph-pulse"></i>
+              Recent Activity
+            </h3>
+            <span class="text-[10px] font-bold text-dark-muted uppercase tracking-wide">All Plants</span>
+          </div>
+          <div id="activity-feed" class="p-4 space-y-3 overflow-y-auto max-h-[380px] dashboard-scroll">
+            <!-- JS-populated -->
+          </div>
+        </div>
+
+        <!-- Right: Job Distribution + Quick Actions (2 cols) -->
+        <div class="lg:col-span-2 space-y-4">
+
+          <!-- Job Distribution -->
+          <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+            <div class="px-4 py-2.5 border-b border-dark-border">
+              <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+                <i class="ph-fill ph-chart-bar-horizontal"></i>
+                Job Distribution
+              </h3>
+            </div>
+            <div id="job-distribution" class="p-4 space-y-3">
+              <!-- JS-populated -->
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+            <div class="px-4 py-2.5 border-b border-dark-border">
+              <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+                <i class="ph-fill ph-lightning"></i>
+                Quick Actions
+              </h3>
+            </div>
+            <div class="p-3 grid grid-cols-3 gap-2">
+              <a href="/src/pages/technician_logbook.html"
+                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-blue/40 rounded-md p-3 text-center group">
+                <i
+                  class="ph-fill ph-notebook text-xl text-gnfc-blue mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Logbook</span>
+              </a>
+              <a href="/src/pages/datewise_report.html"
+                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-orange/40 rounded-md p-3 text-center group">
+                <i
+                  class="ph-fill ph-calendar-check text-xl text-gnfc-orange mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Reports</span>
+              </a>
+              <a href="/src/pages/job_history.html"
+                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-green/40 rounded-md p-3 text-center group">
+                <i
+                  class="ph-fill ph-clock-counter-clockwise text-xl text-gnfc-green mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">History</span>
+              </a>
+              <a href="/src/pages/Sy_PM.html"
+                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-purple/40 rounded-md p-3 text-center group">
+                <i
+                  class="ph-fill ph-wrench text-xl text-gnfc-purple mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">SY/PM</span>
+              </a>
+              <a href="/src/pages/pending_log.html"
+                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-red/40 rounded-md p-3 text-center group">
+                <i
+                  class="ph-fill ph-warning text-xl text-gnfc-red mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Pending</span>
+              </a>
+              <a href="/src/pages/settings.html"
+                class="quick-action bg-dark-bg border border-dark-border hover:border-dark-muted/40 rounded-md p-3 text-center group">
+                <i
+                  class="ph-fill ph-gear text-xl text-dark-muted mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Settings</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── FOOTER ─── -->
+      <div class="text-center py-3">
+        <p class="text-[10px] text-dark-muted font-mono">GNFC E-Logbook Dashboard &bull; Instrumentation Dept.</p>
+      </div>
+
     </div>
   </main>
 
+  <!-- ═══════ DASHBOARD LOGIC ═══════ -->
   <script>
-    const units = [
-      { name: "M1 Unit", status: "Operational", color: "#73BF69" },
-      { name: "M2 Unit", status: "Maintenance", color: "#FF9900" },
-      { name: "AA Section", status: "Operational", color: "#73BF69" },
-      { name: "FA Section", status: "Operational", color: "#73BF69" },
-      { name: "BOILER", status: "Critical", color: "#F2495C" },
-      { name: "AMM", status: "Operational", color: "#73BF69" },
-      { name: "UREA", status: "Operational", color: "#73BF69" },
-      { name: "NPP", status: "Offline", color: "#8e8e9e" },
-      { name: "DM Plant", status: "Operational", color: "#73BF69" },
-      { name: "BAGG", status: "Operational", color: "#73BF69" },
-      { name: "INST WS", status: "Active", color: "#5794F2" },
-      { name: "CMS", status: "Operational", color: "#73BF69" }
-    ];
+    (function () {
+      'use strict';
 
-    const grid = document.getElementById('units-grid');
-    units.forEach(u => {
-      // Card BG is same as Panel BG (#181b1f) but has hover effect (#22252b)
-      const cardHTML = `
-            <div class="bg-dark-panel border border-dark-border hover:border-gnfc-blue hover:bg-dark-header rounded-sm p-3 relative group cursor-pointer transition-all duration-200 h-24 flex flex-col justify-between shadow-sm">
-                <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-sm" style="background-color: ${u.color}"></div>
-                
-                <div class="flex justify-between items-start pl-3">
-                    <h4 class="font-bold  text-sm tracking-tight">${u.name}</h4>
-                    <i class="ph-fill ph-circle text-[8px] animate-pulse" style="color: ${u.color}"></i>
+      const DEFAULT_PLANTS = [
+        'AA', 'AAQM', 'AMM', 'ANIPF', 'ANITDI',
+        'ASGP', 'BAGG', 'BOILER', 'CMS', 'CPSU',
+        'DM', 'EA', 'FA', 'INST WS', 'M1', 'M2', 'UREA', 'UTIL', 'DCS', 'MF'
+      ];
+
+      const PLANT_DISPLAY = {
+        'AA': { label: 'AA Section', status: 'Operational', color: '#73BF69' },
+        'AAQM': { label: 'AAQM', status: 'Operational', color: '#73BF69' },
+        'AMM': { label: 'Ammonia', status: 'Operational', color: '#73BF69' },
+        'ANIPF': { label: 'ANIPF', status: 'Maintenance', color: '#FF9900' },
+        'ANITDI': { label: 'ANITDI', status: 'Operational', color: '#73BF69' },
+        'ASGP': { label: 'ASGP', status: 'Operational', color: '#73BF69' },
+        'BAGG': { label: 'Bagging', status: 'Operational', color: '#73BF69' },
+        'BOILER': { label: 'BOILER', status: 'Critical', color: '#F2495C' },
+        'CMS': { label: 'CMS', status: 'Operational', color: '#73BF69' },
+        'CPSU': { label: 'CPSU', status: 'Operational', color: '#73BF69' },
+        'DM': { label: 'DM Plant', status: 'Operational', color: '#73BF69' },
+        'EA': { label: 'EA', status: 'Operational', color: '#73BF69' },
+        'FA': { label: 'FA Section', status: 'Operational', color: '#73BF69' },
+        'INST WS': { label: 'Inst W/S', status: 'Active', color: '#5794F2' },
+        'M1': { label: 'Methanol-1', status: 'Operational', color: '#73BF69' },
+        'M2': { label: 'Methanol-2', status: 'Maintenance', color: '#FF9900' },
+        'UREA': { label: 'Urea', status: 'Operational', color: '#73BF69' },
+        'UTIL': { label: 'Utility', status: 'Operational', color: '#73BF69' },
+        'DCS': { label: 'DCS', status: 'Active', color: '#5794F2' },
+        'MF': { label: 'MF', status: 'Operational', color: '#73BF69' }
+      };
+
+      // ── Clock & Date ──
+      function updateClock() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('live-clock').textContent = `${hh}:${mm}:${ss}`;
+
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        document.getElementById('live-date').textContent =
+          `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+        const hour = now.getHours();
+        const greeting = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
+        document.getElementById('greeting-time').textContent = greeting;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // ── Load all data ──
+      const state = window.ElogbookStore ? ElogbookStore.loadState() : { plants: {} };
+      const allJobs = [];
+      const plantJobCounts = {};
+
+      DEFAULT_PLANTS.forEach(plant => {
+        const jobs = (state.plants[plant] && state.plants[plant].jobs) || [];
+        plantJobCounts[plant] = { total: jobs.length, completed: 0, inProgress: 0, pending: 0 };
+        jobs.forEach(job => {
+          allJobs.push({ ...job, _plant: plant });
+          if (job.status === '✓ OVER') plantJobCounts[plant].completed++;
+          else if (job.status === 'IN PROGRESS') plantJobCounts[plant].inProgress++;
+          else plantJobCounts[plant].pending++;
+        });
+      });
+
+      // ── KPI Stats ──
+      const totalJobs = allJobs.length;
+      const completedJobs = allJobs.filter(j => j.status === '✓ OVER').length;
+      const inProgressJobs = allJobs.filter(j => j.status === 'IN PROGRESS').length;
+      const pendingJobs = allJobs.filter(j => !j.status || (j.status !== '✓ OVER' && j.status !== 'IN PROGRESS')).length;
+
+      function animateCounter(el, target) {
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 20));
+        const interval = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(interval); }
+          el.textContent = current;
+        }, 40);
+      }
+
+      setTimeout(() => {
+        animateCounter(document.getElementById('kpi-total'), totalJobs);
+        animateCounter(document.getElementById('kpi-completed'), completedJobs);
+        animateCounter(document.getElementById('kpi-progress'), inProgressJobs);
+        animateCounter(document.getElementById('kpi-pending'), pendingJobs);
+
+        const pct = totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
+        document.getElementById('kpi-completed-pct').textContent = pct + '%';
+      }, 200);
+
+
+      // ── Plant Badge ──
+      let activeCount = 0;
+      DEFAULT_PLANTS.forEach(code => {
+        const info = PLANT_DISPLAY[code] || { status: 'Unknown' };
+        if (info.status !== 'Offline') activeCount++;
+      });
+      document.getElementById('plant-count-badge').textContent = `${activeCount} Active`;
+
+
+      // ── Recent Activity Feed ──
+      const activityFeed = document.getElementById('activity-feed');
+      const recentJobs = allJobs
+        .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime())
+        .slice(0, 8);
+
+      if (recentJobs.length === 0) {
+        activityFeed.innerHTML = `
+        <div class="text-center py-12 text-dark-muted">
+          <i class="ph ph-clipboard-text text-4xl mb-2 block opacity-30"></i>
+          <p class="text-xs font-bold">No recent activity</p>
+        </div>`;
+      } else {
+        recentJobs.forEach(job => {
+          const statusIcon = job.status === '✓ OVER'
+            ? '<i class="ph-fill ph-check-circle text-gnfc-green"></i>'
+            : job.status === 'IN PROGRESS'
+              ? '<i class="ph-fill ph-hourglass-medium text-gnfc-orange"></i>'
+              : '<i class="ph-fill ph-clock text-gnfc-red"></i>';
+
+          const statusText = job.status || 'Pending';
+          const statusColor = job.status === '✓ OVER' ? 'text-gnfc-green'
+            : job.status === 'IN PROGRESS' ? 'text-gnfc-orange' : 'text-gnfc-red';
+
+          const timeAgo = getTimeAgo(new Date(job.updatedAt || job.createdAt));
+          const description = job.desc || job.jobType || 'No description';
+
+          activityFeed.innerHTML += `
+          <div class="activity-item flex gap-3">
+            <div class="w-8 h-8 rounded-full bg-dark-bg border border-dark-border flex items-center justify-center shrink-0 text-sm z-10">
+              ${statusIcon}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="text-xs font-bold text-gnfc-blue">${job._plant}</span>
+                  <span class="text-dark-muted text-[10px]">•</span>
+                  <span class="text-xs font-bold  truncate">${job.tag || 'N.A'}</span>
+                  <span class="text-[10px] font-bold ${statusColor} bg-dark-bg px-1.5 py-0.5 rounded-sm border border-dark-border shrink-0">${statusText}</span>
                 </div>
-                
-                <div class="pl-3 flex items-end justify-between border-t border-white/5 pt-2 mt-1">
-                    <span class="text-xs font-mono font-medium" style="color: ${u.color}">${u.status}</span>
-                    <span class="text-[10px] text-[#8e8e9e] group-hover:text-[#5794F2] flex items-center gap-1">
-                        View <i class="ph-bold ph-caret-right"></i>
-                    </span>
-                </div>
-            </div>`;
-      grid.innerHTML += cardHTML;
-    });
+                <span class="text-[10px] text-dark-muted font-mono shrink-0">${timeAgo}</span>
+              </div>
+              <p class="text-[11px] text-dark-muted mt-0.5 truncate">${description}</p>
+              <div class="flex items-center gap-3 mt-1">
+                <span class="text-[10px] text-dark-muted"><i class="ph ph-user mr-0.5"></i>${job.tech || 'N.A'}</span>
+                <span class="text-[10px] text-dark-muted"><i class="ph ph-wrench mr-0.5"></i>${job.jobType || 'N.A'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+        });
+      }
+
+      function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        if (seconds < 60) return 'Just now';
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes}m ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        return `${days}d ago`;
+      }
+
+      // ── Job Distribution Chart ──
+      const jobTypeCounts = {};
+      allJobs.forEach(job => {
+        const type = job.jobType || 'Other';
+        jobTypeCounts[type] = (jobTypeCounts[type] || 0) + 1;
+      });
+
+      const distContainer = document.getElementById('job-distribution');
+      const sortedTypes = Object.entries(jobTypeCounts).sort((a, b) => b[1] - a[1]);
+      const maxCount = sortedTypes.length > 0 ? sortedTypes[0][1] : 1;
+
+      const chartColors = ['#5794F2', '#FF9900', '#73BF69', '#F2495C', '#B794F4', '#14b8a6', '#f59e0b', '#06b6d4'];
+
+      if (sortedTypes.length === 0) {
+        distContainer.innerHTML = '<p class="text-xs text-dark-muted text-center py-4">No data available</p>';
+      } else {
+        sortedTypes.forEach(([type, count], i) => {
+          const pct = Math.round((count / maxCount) * 100);
+          const color = chartColors[i % chartColors.length];
+          distContainer.innerHTML += `
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[11px] font-bold text-dark-text">${type}</span>
+              <span class="text-[10px] font-mono text-dark-muted font-bold">${count}</span>
+            </div>
+            <div class="h-2 bg-dark-bg rounded-full overflow-hidden">
+              <div class="chart-bar h-full rounded-full" style="width: 0%; background: ${color};" data-target="${pct}"></div>
+            </div>
+          </div>
+        `;
+        });
+
+        // Animate bars
+        setTimeout(() => {
+          document.querySelectorAll('.chart-bar').forEach(bar => {
+            bar.style.width = bar.dataset.target + '%';
+          });
+        }, 400);
+      }
+
+    })();
   </script>
 </body>
 

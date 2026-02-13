@@ -80,7 +80,8 @@
         <div class="flex items-center gap-4 px-2">
           <div class="flex items-center gap-2">
             <label class="text-xs font-bold text-dark-muted uppercase tracking-wide">Manager and Above:</label>
-            <select id="engineer-select" class="bg-dark-bg border border-dark-border text-white text-xs rounded-md px-3 py-1.5 cursor-pointer hover:border-gnfc-blue transition-colors">
+            <select id="engineer-select"
+              class="bg-dark-bg border border-dark-border text-white text-xs rounded-md px-3 py-1.5 cursor-pointer hover:border-gnfc-blue transition-colors">
               <option value="">Select Name</option>
               <option value="DVP">DVP</option>
               <option value="HNP">HNP</option>
@@ -113,7 +114,8 @@
 
           <div class="h-4 w-px bg-dark-border"></div>
 
-          <a href="#" onclick="openOldReportsModal(); return false;" class="text-xs font-bold text-gnfc-blue hover:text-blue-400 transition-colors uppercase tracking-wide">
+          <a href="#" onclick="openOldReportsModal(); return false;"
+            class="text-xs font-bold text-gnfc-blue hover:text-blue-400 transition-colors uppercase tracking-wide">
             Old Reports
           </a>
         </div>
@@ -128,7 +130,8 @@
           </h3>
         </div>
 
-        <div id="plant-grid" class="p-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+        <div id="plant-grid"
+          class="p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
         </div>
 
       </div>
@@ -207,16 +210,20 @@
   <!-- Old Reports Modal -->
   <div class="modal micromodal-slide" id="modal-old-reports" aria-hidden="true">
     <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-      <div class="modal__container w-full max-w-3xl glass-panel border border-dark-border rounded-lg shadow-2xl overflow-hidden animate-slide-up" role="dialog" aria-modal="true" aria-labelledby="modal-old-reports-title">
-        
+      <div
+        class="modal__container w-full max-w-3xl glass-panel border border-dark-border rounded-lg shadow-2xl overflow-hidden animate-slide-up"
+        role="dialog" aria-modal="true" aria-labelledby="modal-old-reports-title">
+
         <!-- Modal Header -->
         <div class="h-16 border-b border-dark-border flex items-center justify-between px-6 bg-dark-header/80">
           <div class="flex items-center gap-4">
-            <div class="w-8 h-8 rounded bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+            <div
+              class="w-8 h-8 rounded bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
               <i class="ph-fill ph-archive-box text-lg"></i>
             </div>
             <div>
-              <h2 id="modal-old-reports-title" class="text-white font-bold text-lg tracking-tight">Old Report Archives</h2>
+              <h2 id="modal-old-reports-title" class="text-white font-bold text-lg tracking-tight">Old Report Archives
+              </h2>
               <div class="flex items-center gap-2 text-[10px] text-dark-text/60 uppercase tracking-widest font-mono">
                 <span>Officer's Logbook</span>
                 <span class="w-1 h-1 rounded-full bg-dark-border"></span>
@@ -224,22 +231,25 @@
               </div>
             </div>
           </div>
-          
-          <button data-micromodal-close class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-white/10 text-gray-400 hover:text-white transition-colors" aria-label="Close modal">
+
+          <button data-micromodal-close
+            class="w-8 h-8 flex items-center justify-center rounded-sm hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+            aria-label="Close modal">
             <i class="ph-bold ph-x text-lg"></i>
           </button>
         </div>
 
         <!-- Modal Body -->
         <div class="px-6 py-6 bg-dark-bg/40">
-          
+
           <!-- Filters Row -->
           <div class="flex flex-wrap items-end gap-4 mb-6">
-            
+
             <!-- Engineer Dropdown -->
             <div class="flex flex-col gap-1.5 flex-1 min-w-[200px]">
               <label class="text-[10px] font-bold text-gnfc-blue uppercase">Select Engineer</label>
-              <select id="oldReportsEngineer" class="h-9 bg-dark-bg border border-dark-border rounded-sm px-3 text-sm text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
+              <select id="oldReportsEngineer"
+                class="h-9 bg-dark-bg border border-dark-border rounded-sm px-3 text-sm text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
                 <option value="">-- Select Name --</option>
                 <option value="DVP">DVP</option>
                 <option value="HNP">HNP</option>
@@ -274,9 +284,11 @@
             <div class="flex flex-col gap-1.5">
               <label class="text-[10px] font-bold text-gnfc-blue uppercase">Date Range</label>
               <div class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center p-1">
-                <input type="date" id="oldReportsStartDate" class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
+                <input type="date" id="oldReportsStartDate"
+                  class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
                 <span class="text-dark-border px-1">to</span>
-                <input type="date" id="oldReportsEndDate" class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
+                <input type="date" id="oldReportsEndDate"
+                  class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
               </div>
             </div>
 
@@ -284,11 +296,13 @@
 
           <!-- Action Buttons -->
           <div class="flex items-center justify-center gap-4">
-            <button onclick="submitOldReports()" class="h-9 px-6 bg-purple-600 hover:bg-purple-700 border border-purple-500 text-white text-sm font-bold rounded-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+            <button onclick="submitOldReports()"
+              class="h-9 px-6 bg-purple-600 hover:bg-purple-700 border border-purple-500 text-white text-sm font-bold rounded-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
               <i class="ph-bold ph-magnifying-glass"></i>
               Search Reports
             </button>
-            <button data-micromodal-close class="h-9 px-6 bg-dark-bg border border-dark-border text-dark-text hover:text-white hover:border-white/20 text-sm font-bold rounded-sm transition-all">
+            <button data-micromodal-close
+              class="h-9 px-6 bg-dark-bg border border-dark-border text-dark-text hover:text-white hover:border-white/20 text-sm font-bold rounded-sm transition-all">
               Cancel
             </button>
           </div>
@@ -300,40 +314,51 @@
 
   <style>
     /* Glass Effect for Modal */
-    .glass-panel { 
-      background: var(--app-panel, rgba(24, 27, 31, 0.95)); 
-      backdrop-filter: blur(12px); 
-      -webkit-backdrop-filter: blur(12px); 
+    .glass-panel {
+      background: var(--app-panel, rgba(24, 27, 31, 0.95));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
-    
+
     /* Slide Up Animation */
-    @keyframes slideUp { 
-      from { transform: translateY(20px); opacity: 0; } 
-      to { transform: translateY(0); opacity: 1; } 
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
-    .animate-slide-up { 
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+
+    .animate-slide-up {
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* MicroModal Classes */
     .modal {
       display: none;
     }
+
     .modal.is-open {
       display: block;
     }
+
     .modal__overlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
     }
+
     .modal__container {
       max-height: 90vh;
       overflow-y: auto;
@@ -467,13 +492,13 @@
       // Here you can redirect to old reports page or make an API call
       console.log('Searching reports for:', { engineer, startDate, endDate });
       alert(`Searching reports for ${engineer} from ${startDate} to ${endDate}`);
-      
+
       // Close the modal
       closeOldReportsModal();
     }
 
     // ESC key support (MicroModal handles this, but keeping for reference)
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         closeOldReportsModal();
       }

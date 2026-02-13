@@ -133,7 +133,7 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg text-dark-text flex">
 
 
   <script src="/src/js/theme_manager.js"></script>
@@ -146,7 +146,7 @@
     } catch (e) { }
   </script>
 
-  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+  <main class="flex-1 flex flex-col">
 
     <div id="header-container"></div>
     <script>
@@ -227,17 +227,17 @@
     const reportData = [
       {
         sr: 1, area: '300', loopNo: 'N.A', tagNo: 'PT310', job: 'To be checked as reported PT showing Zero value. (By:MAJ : 08/02/2026)', typeOfJob: 'DEFECT MAINTENANCE', tech1: 'NND',
-        description: 'Rosemount remote seal PT found defective so removed it. Its diaphragm is not working properly. New ABB 2600 series remote seal PT installed with new gasket(1-1/2" 300#). Capillary tube dressing and cable connection done. Tx configuration done. Mounting zero done. Tx taken in line. No any leakage. Indication is ok now. Steam tracing flow established.',
-        tech2: 'NND', status: 'OVER', remarks: 'An email has been sent to the Mechanical Team for the provision of a drain spool arrangement. The email reference has also been uploaded in the IIMS correspondence section under \'Safety-related emails\'. [written by : MAJ Date : 07/02/2026 ]'
+        description: 'Rosemount remote seal PT found defective so removed it. Its diaphragm is not working properly. New ABB 2600 series',
+        tech2: 'NND', status: 'OVER', remarks: 'An email has been sent to the Mechanical Team for the provision of a drain spool arrangement. The email reference has also been uploaded in the'
       },
       {
         sr: 2, area: '500', loopNo: 'N.A', tagNo: 'PT501', job: 'DEFECT MAINTENANCE', typeOfJob: 'DEFECT MAINTENANCE', tech1: 'GAZ',
-        description: 'Leakage was found from its tapping so Ferrule camp was provided on it. As per process requirement Near by same line GE pint disconnected and PG(10BAR) provided on it for Pressure measurement (GE point valve passing so isolated on needle valve and tap is done.)',
+        description: 'Leakage was found from its tapping so Ferrule camp was provided on it. As per process requirement Near by same ',
         tech2: 'GAZ', status: 'OVER', remarks: 'Tag is PT501. [written by : DKV Date : 03/02/2026 ]'
       },
       {
         sr: 3, area: 'N.A', loopNo: 'N.A', tagNo: 'DCS-FOXBORO IA', job: 'Associated with M/S SEBPL for Foxboro AMC visit. (By:MAJ : 30/01/2026)', typeOfJob: 'PM', tech1: 'PSG',
-        description: 'Associated with M/S SEBPL engr Mr. Shailesh Pateliya as part of Foxboro AMC visit. Backup of AW0001 Foxboro server is taken. Backup of WP0001/WP0002/WP0003/WP0004 workstation is taken. Backup of AW0001 at Meth-1 plant is taken. Material received for Triconex upgradation kit is received and checked Found Ok. Following discrepancies observed: -TRICON DIAGREAD KIT along with CD is not available. -Monitor received 24" 2 Nos against 27" 3 Nos mention in BOM -Hex screw driver tool is not availble. -EPROM for DI module is 38 Nos and 51 mentioned in BOM.',
+        description: 'Associated with M/S SEBPL engr Mr. Shailesh Pateliya as part of Foxboro AMC visit. Backup of AW0001 Foxboro',
         tech2: 'PSG', status: 'OVER', remarks: 'TRICON DIAGREAD kit and hex tool are not required as certified by M/s SFSIPL engineer. Other discrepancies are relayed further. [written by : NKP Date : 31/01/2026 ]'
       },
       {
@@ -247,17 +247,17 @@
       },
       {
         sr: 5, area: 'N.A', loopNo: 'N.A', tagNo: 'QT0207/QT0208_3', job: 'DEFECT MAINTENANCE', typeOfJob: 'DEFECT MAINTENANCE', tech1: 'MRL',
-        description: 'During the analyzer round, an Error LED was observed on the analyzer. Upon investigation, the errors were identified as CAN – No Device and CAN Bus Error. A system reboot was performed, and all CAN connections were disconnected and reconnected; however, no improvement was observed. The internal old backup was loaded, but the issue persisted. Further attempts were made to establish communication with the SEI card using TCT software version 3.7 and above, but communication could not be established. Based on these observations, it was decided to replace the SEI card. A replacement SEI card was arranged and installed. Communication was successfully established after configuring the network settings as follows: SEI card IP address: 192.168.1.4 PC IP address: 192.168.1.5 Subnet mask: 255.255.255.0 As there was no analyzer backup available locally, a backup was arranged from ABB and an attempt was made to load it. However, the serial number of the new SEI card differed from the old SEI card, and the old serial number was stored in the backup. Due to this mismatch, the backup could not be loaded. Subsequently, the analyzer from M-1 was removed and installed at QT0207_0208_02. The measurement range was configured, all connections and tubing were completed, and calibration was performed. The analyzer was then placed inline, and the sample readings were found to be normal.',
+        description: 'During the analyzer round, an Error LED was observed on the analyzer. Upon investigation, the errors were',
         tech2: 'MRL', status: 'OVER', remarks: 'replaced AMC(Analyzer module controller). [written by : MAJ Date : 19/01/2026 ]'
       },
       {
         sr: 6, area: 'ABU REVAMP', loopNo: 'N.A', tagNo: 'XV20', job: 'PROCESS REQMT', typeOfJob: 'PROCESS REQMT', tech1: 'PSG',
-        description: 'CX20 startup related activities done. Reported that XV09 is not getting open. Found that K3 was in dropped condition. So, informed to make it on via FSOV64 RESET command from DCS panel. After that K3 relay become OK. After that turbine is started but due to some leakage they have stopped it. After that it was required to open XV09 for draining purpose. But it was not getting open. FSOV64 reset done but K3 relay was dropping after sometime. So, P24VDC undervoltage contact is bypassed. But still no improvement. So, total K3 contactor is bypassed. It may be required to be replace with spare one. Draining is started by process department.',
+        description: 'CX20 startup related activities done. Reported that XV09 is not getting open. Found that K3 was in dropped condition. So, informed to make it on via FSOV64 RESET command from DCS panel. After that K3 relay',
         tech2: 'PSG', status: 'OVER', remarks: 'Good job. [written by : VMP Date : 17/01/2026 ]'
       },
       {
         sr: 7, area: 'ABU REVAMP', loopNo: 'N.A', tagNo: 'XV1010', job: 'PROCESS REQMT', typeOfJob: 'PROCESS REQMT', tech1: 'PSG',
-        description: 'X01010 related startup activities done. Reported that X01 TTD is not getting start. Checked found that pin on down engage lamp was ON. So checked in field and TTD SOV air is isolated and taken line. After that TTD engage pin on positioned properly and lamp disappear. After that TTD is put on AUTO by panel operator and it got start. X01 startup activity done by process and reported that HP steam pilot valve is not getting open after ESV opened. RUN button pressed several times. Checked in field and informed process people to press RUN button hard. After that it is working OK. But in a minute it got tripped due to 20 minutes timer for turbine. Then process people tried to open ESV. But control oil pressure was not coming. Checked in detail found that TTDNOTRIP was unhealthy. Traced found that it is T21 command coming from TTD panel. Process has reset TTD from panel after that this trip become normal. After that ESV opening sequence found smooth and RUN command given from local panel and X01 turbine started. On Woodward panel, there was alarm - one speed probe failed. So, frequency in outlet of all',
+        description: 'X01010 related startup activities done. Reported that X01 TTD is not getting start. Checked found that pin on down engage lamp was ON. So checked in field and TTD SOV air is isolated and taken line.',
         tech2: 'PSG', status: 'OVER', remarks: 'Good job. [written by : VMP Date : 17/01/2026 ]'
       }
     ];
@@ -281,7 +281,7 @@
                             <div class="text-gnfc-orange mt-1 font-medium">${item.typeOfJob}</div>
                         </td>
                         <td class="border-r border-dark-border px-2 py-3 text-center font-bold ">${item.tech1}</td>
-                        <td class="border-r border-dark-border px-4 py-3 text-dark-text leading-relaxed overflow-hidden text-ellipsis relative" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;" title="${item.description}">
+                        <td class="border-r border-dark-border px-4 py-3 text-dark-text leading-relaxed text-ellipsis relative" title="${item.description}">
                             ${item.description}
                         </td>
                         <td class="border-r border-dark-border px-2 py-3 text-center font-bold ">${item.tech2}</td>
@@ -291,9 +291,7 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-dark-text leading-snug">
-                            <div class="p-2 bg-dark-bg/50 rounded border border-dark-border">
-                                ${item.remarks}
-                            </div>
+                          ${item.remarks}
                         </td>
                     </tr>
                 `;

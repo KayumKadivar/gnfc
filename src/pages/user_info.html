@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information | GNFC E-Logbook</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'user_info';</script>
+    <style>
+        .user-row {
+            transition: all 0.15s ease;
+        }
+
+        .user-row:hover {
+            background: rgba(87, 148, 242, 0.04);
+        }
+
+        .status-online {
+            background: #73BF69;
+            box-shadow: 0 0 6px rgba(115, 191, 105, 0.4);
+        }
+
+        .status-offline {
+            background: #8e8e9e;
+        }
+
+        .status-busy {
+            background: #FF9900;
+            box-shadow: 0 0 6px rgba(255, 153, 0, 0.4);
+        }
+
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            color: #5794F2;
+            border-bottom: 2px solid #5794F2;
+            background: rgba(87, 148, 242, 0.05);
+        }
+
+        .info-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .info-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .info-scroll::-webkit-scrollbar-thumb {
+            background: #2c3235;
+            border-radius: 4px;
+        }
+
+        /* User detail modal */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('user_info');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "User Information",
+                breadcrumbs: [
+                    { label: "User Information" }
+                ],
+                backLink: "/src/pages/dashboard.html"
+            });
+        </script>
+
+        <!-- ═══════ CONTENT ═══════ -->
+        <div class="flex-1 overflow-y-auto p-4 bg-dark-bg info-scroll">
+
+            <!-- ─── STATS ROW ─── -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gnfc-blue/10 flex items-center justify-center">
+                        <i class="ph-fill ph-users text-lg text-gnfc-blue"></i>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold" id="stat-total">0</div>
+                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Total Users</p>
+                    </div>
+                </div>
+                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gnfc-green/10 flex items-center justify-center">
+                        <i class="ph-fill ph-user-check text-lg text-gnfc-green"></i>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold " id="stat-online">0</div>
+                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Online</p>
+                    </div>
+                </div>
+                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gnfc-purple/10 flex items-center justify-center">
+                        <i class="ph-fill ph-user-gear text-lg text-gnfc-purple"></i>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold " id="stat-engineers">0</div>
+                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Engineers</p>
+                    </div>
+                </div>
+                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gnfc-orange/10 flex items-center justify-center">
+                        <i class="ph-fill ph-wrench text-lg text-gnfc-orange"></i>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold " id="stat-technicians">0</div>
+                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Technicians</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── FILTER + SEARCH BAR ─── -->
+            <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm mb-4">
+                <div class="flex items-center justify-between border-b border-dark-border">
+                    <!-- Tabs -->
+                    <div class="flex">
+                        <button
+                            class="tab-btn active px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
+                            data-tab="all" onclick="filterTab('all', this)">All Users</button>
+                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
+                            data-tab="engineer" onclick="filterTab('engineer', this)">Engineers</button>
+                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
+                            data-tab="technician" onclick="filterTab('technician', this)">Technicians</button>
+                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
+                            data-tab="officer" onclick="filterTab('officer', this)">Officers</button>
+                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
+                            data-tab="admin" onclick="filterTab('admin', this)">Admins</button>
+                    </div>
+                    <!-- Search -->
+                    <div class="relative px-3">
+                        <i
+                            class="ph ph-magnifying-glass absolute left-6 top-1/2 -translate-y-1/2 text-dark-muted text-sm"></i>
+                        <input type="text" id="search-input" placeholder="Search users..."
+                            oninput="searchUsers(this.value)"
+                            class="bg-dark-bg border border-dark-border text-dark-text text-xs rounded-md pl-8 pr-3 h-8 w-56 focus:border-gnfc-blue focus:outline-none transition-all placeholder-dark-muted">
+                    </div>
+                </div>
+
+                <!-- ─── TABLE ─── -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr
+                                class="border-b border-dark-border text-[10px] uppercase tracking-wider text-dark-muted font-bold">
+                                <th class="px-4 py-2.5 text-left">User</th>
+                                <th class="px-4 py-2.5 text-left">Employee ID</th>
+                                <th class="px-4 py-2.5 text-left">Role</th>
+                                <th class="px-4 py-2.5 text-left">Department</th>
+                                <th class="px-4 py-2.5 text-left">Plant</th>
+                                <th class="px-4 py-2.5 text-left">Shift</th>
+                                <th class="px-4 py-2.5 text-left">Contact</th>
+                                <th class="px-4 py-2.5 text-left">Status</th>
+                                <th class="px-4 py-2.5 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-table-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between px-4 py-2.5 border-t border-dark-border">
+                    <span class="text-[10px] text-dark-muted font-bold" id="showing-count">Showing 0 of 0 users</span>
+                    <div class="flex items-center gap-1" id="pagination">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══════ USER DETAIL MODAL ═══════ -->
+    <div id="user-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-overlay"
+        onclick="if(event.target===this)closeUserModal()">
+        <div class="bg-dark-panel border border-dark-border rounded-lg shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-3 border-b border-dark-border">
+                <h3 class="text-sm font-bold text-gnfc-blue flex items-center gap-2">
+                    <i class="ph-fill ph-user-circle"></i>
+                    User Details
+                </h3>
+                <button onclick="closeUserModal()"
+                    class="w-7 h-7 flex items-center justify-center rounded hover:bg-dark-border transition-colors">
+                    <i class="ph-bold ph-x text-dark-muted"></i>
+                </button>
+            </div>
+            <div id="user-modal-body" class="p-5">
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ LOGIC ═══════ -->
+    <script>
+        (function () {
+            'use strict';
+
+            // ── Dummy User Data ──
+            const USERS = [
+                { id: 'EMP-1001', name: 'Nilesh R. Kapadiya', initials: 'NRK', role: 'technician', dept: 'Instrumentation', plant: 'AA', shift: 'A', phone: '9876543210', email: 'nrk@gnfc.in', joined: '2018-06-15', status: 'online', jobsDone: 342 },
+                { id: 'EMP-1002', name: 'Dipak P. Bhatt', initials: 'DPB', role: 'technician', dept: 'Instrumentation', plant: 'MF', shift: 'B', phone: '9876543211', email: 'dpb@gnfc.in', joined: '2019-03-22', status: 'online', jobsDone: 289 },
+                { id: 'EMP-1003', name: 'Amit M. Shah', initials: 'AMS', role: 'technician', dept: 'Instrumentation', plant: 'FA', shift: 'A', phone: '9876543212', email: 'ams@gnfc.in', joined: '2017-11-10', status: 'busy', jobsDone: 410 },
+                { id: 'EMP-1004', name: 'Prashant H. Solanki', initials: 'PHS', role: 'engineer', dept: 'Instrumentation', plant: 'AA', shift: 'General', phone: '9876543213', email: 'phs@gnfc.in', joined: '2015-01-05', status: 'online', jobsDone: 567 },
+                { id: 'EMP-1005', name: 'Vishal A. Acharya', initials: 'VAA', role: 'engineer', dept: 'Instrumentation', plant: 'UREA', shift: 'General', phone: '9876543214', email: 'vaa@gnfc.in', joined: '2016-07-20', status: 'offline', jobsDone: 498 },
+                { id: 'EMP-1006', name: 'Paresh H. Bhavsar', initials: 'PHB', role: 'engineer', dept: 'Instrumentation', plant: 'DCS', shift: 'General', phone: '9876543215', email: 'phb@gnfc.in', joined: '2014-09-12', status: 'online', jobsDone: 623 },
+                { id: 'EMP-1007', name: 'Rajesh K. Patel', initials: 'RKP', role: 'officer', dept: 'Instrumentation', plant: 'AMM', shift: 'A', phone: '9876543216', email: 'rkp@gnfc.in', joined: '2012-04-08', status: 'online', jobsDone: 890 },
+                { id: 'EMP-1008', name: 'Suresh T. Mehta', initials: 'STM', role: 'officer', dept: 'Instrumentation', plant: 'BOILER', shift: 'B', phone: '9876543217', email: 'stm@gnfc.in', joined: '2013-02-14', status: 'busy', jobsDone: 756 },
+                { id: 'EMP-1009', name: 'IT Admin', initials: 'IT', role: 'admin', dept: 'IT & Systems', plant: 'DCS', shift: 'General', phone: '9876543218', email: 'it.admin@gnfc.in', joined: '2010-01-01', status: 'online', jobsDone: 0 },
+                { id: 'EMP-1010', name: 'Kiran V. Joshi', initials: 'KVJ', role: 'technician', dept: 'Instrumentation', plant: 'UTIL', shift: 'C', phone: '9876543219', email: 'kvj@gnfc.in', joined: '2020-08-01', status: 'offline', jobsDone: 178 },
+                { id: 'EMP-1011', name: 'Mahesh D. Trivedi', initials: 'MDT', role: 'technician', dept: 'Instrumentation', plant: 'M1', shift: 'A', phone: '9876543220', email: 'mdt@gnfc.in', joined: '2021-01-15', status: 'online', jobsDone: 134 },
+                { id: 'EMP-1012', name: 'Jayesh N. Parmar', initials: 'JNP', role: 'engineer', dept: 'Instrumentation', plant: 'CPSU', shift: 'General', phone: '9876543221', email: 'jnp@gnfc.in', joined: '2016-11-25', status: 'online', jobsDone: 445 },
+                { id: 'EMP-1013', name: 'Bhavesh R. Panchal', initials: 'BRP', role: 'technician', dept: 'Instrumentation', plant: 'BAGG', shift: 'B', phone: '9876543222', email: 'brp@gnfc.in', joined: '2019-05-10', status: 'offline', jobsDone: 267 },
+                { id: 'EMP-1014', name: 'Hardik S. Dave', initials: 'HSD', role: 'technician', dept: 'Instrumentation', plant: 'CMS', shift: 'A', phone: '9876543223', email: 'hsd@gnfc.in', joined: '2022-02-28', status: 'online', jobsDone: 89 },
+                { id: 'EMP-1015', name: 'Alpesh M. Rathod', initials: 'AMR', role: 'officer', dept: 'Instrumentation', plant: 'EA', shift: 'General', phone: '9876543224', email: 'amr@gnfc.in', joined: '2011-06-30', status: 'online', jobsDone: 1023 },
+                { id: 'EMP-1016', name: 'Vikram J. Soni', initials: 'VJS', role: 'technician', dept: 'Instrumentation', plant: 'DM', shift: 'C', phone: '9876543225', email: 'vjs@gnfc.in', joined: '2020-11-12', status: 'busy', jobsDone: 156 },
+                { id: 'EMP-1017', name: 'Chirag P. Modi', initials: 'CPM', role: 'engineer', dept: 'Instrumentation', plant: 'ANIPF', shift: 'General', phone: '9876543226', email: 'cpm@gnfc.in', joined: '2017-03-18', status: 'offline', jobsDone: 389 },
+                { id: 'EMP-1018', name: 'Devang K. Thakkar', initials: 'DKT', role: 'technician', dept: 'Instrumentation', plant: 'ASGP', shift: 'B', phone: '9876543227', email: 'dkt@gnfc.in', joined: '2021-09-05', status: 'online', jobsDone: 112 },
+                { id: 'EMP-1019', name: 'Gaurav B. Nayak', initials: 'GBN', role: 'admin', dept: 'Management', plant: 'INST WS', shift: 'General', phone: '9876543228', email: 'gbn@gnfc.in', joined: '2009-04-15', status: 'online', jobsDone: 0 },
+                { id: 'EMP-1020', name: 'Pranav S. Desai', initials: 'PSD', role: 'technician', dept: 'Instrumentation', plant: 'M2', shift: 'A', phone: '9876543229', email: 'psd@gnfc.in', joined: '2023-01-10', status: 'online', jobsDone: 45 },
+            ];
+
+            window._allUsers = USERS;
+            window._currentTab = 'all';
+            window._searchQuery = '';
+
+            // ── Stats ──
+            document.getElementById('stat-total').textContent = USERS.length;
+            document.getElementById('stat-online').textContent = USERS.filter(u => u.status === 'online').length;
+            document.getElementById('stat-engineers').textContent = USERS.filter(u => u.role === 'engineer').length;
+            document.getElementById('stat-technicians').textContent = USERS.filter(u => u.role === 'technician').length;
+
+            // ── Render Table ──
+            window.renderTable = function () {
+                let filtered = _allUsers;
+
+                if (_currentTab !== 'all') {
+                    filtered = filtered.filter(u => u.role === _currentTab);
+                }
+                if (_searchQuery) {
+                    const q = _searchQuery.toLowerCase();
+                    filtered = filtered.filter(u =>
+                        u.name.toLowerCase().includes(q) ||
+                        u.initials.toLowerCase().includes(q) ||
+                        u.id.toLowerCase().includes(q) ||
+                        u.plant.toLowerCase().includes(q) ||
+                        u.email.toLowerCase().includes(q)
+                    );
+                }
+
+                const tbody = document.getElementById('user-table-body');
+                tbody.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="text-center py-12 text-dark-muted">
+              <i class="ph ph-user-circle text-4xl mb-2 block opacity-30"></i>
+              <p class="text-xs font-bold">No users found</p>
+            </td>
+          </tr>`;
+                    document.getElementById('showing-count').textContent = 'Showing 0 of 0 users';
+                    return;
+                }
+
+                filtered.forEach(user => {
+                    const statusDot = user.status === 'online' ? 'status-online'
+                        : user.status === 'busy' ? 'status-busy' : 'status-offline';
+                    const statusLabel = user.status.charAt(0).toUpperCase() + user.status.slice(1);
+
+                    const roleBg = user.role === 'engineer' ? 'bg-gnfc-purple/10 text-gnfc-purple border-gnfc-purple/20'
+                        : user.role === 'technician' ? 'bg-gnfc-orange/10 text-gnfc-orange border-gnfc-orange/20'
+                            : user.role === 'officer' ? 'bg-gnfc-blue/10 text-gnfc-blue border-gnfc-blue/20'
+                                : 'bg-gnfc-red/10 text-gnfc-red border-gnfc-red/20';
+
+                    const avatarBg = user.role === 'engineer' ? '#B794F4'
+                        : user.role === 'technician' ? '#FF9900'
+                            : user.role === 'officer' ? '#5794F2' : '#F2495C';
+
+                    const shiftBg = user.shift === 'A' ? 'text-gnfc-green'
+                        : user.shift === 'B' ? 'text-gnfc-orange'
+                            : user.shift === 'C' ? 'text-gnfc-red' : 'text-gnfc-blue';
+
+                    tbody.innerHTML += `
+          <tr class="user-row border-b border-dark-border/50 cursor-pointer" onclick="showUserDetail('${user.id}')">
+            <td class="px-4 py-2.5">
+              <div class="flex items-center gap-2.5">
+                <div class="relative">
+                  <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=${avatarBg.replace('#', '')}&color=fff&size=32&font-size=0.4&bold=true"
+                    class="w-8 h-8 rounded-full border border-dark-border">
+                  <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-dark-panel ${statusDot}"></div>
+                </div>
+                <div>
+                  <p class="font-bold  text-xs leading-tight">${user.name}</p>
+                  <p class="text-[10px] text-dark-muted font-mono">${user.initials}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-2.5">
+              <span class="text-[10px] font-mono font-bold text-dark-muted">${user.id}</span>
+            </td>
+            <td class="px-4 py-2.5">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-sm border ${roleBg} uppercase">${user.role}</span>
+            </td>
+            <td class="px-4 py-2.5 text-xs text-dark-muted">${user.dept}</td>
+            <td class="px-4 py-2.5">
+              <span class="text-xs font-bold text-gnfc-blue">${user.plant}</span>
+            </td>
+            <td class="px-4 py-2.5">
+              <span class="text-xs font-bold ${shiftBg}">Shift ${user.shift}</span>
+            </td>
+            <td class="px-4 py-2.5">
+              <div class="flex flex-col">
+                <span class="text-[10px] text-dark-muted"><i class="ph ph-phone mr-0.5"></i>${user.phone}</span>
+                <span class="text-[10px] text-gnfc-blue"><i class="ph ph-envelope mr-0.5"></i>${user.email}</span>
+              </div>
+            </td>
+            <td class="px-4 py-2.5">
+              <div class="flex items-center gap-1.5">
+                <div class="w-2 h-2 rounded-full ${statusDot}"></div>
+                <span class="text-[10px] font-bold text-dark-muted">${statusLabel}</span>
+              </div>
+            </td>
+            <td class="px-4 py-2.5 text-center">
+              <button onclick="event.stopPropagation(); showUserDetail('${user.id}')"
+                class="w-7 h-7 rounded bg-dark-bg border border-dark-border hover:border-gnfc-blue hover:text-gnfc-blue flex items-center justify-center text-dark-muted transition-all mx-auto">
+                <i class="ph-bold ph-eye text-xs"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+                });
+
+                document.getElementById('showing-count').textContent = `Showing ${filtered.length} of ${_allUsers.length} users`;
+            };
+
+            // ── Filter by tab ──
+            window.filterTab = function (tab, btn) {
+                _currentTab = tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderTable();
+            };
+
+            // ── Search ──
+            window.searchUsers = function (query) {
+                _searchQuery = query;
+                renderTable();
+            };
+
+            // ── User Detail Modal ──
+            window.showUserDetail = function (userId) {
+                const user = _allUsers.find(u => u.id === userId);
+                if (!user) return;
+
+                const avatarBg = user.role === 'engineer' ? 'B794F4'
+                    : user.role === 'technician' ? 'FF9900'
+                        : user.role === 'officer' ? '5794F2' : 'F2495C';
+
+                const statusDot = user.status === 'online' ? 'status-online'
+                    : user.status === 'busy' ? 'status-busy' : 'status-offline';
+
+                const roleBg = user.role === 'engineer' ? 'bg-gnfc-purple/10 text-gnfc-purple border-gnfc-purple/20'
+                    : user.role === 'technician' ? 'bg-gnfc-orange/10 text-gnfc-orange border-gnfc-orange/20'
+                        : user.role === 'officer' ? 'bg-gnfc-blue/10 text-gnfc-blue border-gnfc-blue/20'
+                            : 'bg-gnfc-red/10 text-gnfc-red border-gnfc-red/20';
+
+                const joinDate = new Date(user.joined);
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const joinStr = `${joinDate.getDate()} ${months[joinDate.getMonth()]} ${joinDate.getFullYear()}`;
+                const years = new Date().getFullYear() - joinDate.getFullYear();
+
+                document.getElementById('user-modal-body').innerHTML = `
+        <div class="flex items-center gap-4 mb-5">
+          <div class="relative">
+            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=${avatarBg}&color=fff&size=64&font-size=0.35&bold=true"
+              class="w-16 h-16 rounded-full border-2 border-dark-border">
+            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-dark-panel ${statusDot}"></div>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold ">${user.name}</h3>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-sm border ${roleBg} uppercase">${user.role}</span>
+              <span class="text-[10px] font-mono text-dark-muted">${user.id}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Department</p>
+            <p class="text-xs font-bold ">${user.dept}</p>
+          </div>
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Plant Assignment</p>
+            <p class="text-xs font-bold text-gnfc-blue">${user.plant}</p>
+          </div>
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Shift</p>
+            <p class="text-xs font-bold ">Shift ${user.shift}</p>
+          </div>
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Jobs Completed</p>
+            <p class="text-xs font-bold text-gnfc-green">${user.jobsDone}</p>
+          </div>
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Phone</p>
+            <p class="text-xs font-bold "><i class="ph ph-phone mr-1 text-gnfc-blue"></i>${user.phone}</p>
+          </div>
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Email</p>
+            <p class="text-xs font-bold text-gnfc-blue"><i class="ph ph-envelope mr-1"></i>${user.email}</p>
+          </div>
+          <div class="bg-dark-bg rounded-md border border-dark-border p-3 col-span-2">
+            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Joined Date</p>
+            <p class="text-xs font-bold "><i class="ph ph-calendar mr-1 text-gnfc-orange"></i>${joinStr} <span class="text-dark-muted font-normal">(${years} years)</span></p>
+          </div>
+        </div>
+      `;
+
+                const modal = document.getElementById('user-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            window.closeUserModal = function () {
+                const modal = document.getElementById('user-modal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            // Initial render
+            renderTable();
+
+        })();
+    </script>
+</body>
+
+</html>
