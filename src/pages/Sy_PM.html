@@ -47,11 +47,22 @@
       border: 1px solid rgba(255, 255, 255, 0.08); /* White border with low opacity */
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     }
+
+    html[data-theme-mode="light"] .glass-panel {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(148, 163, 184, 0.35);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
+    }
     
     .glass-header {
       background: rgba(15, 23, 42, 0.85); /* Dark bg */
       backdrop-filter: blur(8px);
       border-bottom: 1px solid rgba(51, 65, 85, 0.5); /* Slate border */
+    }
+
+    html[data-theme-mode="light"] .glass-header {
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom-color: rgba(148, 163, 184, 0.35);
     }
 
     /* Selection Highlighting */
@@ -67,6 +78,8 @@
 </head>
 
 <body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+
+  <script src="/src/js/theme_manager.js"></script>
 
   <!-- Sidebar Container -->
   <div id="sidebar-container"></div>
@@ -106,10 +119,10 @@
     </script>
 
     <!-- Main Content Area -->
-    <div class="flex-1 overflow-y-auto p-6 z-10 relative custom-scrollbar flex flex-col">
+    <div class="flex-1 p-4 relative custom-scrollbar flex flex-col">
       
       <!-- Top Navigation Bar -->
-      <div id="plant-nav-container" class="mb-6"></div>
+      <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
       <script>
         renderPlantNav('sy_pm');
@@ -117,14 +130,13 @@
 
 
       <!-- Central Selection Panel -->
-      <div class="flex-1 flex items-center justify-center p-4">
-        
-        <div class="glass-panel w-full max-w-4xl p-8 rounded-2xl flex flex-col items-center relative overflow-hidden">
+      <div>
+        <div class="glass-panel w-full p-8 rounded-2xl flex flex-col items-center relative overflow-hidden">
             
             <!-- System Title -->
             <div class="text-center mb-10 relative z-10">
                 <h2 class="text-sm font-bold text-gnfc-orange tracking-[0.2em] uppercase mb-2">Acetic Acid Plant</h2>
-                <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-dark-text tracking-tight leading-tight">
                     <span id="system-title-display">System</span> Performance Monitoring Data
                 </h1>
                 <div class="h-1 w-24 bg-gradient-to-r from-transparent via-gnfc-blue to-transparent mx-auto mt-6 rounded-full"></div>
@@ -139,52 +151,52 @@
                     <!-- Daily -->
                     <div class="relative">
                         <input type="radio" name="frequency" id="freq-daily" value="daily" class="peer hidden" checked>
-                        <label for="freq-daily" class="flex items-center gap-2 px-5 py-3 bg-dark-bg/50 border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-bg/80 transition-all group">
-                            <i class="ph-bold ph-sun text-lg text-dark-muted group-hover:text-white transition-colors"></i>
-                            <span class="text-sm font-bold text-dark-muted group-hover:text-white transition-colors">DAILY</span>
+                        <label for="freq-daily" class="flex items-center gap-2 px-5 py-3 bg-dark-bg border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-panel transition-all group">
+                            <i class="ph-bold ph-sun text-lg text-dark-muted group-hover:text-dark-text transition-colors"></i>
+                            <span class="text-sm font-bold text-dark-muted group-hover:text-dark-text transition-colors">DAILY</span>
                         </label>
                     </div>
 
                     <!-- Weekly -->
                     <div class="relative">
                         <input type="radio" name="frequency" id="freq-weekly" value="weekly" class="peer hidden">
-                        <label for="freq-weekly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg/50 border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-bg/80 transition-all group">
-                            <i class="ph-bold ph-calendar-check text-lg text-dark-muted group-hover:text-white transition-colors"></i>
-                            <span class="text-sm font-bold text-dark-muted group-hover:text-white transition-colors">WEEKLY</span>
+                        <label for="freq-weekly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-panel transition-all group">
+                            <i class="ph-bold ph-calendar-check text-lg text-dark-muted group-hover:text-dark-text transition-colors"></i>
+                            <span class="text-sm font-bold text-dark-muted group-hover:text-dark-text transition-colors">WEEKLY</span>
                         </label>
                     </div>
 
                     <!-- Monthly -->
                     <div class="relative">
                         <input type="radio" name="frequency" id="freq-monthly" value="monthly" class="peer hidden">
-                        <label for="freq-monthly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg/50 border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-bg/80 transition-all group">
-                            <i class="ph-bold ph-calendar-blank text-lg text-dark-muted group-hover:text-white transition-colors"></i>
-                            <span class="text-sm font-bold text-dark-muted group-hover:text-white transition-colors">MONTHLY</span>
+                        <label for="freq-monthly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-panel transition-all group">
+                            <i class="ph-bold ph-calendar-blank text-lg text-dark-muted group-hover:text-dark-text transition-colors"></i>
+                            <span class="text-sm font-bold text-dark-muted group-hover:text-dark-text transition-colors">MONTHLY</span>
                         </label>
                     </div>
 
                     <!-- Quarterly -->
                     <div class="relative">
                         <input type="radio" name="frequency" id="freq-quarterly" value="quarterly" class="peer hidden">
-                        <label for="freq-quarterly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg/50 border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-bg/80 transition-all group">
-                            <i class="ph-bold ph-chart-pie-slice text-lg text-dark-muted group-hover:text-white transition-colors"></i>
-                            <span class="text-sm font-bold text-dark-muted group-hover:text-white transition-colors">QUARTERLY</span>
+                        <label for="freq-quarterly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-panel transition-all group">
+                            <i class="ph-bold ph-chart-pie-slice text-lg text-dark-muted group-hover:text-dark-text transition-colors"></i>
+                            <span class="text-sm font-bold text-dark-muted group-hover:text-dark-text transition-colors">QUARTERLY</span>
                         </label>
                     </div>
 
                     <!-- Half Yearly -->
                     <div class="relative">
                         <input type="radio" name="frequency" id="freq-halfyearly" value="halfyearly" class="peer hidden">
-                        <label for="freq-halfyearly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg/50 border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-bg/80 transition-all group">
-                            <i class="ph-bold ph-calendar-x text-lg text-dark-muted group-hover:text-white transition-colors"></i>
-                            <span class="text-sm font-bold text-dark-muted group-hover:text-white transition-colors">HALF YEARLY</span>
+                        <label for="freq-halfyearly" class="flex items-center gap-2 px-5 py-3 bg-dark-bg border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-blue/50 hover:bg-dark-panel transition-all group">
+                            <i class="ph-bold ph-calendar-x text-lg text-dark-muted group-hover:text-dark-text transition-colors"></i>
+                            <span class="text-sm font-bold text-dark-muted group-hover:text-dark-text transition-colors">HALF YEARLY</span>
                         </label>
                     </div>
 
                     <!-- Shutdown -->
                     <div class="relative">
                         <input type="radio" name="frequency" id="freq-shutdown" value="shutdown" class="peer hidden">
-                        <label for="freq-shutdown" class="flex items-center gap-2 px-5 py-3 bg-dark-bg/50 border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-red/50 hover:bg-dark-bg/80 transition-all group">
+                        <label for="freq-shutdown" class="flex items-center gap-2 px-5 py-3 bg-dark-bg border border-dark-border rounded-lg cursor-pointer hover:border-gnfc-red/50 hover:bg-dark-panel transition-all group">
                             <i class="ph-bold ph-plugs text-lg text-dark-muted group-hover:text-gnfc-red transition-colors"></i>
                             <span class="text-sm font-bold text-dark-muted group-hover:text-gnfc-red transition-colors">SHUTDOWN</span>
                         </label>
@@ -200,11 +212,11 @@
                 <button onclick="handleAction('static')" class="flex-1 group relative overflow-hidden rounded-xl bg-dark-bg border border-dark-border p-px shadow-lg hover:shadow-gnfc-blue/20 transition-all hover:-translate-y-1">
                     <span class="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-gnfc-blue to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></span>
                     <span class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    <div class="relative flex flex-col items-center justify-center py-6 px-4 bg-dark-panel/50 rounded-[11px] h-full">
+                    <div class="relative flex flex-col items-center justify-center py-6 px-4 bg-dark-panel rounded-[11px] h-full">
                         <div class="mb-3 p-3 rounded-full bg-dark-bg border border-dark-border group-hover:border-gnfc-blue/30 group-hover:bg-gnfc-blue/10 transition-colors">
                             <i class="ph-fill ph-database text-2xl text-dark-muted group-hover:text-gnfc-blue transition-colors"></i>
                         </div>
-                        <span class="text-lg font-bold text-white mb-1">Static Data</span>
+                        <span class="text-lg font-bold text-dark-text mb-1">Static Data</span>
                         <span class="text-[10px] text-dark-muted uppercase tracking-wider group-hover:text-gnfc-blue/80 transition-colors">View / Edit</span>
                     </div>
                 </button>
@@ -213,11 +225,11 @@
                 <button onclick="handleAction('report')" class="flex-1 group relative overflow-hidden rounded-xl bg-dark-bg border border-dark-border p-px shadow-lg hover:shadow-gnfc-green/20 transition-all hover:-translate-y-1">
                     <span class="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-gnfc-green to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></span>
                     <span class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    <div class="relative flex flex-col items-center justify-center py-6 px-4 bg-dark-panel/50 rounded-[11px] h-full">
+                    <div class="relative flex flex-col items-center justify-center py-6 px-4 bg-dark-panel rounded-[11px] h-full">
                         <div class="mb-3 p-3 rounded-full bg-dark-bg border border-dark-border group-hover:border-gnfc-green/30 group-hover:bg-gnfc-green/10 transition-colors">
                             <i class="ph-fill ph-file-text text-2xl text-dark-muted group-hover:text-gnfc-green transition-colors"></i>
                         </div>
-                        <span class="text-lg font-bold text-white mb-1">Generate Report</span>
+                        <span class="text-lg font-bold text-dark-text mb-1">Generate Report</span>
                         <span class="text-[10px] text-dark-muted uppercase tracking-wider group-hover:text-gnfc-green/80 transition-colors">Analyze Data</span>
                     </div>
                 </button>

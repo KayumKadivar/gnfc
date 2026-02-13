@@ -39,9 +39,83 @@
     }
   </script>
 
+  <style>
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    html[data-theme-mode="light"] .glass-panel {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(148, 163, 184, 0.35);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal__overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 120;
+      backdrop-filter: blur(3px);
+      padding: 1rem;
+    }
+
+    html[data-theme-mode="light"] .modal__overlay {
+      background: rgba(15, 23, 42, 0.28);
+    }
+
+    .modal__container {
+      width: min(700px, 95vw);
+      max-height: 90vh;
+      overflow: auto;
+      border-radius: 0.75rem;
+      border: 1px solid var(--app-border, #334155);
+      background: var(--app-panel, #1e293b);
+      color: var(--app-text, #f8fafc);
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.4);
+      padding: 1.25rem;
+    }
+
+    .custom-table th {
+      background: var(--app-panel-alt, #111827);
+      color: var(--app-muted, #94a3b8);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 10px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--app-border, #334155);
+      padding: 0.75rem;
+    }
+
+    .custom-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--app-border, #334155);
+    }
+
+    .custom-table tbody tr:hover {
+      background: var(--app-panel-alt, #111827);
+    }
+  </style>
+
 </head>
 
 <body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+
+  <script src="/src/js/theme_manager.js"></script>
 
   <!-- Sidebar Container -->
   <div id="sidebar-container"></div>
@@ -83,7 +157,7 @@
     </script>
 
     <!-- Main Content Area -->
-    <div class="flex-1 overflow-y-auto p-6 z-10 relative custom-scrollbar flex flex-col">
+    <div class="flex-1 overflow-y-auto p-4 z-10 relative custom-scrollbar flex flex-col">
       
       <!-- Top Navigation Bar -->
       <div id="plant-nav-container" class="mb-6"></div>
@@ -98,14 +172,14 @@
             <div class="px-6 py-5 border-b border-dark-border bg-dark-panel flex justify-between items-center">
                 <div>
                    <h2 class="text-xs font-bold text-gnfc-orange uppercase tracking-wider mb-1">Static Values</h2>
-                   <h3 class="text-xl font-extrabold text-white flex items-center gap-2">
+                   <h3 class="text-xl font-extrabold text-dark-text flex items-center gap-2">
                       <span id="page-system-title">ACETIC ACID</span>
                       <i class="ph-bold ph-caret-right text-dark-muted text-sm"></i>
                       <span id="page-freq-title" class="text-gnfc-blue">DCS DAILY</span>
                    </h3>
                 </div>
                 <div class="flex gap-3">
-                    <a href="#" onclick="window.history.back()" class="px-3 py-2 rounded-lg border border-dark-border text-dark-muted text-sm font-bold hover:bg-white/5 hover:text-white transition-colors">
+                    <a href="#" onclick="window.history.back()" class="px-3 py-2 rounded-lg border border-dark-border text-dark-muted text-sm font-bold hover:bg-white/5 hover:text-dark-text transition-colors">
                         Main
                     </a>
                     <button onclick="openModal('modal-add')" class="px-3 py-2 rounded-lg bg-gnfc-blue text-white text-sm font-bold hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2">
@@ -133,13 +207,13 @@
             </div>
             
             <!-- Instructions Footer -->
-            <div class="p-4 bg-dark-bg/50 border-t border-dark-border">
-                <div class="flex items-start gap-4 p-3 rounded-lg border border-dark-border bg-dark-panel/50">
+            <div class="p-4 bg-dark-bg border-t border-dark-border">
+                <div class="flex items-start gap-4 p-3 rounded-lg border border-dark-border bg-dark-panel">
                     <div class="flex-1">
                         <h4 class="text-xs font-bold text-dark-muted uppercase mb-1">Instruction</h4>
                         <p class="text-sm text-dark-text leading-relaxed">Ensure all cabinet doors are securely closed after inspection. Validate temperature readings against local gauges if discrepancy > 2°C.</p> 
                     </div>
-                    <button class="text-xs font-bold text-gnfc-blue hover:text-white px-3 py-1.5 rounded border border-gnfc-blue/30 hover:bg-gnfc-blue/10 transition-colors">
+                    <button class="text-xs font-bold text-gnfc-blue hover:text-dark-text px-3 py-1.5 rounded border border-gnfc-blue/30 hover:bg-gnfc-blue/10 transition-colors">
                         Edit
                     </button>
                 </div>
@@ -157,11 +231,11 @@
       <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         
         <header class="flex justify-between items-center mb-6">
-          <h2 class="text-lg font-bold text-white flex items-center gap-2" id="modal-title">
+          <h2 class="text-lg font-bold text-dark-text flex items-center gap-2" id="modal-title">
              <i class="ph-bold ph-pencil-simple text-gnfc-blue"></i>
              <span id="modal-header-text">Add New Record</span>
           </h2>
-          <button class="text-dark-muted hover:text-white transition-colors" aria-label="Close modal" data-micromodal-close>
+          <button class="text-dark-muted hover:text-dark-text transition-colors" aria-label="Close modal" data-micromodal-close>
              <i class="ph-bold ph-x text-lg"></i>
           </button>
         </header>
@@ -171,24 +245,24 @@
             
             <div>
                 <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5">Item Description</label>
-                <input type="text" id="input-item" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Enter item description">
+                <input type="text" id="input-item" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Enter item description">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5">Action</label>
-                    <input type="text" id="input-action" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Optional action">
+                    <input type="text" id="input-action" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Optional action">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5">Reference Value</label>
-                    <input type="text" id="input-ref" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-white focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Optional reference">
+                    <input type="text" id="input-ref" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Optional reference">
                 </div>
             </div>
             
         </main>
 
         <footer class="mt-8 flex justify-end gap-3 pt-4 border-t border-dark-border">
-            <button class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-sm font-bold hover:text-white hover:bg-white/5 transition-colors" data-micromodal-close>Cancel</button>
+            <button class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-sm font-bold hover:text-dark-text hover:bg-white/5 transition-colors" data-micromodal-close>Cancel</button>
             <button onclick="saveRecord()" class="px-4 py-2 rounded-lg bg-gnfc-blue text-white text-sm font-bold hover:bg-blue-600 shadow-lg shadow-blue-500/20 transition-all">Save Record</button>
         </footer>
 
@@ -228,11 +302,11 @@
             tr.className = "group transition-colors";
             tr.innerHTML = `
                 <td class="text-center font-mono text-dark-muted text-xs">${index + 1}</td>
-                <td class="font-medium text-white group-hover:text-gnfc-blue transition-colors">${row.item}</td>
+                <td class="font-medium text-dark-text group-hover:text-gnfc-blue transition-colors">${row.item}</td>
                 <td class="text-dark-muted">${row.action}</td>
                 <td class="text-dark-muted font-mono text-xs">${row.ref}</td>
                 <td class="text-center">
-                    <button onclick="editRecord(${row.id})" class="p-1.5 rounded hover:bg-white/10 text-dark-muted hover:text-white transition-colors" title="Edit">
+                    <button onclick="editRecord(${row.id})" class="p-1.5 rounded hover:bg-white/10 text-dark-muted hover:text-dark-text transition-colors" title="Edit">
                         <i class="ph-bold ph-pencil-simple"></i>
                     </button>
                 </td>

@@ -30,6 +30,7 @@ const ThemeManager = {
             text: '#000000',
             textStrong: '#000000',
             muted: '#4b5563',
+            white: '#ffffff',
             sidebar: '#ffffff',
             sidebarBorder: '#d6deea',
         },
@@ -207,7 +208,7 @@ const ThemeManager = {
             html[data-theme-mode="light"] .text-white,
             html[data-theme-mode="light"] .text-white,
             html[data-theme-mode="light"] .text-white {
-                color: var(--app-muted) !important;
+                color: var(--app-muted);
             }
 
             html[data-theme-mode="dark"] .bg-slate-50,
