@@ -94,6 +94,8 @@ function renderContext() {
   const generateButton = document.getElementById("btn-generate-report");
   if (generateButton) {
     generateButton.disabled = state.staticRows.length === 0;
+    generateButton.classList.toggle("opacity-50", state.staticRows.length === 0);
+    generateButton.classList.toggle("cursor-not-allowed", state.staticRows.length === 0);
     generateButton.title = state.staticRows.length === 0
       ? "Add static data first"
       : "Generate a new report instance";
@@ -110,7 +112,7 @@ function renderReportList() {
     list.innerHTML = renderEmptyState(
       "No reports generated",
       "Generate a report after static data is available.",
-      "Use Generate Report"
+      "Generate Report"
     );
     return;
   }
@@ -119,11 +121,23 @@ function renderReportList() {
     const item = document.createElement("button");
     const isActive = report.id === state.activeReportId;
     item.type = "button";
-    item.className = `sy-list-item ${isActive ? "is-active" : ""}`;
+    
+    let baseClasses = "w-full text-left p-3 rounded-lg border transition-all mb-2 flex flex-col gap-1 group relative overflow-hidden";
+    if (isActive) {
+      baseClasses += " border-gnfc-orange ring-1 ring-gnfc-orange/50 bg-dark-header shadow-lg shadow-gnfc-orange/5";
+    } else {
+      baseClasses += " border-dark-border bg-dark-panel hover:bg-dark-header hover:border-dark-muted";
+    }
+    
+    item.className = baseClasses;
     item.dataset.reportId = report.id;
     item.innerHTML = `
-      <span class="sy-list-title">${formatDate(report.reportDate)}</span>
-      <span class="sy-list-subtitle">Updated ${formatDateTime(report.updatedAt)}</span>
+      <div class="flex justify-between items-center w-full">
+        <span class="text-sm font-bold ${isActive ? 'text-white' : 'text-dark-text group-hover:text-white'}">${formatDate(report.reportDate)}</span>
+        ${isActive ? '<i class="ph-bold ph-check-circle text-gnfc-orange text-xs"></i>' : ''}
+      </div>
+      <span class="text-[10px] text-dark-muted font-mono uppercase tracking-wide">Updated ${formatDateTime(report.updatedAt)}</span>
+      ${isActive ? '<div class="absolute inset-y-0 left-0 w-1 bg-gnfc-orange"></div>' : ''}
     `;
     list.appendChild(item);
   });
@@ -151,34 +165,34 @@ function renderEditor() {
   }
 
   const bodyRows = activeReport.rows.map((row, index) => `
-      <tr data-static-row-id="${row.staticRowId}">
-        <td class="sy-col-index">${index + 1}</td>
-        <td>${row.item}</td>
-        <td>${row.action || "-"}</td>
-        <td>${row.referenceValue || "-"}</td>
-        <td>
-          <textarea class="sy-input sy-input-area" data-field="observation" placeholder="Observation">${row.observation || ""}</textarea>
+      <tr data-static-row-id="${row.staticRowId}" class="hover:bg-dark-header/30 transition-colors group">
+        <td class="px-3 py-2 text-center font-mono text-dark-muted text-[10px] border-r border-dark-border/10 w-10">${index + 1}</td>
+        <td class="px-3 py-2 font-medium text-dark-text text-xs border-r border-dark-border/10">${row.item}</td>
+        <td class="px-3 py-2 text-dark-muted text-xs leading-relaxed border-r border-dark-border/10">${row.action || "-"}</td>
+        <td class="px-3 py-2 text-dark-text font-mono text-[10px] bg-dark-bg/20 border-r border-dark-border/10">${row.referenceValue || "-"}</td>
+        <td class="p-2 border-r border-dark-border/10">
+          <textarea class="w-full bg-dark-bg border border-dark-border rounded px-2 py-1.5 text-xs text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted resize-y min-h-[60px]" data-field="observation" placeholder="Observation">${row.observation || ""}</textarea>
         </td>
-        <td>
-          <textarea class="sy-input sy-input-area" data-field="remark" placeholder="Remark">${row.remark || ""}</textarea>
+        <td class="p-2">
+          <textarea class="w-full bg-dark-bg border border-dark-border rounded px-2 py-1.5 text-xs text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted resize-y min-h-[60px]" data-field="remark" placeholder="Remark">${row.remark || ""}</textarea>
         </td>
       </tr>
     `).join("");
 
   wrapper.innerHTML = `
-    <div class="sy-table-shell">
-      <table class="sy-table">
+    <div class="rounded-lg border border-dark-border overflow-hidden bg-dark-panel">
+      <table class="w-full text-left text-xs border-collapse">
         <thead>
           <tr>
-            <th>Sr</th>
-            <th>Item</th>
-            <th>Action</th>
-            <th>Reference</th>
-            <th>Observation</th>
-            <th>Remark</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border text-center">Sr</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/4">Item</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/5">Action</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border">Reference</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/5">Observation</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/6">Remark</th>
           </tr>
         </thead>
-        <tbody>${bodyRows}</tbody>
+        <tbody class="divide-y divide-dark-border/30">${bodyRows}</tbody>
       </table>
     </div>
   `;
@@ -216,7 +230,7 @@ function reloadData() {
 
 function handleGenerate() {
   if (!state.staticRows.length) {
-    showToast("Static data is required before report generation.", "error");
+    showToast("Static data is required.", "error");
     return;
   }
 
@@ -245,14 +259,14 @@ function handleSave() {
 
   const invalidRow = rows.find((row) => !row.observation);
   if (invalidRow) {
-    showToast("Observation is required for all rows before save.", "error");
+    showToast("Observation is required for all rows.", "error");
     return;
   }
 
   try {
     updateReport(state.context, activeReport.id, rows);
     reloadData();
-    showToast("Report updated successfully.", "info");
+    showToast("Report updated successfully.", "success");
   } catch (error) {
     showToast(error.message || "Unable to update report.", "error");
   }
@@ -281,7 +295,7 @@ function handleDelete() {
 
 function handleBlankFormatPrint() {
   if (!state.staticRows.length) {
-    showToast("No static rows available for blank format.", "warn");
+    showToast("No static rows available.", "warn");
     return;
   }
 

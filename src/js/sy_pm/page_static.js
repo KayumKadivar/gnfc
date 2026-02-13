@@ -112,7 +112,7 @@ function renderRows() {
       empty.innerHTML = renderEmptyState(
         "No static records",
         "Add static rows before generating or filling reports.",
-        "Use the Add Row action"
+        "Add Row"
       );
       empty.classList.remove("hidden");
     }
@@ -125,14 +125,19 @@ function renderRows() {
 
   state.rows.forEach((row, index) => {
     const tr = document.createElement("tr");
+    tr.className = "hover:bg-dark-header/50 transition-colors group";
     tr.innerHTML = `
-      <td class="sy-col-index">${index + 1}</td>
-      <td>${row.item}</td>
-      <td>${row.action || "-"}</td>
-      <td>${row.referenceValue || "-"}</td>
-      <td class="sy-col-actions">
-        <button class="sy-btn sy-btn-ghost" data-action="edit" data-id="${row.id}">Edit</button>
-        <button class="sy-btn sy-btn-danger" data-action="delete" data-id="${row.id}">Delete</button>
+      <td class="px-4 py-3 text-center font-mono  text-[10px] border-r border-dark-border/10">${index + 1}</td>
+      <td class="px-4 py-3 font-medium text-dark-text text-[13px]">${row.item}</td>
+      <td class="px-4 py-3  text-xs leading-relaxed">${row.action || "-"}</td>
+      <td class="px-4 py-3 text-dark-text font-mono text-[11px] bg-dark-bg/30">${row.referenceValue || "-"}</td>
+      <td class="px-4 py-3 text-center space-x-2 flex ">
+        <button class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-[10px] font-bold rounded-md  hover:text-white hover:bg-dark-header border border-transparent hover:border-dark-border transition-all active:scale-95" data-action="edit" data-id="${row.id}">
+          <i class="ph-bold ph-pencil-simple text-sm"></i>
+        </button>
+        <button class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-[10px] font-bold rounded-md bg-rose-900/20 text-rose-400 border border-rose-900/30 hover:bg-rose-900/40 hover:text-rose-200 transition-all active:scale-95" data-action="delete" data-id="${row.id}">
+          <i class="ph-bold ph-trash text-sm"></i>
+        </button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -183,7 +188,7 @@ function handleRowSubmit(event) {
       showToast("Static record updated.", "info");
     } else {
       createStaticRow(state.context, { item, action, referenceValue });
-      showToast("Static record added.", "info");
+      showToast("Static record added.", "success");
     }
 
     closeModal("static-row-modal");
@@ -206,7 +211,7 @@ function handleInstructionSave(event) {
     state.instruction = updateInstruction(state.context, nextText);
     renderInstruction();
     closeModal("instruction-modal");
-    showToast("Instruction updated.", "info");
+    showToast("Instruction updated.", "success");
   } catch (error) {
     showToast(error.message || "Unable to update instruction.", "error");
   }

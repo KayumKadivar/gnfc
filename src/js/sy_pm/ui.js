@@ -8,7 +8,8 @@ function getToastRoot() {
 
   root = document.createElement("div");
   root.id = TOAST_ROOT_ID;
-  root.className = "sy-toast-root";
+  // Container for toasts
+  root.className = "fixed bottom-0 right-0 p-6 flex flex-col items-end gap-2 pointer-events-none z-[9999]";
   document.body.appendChild(root);
   return root;
 }
@@ -19,14 +20,44 @@ export function showToast(message, tone = "info") {
 
   const root = getToastRoot();
   const toast = document.createElement("div");
-  toast.className = `sy-toast sy-toast-${tone}`;
-  toast.textContent = text;
+  
+  // Base classes for toast
+  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 font-medium text-sm border backdrop-blur-md";
+  
+  // Tone specific classes
+  if (tone === "error") {
+    baseClasses += " bg-rose-950/90 text-rose-100 border-rose-800 shadow-rose-900/20";
+  } else if (tone === "warn") {
+    baseClasses += " bg-amber-950/90 text-amber-100 border-amber-800 shadow-amber-900/20";
+  } else if (tone === "success") {
+    baseClasses += " bg-emerald-950/90 text-emerald-100 border-emerald-800 shadow-emerald-900/20";
+  } else {
+    // Info / Default
+    baseClasses += " bg-dark-panel/95 text-white border-dark-border shadow-black/50";
+  }
+
+  toast.className = baseClasses + " translate-y-4 opacity-0"; // Initial state for animation
+  
+  // Icon based on tone
+  let icon = "";
+  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle text-lg shrink-0"></i>';
+  else if (tone === "warn") icon = '<i class="ph-bold ph-warning text-lg shrink-0"></i>';
+  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle text-lg shrink-0"></i>';
+  else icon = '<i class="ph-bold ph-info text-lg shrink-0 text-gnfc-orange"></i>';
+
+  toast.innerHTML = `${icon}<span>${text}</span>`;
   root.appendChild(toast);
 
+  // Trigger animation
+  requestAnimationFrame(() => {
+    toast.className = baseClasses;
+  });
+
   setTimeout(() => {
-    toast.classList.add("sy-toast-hide");
-    setTimeout(() => toast.remove(), 220);
-  }, 2200);
+    // Hide animation
+    toast.className = baseClasses + " translate-y-2 opacity-0 pointer-events-none";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
 export function escapeHtml(value) {
@@ -41,14 +72,19 @@ export function escapeHtml(value) {
 export function openModal(target) {
   const modal = typeof target === "string" ? document.getElementById(target) : target;
   if (!modal) return;
-  modal.classList.add("is-open");
+  modal.classList.remove("hidden");
+  // Small delay to allow display:block to apply before opacity transition if needed
+  requestAnimationFrame(() => {
+    modal.classList.add("opacity-100");
+  });
   modal.setAttribute("aria-hidden", "false");
 }
 
 export function closeModal(target) {
   const modal = typeof target === "string" ? document.getElementById(target) : target;
   if (!modal) return;
-  modal.classList.remove("is-open");
+  modal.classList.remove("opacity-100");
+  modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
 }
 
@@ -66,7 +102,7 @@ export function bindModalDismiss(modalId) {
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
-    if (!modal.classList.contains("is-open")) return;
+    if (modal.classList.contains("hidden")) return;
     closeModal(modal);
   });
 
@@ -83,10 +119,13 @@ export function renderEmptyState(title, description, actionLabel = "") {
   const safeAction = escapeHtml(actionLabel || "");
 
   return `
-    <div class="sy-empty-state">
-      <h3>${safeTitle}</h3>
-      <p>${safeDescription}</p>
-      ${safeAction ? `<span class="sy-empty-hint">${safeAction}</span>` : ""}
+    <div class="flex flex-col items-center justify-center p-12 text-center rounded-xl border-2 border-dashed border-dark-border/50 bg-dark-bg/30">
+      <div class="w-16 h-16 rounded-full bg-dark-panel border border-dark-border flex items-center justify-center mb-4 text-dark-muted">
+        <i class="ph-duotone ph-folder-open text-3xl"></i>
+      </div>
+      <h3 class="text-white font-bold text-lg mb-1">${safeTitle}</h3>
+      <p class="text-dark-muted text-sm max-w-[280px] leading-relaxed">${safeDescription}</p>
+      ${safeAction ? `<span class="inline-block mt-5 px-3 py-1.5 rounded-full bg-gnfc-orange/10 text-gnfc-orange text-[10px] font-bold uppercase tracking-wider border border-gnfc-orange/20 animate-pulse">${safeAction}</span>` : ""}
     </div>
   `;
 }
@@ -111,6 +150,7 @@ export function buildContextHeading(context) {
 }
 
 export function printBlankFormat(payload) {
+  // Keeping print styles simple and robust for printing
   const title = String(payload?.title || "SY_PM Blank Format");
   const contextLabel = String(payload?.contextLabel || "");
   const instruction = String(payload?.instruction || "");

@@ -11,15 +11,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
-  <link rel="stylesheet" href="/src/styles/sy_pm.css">
+  <style>
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: var(--app-bg, #111217); }
+      ::-webkit-scrollbar-thumb { background: var(--app-border, #2c3235); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--app-muted, #8e8e9e); }
+  </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
+  
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
 
-  <div id="sidebar-container"></div>
+  <div id="sidebar-container" class="relative z-20"></div>
   <script>
     try {
       renderSidebar('technician_logbook');
@@ -28,10 +34,10 @@
     }
   </script>
 
-  <main class="flex-1 flex flex-col overflow-hidden">
+  <main class="flex-1 flex flex-col overflow-hidden relative z-10">
     <div id="header-container"></div>
 
-    <div class="flex-1 overflow-y-auto sy-page-shell bg-dark-bg">
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
       <script>
@@ -42,112 +48,128 @@
         }
       </script>
 
-      <div class="sy-content">
-        <section class="sy-panel sy-section">
-          <div class="sy-header-row">
-            <div>
-              <h2 id="sy-context-heading" class="sy-title">SY_PM Context</h2>
-              <p class="sy-subtitle">Static records are scoped to selected system and frequency.</p>
-            </div>
-            <div class="sy-chip-row">
-              <span class="sy-chip">System <strong id="sy-chip-system">-</strong></span>
-              <span class="sy-chip">Frequency <strong id="sy-chip-frequency">-</strong></span>
-              <span class="sy-chip">Rows <strong id="static-record-count">0 records</strong></span>
-            </div>
+      <!-- Context Section -->
+      <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg">
+        <div class="flex justify-between items-start gap-4 flex-wrap">
+          <div>
+            <h2 id="sy-context-heading" class="text-lg font-bold text-white">SY_PM Context</h2>
+            <p class="text-sm text-dark-muted mt-1">Static records are scoped to selected system and frequency.</p>
           </div>
-          <div class="sy-action-row mt-4">
-            <button id="btn-add-record" type="button" class="sy-btn sy-btn-primary">
-              <i class="ph-bold ph-plus mr-1"></i> Add Row
-            </button>
-            <button id="btn-edit-instruction" type="button" class="sy-btn">
-              <i class="ph-bold ph-note-pencil mr-1"></i> Edit Instruction
-            </button>
-            <button id="btn-go-report" type="button" class="sy-btn sy-btn-success">
-              <i class="ph-bold ph-file-text mr-1"></i> Open Report Workspace
-            </button>
+          <div class="flex gap-2 flex-wrap text-[11px] font-bold uppercase tracking-wider">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+                System <strong id="sy-chip-system" class="text-dark-text">-</strong>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+                Frequency <strong id="sy-chip-frequency" class="text-dark-text">-</strong>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+                Rows <strong id="static-record-count" class="text-dark-text">0 records</strong>
+            </span>
           </div>
-        </section>
+        </div>
+        <div class="flex gap-3 mt-5 flex-wrap">
+          <button id="btn-add-record" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
+            <i class="ph-bold ph-plus text-sm"></i> Add Row
+          </button>
+          <button id="btn-edit-instruction" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
+            <i class="ph-bold ph-note-pencil text-sm"></i> Edit Instruction
+          </button>
+          <button id="btn-go-report" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-gnfc-orange border border-gnfc-orange/30 text-xs font-bold rounded-lg transition-all active:scale-95">
+            <i class="ph-bold ph-file-text text-sm"></i> Open Report Workspace
+          </button>
+        </div>
+      </section>
 
-        <section class="sy-panel sy-section">
-          <div class="sy-table-shell">
-            <table class="sy-table">
-              <thead>
-                <tr>
-                  <th>Sr</th>
-                  <th>Item</th>
-                  <th>Action</th>
-                  <th>Reference Value</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="static-table-body"></tbody>
-            </table>
-          </div>
-          <div id="static-empty" class="mt-3"></div>
-        </section>
+      <!-- Table Section -->
+      <section class="rounded-xl border border-dark-border bg-dark-panel p-0 shadow-lg overflow-hidden flex flex-col">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-dark-header uppercase tracking-wider border-b border-dark-border">
+                <th class="px-4 py-3 font-bold w-16 text-center">Sr</th>
+                <th class="px-4 py-3 font-bold">Item</th>
+                <th class="px-4 py-3 font-bold">Action</th>
+                <th class="px-4 py-3 font-bold">Reference Value</th>
+                <th class="px-4 py-3 font-bold w-32 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="static-table-body" class="divide-y divide-dark-border text-dark-text">
+                <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div id="static-empty" class="hidden p-8 text-center text-sm">No records found.</div>
+      </section>
 
-        <section class="sy-panel sy-section">
-          <div class="sy-header-row">
-            <div>
-              <h3 class="sy-title">General Instruction</h3>
-              <p class="sy-subtitle">Instruction content is shared with report generation and blank format print.</p>
-            </div>
-            <div class="sy-mini-meta" id="instruction-updated-at">Updated: -</div>
+      <!-- Instruction Section -->
+      <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg mb-8">
+        <div class="flex justify-between items-center mb-3">
+          <div>
+            <h3 class="text-sm font-bold text-white">General Instruction</h3>
+            <p class="text-xs text-dark-muted mt-0.5">Instruction content is shared with report generation and blank format print.</p>
           </div>
-          <div id="instruction-preview" class="sy-text-block mt-3"></div>
-        </section>
-      </div>
+          <div class="text-[10px] text-dark-muted font-mono" id="instruction-updated-at">Updated: -</div>
+        </div>
+        <div id="instruction-preview" class="p-3 rounded-lg bg-dark-bg border border-dark-border text-xs text-dark-text leading-relaxed font-mono whitespace-pre-wrap min-h-[60px]"></div>
+      </section>
+
     </div>
   </main>
 
-  <div id="static-row-modal" class="sy-modal" aria-hidden="true">
-    <div class="sy-modal-panel">
-      <div class="sy-modal-head sy-header-row">
-        <h3 id="static-row-modal-title" class="sy-modal-title">Add Static Record</h3>
-        <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Close</button>
+  <!-- Add/Edit Modal (Tailwind + Theme) -->
+  <div id="static-row-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text" aria-hidden="true">
+    <div class="w-full max-w-2xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-5 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
+        <h3 id="static-row-modal-title" class="text-sm font-bold text-white uppercase tracking-wide">Add Static Record</h3>
+        <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
+            <i class="ph-bold ph-x text-lg"></i>
+        </button>
       </div>
-      <form id="static-row-form">
-        <div class="sy-modal-body">
+      <form id="static-row-form" class="flex flex-col flex-1 overflow-hidden">
+        <div class="p-6 overflow-y-auto space-y-5">
           <input type="hidden" id="static-row-id">
-          <div class="sy-field">
-            <label class="sy-label" for="static-item">Item</label>
-            <input id="static-item" class="sy-input" type="text" maxlength="250" placeholder="Enter checklist item">
+          <div>
+            <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-item">Item</label>
+            <input id="static-item" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted" type="text" maxlength="250" placeholder="Enter checklist item">
           </div>
-          <div class="sy-modal-grid">
-            <div class="sy-field">
-              <label class="sy-label" for="static-action">Action</label>
-              <input id="static-action" class="sy-input" type="text" maxlength="250" placeholder="Action guidance">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-action">Action</label>
+              <input id="static-action" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted" type="text" maxlength="250" placeholder="Action guidance">
             </div>
-            <div class="sy-field">
-              <label class="sy-label" for="static-reference">Reference Value</label>
-              <input id="static-reference" class="sy-input" type="text" maxlength="180" placeholder="Reference value">
+            <div>
+              <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-reference">Reference Value</label>
+              <input id="static-reference" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted" type="text" maxlength="180" placeholder="Reference value">
             </div>
           </div>
         </div>
-        <div class="sy-modal-foot">
-          <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Cancel</button>
-          <button type="submit" class="sy-btn sy-btn-primary">Save</button>
+        <div class="px-5 py-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
+          <button type="button" data-close-modal="true" class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Save</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div id="instruction-modal" class="sy-modal" aria-hidden="true">
-    <div class="sy-modal-panel">
-      <div class="sy-modal-head sy-header-row">
-        <h3 class="sy-modal-title">Edit Instruction</h3>
-        <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Close</button>
+  <!-- Instruction Modal (Tailwind + Theme) -->
+  <div id="instruction-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text" aria-hidden="true">
+    <div class="w-full max-w-xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-5 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wide">Edit Instruction</h3>
+        <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
+            <i class="ph-bold ph-x text-lg" data-close-modal="true"></i>
+        </button>
       </div>
-      <form id="instruction-form">
-        <div class="sy-modal-body">
-          <div class="sy-field">
-            <label class="sy-label" for="instruction-input">Instruction Text</label>
-            <textarea id="instruction-input" class="sy-input sy-input-area" rows="6" placeholder="Enter report instruction"></textarea>
+      <form id="instruction-form" class="flex flex-col flex-1 overflow-hidden">
+        <div class="p-6 overflow-y-auto">
+          <div>
+            <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="instruction-input">Instruction Text</label>
+            <textarea id="instruction-input" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted min-h-[150px]" placeholder="Enter report instruction"></textarea>
           </div>
         </div>
-        <div class="sy-modal-foot">
-          <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Cancel</button>
-          <button type="submit" class="sy-btn sy-btn-primary">Update Instruction</button>
+        <div class="px-5 py-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
+          <button type="button" data-close-modal="true" class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Update Instruction</button>
         </div>
       </form>
     </div>
