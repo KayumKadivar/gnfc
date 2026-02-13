@@ -77,7 +77,7 @@ function renderSidebar(activePageId) {
 function createLink(id, url, icon, text, isCollapsed) {
     const isActive = id === window.activePage;
     const activeClass = isActive
-        ? "bg-[#181b1f] text-white border-l-4 border-[#FF9900]"
+        ? "bg-[#181b1f] border-l-4 border-[#FF9900]"
         : "text-[#8e8e9e] hover:text-gray-200 hover:bg-[#181b1f] border-l-4 border-transparent";
 
     const justifyClass = isCollapsed ? 'justify-center' : '';

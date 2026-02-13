@@ -199,11 +199,11 @@ const ThemeManager = {
             }
 
             [class~="hover:text-white"]:hover {
-                color: var(--app-text-strong) !important;
+                color: var(--app-text-strong);
             }
 
             html[data-theme-mode="light"] .text-white {
-                color: var(--app-text-strong) !important;
+                color: var(--app-text-strong;
             }
             html[data-theme-mode="light"] .text-white,
             html[data-theme-mode="light"] .text-white,

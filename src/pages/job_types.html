@@ -105,7 +105,7 @@
       <div class="bg-dark-panel border border-dark-border rounded mb-6 shadow-sm">
         <div
           class="px-4 py-3 border-b border-dark-border bg-dark-header rounded-t-md flex justify-between items-center">
-          <div class="flex items-center gap-2 text-sm font-bold text-white uppercase tracking-wide">
+          <div class="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
             <i class="ph-bold ph-funnel text-gnfc-blue"></i> Filter Query
           </div>
         </div>
@@ -117,10 +117,10 @@
             <div
               class="flex bg-dark-bg border border-dark-border rounded-md h-10 items-center px-3 focus-within:border-gnfc-blue focus-within:ring-1 focus-within:ring-gnfc-blue transition-all">
               <input type="date" id="start-date"
-                class="bg-transparent text-sm text-white focus:outline-none w-full [color-scheme:dark]">
+                class="bg-transparent text-sm  focus:outline-none w-full [color-scheme:dark]">
               <span class="px-2 text-dark-muted font-bold">-</span>
               <input type="date" id="end-date"
-                class="bg-transparent text-sm text-white focus:outline-none w-full [color-scheme:dark]">
+                class="bg-transparent text-sm  focus:outline-none w-full [color-scheme:dark]">
             </div>
           </div>
 
@@ -128,7 +128,7 @@
             <label class="block text-[10px] uppercase font-bold text-dark-muted mb-1.5">Job Type</label>
             <div class="relative">
               <select id="job-type-select"
-                class="bg-dark-bg border border-dark-border text-white text-sm rounded-md h-10 w-full pl-3 pr-10 cursor-pointer focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
+                class="bg-dark-bg border border-dark-border  text-sm rounded-md h-10 w-full pl-3 pr-10 cursor-pointer focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
                 <option value="">All Job Types</option>
               </select>
               <i class="ph-bold ph-caret-down absolute right-3 top-3 text-dark-muted pointer-events-none"></i>
@@ -137,11 +137,11 @@
 
           <div class="md:col-span-3 flex gap-2">
             <button onclick="applyFilters()"
-              class="h-10 px-4 flex-1 bg-gnfc-blue hover:bg-blue-500 text-white text-sm font-bold rounded-md transition-colors shadow-lg shadow-blue-500/20">
+              class="h-10 px-4 flex-1 bg-gnfc-blue hover:bg-blue-500  text-sm font-bold rounded-md transition-colors shadow-lg shadow-blue-500/20">
               Run
             </button>
             <button onclick="resetFilters()"
-              class="h-10 px-4 bg-transparent border border-dark-border text-dark-muted hover:text-white hover:border-white/20 text-sm font-bold rounded-md transition-colors">
+              class="h-10 px-4 bg-transparent border border-dark-border text-dark-muted hover: hover:border-white/20 text-sm font-bold rounded-md transition-colors">
               Clear
             </button>
           </div>
@@ -150,7 +150,7 @@
 
       <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm overflow-hidden">
         <div class="px-4 py-3 border-b border-dark-border flex justify-between items-center bg-dark-header">
-          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+          <h3 class="font-bold text-sm flex items-center gap-2">
             <i class="ph-fill ph-clipboard-text text-gnfc-blue"></i>
             Job Type Report
           </h3>
@@ -166,8 +166,8 @@
                 class="bg-dark-bg text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
-                <th class="border-r border-dark-border px-3 py-2 w-48 border-b border-dark-border text-white">Job</th>
-                <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border text-white">
+                <th class="border-r border-dark-border px-3 py-2 w-48 border-b border-dark-border ">Job</th>
+                <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border ">
                   Type of Job</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
                 <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px] text-left">Description</th>
@@ -308,7 +308,7 @@
         // Date Header Row
         tbody.innerHTML += `
           <tr class="bg-dark-panel/50 border-y border-dark-border/50">
-             <td colspan="9" class="px-4 py-2 font-bold text-[10px] text-gnfc-orange uppercase">
+             <td colspan="9" class="px-4 py-2 font-bold text-[10px] text-gnfc-orange uppercase bg-dark-panel">
                <div class="flex items-center gap-2">
                  <i class="ph-fill ph-calendar-blank text-lg"></i> 
                  <span class="tracking-widest">${date}</span>
@@ -325,15 +325,15 @@
                 <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted font-mono text-[10px]">${item.sr}</td>
                 <td class="border-r border-dark-border px-2 py-3 font-bold text-gnfc-blue text-xs text-center">${item.area}</td>
                 <td class="border-r border-dark-border px-3 py-3 align-top">
-                    <div class="text-xs font-bold text-white tracking-tight">${item.tag}</div>
+                    <div class="text-xs font-bold  tracking-tight">${item.tag}</div>
                     <div class="text-[10px] text-dark-muted mt-1 font-mono">${item.tagSubtitle}</div>
                 </td>
                 <td class="border-r border-dark-border px-3 py-3 align-top">
-                    <div class="text-xs font-semibold text-gray-300 leading-tight">${item.jobType}</div>
+                    <div class="text-xs font-semibold leading-tight">${item.jobType}</div>
                 </td>
-                <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white text-[10px]">${item.tech}</td>
+                <td class="border-r border-dark-border px-2 py-3 text-center font-bold  text-[10px]">${item.tech}</td>
                 <td class="border-r border-dark-border px-4 py-3 text-xs text-dark-text leading-relaxed opacity-90">${item.desc}</td>
-                <td class="border-r border-dark-border px-2 py-3 text-center text-[10px] font-bold text-white">${item.engineer}</td>
+                <td class="border-r border-dark-border px-2 py-3 text-center text-[10px] font-bold ">${item.engineer}</td>
                 <td class="border-r border-dark-border px-2 py-3 text-center align-top pt-4">
                     <span class="text-[9px] font-black uppercase tracking-widest ${statusColor} px-2 py-1 rounded border shadow-sm">
                         ${item.status}

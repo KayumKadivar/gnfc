@@ -85,10 +85,10 @@
                 class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
                 <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-10">Sr</th>
                 <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Area</th>
-                <th class="border-r border-dark-border px-2 py-1 w-32 border-b border-dark-border/50 text-white">
+                <th class="border-r border-dark-border px-2 py-1 w-32 border-b border-dark-border/50 ">
                   LoopNo</th>
                 <th
-                  class="border-r border-dark-border px-2 py-1 min-w-[200px] border-b border-dark-border/50 text-white">
+                  class="border-r border-dark-border px-2 py-1 min-w-[200px] border-b border-dark-border/50 ">
                   Job</th>
                 <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Tech</th>
                 <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[300px]">Description
@@ -173,18 +173,18 @@
                         <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted font-mono">${item.sr}</td>
                         <td class="border-r border-dark-border px-2 py-3 font-bold text-gnfc-blue text-center">${item.area}</td>
                         <td class="border-r border-dark-border px-2 py-3">
-                            <div class="text-white">${item.loopNo}</div>
+                            <div class="">${item.loopNo}</div>
                             <div class="text-gnfc-blue mt-1 font-bold">${item.tagNo}</div>
                         </td>
                         <td class="border-r border-dark-border px-2 py-3">
-                            <div class="text-gray-300 line-clamp-2 hover:line-clamp-none" title="${item.job}">${item.job}</div>
+                            <div class=" line-clamp-2 hover:line-clamp-none" title="${item.job}">${item.job}</div>
                             <div class="text-gnfc-orange mt-1 font-medium">${item.typeOfJob}</div>
                         </td>
-                        <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white">${item.tech1}</td>
+                        <td class="border-r border-dark-border px-2 py-3 text-center font-bold ">${item.tech1}</td>
                         <td class="border-r border-dark-border px-4 py-3 text-dark-text leading-relaxed overflow-hidden text-ellipsis relative" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;" title="${item.description}">
                             ${item.description}
                         </td>
-                        <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-white">${item.tech2}</td>
+                        <td class="border-r border-dark-border px-2 py-3 text-center font-bold ">${item.tech2}</td>
                         <td class="border-r border-dark-border px-2 py-3 text-center">
                             <span class="text-[10px] font-black uppercase tracking-widest ${statusClass} px-2 py-1 rounded-sm border">
                                 ${item.status}

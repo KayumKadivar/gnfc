@@ -4,370 +4,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Static Data | GNFC</title>
-  
+  <title>SY_PM Static Data | GNFC</title>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/styles/sy_pm.css">
+</head>
 
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+
+  <div id="sidebar-container"></div>
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            'dark-bg': '#0f172a',
-            'dark-panel': '#1e293b',
-            'dark-border': '#334155',
-            'dark-text': '#f8fafc',
-            'dark-muted': '#94a3b8',
-            'gnfc-blue': '#3b82f6',
-            'gnfc-cyan': '#06b6d4',
-            'gnfc-orange': '#f97316',
-            'gnfc-green': '#10b981',
-            'gnfc-red': '#ef4444',
-          }
-        }
-      }
+    try {
+      renderSidebar('technician_logbook');
+    } catch (error) {
+      console.error(error);
     }
   </script>
 
-  <style>
-    .glass-panel {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
-
-    html[data-theme-mode="light"] .glass-panel {
-      background: rgba(255, 255, 255, 0.9);
-      border-color: rgba(148, 163, 184, 0.35);
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
-    }
-
-    .modal {
-      display: none;
-    }
-
-    .modal.is-open {
-      display: block;
-    }
-
-    .modal__overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.65);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 120;
-      backdrop-filter: blur(3px);
-      padding: 1rem;
-    }
-
-    html[data-theme-mode="light"] .modal__overlay {
-      background: rgba(15, 23, 42, 0.28);
-    }
-
-    .modal__container {
-      width: min(700px, 95vw);
-      max-height: 90vh;
-      overflow: auto;
-      border-radius: 0.75rem;
-      border: 1px solid var(--app-border, #334155);
-      background: var(--app-panel, #1e293b);
-      color: var(--app-text, #f8fafc);
-      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.4);
-      padding: 1.25rem;
-    }
-
-    .custom-table th {
-      background: var(--app-panel-alt, #111827);
-      color: var(--app-muted, #94a3b8);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-size: 10px;
-      font-weight: 700;
-      border-bottom: 1px solid var(--app-border, #334155);
-      padding: 0.75rem;
-    }
-
-    .custom-table td {
-      padding: 0.75rem;
-      border-bottom: 1px solid var(--app-border, #334155);
-    }
-
-    .custom-table tbody tr:hover {
-      background: var(--app-panel-alt, #111827);
-    }
-  </style>
-
-</head>
-
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
-
-  <script src="/src/js/theme_manager.js"></script>
-
-  <!-- Sidebar Container -->
-  <div id="sidebar-container"></div>
-  <script src="/src/js/sidebar.js"></script>
-  <script>try { renderSidebar('technician_logbook'); } catch (e) { console.error(e); }</script>
-
-  <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
-    
-    <!-- Background Gradient Effect -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-gnfc-blue/5 rounded-full blur-[100px] animate-pulse"></div>
-        <div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-gnfc-cyan/5 rounded-full blur-[120px]"></div>
-    </div>
-
-    <!-- Header -->
+  <main class="flex-1 flex flex-col overflow-hidden">
     <div id="header-container"></div>
-    <script src="/src/js/header.js"></script>
-    <script>
-      // Function to parse query parameters
-      function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-      }
 
-      const systemName = getQueryParam('system') || 'System';
-      const frequency = getQueryParam('freq') || 'Daily';
-      const formattedSystem = systemName.replace(' DCS', '').replace(' ESD', '');
-
-      renderHeader({
-        title: "Acetic Acid Plant",
-        breadcrumbs: [
-          { label: "Technician Log", href: "technician_logbook.html" },
-          { label: "Plant Detail", href: "plant_detail.html" },
-          { label: "System Performance", href: `Sy_PM.html?system=${systemName}` },
-          { label: "Static Data" } 
-        ],
-        backLink: `Sy_PM.html?system=${systemName}`
-      });
-    </script>
-
-    <!-- Main Content Area -->
-    <div class="flex-1 overflow-y-auto p-4 z-10 relative custom-scrollbar flex flex-col">
-      
-      <!-- Top Navigation Bar -->
-      <div id="plant-nav-container" class="mb-6"></div>
+    <div class="flex-1 overflow-y-auto sy-page-shell bg-dark-bg">
+      <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
-      <script>renderPlantNav('sy_pm');</script>
+      <script>
+        try {
+          renderPlantNav('sy_pm');
+        } catch (error) {
+          console.error(error);
+        }
+      </script>
 
-
-      <!-- Static Data Panel -->
-      <div class="glass-panel w-full rounded-xl overflow-hidden shadow-xl flex flex-col flex-1 max-h-full">
-            
-            <!-- Panel Header -->
-            <div class="px-6 py-5 border-b border-dark-border bg-dark-panel flex justify-between items-center">
-                <div>
-                   <h2 class="text-xs font-bold text-gnfc-orange uppercase tracking-wider mb-1">Static Values</h2>
-                   <h3 class="text-xl font-extrabold text-dark-text flex items-center gap-2">
-                      <span id="page-system-title">ACETIC ACID</span>
-                      <i class="ph-bold ph-caret-right text-dark-muted text-sm"></i>
-                      <span id="page-freq-title" class="text-gnfc-blue">DCS DAILY</span>
-                   </h3>
-                </div>
-                <div class="flex gap-3">
-                    <a href="#" onclick="window.history.back()" class="px-3 py-2 rounded-lg border border-dark-border text-dark-muted text-sm font-bold hover:bg-white/5 hover:text-dark-text transition-colors">
-                        Main
-                    </a>
-                    <button onclick="openModal('modal-add')" class="px-3 py-2 rounded-lg bg-gnfc-blue text-white text-sm font-bold hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2">
-                        <i class="ph-bold ph-plus"></i> Add
-                    </button>
-                </div>
+      <div class="sy-content">
+        <section class="sy-panel sy-section">
+          <div class="sy-header-row">
+            <div>
+              <h2 id="sy-context-heading" class="sy-title">SY_PM Context</h2>
+              <p class="sy-subtitle">Static records are scoped to selected system and frequency.</p>
             </div>
-
-             <!-- Scrollable Table Area -->
-            <div class="flex-1 overflow-auto custom-scrollbar">
-                <table class="w-full custom-table border-collapse">
-                    <thead class="sticky top-0 z-10">
-                        <tr>
-                            <th class="w-16 text-center">Sr</th>
-                            <th class="w-1/3">Item</th>
-                            <th class="w-1/4">Action</th>
-                            <th class="w-1/4">Reference Value</th>
-                            <th class="w-24 text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="static-data-body">
-                        <!-- Data will be populated here -->
-                    </tbody>
-                </table>
+            <div class="sy-chip-row">
+              <span class="sy-chip">System <strong id="sy-chip-system">-</strong></span>
+              <span class="sy-chip">Frequency <strong id="sy-chip-frequency">-</strong></span>
+              <span class="sy-chip">Rows <strong id="static-record-count">0 records</strong></span>
             </div>
-            
-            <!-- Instructions Footer -->
-            <div class="p-4 bg-dark-bg border-t border-dark-border">
-                <div class="flex items-start gap-4 p-3 rounded-lg border border-dark-border bg-dark-panel">
-                    <div class="flex-1">
-                        <h4 class="text-xs font-bold text-dark-muted uppercase mb-1">Instruction</h4>
-                        <p class="text-sm text-dark-text leading-relaxed">Ensure all cabinet doors are securely closed after inspection. Validate temperature readings against local gauges if discrepancy > 2°C.</p> 
-                    </div>
-                    <button class="text-xs font-bold text-gnfc-blue hover:text-dark-text px-3 py-1.5 rounded border border-gnfc-blue/30 hover:bg-gnfc-blue/10 transition-colors">
-                        Edit
-                    </button>
-                </div>
-            </div>
+          </div>
+          <div class="sy-action-row mt-4">
+            <button id="btn-add-record" type="button" class="sy-btn sy-btn-primary">
+              <i class="ph-bold ph-plus mr-1"></i> Add Row
+            </button>
+            <button id="btn-edit-instruction" type="button" class="sy-btn">
+              <i class="ph-bold ph-note-pencil mr-1"></i> Edit Instruction
+            </button>
+            <button id="btn-go-report" type="button" class="sy-btn sy-btn-success">
+              <i class="ph-bold ph-file-text mr-1"></i> Open Report Workspace
+            </button>
+          </div>
+        </section>
 
+        <section class="sy-panel sy-section">
+          <div class="sy-table-shell">
+            <table class="sy-table">
+              <thead>
+                <tr>
+                  <th>Sr</th>
+                  <th>Item</th>
+                  <th>Action</th>
+                  <th>Reference Value</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="static-table-body"></tbody>
+            </table>
+          </div>
+          <div id="static-empty" class="mt-3"></div>
+        </section>
+
+        <section class="sy-panel sy-section">
+          <div class="sy-header-row">
+            <div>
+              <h3 class="sy-title">General Instruction</h3>
+              <p class="sy-subtitle">Instruction content is shared with report generation and blank format print.</p>
+            </div>
+            <div class="sy-mini-meta" id="instruction-updated-at">Updated: -</div>
+          </div>
+          <div id="instruction-preview" class="sy-text-block mt-3"></div>
+        </section>
       </div>
-
     </div>
   </main>
 
-
-  <!-- Add/Edit Modal -->
-  <div class="modal micro-modal" id="modal-add" aria-hidden="true">
-    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        
-        <header class="flex justify-between items-center mb-6">
-          <h2 class="text-lg font-bold text-dark-text flex items-center gap-2" id="modal-title">
-             <i class="ph-bold ph-pencil-simple text-gnfc-blue"></i>
-             <span id="modal-header-text">Add New Record</span>
-          </h2>
-          <button class="text-dark-muted hover:text-dark-text transition-colors" aria-label="Close modal" data-micromodal-close>
-             <i class="ph-bold ph-x text-lg"></i>
-          </button>
-        </header>
-        
-        <main class="space-y-4">
-            <input type="hidden" id="edit-id">
-            
-            <div>
-                <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5">Item Description</label>
-                <input type="text" id="input-item" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Enter item description">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5">Action</label>
-                    <input type="text" id="input-action" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Optional action">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5">Reference Value</label>
-                    <input type="text" id="input-ref" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue/50 outline-none transition-all" placeholder="Optional reference">
-                </div>
-            </div>
-            
-        </main>
-
-        <footer class="mt-8 flex justify-end gap-3 pt-4 border-t border-dark-border">
-            <button class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-sm font-bold hover:text-dark-text hover:bg-white/5 transition-colors" data-micromodal-close>Cancel</button>
-            <button onclick="saveRecord()" class="px-4 py-2 rounded-lg bg-gnfc-blue text-white text-sm font-bold hover:bg-blue-600 shadow-lg shadow-blue-500/20 transition-all">Save Record</button>
-        </footer>
-
+  <div id="static-row-modal" class="sy-modal" aria-hidden="true">
+    <div class="sy-modal-panel">
+      <div class="sy-modal-head sy-header-row">
+        <h3 id="static-row-modal-title" class="sy-modal-title">Add Static Record</h3>
+        <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Close</button>
       </div>
+      <form id="static-row-form">
+        <div class="sy-modal-body">
+          <input type="hidden" id="static-row-id">
+          <div class="sy-field">
+            <label class="sy-label" for="static-item">Item</label>
+            <input id="static-item" class="sy-input" type="text" maxlength="250" placeholder="Enter checklist item">
+          </div>
+          <div class="sy-modal-grid">
+            <div class="sy-field">
+              <label class="sy-label" for="static-action">Action</label>
+              <input id="static-action" class="sy-input" type="text" maxlength="250" placeholder="Action guidance">
+            </div>
+            <div class="sy-field">
+              <label class="sy-label" for="static-reference">Reference Value</label>
+              <input id="static-reference" class="sy-input" type="text" maxlength="180" placeholder="Reference value">
+            </div>
+          </div>
+        </div>
+        <div class="sy-modal-foot">
+          <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Cancel</button>
+          <button type="submit" class="sy-btn sy-btn-primary">Save</button>
+        </div>
+      </form>
     </div>
   </div>
 
+  <div id="instruction-modal" class="sy-modal" aria-hidden="true">
+    <div class="sy-modal-panel">
+      <div class="sy-modal-head sy-header-row">
+        <h3 class="sy-modal-title">Edit Instruction</h3>
+        <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Close</button>
+      </div>
+      <form id="instruction-form">
+        <div class="sy-modal-body">
+          <div class="sy-field">
+            <label class="sy-label" for="instruction-input">Instruction Text</label>
+            <textarea id="instruction-input" class="sy-input sy-input-area" rows="6" placeholder="Enter report instruction"></textarea>
+          </div>
+        </div>
+        <div class="sy-modal-foot">
+          <button type="button" data-close-modal="true" class="sy-btn sy-btn-ghost">Cancel</button>
+          <button type="submit" class="sy-btn sy-btn-primary">Update Instruction</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  <script>
-    // --- Initial Config ---
-    MicroModal.init();
-    
-    // Set headers
-    document.getElementById('page-system-title').textContent = formattedSystem.toUpperCase();
-    document.getElementById('page-freq-title').textContent = `${formattedSystem} ${frequency}`.toUpperCase();
-
-
-    // --- Mock Data Management ---
-    // In a real app, this would fetch from an API based on system + freq
-    let staticData = [
-        { id: 1, item: "AC is running or not?", action: "", ref: "" },
-        { id: 2, item: "All cabinet doors must be closed.", action: "", ref: "" },
-        { id: 3, item: "Any BPS Fail", action: "Open cabinets.", ref: "" },
-        { id: 4, item: "Cabinet room temperature.", action: "Alarm and Trend on DCS.", ref: "Below 30 DegC." },
-        { id: 5, item: "DCS Alarm Printer.", action: "Paper available and Ribbon quality", ref: "" },
-        { id: 6, item: "DCS system alarm.", action: "Sys Key on display.", ref: "" },
-        { id: 7, item: "FAN running indication.", action: "Open cabinets.", ref: "" },
-        { id: 8, item: "Is any wires are unterminated and untagged?", action: "To be Terminated OR removed.", ref: "No wire should be unterminated." },
-    ];
-
-    function renderTable() {
-        const tbody = document.getElementById('static-data-body');
-        tbody.innerHTML = '';
-        
-        staticData.forEach((row, index) => {
-            const tr = document.createElement('tr');
-            tr.className = "group transition-colors";
-            tr.innerHTML = `
-                <td class="text-center font-mono text-dark-muted text-xs">${index + 1}</td>
-                <td class="font-medium text-dark-text group-hover:text-gnfc-blue transition-colors">${row.item}</td>
-                <td class="text-dark-muted">${row.action}</td>
-                <td class="text-dark-muted font-mono text-xs">${row.ref}</td>
-                <td class="text-center">
-                    <button onclick="editRecord(${row.id})" class="p-1.5 rounded hover:bg-white/10 text-dark-muted hover:text-dark-text transition-colors" title="Edit">
-                        <i class="ph-bold ph-pencil-simple"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    // --- Modal Logic ---
-    function openModal(id) {
-        document.getElementById('modal-header-text').textContent = 'Add New Record';
-        document.getElementById('edit-id').value = '';
-        document.getElementById('input-item').value = '';
-        document.getElementById('input-action').value = '';
-        document.getElementById('input-ref').value = '';
-        MicroModal.show(id);
-    }
-
-    function editRecord(id) {
-        const record = staticData.find(r => r.id === id);
-        if(!record) return;
-
-        document.getElementById('modal-header-text').textContent = 'Edit Record';
-        document.getElementById('edit-id').value = record.id;
-        document.getElementById('input-item').value = record.item;
-        document.getElementById('input-action').value = record.action;
-        document.getElementById('input-ref').value = record.ref;
-        
-        MicroModal.show('modal-add');
-    }
-
-    function saveRecord() {
-        const id = document.getElementById('edit-id').value;
-        const item = document.getElementById('input-item').value;
-        const action = document.getElementById('input-action').value;
-        const ref = document.getElementById('input-ref').value;
-
-        if(!item) {
-            alert("Item description is required");
-            return;
-        }
-
-        if(id) {
-            // Update
-            const index = staticData.findIndex(r => r.id == id);
-            if(index !== -1) {
-                staticData[index] = { ...staticData[index], item, action, ref };
-            }
-        } else {
-            // Add
-            const newId = staticData.length > 0 ? Math.max(...staticData.map(r => r.id)) + 1 : 1;
-            staticData.push({ id: newId, item, action, ref });
-        }
-
-        renderTable();
-        MicroModal.close('modal-add');
-    }
-
-    // --- Init ---
-    renderTable();
-
-  </script>
+  <script type="module" src="/src/js/sy_pm/page_static.js"></script>
 </body>
+
 </html>
