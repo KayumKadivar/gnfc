@@ -52,7 +52,7 @@ function renderPlantNav(activePageId) {
                         <i class="ph-bold ph-caret-down opacity-70 text-[10px]"></i>
                     </button>
                     <div id="${dropdownId}" 
-                         class="dropdown-menu hidden absolute left-0 top-full mt-2 w-48 bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-[#2c3235] rounded-lg shadow-xl py-1 z-50 animate-in fade-in zoom-in-95 duration-100 origin-top-left">
+                         class="dropdown-menu hidden fixed w-48 bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-[#2c3235] rounded-lg shadow-xl py-1 z-[70] animate-in fade-in zoom-in-95 duration-100 origin-top-right">
                         ${item.children.map(child => `
                             <a href="${child.href}" class="block px-3 py-2 text-[11px] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#2c3235] hover:text-gnfc-blue dark:hover:text-gnfc-blue transition-colors">
                                 ${child.label}
@@ -73,7 +73,7 @@ function renderPlantNav(activePageId) {
 
     // --- Render Container ---
     navContainer.innerHTML = `
-        <div class="sticky top-16 z-20 transition-all duration-300">
+        <div class="sticky top-10 z-20 transition-all duration-300">
             <div class="bg-white/80 dark:bg-[#111217]/80 backdrop-blur-md border-b border-gray-200 dark:border-[#2c3235] p-2 mb-4">
                 <div class="max-w-[1920px] mx-auto flex items-center justify-between gap-4">
                     
@@ -95,26 +95,100 @@ function renderPlantNav(activePageId) {
         </div>
     `;
 
+    const closeAllDropdowns = () => {
+        document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.add('hidden'));
+    };
+
+    const getFixedContainingBlock = (element) => {
+        let current = element.parentElement;
+        while (current && current !== document.body) {
+            const styles = window.getComputedStyle(current);
+            const containValue = styles.contain || '';
+            const createsContainingBlock =
+                styles.transform !== 'none' ||
+                styles.perspective !== 'none' ||
+                styles.filter !== 'none' ||
+                styles.backdropFilter !== 'none' ||
+                styles.webkitBackdropFilter !== 'none' ||
+                containValue.includes('paint') ||
+                containValue.includes('layout');
+
+            if (createsContainingBlock) return current;
+            current = current.parentElement;
+        }
+        return null;
+    };
+
+    const positionDropdown = (menu, triggerButton) => {
+        const spacing = 8;
+        const triggerRect = triggerButton.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+        const containingBlock = getFixedContainingBlock(menu);
+
+        let minLeft = spacing;
+        let maxRight = window.innerWidth - spacing;
+        let minTop = spacing;
+        let maxBottom = window.innerHeight - spacing;
+        let leftOffset = 0;
+        let topOffset = 0;
+
+        if (containingBlock) {
+            const blockRect = containingBlock.getBoundingClientRect();
+            leftOffset = blockRect.left;
+            topOffset = blockRect.top;
+            minLeft = spacing;
+            maxRight = blockRect.width - spacing;
+            minTop = spacing;
+            maxBottom = blockRect.height - spacing;
+        }
+
+        let left = (triggerRect.left - leftOffset);
+        let top = (triggerRect.bottom - topOffset) + spacing;
+
+        if (left + menuRect.width > maxRight) {
+            left = maxRight - menuRect.width;
+        }
+        if (left < minLeft) left = minLeft;
+
+        if (top + menuRect.height > maxBottom) {
+            const aboveTrigger = (triggerRect.top - topOffset) - menuRect.height - spacing;
+            if (aboveTrigger >= minTop) top = aboveTrigger;
+        }
+
+        menu.style.left = `${Math.round(left)}px`;
+        menu.style.top = `${Math.round(top)}px`;
+    };
+
     // --- Dropdown Handler (attached to window for global access) ---
     window.toggleDropdown = function(event, id) {
         event.stopPropagation();
+        const triggerButton = event.currentTarget;
         const menu = document.getElementById(id);
+        if (!menu || !triggerButton) return;
         const isHidden = menu.classList.contains('hidden');
         
         // Close all others
-        document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.add('hidden'));
+        closeAllDropdowns();
         
         // Toggle current
         if (isHidden) {
             menu.classList.remove('hidden');
+            positionDropdown(menu, triggerButton);
         }
     };
 
     // --- Close Dropdowns on Outside Click ---
     if (!window.dropdownListenerAdded) {
         document.addEventListener('click', () => {
-            document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.add('hidden'));
+            closeAllDropdowns();
         });
         window.dropdownListenerAdded = true;
+    }
+
+    // Close open dropdowns whenever viewport changes.
+    if (!window.dropdownViewportListenerAdded) {
+        window.addEventListener('resize', closeAllDropdowns);
+        window.addEventListener('scroll', closeAllDropdowns, true);
+        window.dropdownViewportListenerAdded = true;
     }
 }
