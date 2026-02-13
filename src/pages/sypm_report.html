@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | SY_PM Report Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            'dark-bg': '#0f172a',
+            'dark-panel': '#1e293b',
+            'dark-border': '#334155',
+            'dark-text': '#f8fafc',
+            'dark-muted': '#94a3b8',
+            'gnfc-blue': '#3b82f6',
+            'gnfc-cyan': '#06b6d4',
+            'gnfc-orange': '#f97316',
+            'gnfc-green': '#10b981',
+            'gnfc-red': '#ef4444',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Glassmorphism & Utilities */
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    
+    .glass-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+
+<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white">
+
+  <!-- Sidebar (Minimal) -->
+  <div class="w-16 bg-dark-panel border-r border-dark-border hidden md:flex flex-col items-center py-6 gap-6 z-20 shrink-0">
+    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gnfc-orange to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/20 text-white font-bold text-xl">G</div>
+    <div class="flex-1 flex flex-col gap-4 w-full">
+      <button onclick="window.location.href='/src/pages/Sy_PM1.html'" class="h-10 w-10 mx-auto rounded-md hover:bg-white/5 text-dark-muted hover:text-white transition-colors flex items-center justify-center" title="Dashboard"><i class="ph-bold ph-squares-four text-xl"></i></button>
+      <button class="h-10 w-10 mx-auto rounded-md bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/20 flex items-center justify-center" title="Reports"><i class="ph-fill ph-file-text text-xl"></i></button>
+      <button class="h-10 w-10 mx-auto rounded-md hover:bg-white/5 text-dark-muted hover:text-white transition-colors flex items-center justify-center" title="Logs"><i class="ph-bold ph-notebook text-xl"></i></button>
+    </div>
+  </div>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    
+    <!-- Background Effects -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-gnfc-orange/5 rounded-full blur-[100px] animate-pulse"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-gnfc-blue/5 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="h-16 glass-header flex items-center justify-between px-6 shrink-0 z-20 relative">
+      <div>
+        <h1 class="text-sm font-bold text-gnfc-orange tracking-wide uppercase">Acetic Acid Plant</h1>
+        <div class="flex items-center gap-2 text-xs text-dark-muted">
+          <span>Maintenance</span>
+          <i class="ph-bold ph-caret-right text-[10px]"></i>
+          <span class="text-white font-medium">Report Workspace</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg border border-dark-border rounded-full">
+          <span class="w-2 h-2 rounded-full bg-gnfc-green animate-pulse"></span>
+          <span class="text-xs font-mono text-gnfc-green">LIVE</span>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-gray-700 to-gray-600 border border-gray-500"></div>
+      </div>
+    </header>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto p-6 z-10 relative custom-scrollbar">
+      
+      <div class="flex flex-col gap-6 max-w-[1600px] mx-auto">
+
+        <!-- Top Controls & Context -->
+        <div class="glass-panel p-6 rounded-xl">
+             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                   <h2 id="report-context-heading" class="text-xl font-bold text-white tracking-wide">Report Context</h2>
+                   <p class="text-xs text-dark-muted mt-1">Generate, edit and manage report instances for selected system-frequency pair.</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-dark-border bg-dark-bg/50 text-xs font-medium text-dark-muted">
+                        System <strong id="report-chip-system" class="text-white ml-1">-</strong>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-dark-border bg-dark-bg/50 text-xs font-medium text-dark-muted">
+                        Frequency <strong id="report-chip-frequency" class="text-white ml-1">-</strong>
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-dark-border bg-dark-bg/50 text-xs font-medium text-dark-muted">
+                        Reports <strong id="report-count" class="text-white ml-1">0</strong>
+                    </span>
+                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-dark-border bg-dark-bg/50 text-xs font-medium text-dark-muted">
+                        Static <strong id="report-static-count" class="text-white ml-1">0</strong>
+                    </span>
+                </div>
+             </div>
+
+             <div class="flex flex-wrap gap-2 justify-end">
+                 <button id="btn-view-instruction" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-dark-bg border border-dark-border text-dark-muted hover:text-white hover:border-dark-muted text-xs font-bold uppercase tracking-wider rounded-lg transition-all">
+                     <i class="ph-bold ph-info text-lg"></i> Instructions
+                 </button>
+               
+                 <button id="btn-generate-report" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-amber-600 transition-colors shadow-lg shadow-orange-500/20">
+                     <i class="ph-bold ph-plus-circle text-lg"></i> Add
+                 </button>
+             </div>
+
+        </div>
+
+        <!-- Main Workspace Split -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Sidebar: Report List -->
+            <div class="lg:col-span-3">
+                <div class="glass-panel rounded-xl p-4 h-full min-h-[500px] flex flex-col">
+                    <h3 class="text-sm font-bold text-white mb-1">History</h3>
+                    <p class="text-[10px] text-dark-muted mb-4 uppercase tracking-wider">Select a report to view/edit</p>
+                    <div id="report-list" class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                        <!-- Populated by JS -->
+                        <div class="p-4 text-center text-dark-muted text-xs italic opacity-50">Loading reports...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main: Report Editor -->
+            <div class="lg:col-span-9">
+                 <div class="glass-panel rounded-xl p-0 overflow-hidden flex flex-col h-full">
+                     <div class="px-6 py-4 border-b border-dark-border/50 bg-dark-bg/30 flex justify-between items-center">
+                         <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                             <i class="ph-fill ph-note-pencil text-gnfc-orange"></i> Report Editor
+                         </h3>
+                         <span id="report-editor-meta" class="text-[10px] font-mono text-dark-muted">-</span>
+                     </div>
+                     
+                     <div id="report-editor-container" class="flex-1 overflow-auto bg-dark-bg/20 p-4">
+                         <!-- Table populated by JS -->
+                         <div class="flex flex-col items-center justify-center h-40 text-dark-muted">
+                             <i class="ph-duotone ph-file-text text-4xl mb-2 opacity-20"></i>
+                             <span class="text-xs">Select a report to begin editing</span>
+                         </div>
+                     </div>
+                     <div class="px-6 py-4 border-t border-dark-border/50 bg-dark-bg/30 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-4 text-xs text-dark-muted">
+                            <label class="flex items-center gap-2">
+                                <span class="uppercase font-bold tracking-wider text-[10px]">Checked By 1:</span>
+                                <input id="report-checked-1" type="text" class="bg-dark-panel border border-dark-border rounded px-2 py-1 w-20 text-white focus:border-gnfc-orange focus:outline-none uppercase font-mono" placeholder="PBS" />
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <span class="uppercase font-bold tracking-wider text-[10px]">Checked By 2:</span>
+                                <input id="report-checked-2" type="text" class="bg-dark-panel border border-dark-border rounded px-2 py-1 w-20 text-white focus:border-gnfc-orange focus:outline-none uppercase font-mono" placeholder="PNV" />
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button id="btn-cancel-report" type="button" class="inline-flex items-center gap-2 px-6 py-2 bg-dark-bg border border-dark-border text-dark-muted hover:text-white hover:border-dark-muted text-xs font-bold uppercase tracking-wider rounded-lg transition-all">
+                                Cancel
+                            </button>
+                            <button id="btn-save-report" type="button" class="inline-flex items-center gap-2 px-6 py-2 bg-gnfc-green text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-emerald-600 transition-colors shadow-lg shadow-green-500/20">
+                                <i class="ph-bold ph-floppy-disk text-lg"></i> Save Changes
+                            </button>
+                        </div>
+                     </div>
+
+                 </div>
+            </div>
+
+        </div>
+
+      </div>
+      
+      <div class="h-6"></div>
+    </div>
+  </main>
+
+  <!-- Instruction Modal -->
+  <div id="report-instruction-modal" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" data-close-modal="true"></div>
+    <div class="relative bg-dark-panel border border-dark-border rounded-xl shadow-2xl w-full max-w-2xl m-4 flex flex-col max-h-[90vh]">
+      <div class="px-6 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header rounded-t-xl">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wide">Work Instruction</h3>
+        <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
+            <i class="ph-bold ph-x text-lg pointer-events-none"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto custom-scrollbar">
+         <div id="report-instruction-text" class="prose prose-invert prose-sm max-w-none text-dark-text whitespace-pre-wrap leading-relaxed"></div>
+      </div>
+      <div class="px-6 py-4 border-t border-dark-border bg-dark-bg/50 rounded-b-xl flex justify-between items-center">
+        <div id="report-instruction-updated" class="text-[10px] text-dark-muted font-mono">-</div>
+        <button type="button" data-close-modal="true" class="px-4 py-2 bg-dark-panel border border-dark-border text-white text-xs font-bold rounded hover:bg-dark-border transition-colors">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/src/js/theme_manager.js"></script>
+    <!-- Print Preview Modal -->
+    <div id="print-preview-modal" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" data-close-modal="true"></div>
+        
+        <!-- Modal Panel -->
+        <div class="relative w-full h-full flex flex-col bg-white animate-in fade-in zoom-in-95 duration-200">
+            
+            <!-- Modal Header (No Print) -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50 print:hidden">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                    <i class="ph-bold ph-printer text-gray-500"></i> Print Preview
+                </h3>
+                <div class="flex items-center gap-3">
+                    <button id="btn-print-modal" type="button" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors flex items-center gap-2">
+                        <i class="ph-bold ph-printer"></i> Print
+                    </button>
+                    <button type="button" class="p-2 text-gray-500 hover:text-gray-800 transition-colors" data-close-modal="true">
+                        <i class="ph-bold ph-x text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div id="print-preview-content" class="flex-1 overflow-auto p-8 bg-gray-100 print:p-0 print:overflow-visible print:bg-white">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/sy_pm/page_report.js"></script>
+    <script>
+       // Simple print styles helper
+       const style = document.createElement('style');
+       style.innerHTML = `
+           @media print {
+               body > *:not(#print-preview-modal) { display: none !important; }
+               #print-preview-modal { position: absolute !important; inset: 0 !important; display: block !important; background: white !important; z-index: 9999 !important; }
+               #print-preview-modal > div:first-child { display: none !important; } /* Hide backdrop */
+               #print-preview-modal > div:nth-child(2) { width: 100% !important; height: auto !important; } /* Full width panel */
+               .print\\:hidden { display: none !important; }
+               .print\\:p-0 { padding: 0 !important; }
+               .print\\:overflow-visible { overflow: visible !important; }
+               .print\\:bg-white { background: white !important; }
+           }
+       `;
+       document.head.appendChild(style);
+    </script>
+</body>
+</html>

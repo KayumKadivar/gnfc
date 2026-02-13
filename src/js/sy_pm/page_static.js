@@ -14,16 +14,155 @@ import {
   updateInstruction,
   updateStaticRow
 } from "./store.js";
-import {
-  bindModalDismiss,
-  buildContextHeading,
-  closeModal,
-  confirmAction,
-  formatDateTime,
-  openModal,
-  renderEmptyState,
-  showToast
-} from "./ui.js";
+
+// --- UI Utilities Inlined ---
+
+const TOAST_ROOT_ID = "sy-pm-toast-root";
+
+function getToastRoot() {
+  let root = document.getElementById(TOAST_ROOT_ID);
+  if (root) return root;
+
+  root = document.createElement("div");
+  root.id = TOAST_ROOT_ID;
+  root.className = "fixed bottom-0 right-0 p-6 flex flex-col items-end gap-2 pointer-events-none z-[9999]";
+  document.body.appendChild(root);
+  return root;
+}
+
+function showToast(message, tone = "info") {
+  const text = String(message || "").trim();
+  if (!text) return;
+
+  const root = getToastRoot();
+  const toast = document.createElement("div");
+  
+  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 font-medium text-sm border backdrop-blur-md";
+  
+  if (tone === "error") {
+    baseClasses += " bg-rose-950/90 text-rose-100 border-rose-800 shadow-rose-900/20";
+  } else if (tone === "warn") {
+    baseClasses += " bg-amber-950/90 text-amber-100 border-amber-800 shadow-amber-900/20";
+  } else if (tone === "success") {
+    baseClasses += " bg-emerald-950/90 text-emerald-100 border-emerald-800 shadow-emerald-900/20";
+  } else {
+    baseClasses += " bg-dark-panel/95 text-white border-dark-border shadow-black/50";
+  }
+
+  toast.className = baseClasses + " translate-y-4 opacity-0";
+  
+  let icon = "";
+  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle text-lg shrink-0"></i>';
+  else if (tone === "warn") icon = '<i class="ph-bold ph-warning text-lg shrink-0"></i>';
+  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle text-lg shrink-0"></i>';
+  else icon = '<i class="ph-bold ph-info text-lg shrink-0 text-gnfc-orange"></i>';
+
+  toast.innerHTML = `${icon}<span>${text}</span>`;
+  root.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.className = baseClasses;
+  });
+
+  setTimeout(() => {
+    toast.className = baseClasses + " translate-y-2 opacity-0 pointer-events-none";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function openModal(target) {
+  const modal = typeof target === "string" ? document.getElementById(target) : target;
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  requestAnimationFrame(() => {
+    modal.classList.add("opacity-100");
+  });
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeModal(target) {
+  const modal = typeof target === "string" ? document.getElementById(target) : target;
+  if (!modal) return;
+  modal.classList.remove("opacity-100");
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function bindModalDismiss(modalId) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+
+  if (modal._dismissBound) return;
+
+  modal.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    if (target === modal) {
+      closeModal(modal);
+      return;
+    }
+
+    const closeTrigger = target.closest('[data-close-modal="true"]');
+    if (closeTrigger) {
+      closeModal(modal);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (modal.classList.contains("hidden")) return;
+    closeModal(modal);
+  });
+
+  modal._dismissBound = true;
+  modal.dataset.bound = "true";
+}
+
+function confirmAction(message) {
+  return window.confirm(String(message || "Are you sure?"));
+}
+
+function formatDateTime(dateValue) {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return "--";
+  return date.toLocaleString("en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+function buildContextHeading(context) {
+  return `${context.systemCode} - ${getFrequencyLabel(context.frequencyCode)}`;
+}
+
+function renderEmptyState(title, description, actionLabel = "") {
+  const safeTitle = escapeHtml(title || "No data available");
+  const safeDescription = escapeHtml(description || "Please create a record to continue.");
+  const safeAction = escapeHtml(actionLabel || "");
+
+  return `
+    <div class="flex flex-col items-center justify-center p-12 text-center rounded-xl border-2 border-dashed border-dark-border/50 bg-dark-bg/30">
+      <div class="w-16 h-16 rounded-full bg-dark-panel border border-dark-border flex items-center justify-center mb-4 text-dark-muted">
+        <i class="ph-duotone ph-folder-open text-3xl"></i>
+      </div>
+      <h3 class="text-white font-bold text-lg mb-1">${safeTitle}</h3>
+      <p class="text-dark-muted text-sm max-w-[280px] leading-relaxed">${safeDescription}</p>
+      ${safeAction ? `<span class="inline-block mt-5 px-3 py-1.5 rounded-full bg-gnfc-orange/10 text-gnfc-orange text-[10px] font-bold uppercase tracking-wider border border-gnfc-orange/20 animate-pulse">${safeAction}</span>` : ""}
+    </div>
+  `;
+}
+
+// --- End Utilities ---
 
 const state = {
   context: null,

@@ -15,18 +15,161 @@ import {
   listStaticRows,
   updateReport
 } from "./store.js";
-import {
-  bindModalDismiss,
-  buildContextHeading,
-  closeModal,
-  confirmAction,
-  formatDate,
-  formatDateTime,
-  openModal,
-  printBlankFormat,
-  renderEmptyState,
-  showToast
-} from "./ui.js";
+
+// --- UI Utilities Inlined ---
+
+const TOAST_ROOT_ID = "sy-pm-toast-root";
+
+function getToastRoot() {
+  let root = document.getElementById(TOAST_ROOT_ID);
+  if (root) return root;
+
+  root = document.createElement("div");
+  root.id = TOAST_ROOT_ID;
+  root.className = "fixed bottom-0 right-0 p-6 flex flex-col items-end gap-2 pointer-events-none z-[9999]";
+  document.body.appendChild(root);
+  return root;
+}
+
+function showToast(message, tone = "info") {
+  const text = String(message || "").trim();
+  if (!text) return;
+
+  const root = getToastRoot();
+  const toast = document.createElement("div");
+  
+  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 font-medium text-sm border backdrop-blur-md";
+  
+  if (tone === "error") {
+    baseClasses += " bg-rose-950/90 text-rose-100 border-rose-800 shadow-rose-900/20";
+  } else if (tone === "warn") {
+    baseClasses += " bg-amber-950/90 text-amber-100 border-amber-800 shadow-amber-900/20";
+  } else if (tone === "success") {
+    baseClasses += " bg-emerald-950/90 text-emerald-100 border-emerald-800 shadow-emerald-900/20";
+  } else {
+    baseClasses += " bg-dark-panel/95 text-white border-dark-border shadow-black/50";
+  }
+
+  toast.className = baseClasses + " translate-y-4 opacity-0";
+  
+  let icon = "";
+  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle text-lg shrink-0"></i>';
+  else if (tone === "warn") icon = '<i class="ph-bold ph-warning text-lg shrink-0"></i>';
+  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle text-lg shrink-0"></i>';
+  else icon = '<i class="ph-bold ph-info text-lg shrink-0 text-gnfc-orange"></i>';
+
+  toast.innerHTML = `${icon}<span>${text}</span>`;
+  root.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.className = baseClasses;
+  });
+
+  setTimeout(() => {
+    toast.className = baseClasses + " translate-y-2 opacity-0 pointer-events-none";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function openModal(target) {
+  const modal = typeof target === "string" ? document.getElementById(target) : target;
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  requestAnimationFrame(() => {
+    modal.classList.add("opacity-100");
+  });
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeModal(target) {
+  const modal = typeof target === "string" ? document.getElementById(target) : target;
+  if (!modal) return;
+  modal.classList.remove("opacity-100");
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function bindModalDismiss(modalId) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+
+  if (modal._dismissBound) return;
+
+  modal.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    if (target === modal) {
+      closeModal(modal);
+      return;
+    }
+
+    const closeTrigger = target.closest('[data-close-modal="true"]');
+    if (closeTrigger) {
+      closeModal(modal);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (modal.classList.contains("hidden")) return;
+    closeModal(modal);
+  });
+
+  modal._dismissBound = true;
+  modal.dataset.bound = "true";
+}
+
+function confirmAction(message) {
+  return window.confirm(String(message || "Are you sure?"));
+}
+
+function formatDate(dateValue) {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return "--";
+  return date.toLocaleDateString("en-GB");
+}
+
+function formatDateTime(dateValue) {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return "--";
+  return date.toLocaleString("en-GB", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+function buildContextHeading(context) {
+  return `${context.systemCode} - ${getFrequencyLabel(context.frequencyCode)}`;
+}
+
+function renderEmptyState(title, description, actionLabel = "") {
+  const safeTitle = escapeHtml(title || "No data available");
+  const safeDescription = escapeHtml(description || "Please create a record to continue.");
+  const safeAction = escapeHtml(actionLabel || "");
+
+  return `
+    <div class="flex flex-col items-center justify-center p-12 text-center rounded-xl border-2 border-dashed border-dark-border/50 bg-dark-bg/30">
+      <div class="w-16 h-16 rounded-full bg-dark-panel border border-dark-border flex items-center justify-center mb-4 text-dark-muted">
+        <i class="ph-duotone ph-folder-open text-3xl"></i>
+      </div>
+      <h3 class="text-white font-bold text-lg mb-1">${safeTitle}</h3>
+      <p class="text-dark-muted text-sm max-w-[280px] leading-relaxed">${safeDescription}</p>
+      ${safeAction ? `<span class="inline-block mt-5 px-3 py-1.5 rounded-full bg-gnfc-orange/10 text-gnfc-orange text-[10px] font-bold uppercase tracking-wider border border-gnfc-orange/20 animate-pulse">${safeAction}</span>` : ""}
+    </div>
+  `;
+}
+
+// --- End Utilities ---
 
 const state = {
   context: null,
@@ -160,8 +303,19 @@ function renderEditor() {
     return;
   }
 
-  if (editorMeta) {
-    editorMeta.textContent = `Report Date: ${formatDate(activeReport.reportDate)} | Updated: ${formatDateTime(activeReport.updatedAt)}`;
+  const checked1Input = document.getElementById("report-checked-1");
+  const checked2Input = document.getElementById("report-checked-2");
+
+  if (activeReport) {
+    if (editorMeta) {
+      editorMeta.textContent = `Report Date: ${formatDate(activeReport.reportDate)} | Updated: ${formatDateTime(activeReport.updatedAt)}`;
+    }
+    if (checked1Input) checked1Input.value = activeReport.checkedBy1 || "PBS";
+    if (checked2Input) checked2Input.value = activeReport.checkedBy2 || "PNV";
+  } else {
+    if (editorMeta) editorMeta.textContent = "-";
+    if (checked1Input) checked1Input.value = "";
+    if (checked2Input) checked2Input.value = "";
   }
 
   const bodyRows = activeReport.rows.map((row, index) => `
@@ -187,7 +341,7 @@ function renderEditor() {
             <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border text-center">Sr</th>
             <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/4">Item</th>
             <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/5">Action</th>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border">Reference</th>
+            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border">Reference Value</th>
             <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/5">Observation</th>
             <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/6">Remark</th>
           </tr>
@@ -198,9 +352,9 @@ function renderEditor() {
   `;
 }
 
-function collectEditedRows() {
+function collectEditedRequest() {
   const wrapper = document.getElementById("report-editor-container");
-  if (!wrapper) return [];
+  if (!wrapper) return { rows: [], checkedBy1: "", checkedBy2: "" };
 
   const rows = [];
   wrapper.querySelectorAll("tbody tr").forEach((tr) => {
@@ -211,6 +365,12 @@ function collectEditedRows() {
     rows.push({ staticRowId, observation, remark });
   });
 
+  const checkedBy1 = document.getElementById("report-checked-1")?.value || "";
+  const checkedBy2 = document.getElementById("report-checked-2")?.value || "";
+
+  // Return augmented array for payload compatibility
+  rows.checkedBy1 = checkedBy1;
+  rows.checkedBy2 = checkedBy2;
   return rows;
 }
 
@@ -219,10 +379,10 @@ function reloadData() {
   state.instruction = getInstruction(state.context);
   state.reports = listReports(state.context);
 
-  if (!state.reports.find((report) => report.id === state.activeReportId)) {
-    state.activeReportId = state.reports[0]?.id || "";
+  if (state.activeReportId && !state.reports.find((report) => report.id === state.activeReportId)) {
+    state.activeReportId = "";
   }
-
+  
   renderContext();
   renderReportList();
   renderEditor();
@@ -251,7 +411,7 @@ function handleSave() {
     return;
   }
 
-  const rows = collectEditedRows();
+  const rows = collectEditedRequest();
   if (!rows.length) {
     showToast("No rows to save.", "warn");
     return;
@@ -269,6 +429,16 @@ function handleSave() {
     showToast("Report updated successfully.", "success");
   } catch (error) {
     showToast(error.message || "Unable to update report.", "error");
+  }
+}
+
+function handleCancel() {
+  if (!state.activeReportId) return;
+
+  if (confirmAction("Discard changes and close editor?")) {
+    state.activeReportId = "";
+    renderReportList();
+    renderEditor(); 
   }
 }
 
@@ -291,6 +461,70 @@ function handleDelete() {
   } catch (error) {
     showToast(error.message || "Unable to delete report.", "error");
   }
+}
+
+function printBlankFormat(payload) {
+  const modal = document.getElementById("print-preview-modal");
+  const contentContainer = document.getElementById("print-preview-content");
+  const printBtn = document.getElementById("btn-print-modal");
+
+  if (!modal || !contentContainer) {
+    showToast("Print modal not found.", "error");
+    return;
+  }
+
+  const systemName = String(payload?.contextLabel || "SYSTEM PERFORMANCE MONITORING DATA").toUpperCase();
+  const instruction = String(payload?.instruction || "");
+  const rows = Array.isArray(payload?.rows) ? payload.rows : [];
+
+  const contentRows = rows.map((row, index) => `
+      <tr>
+        <td style="text-align:center;">${index + 1}</td>
+        <td>${escapeHtml(row.item)}</td>
+        <td>${escapeHtml(row.action)}</td>
+        <td></td> <!-- Observation is blank -->
+        <td>${escapeHtml(row.referenceValue)}</td>
+        <td></td> <!-- Remark is blank -->
+      </tr>
+    `).join("");
+
+  contentContainer.innerHTML = `
+      <div class="print-container font-serif text-black p-4 bg-white min-h-[1056px] shadow-sm max-w-[800px] mx-auto print:shadow-none print:m-0 print:p-0 print:w-full print:max-w-none">
+        
+        <div class="header mb-5 border-b-2 border-red-900 pb-1">
+          <div class="title text-red-900 text-lg font-bold uppercase mb-2">SYSTEM PERFORMANCE MONITORING DATA</div>
+        </div>
+        
+        <div class="sub-header flex justify-between font-bold text-blue-900 mb-4 text-sm">
+          <span>${escapeHtml(systemName.split(' - ')[0] || "ACETIC ACID")}</span>
+          <span>${escapeHtml(systemName.split(' - ')[1] || "DCS DAILY")}</span>
+        </div>
+
+        ${instruction ? `<div class="instruction-box bg-gray-100 p-2 border border-gray-300 text-xs mb-4 print:bg-transparent"><strong>Instructions:</strong> ${escapeHtml(instruction)}</div>` : ''}
+
+        <table class="w-full border-collapse text-[11px]">
+          <thead>
+            <tr>
+              <th class="border border-gray-400 p-1.5 bg-gray-200 font-bold text-left uppercase text-black text-center w-[30px] print:bg-gray-200">Sr</th>
+              <th class="border border-gray-400 p-1.5 bg-gray-200 font-bold text-left uppercase text-black w-[25%] print:bg-gray-200">ITEM</th>
+              <th class="border border-gray-400 p-1.5 bg-gray-200 font-bold text-left uppercase text-black w-[20%] print:bg-gray-200">ACTION</th>
+              <th class="border border-gray-400 p-1.5 bg-gray-200 font-bold text-left uppercase text-black w-[20%] print:bg-gray-200">OBSERVATION</th>
+              <th class="border border-gray-400 p-1.5 bg-gray-200 font-bold text-left uppercase text-black w-[15%] print:bg-gray-200">REFERENCE VALUE</th>
+              <th class="border border-gray-400 p-1.5 bg-gray-200 font-bold text-left uppercase text-black w-[15%] print:bg-gray-200">REMARK</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${contentRows}
+          </tbody>
+        </table>
+      </div>
+  `;
+
+  if (printBtn) {
+    printBtn.onclick = () => window.print();
+  }
+  
+  openModal(modal);
 }
 
 function handleBlankFormatPrint() {
@@ -321,6 +555,7 @@ function openInstructionModal() {
 function bindEvents() {
   const generateBtn = document.getElementById("btn-generate-report");
   const saveBtn = document.getElementById("btn-save-report");
+  const cancelBtn = document.getElementById("btn-cancel-report");
   const deleteBtn = document.getElementById("btn-delete-report");
   const instructionBtn = document.getElementById("btn-view-instruction");
   const blankBtn = document.getElementById("btn-blank-format");
@@ -329,6 +564,7 @@ function bindEvents() {
 
   if (generateBtn) generateBtn.addEventListener("click", handleGenerate);
   if (saveBtn) saveBtn.addEventListener("click", handleSave);
+  if (cancelBtn) cancelBtn.addEventListener("click", handleCancel);
   if (deleteBtn) deleteBtn.addEventListener("click", handleDelete);
   if (instructionBtn) instructionBtn.addEventListener("click", openInstructionModal);
   if (blankBtn) blankBtn.addEventListener("click", handleBlankFormatPrint);
@@ -353,6 +589,7 @@ function bindEvents() {
   }
 
   bindModalDismiss("report-instruction-modal");
+  bindModalDismiss("print-preview-modal");
 }
 
 function bootstrap() {

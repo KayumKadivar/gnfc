@@ -429,6 +429,9 @@ export function updateReport(context, reportId, rows) {
       };
     });
 
+    located.report.checkedBy1 = String(rows.checkedBy1 || located.report.checkedBy1 || "PBS"); // Defaulting to legacy value for demo
+    located.report.checkedBy2 = String(rows.checkedBy2 || located.report.checkedBy2 || "PNV");
+
     located.report.updatedAt = nowIso();
     return located.report;
   });

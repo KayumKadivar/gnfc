@@ -32,7 +32,7 @@ export const SY_PM_NOTICES = Object.freeze({
 export const SY_PM_ROUTES = Object.freeze({
   selection: "/src/pages/Sy_PM.html",
   staticData: "/src/pages/static_data.html",
-  reports: "/src/pages/Sy_PM1.html"
+  reports: "/src/pages/sypm_report.html"
 });
 
 const SYSTEM_LOOKUP = new Map();
