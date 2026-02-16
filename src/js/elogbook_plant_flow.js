@@ -225,8 +225,8 @@
 
   function renderJobRow(job) {
     const rowClass = job.emergency ? "bg-amber-500/10" : "";
-    const srClass = job.pendingWrite ? "bg-pink-500/20 text-pink-200 cursor-pointer" : "";
-    const descClass = job.abnormality ? "border border-red-500/60 rounded-sm px-1.5 py-1 text-red-200" : "";
+    const srClass = job.pendingWrite ? "bg-pink-500/20 cursor-pointer" : "";
+    const descClass = job.abnormality ? "border border-red-500/60 rounded-sm px-1.5 py-1" : "";
     const badgeClass = getStatusClass(statusColor(job.status));
     const canEdit = !job.locked;
     const pendingAck = hasPendingAck(job);

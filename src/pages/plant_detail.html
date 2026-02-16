@@ -351,38 +351,38 @@
 
         <div class="overflow-x-auto flex-1">
           <table id="plant-table" class="w-full text-left border-collapse">
-            <thead>
+            <thead class="bg-slate-100 hover:bg-slate-200 ">
               <tr
-                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                class="dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
                 <th rowspan="2"
-                  class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors"
+                  class="border-r border-dark-border p-2 w-12 cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
                 <th rowspan="2"
-                  class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors"
+                  class="border-r border-dark-border p-2 w-20 cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
                 </th>
                 <th
-                  class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors"
+                  class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('tag')">Loop / Tag <i
                     class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
                 </th>
                 <th
-                  class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors"
+                  class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('jobType')">Job Type <i
                     class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
                 <th rowspan="2"
-                  class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors"
+                  class="border-r border-dark-border p-2 w-16 cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('tech')">Tech</th>
                 <th rowspan="2"
-                  class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">
+                  class="border-r border-dark-border p-2 min-w-[300px] transition-colors">
                   Description
                 </th>
-                <th rowspan="2"
-                  class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors"
+                <th rowspan="2" 
+                  class="border-r border-dark-border p-2 w-24 cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
                 <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
                   <div
-                    class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded"
+                    class="flex items-center justify-between cursor-pointer transition-colors p-1 rounded"
                     onclick="plantLogTable.sort('status')">
                     <span>Status</span>
                   </div>
@@ -394,13 +394,13 @@
                     class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
                   </div>
                 </th>
-                <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
-                <th rowspan="2" class="p-2 w-10 hover:bg-white/5 transition-colors" title="Add To History">H</th>
+                <th rowspan="2" class="p-2 min-w-[120px] transition-colors">Remarks</th>
+                <th rowspan="2" class="p-2 w-10 transition-colors" title="Add To History">H</th>
               </tr>
               <tr
-                class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
-                <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
+                class="text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th class="border-r border-dark-border p-2 transition-colors">Tag Detail</th>
+                <th class="border-r border-dark-border p-2 transition-colors">Instrument Detail</th>
               </tr>
             </thead>
             <tbody id="plantTableBody" class="text-xs font-mono"></tbody>
@@ -778,6 +778,7 @@
     </div>
   </div>
 
+  <script src="/src/js/pagination.js"></script>
   <script src="/src/js/plant_log_core.js"></script>
 
   <!-- Add To History — Type Selection Modal (Fig 5.32.1) -->

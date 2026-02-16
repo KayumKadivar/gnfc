@@ -57,7 +57,7 @@ class PlantLogTable {
         // 1. Filter by text (search)
         if (this.filterText) {
             processed = processed.filter(item => {
-                return Object.values(item).some(val => 
+                return Object.values(item).some(val =>
                     String(val).toLowerCase().includes(this.filterText)
                 );
             });
@@ -76,12 +76,12 @@ class PlantLogTable {
 
                 // Check for dates
                 if (this.sortColumn === 'date') {
-                     // Assuming DD/MM/YYYY
+                    // Assuming DD/MM/YYYY
                     const [d1, m1, y1] = valA.split('/').map(Number);
                     const [d2, m2, y2] = valB.split('/').map(Number);
                     valA = new Date(y1, m1 - 1, d1).getTime();
                     valB = new Date(y2, m2 - 1, d2).getTime();
-                } 
+                }
                 // Check for numbers
                 else if (!isNaN(parseFloat(valA)) && isFinite(valA)) {
                     valA = parseFloat(valA);
@@ -114,11 +114,11 @@ class PlantLogTable {
     renderHeader(columns) {
         return columns.map(col => {
             if (!col.sortable) return `<th class="${col.class}">${col.label}</th>`;
-            
+
             const icon = this.sortColumn === col.key
                 ? (this.sortDirection === 'asc' ? 'ph-caret-up' : 'ph-caret-down')
                 : 'ph-caret-up-down'; // distinct 'inactive' state could be just ph-caret-up-down opacity-50
-            
+
             const activeClass = this.sortColumn === col.key ? 'text-grafana-blue' : 'text-slate-500 dark:text-dark-muted';
 
             return `
@@ -132,51 +132,6 @@ class PlantLogTable {
         }).join('');
     }
 
-    renderPagination(totalItems) {
-        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
-        
-        // Prevent rendering if no pages
-        if (totalPages <= 1) return '';
-
-        let html = '<div class="flex items-center justify-end gap-2 mt-4 select-none">';
-        
-        // Prev
-        html += `
-            <button 
-                class="px-3 py-1 text-xs font-bold rounded-sm border border-slate-200 dark:border-dark-border ${this.currentPage === 1 ? 'opacity-50 cursor-not-allowed text-slate-400 dark:text-gray-600' : 'hover:bg-slate-100 dark:hover:bg-dark-border text-slate-600 dark:text-gray-300'}"
-                onclick="plantLogTable.goToPage(${this.currentPage - 1})"
-                ${this.currentPage === 1 ? 'disabled' : ''}
-            >Prev</button>
-        `;
-
-        // Page Numbers
-        for (let i = 1; i <= totalPages; i++) {
-            // Simple logic: show all. For many pages, you'd want ellipsis logic.
-            const activeClass = i === this.currentPage 
-                ? 'bg-blue-600 dark:bg-grafana-blue text-white border-blue-600 dark:border-gnfc-blue' 
-                : 'border-slate-200 dark:border-dark-border hover:bg-slate-100 dark:hover:bg-dark-border text-slate-600 dark:text-gray-300';
-            
-            html += `
-                <button 
-                    class="px-3 py-1 text-xs font-bold rounded-sm border ${activeClass}"
-                    onclick="plantLogTable.goToPage(${i})"
-                >${i}</button>
-            `;
-        }
-
-        // Next
-        html += `
-            <button 
-                class="px-3 py-1 text-xs font-bold rounded-sm border border-slate-200 dark:border-dark-border ${this.currentPage === totalPages ? 'opacity-50 cursor-not-allowed text-slate-400 dark:text-gray-600' : 'hover:bg-slate-100 dark:hover:bg-dark-border text-slate-600 dark:text-gray-300'}"
-                onclick="plantLogTable.goToPage(${this.currentPage + 1})"
-                ${this.currentPage === totalPages ? 'disabled' : ''}
-            >Next</button>
-        `;
-
-        html += '</div>';
-        return html;
-    }
-
     goToPage(page) {
         if (page < 1) return;
         this.currentPage = page;
@@ -184,36 +139,36 @@ class PlantLogTable {
     }
 
     createRow(item) {
-         const statusClass = item.statusColor === 'green'
-          ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20'
-          : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
+        const statusClass = item.statusColor === 'green'
+            ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20'
+            : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
 
         return `
-            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
-                <td class="p-2 text-center text-slate-500 dark:text-dark-muted font-mono border-r border-dark-border">${item.sr}</td>
-                <td class="p-2 font-bold text-slate-700 dark:text-white border-r border-dark-border">${item.area}</td>
-                <td class="p-2 border-r border-dark-border">
-                    <div class="text-xs text-blue-600 dark:text-grafana-blue font-bold">${item.tag}</div>
-                    <span class="inline-block mt-1 text-[10px] text-slate-500 dark:text-dark-muted bg-slate-100  px-1.5 py-0.5 rounded border border-dark-border font-mono">${item.tagSubtitle}</span>
+            <tr class="border-b border-slate-200 dark:border-dark-border group transition-all duration-150" style="border-left: 3px solid transparent;">
+                <td class="p-2.5 text-center font-mono text-[11px] border-r border-slate-200 dark:border-dark-border" style="color: var(--app-muted);">${item.sr}</td>
+                <td class="p-2.5 font-bold text-xs border-r border-slate-200 dark:border-dark-border" style="color: var(--app-text-strong, var(--app-text));">${item.area}</td>
+                <td class="p-2.5 border-r border-slate-200 dark:border-dark-border">
+                    <div class="text-xs text-gnfc-blue font-bold">${item.tag}</div>
+                    <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-md font-mono" style="color: var(--app-muted); background: var(--app-bg); border: 1px solid var(--app-border);">${item.tagSubtitle}</span>
                 </td>
-                <td class="p-2 border-r border-dark-border">
-                    <div class="font-medium text-slate-600 dark:text-gray-300 line-clamp-1">${item.jobType}</div>
-                    <div class="text-[10px] text-slate-400 dark:text-dark-muted mt-0.5">${item.jobRef}</div>
-                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-grafana-blue/10 !text-blue-600 dark:text-grafana-blue border border-dark-border">${item.jobLabel}</span>` : ''}
+                <td class="p-2.5 border-r border-slate-200 dark:border-dark-border">
+                    <div class="font-semibold text-xs" style="color: var(--app-text);">${item.jobType}</div>
+                    <div class="text-[10px] mt-0.5" style="color: var(--app-muted);">${item.jobRef}</div>
+                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-gnfc-blue/10 text-gnfc-blue" style="border: 1px solid var(--app-border);">${item.jobLabel}</span>` : ''}
                 </td>
-                <td class="p-2 text-center font-bold text-slate-500 dark:text-dark-muted border-r border-dark-border">${item.tech}</td>
-                <td class="p-2 text-slate-500 dark:text-gray-400 border-r border-dark-border leading-relaxed">${item.desc}</td>
-                <td class="p-2 text-center border-r border-dark-border">
-                    <div class="font-bold text-slate-600 dark:text-gray-300">${item.engineer}</div>
-                    <div class="text-[10px] text-slate-400 dark:text-dark-muted">${item.engInitials}</div>
+                <td class="p-2.5 text-center font-bold border-r border-slate-200 dark:border-dark-border" style="color: var(--app-muted);">${item.tech}</td>
+                <td class="p-2.5 border-r border-slate-200 dark:border-dark-border leading-relaxed text-xs" style="color: var(--app-muted);">${item.desc}</td>
+                <td class="p-2.5 text-center border-r border-slate-200 dark:border-dark-border">
+                    <div class="font-bold text-xs" style="color: var(--app-text);">${item.engineer}</div>
+                    <div class="text-[10px]" style="color: var(--app-muted);">${item.engInitials}</div>
                 </td>
-                <td class="p-2 text-center border-r border-dark-border">
+                <td class="p-2.5 text-center border-r border-slate-200 dark:border-dark-border">
                     ${item.status ? `
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-bold border ${statusClass}">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusClass}">
                         ${item.status}
                     </span>` : ''}
                 </td>
-                <td class="p-2 text-slate-600 dark:text-gray-400">${item.remarks}</td>
+                <td class="p-2.5 text-xs" style="color: var(--app-muted);">${item.remarks}</td>
             </tr>
         `;
     }
@@ -224,8 +179,8 @@ class PlantLogTable {
 
     render() {
         const tbody = document.querySelector(`${this.containerId} tbody`);
-        const paginationContainer = document.querySelector(`${this.containerId}-pagination`);
-        
+        const paginationSel = `${this.containerId}-pagination`;
+
         if (!tbody) return;
 
         const processedData = this.getProcessedData();
@@ -234,7 +189,10 @@ class PlantLogTable {
         tbody.innerHTML = '';
 
         if (paginatedData.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-slate-400 dark:text-dark-muted italic border-b border-slate-200 dark:border-dark-border">No entries found for this view.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-16 text-center italic border-b" style="color: var(--app-muted); border-color: var(--app-border);">
+                <i class="ph ph-clipboard-text text-3xl block mb-2 opacity-30"></i>
+                No entries found for this view.
+            </td></tr>`;
         } else {
             paginatedData.forEach(item => {
                 if (this.onRender) {
@@ -245,15 +203,30 @@ class PlantLogTable {
             });
         }
 
-        // Render Pagination
-        if (paginationContainer) {
-            paginationContainer.innerHTML = this.renderPagination(processedData.length);
+        // Render Pagination using GNFCPagination if available
+        if (typeof GNFCPagination !== 'undefined') {
+            if (!this._pagination) {
+                this._pagination = new GNFCPagination({
+                    containerId: paginationSel,
+                    totalItems: processedData.length,
+                    itemsPerPage: this.itemsPerPage,
+                    currentPage: this.currentPage,
+                    onPageChange: (page) => {
+                        this.currentPage = page;
+                        this.render();
+                    }
+                });
+            }
+            this._pagination.update({
+                totalItems: processedData.length,
+                currentPage: this.currentPage
+            });
         }
-        
+
         // Update Count if element exists
         const countEl = document.getElementById('record-count');
         if (countEl) {
-             countEl.textContent = `${processedData.length} Records`;
+            countEl.textContent = `${processedData.length} Records`;
         }
     }
 }
