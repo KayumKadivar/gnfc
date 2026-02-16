@@ -131,9 +131,9 @@ function bindModalDismiss(modalId) {
   modal.dataset.bound = "true";
 }
 
-function confirmAction(message) {
-  return window.confirm(String(message || "Are you sure?"));
-}
+// function confirmAction(message) {
+//   return window.confirm(String(message || "Are you sure?"));
+// }
 
 function formatDate(dateValue) {
   const date = new Date(dateValue);
@@ -437,11 +437,28 @@ function handleSave() {
 function handleCancel() {
   if (!state.activeReportId) return;
 
-  if (confirmAction("Discard changes and close editor?")) {
-    state.activeReportId = "";
-    renderReportList();
-    renderEditor();
-  }
+  Swal.fire({
+    title: "Discard changes?",
+    text: "Are you sure you want to discard changes and close the editor?",
+    icon: "warning",
+    width: 400,
+    padding: "1em",
+    customClass: {
+      title: "text-lg",
+      htmlContainer: "text-sm",
+      popup: "text-xs"
+    },
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, discard changes!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      state.activeReportId = "";
+      renderReportList();
+      renderEditor();
+    }
+  });
 }
 
 function handleDelete() {
@@ -451,18 +468,44 @@ function handleDelete() {
     return;
   }
 
-  if (!confirmAction("Delete selected report?")) {
-    return;
-  }
-
-  try {
-    deleteReport(state.context, activeReport.id);
-    state.activeReportId = "";
-    reloadData();
-    showToast("Report deleted.", "warn");
-  } catch (error) {
-    showToast(error.message || "Unable to delete report.", "error");
-  }
+  Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to delete this report?",
+    icon: "warning",
+    width: 400,
+    padding: "1em",
+    customClass: {
+      title: "text-lg",
+      htmlContainer: "text-sm",
+      popup: "text-xs"
+    },
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        deleteReport(state.context, activeReport.id);
+        state.activeReportId = "";
+        reloadData();
+        Swal.fire({
+          title: "Deleted!",
+          text: "The report has been deleted.",
+          icon: "success",
+          width: 400,
+          padding: "1em",
+          customClass: {
+            title: "text-lg",
+            htmlContainer: "text-sm",
+            popup: "text-xs"
+          }
+        });
+      } catch (error) {
+        showToast(error.message || "Unable to delete report.", "error");
+      }
+    }
+  });
 }
 
 function printBlankFormat(payload) {

@@ -173,7 +173,8 @@
 
             <div class="w-full">
                 <!-- Pending Log Report -->
-                <div class="bg-dark-panel border border-dark-border rounded-sm shadow-lg">
+                <div class="border border-dark-border rounded-sm shadow-lg my-4">
+
                     <!-- Header with title and Delete All -->
                     <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -228,28 +229,109 @@
 
     <script>
         // Sample pending log data
-        let pendingData = [
-            {
-                sr: 1, tagNo: 'HV_1402',
-                job: 'C/V to be calibrated after installation of positioner. (By:SHC : 20/01/2005)',
-                tech: 'BPB', desc: '', techStatus: '', remarks: ''
-            },
-            {
-                sr: 2, tagNo: 'C_3401R',
-                job: 'SOUTHSIDE CYLINDER SUCTION PRESSURE INDICATION IS FAULTY. (By:SHC : 20/01/2005)',
-                tech: 'BPB', desc: '', techStatus: '', remarks: ''
-            },
-            {
-                sr: 3, tagNo: 'NOTAG',
-                job: 'INSTRUMENT INSTALLATION HOOK UP TO BE PREPARED for MBU. (By:SHC : 03/02/2005)',
-                tech: 'BPB', desc: '', techStatus: '', remarks: ''
-            },
-            {
-                sr: 4, tagNo: 'NOTAG',
-                job: 'Field round to be taken. (By:SHC : 10/02/2005)',
-                tech: 'NHP', desc: '', techStatus: '', remarks: ''
-            },
-        ];
+let pendingData = [
+    {
+        sr: 1, tagNo: 'HV_1402',
+        job: 'C/V to be calibrated after installation of positioner. (By:SHC : 20/01/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 2, tagNo: 'C_3401R',
+        job: 'SOUTHSIDE CYLINDER SUCTION PRESSURE INDICATION IS FAULTY. (By:SHC : 20/01/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 3, tagNo: 'NOTAG',
+        job: 'INSTRUMENT INSTALLATION HOOK UP TO BE PREPARED for MBU. (By:SHC : 03/02/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 4, tagNo: 'NOTAG',
+        job: 'Field round to be taken. (By:SHC : 10/02/2005)',
+        tech: 'NHP', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 5, tagNo: 'PT_2103',
+        job: 'Pressure transmitter calibration required due to deviation observed. (By:RKP : 15/02/2005)',
+        tech: 'RKS', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 6, tagNo: 'LT_1102',
+        job: 'Level transmitter showing fluctuating reading, check wiring and recalibrate. (By:SHC : 16/02/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 7, tagNo: 'TT_4501',
+        job: 'Temperature transmitter loop checking required from field to DCS. (By:KDP : 18/02/2005)',
+        tech: 'NHP', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 8, tagNo: 'FV_3201',
+        job: 'Flow control valve not responding properly, check positioner and actuator. (By:RKP : 19/02/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 9, tagNo: 'PI_1204',
+        job: 'Pressure indicator glass damaged, replacement required. (By:SHC : 21/02/2005)',
+        tech: 'RKS', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 10, tagNo: 'LIC_2301',
+        job: 'Level indicator controller calibration to be carried out. (By:KDP : 22/02/2005)',
+        tech: 'NHP', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 11, tagNo: 'PSV_1401',
+        job: 'Pressure safety valve functional test required. (By:SHC : 23/02/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 12, tagNo: 'AIT_3302',
+        job: 'Analyzer transmitter signal not coming in DCS, check signal cable. (By:RKP : 24/02/2005)',
+        tech: 'RKS', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 13, tagNo: 'FIT_4102',
+        job: 'Flow transmitter zero shifting observed, recalibration required. (By:KDP : 25/02/2005)',
+        tech: 'NHP', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 14, tagNo: 'XV_5201',
+        job: 'On/off valve limit switch malfunction, check and repair. (By:SHC : 26/02/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 15, tagNo: 'TT_6101',
+        job: 'Temperature reading mismatch between field and DCS. (By:RKP : 27/02/2005)',
+        tech: 'RKS', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 16, tagNo: 'LT_7102',
+        job: 'Level transmitter installation pending at tank area. (By:KDP : 28/02/2005)',
+        tech: 'NHP', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 17, tagNo: 'PT_8103',
+        job: 'Impulse line suspected blockage, flushing required. (By:SHC : 01/03/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 18, tagNo: 'FV_9101',
+        job: 'Flow valve air leakage observed from actuator. (By:RKP : 02/03/2005)',
+        tech: 'RKS', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 19, tagNo: 'AIT_1011',
+        job: 'Analyzer calibration overdue, calibration to be performed urgently. (By:KDP : 03/03/2005)',
+        tech: 'NHP', desc: '', techStatus: '', remarks: ''
+    },
+    {
+        sr: 20, tagNo: 'PI_1112',
+        job: 'Pressure gauge needle stuck, replacement required. (By:SHC : 04/03/2005)',
+        tech: 'BPB', desc: '', techStatus: '', remarks: ''
+    }
+];
+
 
         function renderTable() {
             const tbody = document.getElementById('pendingTableBody');
@@ -342,4 +424,4 @@
 
 </body>
 
-</html>
+</html>>

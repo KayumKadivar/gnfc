@@ -12,6 +12,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     ::-webkit-scrollbar {
       width: 6px;
@@ -168,19 +169,19 @@
         <div class="flex justify-between items-start gap-4 flex-wrap">
           <div>
             <h2 id="sy-context-heading" class="text-lg font-bold text-white">SY_PM Context</h2>
-            <p class="text-sm text-dark-muted mt-1">Static records are scoped to selected system and frequency.</p>
+            <p class="text-sm  mt-1">Static records are scoped to selected system and frequency.</p>
           </div>
           <div class="flex gap-2 flex-wrap text-[11px] font-bold uppercase tracking-wider">
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border ">
               System <strong id="sy-chip-system" class="text-dark-text">-</strong>
             </span>
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border ">
               Frequency <strong id="sy-chip-frequency" class="text-dark-text">-</strong>
             </span>
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border ">
               Rows <strong id="static-record-count" class="text-dark-text">0 records</strong>
             </span>
           </div>
@@ -227,10 +228,10 @@
         <div class="flex justify-between items-center mb-3">
           <div>
             <h3 class="text-sm font-bold text-white">General Instruction</h3>
-            <p class="text-xs text-dark-muted mt-0.5">Instruction content is shared with report generation and blank
+            <p class="text-xs  mt-0.5">Instruction content is shared with report generation and blank
               format print.</p>
           </div>
-          <div class="text-[10px] text-dark-muted font-mono" id="instruction-updated-at">Updated: -</div>
+          <div class="text-[10px]  font-mono" id="instruction-updated-at">Updated: -</div>
         </div>
         <div id="instruction-preview"
           class="p-3 rounded-lg bg-dark-bg border border-dark-border text-xs text-dark-text leading-relaxed font-mono whitespace-pre-wrap min-h-[60px]">
@@ -246,43 +247,43 @@
     aria-hidden="true">
     <div
       class="w-full max-w-2xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="px-5 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
+      <div class="p-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
         <h3 id="static-row-modal-title" class="text-sm font-bold text-white uppercase tracking-wide">Add Static Record
         </h3>
-        <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
+        <button type="button" data-close-modal="true" class=" hover:text-white transition-colors">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
       <form id="static-row-form" class="flex flex-col flex-1 overflow-hidden">
-        <div class="p-6 overflow-y-auto space-y-5">
-          <input type="hidden" id="static-row-id">
+        <div class="p-4 overflow-y-auto space-y-5">
+          <!-- <input type="hidden" id="static-row-id"> -->
           <div>
-            <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-item">Item</label>
+            <label class="block text-xs font-bold  uppercase mb-1.5" for="static-item">Item</label>
             <input id="static-item"
-              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted"
+              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:"
               type="text" maxlength="250" placeholder="Enter checklist item">
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-action">Action</label>
+              <label class="block text-xs font-bold  uppercase mb-1.5" for="static-action">Action</label>
               <input id="static-action"
-                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted"
+                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:"
                 type="text" maxlength="250" placeholder="Action guidance">
             </div>
             <div>
-              <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="static-reference">Reference
+              <label class="block text-xs font-bold  uppercase mb-1.5" for="static-reference">Reference
                 Value</label>
               <input id="static-reference"
-                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted"
+                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:"
                 type="text" maxlength="180" placeholder="Reference value">
             </div>
           </div>
         </div>
-        <div class="px-5 py-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
+        <div class="p-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
           <button type="button" data-close-modal="true"
-            class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
+            class="px-4 py-2 rounded-md border border-dark-border  text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
           <button type="submit"
-            class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Save</button>
+            class="px-4 py-2 rounded-md bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Save</button>
         </div>
       </form>
     </div>
@@ -294,25 +295,25 @@
     aria-hidden="true">
     <div
       class="w-full max-w-xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="px-5 py-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
+      <div class="p-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
         <h3 class="text-sm font-bold text-white uppercase tracking-wide">Edit Instruction</h3>
-        <button type="button" data-close-modal="true" class="text-dark-muted hover:text-white transition-colors">
+        <button type="button" data-close-modal="true" class=" hover:text-white transition-colors">
           <i class="ph-bold ph-x text-lg" data-close-modal="true"></i>
         </button>
       </div>
       <form id="instruction-form" class="flex flex-col flex-1 overflow-hidden">
         <div class="p-6 overflow-y-auto">
           <div>
-            <label class="block text-xs font-bold text-dark-muted uppercase mb-1.5" for="instruction-input">Instruction
+            <label class="block text-xs font-bold  uppercase mb-1.5" for="instruction-input">Instruction
               Text</label>
             <textarea id="instruction-input"
-              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted min-h-[150px]"
+              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder: min-h-[150px]"
               placeholder="Enter report instruction"></textarea>
           </div>
         </div>
-        <div class="px-5 py-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
+        <div class="p-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
           <button type="button" data-close-modal="true"
-            class="px-4 py-2 rounded-lg border border-dark-border text-dark-muted text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
+            class="px-4 py-2 rounded-lg border border-dark-border  text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
           <button type="submit"
             class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Update
             Instruction</button>

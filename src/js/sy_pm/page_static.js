@@ -130,9 +130,9 @@ function bindModalDismiss(modalId) {
   modal.dataset.bound = "true";
 }
 
-function confirmAction(message) {
-  return window.confirm(String(message || "Are you sure?"));
-}
+// function confirmAction(message) {
+//   return window.confirm(String(message || "Are you sure?"));
+// }
 
 function formatDateTime(dateValue) {
   const date = new Date(dateValue);
@@ -378,15 +378,43 @@ function handleTableActions(event) {
   }
 
   if (action === "delete") {
-    if (!confirmAction("Delete this static record?")) return;
-
-    try {
-      deleteStaticRow(state.context, rowId);
-      renderRows();
-      showToast("Static record deleted.", "warn");
-    } catch (error) {
-      showToast(error.message || "Unable to delete static record.", "error");
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      width: 300,
+      padding: "1em",
+      customClass: {
+        title: "text-lg",
+        htmlContainer: "text-sm",
+        popup: "text-xs"
+      },
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          deleteStaticRow(state.context, rowId);
+          renderRows();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your record has been deleted.",
+            icon: "success",
+            width: 400,
+            padding: "1em",
+            customClass: {
+              title: "text-lg",
+              htmlContainer: "text-sm",
+              popup: "text-xs"
+            }
+          });
+        } catch (error) {
+          showToast(error.message || "Unable to delete static record.", "error");
+        }
+      }
+    });
   }
 }
 
