@@ -2,200 +2,78 @@
 <html lang="en" class="dark">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GNFC | Instrument Type Analysis</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNFC | Job Type Analysis</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            dark: {
-              bg: '#0f1115',
-              panel: '#181b21',
-              header: '#1f242b', // Slightly lighter for headers
-              border: '#2a2e36',
-              text: '#e2e8f0',
-              muted: '#94a3b8'
-            },
-            gnfc: {
-              blue: '#3b82f6',
-              orange: '#f97316',
-              green: '#22c55e'
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0f1115',
+                            panel: '#181b21',
+                            header: '#1f242b',
+                            border: '#2a2e36',
+                            text: '#e2e8f0',
+                            muted: '#94a3b8'
+                        },
+                        gnfc: {
+                            blue: '#3b82f6',
+                            orange: '#f97316',
+                            green: '#22c55e'
+                        }
+                    }
+                }
             }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          }
         }
-      }
-    }
-  </script>
+    </script>
 
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: #2a2e36; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
 
-    ::-webkit-scrollbar-track {
-      background: #0f1115;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #2a2e36;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #3b82f6;
-      /* Blue hover for better visibility */
-    }
-
-    /* Remove default select arrow */
-    select {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-    }
-
-    /* MicroModal styles */
-    .modal {
-      display: none;
-    }
-
-    .modal.is-open {
-      display: block;
-    }
-
-    .modal__overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal__container {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 6px;
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-
-    .micromodal-slide {
-      display: none;
-    }
-
-    .micromodal-slide.is-open {
-      display: block;
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__overlay {
-      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__container {
-      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__overlay {
-      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__container {
-      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide .modal__container,
-    .micromodal-slide .modal__overlay {
-      will-change: transform;
-    }
-
-    @keyframes mmfadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes mmfadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    @keyframes mmslideIn {
-      from {
-        transform: translateY(15%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes mmslideOut {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-10%);
-      }
-    }
-  </style>
+        .table-sticky-header th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+    </style>
 </head>
 
 <body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
-  <script src="/src/js/sidebar.js"></script>
+    <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
 
   <div id="sidebar-container"></div>
-  <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
+    <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
 
-  <main class="flex-1 flex flex-col h-screen overflow-hidden">
-    <div id="header-container"></div>
-    <script>
-      renderHeader({
-        title: "Acetic Acid Logbook",
-        breadcrumbs: [
-          { label: "Technician Log", href: "technician_logbook.html" },
-          { label: "Plant Detail", href: "plant_detail.html" },
-          { label: "Job Type Analysis" }
-        ],
-        backLink: "plant_detail.html"
-      });
-    </script>
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <div id="header-container"></div>
+        <script>
+            renderHeader({
+                title: "Job Type Analysis",
+                breadcrumbs: [
+                    { label: "Technician Log", href: "technician_logbook.html" },
+                    { label: "Plant Detail", href: "plant_detail.html" },
+                    { label: "Job Type Analysis" }
+                ],
+                backLink: "plant_detail.html"
+            });
+        </script>
 
-    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+        <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
       <!-- Top Navigation Bar -->
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
@@ -203,256 +81,186 @@
         renderPlantNav('job_types');
       </script>
 
-      <div class="bg-dark-panel border border-dark-border rounded my-4 shadow-sm">
-        <div
-          class="px-4 py-3 border-b border-dark-border bg-dark-header rounded-t-md flex justify-between items-center">
-          <div class="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
-            <i class="ph-bold ph-funnel text-gnfc-blue"></i> Filter Query
-          </div>
-        </div>
+            <div class="bg-dark-panel border border-dark-border rounded my-4 shadow-sm">
+                <div class="px-4 py-3 border-b border-dark-border bg-dark-header flex justify-between items-center">
+                    <div class="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
+                        <i class="ph-bold ph-funnel text-gnfc-blue"></i> Filter Query
+                    </div>
+                </div>
 
-        <div class="p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                <div class="p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                    <div class="md:col-span-5">
+                        <label class="block text-[12px] uppercase font-bold text-dark-muted mb-1.5">Time Range</label>
+                        <div class="flex bg-dark-bg border border-dark-border rounded-md h-10 items-center px-3">
+                            <input type="date" id="start-date" class="bg-transparent text-sm focus:outline-none w-full">
+                            <span class="px-2 text-dark-muted font-bold">-</span>
+                            <input type="date" id="end-date" class="bg-transparent text-sm focus:outline-none w-full">
+                        </div>
+                    </div>
 
-          <div class="md:col-span-5">
-            <label class="block text-[10px] uppercase font-bold text-dark-muted mb-1.5">Time Range</label>
-            <div
-              class="flex bg-dark-bg border border-dark-border rounded-md h-10 items-center px-3 focus-within:border-gnfc-blue focus-within:ring-1 focus-within:ring-gnfc-blue transition-all">
-              <input type="date" id="start-date"
-                class="bg-transparent text-sm  focus:outline-none">
-              <span class="px-2 text-dark-muted font-bold">-</span>
-              <input type="date" id="end-date"
-                class="bg-transparent text-sm focus:outline-none">
+                    <div class="md:col-span-4">
+                        <label class="block text-[12px] uppercase font-bold text-dark-muted mb-1.5">Job Category</label>
+                        <select id="job-type-select" class="bg-dark-bg border border-dark-border text-sm rounded-md h-10 w-full px-3 outline-none">
+                            <option value="">All Categories</option>
+                            <option value="PM">Preventive Maint (PM)</option>
+                            <option value="BREAKDOWN">Breakdown</option>
+                            <option value="DEFECT">Defect Maintenance</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-3 flex gap-2">
+                        <button onclick="applyFilters()" class="h-10 px-4 flex-1 bg-gnfc-blue  text-sm font-bold rounded-md shadow-lg shadow-blue-500/20 hover:bg-blue-500">Run</button>
+                        <button onclick="resetFilters()" class="h-10 px-4 bg-transparent border border-dark-border text-dark-muted rounded-md hover:border-white/20">Clear</button>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="md:col-span-4">
-            <label class="block text-[10px] uppercase font-bold text-dark-muted mb-1.5">Job Type</label>
-            <div class="relative">
-              <select id="job-type-select"
-                class="bg-dark-bg border border-dark-border  text-sm rounded-md h-10 w-full pl-3 pr-10 cursor-pointer focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
-                <option value="">All Job Types</option>
-              </select>
-              <i class="ph-bold ph-caret-down absolute right-3 top-3 text-dark-muted pointer-events-none"></i>
+            <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm overflow-hidden">
+                <div class="px-4 py-3 border-b border-dark-border flex justify-between items-center bg-dark-header">
+                    <h3 class="font-bold text-sm flex items-center gap-2">
+                        <i class="ph-fill ph-clipboard-text text-gnfc-blue"></i>
+                        Last 40 Days Log Book Report
+                    </h3>
+                    <span class="text-xs font-mono font-bold text-gnfc-blue bg-gnfc-blue/10 px-2 py-1 rounded border border-gnfc-blue/20" id="item-count">0 Records</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse table-sticky-header">
+                        <thead>
+                            <tr class="bg-dark-bg text-[12px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
+                                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
+                                <th class="border-r border-dark-border px-3 py-2 w-48 border-b border-dark-border ">Loop No</th>
+                                <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border ">Job</th>
+                                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
+                                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px] text-left">Description</th>
+                                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Tech</th>
+                                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Status</th>
+                                <th rowspan="2" class="px-3 py-3 min-w-[100px]">Remarks</th>
+                            </tr>
+                            <tr class="bg-dark-bg text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
+                                <th class="border-r border-dark-border px-3 py-1">Tag No</th>
+                                <th class="border-r border-dark-border px-3 py-1">Type of Job</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plantTableBody" class="text-xs font-mono">
+                            </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-
-          <div class="md:col-span-3 flex gap-2">
-            <button onclick="applyFilters()"
-              class="h-10 px-4 flex-1 bg-gnfc-blue hover:bg-blue-500 text-white text-sm font-bold rounded-md transition-colors shadow-lg shadow-blue-500/20">
-              Run
-            </button>
-            <button onclick="resetFilters()"
-              class="h-10 px-4 bg-transparent border border-dark-border text-dark-muted hover: hover:border-white/20 text-sm font-bold rounded-md transition-colors">
-              Clear
-            </button>
-          </div>
         </div>
-      </div>
+    </main>
 
-      <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-dark-border flex justify-between items-center bg-dark-header">
-          <h3 class="font-bold text-sm flex items-center gap-2">
-            <i class="ph-fill ph-clipboard-text text-gnfc-blue"></i>
-            Job Type Report
-          </h3>
-          <span
-            class="text-xs font-mono font-bold text-gnfc-blue bg-gnfc-blue/10 px-2 py-1 rounded border border-gnfc-blue/20"
-            id="item-count">0 Records</span>
-        </div>
+    <script>
+        const jobTypeData = [
+            { sr: '1', date: '15/02/2026', area: '100', tag: 'N.A', tagSubtitle: 'MOLSIEVE ADSORBER', jobType: 'A104A/B Molsieve adsorber flushing', jobRef: 'PM', tech: 'PJR', desc: 'A104A/B Molsieve adsorber condensate flushing was done.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '2', date: '15/02/2026', area: 'N.A', tag: 'N.A', tagSubtitle: 'DCS/ESD system', jobType: 'Routine DCS/ESD System checking', jobRef: 'PM', tech: 'NND', desc: 'System round taken.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '3', date: '15/02/2026', area: 'N.A', tag: 'N.A', tagSubtitle: 'ANA-A1', jobType: 'Analyzer Sample/Bypass Flow check', jobRef: 'PM', tech: 'PJR', desc: 'Analyzer Sample/Bypass Flow and Pressure checked.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '4', date: '15/02/2026', area: 'N.A', tag: 'N.A', tagSubtitle: 'ANALYZER ROUND', jobType: 'Analyzer healthiness check', jobRef: 'PM', tech: 'PJR', desc: 'Analyzer round taken and no abnormality found.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '5', date: '15/02/2026', area: 'N.A', tag: 'N.A', tagSubtitle: 'DCS/ESD system', jobType: 'N.A', jobRef: 'PM', tech: 'NND', desc: 'System round taken.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '6', date: '14/02/2026', area: 'N.A', tag: 'N.A', tagSubtitle: 'ESD-FSC1', jobType: 'DEFECT MAINTENANCE', jobRef: 'DEFECT', tech: 'PSG', desc: '-LIS1077 faulty alarm appeared in ESD-FSC1 reset done.', engineer: 'NKP', status: '✓ OVER' },
+            { sr: '7', date: '14/02/2026', area: 'N.A', tag: 'N.A', tagSubtitle: 'DCS/ESD system', jobType: 'Routine checking', jobRef: 'PM', tech: 'NND', desc: 'System round taken.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '8', date: '14/02/2026', area: '400', tag: 'PT-4001', tagSubtitle: 'STEAM HEADER', jobType: 'Calibration', jobRef: 'BREAKDOWN', tech: 'GAZ', desc: 'Zero drift corrected using HART.', engineer: 'PJR', status: '✓ OVER' },
+            { sr: '9', date: '13/02/2026', area: '200', tag: 'FV-0208', tagSubtitle: 'FEED LINE', jobType: 'Gland Tightening', jobRef: 'DEFECT', tech: 'MRL', desc: 'Online gland tightening performed.', engineer: 'MR_', status: '✓ OVER' },
+            { sr: '10', date: '13/02/2026', area: '700', tag: 'N.A', tagSubtitle: 'UPS SYSTEM', jobType: 'Battery Health Check', jobRef: 'PM', tech: 'NND', desc: 'Voltage health check done.', engineer: 'MAJ', status: '✓ OVER' },
+            { sr: '11', date: '12/02/2026', area: '100', tag: 'LV-1002', tagSubtitle: 'REFRESH TANK', jobType: 'Stroke Checking', jobRef: 'PM', tech: 'PJR', desc: 'Valve stroke confirmed from DCS.', engineer: 'NKP', status: '✓ OVER' },
+            { sr: '12', date: '12/02/2026', area: '200', tag: 'HV-0207', tagSubtitle: 'REACTOR', jobType: 'SOV Replacement', jobRef: 'BREAKDOWN', tech: 'GAZ', desc: 'SOV coil replaced and tested.', engineer: 'PJR', status: 'U/P' }
+        ];
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr
-                class="bg-dark-bg text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
-                <th class="border-r border-dark-border px-3 py-2 w-48 border-b border-dark-border ">Job</th>
-                <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border ">
-                  Type of Job</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
-                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px] text-left">Description</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Engr.</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Status</th>
-                <th rowspan="2" class="px-3 py-3 min-w-[100px]">Remarks</th>
-              </tr>
-              <tr
-                class="bg-dark-bg text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
-                <th class="border-r border-dark-border px-3 py-1">Tag Detail</th>
-                <th class="border-r border-dark-border px-3 py-1">Instrument Detail</th>
-              </tr>
-            </thead>
-            <tbody id="plantTableBody" class="text-xs font-mono">
-            </tbody>
-          </table>
-        </div>
-      </div>
+        function applyFilters() {
+            const jobType = document.getElementById('job-type-select').value;
+            const startDateInput = document.getElementById('start-date').value;
+            const endDateInput = document.getElementById('end-date').value;
 
-    </div>
-  </main>
+            let filtered = jobTypeData;
 
-  <script>
-    // 1. Corrected Data Structure Variable Name
-    const jobTypeData = {
-      today: [
-        { sr: '1', date: '01/01/2026', area: '200', tag: 'N.A', tagSubtitle: 'FVC0208A', jobType: 'Preventive Maint', jobRef: '', tech: 'GAZ', desc: 'Reported That CV is not getting close more than 75%. Actuator tube removed and checked valve close up to 75% and then stuck up.', engineer: 'GAZ', status: 'U/P' }
-      ],
-      prev: [
-        { sr: '2', date: '31/12/2025', area: '400', tag: 'N.A', tagSubtitle: 'LV412B', jobType: 'Breakdown', jobRef: '', tech: 'MR_', desc: 'Process reported that valve not response to signal so checked at field and found that its CAM was out of line.', engineer: 'MR_', status: '✓ OVER' },
-        { sr: '3', date: '31/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'HV0207B', jobType: 'Breakdown', jobRef: '', tech: 'PJR', desc: 'Control valve are Fully open on Handwheel So R0201B Shutdown taken by process.', engineer: 'PJR', status: '✓ OVER' },
-        { sr: '4', date: '30/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Preventive Maint', jobRef: '', tech: 'MRL', desc: '1/2 inch NPT machining is done for hydro test in both 6 inch 300 flange.', engineer: 'MR_', status: '✓ OVER' },
-        { sr: '5', date: '29/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'V4A-XV0209A', jobType: 'Breakdown', jobRef: '', tech: 'GAZ', desc: 'V4A valve was found slight slow in closing so its Pneumatic SOV vent port was checked.', engineer: 'GAZ', status: '✓ OVER' },
-        { sr: '6', date: '29/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Preventive Maint', jobRef: '', tech: 'MRL', desc: 'Flange issued machining in flange is required so sent to central workshop.', engineer: 'MR_', status: 'U/P' },
-        { sr: '7', date: '29/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'FV003AB', jobType: 'Breakdown', jobRef: '', tech: 'GAZ', desc: 'Reported that valve was not getting operate in between 0-35% so checked it was Air to close valve.', engineer: 'GAZ', status: '✓ OVER' },
-        { sr: '8', date: '29/12/2025', area: '700', tag: 'N.A', tagSubtitle: 'FV791', jobType: 'Breakdown', jobRef: '', tech: 'PJR', desc: 'After process clearance and valve put on MANUAL From DCS, online Gland Tightening done.', engineer: 'PJR', status: '✓ OVER' }
-      ],
-      weekly: [],
-      monthly: []
-    };
+            if (jobType) {
+                filtered = filtered.filter(item => item.jobRef === jobType);
+            }
 
-    // 2. Fixed Data Accessor
-    function getAllData() {
-      // FIX: Used to be plantLogData, now using jobTypeData
-      return [...jobTypeData.today, ...jobTypeData.prev, ...jobTypeData.weekly, ...jobTypeData.monthly];
-    }
+            if (startDateInput || endDateInput) {
+                const start = startDateInput ? new Date(startDateInput) : null;
+                const end = endDateInput ? new Date(endDateInput) : null;
+                if (start) start.setHours(0,0,0,0);
+                if (end) end.setHours(23,59,59,999);
 
-    // 3. Populate Dropdown
-    function populateJobTypeDropdown() {
-      const allData = getAllData();
-      const jobTypes = [...new Set(allData.map(item => item.jobType).filter(Boolean))].sort();
-      const select = document.getElementById('job-type-select');
+                filtered = filtered.filter(item => {
+                    const [d, m, y] = item.date.split('/').map(Number);
+                    const itemDate = new Date(y, m - 1, d);
+                    if (start && itemDate < start) return false;
+                    if (end && itemDate > end) return false;
+                    return true;
+                });
+            }
 
-      // Clear existing options except first
-      select.innerHTML = '<option value="">All Job Types</option>';
+            renderTable(filtered);
+        }
 
-      jobTypes.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.textContent = type;
-        select.appendChild(option);
-      });
-    }
+        function resetFilters() {
+            document.getElementById('start-date').value = '';
+            document.getElementById('end-date').value = '';
+            document.getElementById('job-type-select').value = '';
+            renderTable(jobTypeData);
+        }
 
-    function resetFilters() {
-      document.getElementById('start-date').value = '';
-      document.getElementById('end-date').value = '';
-      document.getElementById('job-type-select').value = '';
-      applyFilters();
-    }
+        function renderTable(data) {
+            const tbody = document.getElementById('plantTableBody');
+            const countLabel = document.getElementById('item-count');
+            tbody.innerHTML = '';
+            countLabel.textContent = `${data.length} Records`;
 
-    // 4. Improved Filtering Logic (handles dd/mm/yyyy correctly)
-    function applyFilters() {
-      const jobType = document.getElementById('job-type-select').value;
-      const startDateInput = document.getElementById('start-date').value;
-      const endDateInput = document.getElementById('end-date').value;
+            // Grouping by Date
+            const grouped = data.reduce((acc, item) => {
+                if (!acc[item.date]) acc[item.date] = [];
+                acc[item.date].push(item);
+                return acc;
+            }, {});
 
-      let filteredData = getAllData();
+            const sortedDates = Object.keys(grouped).sort((a, b) => {
+                const [d1, m1, y1] = a.split('/').map(Number);
+                const [d2, m2, y2] = b.split('/').map(Number);
+                return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
+            });
 
-      // Job Type Filter
-      if (jobType) {
-        filteredData = filteredData.filter(item => item.jobType === jobType);
-      }
+            sortedDates.forEach(date => {
+                // Header row for Date
+                tbody.innerHTML += `
+                    <tr class="bg-dark-panel border-y border-dark-border">
+                        <td colspan="9" class="px-4 py-2 font-bold text-[12px] text-gnfc-orange uppercase tracking-widest bg-dark-header">
+                            <div class="flex items-center gap-2">
+                                <i class="ph ph-calendar-blank text-base"></i> ${date}
+                            </div>
+                        </td>
+                    </tr>`;
 
-      // Date Range Filter
-      if (startDateInput || endDateInput) {
-        const start = startDateInput ? new Date(startDateInput) : null;
-        const end = endDateInput ? new Date(endDateInput) : null;
+                grouped[date].forEach(item => {
+                    const statusColor = item.status.includes('OVER') ? 'text-gnfc-green' : 'text-gnfc-orange';
+                    
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-white/5 border-b border-dark-border transition-colors">
+                            <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted">${item.sr}</td>
+                            <td class="border-r border-dark-border px-2 py-3 text-center font-bold text-gnfc-blue">${item.area}</td>
+                            <td class="border-r border-dark-border px-3 py-3">
+                                <div class="font-bold text-dark-text">${item.tag}</div>
+                                <div class="text-[12px] text-dark-muted mt-1">${item.tagSubtitle}</div>
+                            </td>
+                            <td class="border-r border-dark-border px-3 py-3">
+                                <div class="">${item.jobType}</div>
+                                <div class="text-[12px] font-black text-gnfc-orange uppercase mt-1 tracking-tighter">${item.jobRef}</div>
+                            </td>
+                            <td class="border-r border-dark-border px-2 py-3 text-center font-bold">${item.tech}</td>
+                            <td class="border-r border-dark-border px-4 py-3 text-xs leading-relaxed opacity-80">${item.desc}</td>
+                            <td class="border-r border-dark-border px-2 py-3 text-center">
+                                <div class="text-[12px] font-bold pb-1 mb-1">${item.tech}</div>
+                            </td>
+                            <td class="border-r border-dark-border px-2 py-3 text-center ${statusColor} font-black text-[12px]">${item.status}</td>
+                            <td class="px-2 py-3"></td>
+                        </tr>`;
+                });
+            });
+        }
 
-        // Normalize times to start/end of day
-        if (start) start.setHours(0, 0, 0, 0);
-        if (end) end.setHours(23, 59, 59, 999);
-
-        filteredData = filteredData.filter(item => {
-          if (!item.date) return false;
-
-          // Parse "dd/mm/yyyy" manually because JS Date() prefers mm/dd/yyyy
-          const [d, m, y] = item.date.split('/').map(Number);
-          const itemDate = new Date(y, m - 1, d); // Months are 0-indexed
-
-          if (start && itemDate < start) return false;
-          if (end && itemDate > end) return false;
-
-          return true;
-        });
-      }
-
-      renderPlantTable(filteredData);
-    }
-
-    function renderPlantTable(data) {
-      const tbody = document.getElementById('plantTableBody');
-      const countLabel = document.getElementById('item-count');
-
-      tbody.innerHTML = '';
-      countLabel.textContent = `${data.length} Records`;
-
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
-        return;
-      }
-
-      // Group by Date
-      const groupedData = data.reduce((acc, item) => {
-        if (!acc[item.date]) acc[item.date] = [];
-        acc[item.date].push(item);
-        return acc;
-      }, {});
-
-      // Sort Dates Descending
-      const sortedDates = Object.keys(groupedData).sort((a, b) => {
-        const [d1, m1, y1] = a.split('/').map(Number);
-        const [d2, m2, y2] = b.split('/').map(Number);
-        return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
-      });
-
-      sortedDates.forEach(date => {
-        // Date Header Row
-        tbody.innerHTML += `
-          <tr class="bg-dark-panel/50 border-y border-dark-border/50">
-             <td colspan="9" class="px-4 py-2 font-bold text-[10px] text-gnfc-orange uppercase bg-dark-panel">
-               <div class="flex items-center gap-2">
-                 <i class="ph-fill ph-calendar-blank text-lg"></i> 
-                 <span class="tracking-widest">${date}</span>
-               </div>
-             </td>
-          </tr>`;
-
-        groupedData[date].forEach(item => {
-          const isOver = item.status.includes('OVER');
-          const statusColor = isOver ? 'text-gnfc-green border-gnfc-green/30 bg-gnfc-green/10' : 'text-gnfc-orange border-gnfc-orange/30 bg-gnfc-orange/10';
-
-          const row = `
-            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
-                <td class="border-r border-dark-border px-2 py-3 text-center text-dark-muted font-mono text-[10px]">${item.sr}</td>
-                <td class="border-r border-dark-border px-2 py-3 font-bold text-gnfc-blue text-xs text-center">${item.area}</td>
-                <td class="border-r border-dark-border px-3 py-3 align-top">
-                    <div class="text-xs font-bold  tracking-tight">${item.tag}</div>
-                    <div class="text-[10px] text-dark-muted mt-1 font-mono">${item.tagSubtitle}</div>
-                </td>
-                <td class="border-r border-dark-border px-3 py-3 align-top">
-                    <div class="text-xs font-semibold leading-tight">${item.jobType}</div>
-                </td>
-                <td class="border-r border-dark-border px-2 py-3 text-center font-bold  text-[10px]">${item.tech}</td>
-                <td class="border-r border-dark-border px-4 py-3 text-xs text-dark-text leading-relaxed opacity-90">${item.desc}</td>
-                <td class="border-r border-dark-border px-2 py-3 text-center text-[10px] font-bold ">${item.engineer}</td>
-                <td class="border-r border-dark-border px-2 py-3 text-center align-top pt-4">
-                    <span class="text-[9px] font-black uppercase tracking-widest ${statusColor} px-2 py-1 rounded border shadow-sm">
-                        ${item.status}
-                    </span>
-                </td>
-                <td class="px-2 py-3"></td>
-            </tr>`;
-          tbody.innerHTML += row;
-        });
-      });
-    }
-
-    // Initialize Page
-    populateJobTypeDropdown();
-    applyFilters(); 
-  </script>
-  <script src="/src/js/emg_call_modal.js"></script>
-  <script src="/src/js/pagination.js"></script>
+        document.addEventListener('DOMContentLoaded', () => renderTable(jobTypeData));
+    </script>
 </body>
-
 </html>

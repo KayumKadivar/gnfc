@@ -8,8 +8,20 @@ const EmgCallModal = {
     ],
     filteredData: [],
 
+    ensureSharedStyles() {
+        const styleId = 'gnfc-modal-ui-style';
+        if (document.getElementById(styleId)) return;
+
+        const link = document.createElement('link');
+        link.id = styleId;
+        link.rel = 'stylesheet';
+        link.href = '/src/css/modal-ui.css';
+        document.head.appendChild(link);
+    },
+
     init() {
         this.filteredData = [...this.data];
+        this.ensureSharedStyles();
         this.ensureModalStructure();
         try {
             MicroModal.init({
@@ -31,73 +43,79 @@ const EmgCallModal = {
     ensureModalStructure() {
         if (document.getElementById('modal-emg-call')) return;
 
+        // Using a clean light-theme design for the report modal as per screenshot
         const modalHtml = `
             <div class="modal micromodal-slide" id="modal-emg-call" aria-hidden="true">
                 <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-                    <div class="modal__container bg-dark-panel border border-dark-border shadow-2xl w-full max-w-6xl overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="modal-emg-title">
+                    <div class="modal__container gnfc-modal-shell bg-white border border-gray-200 shadow-2xl w-full max-w-6xl overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="modal-emg-title">
                         
                         <!-- Header -->
-                        <div class="bg-dark-header p-3 border-b border-dark-border flex justify-between items-center shrink-0">
+                        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-white shrink-0">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-gnfc-red/20 flex items-center justify-center text-gnfc-red">
-                                    <i class="ph-fill ph-siren text-xl animate-pulse"></i>
+                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500">
+                                    <i class="ph-fill ph-siren text-xl"></i>
                                 </div>
-                                <div class="flex flex-col">
-                                    <h2 id="modal-emg-title" class="text-sm font-bold text-dark-text uppercase tracking-widest leading-none">Emergency Call Report</h2>
-                                </div>
+                                <h2 id="modal-emg-title" class="text-sm font-bold text-gray-800 uppercase tracking-widest leading-none">Emergency Call Report</h2>
                             </div>
-                            <button class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-dark-muted hover:text-dark-text transition-all focus:outline-none" aria-label="Close modal" data-micromodal-close>
+                            <button class="gnfc-modal-close text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close modal" data-micromodal-close>
                                 <i class="ph-bold ph-x text-lg pointer-events-none"></i>
                             </button>
                         </div>
 
-                        <div class="flex-1 flex flex-col overflow-hidden">
+                        <div class="flex-1 flex flex-col overflow-hidden bg-white">
                             
-                            <div class="p-3 border-b border-dark-border shrink-0">
+                            <!-- Filters -->
+                            <div class="px-6 py-4 border-b border-gray-100 shrink-0 bg-gray-50/50">
                                 <div class="flex items-end gap-6 max-w-4xl">
-                                    <div class="flex-1 grid grid-cols-2 gap-4">
-                                        <div class="space-y-1.5">
-                                            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-widest">Start Date</label>
-                                            <input type="date" id="emg-start-date" 
-                                                class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
+                                    <div class="flex gap-4 w-full max-w-md">
+                                        <div class="space-y-1.5 flex-1">
+                                            <label class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Start Date</label>
+                                            <div class="relative">
+                                                <input type="date" id="emg-start-date" 
+                                                    class="w-full bg-white border border-gray-300 text-gray-700 text-xs rounded-sm px-3 py-2 pl-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder-gray-400">
+                                            </div>
                                         </div>
-                                        <div class="space-y-1.5">
-                                            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-widest">End Date</label>
-                                            <input type="date" id="emg-end-date" 
-                                                class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
+                                        <div class="space-y-1.5 flex-1">
+                                            <label class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">End Date</label>
+                                            <div class="relative">
+                                                <input type="date" id="emg-end-date" 
+                                                    class="w-full bg-white border border-gray-300 text-gray-700 text-xs rounded-sm px-3 py-2 pl-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all placeholder-gray-400">
+                                            </div>
                                         </div>
                                     </div>
                                     <button onclick="EmgCallModal.applyFilters()"
-                                        class="h-9 px-8 bg-blue-600 hover:bg-gnfc-blue text-xs font-bold rounded-sm shadow-lg shadow-blue-500/10 transition-all flex items-center gap-2 uppercase tracking-wider active:scale-95"> GO </button>
+                                        class="h-[34px] px-6 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-sm shadow-sm transition-all uppercase tracking-wider flex items-center justify-center">
+                                        GO
+                                    </button>
                                 </div>
                             </div>
 
                             <!-- Table Area -->
-                            <div class="flex-1 overflow-auto">
+                            <div class="flex-1 overflow-auto bg-white">
                                 <table class="w-full text-left border-collapse min-w-[900px]">
-                                    <thead class="sticky top-0 z-10">
-                                        <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest border-b border-dark-border shadow-sm">
-                                            <th class="px-4 py-4 w-28 text-center border-r border-dark-border">Date</th>
-                                            <th class="px-4 py-4 w-20 text-center border-r border-dark-border">Tech</th>
-                                            <th class="px-4 py-4 w-32 border-r border-dark-border">Tag No</th>
-                                            <th class="px-4 py-4 w-40 border-r border-dark-border">Type of Job</th>
-                                            <th class="px-6 py-4 border-r border-dark-border">Description</th>
-                                            <th class="px-4 py-4 w-20 text-center">OT Hr</th>
+                                    <thead class="sticky top-0 z-10 bg-gray-50">
+                                        <tr class="text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200">
+                                            <th class="px-4 py-3 w-28 text-center border-r border-gray-100">Date</th>
+                                            <th class="px-4 py-3 w-20 text-center border-r border-gray-100">Tech</th>
+                                            <th class="px-4 py-3 w-28 font-mono text-center border-r border-gray-100">Tag No</th>
+                                            <th class="px-4 py-3 w-36 border-r border-gray-100">Type of Job</th>
+                                            <th class="px-6 py-3 border-r border-gray-100">Description</th>
+                                            <th class="px-4 py-3 w-20 text-center">OT Hr</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="emg-table-body" class="text-xs font-mono"></tbody>
+                                    <tbody id="emg-table-body" class="text-xs font-sans text-gray-700"></tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- Footer -->
-                        <div class="bg-dark-header p-3 border-t border-dark-border flex justify-between items-center text-[10px] shrink-0">
-                            <div class="flex items-center gap-4 text-dark-muted">
-                                <span>Showing <span id="emg-record-count" class="text-dark-text font-bold">0</span> entries</span>
+                        <div class="px-6 py-3 border-t border-gray-200 bg-white shrink-0 flex items-center justify-between text-[10px]">
+                            <div class="flex items-center gap-4 text-gray-500">
+                                <span>Showing <span id="emg-record-count" class="text-gray-900 font-bold">0</span> entries</span>
                             </div>
                             <div class="flex items-center gap-3">
-                                <span class="text-dark-muted uppercase tracking-wider font-bold">Total Overtime:</span>
-                                <span id="emg-total-hours" class="bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/30 px-4 py-1.5 rounded-sm font-bold text-xs ring-1 ring-gnfc-orange/20">0.0</span>
+                                <span class="text-gray-500 uppercase tracking-wider font-bold">Total Overtime:</span>
+                                <span id="emg-total-hours" class="bg-orange-50 text-orange-600 border border-orange-200 px-3 py-1 rounded-sm font-bold text-xs">0.0</span>
                             </div>
                         </div>
                     </div>
@@ -114,7 +132,6 @@ const EmgCallModal = {
             this.updateTable();
         } catch (e) {
             console.error("MicroModal show failed, falling back", e);
-            // Simple fallback if MicroModal fails
             document.getElementById('modal-emg-call').classList.add('is-open');
         }
     },
@@ -128,10 +145,9 @@ const EmgCallModal = {
     },
 
     render() {
-        // Initial structure check
+        this.ensureSharedStyles();
         this.ensureModalStructure();
     },
-
 
     updateTable() {
         const tbody = document.getElementById('emg-table-body');
@@ -144,26 +160,31 @@ const EmgCallModal = {
         let totalHours = 0;
 
         if (this.filteredData.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-20 text-center text-dark-muted italic text-sm">No emergency calls found for the selected range.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-20 text-center text-gray-400 italic text-sm">No emergency calls found for the selected range.</td></tr>`;
         } else {
             this.filteredData.forEach(item => {
                 totalHours += item.otHour || 0;
+
+                // Determine styling based on type (simple badge logic)
+                let typeClass = "bg-orange-50 text-orange-600 border-orange-100";
+                if (item.type.includes('MAINTENANCE')) typeClass = "bg-blue-50 text-blue-600 border-blue-100";
+
                 const row = `
-                    <tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors border-b border-dark-border group align-top">
-                        <td class="px-4 py-4 text-center border-r border-dark-border text-dark-muted whitespace-nowrap">${item.date}</td>
-                        <td class="px-4 py-4 text-center border-r border-dark-border font-bold text-dark-text">${item.tech}</td>
-                        <td class="px-4 py-4 border-r border-dark-border font-bold text-gnfc-blue">${item.tag}</td>
-                        <td class="px-4 py-4 border-r border-dark-border">
-                            <span class="inline-block px-2 py-0.5 rounded-sm bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/20 text-[10px] font-bold">
+                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100 group align-top">
+                        <td class="px-4 py-4 text-center border-r border-gray-100 text-gray-500 whitespace-nowrap font-mono">${item.date}</td>
+                        <td class="px-4 py-4 text-center border-r border-gray-100 font-bold text-gray-900">${item.tech}</td>
+                        <td class="px-4 py-4 border-r border-gray-100 text-center font-bold text-blue-600 font-mono text-[11px]">${item.tag}</td>
+                        <td class="px-4 py-4 border-r border-gray-100">
+                            <span class="inline-block px-2 py-0.5 rounded-sm border ${typeClass} text-[9px] font-bold uppercase tracking-wide">
                                 ${item.type}
                             </span>
                         </td>
-                        <td class="px-6 py-4 border-r border-dark-border text-dark-text leading-relaxed text-[11px] font-sans">
-                            <div class="max-h-32 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-dark-border">
+                        <td class="px-6 py-4 border-r border-gray-100 text-gray-600 leading-relaxed text-[11px] font-sans">
+                            <div class="line-clamp-4 hover:line-clamp-none transition-all">
                                 ${item.desc}
                             </div>
                         </td>
-                        <td class="px-4 py-4 text-center font-bold text-dark-text">${item.otHour.toFixed(1)}</td>
+                        <td class="px-4 py-4 text-center font-bold text-gray-900">${item.otHour.toFixed(1)}</td>
                     </tr>
                 `;
                 tbody.innerHTML += row;

@@ -11,6 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
     <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
     <style>
         ::-webkit-scrollbar {
@@ -31,7 +32,7 @@
             background: var(--app-muted, #8e8e9e);
         }
 
-        /* MicroModal styles */
+        /* MicroModal base */
         .modal {
             display: none;
         }
@@ -40,95 +41,8 @@
             display: block;
         }
 
-        .modal__overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+        .modal.is-open .gnfc-modal-overlay {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal__container {
-            max-width: 90vw;
-            max-height: 90vh;
-            border-radius: 6px;
-            overflow-y: auto;
-            box-sizing: border-box;
-        }
-
-        .micromodal-slide {
-            display: none;
-        }
-
-        .micromodal-slide.is-open {
-            display: block;
-        }
-
-        .micromodal-slide[aria-hidden="false"] .modal__overlay {
-            animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
-        }
-
-        .micromodal-slide[aria-hidden="false"] .modal__container {
-            animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-        }
-
-        .micromodal-slide[aria-hidden="true"] .modal__overlay {
-            animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
-        }
-
-        .micromodal-slide[aria-hidden="true"] .modal__container {
-            animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-        }
-
-        .micromodal-slide .modal__container,
-        .micromodal-slide .modal__overlay {
-            will-change: transform;
-        }
-
-        @keyframes mmfadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes mmfadeOut {
-            from {
-                opacity: 1;
-            }
-
-            to {
-                opacity: 0;
-            }
-        }
-
-        @keyframes mmslideIn {
-            from {
-                transform: translateY(15%);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes mmslideOut {
-            from {
-                transform: translateY(0);
-            }
-
-            to {
-                transform: translateY(-10%);
-            }
         }
     </style>
 </head>
@@ -175,99 +89,99 @@
                 <!-- Filter Bar -->
                 <div class="border border-dark-border rounded-sm p-4 shadow-sm flex gap-5 flex-wrap items-end my-4">
 
-                        <!-- Start Date -->
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">Start
-                                Date</label>
-                            <input type="date" id="startDateFilter"
-                                class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
-                        </div>
+                    <!-- Start Date -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">Start
+                            Date</label>
+                        <input type="date" id="startDateFilter"
+                            class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
+                    </div>
 
-                        <!-- End Date -->
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">End
-                                Date</label>
-                            <input type="date" id="endDateFilter"
-                                class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
-                        </div>
+                    <!-- End Date -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">End
+                            Date</label>
+                        <input type="date" id="endDateFilter"
+                            class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
+                    </div>
 
-                        <!-- Select Name -->
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">Select
-                                Name</label>
-                            <select id="nameFilter"
-                                class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[180px] focus:border-gnfc-blue outline-none transition-all">
-                                <option value="">All Technicians</option>
-                                <option value="PBS">PBS</option>
-                                <option value="NRK">NRK</option>
-                                <option value="MJ">MJ</option>
-                                <option value="MR">MR</option>
-                                <option value="R.R.">R.R.</option>
-                                <option value="SHC">SHC</option>
-                            </select>
-                        </div>
+                    <!-- Select Name -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">Select
+                            Name</label>
+                        <select id="nameFilter"
+                            class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[180px] focus:border-gnfc-blue outline-none transition-all">
+                            <option value="">All Technicians</option>
+                            <option value="PBS">PBS</option>
+                            <option value="NRK">NRK</option>
+                            <option value="MJ">MJ</option>
+                            <option value="MR">MR</option>
+                            <option value="R.R.">R.R.</option>
+                            <option value="SHC">SHC</option>
+                        </select>
+                    </div>
 
-                        <!-- Spacer -->
-                        <div class="flex-1"></div>
+                    <!-- Spacer -->
+                    <div class="flex-1"></div>
 
-                        <!-- Action Buttons -->
-                        <div class="flex items-end gap-2">
-                            <button onclick="resetFilters()"
-                                class="px-3 py-1.5 bg-transparent border border-dark-border text-dark-muted hover:border-white/30 text-[11px] font-bold rounded transition-all">
-                                <i class="ph-bold ph-x mr-1"></i>RESET
-                            </button>
-                            <button onclick="generateReport()"
-                                class="px-4 py-1.5 bg-gnfc-blue hover:bg-blue-500 text-[11px] font-bold rounded transition-all shadow-lg shadow-gnfc-blue/20">
-                                <i class="ph-bold ph-sparkle mr-1"></i>GENERATE
-                            </button>
-                        </div>
+                    <!-- Action Buttons -->
+                    <div class="flex items-end gap-2">
+                        <button onclick="resetFilters()"
+                            class="px-3 py-1.5 bg-transparent border border-dark-border text-dark-muted hover:border-white/30 text-[11px] font-bold rounded transition-all">
+                            <i class="ph-bold ph-x mr-1"></i>RESET
+                        </button>
+                        <button onclick="generateReport()"
+                            class="px-4 py-1.5 bg-gnfc-blue hover:bg-blue-500 text-[11px] font-bold rounded transition-all shadow-lg shadow-gnfc-blue/20">
+                            <i class="ph-bold ph-sparkle mr-1"></i>GENERATE
+                        </button>
                     </div>
                 </div>
-
-                <!-- Report Results Section -->
-                <div id="reportResults" class="bg-dark-panel border border-dark-border rounded-sm shadow-lg mt-6"
-                    style="display:none;">
-                    <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <i class="ph-fill ph-user-list text-gnfc-blue"></i>
-                            <h3 class="font-bold text-sm" id="reportTitle">Name Wise Report</h3>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span id="recordCount"
-                                class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono">0
-                                Records</span>
-                            <button onclick="exportReport()"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded-sm transition-all">
-                                <i class="ph-bold ph-download-simple"></i>Export
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr
-                                    class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
-                                    <th class="border-r border-dark-border p-2 w-10">Sr</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[100px]">Assign Job<br><span
-                                            class="text-[9px] text-dark-muted/60">Assign To</span></th>
-                                    <th class="border-r border-dark-border p-2 w-24">Date</th>
-                                    <th class="border-r border-dark-border p-2 w-14">Tech</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[90px]">TagNo</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[110px]">Type of Job</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[250px]">Description</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[120px]">Remarks</th>
-                                    <th class="p-2 w-14">OT Hr</th>
-                                </tr>
-                            </thead>
-                            <tbody id="reportTableBody" class="text-xs">
-                                <!-- Report data will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- Report Results Section -->
+            <div id="reportResults" class="bg-dark-panel border border-dark-border rounded-sm shadow-lg mt-6"
+                style="display:none;">
+                <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-fill ph-user-list text-gnfc-blue"></i>
+                        <h3 class="font-bold text-sm" id="reportTitle">Name Wise Report</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="recordCount"
+                            class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono">0
+                            Records</span>
+                        <button onclick="exportReport()"
+                            class="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded-sm transition-all">
+                            <i class="ph-bold ph-download-simple"></i>Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                                <th class="border-r border-dark-border p-2 w-10">Sr</th>
+                                <th class="border-r border-dark-border p-2 min-w-[100px]">Assign Job<br><span
+                                        class="text-[9px] text-dark-muted/60">Assign To</span></th>
+                                <th class="border-r border-dark-border p-2 w-24">Date</th>
+                                <th class="border-r border-dark-border p-2 w-14">Tech</th>
+                                <th class="border-r border-dark-border p-2 min-w-[90px]">TagNo</th>
+                                <th class="border-r border-dark-border p-2 min-w-[110px]">Type of Job</th>
+                                <th class="border-r border-dark-border p-2 min-w-[250px]">Description</th>
+                                <th class="border-r border-dark-border p-2 min-w-[120px]">Remarks</th>
+                                <th class="p-2 w-14">OT Hr</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody" class="text-xs">
+                            <!-- Report data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
         </div>
 
     </main>
@@ -390,7 +304,7 @@
     </script>
     <script src="/src/js/emg_call_modal.js"></script>
 
-  <script src="/src/js/pagination.js"></script>
+    <script src="/src/js/pagination.js"></script>
 </body>
 
 </html>

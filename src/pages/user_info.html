@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Information | GNFC E-Logbook</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
@@ -54,12 +55,6 @@
         .info-scroll::-webkit-scrollbar-thumb {
             background: #2c3235;
             border-radius: 4px;
-        }
-
-        /* User detail modal */
-        .modal-overlay {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
         }
     </style>
 </head>
@@ -189,20 +184,18 @@
     </main>
 
     <!-- ═══════ USER DETAIL MODAL ═══════ -->
-    <div id="user-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-overlay"
-        onclick="if(event.target===this)closeUserModal()">
-        <div class="bg-dark-panel border border-dark-border rounded-lg shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
-            <div class="flex items-center justify-between px-5 py-3 border-b border-dark-border">
-                <h3 class="text-sm font-bold text-gnfc-blue flex items-center gap-2">
+    <div id="user-modal" class="gnfc-modal-overlay hidden" onclick="if(event.target===this)closeUserModal()">
+        <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+            <div class="gnfc-modal-header">
+                <h3 class="gnfc-modal-title">
                     <i class="ph-fill ph-user-circle"></i>
                     User Details
                 </h3>
-                <button onclick="closeUserModal()"
-                    class="w-7 h-7 flex items-center justify-center rounded hover:bg-dark-border transition-colors">
+                <button onclick="closeUserModal()" class="gnfc-modal-close">
                     <i class="ph-bold ph-x text-dark-muted"></i>
                 </button>
             </div>
-            <div id="user-modal-body" class="p-5">
+            <div id="user-modal-body" class="gnfc-modal-body">
             </div>
         </div>
     </div>
@@ -450,7 +443,7 @@
 
         })();
     </script>
-  <script src="/src/js/pagination.js"></script>
+    <script src="/src/js/pagination.js"></script>
 </body>
 
 </html>

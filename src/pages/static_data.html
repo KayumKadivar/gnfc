@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SY_PM Static Data | GNFC</title>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -30,106 +31,6 @@
 
     ::-webkit-scrollbar-thumb:hover {
       background: var(--app-muted, #8e8e9e);
-    }
-
-    /* MicroModal styles */
-    .modal {
-      display: none;
-    }
-
-    .modal.is-open {
-      display: block;
-    }
-
-    .modal__overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal__container {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 6px;
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-
-    .micromodal-slide {
-      display: none;
-    }
-
-    .micromodal-slide.is-open {
-      display: block;
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__overlay {
-      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__container {
-      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__overlay {
-      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__container {
-      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide .modal__container,
-    .micromodal-slide .modal__overlay {
-      will-change: transform;
-    }
-
-    @keyframes mmfadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes mmfadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    @keyframes mmslideIn {
-      from {
-        transform: translateY(15%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes mmslideOut {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-10%);
-      }
     }
   </style>
 </head>
@@ -241,82 +142,63 @@
     </div>
   </main>
 
-  <!-- Add/Edit Modal (Tailwind + Theme) -->
-  <div id="static-row-modal"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text"
-    aria-hidden="true">
-    <div
-      class="w-full max-w-2xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="p-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
-        <h3 id="static-row-modal-title" class="text-sm font-bold text-white uppercase tracking-wide">Add Static Record
-        </h3>
-        <button type="button" data-close-modal="true" class=" hover:text-white transition-colors">
+  <!-- Add/Edit Modal -->
+  <div id="static-row-modal" class="gnfc-modal-overlay hidden" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-header">
+        <h3 id="static-row-modal-title" class="gnfc-modal-title">Add Static Record</h3>
+        <button type="button" data-close-modal="true" class="gnfc-modal-close">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
       <form id="static-row-form" class="flex flex-col flex-1 overflow-hidden">
-        <div class="p-4 overflow-y-auto space-y-5">
-          <!-- <input type="hidden" id="static-row-id"> -->
+        <div class="gnfc-modal-body">
           <div>
-            <label class="block text-xs font-bold  uppercase mb-1.5" for="static-item">Item</label>
-            <input id="static-item"
-              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:"
-              type="text" maxlength="250" placeholder="Enter checklist item">
+            <label class="gnfc-modal-label" for="static-item">Item</label>
+            <input id="static-item" class="gnfc-modal-input" type="text" maxlength="250"
+              placeholder="Enter checklist item">
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label class="block text-xs font-bold  uppercase mb-1.5" for="static-action">Action</label>
-              <input id="static-action"
-                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:"
-                type="text" maxlength="250" placeholder="Action guidance">
+              <label class="gnfc-modal-label" for="static-action">Action</label>
+              <input id="static-action" class="gnfc-modal-input" type="text" maxlength="250"
+                placeholder="Action guidance">
             </div>
             <div>
-              <label class="block text-xs font-bold  uppercase mb-1.5" for="static-reference">Reference
-                Value</label>
-              <input id="static-reference"
-                class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:"
-                type="text" maxlength="180" placeholder="Reference value">
+              <label class="gnfc-modal-label" for="static-reference">Reference Value</label>
+              <input id="static-reference" class="gnfc-modal-input" type="text" maxlength="180"
+                placeholder="Reference value">
             </div>
           </div>
         </div>
-        <div class="p-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
-          <button type="button" data-close-modal="true"
-            class="px-4 py-2 rounded-md border border-dark-border  text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
-          <button type="submit"
-            class="px-4 py-2 rounded-md bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Save</button>
+        <div class="gnfc-modal-footer">
+          <button type="button" data-close-modal="true" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Instruction Modal (Tailwind + Theme) -->
-  <div id="instruction-modal"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden text-dark-text"
-    aria-hidden="true">
-    <div
-      class="w-full max-w-xl bg-dark-panel border border-dark-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="p-4 border-b border-dark-border flex justify-between items-center bg-dark-header">
-        <h3 class="text-sm font-bold text-white uppercase tracking-wide">Edit Instruction</h3>
-        <button type="button" data-close-modal="true" class=" hover:text-white transition-colors">
+  <!-- Instruction Modal -->
+  <div id="instruction-modal" class="gnfc-modal-overlay hidden" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Edit Instruction</h3>
+        <button type="button" data-close-modal="true" class="gnfc-modal-close">
           <i class="ph-bold ph-x text-lg" data-close-modal="true"></i>
         </button>
       </div>
       <form id="instruction-form" class="flex flex-col flex-1 overflow-hidden">
-        <div class="p-6 overflow-y-auto">
+        <div class="gnfc-modal-body">
           <div>
-            <label class="block text-xs font-bold  uppercase mb-1.5" for="instruction-input">Instruction
-              Text</label>
-            <textarea id="instruction-input"
-              class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2.5 text-sm text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder: min-h-[150px]"
+            <label class="gnfc-modal-label" for="instruction-input">Instruction Text</label>
+            <textarea id="instruction-input" class="gnfc-modal-input" style="min-height:150px;"
               placeholder="Enter report instruction"></textarea>
           </div>
         </div>
-        <div class="p-4 border-t border-dark-border bg-dark-header flex justify-end gap-3">
-          <button type="button" data-close-modal="true"
-            class="px-4 py-2 rounded-lg border border-dark-border  text-xs font-bold hover:text-white hover:bg-dark-border transition-colors">Cancel</button>
-          <button type="submit"
-            class="px-4 py-2 rounded-lg bg-gnfc-orange text-white text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-gnfc-orange/20">Update
-            Instruction</button>
+        <div class="gnfc-modal-footer">
+          <button type="button" data-close-modal="true" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Update Instruction</button>
         </div>
       </form>
     </div>

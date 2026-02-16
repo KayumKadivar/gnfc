@@ -9,6 +9,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <script>
     window.activePage = 'shift_logbook_officer';
   </script>
@@ -26,35 +27,11 @@
       background: rgba(15, 23, 42, 0.08);
       color: #0f172a;
     }
-
-    .shift-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.65);
-      z-index: 130;
-      padding: 1rem;
-      backdrop-filter: blur(2px);
-    }
-
-    .shift-overlay.is-open {
-      display: flex;
-    }
-
-    .shift-modal {
-      width: min(860px, 96vw);
-      max-height: 92vh;
-      overflow: auto;
-      background: #111217;
-      border: 1px solid #2c3235;
-      border-radius: 6px;
-    }
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+<body
+  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -84,19 +61,24 @@
     <div class="flex-1 p-3 bg-dark-bg flex flex-col gap-3">
       <section class="bg-dark-panel border border-dark-border rounded-sm p-3 flex flex-col gap-3 shrink-0">
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Time Range</label>
-                <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
-                    <button id="tab-today" onclick="switchView('today')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Today</button>
-                    <button id="tab-prev" onclick="switchView('prev')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Prev Day</button>
-                    <button id="tab-weekly" onclick="switchView('weekly')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Weekly</button>
-                    <button id="tab-monthly" onclick="switchView('monthly')" type="button" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Monthly</button>
-                </div>
+          <div class="flex items-center gap-2">
+            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Time Range</label>
+            <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
+              <button id="tab-today" onclick="switchView('today')" type="button"
+                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Today</button>
+              <button id="tab-prev" onclick="switchView('prev')" type="button"
+                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Prev Day</button>
+              <button id="tab-weekly" onclick="switchView('weekly')" type="button"
+                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Weekly</button>
+              <button id="tab-monthly" onclick="switchView('monthly')" type="button"
+                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Monthly</button>
             </div>
-            
-            <button onclick="openAddModal()" class="bg-gnfc-blue hover:bg-blue-600 text-white px-3 py-1.5 rounded-sm text-xs font-bold flex items-center gap-1">
-                <i class="ph-bold ph-plus"></i> Add Entry
-            </button>
+          </div>
+
+          <button onclick="openAddModal()"
+            class="bg-gnfc-blue hover:bg-blue-600 text-white px-3 py-1.5 rounded-sm text-xs font-bold flex items-center gap-1">
+            <i class="ph-bold ph-plus"></i> Add Entry
+          </button>
         </div>
       </section>
 
@@ -108,14 +90,15 @@
             <span class="text-xs text-dark-muted ml-2" id="report-date"></span>
           </div>
           <div class="text-xs font-mono text-dark-muted">
-             Count: <span id="record-count" class="text-white font-bold">0</span>
+            Count: <span id="record-count" class="text-white font-bold">0</span>
           </div>
         </div>
 
         <div class="flex-1 overflow-auto">
           <table id="shift-log-table" class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
+              <tr
+                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
                 <th rowspan="2" class="w-10 p-2 border-r border-dark-border">Sr</th>
                 <th class="w-24 p-2 border-r border-dark-border border-b border-dark-border">Shift</th>
                 <th class="w-32 p-2 border-r border-dark-border border-b border-dark-border">Tag No</th>
@@ -124,7 +107,8 @@
                 <th rowspan="2" class="w-20 p-2 border-r border-dark-border">Status</th>
                 <th rowspan="2" class="min-w-[180px] p-2">Remarks</th>
               </tr>
-              <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
+              <tr
+                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
                 <th class="p-2 border-r border-dark-border">Time</th>
                 <th class="p-2 border-r border-dark-border">Type Of Job</th>
               </tr>
@@ -135,106 +119,105 @@
       </section>
     </div>
 
-    <footer class="h-8 bg-dark-panel border-t border-dark-border px-4 flex items-center justify-between text-[10px] text-dark-muted uppercase tracking-wider shrink-0">
+    <footer
+      class="h-8 bg-dark-panel border-t border-dark-border px-4 flex items-center justify-between text-[10px] text-dark-muted uppercase tracking-wider shrink-0">
       <span>GNFC Instrumentation Dept.</span>
       <span>Officer Logbook</span>
     </footer>
   </main>
 
-  <div id="shift-add-overlay" class="shift-overlay" aria-hidden="true">
-    <div class="shift-modal">
-      <div class="px-4 py-3 border-b border-dark-border bg-dark-panel flex items-center justify-between">
-        <h3 class="text-sm font-bold text-gnfc-blue">Add Officer Entry</h3>
-        <button onclick="closeAddModal()" class="text-dark-muted hover:text-white"><i class="ph-bold ph-x text-lg"></i></button>
+  <div id="shift-add-overlay" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Add Officer Entry</h3>
+        <button onclick="closeAddModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
       </div>
-      <form id="shift-add-form" class="p-4 space-y-3">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Date</label>
-            <input id="add-date" type="date" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Shift</label>
-            <select id="add-shift" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Time</label>
-            <input id="add-time" type="text" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tag No</label>
-            <input id="add-tag" type="text" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="e.g. PT5087K">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type Of Job</label>
-            <select id="add-job-type" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
-              <option>MAINTENANCE</option>
-              <option>CALIBRATION</option>
-              <option>PM</option>
-              <option>BREAKDOWN</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Officer</label>
-            <input id="add-officer" type="text" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="Officer name">
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Description</label>
-            <textarea id="add-description" rows="4" required class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="Describe the work"></textarea>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Status</label>
-            <select id="add-status" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white">
-              <option value="OVER">OVER</option>
-              <option value="PENDING">PENDING</option>
-            </select>
-          </div>
-          <div class="md:col-span-3">
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Remarks</label>
-            <input id="add-remarks" type="text" class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs text-white" placeholder="Optional remarks">
+      <form id="shift-add-form">
+        <div class="gnfc-modal-body gnfc-modal-body--tight">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="gnfc-modal-label">Date</label>
+              <input id="add-date" type="date" required class="gnfc-modal-input">
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Shift</label>
+              <select id="add-shift" class="gnfc-modal-input">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Time</label>
+              <input id="add-time" type="text" class="gnfc-modal-input">
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Tag No</label>
+              <input id="add-tag" type="text" required class="gnfc-modal-input" placeholder="e.g. PT5087K">
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Type Of Job</label>
+              <select id="add-job-type" class="gnfc-modal-input">
+                <option>MAINTENANCE</option>
+                <option>CALIBRATION</option>
+                <option>PM</option>
+                <option>BREAKDOWN</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Officer</label>
+              <input id="add-officer" type="text" required class="gnfc-modal-input" placeholder="Officer name">
+            </div>
+            <div class="md:col-span-2">
+              <label class="gnfc-modal-label">Description</label>
+              <textarea id="add-description" rows="4" required class="gnfc-modal-input"
+                placeholder="Describe the work"></textarea>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Status</label>
+              <select id="add-status" class="gnfc-modal-input">
+                <option value="OVER">OVER</option>
+                <option value="PENDING">PENDING</option>
+              </select>
+            </div>
+            <div class="md:col-span-3">
+              <label class="gnfc-modal-label">Remarks</label>
+              <input id="add-remarks" type="text" class="gnfc-modal-input" placeholder="Optional remarks">
+            </div>
           </div>
         </div>
-        <div class="flex justify-end gap-2">
-          <button type="button" onclick="closeAddModal()" class="px-3 py-1.5 border border-dark-border rounded-sm text-xs font-bold text-dark-muted hover:text-white">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 bg-gnfc-blue text-white rounded-sm text-xs font-bold">Save Entry</button>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeAddModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Entry</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Remark Modal -->
-  <div id="remark-overlay" class="shift-overlay" aria-hidden="true">
-    <div class="shift-modal" style="max-width: 600px;">
-      <div class="px-4 py-3 border-b border-dark-border bg-dark-panel flex items-center justify-between">
-        <h3 class="text-sm font-bold text-gnfc-blue">Officer's Log Book (Instrument)</h3>
-        <button onclick="closeRemarkModal()" class="text-dark-muted hover:text-white">
+  <div id="remark-overlay" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Officer's Log Book (Instrument)</h3>
+        <button onclick="closeRemarkModal()" class="gnfc-modal-close">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
-      <div class="p-4 space-y-3 bg-dark-panel">
-        <div>
-          <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Remark By: TESTER</label>
-          <textarea id="remark-text" rows="6" class="w-full bg-dark-bg border border-dark-border rounded-sm px-3 py-2 text-xs text-white" placeholder="Enter remarks..."></textarea>
-        </div>
-        <div class="flex justify-end gap-2">
-          <button onclick="saveRemark()" class="px-4 py-1.5 bg-gnfc-blue text-white rounded-sm text-xs font-bold hover:bg-blue-600 transition-colors">
-            Save
-          </button>
-          <button onclick="closeRemarkModal()" class="px-3 py-1.5 border border-dark-border rounded-sm text-xs font-bold text-dark-muted hover:text-white transition-colors">
-            Cancel
-          </button>
-        </div>
+      <div class="gnfc-modal-body gnfc-modal-body--tight">
+        <label class="gnfc-modal-label">Remark By: TESTER</label>
+        <textarea id="remark-text" rows="6" class="gnfc-modal-input" placeholder="Enter remarks..."></textarea>
+      </div>
+      <div class="gnfc-modal-footer">
+        <button onclick="closeRemarkModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button onclick="saveRemark()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save</button>
       </div>
     </div>
   </div>
 
   <script>
     /* ================= DATA STORE (MOCKED FOR DEMO) ================= */
-    
+
     // Data extracted from the provided images
     const mockData = [
       {
@@ -298,10 +281,10 @@
       // Note: In a real app this would query the backend/store
       const today = '2026-02-11'; // Fixed to match image date for demo
       const prev = '2026-02-10';
-      
+
       if (state.view === 'today') return mockData.filter(d => d.date === today);
       if (state.view === 'prev') return mockData.filter(d => d.date === prev);
-      
+
       // Weekly/Monthly returns everything for this demo
       return mockData.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
@@ -314,12 +297,12 @@
       const reportTitle = document.getElementById('report-title');
 
       count.textContent = String(rows.length);
-      
+
       // Update Title Text
       reportTitle.textContent = state.view === 'today' ? 'Today Log Report'
         : state.view === 'prev' ? 'Prev Day Log Report'
-        : state.view === 'weekly' ? 'Weekly Log Report'
-        : 'Monthly Log Report';
+          : state.view === 'weekly' ? 'Weekly Log Report'
+            : 'Monthly Log Report';
 
       if (!rows.length) {
         tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries found for this range.</td></tr>';
@@ -329,15 +312,15 @@
       /* ================= GROUPING LOGIC START ================= */
       // If Weekly or Monthly, we want to group by Date
       const isGroupedView = state.view === 'weekly' || state.view === 'monthly';
-      
+
       let html = '';
       let processedDates = new Set();
 
       rows.forEach((entry, index) => {
-        
+
         // 1. Inject Date Header if needed
         if (isGroupedView && !processedDates.has(entry.date)) {
-           html += `
+          html += `
              <tr class="date-header-row">
                <td colspan="7">
                  <div class="flex items-center gap-2 border-b border-dark-border px-4 py-1.5 font-bold text-[10px] text-gnfc-orange uppercase">
@@ -347,7 +330,7 @@
                </td>
              </tr>
            `;
-           processedDates.add(entry.date);
+          processedDates.add(entry.date);
         }
 
         // 2. Render Row
@@ -386,17 +369,17 @@
 
 
       tbody.innerHTML = html;
-      
+
       // Add hover effect to both rows of each entry
       const allRows = tbody.querySelectorAll('tr[data-entry-id]');
       allRows.forEach(row => {
         const entryId = row.getAttribute('data-entry-id');
-        
+
         row.addEventListener('mouseenter', () => {
           const matchingRows = tbody.querySelectorAll(`tr[data-entry-id="${entryId}"]`);
           matchingRows.forEach(r => r.classList.add('bg-white/5'));
         });
-        
+
         row.addEventListener('mouseleave', () => {
           const matchingRows = tbody.querySelectorAll(`tr[data-entry-id="${entryId}"]`);
           matchingRows.forEach(r => r.classList.remove('bg-white/5'));
@@ -458,7 +441,7 @@
 
     function saveRemark() {
       const remarkText = document.getElementById('remark-text').value.trim();
-      
+
       // Find and update the entry in mockData
       const entry = mockData.find(e => e.id === currentRemarkEntryId);
       if (entry) {
@@ -492,4 +475,5 @@
   </script>
   <script src="/src/js/pagination.js"></script>
 </body>
+
 </html>

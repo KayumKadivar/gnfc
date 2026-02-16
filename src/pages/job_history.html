@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GNFC | Job History</title>
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
@@ -16,23 +17,28 @@
   <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
   <style>
-      .datatable-input {
-          background-color: #111217;
-          border: 1px solid #2c3235;
-          color: #ececec;
-      }
-      .datatable-selector {
-          background-color: #111217;
-          border: 1px solid #2c3235;
-          color: #ececec;
-      }
-      .datatable-pagination a {
-          color: #ececec;
-      }
-      .datatable-pagination .datatable-active a, .datatable-pagination .datatable-active a:focus, .datatable-pagination .datatable-active a:hover {
-          background-color: #111217;
-          color: #ff8c00;
-      }
+    .datatable-input {
+      background-color: #111217;
+      border: 1px solid #2c3235;
+      color: #ececec;
+    }
+
+    .datatable-selector {
+      background-color: #111217;
+      border: 1px solid #2c3235;
+      color: #ececec;
+    }
+
+    .datatable-pagination a {
+      color: #ececec;
+    }
+
+    .datatable-pagination .datatable-active a,
+    .datatable-pagination .datatable-active a:focus,
+    .datatable-pagination .datatable-active a:hover {
+      background-color: #111217;
+      color: #ff8c00;
+    }
   </style>
   <style>
     ::-webkit-scrollbar {
@@ -61,34 +67,6 @@
       background-image: none;
     }
 
-    /* Modal Styles */
-    .shift-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.65);
-      z-index: 130;
-      padding: 1rem;
-      backdrop-filter: blur(2px);
-    }
-
-    .shift-overlay.is-open {
-      display: flex;
-    }
-
-    .shift-modal {
-      width: min(900px, 96vw);
-      max-height: 92vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 6px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
 
     /* Table Fixes */
     table {
@@ -117,7 +95,7 @@
       transition: background-color 5000s ease-in-out 0s;
     }
 
-    /* MicroModal styles */
+    /* MicroModal base */
     .modal {
       display: none;
     }
@@ -126,95 +104,8 @@
       display: block;
     }
 
-    .modal__overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
+    .modal.is-open .gnfc-modal-overlay {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal__container {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 6px;
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-
-    .micromodal-slide {
-      display: none;
-    }
-
-    .micromodal-slide.is-open {
-      display: block;
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__overlay {
-      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__container {
-      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__overlay {
-      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__container {
-      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide .modal__container,
-    .micromodal-slide .modal__overlay {
-      will-change: transform;
-    }
-
-    @keyframes mmfadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes mmfadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    @keyframes mmslideIn {
-      from {
-        transform: translateY(15%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes mmslideOut {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-10%);
-      }
     }
   </style>
 </head>
@@ -258,13 +149,13 @@
           </h3>
           <div class="flex gap-2">
             <button
-              class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">Default
+              class="text-[11px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">Default
               Date</button>
             <button
-              class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">Prev
+              class="text-[11px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">Prev
               Year</button>
             <button
-              class="text-[10px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">This
+              class="text-[11px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">This
               Year</button>
           </div>
         </div>
@@ -272,7 +163,7 @@
         <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-dark-muted uppercase">Loop</label>
+            <label class="text-[11px] font-bold text-dark-muted uppercase">Loop</label>
             <div class="relative">
               <select
                 class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
@@ -286,7 +177,7 @@
           </div>
 
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-dark-muted uppercase">Tag</label>
+            <label class="text-[11px] font-bold text-dark-muted uppercase">Tag</label>
             <div class="relative">
               <select id="tagSelect"
                 class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
@@ -298,7 +189,7 @@
           </div>
 
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-dark-muted uppercase">Type of Job</label>
+            <label class="text-[11px] font-bold text-dark-muted uppercase">Type of Job</label>
             <div class="relative">
               <select
                 class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
@@ -313,7 +204,7 @@
           </div>
 
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-dark-muted uppercase">Instrument Type</label>
+            <label class="text-[11px] font-bold text-dark-muted uppercase">Instrument Type</label>
             <div class="relative">
               <select
                 class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
@@ -328,20 +219,20 @@
           </div>
 
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-dark-muted uppercase">Start Date</label>
+            <label class="text-[11px] font-bold text-dark-muted uppercase">Start Date</label>
             <input type="date" value="2025-02-09"
               class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
 
           <div class="space-y-1">
-            <label class="text-[10px] font-bold text-dark-muted uppercase">End Date</label>
+            <label class="text-[11px] font-bold text-dark-muted uppercase">End Date</label>
             <input type="date" value="2026-02-09"
               class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
 
           <div class="flex items-end gap-2">
             <div class="space-y-1 flex-1">
-              <label class="text-[10px] font-bold text-dark-muted uppercase">Filter Options</label>
+              <label class="text-[11px] font-bold text-dark-muted uppercase">Filter Options</label>
               <div class="flex gap-2">
                 <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
                   <input type="checkbox" class="accent-gnfc-blue">
@@ -357,7 +248,7 @@
 
           <div class="flex items-end gap-2">
             <button
-              class="flex-1 bg-gnfc-blue hover:bg-blue-600 font-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide "
+              class="flex-1 bg-gnfc-blue hover:bg-blue-600 font-bold h-8 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide "
               onclick="renderTable()">
               <i class="ph-bold ph-lightning"></i> Apply
             </button>
@@ -371,7 +262,7 @@
           <h3 class="text-xs font-bold  uppercase tracking-wider flex items-center gap-2">
             <i class="ph-fill ph-table text-gnfc-orange"></i> Job Records
           </h3>
-          <span class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono"
+          <span class="text-[11px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono"
             id="recordCount">0 Records Found</span>
         </div>
 
@@ -379,7 +270,7 @@
           <table class="w-full text-left border-collapse">
             <thead class="bg-dark-header z-10">
               <tr
-                class="text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                class="text-[11px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
                 <th rowspan="2"
                   class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-12 sticky left-0 z-20 shadow-[1px_0_0_0_#334155]">
                   Sr</th>
@@ -399,7 +290,7 @@
                 <th rowspan="1" class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Eng Remark
                 </th>
               </tr>
-              <tr class="text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
+              <tr class="text-[11px] text-gnfc-blue uppercase text-center border-b border-dark-border">
                 <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Tag</th>
                 <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Job Type</th>
                 <th class="bg-dark-header border-r border-dark-border border-b px-2 py-1">Eng</th>
@@ -415,21 +306,20 @@
     </div>
   </main>
 
-  <div id="job-detail-overlay" class="shift-overlay" aria-hidden="true">
-    <div class="shift-modal">
-      <div class="px-4 py-3 border-b border-dark-border bg-dark-header flex items-center justify-between shrink-0">
-        <h3 class="text-sm font-bold text-gnfc-blue uppercase tracking-wide">Job History Detail</h3>
-        <button onclick="closeJobDetailModal()" class="text-dark-muted  transition-colors">
+  <div id="job-detail-overlay" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Job History Detail</h3>
+        <button onclick="closeJobDetailModal()" class="gnfc-modal-close">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
 
-      <div class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1 bg-dark-panel">
+      <div class="gnfc-modal-body" style="overflow-y:auto;">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Area</label>
-            <select id="modal-area"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Area</label>
+            <select id="modal-area" class="gnfc-modal-input">
               <option>400</option>
               <option>200</option>
               <option>300</option>
@@ -438,47 +328,40 @@
             </select>
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Loop PLM</label>
-            <input type="text" id="modal-loop"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Loop PLM</label>
+            <input type="text" id="modal-loop" class="gnfc-modal-input">
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tag No</label>
-            <input type="text" id="modal-tag"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Tag No</label>
+            <input type="text" id="modal-tag" class="gnfc-modal-input">
           </div>
         </div>
 
-        <div>
-          <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Description of Job</label>
-          <textarea id="modal-description" rows="5"
-            class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none leading-relaxed font-mono"></textarea>
+        <div class="mt-4">
+          <label class="gnfc-modal-label">Description of Job</label>
+          <textarea id="modal-description" rows="5" class="gnfc-modal-input font-mono leading-relaxed"></textarea>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Date</label>
-            <input type="date" id="modal-date"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Date</label>
+            <input type="date" id="modal-date" class="gnfc-modal-input">
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tech</label>
-            <input type="text" id="modal-tech"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Tech</label>
+            <input type="text" id="modal-tech" class="gnfc-modal-input">
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type of Job</label>
-            <select id="modal-jobtype"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Type of Job</label>
+            <select id="modal-jobtype" class="gnfc-modal-input">
               <option>CMS JOB</option>
               <option>PM JOB</option>
               <option>BREAKDOWN</option>
             </select>
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Eng</label>
-            <select id="modal-eng"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+            <label class="gnfc-modal-label">Eng</label>
+            <select id="modal-eng" class="gnfc-modal-input">
               <option>MAJ</option>
               <option>CKV</option>
               <option>MDM</option>
@@ -486,8 +369,8 @@
           </div>
         </div>
 
-        <div class="bg-dark-bg border border-dark-border p-3 rounded-sm">
-          <label class="block text-[10px] font-bold text-dark-muted uppercase mb-2">Attachments</label>
+        <div class="bg-dark-bg border border-dark-border p-3 rounded-sm mt-4">
+          <label class="gnfc-modal-label" style="margin-bottom:0.5rem;">Attachments</label>
           <div class="flex gap-4">
             <label class="flex items-center gap-2 cursor-pointer select-none">
               <input type="checkbox" id="modal-attach-1"
@@ -502,33 +385,24 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Engineer's Remark</label>
-            <textarea id="modal-eng-remark" rows="3"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none"></textarea>
+            <label class="gnfc-modal-label">Engineer's Remark</label>
+            <textarea id="modal-eng-remark" rows="3" class="gnfc-modal-input"></textarea>
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Executive Remark</label>
-            <textarea id="modal-exec-remark" rows="3"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none"></textarea>
+            <label class="gnfc-modal-label">Executive Remark</label>
+            <textarea id="modal-exec-remark" rows="3" class="gnfc-modal-input"></textarea>
           </div>
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 p-4 border-t border-dark-border bg-dark-header shrink-0">
-        <button onclick="deleteJob()"
-          class="px-4 py-2 bg-transparent border border-dark-border text-gnfc-red text-xs font-bold rounded-sm hover:bg-gnfc-red/10 hover:border-gnfc-red transition-colors mr-auto">
-          Delete Entry
-        </button>
-        <button onclick="closeJobDetailModal()"
-          class="px-4 py-2 bg-dark-bg border border-dark-border text-dark-muted text-xs font-bold rounded-sm  hover:border-gnfc-blue transition-colors">
-          Cancel
-        </button>
-        <button onclick="saveJobDetails()"
-          class="px-6 py-2 bg-gnfc-blue  text-xs font-bold rounded-sm hover:bg-blue-600 transition-colors shadow-lg shadow-blue-900/20">
-          Save Changes
-        </button>
+      <div class="gnfc-modal-footer gnfc-modal-footer--space-between">
+        <button onclick="deleteJob()" class="gnfc-modal-btn gnfc-modal-btn-danger">Delete Entry</button>
+        <div class="flex gap-3">
+          <button onclick="closeJobDetailModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button onclick="saveJobDetails()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
+        </div>
       </div>
     </div>
   </div>
@@ -564,7 +438,7 @@
           tech: record.tech || '',
           eng: record.eng || '',
           attach: false,
-          remark: `<span class="text-[10px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm font-bold">${record.type === 'system' ? 'System' : 'General'} Export</span>`,
+          remark: `<span class="text-[11px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm font-bold">${record.type === 'system' ? 'System' : 'General'} Export</span>`,
           isExported: true
         });
       });
@@ -593,6 +467,7 @@
     }
 
     let dataTable;
+    var currentJobId = null;
 
     // Render Table
     function renderTable() {
@@ -622,7 +497,7 @@
 
                 <td class="border-r border-dark-border px-3 py-3">
                     <div class="text-xs  font-bold">${item.instType}</div>
-                    <div class="text-[10px] text-gnfc-orange mt-1 font-mono">${item.jobType}</div>
+                    <div class="text-[11px] text-gnfc-orange mt-1 font-mono">${item.jobType}</div>
                 </td>
 
                 <td class="border-r border-dark-border px-3 py-3 font-mono text-dark-muted whitespace-nowrap">${formatDateDisplay(item.date)}</td>
@@ -632,7 +507,7 @@
                 </td>
 
                 <td class="border-r border-dark-border px-2 py-3">
-                    <div class="text-[10px] text-dark-muted text-center">${item.tech || '-'}</div>
+                    <div class="text-[11px] text-dark-muted text-center">${item.tech || '-'}</div>
                     <div class="text-xs font-bold  text-center mt-1">${item.eng}</div>
                 </td>
 
@@ -649,26 +524,24 @@
 
       // Initialize DataTable
       if (jobData.length > 0) {
-          dataTable = new simpleDatatables.DataTable(tableElement, {
-              perPage: 10,
-              perPageSelect: [10, 25, 50, 100],
-              searchable: false, // We have custom search
-              fixedHeight: false,
-              labels: {
-                  placeholder: "Search...",
-                  perPage: "{select} entries per page",
-                  noRows: "No entries found",
-                  info: "Showing {start} to {end} of {rows} entries",
-              }
-          });
+        dataTable = new simpleDatatables.DataTable(tableElement, {
+          perPage: 10,
+          perPageSelect: [10, 25, 50, 100],
+          searchable: false, // We have custom search
+          fixedHeight: false,
+          labels: {
+            placeholder: "Search...",
+            perPage: "{select} entries per page",
+            noRows: "No entries found",
+            info: "Showing {start} to {end} of {rows} entries",
+          }
+        });
       }
     }
 
     // Initial Load
     renderTable();
 
-    // --- Modal Functions ---
-    let currentJobId = null;
 
     function openJobDetailModal(srNumber) {
       const job = jobData.find(j => j.sr === srNumber);

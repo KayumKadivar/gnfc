@@ -11,6 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
     ::-webkit-scrollbar {
@@ -31,7 +32,7 @@
       background: #444;
     }
 
-    /* MicroModal styles */
+    /* MicroModal base */
     .modal {
       display: none;
     }
@@ -40,95 +41,8 @@
       display: block;
     }
 
-    .modal__overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
+    .modal.is-open .gnfc-modal-overlay {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal__container {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 6px;
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-
-    .micromodal-slide {
-      display: none;
-    }
-
-    .micromodal-slide.is-open {
-      display: block;
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__overlay {
-      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__container {
-      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__overlay {
-      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__container {
-      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide .modal__container,
-    .micromodal-slide .modal__overlay {
-      will-change: transform;
-    }
-
-    @keyframes mmfadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes mmfadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    @keyframes mmslideIn {
-      from {
-        transform: translateY(15%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes mmslideOut {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-10%);
-      }
     }
   </style>
 </head>
@@ -187,12 +101,12 @@
           </div>
           <div class="flex gap-2">
             <button onclick="showReport()"
-              class="bg-gnfc-blue hover:bg-blue-600 font-bold py-2.5 px-6 rounded shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 whitespace-nowrap h-9">
+              class="bg-gnfc-blue hover:bg-blue-600 font-bold py-2.5 px-6 rounded shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 whitespace-nowrap h-9 text-white text-sm">
               <i class="ph-bold ph-lightning"></i> Apply Filter
             </button>
 
             <button onclick="resetView()"
-              class="bg-dark-bg border border-dark-border hover:border-gnfc-red hover:text-gnfc-red text-dark-muted font-bold py-2.5 px-4 rounded transition-all flex items-center gap-2 whitespace-nowrap h-9">
+              class="bg-dark-bg border border-dark-border hover:border-gnfc-red hover:text-gnfc-red text-dark-muted font-bold py-2.5 px-4 rounded transition-all flex items-center gap-2 whitespace-nowrap h-9 text-sm">
               <i class="ph-bold ph-arrow-counter-clockwise"></i> Reset
             </button>
           </div>
@@ -224,8 +138,7 @@
                   <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Area</th>
                   <th class="border-r border-dark-border px-2 py-1 w-32 border-b border-dark-border ">LoopNo
                   </th>
-                  <th
-                    class="border-r border-dark-border px-2 py-1 min-w-[150px] border-b border-dark-border ">
+                  <th class="border-r border-dark-border px-2 py-1 min-w-[150px] border-b border-dark-border ">
                     Job</th>
                   <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Tech</th>
                   <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[300px] text-left">Description</th>

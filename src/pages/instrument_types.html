@@ -11,6 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
     ::-webkit-scrollbar {
@@ -31,7 +32,7 @@
       background: #444;
     }
 
-    /* MicroModal styles */
+    /* MicroModal base */
     .modal {
       display: none;
     }
@@ -40,95 +41,8 @@
       display: block;
     }
 
-    .modal__overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
+    .modal.is-open .gnfc-modal-overlay {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal__container {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 6px;
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
-
-    .micromodal-slide {
-      display: none;
-    }
-
-    .micromodal-slide.is-open {
-      display: block;
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__overlay {
-      animation: mmfadeIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__container {
-      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__overlay {
-      animation: mmfadeOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__container {
-      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide .modal__container,
-    .micromodal-slide .modal__overlay {
-      will-change: transform;
-    }
-
-    @keyframes mmfadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes mmfadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    @keyframes mmslideIn {
-      from {
-        transform: translateY(15%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes mmslideOut {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-10%);
-      }
     }
   </style>
 </head>
@@ -227,16 +141,16 @@
                   Tag</th>
                 <th
                   class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border/50  font-black">
-                  Job Type</th>
+                  Job</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
                 <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px]">Description</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Tech/Eng</th>
+                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Tech</th>
                 <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Status</th>
                 <th rowspan="2" class="px-3 py-3 min-w-[120px]">Remarks</th>
               </tr>
               <tr
                 class="bg-dark-header text-[9px] font-bold text-gnfc-blue uppercase text-center border-b border-dark-border">
-                <th class="border-r border-dark-border px-3 py-1">Tag Detail</th>
+                <th class="border-r border-dark-border px-3 py-1">Tag No</th>
                 <th class="border-r border-dark-border px-3 py-1">Instrument Detail</th>
               </tr>
             </thead>
@@ -262,7 +176,7 @@
         { sr: '4', date: '30/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Spare CV received from Store related PM to be done.(By:DKV : 30/12/2025)\nC/V', jobRef: '', tech: 'MRL', desc: '1/2 inch NPT machining is done for hydro test in both 6 inch 300 flange -Passing with water test taken at 10 bar no passing found -Body hydro test taken at 25bar. no leakage is found. Air passing test taken at 6 bar pressure from both side one by one not a single bubble found as leakage. -Stopper bolt provided', engineer: 'MR_', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
         { sr: '5', date: '29/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'V4A-XV0209A', jobType: 'V4A related shutdown simulation defect to be attend.(By:MAJ : 29/12/2025)\nC/V', jobRef: '', tech: 'GAZ', desc: 'V4Avalve was found slight slow in closing so its Pnumatic SOV vent port was checked, it was found block so spare brand new 2 vent port issued and installed in both Pupet valve(1 Inch size) and operation time was checked now it was found ok.', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
         { sr: '6', date: '29/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Spare CV received from Store related PM to be done.(By:MAJ : 29/12/2025)\nC/V', jobRef: '', tech: 'MRL', desc: 'Flange issued machining in flange is required so sent to central workshop.', engineer: 'MR_', engInitials: '', status: 'U/P', statusClass: 'text-amber-600' },
-        { sr: '7', date: '200', tag: 'N.A', tagSubtitle: 'FV003AB', jobType: 'C/V', jobRef: '', tech: 'GAZ', desc: 'Reported that valve was not getting operate in between 0-35% so checked it was Air to close valve and its span was found higher side, span slight adjusted and set and 50% and further stroke was checked and found matching -Start open at 9%', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
+        { sr: '7', date: '29/12/2025', tag: 'N.A', tagSubtitle: 'FV003AB', jobType: 'C/V', jobRef: '', tech: 'GAZ', desc: 'Reported that valve was not getting operate in between 0-35% so checked it was Air to close valve and its span was found higher side, span slight adjusted and set and 50% and further stroke was checked and found matching -Start open at 9%', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' },
         { sr: '8', date: '29/12/2025', area: '700', tag: 'N.A', tagSubtitle: 'FV791', jobType: 'To be checked as reported CV having gland leakage (By:MAJ : 29/12/2025)(Reassign by:MAJ 29/12/2025)\nC/V', jobRef: '', tech: 'PJR', desc: 'After process clearance and valve put on MANUAL From DCS, online Gland Tightening done. Now there is no any leakage found in it.', engineer: 'PJR', engInitials: '', status: '✓ OVER', statusClass: 'text-green-700' }
       ],
       weekly: [],
