@@ -306,51 +306,6 @@
           <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
             <div class="px-4 py-2.5 border-b border-dark-border">
               <h3 class="fw-bold font-15px color-blue flex items-center gap-2">
-                <i class="ph-fill ph-lightning"></i>
-                Quick Actions
-              </h3>
-            </div>
-            <div class="p-3 grid grid-cols-3 gap-2">
-              <a href="/src/pages/technician_logbook.html"
-                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-blue/40 rounded-md p-3 text-center group">
-                <i
-                  class="ph-fill ph-notebook text-xl color-blue mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="font-13px fw-bold color-label group-hover: transition-colors">Logbook</span>
-              </a>
-              <a href="/src/pages/datewise_report.html"
-                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-orange/40 rounded-md p-3 text-center group">
-                <i
-                  class="ph-fill ph-calendar-check text-xl color-orange mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="font-13px fw-bold color-label group-hover: transition-colors">Reports</span>
-              </a>
-              <a href="/src/pages/job_history.html"
-                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-green/40 rounded-md p-3 text-center group">
-                <i
-                  class="ph-fill ph-clock-counter-clockwise text-xl color-green mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="font-13px fw-bold color-label group-hover: transition-colors">History</span>
-              </a>
-              <a href="/src/pages/Sy_PM.html"
-                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-purple/40 rounded-md p-3 text-center group">
-                <i
-                  class="ph-fill ph-wrench text-xl color-purple mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="font-13px fw-bold color-label group-hover: transition-colors">SY/PM</span>
-              </a>
-              <a href="/src/pages/pending_log.html"
-                class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-red/40 rounded-md p-3 text-center group">
-                <i
-                  class="ph-fill ph-warning text-xl color-red mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="font-13px fw-bold color-label group-hover: transition-colors">Pending</span>
-              </a>
-              <a href="/src/pages/settings.html"
-                class="quick-action bg-dark-bg border border-dark-border hover:border-dark-muted/40 rounded-md p-3 text-center group">
-                <i
-                  class="ph-fill ph-gear text-xl color-label mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="font-13px fw-bold color-label group-hover: transition-colors">Settings</span>
-              </a>
-            </div>
-          </div>
-
-        </div>
       </div>
 
       <!-- ─── FOOTER ─── -->
@@ -738,6 +693,23 @@
                </div>
             `;
         });
+      }
+
+      // ── Quick Actions Badges ──
+      const sypmCount = allJobs.filter(j => (j.area === 'SY' || j.area === 'PM') && !isCompletedStatus(j.status)).length;
+      if (sypmCount > 0) {
+          const el = document.getElementById('qa-sypm-badge');
+          if (el) {
+              el.classList.remove('hidden');
+          }
+      }
+
+      if (pendingJobsSafe > 0) {
+          const el = document.getElementById('qa-pending-badge');
+          if (el) {
+              el.textContent = pendingJobsSafe > 99 ? '99+' : pendingJobsSafe;
+              el.classList.remove('hidden');
+          }
       }
 
     })();

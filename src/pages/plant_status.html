@@ -7,13 +7,121 @@
     <title>Plant Status | GNFC</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
     <link rel="stylesheet" href="/src/css/typography.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
-    <script>window.activePage = 'dashboard';</script>
-    <script src="config.js"></script>
+    <script>window.activePage = 'plant_status';</script>
+    <style>
+        .page-shell {
+            padding: 1rem;
+        }
+
+        .unit-panel {
+            background: var(--app-panel);
+            border: 1px solid var(--app-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .unit-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.95rem 1rem;
+            border-bottom: 1px solid var(--app-border);
+        }
+
+        .unit-panel-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--app-text, #e6edf3);
+        }
+
+        .unit-count {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--app-muted, #9aa7b5);
+            background: rgba(87, 148, 242, 0.1);
+            border: 1px solid rgba(87, 148, 242, 0.25);
+            border-radius: 0.45rem;
+            padding: 0.3rem 0.55rem;
+            white-space: nowrap;
+        }
+
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 0.8rem;
+            padding: 1rem;
+        }
+
+        .unit-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 4rem;
+            border: 1px solid var(--app-border);
+            border-radius: 0.65rem;
+            padding: 0.9rem 1rem;
+            background: rgba(15, 23, 42, 0.24);
+            text-decoration: none;
+            transition: border-color 0.18s ease, background-color 0.18s ease;
+        }
+
+        .unit-card:hover {
+            border-color: rgba(87, 148, 242, 0.48);
+            background: rgba(15, 23, 42, 0.36);
+        }
+
+        .unit-name {
+            font-size: 1.08rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--app-text, #e6edf3);
+        }
+
+        .unit-arrow {
+            font-size: 0.95rem;
+            color: var(--app-muted, #9aa7b5);
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 640px) {
+            .unit-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .unit-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .unit-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        html[data-theme-mode="light"] .unit-card {
+            background: #ffffff;
+            border-color: #d6deea;
+        }
+
+        html[data-theme-mode="light"] .unit-card:hover {
+            border-color: #7ea3d8;
+            background: #f9fbff;
+        }
+
+        html[data-theme-mode="light"] .unit-count {
+            color: #52657b;
+        }
+    </style>
 </head>
 
 <body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
@@ -29,70 +137,52 @@
         <script src="/src/js/header.js"></script>
         <script>
             renderHeader({
-                title: "Plant Status Overview",
+                title: "Plant Units",
                 breadcrumbs: [
                     { label: "Plant Status" }
                 ],
-                backLink: "/dashboard.html"
+                backLink: "/src/pages/dashboard.html"
             });
         </script>
 
-        <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
-
-            <div class="bg-dark-panel border border-dark-border rounded-sm mb-4 shadow-sm">
-                <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border bg-dark-panel">
-                    <h3
-                        class="fw-medium color-blue flex items-center gap-2 font-15px cursor-pointer hover-color-white transition">
-                        Plant Status
-                    </h3>
-                    <span
-                        class="font-13px bg-gnfc-green/10 color-green px-2 py-0.5 rounded text-upper fw-bold border border-gnfc-green/20">14
-                        Active</span>
+        <div class="flex-1 overflow-y-auto bg-dark-bg">
+            <section class="page-shell">
+                <div class="unit-panel">
+                    <div class="unit-panel-header">
+                        <h2 class="unit-panel-title">Plant Units</h2>
+                        <span id="unit-count" class="unit-count">0 Units</span>
+                    </div>
+                    <div id="unit-grid" class="unit-grid"></div>
                 </div>
-
-                <div id="units-grid" class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                </div>
-            </div>
+            </section>
         </div>
     </main>
 
     <script>
         const units = [
-            { name: "M1 Unit", status: "Operational", color: "#73BF69" },
-            { name: "M2 Unit", status: "Maintenance", color: "#FF9900" },
-            { name: "AA Section", status: "Operational", color: "#73BF69" },
-            { name: "FA Section", status: "Operational", color: "#73BF69" },
-            { name: "BOILER", status: "Critical", color: "#F2495C" },
-            { name: "AMM", status: "Operational", color: "#73BF69" },
-            { name: "UREA", status: "Operational", color: "#73BF69" },
-            { name: "NPP", status: "Offline", color: "#8e8e9e" },
-            { name: "DM Plant", status: "Operational", color: "#73BF69" },
-            { name: "BAGG", status: "Operational", color: "#73BF69" },
-            { name: "INST WS", status: "Active", color: "#5794F2" },
-            { name: "CMS", status: "Operational", color: "#73BF69" }
+            "AA", "AAQM", "AMM", "ANIPF", "ANITDI", "ASGP",
+            "BAGG", "BOILER", "CMS", "CPSU", "DM", "EA",
+            "FA", "INST WS", "M1", "M2", "UREA"
         ];
 
-        const grid = document.getElementById('units-grid');
-        units.forEach(u => {
-            // Card BG is same as Panel BG (#181b1f) but has hover effect (#22252b)
-            const cardHTML = `
-            <div class="bg-dark-panel border border-dark-border hover:border-gnfc-blue hover:bg-dark-header rounded-sm p-3 relative group cursor-pointer transition-all duration-200 h-24 flex flex-col justify-between shadow-sm">
-                <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-sm" style="background-color: ${u.color}"></div>
-                
-                <div class="flex justify-between items-start pl-3">
-                    <h4 class="fw-bold  font-15px tracking-tight color-primary">${u.name}</h4>
-                    <i class="ph-fill ph-circle text-[8px] animate-pulse" style="color: ${u.color}"></i>
-                </div>
-                
-                <div class="pl-3 flex items-end justify-between border-t border-white/5 pt-2 mt-1">
-                    <span class="font-14px typo-mono fw-medium" style="color: ${u.color}">${u.status}</span>
-                    <span class="font-13px color-label group-hover-color-blue flex items-center gap-1">
-                        View <i class="ph-bold ph-caret-right"></i>
-                    </span>
-                </div>
-            </div>`;
-            grid.innerHTML += cardHTML;
-        });
+        const unitGrid = document.getElementById("unit-grid");
+        const unitCount = document.getElementById("unit-count");
+
+        if (unitCount) {
+            unitCount.textContent = `${units.length} Units`;
+        }
+
+        if (unitGrid) {
+            unitGrid.innerHTML = units.map((unit) => {
+                const href = `/src/pages/plant_detail.html?plant=${encodeURIComponent(unit)}&view=today`;
+                return `
+                    <a href="${href}" class="unit-card" aria-label="Open ${unit}">
+                        <span class="unit-name">${unit}</span>
+                        <i class="ph-bold ph-caret-right unit-arrow" aria-hidden="true"></i>
+                    </a>
+                `;
+            }).join("");
+        }
     </script>
 </body>
 

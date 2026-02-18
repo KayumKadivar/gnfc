@@ -57,69 +57,57 @@
 
     /* ===== PLANT CARD ===== */
     .plant-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(15, 23, 42, 0.26);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border: 3px solid #5794F2;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
 
     .plant-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
+      border-color: rgba(87, 148, 242, 0.45);
+      border: #5794F2;
+      box-shadow: 0 8px 18px rgba(2, 6, 23, 0.2);
     }
 
-    .plant-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
+    .plant-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+      color: var(--app-text, #e6edf3);
     }
 
-    .plant-card:hover::after {
-      opacity: 1;
+    .plant-card-subtitle {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--app-muted, #9aa7b5);
     }
 
-    .plant-card.status-operational::after {
-      background: linear-gradient(135deg, rgba(115, 191, 105, 0.05), transparent 60%);
+    .plant-card-action {
+      color: var(--app-muted, #9aa7b5);
+      transition: color 0.2s ease;
     }
 
-    .plant-card.status-maintenance::after {
-      background: linear-gradient(135deg, rgba(255, 153, 0, 0.05), transparent 60%);
+    .plant-card:hover .plant-card-action {
+      color: #5794F2;
     }
 
-    /* Light mode: stronger glow for visibility */
+    /* Light mode */
     html[data-theme-mode="light"] .plant-card {
       background: #ffffff !important;
-      border-color: var(--app-border) !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      border: 2px solid #cbd5e1 !important;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
     }
 
     html[data-theme-mode="light"] .plant-card:hover {
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+      border: 2px solid #5794F2 !important;
     }
 
-    html[data-theme-mode="light"] .plant-card.status-operational::after {
-      background: linear-gradient(135deg, rgba(115, 191, 105, 0.08), transparent 60%);
-    }
-
-    html[data-theme-mode="light"] .plant-card.status-maintenance::after {
-      background: linear-gradient(135deg, rgba(255, 153, 0, 0.08), transparent 60%);
-    }
-
-    /* ===== STATUS DOT PULSE ===== */
-    .status-dot {
-      animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.5;
-      }
+    html[data-theme-mode="light"] .plant-card-subtitle {
+      color: #64748b;
     }
 
     /* ===== QUICK ACCESS CARD ===== */
@@ -291,18 +279,6 @@
 
             <!-- Summary Stats -->
             <div class="flex items-center gap-3">
-              <div id="stat-operational"
-                class="flex items-center gap-2 bg-gnfc-green/10 border border-gnfc-green/20 rounded-lg px-3 py-1.5">
-                <div class="w-2 h-2 rounded-full bg-gnfc-green status-dot"></div>
-                <span class="font-13px fw-bold color-green text-upper ls-wider">Operational: <span
-                    id="op-count">0</span></span>
-              </div>
-              <div id="stat-maintenance"
-                class="flex items-center gap-2 bg-gnfc-orange/10 border border-gnfc-orange/20 rounded-lg px-3 py-1.5">
-                <div class="w-2 h-2 rounded-full bg-gnfc-orange status-dot" style="animation-delay: 0.5s;"></div>
-                <span class="font-13px fw-bold color-orange text-upper ls-wider">Maintenance: <span
-                    id="mt-count">0</span></span>
-              </div>
               <div class="flex items-center gap-2 bg-gnfc-blue/10 border border-gnfc-blue/20 rounded-lg px-3 py-1.5">
                 <i class="ph-bold ph-factory color-blue font-14px"></i>
                 <span class="font-13px fw-bold color-blue text-upper ls-wider">Total: <span
@@ -322,15 +298,12 @@
           <div class="flex items-center justify-between px-5 py-3 border-b border-dark-border/40">
             <div class="flex items-center gap-3">
               <div class="w-1 h-5 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-teal"></div>
-              <h3 class="fw-bold font-15px tracking-tight section-label cursor-default">Select Plant Unit</h3>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-13px color-secondary typo-mono" id="grid-count">17 Units</span>
+              <h3 class="fw-bold font-18px tracking-tight section-label cursor-default">Select Plant Unit</h3>
             </div>
           </div>
 
           <div id="plant-grid"
-            class="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+            class="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
           </div>
 
         </div>
@@ -342,7 +315,7 @@
 
           <div class="flex items-center gap-3 mb-4">
             <div class="w-1 h-6 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-purple"></div>
-            <h3 class="fw-bold font-15px tracking-tight section-label cursor-default">Officer Logbook Quick Access</h3>
+            <h3 class="fw-bold font-18px tracking-tight section-label cursor-default">Officer Logbook Quick Access</h3>
             <div class="h-px flex-1 bg-gradient-to-r from-dark-border/50 to-transparent"></div>
           </div>
 
@@ -491,49 +464,23 @@
 
     function renderPlantCards() {
       let gridContent = '';
-      let opCount = 0;
-      let mtCount = 0;
 
       units.forEach((code, i) => {
-        const status = i % 4 === 0 ? 'Maintenance' : 'Operational';
-        if (status === 'Operational') opCount++; else mtCount++;
-
-        const isOp = status === 'Operational';
-        const color = isOp ? '#73BF69' : '#FF9900';
-        const statusClass = isOp ? 'status-operational' : 'status-maintenance';
-        const unitNumber = (i + 1).toString().padStart(2, '0');
         const href = `/src/pages/plant_detail.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
-
-        const borderColor = isOp ? 'border-gnfc-green/20 hover:border-gnfc-green/50' : 'border-gnfc-orange/20 hover:border-gnfc-orange/50';
-        const glowColor = isOp ? 'hover:shadow-gnfc-green/10' : 'hover:shadow-gnfc-orange/10';
-        const iconBg = isOp ? 'bg-gnfc-green/10' : 'bg-gnfc-orange/10';
-        const textHover = isOp ? 'group-hover-color-green' : 'group-hover-color-orange';
 
         gridContent += `
           <a href="${href}"
-             class="plant-card ${statusClass} relative glass-card border ${borderColor} rounded-xl p-4 flex flex-col gap-3
-                    group shadow-sm hover:shadow-lg ${glowColor} overflow-hidden"
+             class="plant-card rounded-lg px-4 py-3 group flex items-center justify-between gap-2"
              style="animation: fadeInUp 0.4s cubic-bezier(0.4,0,0.2,1) ${i * 0.03}s both;">
-            
-            <!-- Top: Number + Status Dot -->
-            <div class="flex justify-between items-center">
-              <span class="font-13px typo-mono color-secondary fw-bold ls-wider">#${unitNumber}</span>
-              <div class="flex items-center gap-1.5">
-                <span class="font-10px text-upper fw-bold ls-wider" style="color: ${color}">${status}</span>
-                <div class="w-2 h-2 rounded-full status-dot" style="background-color: ${color}; box-shadow: 0 0 8px ${color}40;"></div>
-              </div>
+
+            <div class="min-w-0">
+              <p class="plant-card-subtitle mb-0.5">Unit Code</p>
+              <h3 class="plant-card-title truncate">${code}</h3>
             </div>
 
-            <!-- Center: Unit Code -->
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center shrink-0">
-                <i class="ph-bold ph-factory font-15px" style="color: ${color}"></i>
-              </div>
-              <h3 class="font-16px fw-bold tracking-tight ${textHover} transition-colors">${code}</h3>
+            <div class="plant-card-action shrink-0">
+              <i class="ph-bold ph-caret-right font-15px"></i>
             </div>
-
-            <!-- Bottom bar -->
-            <div class="h-0.5 w-full rounded-full" style="background: linear-gradient(90deg, ${color}40, transparent);"></div>
           </a>
         `;
       });
@@ -541,8 +488,6 @@
       grid.innerHTML = gridContent;
 
       // Update stats
-      document.getElementById('op-count').textContent = opCount;
-      document.getElementById('mt-count').textContent = mtCount;
       document.getElementById('total-count').textContent = units.length;
       document.getElementById('grid-count').textContent = units.length + ' Units';
     }

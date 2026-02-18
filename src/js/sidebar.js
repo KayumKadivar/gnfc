@@ -50,8 +50,8 @@ function renderSidebar(activePageId) {
             ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard", isCollapsed)}
 
             <!-- Plants / Status -->
-            ${createLink("spp", "/src/pages/plant_status.html", "ph-plant", "SPP", isCollapsed)}
-            ${createLink("plants", "#", "ph-buildings", "PLANTS", isCollapsed)}
+            ${createLink("spp", "#", "ph-plant", "SPP", isCollapsed)}
+            ${createLink("plants", "/src/pages/plant_status.html", "ph-buildings", "PLANTS", isCollapsed)}
 
             <!-- Logs -->
             ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logbook", isCollapsed)}
@@ -108,18 +108,6 @@ function createLink(id, url, icon, text, isCollapsed) {
     const activeClass = isActive
         ? "bg-[#FF9900]/25 border-l-4 border-[#FF9900] color-orange"
         : "color-label hover-color-secondary hover:bg-[#181b1f] border-l-4 border-transparent";
-
-    // Note: border-orange is needed? Or style="border-color: ..."? 
-    // typography.css doesn't validly support border colors via color classes unless I use currentColor or explicit border utils.
-    // I'll stick to replacing text colors. 
-    // isActive check: text-[#FF9900] -> color-orange.
-    
-    // Correction for activeClass:
-    // User had: `bg-[#181b1f] border-l-4 border-[#FF9900]`
-    // I'll keep border-[#FF9900] for now or use style.
-    
-    // User had: `text-[#8e8e9e] hover:text-gray-200`
-    // I replaced with: `color-label hover-color-secondary`
 
     const justifyClass = isCollapsed ? 'justify-center' : '';
     const spanClass = isCollapsed ? 'hidden' : 'block';

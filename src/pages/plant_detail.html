@@ -104,206 +104,163 @@
           <!-- Right: Actions & Tools -->
           <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
 
-            <!-- Quick Actions Group -->
-            <div class="flex items-center gap-1 flex-wrap">
-              <button onclick="AddLogModal.open()"
-                class="flex items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
-                <i class="ph-bold ph-plus"></i> Add Direct Job
+            <button onclick="AddLogModal.open()"
+              class=" items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              <i class="ph-bold ph-plus"></i> Add Job
+            </button>
+
+            <button onclick="window.location.href='/src/pages/shift_logbook.html?view=assigned_today'"
+              class=" items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              Assign Today
+            </button>
+
+            <button onclick="window.location.href='/src/pages/shift_logbook.html?view=assigned_tomorrow'"
+              class=" items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              Assign Tomorrow
+            </button>
+
+            <script>
+              // Hide assigned job cards for Technician role
+              (function () {
+                const role = localStorage.getItem('userRole') || 'technician';
+                if (role === 'technician') {
+                  const section = document.getElementById('assigned-jobs-section');
+                  if (section) section.style.display = 'none';
+                }
+              })();
+            </script>
+
+            <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+
+            <!-- Tools Group -->
+            <div class="flex items-center gap-2">
+              <button id="toggle-pending-btn" onclick="togglePendingMode()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover-color-orange font-14px fw-bold rounded-sm transition-colors"
+                title="Show Pending Logs">
+                <i class="ph-bold ph-clock"></i> Pending
               </button>
 
+              <button id="job-reminder-btn" onclick="openReminderModal()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover:text-purple-400 font-14px fw-bold rounded-sm transition-colors"
+                title="Job Planner / Reminders">
+                <i class="ph-bold ph-calendar-check"></i> Planner
+              </button>
 
-              <!-- Assigned Job Cards (Engineer/Manager only) -->
-              <div id="assigned-jobs-section" class="mt-4">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="w-1 h-6 rounded-full bg-gradient-to-b from-gnfc-orange to-gnfc-red"></div>
-                  <h3 class="fw-bold font-15px tracking-tight section-label cursor-default color-primary">Assigned Jobs</h3>
-                  <div class="h-px flex-1 bg-gradient-to-r from-dark-border/50 to-transparent"></div>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-
-                  <button onclick="window.location.href='/src/pages/shift_logbook.html?view=assigned_today'"
-                    class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-orange/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-orange/5">
-                    <div class="flex items-start justify-between mb-3">
-                      <div
-                        class="w-10 h-10 rounded-xl bg-gnfc-orange/10 border border-gnfc-orange/20 flex items-center justify-center group-hover:bg-gnfc-orange/20 group-hover:scale-110 transition-all duration-300">
-                        <i class="ph-fill ph-clipboard-text text-lg color-orange"></i>
-                      </div>
-                      <i
-                        class="ph-bold ph-arrow-up-right color-label group-hover-color-orange transition-colors font-15px"></i>
-                    </div>
-                    <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">Assigned</p>
-                    <h4 class="font-15px fw-bold group-hover-color-orange transition-colors">Today's Job</h4>
-                    <style>
-                      #assigned-jobs-section .qa-card:nth-child(1)::before {
-                        background: linear-gradient(90deg, #FF9900, #F2495C);
-                      }
-                    </style>
-                  </button>
-
-                  <button onclick="window.location.href='/src/pages/shift_logbook.html?view=assigned_tomorrow'"
-                    class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-red/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-red/5">
-                    <div class="flex items-start justify-between mb-3">
-                      <div
-                        class="w-10 h-10 rounded-xl bg-gnfc-red/10 border border-gnfc-red/20 flex items-center justify-center group-hover:bg-gnfc-red/20 group-hover:scale-110 transition-all duration-300">
-                        <i class="ph-fill ph-calendar-star text-lg color-red"></i>
-                      </div>
-                      <i
-                        class="ph-bold ph-arrow-up-right color-label group-hover-color-red transition-colors font-15px"></i>
-                    </div>
-                    <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">Assigned</p>
-                    <h4 class="font-15px fw-bold group-hover-color-red transition-colors">Tomorrow's Job</h4>
-                    <style>
-                      #assigned-jobs-section .qa-card:nth-child(2)::before {
-                        background: linear-gradient(90deg, #F2495C, #B794F4);
-                      }
-                    </style>
-                  </button>
-
-                </div>
-              </div>
-
-              <script>
-                // Hide assigned job cards for Technician role
-                (function () {
-                  const role = localStorage.getItem('userRole') || 'technician';
-                  if (role === 'technician') {
-                    const section = document.getElementById('assigned-jobs-section');
-                    if (section) section.style.display = 'none';
-                  }
-                })();
-              </script>
-
+              <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
+                class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 font-14px fw-bold rounded-sm transition-colors animate-pulse">
+                <i class="ph-bold ph-warning"></i> Acknowledge
+              </button>
             </div>
+
+
           </div>
+        </div>
 
-          <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
 
-          <!-- Tools Group -->
+      </div>
+
+
+
+      <!-- Filters Drawer (Collapsible) -->
+      <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
+        <div class="flex flex-col md:flex-row items-center gap-4 font-14px">
           <div class="flex items-center gap-2">
-            <button id="toggle-pending-btn" onclick="togglePendingMode()"
-              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover-color-orange font-14px fw-bold rounded-sm transition-colors"
-              title="Show Pending Logs">
-              <i class="ph-bold ph-clock"></i> Pending
-            </button>
-
-            <button id="job-reminder-btn" onclick="openReminderModal()"
-              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover:text-purple-400 font-14px fw-bold rounded-sm transition-colors"
-              title="Job Planner / Reminders">
-              <i class="ph-bold ph-calendar-check"></i> Planner
-            </button>
-
-            <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
-              class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 font-14px fw-bold rounded-sm transition-colors animate-pulse">
-              <i class="ph-bold ph-warning"></i> Acknowledge
-            </button>
+            <span class="color-secondary typo-mono text-upper">Range:</span>
+            <input type="date" id="start-date" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+            <span class="color-secondary">-</span>
+            <input type="date" id="end-date" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
           </div>
 
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters Drawer (Collapsible) -->
-    <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
-      <div class="flex flex-col md:flex-row items-center gap-4 font-14px">
-        <div class="flex items-center gap-2">
-          <span class="color-secondary typo-mono text-upper">Range:</span>
-          <input type="date" id="start-date" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-          <span class="color-secondary">-</span>
-          <input type="date" id="end-date" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-        </div>
-
-        <div class="flex items-center gap-2 flex-1">
-          <span class="color-secondary typo-mono text-upper">Type:</span>
-          <select id="job-type-select" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
-            <option value="">All Jobs</option>
-          </select>
-        </div>
-
-        <button onclick="toggleJobFilter()" class="color-secondary hover-color-white"><i
-            class="ph-bold ph-x"></i></button>
-      </div>
-    </div>
-
-    <div id="dynamic-view-container"
-      class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
-      <div
-        class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
-        <div class="flex items-center gap-2">
-          <i class="ph-fill ph-table text-blue-600 dark:color-blue"></i>
-          <span id="view-title" class="font-15px fw-bold text-slate-800 dark:color-primary">Today Log Book</span>
-          <span id="record-count"
-            class="ml-2 font-13px bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:color-secondary typo-mono">0
-            Records</span>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div class="relative">
-            <i
-              class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 color-secondary font-14px"></i>
-            <input type="text" id="table-search" placeholder="Search logs..."
-              onkeyup="plantLogTable.setSearch(this.value)"
-              class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border color-primary font-14px rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+          <div class="flex items-center gap-2 flex-1">
+            <span class="color-secondary typo-mono text-upper">Type:</span>
+            <select id="job-type-select" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
+              <option value="">All Jobs</option>
+            </select>
           </div>
-          <span id="view-date" class="font-14px typo-mono color-blue dark:color-orange">--.--.----</span>
+
+          <button onclick="toggleJobFilter()" class="color-secondary hover-color-white"><i
+              class="ph-bold ph-x"></i></button>
         </div>
       </div>
 
-      <div class="overflow-x-auto flex-1">
-        <table id="plant-table" class="w-full text-left border-collapse">
-          <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header ">
-            <tr
-              class="font-13px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
-              <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer transition-colors"
-                onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-              <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer transition-colors"
-                onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer transition-colors"
-                onclick="plantLogTable.sort('tag')">Loop No <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th
-                class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border fw-black cursor-pointer transition-colors"
-                onclick="plantLogTable.sort('jobType')">Job <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer transition-colors"
-                onclick="plantLogTable.sort('tech')">Tech</th>
-              <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] transition-colors">
-                Description
-              </th>
-              <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer transition-colors"
-                onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-              <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                <div class="flex items-center justify-between cursor-pointer transition-colors p-1 rounded"
-                  onclick="plantLogTable.sort('status')">
-                  <span>Status</span>
-                </div>
-                <button onclick="toggleStatusFilter(event)"
-                  class="absolute top-5 right-6 color-secondary hover-color-blue focus:outline-none p-1 rounded hover:bg-white/5">
-                  <i class="ph-bold ph-funnel font-14px"></i>
-                </button>
-                <div id="status-filter-dropdown"
-                  class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
-                </div>
-              </th>
-              <th rowspan="2" class="p-2 min-w-[120px] transition-colors">Remarks</th>
-              <th rowspan="2" class="p-2 w-10 transition-colors" title="Add To History">H</th>
-            </tr>
-            <tr
-              class="font-13px fw-bold text-slate-500 dark:color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
-              <th class="border-r border-dark-border p-2 transition-colors">Tag No</th>
-              <th class="border-r border-dark-border p-2 transition-colors">Type of Job</th>
-            </tr>
-          </thead>
-          <tbody id="plantTableBody" class="font-14px typo-mono"></tbody>
-        </table>
-      </div>
+      <div id="dynamic-view-container"
+        class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+        <div
+          class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-table text-blue-600 dark:color-blue"></i>
+            <span id="view-title" class="font-15px fw-bold text-slate-800 dark:color-primary">Today Log Book</span>
+            <span id="record-count"
+              class="ml-2 font-13px bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:color-secondary typo-mono">0
+              Records</span>
+          </div>
 
-      <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
-    </div>
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <i class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 color-secondary font-14px"></i>
+              <input type="text" id="table-search" placeholder="Search logs..."
+                onkeyup="plantLogTable.setSearch(this.value)"
+                class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border color-primary font-14px rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+            </div>
+            <span id="view-date" class="font-14px typo-mono color-blue dark:color-orange">--.--.----</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto flex-1">
+          <table id="plant-table" class="w-full text-left border-collapse">
+            <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header ">
+              <tr
+                class="font-13px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer transition-colors"
+                  onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer transition-colors"
+                  onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+                </th>
+                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer transition-colors"
+                  onclick="plantLogTable.sort('tag')">Loop No <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+                </th>
+                <th
+                  class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border fw-black cursor-pointer transition-colors"
+                  onclick="plantLogTable.sort('jobType')">Job <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+                </th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer transition-colors"
+                  onclick="plantLogTable.sort('tech')">Tech</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] transition-colors">
+                  Description
+                </th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer transition-colors"
+                  onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
+                  <div class="flex items-center justify-between cursor-pointer transition-colors p-1 rounded"
+                    onclick="plantLogTable.sort('status')">
+                    <span>Status</span>
+                  </div>
+                  <button onclick="toggleStatusFilter(event)"
+                    class="absolute top-5 right-6 color-secondary hover-color-blue focus:outline-none p-1 rounded hover:bg-white/5">
+                    <i class="ph-bold ph-funnel font-14px"></i>
+                  </button>
+                  <div id="status-filter-dropdown"
+                    class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
+                  </div>
+                </th>
+                <th rowspan="2" class="p-2 min-w-[120px] transition-colors">Remarks</th>
+                <th rowspan="2" class="p-2 w-10 transition-colors" title="Add To History">H</th>
+              </tr>
+              <tr
+                class="font-13px fw-bold text-slate-500 dark:color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th class="border-r border-dark-border p-2 transition-colors">Tag No</th>
+                <th class="border-r border-dark-border p-2 transition-colors">Type of Job</th>
+              </tr>
+            </thead>
+            <tbody id="plantTableBody" class="font-14px typo-mono"></tbody>
+          </table>
+        </div>
+
+        <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
+      </div>
     </div>
   </main>
 
@@ -504,8 +461,7 @@
                 <!-- Emergency Toggle -->
                 <div class="pt-2 flex justify-end">
                   <label class="flex items-center gap-3 cursor-pointer group select-none">
-                    <span
-                      class="font-14px fw-bold color-secondary group-hover-color-orange transition-colors">Emergency
+                    <span class="font-14px fw-bold color-secondary group-hover-color-orange transition-colors">Emergency
                       Call</span>
                     <div class="relative">
                       <input id="edit-job-emergency" type="checkbox" class="sr-only peer">
@@ -750,6 +706,7 @@
         <button onclick="addToHistory()" class="gnfc-modal-btn gnfc-modal-btn-primary">Add</button>
       </div>
     </div>
+  </div>
   </div>
 
 
