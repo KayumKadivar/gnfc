@@ -18,7 +18,7 @@
 
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -47,30 +47,30 @@
         class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 flex-wrap mb-6 bg-dark-panel p-3 border border-dark-border rounded-md shadow-sm">
 
         <div class="flex items-center gap-3 px-2">
-          <div class="flex items-center gap-2 text-gnfc-blue">
+          <div class="flex items-center gap-2 color-blue">
             <i class="ph-fill ph-calendar-blank"></i>
-            <span class="text-xs font-bold uppercase tracking-wide">Time Range</span>
+            <span class="font-14px fw-bold text-upper ls-wide">Time Range</span>
           </div>
           <div class="h-4 w-px bg-dark-border"></div>
 
           <div class="flex bg-dark-bg p-1 rounded-md border border-dark-border">
             <button data-view="today"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent"
+              class="time-btn px-4 py-1.5 font-14px fw-bold rounded-[4px] transition-all duration-200 border border-transparent"
               aria-pressed="true">
               Today
             </button>
             <button data-view="prev"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              class="time-btn px-4 py-1.5 font-14px fw-bold rounded-[4px] transition-all duration-200 border border-transparent color-secondary hover-color-white"
               aria-pressed="false">
               Prev Day
             </button>
             <button data-view="weekly"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              class="time-btn px-4 py-1.5 font-14px fw-bold rounded-[4px] transition-all duration-200 border border-transparent color-secondary hover-color-white"
               aria-pressed="false">
               Weekly
             </button>
             <button data-view="monthly"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
+              class="time-btn px-4 py-1.5 font-14px fw-bold rounded-[4px] transition-all duration-200 border border-transparent color-secondary hover-color-white"
               aria-pressed="false">
               Monthly
             </button>
@@ -80,9 +80,9 @@
         <!-- Engineer Dropdown and Links -->
         <div class="flex items-center gap-4 px-2">
           <div class="flex items-center gap-2">
-            <label class="text-xs font-bold text-dark-muted uppercase tracking-wide">Manager and Above:</label>
+            <label class="font-14px fw-bold color-secondary text-upper ls-wide">Manager and Above:</label>
             <select id="engineer-select"
-              class="bg-dark-bg border border-dark-border text-white text-xs rounded-md px-3 py-1.5 cursor-pointer hover:border-gnfc-blue transition-colors">
+              class="bg-dark-bg border border-dark-border color-white font-14px rounded-md px-3 py-1.5 cursor-pointer hover:border-gnfc-blue transition-colors">
               <option value="">Select Name</option>
               <option value="DVP">DVP</option>
               <option value="HNP">HNP</option>
@@ -116,7 +116,7 @@
           <div class="h-4 w-px bg-dark-border"></div>
 
           <a href="#" onclick="openOldReportsModal(); return false;"
-            class="text-xs font-bold text-gnfc-blue hover:text-blue-400 transition-colors uppercase tracking-wide">
+            class="font-14px fw-bold color-blue hover:text-blue-400 transition-colors text-upper ls-wide">
             Old Reports
           </a>
         </div>
@@ -126,7 +126,7 @@
       <div class="bg-dark-panel border border-dark-border rounded-sm">
 
         <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border">
-          <h3 class="font-medium text-gnfc-blue text-sm">
+          <h3 class="fw-medium color-blue font-15px">
             Select Plant Unit
           </h3>
         </div>
@@ -141,7 +141,7 @@
 
         <div class="flex items-center gap-3 mb-4">
           <div class="h-8 w-1 bg-gnfc-blue rounded-full"></div>
-          <h3 class="text-white font-bold text-sm tracking-wide">Quick Access</h3>
+          <h3 class="color-white fw-bold font-15px ls-wide">Quick Access</h3>
           <div class="h-px flex-1 bg-dark-border"></div>
         </div>
 
@@ -150,47 +150,47 @@
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=today'"
             class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
             <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-calendar-check text-4xl text-gnfc-blue"></i>
+              <i class="ph-fill ph-calendar-check text-4xl color-blue"></i>
             </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Today</h4>
+            <p class="font-13px fw-bold color-secondary text-upper ls-wider mb-1">View Report</p>
+            <h4 class="font-15px fw-bold color-white group-hover-color-blue transition-colors">Today</h4>
           </button>
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=prev'"
             class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
             <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-clock-counter-clockwise text-4xl text-gnfc-blue"></i>
+              <i class="ph-fill ph-clock-counter-clockwise text-4xl color-blue"></i>
             </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Previous Day</h4>
+            <p class="font-13px fw-bold color-secondary text-upper ls-wider mb-1">View Report</p>
+            <h4 class="font-15px fw-bold color-white group-hover-color-blue transition-colors">Previous Day</h4>
           </button>
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=weekly'"
             class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
             <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-calendar-plus text-4xl text-gnfc-blue"></i>
+              <i class="ph-fill ph-calendar-plus text-4xl color-blue"></i>
             </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Weekly</h4>
+            <p class="font-13px fw-bold color-secondary text-upper ls-wider mb-1">View Report</p>
+            <h4 class="font-15px fw-bold color-white group-hover-color-blue transition-colors">Weekly</h4>
           </button>
 
           <button onclick="window.location.href='/src/pages/shift_logbook.html?view=monthly'"
             class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
             <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-calendar text-4xl text-gnfc-blue"></i>
+              <i class="ph-fill ph-calendar text-4xl color-blue"></i>
             </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Monthly</h4>
+            <p class="font-13px fw-bold color-secondary text-upper ls-wider mb-1">View Report</p>
+            <h4 class="font-15px fw-bold color-white group-hover-color-blue transition-colors">Monthly</h4>
           </button>
 
           <!-- Old Shift Log Button -->
           <button onclick="alert('Old Shift Log feature coming soon!')"
             class="relative overflow-hidden bg-dark-panel border border-gnfc-orange/50 hover:border-gnfc-orange p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
             <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-folder-open text-4xl text-gnfc-orange"></i>
+              <i class="ph-fill ph-folder-open text-4xl color-orange"></i>
             </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">Archive</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-orange transition-colors">Old Shift Log</h4>
+            <p class="font-13px fw-bold color-secondary text-upper ls-wider mb-1">Archive</p>
+            <h4 class="font-15px fw-bold color-white group-hover-color-orange transition-colors">Old Shift Log</h4>
           </button>
 
         </div>
@@ -201,8 +201,8 @@
     <!-- Footer -->
     <footer class="bg-dark-panel border-t border-dark-border py-3">
       <div class="text-center">
-        <p class="text-xs text-dark-muted font-semibold">Instrument Department</p>
-        <p class="text-xs text-dark-muted">Gujarat Narmada Valley Fertilizers Co. Ltd.</p>
+        <p class="font-14px color-secondary fw-semibold">Instrument Department</p>
+        <p class="font-14px color-secondary">Gujarat Narmada Valley Fertilizers Co. Ltd.</p>
       </div>
     </footer>
 
@@ -260,10 +260,10 @@
               <label class="gnfc-modal-label">Date Range</label>
               <div class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center p-1">
                 <input type="date" id="oldReportsStartDate"
-                  class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
+                  class="bg-transparent font-14px color-white outline-none px-2 typo-mono h-full w-36">
                 <span class="text-dark-border px-1">to</span>
                 <input type="date" id="oldReportsEndDate"
-                  class="bg-transparent text-xs text-white outline-none px-2 font-mono h-full w-36">
+                  class="bg-transparent font-14px color-white outline-none px-2 typo-mono h-full w-36">
               </div>
             </div>
           </div>
@@ -305,13 +305,13 @@
         const isActive = btnView === selectedView;
 
         // Reset classes
-        btn.className = "time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent";
+        btn.className = "time-btn px-4 py-1.5 font-14px fw-bold rounded-[4px] transition-all duration-200 border border-transparent";
 
         if (isActive) {
-          btn.classList.add("bg-gnfc-blue", "text-white", "shadow-sm");
+          btn.classList.add("bg-gnfc-blue", "color-white", "shadow-sm");
           btn.setAttribute("aria-pressed", "true");
         } else {
-          btn.classList.add("text-dark-muted", "hover:text-white", "hover:bg-white/5");
+          btn.classList.add("color-secondary", "hover-color-white", "hover:bg-white/5");
           btn.setAttribute("aria-pressed", "false");
         }
       });
@@ -358,13 +358,13 @@
               <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: ${color}"></div>
 
               <div class="flex justify-between items-start pl-2">
-                  <span class="text-[10px] font-mono text-dark-muted font-bold tracking-wider">${unitNumber}</span>
+                  <span class="font-13px typo-mono color-secondary fw-bold ls-wider">${unitNumber}</span>
                   <div class="w-1.5 h-1.5 rounded-full" style="background-color: ${color}; box-shadow: 0 0 4px ${color}"></div>
               </div>
 
               <div class="pl-2 flex items-end justify-between">
-                  <h3 class="text-lg font-bold tracking-tight group-hover:text-gnfc-blue transition-colors">${code}</h3>
-                  <span class="text-[9px] uppercase font-bold text-dark-muted tracking-wider" style="color: ${color}">${status}</span>
+                  <h3 class="font-18px fw-bold tracking-tight group-hover-color-blue transition-colors">${code}</h3>
+                  <span class="font-12px text-upper fw-bold color-secondary ls-wider" style="color: ${color}">${status}</span>
               </div>
           </a>
         `;

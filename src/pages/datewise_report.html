@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datewise Log Report | GNFC</title>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,50 +15,35 @@
   <script src="/src/js/tailwind_config.js"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--app-bg, #0f1115);
-      color: var(--app-text, #e2e8f0);
-    }
-
     /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: var(--app-bg, #0f1115); }
     ::-webkit-scrollbar-thumb { background: var(--app-border, #2a2e36); border-radius: 10px; }
 
-    .report-table thead th {
-      background-color: var(--app-panel-alt, #1f242b);
-      color: var(--app-muted, #94a3b8);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border: 1px solid var(--app-border, #2a2e36);
-      padding: 10px 4px;
-    }
-
-    .report-table tbody td {
-      border: 1px solid var(--app-border, #2a2e36);
-      padding: 12px 8px;
-      vertical-align: top;
-      font-size: 11px;
-      color: var(--app-text, #e2e8f0);
-    }
-
     .date-row {
-      background-color: var(--app-panel-alt, #1f242b);
+      background-color: #1f242b;
       font-weight: 800;
       color: #f59e0b;
       font-size: 11px;
       letter-spacing: 1px;
     }
+    
+    html[data-theme-mode="light"] .date-row {
+        background-color: #f1f5f9;
+        color: #d97706;
+        border-bottom: 1px solid #e2e8f0;
+    }
 
     .date-row td {
-      border-color: var(--app-border, #2a2e36) !important;
+      border-color: #2a2e36 !important;
+    }
+    html[data-theme-mode="light"] .date-row td {
+      border-color: #e2e8f0 !important;
     }
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -95,13 +82,13 @@
       </script>
       <div class="w-full">
         <!-- Compact Horizontal Filter Bar -->
-        <div class="bg-dark-panel border border-dark-border rounded-sm p-4 shadow-sm flex gap-2 my-4 flex flex-wrap gap-4">
+        <div class="bg-dark-panel border border-dark-border rounded-sm p-4 shadow-sm flex gap-2 my-4 flex-wrap">
 
             <!-- Plant Area / Tag No -->
             <div class="flex items-center gap-3">
-              <label class="text-[10px] font-bold text-dark-muted uppercase tracking-wider">Tag No</label>
+              <label class="font-10px fw-bold color-label text-upper ls-wider">Tag No</label>
               <select id="tagNoFilter"
-                class="bg-dark-bg border border-dark-border text-dark-text text-xs rounded px-3 py-1.5 min-w-[100px] focus:border-gnfc-blue outline-none transition-all">
+                class="bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-1.5 min-w-[100px] focus:border-gnfc-blue outline-none transition-all">
                   <option value="">All Tags</option>
                   <option value="FVC0208A">FVC0208A</option>
                   <option value="LV412B">LV412B</option>
@@ -112,23 +99,23 @@
               </select>
           </div>
           <div class="flex items-center gap-3">
-              <label class="block text-[10px] font-bold text-dark-muted uppercase mb-2">Report Period</label>
-              <div class="flex items-center gap-2 bg-dark-bg border border-dark-border rounded px-3 py-1.5">
-                  <input type="date" id="startDateFilter" class="bg-transparent text-dark-text text-xs outline-none">
-                  <span class="text-dark-muted font-bold">to</span>
-                  <input type="date" id="endDateFilter" class="bg-transparent text-dark-text text-xs outline-none">
+              <label class="block font-10px fw-bold color-label text-upper ls-wider mb-2">Report Period</label>
+              <div class="flex items-center gap-2 bg-dark-bg border border-dark-border rounded-sm px-3 py-1.5">
+                  <input type="date" id="startDateFilter" class="bg-transparent color-primary font-12px outline-none">
+                  <span class="color-label fw-bold font-12px">to</span>
+                  <input type="date" id="endDateFilter" class="bg-transparent color-primary font-12px outline-none">
               </div>
           </div>
-          <button onclick="location.reload()" class="px-4 py-2 border border-dark-border text-dark-muted text-xs font-bold rounded hover:bg-white/5 hover:text-dark-text transition-colors h-9">Reset</button>
+          <button onclick="location.reload()" class="px-4 py-2 border border-dark-border color-label font-12px fw-bold rounded-sm hover:bg-white/5 hover-color-primary transition-colors h-9">Reset</button>
       </div>
 
-      <div class="bg-dark-panel border border-dark-border rounded shadow-2xl overflow-hidden">
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-2xl overflow-hidden">
         <div class="px-4 py-3 bg-dark-header border-b border-dark-border flex justify-between items-center">
-          <h3 class="font-bold text-sm flex items-center gap-2">
-            <i class="ph-fill ph-calendar-check text-gnfc-blue"></i>
-            Datewise Log Book: <span id="dateDisplay">09/02/2026 to 16/02/2026</span>
+          <h3 class="fw-bold font-14px flex items-center gap-2 color-primary">
+            <i class="ph-fill ph-calendar-check color-blue font-16px"></i>
+            Datewise Log Book: <span id="dateDisplay" class="color-secondary">09/02/2026 to 16/02/2026</span>
           </h3>
-          <button class="bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-2">
+          <button class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-sm font-12px fw-bold flex items-center gap-2 transition-colors">
               <i class="ph-bold ph-download-simple"></i> Export
           </button>
         </div>
@@ -136,25 +123,25 @@
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse report-table">
             <thead>
-              <tr class="text-center">
-                <th rowspan="2" class="w-12">Sr</th>
-                <th rowspan="2" class="w-16">Area</th>
-                <th colspan="2" class="w-64">Loop No</th>
-                <th colspan="2" class="min-w-[300px]">Job</th>
-                <th rowspan="2" class="w-24">Tech / Eng</th>
-                <th rowspan="2" class="w-20">Status</th>
-                <th rowspan="2" class="w-24">Remarks</th>
-                <th rowspan="2" class="w-12">Add</th>
+              <tr class="text-center font-10px fw-bold color-label text-upper ls-wider bg-dark-header">
+                <th rowspan="2" class="w-12 border-r border-b border-dark-border p-2">Sr</th>
+                <th rowspan="2" class="w-16 border-r border-b border-dark-border p-2">Area</th>
+                <th colspan="2" class="w-64 border-r border-b border-dark-border p-2">Loop No</th>
+                <th colspan="2" class="min-w-[300px] border-r border-b border-dark-border p-2">Job</th>
+                <th rowspan="2" class="w-24 border-r border-b border-dark-border p-2">Tech / Eng</th>
+                <th rowspan="2" class="w-20 border-r border-b border-dark-border p-2">Status</th>
+                <th rowspan="2" class="w-24 border-r border-b border-dark-border p-2">Remarks</th>
+                <th rowspan="2" class="w-12 border-b border-dark-border p-2">Add</th>
               </tr>
-              <tr class="text-center">
-                <th class="text-gnfc-blue">Tag No</th>
-                <th class="text-gnfc-blue">Type / Date</th>
-                <th class="text-gnfc-blue w-20">Tech</th>
-                <th class="text-gnfc-blue text-left px-4">Description</th>
+              <tr class="text-center font-10px fw-bold color-blue text-upper ls-wider bg-dark-header">
+                <th class="border-r border-b border-dark-border p-2">Tag No</th>
+                <th class="border-r border-b border-dark-border p-2">Type / Date</th>
+                <th class="border-r border-b border-dark-border w-20 p-2">Tech</th>
+                <th class="border-b border-dark-border text-left px-4 p-2">Description</th>
               </tr>
             </thead>
-            <tbody id="reportTableBody" class="font-mono">
-              </tbody>
+            <tbody id="reportTableBody" class="typo-mono font-12px">
+            </tbody>
           </table>
         </div>
       </div>
@@ -191,23 +178,23 @@
 
         grouped[date].forEach(item => {
           tbody.innerHTML += `
-            <tr class="hover:bg-white/5 transition-colors">
-              <td class="text-center font-bold text-dark-muted">${item.sr}</td>
-              <td class="text-center font-bold text-gnfc-blue">${item.area}</td>
-              <td class="font-bold text-dark-text text-center">${item.tagNo}</td>
-              <td class="text-[10px] text-dark-muted whitespace-pre-line text-center">${item.type}</td>
-              <td class="text-center font-bold text-dark-muted">${item.tech}</td>
-              <td class="text-dark-text leading-relaxed text-[10.5px] px-4 min-w-[300px]">${item.desc}</td>
-              <td class="text-center">
-                <div class="font-bold border-b border-dark-border pb-1 mb-1 text-dark-text">${item.tech}</div>
-                <div class="font-bold text-gnfc-blue">${item.engr}</div>
+            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border">
+              <td class="text-center font-bold color-label border-r border-dark-border p-2">${item.sr}</td>
+              <td class="text-center font-bold color-blue border-r border-dark-border p-2">${item.area}</td>
+              <td class="font-bold color-primary text-center border-r border-dark-border p-2">${item.tagNo}</td>
+              <td class="text-[10px] color-secondary whitespace-pre-line text-center border-r border-dark-border p-2">${item.type}</td>
+              <td class="text-center font-bold color-label border-r border-dark-border p-2">${item.tech}</td>
+              <td class="color-primary leading-relaxed text-[11px] px-4 min-w-[300px] border-r border-dark-border p-2">${item.desc}</td>
+              <td class="text-center border-r border-dark-border p-2">
+                <div class="font-bold border-b border-dark-border pb-1 mb-1 color-primary">${item.tech}</div>
+                <div class="font-bold color-blue">${item.engr}</div>
               </td>
-              <td class="text-center">
-                <span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 font-black text-[9px] border border-emerald-500/20">${item.status}</span>
+              <td class="text-center border-r border-dark-border p-2">
+                <span class="px-2 py-1 rounded-sm bg-emerald-500/10 text-emerald-400 fw-black font-10px border border-emerald-500/20">${item.status}</span>
               </td>
-              <td class="text-dark-muted italic text-center">${item.remarks || '-'}</td>
-              <td class="text-center">
-                <button class="text-gnfc-blue hover:text-blue-400"><i class="ph-bold ph-plus-circle text-lg"></i></button>
+              <td class="color-label italic text-center border-r border-dark-border p-2">${item.remarks || '-'}</td>
+              <td class="text-center p-2">
+                <button class="color-blue hover-color-blue-400 transition-colors"><i class="ph-bold ph-plus-circle font-18px"></i></button>
               </td>
             </tr>`;
         });

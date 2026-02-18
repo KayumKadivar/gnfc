@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plant Status | GNFC</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +16,7 @@
     <script src="config.js"></script>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden font-sans">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
 
     <script src="/src/js/theme_manager.js"></script>
     <script src="/src/js/sidebar.js"></script>
@@ -41,11 +42,11 @@
             <div class="bg-dark-panel border border-dark-border rounded-sm mb-4 shadow-sm">
                 <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border bg-dark-panel">
                     <h3
-                        class="font-medium text-gnfc-blue flex items-center gap-2 text-sm cursor-pointer hover:text-white transition">
+                        class="fw-medium color-blue flex items-center gap-2 font-15px cursor-pointer hover-color-white transition">
                         Plant Status
                     </h3>
                     <span
-                        class="text-[10px] bg-gnfc-green/10 text-gnfc-green px-2 py-0.5 rounded uppercase font-bold border border-gnfc-green/20">14
+                        class="font-13px bg-gnfc-green/10 color-green px-2 py-0.5 rounded text-upper fw-bold border border-gnfc-green/20">14
                         Active</span>
                 </div>
 
@@ -79,13 +80,13 @@
                 <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-sm" style="background-color: ${u.color}"></div>
                 
                 <div class="flex justify-between items-start pl-3">
-                    <h4 class="font-bold  text-sm tracking-tight">${u.name}</h4>
+                    <h4 class="fw-bold  font-15px tracking-tight color-primary">${u.name}</h4>
                     <i class="ph-fill ph-circle text-[8px] animate-pulse" style="color: ${u.color}"></i>
                 </div>
                 
                 <div class="pl-3 flex items-end justify-between border-t border-white/5 pt-2 mt-1">
-                    <span class="text-xs font-mono font-medium" style="color: ${u.color}">${u.status}</span>
-                    <span class="text-[10px] text-[#8e8e9e] group-hover:text-[#5794F2] flex items-center gap-1">
+                    <span class="font-14px typo-mono fw-medium" style="color: ${u.color}">${u.status}</span>
+                    <span class="font-13px color-label group-hover-color-blue flex items-center gap-1">
                         View <i class="ph-bold ph-caret-right"></i>
                     </span>
                 </div>

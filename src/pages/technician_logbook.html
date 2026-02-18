@@ -7,6 +7,7 @@
   <title>Technician's Logbook | GNFC</title>
 
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -231,7 +232,7 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -264,24 +265,24 @@
             <div class="flex items-center gap-2">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-gnfc-blue/15 flex items-center justify-center">
-                  <i class="ph-fill ph-calendar-blank text-gnfc-blue text-sm"></i>
+                  <i class="ph-fill ph-calendar-blank color-blue font-15px"></i>
                 </div>
-                <span class="text-xs font-bold uppercase tracking-widest text-dark-muted">Time Range</span>
+                <span class="font-14px fw-bold text-upper ls-widest color-secondary">Time Range</span>
               </div>
               <div class="h-5 w-px bg-dark-border/50"></div>
               <div class="flex bg-dark-bg/80 p-1 rounded-lg border border-dark-border/50 gap-x-1">
                 <button data-view="today"
-                  class="time-btn px-4 py-2 text-[11px] font-bold rounded-md transition-all duration-300 border border-transparent"
+                  class="time-btn px-4 py-1.5 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent"
                   aria-pressed="true">
                   Today
                 </button>
                 <button data-view="prev"
-                  class="time-btn px-4 py-2 text-[11px] font-bold rounded-md transition-all duration-300 border border-transparent text-dark-muted hover:text-white"
+                  class="time-btn px-4 py-1.5 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-white"
                   aria-pressed="false">
                   Prev Day
                 </button>
                 <button data-view="weekly"
-                  class="time-btn px-4 py-2 text-[11px] font-bold rounded-md transition-all duration-300 border border-transparent text-dark-muted hover:text-white"
+                  class="time-btn px-4 py-1.5 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-white"
                   aria-pressed="false">
                   Weekly
                 </button>
@@ -293,18 +294,18 @@
               <div id="stat-operational"
                 class="flex items-center gap-2 bg-gnfc-green/10 border border-gnfc-green/20 rounded-lg px-3 py-1.5">
                 <div class="w-2 h-2 rounded-full bg-gnfc-green status-dot"></div>
-                <span class="text-[10px] font-bold text-gnfc-green uppercase tracking-wider">Operational: <span
+                <span class="font-13px fw-bold color-green text-upper ls-wider">Operational: <span
                     id="op-count">0</span></span>
               </div>
               <div id="stat-maintenance"
                 class="flex items-center gap-2 bg-gnfc-orange/10 border border-gnfc-orange/20 rounded-lg px-3 py-1.5">
                 <div class="w-2 h-2 rounded-full bg-gnfc-orange status-dot" style="animation-delay: 0.5s;"></div>
-                <span class="text-[10px] font-bold text-gnfc-orange uppercase tracking-wider">Maintenance: <span
+                <span class="font-13px fw-bold color-orange text-upper ls-wider">Maintenance: <span
                     id="mt-count">0</span></span>
               </div>
               <div class="flex items-center gap-2 bg-gnfc-blue/10 border border-gnfc-blue/20 rounded-lg px-3 py-1.5">
-                <i class="ph-bold ph-factory text-gnfc-blue text-xs"></i>
-                <span class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wider">Total: <span
+                <i class="ph-bold ph-factory color-blue font-14px"></i>
+                <span class="font-13px fw-bold color-blue text-upper ls-wider">Total: <span
                     id="total-count">17</span></span>
               </div>
             </div>
@@ -321,10 +322,10 @@
           <div class="flex items-center justify-between px-5 py-3 border-b border-dark-border/40">
             <div class="flex items-center gap-3">
               <div class="w-1 h-5 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-teal"></div>
-              <h3 class="font-bold text-sm tracking-tight section-label cursor-default">Select Plant Unit</h3>
+              <h3 class="fw-bold font-15px tracking-tight section-label cursor-default">Select Plant Unit</h3>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-[10px] text-dark-muted font-mono" id="grid-count">17 Units</span>
+              <span class="font-13px color-secondary typo-mono" id="grid-count">17 Units</span>
             </div>
           </div>
 
@@ -341,7 +342,7 @@
 
           <div class="flex items-center gap-3 mb-4">
             <div class="w-1 h-6 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-purple"></div>
-            <h3 class="font-bold text-sm tracking-tight section-label cursor-default">Officer Logbook Quick Access</h3>
+            <h3 class="fw-bold font-15px tracking-tight section-label cursor-default">Officer Logbook Quick Access</h3>
             <div class="h-px flex-1 bg-gradient-to-r from-dark-border/50 to-transparent"></div>
           </div>
 
@@ -354,13 +355,13 @@
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-blue/10 border border-gnfc-blue/20 flex items-center justify-center group-hover:bg-gnfc-blue/20 group-hover:scale-110 transition-all duration-300">
-                  <i class="ph-fill ph-calendar-check text-gnfc-blue text-lg"></i>
+                  <i class="ph-fill ph-calendar-check color-blue text-lg"></i>
                 </div>
-                <i
-                  class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-blue/60 transition-colors text-sm"></i>
+                <!-- <i class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-blue/60 transition-colors font-15px"></i> -->
+                 <i class="ph-bold ph-arrow-up-right color-secondary group-hover-color-blue transition-colors font-15px"></i>
               </div>
-              <p class="text-[10px] font-bold text-dark-muted uppercase tracking-widest mb-0.5">View Report</p>
-              <h4 class="text-sm font-bold group-hover:text-gnfc-blue transition-colors">Today</h4>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-blue transition-colors">Today</h4>
               <style>
                 .qa-card:nth-child(1)::before {
                   background: linear-gradient(90deg, #5794F2, #14b8a6);
@@ -373,13 +374,13 @@
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-teal/10 border border-gnfc-teal/20 flex items-center justify-center group-hover:bg-gnfc-teal/20 group-hover:scale-110 transition-all duration-300">
-                  <i class="ph-fill ph-clock-counter-clockwise text-gnfc-teal text-lg"></i>
+                  <i class="ph-fill ph-clock-counter-clockwise color-teal text-lg"></i>
                 </div>
                 <i
-                  class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-teal/60 transition-colors text-sm"></i>
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-teal transition-colors font-15px"></i>
               </div>
-              <p class="text-[10px] font-bold text-dark-muted uppercase tracking-widest mb-0.5">View Report</p>
-              <h4 class="text-sm font-bold group-hover:text-gnfc-teal transition-colors">Previous Day</h4>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-teal transition-colors">Previous Day</h4>
               <style>
                 .qa-card:nth-child(2)::before {
                   background: linear-gradient(90deg, #14b8a6, #10b981);
@@ -392,13 +393,13 @@
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-purple/10 border border-gnfc-purple/20 flex items-center justify-center group-hover:bg-gnfc-purple/20 group-hover:scale-110 transition-all duration-300">
-                  <i class="ph-fill ph-calendar-plus text-gnfc-purple text-lg"></i>
+                  <i class="ph-fill ph-calendar-plus color-purple text-lg"></i>
                 </div>
                 <i
-                  class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-purple/60 transition-colors text-sm"></i>
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-purple transition-colors font-15px"></i>
               </div>
-              <p class="text-[10px] font-bold text-dark-muted uppercase tracking-widest mb-0.5">View Report</p>
-              <h4 class="text-sm font-bold group-hover:text-gnfc-purple transition-colors">Weekly</h4>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-purple transition-colors">Weekly</h4>
               <style>
                 .qa-card:nth-child(3)::before {
                   background: linear-gradient(90deg, #B794F4, #5794F2);
@@ -411,13 +412,13 @@
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-emerald/10 border border-gnfc-emerald/20 flex items-center justify-center group-hover:bg-gnfc-emerald/20 group-hover:scale-110 transition-all duration-300">
-                  <i class="ph-fill ph-calendar text-gnfc-emerald text-lg"></i>
+                  <i class="ph-fill ph-calendar color-green text-lg"></i>
                 </div>
                 <i
-                  class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-emerald/60 transition-colors text-sm"></i>
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-green transition-colors font-15px"></i>
               </div>
-              <p class="text-[10px] font-bold text-dark-muted uppercase tracking-widest mb-0.5">View Report</p>
-              <h4 class="text-sm font-bold group-hover:text-gnfc-emerald transition-colors">Monthly</h4>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-green transition-colors">Monthly</h4>
               <style>
                 .qa-card:nth-child(4)::before {
                   background: linear-gradient(90deg, #10b981, #73BF69);
@@ -434,8 +435,8 @@
     <!-- Footer -->
     <footer class="border-t border-dark-border/40 py-2.5 px-4 bg-dark-panel/50 backdrop-blur-sm">
       <div class="flex items-center justify-between">
-        <p class="text-[10px] text-dark-muted/60 font-medium">Instrument Department &bull; GNFC Ltd.</p>
-        <p class="text-[10px] text-dark-muted/40 font-mono">&copy; 2026</p>
+        <p class="font-13px color-secondary fw-medium">Instrument Department &bull; GNFC Ltd.</p>
+        <p class="font-13px text-dark-muted/40 typo-mono">&copy; 2026</p>
       </div>
     </footer>
 
@@ -454,13 +455,13 @@
         const btnView = btn.dataset.view || "";
         const isActive = btnView === selectedView;
 
-        btn.className = "time-btn px-4 py-2 text-[11px] font-bold rounded-md transition-all duration-300 border border-transparent";
+        btn.className = "time-btn px-4 py-2 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent";
 
         if (isActive) {
-          btn.classList.add("bg-gnfc-blue", "text-white", "shadow-md", "shadow-gnfc-blue/20");
+          btn.classList.add("bg-gnfc-blue", "color-white", "shadow-md", "shadow-gnfc-blue/20");
           btn.setAttribute("aria-pressed", "true");
         } else {
-          btn.classList.add("text-dark-muted", "hover:text-white", "hover:bg-white/5");
+          btn.classList.add("color-secondary", "hover-color-white", "hover:bg-white/5");
           btn.setAttribute("aria-pressed", "false");
         }
       });
@@ -506,7 +507,7 @@
         const borderColor = isOp ? 'border-gnfc-green/20 hover:border-gnfc-green/50' : 'border-gnfc-orange/20 hover:border-gnfc-orange/50';
         const glowColor = isOp ? 'hover:shadow-gnfc-green/10' : 'hover:shadow-gnfc-orange/10';
         const iconBg = isOp ? 'bg-gnfc-green/10' : 'bg-gnfc-orange/10';
-        const textHover = isOp ? 'group-hover:text-gnfc-green' : 'group-hover:text-gnfc-orange';
+        const textHover = isOp ? 'group-hover-color-green' : 'group-hover-color-orange';
 
         gridContent += `
           <a href="${href}"
@@ -516,9 +517,9 @@
             
             <!-- Top: Number + Status Dot -->
             <div class="flex justify-between items-center">
-              <span class="text-[10px] font-mono text-dark-muted/60 font-bold tracking-wider">#${unitNumber}</span>
+              <span class="font-13px typo-mono color-secondary fw-bold ls-wider">#${unitNumber}</span>
               <div class="flex items-center gap-1.5">
-                <span class="text-[8px] uppercase font-bold tracking-wider" style="color: ${color}">${status}</span>
+                <span class="font-10px text-upper fw-bold ls-wider" style="color: ${color}">${status}</span>
                 <div class="w-2 h-2 rounded-full status-dot" style="background-color: ${color}; box-shadow: 0 0 8px ${color}40;"></div>
               </div>
             </div>
@@ -526,9 +527,9 @@
             <!-- Center: Unit Code -->
             <div class="flex items-center gap-2.5">
               <div class="w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center shrink-0">
-                <i class="ph-bold ph-factory text-sm" style="color: ${color}"></i>
+                <i class="ph-bold ph-factory font-15px" style="color: ${color}"></i>
               </div>
-              <h3 class="text-base font-bold tracking-tight ${textHover} transition-colors">${code}</h3>
+              <h3 class="font-16px fw-bold tracking-tight ${textHover} transition-colors">${code}</h3>
             </div>
 
             <!-- Bottom bar -->

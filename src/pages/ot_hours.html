@@ -11,27 +11,11 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="stylesheet" href="/src/css/modal-ui.css">
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #111217;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #2C3235;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #444;
-    }
-
     /* MicroModal base */
     .modal {
       display: none;
@@ -47,7 +31,7 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -82,26 +66,26 @@
       <!-- Search Criteria Panel -->
       <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm">
         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
-          <h3 class="text-xs font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
+          <h3 class="font-12px fw-bold color-blue text-upper ls-widest flex items-center gap-2">
             <i class="ph-bold ph-clock"></i> OT Report Criteria
           </h3>
         </div>
         <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div class="space-y-1">
-            <label class="text-[10px] font-bold uppercase">Start Date</label>
+            <label class="font-10px fw-bold color-label text-upper ls-wide">Start Date</label>
             <input type="date" value="2026-02-01" id="startDate"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              class="w-full bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] font-bold uppercase">End Date</label>
+            <label class="font-10px fw-bold color-label text-upper ls-wide">End Date</label>
             <input type="date" value="2026-02-28" id="endDate"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              class="w-full bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] font-bold uppercase">Select Name</label>
+            <label class="font-10px fw-bold color-label text-upper ls-wide">Select Name</label>
             <div class="relative">
               <select id="techSelect"
-                class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer appearance-none">
+                class="w-full bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer appearance-none">
                 <option value="ALL">ALL</option>
                 <option value="DVP">DVP</option>
                 <option value="JKP">JKP</option>
@@ -109,11 +93,11 @@
                 <option value="NND">NND</option>
               </select>
               <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2  pointer-events-none text-xs"></i>
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-12px"></i>
             </div>
           </div>
           <button onclick="renderTable()"
-            class="bg-gnfc-blue hover:bg-blue-600  font-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide">
+            class="bg-gnfc-blue hover:bg-blue-600 color-white font-12px fw-bold h-[34px] rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-upper ls-wide">
             <i class="ph-bold ph-lightning"></i> Generate Report
           </button>
         </div>
@@ -123,16 +107,16 @@
       <div
         class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col flex-1 overflow-hidden min-h-[400px]">
         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
-          <h3 class="text-xs font-bold  uppercase tracking-wider flex items-center gap-2">
-            <i class="ph-fill ph-file-text text-gnfc-orange"></i> Report Data
+          <h3 class="font-12px fw-bold color-label text-upper ls-wider flex items-center gap-2">
+            <i class="ph-fill ph-file-text color-orange"></i> Report Data
           </h3>
-          <span class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded  font-mono"
+          <span class="font-10px bg-dark-bg border border-dark-border px-2 py-0.5 rounded-sm color-label typo-mono"
             id="totalHours">Total Hours: 0</span>
         </div>
         <div class="overflow-auto flex-1 relative">
           <table class="w-full text-left border-collapse">
             <thead class="bg-dark-header z-10 sticky top-0">
-              <tr class="text-[10px] font-bold  uppercase tracking-widest text-center border-b border-dark-border">
+              <tr class="font-10px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
                 <th class="border-r border-dark-border px-3 py-2 w-24">Date</th>
                 <th class="border-r border-dark-border px-2 py-2 w-16">Tech</th>
                 <th class="border-r border-dark-border px-3 py-2 w-32">TagNo</th>
@@ -141,7 +125,7 @@
                 <th class="px-3 py-2 w-20">OT Hour</th>
               </tr>
             </thead>
-            <tbody id="reportTableBody" class="text-xs font-mono">
+            <tbody id="reportTableBody" class="font-12px typo-mono">
               <!-- Rows will be injected here -->
             </tbody>
           </table>
@@ -174,7 +158,7 @@
       });
 
       if (filteredData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8  italic">No records found for selected criteria</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 color-label italic">No records found for selected criteria</td></tr>';
         totalHoursEl.textContent = `Total Hours: 0`;
         return;
       }
@@ -183,12 +167,12 @@
         total += item.hours;
         const row = `
                 <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
-                    <td class="border-r border-dark-border px-3 py-3 text-center ">${formatDateDisplay(item.date)}</td>
-                    <td class="border-r border-dark-border px-2 py-3 text-center text-gnfc-blue font-bold">${item.tech}</td>
-                    <td class="border-r border-dark-border px-3 py-3 text-center ">${item.tag}</td>
-                    <td class="border-r border-dark-border px-3 py-3 text-center text-gnfc-orange">${item.jobType}</td>
-                    <td class="border-r border-dark-border px-4 py-3 text-dark-text leading-relaxed text-left">${item.desc}</td>
-                    <td class="px-3 py-3 text-center font-bold text-gnfc-blue">${item.hours.toFixed(1)}</td>
+                    <td class="border-r border-dark-border px-3 py-3 text-center color-primary">${formatDateDisplay(item.date)}</td>
+                    <td class="border-r border-dark-border px-2 py-3 text-center color-blue fw-bold">${item.tech}</td>
+                    <td class="border-r border-dark-border px-3 py-3 text-center color-primary">${item.tag}</td>
+                    <td class="border-r border-dark-border px-3 py-3 text-center color-orange">${item.jobType}</td>
+                    <td class="border-r border-dark-border px-4 py-3 color-secondary leading-relaxed text-left">${item.desc}</td>
+                    <td class="px-3 py-3 text-center fw-bold color-blue">${item.hours.toFixed(1)}</td>
                 </tr>
             `;
         tbody.innerHTML += row;

@@ -113,19 +113,19 @@ class PlantLogTable {
 
     renderHeader(columns) {
         return columns.map(col => {
-            if (!col.sortable) return `<th class="${col.class}">${col.label}</th>`;
+            if (!col.sortable) return `<th class="${col.class} font-13px fw-bold color-label text-upper ls-widest">${col.label}</th>`;
 
             const icon = this.sortColumn === col.key
                 ? (this.sortDirection === 'asc' ? 'ph-caret-up' : 'ph-caret-down')
-                : 'ph-caret-up-down'; // distinct 'inactive' state could be just ph-caret-up-down opacity-50
+                : 'ph-caret-up-down'; 
 
-            const activeClass = this.sortColumn === col.key ? 'text-grafana-blue' : 'text-slate-500 dark:text-dark-muted';
+            const activeClass = this.sortColumn === col.key ? 'color-blue' : 'color-label';
 
             return `
-                <th class="${col.class} cursor-pointer hover:bg-white/5 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
+                <th class="${col.class} font-13px fw-bold color-label text-upper ls-widest cursor-pointer hover:bg-white/5 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
                     <div class="flex items-center gap-1 justify-between">
                         <span>${col.label}</span>
-                        <i class="ph-fill ${icon} ${activeClass}"></i>
+                        <i class="ph-fill ${icon} ${activeClass} font-12px"></i>
                     </div>
                 </th>
             `;
@@ -140,35 +140,35 @@ class PlantLogTable {
 
     createRow(item) {
         const statusClass = item.statusColor === 'green'
-            ? 'text-grafana-green bg-grafana-green/10 border-grafana-green/20'
-            : 'text-grafana-orange bg-grafana-orange/10 border-grafana-orange/20';
+            ? 'color-green bg-gnfc-green/10 border-gnfc-green/20'
+            : 'color-orange bg-gnfc-orange/10 border-gnfc-orange/20';
 
         return `
-            <tr class="border-b border-slate-200 dark:border-dark-border group transition-all duration-150" style="border-left: 3px solid transparent;">
-                <td class="p-2.5 text-center font-mono text-[11px] border-r border-slate-200 dark:border-dark-border" style="color: var(--app-muted);">${item.sr}</td>
-                <td class="p-2.5 font-bold text-xs border-r border-slate-200 dark:border-dark-border" style="color: var(--app-text-strong, var(--app-text));">${item.area}</td>
-                <td class="p-2.5 border-r border-slate-200 dark:border-dark-border">
-                    <div class="text-xs text-gnfc-blue font-bold">${item.tag}</div>
-                    <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-md font-mono" style="color: var(--app-muted); background: var(--app-bg); border: 1px solid var(--app-border);">${item.tagSubtitle}</span>
+            <tr class="border-b border-dark-border group transition-all duration-150 hover:bg-white/5" style="border-left: 3px solid transparent;">
+                <td class="p-2.5 text-center typo-mono font-12px border-r border-dark-border color-label">${item.sr}</td>
+                <td class="p-2.5 fw-bold font-13px border-r border-dark-border color-primary">${item.area}</td>
+                <td class="p-2.5 border-r border-dark-border">
+                    <div class="font-13px color-blue fw-bold">${item.tag}</div>
+                    <span class="inline-block mt-1 font-11px px-1.5 py-0.5 rounded-sm typo-mono color-label bg-dark-bg border border-dark-border">${item.tagSubtitle}</span>
                 </td>
-                <td class="p-2.5 border-r border-slate-200 dark:border-dark-border">
-                    <div class="font-semibold text-xs" style="color: var(--app-text);">${item.jobType}</div>
-                    <div class="text-[10px] mt-0.5" style="color: var(--app-muted);">${item.jobRef}</div>
-                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-gnfc-blue/10 text-gnfc-blue" style="border: 1px solid var(--app-border);">${item.jobLabel}</span>` : ''}
+                <td class="p-2.5 border-r border-dark-border">
+                    <div class="fw-medium font-13px color-primary">${item.jobType}</div>
+                    <div class="font-11px mt-0.5 color-label">${item.jobRef}</div>
+                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded-sm font-11px fw-bold bg-gnfc-blue/10 color-blue border border-dark-border">${item.jobLabel}</span>` : ''}
                 </td>
-                <td class="p-2.5 text-center font-bold border-r border-slate-200 dark:border-dark-border" style="color: var(--app-muted);">${item.tech}</td>
-                <td class="p-2.5 border-r border-slate-200 dark:border-dark-border leading-relaxed text-xs" style="color: var(--app-muted);">${item.desc}</td>
-                <td class="p-2.5 text-center border-r border-slate-200 dark:border-dark-border">
-                    <div class="font-bold text-xs" style="color: var(--app-text);">${item.engineer}</div>
-                    <div class="text-[10px]" style="color: var(--app-muted);">${item.engInitials}</div>
+                <td class="p-2.5 text-center fw-bold border-r border-dark-border color-label font-13px">${item.tech}</td>
+                <td class="p-2.5 border-r border-dark-border leading-relaxed font-13px color-secondary">${item.desc}</td>
+                <td class="p-2.5 text-center border-r border-dark-border">
+                    <div class="fw-bold font-13px color-primary">${item.engineer}</div>
+                    <div class="font-11px color-label">${item.engInitials}</div>
                 </td>
-                <td class="p-2.5 text-center border-r border-slate-200 dark:border-dark-border">
+                <td class="p-2.5 text-center border-r border-dark-border">
                     ${item.status ? `
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${statusClass}">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-11px fw-bold border ${statusClass}">
                         ${item.status}
                     </span>` : ''}
                 </td>
-                <td class="p-2.5 text-xs" style="color: var(--app-muted);">${item.remarks}</td>
+                <td class="p-2.5 font-13px color-label">${item.remarks}</td>
             </tr>
         `;
     }
@@ -190,7 +190,7 @@ class PlantLogTable {
 
         if (paginatedData.length === 0) {
             tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-16 text-center italic border-b" style="color: var(--app-muted); border-color: var(--app-border);">
-                <i class="ph ph-clipboard-text text-3xl block mb-2 opacity-30"></i>
+                <i class="ph ph-clipboard-text font-30px block mb-2 opacity-30"></i>
                 No entries found for this view.
             </td></tr>`;
         } else {

@@ -105,9 +105,9 @@
   }
 
   function getStatusClass(color) {
-    if (color === "green") return "text-gnfc-green bg-gnfc-green/10 border-gnfc-green/20";
-    if (color === "orange") return "text-gnfc-orange bg-gnfc-orange/10 border-gnfc-orange/20";
-    return "text-slate-500 dark:text-dark-muted bg-slate-100 dark:bg-dark-bg border-slate-300 dark:border-dark-border";
+    if (color === "green") return "color-green bg-gnfc-green/10 border-gnfc-green/20";
+    if (color === "orange") return "color-orange bg-gnfc-orange/10 border-gnfc-orange/20";
+    return "color-secondary bg-slate-100 dark:bg-dark-bg border-slate-300 dark:border-dark-border";
   }
 
   function statusColor(status) {
@@ -135,7 +135,7 @@
         : "bg-blue-600/90 border-blue-500";
 
     const toast = document.createElement("div");
-    toast.className = `text-xs font-bold border ${toneClass} text-white px-3 py-2 rounded shadow-lg`;
+    toast.className = `font-14px fw-bold border ${toneClass} text-white px-3 py-2 rounded shadow-lg`;
     toast.textContent = message;
     container.appendChild(toast);
     setTimeout(() => toast.remove(), 2600);
@@ -234,42 +234,42 @@
 
     return `
       <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-200 dark:border-dark-border group ${rowClass}">
-        <td class="p-2 text-center font-mono border-r border-gray-200 dark:border-dark-border ${srClass}" ${canEdit ? `onclick="openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
-        <td class="p-2 font-bold text-gray-900 dark:text-white border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
+        <td class="p-2 text-center typo-mono border-r border-gray-200 dark:border-dark-border ${srClass}" ${canEdit ? `onclick="openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
+        <td class="p-2 fw-bold color-primary border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
         <td class="p-2 border-r border-gray-200 dark:border-dark-border">
           <div class="flex items-start justify-between gap-2">
             <div>
-              <div class="text-xs text-blue-600 dark:text-gnfc-blue font-bold">${safeText(job.loop)}</div>
-              <span class="inline-block mt-1 text-[10px] text-gray-500 dark:text-dark-muted bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border font-mono">${safeText(job.tag)}</span>
+              <div class="font-14px color-blue fw-bold">${safeText(job.loop)}</div>
+              <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono">${safeText(job.tag)}</span>
             </div>
-            ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="text-[10px] px-1 py-0.5 border border-red-500/50 text-red-600 dark:text-red-300 rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
+            ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="font-13px px-1 py-0.5 border border-red-500/50 color-red rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
           </div>
         </td>
         <td class="p-2 border-r border-gray-200 dark:border-dark-border">
-          <div class="font-medium text-gray-700 dark:text-gray-300">${safeText(job.jobType)}</div>
-          <div class="text-[10px] text-gray-400 dark:text-dark-muted mt-0.5">${safeText(ref)}</div>
-          <span class="inline-block mt-1 text-[10px] text-gray-400 dark:text-dark-muted bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border font-mono">${safeText(job.typeOfInst)}</span>
+          <div class="fw-medium color-primary">${safeText(job.jobType)}</div>
+          <div class="font-13px color-secondary mt-0.5">${safeText(ref)}</div>
+          <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono">${safeText(job.typeOfInst)}</span>
         </td>
-        <td class="p-2 text-center font-bold text-gray-500 dark:text-dark-muted border-r border-gray-200 dark:border-dark-border">${safeText(job.tech)}</td>
-        <td class="p-2 text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-dark-border leading-relaxed">
+        <td class="p-2 text-center fw-bold color-secondary border-r border-gray-200 dark:border-dark-border">${safeText(job.tech)}</td>
+        <td class="p-2 color-primary border-r border-gray-200 dark:border-dark-border leading-relaxed">
           <div class="${descClass}">${safeText(job.desc || (job.pendingWrite ? "Assigned. Awaiting technician log entry." : ""))}</div>
         </td>
         <td class="p-2 text-center border-r border-gray-200 dark:border-dark-border">
-          <div class="font-bold text-gray-600 dark:text-gray-300">${safeText(job.engineer || "--")}</div>
-          <div class="text-[10px] text-gray-400 dark:text-dark-muted">${safeText(makeInitials(job.engineer || ""))}</div>
+          <div class="fw-bold color-primary">${safeText(job.engineer || "--")}</div>
+          <div class="font-13px color-secondary">${safeText(makeInitials(job.engineer || ""))}</div>
         </td>
         <td class="p-2 text-center border-r border-gray-200 dark:border-dark-border">
-          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-bold border ${badgeClass}">${safeText(job.status)}</span>` : `<span class="text-[10px] text-pink-600 dark:text-pink-300">ASSIGNED</span>`}
-          ${canEdit ? `<button onclick="event.stopPropagation(); openEditModal('${job.id}')" class="mt-1 text-[10px] px-1.5 py-0.5 rounded border border-gray-300 dark:border-dark-border text-gray-400 hover:text-blue-600 dark:text-slate-400 dark:hover:text-white hover:border-blue-600 dark:hover:border-gnfc-blue shadow-sm">Edit</button>` : `<div class="mt-1 text-[10px] text-gray-400 dark:text-slate-500">Locked</div>`}
+          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-13px fw-bold border ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px color-pink">ASSIGNED</span>`}
+          ${canEdit ? `<button onclick="event.stopPropagation(); openEditModal('${job.id}')" class="mt-1 font-13px px-1.5 py-0.5 rounded border border-gray-300 dark:border-dark-border color-secondary hover-color-blue hover:border-blue-600 dark:hover:border-gnfc-blue shadow-sm">Edit</button>` : `<div class="mt-1 font-13px color-secondary">Locked</div>`}
         </td>
-        <td class="p-2 text-gray-600 dark:text-gray-400">
-          <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 border border-gray-300 dark:border-dark-border rounded-sm hover:border-blue-600 dark:hover:border-gnfc-blue hover:text-blue-600 dark:hover:text-white transition-colors shadow-sm">
+        <td class="p-2 color-secondary">
+          <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-13px px-1.5 py-0.5 border border-gray-300 dark:border-dark-border rounded-sm hover:border-blue-600 dark:hover:border-gnfc-blue hover-color-blue transition-colors shadow-sm">
             <i class="ph-bold ph-chat-circle-dots"></i> ${Array.isArray(job.remarks) ? job.remarks.length : 0}
           </button>
-          ${pendingAck ? `<div class="mt-1 text-[10px] text-amber-600 dark:text-amber-300">Ack pending</div>` : ""}
+          ${pendingAck ? `<div class="mt-1 font-13px color-orange">Ack pending</div>` : ""}
         </td>
         <td class="p-2 text-center border-l border-gray-200 dark:border-dark-border">
-          ${job.status === "✓ OVER" ? `<a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="text-blue-600 dark:text-gnfc-blue font-bold text-xs hover:underline cursor-pointer" title="Add to History">H</a>` : ""}
+          ${job.status === "✓ OVER" ? `<a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer" title="Add to History">H</a>` : ""}
         </td>
       </tr>
     `;
@@ -295,10 +295,10 @@
     if (!dropdown) return;
     const statuses = [...new Set(getFilteredJobs(false).map((job) => job.status).filter(Boolean))].sort();
 
-    let html = `<button class="w-full text-left px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border ${elogbookState.selectedStatus ? "" : "text-blue-600 dark:text-gnfc-blue"}" onclick="filterStatus('${STATUS_FILTER_ALL}')">All</button>`;
+    let html = `<button class="w-full text-left px-2 py-1 font-14px hover:bg-slate-100 dark:hover:bg-dark-border ${elogbookState.selectedStatus ? "" : "color-blue"}" onclick="filterStatus('${STATUS_FILTER_ALL}')">All</button>`;
     statuses.forEach((status) => {
-      const selectedClass = elogbookState.selectedStatus === status ? "text-blue-600 dark:text-gnfc-blue" : "";
-      html += `<button class="w-full text-left px-2 py-1 text-xs hover:bg-slate-100 dark:hover:bg-dark-border ${selectedClass}" onclick="filterStatus('${safeText(status)}')">${safeText(status)}</button>`;
+      const selectedClass = elogbookState.selectedStatus === status ? "color-blue" : "";
+      html += `<button class="w-full text-left px-2 py-1 font-14px hover:bg-slate-100 dark:hover:bg-dark-border ${selectedClass}" onclick="filterStatus('${safeText(status)}')">${safeText(status)}</button>`;
     });
     dropdown.innerHTML = html;
   }
@@ -380,11 +380,11 @@
     elogbookState.pendingOnlyMode = false;
 
     document.querySelectorAll(".tab-btn").forEach((btn) => {
-      btn.className = "tab-btn px-4 py-1 text-xs font-medium text-slate-500 dark:text-dark-muted hover:text-slate-700 dark:hover:text-white transition-colors";
+      btn.className = "tab-btn px-4 py-1 font-14px fw-medium color-secondary hover-color-primary transition-colors";
     });
 
     if (buttonEl) {
-      buttonEl.className = "tab-btn px-4 py-1 text-xs font-bold text-blue-600 dark:text-gnfc-orange bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
+      buttonEl.className = "tab-btn px-4 py-1 font-14px fw-bold color-active bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
     }
 
     const viewTitleEl = document.getElementById("view-title");
@@ -474,17 +474,17 @@
     ];
 
     if (!rows.length) {
-      listEl.innerHTML = '<div class="px-3 py-2 text-xs text-dark-muted">No OJR / Weekly pending jobs.</div>';
+      listEl.innerHTML = '<div class="px-3 py-2 font-14px color-secondary">No OJR / Weekly pending jobs.</div>';
       return;
     }
 
     // listEl.innerHTML = rows.map((item) => `
-    //   <div class="px-3 py-2 text-xs flex items-start justify-between gap-3">
+    //   <div class="px-3 py-2 font-14px flex items-start justify-between gap-3">
     //     <div class="space-y-0.5">
-    //       <div class="font-bold text-white">${safeText(item.tag)} <span class="text-dark-muted">(${safeText(item.loop)})</span></div>
-    //       <div class="text-dark-muted">${safeText(item.jobType)} | ${safeText(item.desc)}</div>
+    //       <div class="fw-bold text-white">${safeText(item.tag)} <span class="color-secondary">(${safeText(item.loop)})</span></div>
+    //       <div class="color-secondary">${safeText(item.jobType)} | ${safeText(item.desc)}</div>
     //     </div>
-    //     <button onclick="assignFromPendingSource('${safeText(item.id)}', '${safeText(item.rowType)}')" class="shrink-0 text-[10px] px-2 py-0.5 border border-gnfc-blue/40 text-gnfc-blue rounded-sm hover:bg-gnfc-blue/20">Assign</button>
+    //     <button onclick="assignFromPendingSource('${safeText(item.id)}', '${safeText(item.rowType)}')" class="shrink-0 font-13px px-2 py-0.5 border border-gnfc-blue/40 text-gnfc-blue rounded-sm hover:bg-gnfc-blue/20">Assign</button>
     //   </div>
     // `).join("");
   }
@@ -863,25 +863,25 @@
 
     const remarks = Array.isArray(job.remarks) ? job.remarks : [];
     if (!remarks.length) {
-      history.innerHTML = '<div class="px-3 py-2 text-xs text-gray-500 dark:text-dark-muted">No remarks yet.</div>';
+      history.innerHTML = '<div class="px-3 py-2 font-14px color-secondary">No remarks yet.</div>';
       return;
     }
 
     history.innerHTML = remarks.map((remark) => {
-      const tone = remark.type === "executive" ? "text-green-600 dark:text-green-300" : "text-purple-600 dark:text-purple-300";
+      const tone = remark.type === "executive" ? "color-green" : "color-purple";
       const pending = [];
       if (remark.ackTech && !remark.ackByTech) pending.push("Tech Ack Pending");
       if (remark.ackEng && !remark.ackByEng) pending.push("Eng Ack Pending");
       const state = pending.length ? pending.join(" | ") : "Acknowledged";
 
       return `
-        <div class="px-3 py-2 text-xs">
+        <div class="px-3 py-2 font-14px">
           <div class="flex items-center justify-between">
-            <span class="font-bold ${tone}">${safeText(String(remark.type || "engineer").toUpperCase())}</span>
-            <span class="text-gray-500 dark:text-dark-muted">${safeText(remark.author)} | ${safeText(remark.date)}</span>
+            <span class="fw-bold ${tone}">${safeText(String(remark.type || "engineer").toUpperCase())}</span>
+            <span class="color-secondary">${safeText(remark.author)} | ${safeText(remark.date)}</span>
           </div>
-          <div class="mt-1 text-gray-700 dark:text-gray-300">${safeText(remark.text)}</div>
-          <div class="mt-1 text-[10px] text-amber-600 dark:text-amber-300">${safeText(state)}</div>
+          <div class="mt-1 color-primary">${safeText(remark.text)}</div>
+          <div class="mt-1 font-13px color-orange">${safeText(state)}</div>
         </div>
       `;
     }).join("");
@@ -963,18 +963,18 @@
     if (!list) return;
 
     if (!pending.length) {
-      list.innerHTML = '<div class="px-3 py-2 text-xs text-gray-500 dark:text-dark-muted">No pending acknowledgements.</div>';
+      list.innerHTML = '<div class="px-3 py-2 font-14px color-secondary">No pending acknowledgements.</div>';
       openOverlay("ack-modal");
       return;
     }
 
     list.innerHTML = pending.map(({ job, remark }) => `
-      <label class="flex items-start gap-2 px-3 py-2 text-xs hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
+      <label class="flex items-start gap-2 px-3 py-2 font-14px hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
         <input type="checkbox" class="mt-0.5 ack-check accent-blue-600" data-job-id="${safeText(job.id)}" data-remark-id="${safeText(remark.id)}">
         <div>
-          <div class="font-bold text-gray-900 dark:text-white">${safeText(job.tag)} | ${safeText(job.jobType)}</div>
-          <div class="text-gray-600 dark:text-dark-muted mt-0.5">${safeText(remark.text)}</div>
-          <div class="text-[10px] text-amber-600 dark:text-amber-300 mt-1">${safeText(remark.author)} | ${safeText(remark.date)}</div>
+          <div class="fw-bold color-primary">${safeText(job.tag)} | ${safeText(job.jobType)}</div>
+          <div class="color-secondary mt-0.5">${safeText(remark.text)}</div>
+          <div class="font-13px color-orange mt-1">${safeText(remark.author)} | ${safeText(remark.date)}</div>
         </div>
       </label>
     `).join("");
@@ -1020,7 +1020,7 @@
     if (!list) return;
 
     if (!elogbookState.jobPlannerDue.length) {
-      list.innerHTML = '<div class="text-xs text-gray-500 dark:text-dark-muted">No due jobs from Job Planner.</div>';
+      list.innerHTML = '<div class="font-14px color-secondary">No due jobs from Job Planner.</div>';
       openOverlay("reminder-modal");
       return;
     }
@@ -1028,11 +1028,11 @@
     list.innerHTML = elogbookState.jobPlannerDue.map((job) => `
       <div class="border border-gray-200 dark:border-dark-border rounded-sm p-3 flex items-start justify-between gap-3 bg-gray-50 dark:bg-transparent">
         <div>
-          <div class="text-xs font-bold text-gray-900 dark:text-white">${safeText(job.tag)} <span class="text-purple-600 dark:text-purple-300">(${safeText(job.jobType)})</span></div>
-          <div class="text-xs text-gray-600 dark:text-dark-muted mt-1">${safeText(job.desc)}</div>
-          <div class="text-[10px] text-amber-600 dark:text-amber-300 mt-1">Due: ${safeText(isoDateToSlash(job.dueDate))}</div>
+          <div class="font-14px fw-bold color-primary">${safeText(job.tag)} <span class="color-purple">(${safeText(job.jobType)})</span></div>
+          <div class="font-14px color-secondary mt-1">${safeText(job.desc)}</div>
+          <div class="font-13px color-orange mt-1">Due: ${safeText(isoDateToSlash(job.dueDate))}</div>
         </div>
-        <button onclick="assignReminder('${safeText(job.id)}')" class="text-[10px] px-2 py-1 rounded-sm border border-purple-200 dark:border-purple-500/40 text-purple-600 dark:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-500/20 transition-colors">Assign</button>
+        <button onclick="assignReminder('${safeText(job.id)}')" class="font-13px px-2 py-1 rounded-sm border border-purple-200 dark:border-purple-500/40 color-purple hover:bg-purple-100 dark:hover:bg-purple-500/20 transition-colors">Assign</button>
       </div>
     `).join("");
 

@@ -1,6 +1,20 @@
 const SIDEBAR_COLLAPSED_CLASS = 'w-12';
 const SIDEBAR_EXPANDED_CLASS = 'w-48';
 
+function getLoggedInUser() {
+    const role = (localStorage.getItem('userRole') || '').toLowerCase();
+    const storedName = (localStorage.getItem('currentUserName') || '').trim();
+
+    const roleToName = {
+        technician: 'Technician',
+        engineer: 'Engineer',
+        manager: 'Manager',
+    };
+
+    const name = storedName || roleToName[role] || 'Admin User';
+    return { role, name };
+}
+
 function renderSidebar(activePageId) {
     window.activePage = activePageId || window.activePage || '';
 
@@ -8,6 +22,9 @@ function renderSidebar(activePageId) {
     const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     const widthClass = isCollapsed ? SIDEBAR_COLLAPSED_CLASS : SIDEBAR_EXPANDED_CLASS;
     const textClass = isCollapsed ? 'hidden' : 'block';
+    const currentUser = getLoggedInUser();
+    const tooltipName = currentUser.name.replace(/'/g, "\\'");
+    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=2c3235&color=fff`;
 
     // 2. Build HTML
     const sidebarHTML = `
@@ -20,44 +37,54 @@ function renderSidebar(activePageId) {
                      <!-- <img src="/src/assets/images/gnfc-sidebar-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="${isCollapsed ? 'hidden' : 'block'} h-6 w-auto object-contain" alt="GNFC Text"> -->
                      <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-12 w-auto object-contain" alt="GNFC Logo">
                   </div>
-              </div>
+          </div>
               
-               <button onclick="toggleSidebar()" class="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-dark-panel rounded-full border border-dark-borde flex items-center justify-center transition-transform hover:scale-110 z-50 shadow-md ${isCollapsed ? 'rotate-180' : ''}">
-                  <i class="ph-bold ph-caret-left text-xs"></i>
+              <button onclick="toggleSidebar()" class="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-6 bg-dark-panel rounded-full border border-dark-borde flex items-center justify-center transition-transform hover:scale-110 z-50 shadow-md ${isCollapsed ? 'rotate-180' : ''}">
+                  <i class="ph-bold ph-caret-left font-14px"></i>
               </button>
           </div>
   
-          <nav class="flex-1 overflow-y-auto py-4 space-y-1 overflow-x-hidden">
+          <nav class="flex-1 overflow-y-auto overflow-x-hidden">
               
-              <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-2'}">Dashboards</div>
-              
-              ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard", isCollapsed)}
-              ${createLink("plant_status", "/src/pages/plant_status.html", "ph-factory", "Plant Status", isCollapsed)}
-  
-              <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Logs</div>
-              
-              ${createLink("shift_logbook_officer", "/src/pages/officer_log_book.html", "ph-notebook", "Officer Logs", isCollapsed)}
-              
-              ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logs", isCollapsed)}
-              
-              <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">Analysis</div>
-              
-              ${createLink("job_types", "#", "ph-wrench", "Job Analysis", isCollapsed)}
-              ${createLink("instrument_types", "#", "ph-faders", "Instrument Types", isCollapsed)}
+            <!-- Dashboard -->
+            ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard", isCollapsed)}
 
-            <div class="sidebar-section-title ${isCollapsed ? 'hidden' : 'block px-4 text-[10px] font-bold text-[#8e8e9e] uppercase tracking-widest mb-2 mt-6'}">System</div>
+            <!-- Plants / Status -->
+            ${createLink("spp", "/src/pages/plant_status.html", "ph-plant", "SPP", isCollapsed)}
+            ${createLink("plants", "#", "ph-buildings", "PLANTS", isCollapsed)}
 
-            ${createLink("user_info", "/src/pages/user_info.html", "ph-users", "User Info", isCollapsed)}
+            <!-- Logs -->
+            ${createLink("technician_logbook", "/src/pages/technician_logbook.html", "ph-factory", "Technician Logbook", isCollapsed)}
+            ${createLink("shift_logbook_officer", "/src/pages/officer_log_book.html", "ph-notebook", "Officer Logbook", isCollapsed)}
+
+            <!-- Compliance -->
+            ${createLink("iso", "#", "ph-certificate", "ISO/OHSAS/CPCB", isCollapsed)}
+
+            <!-- Jobs & Utility -->
+            ${createLink("job_list", "#", "ph-list-bullets", "JOB LIST", isCollapsed)}
+            ${createLink("utility", "#", "ph-lightning", "UTILITY", isCollapsed)}
+            ${createLink("cms", "#", "ph-monitor", "CMS", isCollapsed)}
+            ${createLink("inst_ws", "#", "ph-desktop", "INST WS", isCollapsed)}
+            ${createLink("opr_job_reg", "#", "ph-clipboard-text", "OPR. Job Reg", isCollapsed)}
+            ${createLink("job_analysis", "/src/pages/job_types.html", "ph-chart-bar", "Job Analysis", isCollapsed)}
+
+            <!-- Communication & Helpers -->
+            ${createLink("send_mail", "#", "ph-envelope", "SEND MAIL", isCollapsed)}
+            ${createLink("helper_details", "#", "ph-users-three", "HELPER DETAILS", isCollapsed)}
+
+            <!-- System -->
+            ${createLink("user_info", "/src/pages/user_info.html", "ph-user", "USER INFO", isCollapsed)}
             ${createLink("settings", "/src/pages/settings.html", "ph-gear", "Settings", isCollapsed)}
+            ${createLink("help", "#", "ph-question", "Help", isCollapsed)}
      
           </nav>
   
-          <div class="${isCollapsed ? 'p-2' : 'p-4'} border-t border-[#2c3235] bg-[#0b0c0e]">
-              <div onmouseenter="showSidebarTooltip(event, 'Admin User')" onmouseleave="hideSidebarTooltip()" class="flex items-center gap-3 text-[#c7d0d9] hover:text-white cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
-                  <img src="https://ui-avatars.com/api/?name=Admin&background=2c3235&color=fff" class="w-8 h-8 rounded-full border border-[#2c3235] shrink-0">
+          <div class="${isCollapsed ? 'p-2' : 'px-4 py-2'} border-t border-[#2c3235] bg-[#0b0c0e]">
+              <div onmouseenter="showSidebarTooltip(event, '${tooltipName}')" onmouseleave="hideSidebarTooltip()" class="flex items-center gap-3 color-secondary hover-color-primary cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
+                  <img src="${avatarUrl}" class="w-8 h-8 rounded-full border border-[#2c3235] shrink-0">
                   <div class="flex-1 ${textClass} whitespace-nowrap transition-opacity duration-300">
-                      <p class="text-sm font-medium leading-none">Admin User</p>
-                      <p class="text-[#5794F2] text-xs" onclick="logout()">Sign out</p>
+                      <p class="font-15px fw-medium leading-none">${currentUser.name}</p>
+                      <p class="color-blue font-14px" onclick="logout()">Sign out</p>
                   </div>
                   <i class="ph-bold ph-sign-out ${textClass}" onclick="logout()"></i>
               </div>
@@ -65,7 +92,7 @@ function renderSidebar(activePageId) {
       </aside>
       
       <!-- Custom Tooltip Element -->
-      <div id="sidebar-tooltip" class="fixed z-9999 hidden px-3 py-1.5 bg-dark-panel text-dark-text text-xs font-bold rounded border border-dark-border shadow-2xl pointer-events-none whitespace-nowrap transition-all duration-200 opacity-0 transform translate-x-2">
+      <div id="sidebar-tooltip" class="fixed z-9999 hidden px-3 py-1.5 bg-dark-panel text-dark-text font-14px fw-bold rounded border border-dark-border shadow-2xl pointer-events-none whitespace-nowrap transition-all duration-200 opacity-0 transform translate-x-2">
           <span id="sidebar-tooltip-text"></span>
           <!-- Arrow -->
           <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 bg-dark-panel border-l border-b border-dark-border"></div>
@@ -79,20 +106,31 @@ function renderSidebar(activePageId) {
 function createLink(id, url, icon, text, isCollapsed) {
     const isActive = id === window.activePage;
     const activeClass = isActive
-        ? "bg-[#181b1f] border-l-4 border-[#FF9900]"
-        : "text-[#8e8e9e] hover:text-gray-200 hover:bg-[#181b1f] border-l-4 border-transparent";
+        ? "bg-[#FF9900]/25 border-l-4 border-[#FF9900] color-orange"
+        : "color-label hover-color-secondary hover:bg-[#181b1f] border-l-4 border-transparent";
+
+    // Note: border-orange is needed? Or style="border-color: ..."? 
+    // typography.css doesn't validly support border colors via color classes unless I use currentColor or explicit border utils.
+    // I'll stick to replacing text colors. 
+    // isActive check: text-[#FF9900] -> color-orange.
+    
+    // Correction for activeClass:
+    // User had: `bg-[#181b1f] border-l-4 border-[#FF9900]`
+    // I'll keep border-[#FF9900] for now or use style.
+    
+    // User had: `text-[#8e8e9e] hover:text-gray-200`
+    // I replaced with: `color-label hover-color-secondary`
 
     const justifyClass = isCollapsed ? 'justify-center' : '';
     const spanClass = isCollapsed ? 'hidden' : 'block';
 
-    // Added onmouseenter/leave
     return `
       <a href="${url}" 
          onmouseenter="showSidebarTooltip(event, '${text}')" 
          onmouseleave="hideSidebarTooltip()"
-         class="flex items-center gap-3 px-4 py-2.5 transition-all duration-200 group ${activeClass} ${justifyClass}">
-          <i class="ph ${icon} text-lg ${isActive ? "text-[#FF9900]" : ""} shrink-0"></i>
-          <span class="font-medium text-sm whitespace-nowrap transition-opacity duration-300 ${spanClass} sidebar-text">${text}</span>
+         class="flex items-center gap-3 px-4 py-1.5 transition-all duration-200 group ${activeClass} ${justifyClass}">
+          <i class="ph ${icon} text-lg ${isActive ? "color-orange" : ""} shrink-0"></i>
+          <span class="fw-medium font-15px whitespace-nowrap transition-opacity duration-300 ${spanClass} sidebar-text">${text}</span>
       </a>`;
 }
 
@@ -158,5 +196,7 @@ function hideSidebarTooltip() {
 
 function logout() {
     localStorage.removeItem('sidebarCollapsed');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('currentUserName');
     window.location.href = '/index.html';
 }

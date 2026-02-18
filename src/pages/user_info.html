@@ -13,437 +13,332 @@
     <script>window.activePage = 'user_info';</script>
     <style>
         .user-row {
-            transition: all 0.15s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .user-row:hover {
-            background: rgba(87, 148, 242, 0.04);
-        }
-
-        .status-online {
-            background: #73BF69;
-            box-shadow: 0 0 6px rgba(115, 191, 105, 0.4);
-        }
-
-        .status-offline {
-            background: #8e8e9e;
-        }
-
-        .status-busy {
-            background: #FF9900;
-            box-shadow: 0 0 6px rgba(255, 153, 0, 0.4);
-        }
-
-        .tab-btn {
-            transition: all 0.2s ease;
-        }
-
-        .tab-btn.active {
-            color: #5794F2;
-            border-bottom: 2px solid #5794F2;
-            background: rgba(87, 148, 242, 0.05);
-        }
-
-        .info-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .info-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .info-scroll::-webkit-scrollbar-thumb {
-            background: #2c3235;
-            border-radius: 4px;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 10;
+            position: relative;
         }
     </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg text-dark-text font-sans antialiased selection:bg-gnfc-orange/30 selection:text-white pb-20">
 
-    <script src="/src/js/theme_manager.js"></script>
-    <script src="/src/js/sidebar.js"></script>
-    <div id="sidebar-container"></div>
-    <script>renderSidebar('user_info');</script>
-
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-
-        <div id="header-container"></div>
-        <script src="/src/js/header.js"></script>
-        <script>
-            renderHeader({
-                title: "User Information",
-                breadcrumbs: [
-                    { label: "User Information" }
-                ],
-                backLink: "/src/pages/dashboard.html"
-            });
-        </script>
-
-        <!-- ═══════ CONTENT ═══════ -->
-        <div class="flex-1 overflow-y-auto p-4 bg-dark-bg info-scroll">
-
-            <!-- ─── STATS ROW ─── -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gnfc-blue/10 flex items-center justify-center">
-                        <i class="ph-fill ph-users text-lg text-gnfc-blue"></i>
-                    </div>
-                    <div>
-                        <div class="text-xl font-bold" id="stat-total">0</div>
-                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Total Users</p>
-                    </div>
+    <!-- Header -->
+    <header class="h-16 bg-dark-header/80 backdrop-blur-md border-b border-dark-border fixed top-0 w-full z-50 flex items-center px-4 justify-between lg:px-8">
+        <div class="flex items-center gap-4">
+            <button id="sidebar-toggle" class="p-2 -ml-2 rounded-lg hover:bg-white/5 color-label transition-colors lg:hidden">
+                <i class="ph ph-list font-24px"></i>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-linear-to-br from-gnfc-orange to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                    <span class="font-bold text-white font-18px">G</span>
                 </div>
-                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gnfc-green/10 flex items-center justify-center">
-                        <i class="ph-fill ph-user-check text-lg text-gnfc-green"></i>
-                    </div>
-                    <div>
-                        <div class="text-xl font-bold " id="stat-online">0</div>
-                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Online</p>
-                    </div>
-                </div>
-                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gnfc-purple/10 flex items-center justify-center">
-                        <i class="ph-fill ph-user-gear text-lg text-gnfc-purple"></i>
-                    </div>
-                    <div>
-                        <div class="text-xl font-bold " id="stat-engineers">0</div>
-                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Engineers</p>
-                    </div>
-                </div>
-                <div class="bg-dark-panel border border-dark-border rounded-md p-3 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gnfc-orange/10 flex items-center justify-center">
-                        <i class="ph-fill ph-wrench text-lg text-gnfc-orange"></i>
-                    </div>
-                    <div>
-                        <div class="text-xl font-bold " id="stat-technicians">0</div>
-                        <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide">Technicians</p>
-                    </div>
-                </div>
+                <span class="font-18px fw-bold color-primary tracking-tight">User Management</span>
             </div>
-
-            <!-- ─── FILTER + SEARCH BAR ─── -->
-            <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm mb-4">
-                <div class="flex items-center justify-between border-b border-dark-border">
-                    <!-- Tabs -->
-                    <div class="flex">
-                        <button
-                            class="tab-btn active px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
-                            data-tab="all" onclick="filterTab('all', this)">All Users</button>
-                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
-                            data-tab="engineer" onclick="filterTab('engineer', this)">Engineers</button>
-                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
-                            data-tab="technician" onclick="filterTab('technician', this)">Technicians</button>
-                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
-                            data-tab="officer" onclick="filterTab('officer', this)">Officers</button>
-                        <button class="tab-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-dark-muted"
-                            data-tab="admin" onclick="filterTab('admin', this)">Admins</button>
-                    </div>
-                    <!-- Search -->
-                    <div class="relative px-3">
-                        <i
-                            class="ph ph-magnifying-glass absolute left-6 top-1/2 -translate-y-1/2 text-dark-muted text-sm"></i>
-                        <input type="text" id="search-input" placeholder="Search users..."
-                            oninput="searchUsers(this.value)"
-                            class="bg-dark-bg border border-dark-border text-dark-text text-xs rounded-md pl-8 pr-3 h-8 w-56 focus:border-gnfc-blue focus:outline-none transition-all placeholder-dark-muted">
-                    </div>
-                </div>
-
-                <!-- ─── TABLE ─── -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs">
-                        <thead>
-                            <tr
-                                class="border-b border-dark-border text-[10px] uppercase tracking-wider text-dark-muted font-bold">
-                                <th class="px-4 py-2.5 text-left">User</th>
-                                <th class="px-4 py-2.5 text-left">Employee ID</th>
-                                <th class="px-4 py-2.5 text-left">Role</th>
-                                <th class="px-4 py-2.5 text-left">Department</th>
-                                <th class="px-4 py-2.5 text-left">Plant</th>
-                                <th class="px-4 py-2.5 text-left">Shift</th>
-                                <th class="px-4 py-2.5 text-left">Contact</th>
-                                <th class="px-4 py-2.5 text-left">Status</th>
-                                <th class="px-4 py-2.5 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user-table-body">
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                <div class="flex items-center justify-between px-4 py-2.5 border-t border-dark-border">
-                    <span class="text-[10px] text-dark-muted font-bold" id="showing-count">Showing 0 of 0 users</span>
-                    <div class="flex items-center gap-1" id="pagination">
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </main>
+        <div class="flex items-center gap-4">
+            <button onclick="openAddUserModal()" class="flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-orange-600 color-primary rounded-lg font-14px fw-medium transition-all shadow-lg shadow-orange-500/20 active:scale-95">
+                <i class="ph-bold ph-plus"></i>
+                <span class="hidden sm:inline">Add User</span>
+            </button>
+        </div>
+    </header>
 
-    <!-- ═══════ USER DETAIL MODAL ═══════ -->
-    <div id="user-modal" class="gnfc-modal-overlay hidden" onclick="if(event.target===this)closeUserModal()">
-        <div class="gnfc-modal-shell gnfc-modal-shell--medium">
-            <div class="gnfc-modal-header">
-                <h3 class="gnfc-modal-title">
-                    <i class="ph-fill ph-user-circle"></i>
-                    User Details
-                </h3>
-                <button onclick="closeUserModal()" class="gnfc-modal-close">
-                    <i class="ph-bold ph-x text-dark-muted"></i>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-dark-panel border-r border-dark-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40 overflow-y-auto custom-scrollbar">
+        <nav class="p-4 space-y-1" id="nav-container">
+            <!-- Navigation will be injected here -->
+        </nav>
+        <div class="p-4 border-t border-dark-border">
+            <div class="flex items-center gap-3 p-3 rounded-lg bg-dark-bg/50 border border-dark-border">
+                <div class="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white fw-bold shadow-lg">
+                    JD
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="font-14px fw-medium color-primary truncate">John Doe</p>
+                    <p class="font-12px color-label truncate">Admin</p>
+                </div>
+                <button class="p-1.5 rounded-md hover:bg-white/10 color-label transition-colors">
+                    <i class="ph ph-sign-out font-18px"></i>
                 </button>
             </div>
-            <div id="user-modal-body" class="gnfc-modal-body">
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 pt-24 px-4 lg:px-8 max-w-7xl mx-auto space-y-6">
+
+        <!-- Filters & Search -->
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between bg-dark-panel p-4 rounded-xl border border-dark-border shadow-sm">
+            <div class="relative w-full sm:w-96">
+                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 color-label font-18px"></i>
+                <input type="text" placeholder="Search users by name, role, or ID..." class="w-full pl-10 pr-4 py-2.5 bg-dark-bg border border-dark-border rounded-lg color-primary placeholder:text-dark-muted focus:ring-2 focus:ring-gnfc-orange/50 focus:border-gnfc-orange transition-all font-14px">
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <select class="bg-dark-bg border border-dark-border color-primary font-14px rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-gnfc-orange/50 focus:border-gnfc-orange outline-none cursor-pointer">
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="operator">Operator</option>
+                    <option value="technician">Technician</option>
+                </select>
+                <button class="p-2.5 rounded-lg bg-dark-bg border border-dark-border color-label hover:color-primary hover:border-dark-muted transition-colors" title="Export CSV">
+                    <i class="ph ph-download-simple font-20px"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-dark-panel border border-dark-border rounded-xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-dark-header border-b border-dark-border">
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider w-16 text-center">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" class="w-4 h-4 rounded border-dark-border bg-dark-bg checked:bg-gnfc-orange focus:ring-offset-dark-panel">
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider">User Details</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider">Role & Plant</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider">Status</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider">Last Active</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-border/50" id="user-table-body">
+                        <!-- Example Row 1 -->
+                        <tr class="user-row hover:bg-dark-header/50 group">
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" class="w-4 h-4 rounded border-dark-border bg-dark-bg checked:bg-gnfc-orange focus:ring-offset-dark-panel">
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center fw-bold font-14px shadow-sm">
+                                        JD
+                                    </div>
+                                    <div>
+                                        <div class="font-14px fw-medium color-primary">John Doe</div>
+                                        <div class="font-12px color-label">john.doe@gnfc.in</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col gap-1">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-10px fw-bold bg-blue-500/10 text-blue-500 border border-blue-500/20 w-fit">
+                                        Shift Incharge
+                                    </span>
+                                    <span class="font-12px color-label">High-Pressure Unit</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="relative flex h-2.5 w-2.5">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                    </span>
+                                    <span class="font-12px fw-medium text-emerald-500">Active</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-12px color-primary">2 mins ago</div>
+                                <div class="font-10px color-label">From 192.168.1.45</div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end gap-2">
+                                    <button class="p-2 rounded-lg hover:bg-blue-500/10 text-blue-500 transition-colors" title="Edit">
+                                        <i class="ph ph-pencil-simple font-18px"></i>
+                                    </button>
+                                    <button class="p-2 rounded-lg hover:bg-amber-500/10 text-amber-500 transition-colors" title="Reset Password">
+                                        <i class="ph ph-key font-18px"></i>
+                                    </button>
+                                    <button class="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors" title="Deactivate">
+                                        <i class="ph ph-prohibit font-18px"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Empty State (Hidden by default) -->
+                        <tr class="hidden">
+                            <td colspan="6" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center justify-center">
+                                    <div class="w-16 h-16 rounded-full bg-dark-bg border border-dark-border flex items-center justify-center mb-4 text-dark-muted">
+                                        <i class="ph ph-users font-32px"></i>
+                                    </div>
+                                    <h3 class="font-16px fw-medium color-primary mb-1">No users found</h3>
+                                    <p class="font-14px color-label">Try adjusting your search or filters</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="px-6 py-4 bg-dark-panel border-t border-dark-border flex items-center justify-between">
+                <span class="font-12px color-label">Showing <span class="fw-medium color-primary">1-10</span> of <span class="fw-medium color-primary">45</span> users</span>
+                <div class="flex items-center gap-2">
+                    <button class="p-2 rounded-lg border border-dark-border bg-dark-bg hover:bg-dark-header color-label disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <i class="ph ph-caret-left font-14px"></i>
+                    </button>
+                    <button class="px-3 py-1.5 rounded-lg bg-gnfc-orange color-primary font-12px fw-medium shadow-lg shadow-orange-500/20">1</button>
+                    <button class="px-3 py-1.5 rounded-lg border border-dark-border bg-dark-bg hover:bg-dark-header color-label font-12px hover:color-primary transition-colors">2</button>
+                    <button class="px-3 py-1.5 rounded-lg border border-dark-border bg-dark-bg hover:bg-dark-header color-label font-12px hover:color-primary transition-colors">3</button>
+                    <span class="color-label">...</span>
+                    <button class="p-2 rounded-lg border border-dark-border bg-dark-bg hover:bg-dark-header color-label disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <i class="ph ph-caret-right font-14px"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Add/Edit User Modal -->
+    <div id="user-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
+
+        <!-- Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-dark-panel text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-xl border border-dark-border opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" id="modal-panel">
+                    
+                    <!-- Header -->
+                    <div class="bg-dark-header px-4 py-3 sm:px-6 border-b border-dark-border flex justify-between items-center">
+                        <div>
+                            <h3 class="font-18px fw-bold color-primary" id="modal-title">Add New User</h3>
+                            <p class="font-12px color-label mt-0.5">Create a new user account and assign permissions</p>
+                        </div>
+                        <button onclick="closeUserModal()" class="rounded-lg p-2 color-label hover:color-primary hover:bg-white/5 transition-colors">
+                            <i class="ph ph-x font-20px"></i>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="px-4 py-5 sm:p-6 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-12px fw-medium color-label mb-1.5">First Name</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted" placeholder="John">
+                            </div>
+                            <div>
+                                <label class="block font-12px fw-medium color-label mb-1.5">Last Name</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted" placeholder="Doe">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-12px fw-medium color-label mb-1.5">Email Address</label>
+                            <div class="relative">
+                                <i class="ph ph-envelope absolute left-3 top-1/2 -translate-y-1/2 color-label"></i>
+                                <input type="email" class="w-full bg-dark-bg border border-dark-border rounded-lg pl-9 pr-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted" placeholder="john.doe@gnfc.in">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-12px fw-medium color-label mb-1.5">Role</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all appearance-none cursor-pointer">
+                                    <option value="operator">Operator</option>
+                                    <option value="shift_incharge">Shift Incharge</option>
+                                    <option value="plant_manager">Plant Manager</option>
+                                    <option value="admin">System Admin</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-12px fw-medium color-label mb-1.5">Department / Plant</label>
+                                <select class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all appearance-none cursor-pointer">
+                                    <option value="hpu">High Pressure Unit</option>
+                                    <option value="lpu">Low Pressure Unit</option>
+                                    <option value="utility">Utility</option>
+                                    <option value="labor">Laboratory</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Permissions Preview -->
+                         <div class="p-3 rounded-lg bg-dark-bg border border-dark-border/50">
+                            <h4 class="font-12px fw-bold color-primary mb-2">Permissions Preview</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 rounded bg-dark-panel border border-dark-border font-10px color-label">Read Logs</span>
+                                <span class="px-2 py-1 rounded bg-dark-panel border border-dark-border font-10px color-label">Create Entries</span>
+                                <span class="px-2 py-1 rounded bg-dark-panel border border-dark-border font-10px color-label">Approve Shift</span>
+                            </div>
+                         </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="bg-dark-header px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3 border-t border-dark-border">
+                        <button type="button" class="w-full inline-flex justify-center rounded-lg border border-transparent bg-gnfc-orange px-4 py-2 text-base font-14px fw-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-gnfc-orange focus:ring-offset-2 focus:ring-offset-dark-panel sm:ml-3 sm:w-auto sm:text-sm transition-all shadow-lg shadow-orange-500/20">
+                            Create User
+                        </button>
+                        <button type="button" onclick="closeUserModal()" class="mt-3 w-full inline-flex justify-center rounded-lg border border-dark-border bg-dark-panel px-4 py-2 text-base font-14px fw-medium color-primary shadow-sm hover:bg-dark-bg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-dark-panel sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ═══════ LOGIC ═══════ -->
+    <!-- Mobile Nav Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <script type="module" src="/src/js/nav-component.js"></script>
     <script>
-        (function () {
-            'use strict';
+        const modal = document.getElementById('user-modal');
+        const backdrop = document.getElementById('modal-backdrop');
+        const panel = document.getElementById('modal-panel');
 
-            // ── Dummy User Data ──
-            const USERS = [
-                { id: 'EMP-1001', name: 'Nilesh R. Kapadiya', initials: 'NRK', role: 'technician', dept: 'Instrumentation', plant: 'AA', shift: 'A', phone: '9876543210', email: 'nrk@gnfc.in', joined: '2018-06-15', status: 'online', jobsDone: 342 },
-                { id: 'EMP-1002', name: 'Dipak P. Bhatt', initials: 'DPB', role: 'technician', dept: 'Instrumentation', plant: 'MF', shift: 'B', phone: '9876543211', email: 'dpb@gnfc.in', joined: '2019-03-22', status: 'online', jobsDone: 289 },
-                { id: 'EMP-1003', name: 'Amit M. Shah', initials: 'AMS', role: 'technician', dept: 'Instrumentation', plant: 'FA', shift: 'A', phone: '9876543212', email: 'ams@gnfc.in', joined: '2017-11-10', status: 'busy', jobsDone: 410 },
-                { id: 'EMP-1004', name: 'Prashant H. Solanki', initials: 'PHS', role: 'engineer', dept: 'Instrumentation', plant: 'AA', shift: 'General', phone: '9876543213', email: 'phs@gnfc.in', joined: '2015-01-05', status: 'online', jobsDone: 567 },
-                { id: 'EMP-1005', name: 'Vishal A. Acharya', initials: 'VAA', role: 'engineer', dept: 'Instrumentation', plant: 'UREA', shift: 'General', phone: '9876543214', email: 'vaa@gnfc.in', joined: '2016-07-20', status: 'offline', jobsDone: 498 },
-                { id: 'EMP-1006', name: 'Paresh H. Bhavsar', initials: 'PHB', role: 'engineer', dept: 'Instrumentation', plant: 'DCS', shift: 'General', phone: '9876543215', email: 'phb@gnfc.in', joined: '2014-09-12', status: 'online', jobsDone: 623 },
-                { id: 'EMP-1007', name: 'Rajesh K. Patel', initials: 'RKP', role: 'officer', dept: 'Instrumentation', plant: 'AMM', shift: 'A', phone: '9876543216', email: 'rkp@gnfc.in', joined: '2012-04-08', status: 'online', jobsDone: 890 },
-                { id: 'EMP-1008', name: 'Suresh T. Mehta', initials: 'STM', role: 'officer', dept: 'Instrumentation', plant: 'BOILER', shift: 'B', phone: '9876543217', email: 'stm@gnfc.in', joined: '2013-02-14', status: 'busy', jobsDone: 756 },
-                { id: 'EMP-1009', name: 'IT Admin', initials: 'IT', role: 'admin', dept: 'IT & Systems', plant: 'DCS', shift: 'General', phone: '9876543218', email: 'it.admin@gnfc.in', joined: '2010-01-01', status: 'online', jobsDone: 0 },
-                { id: 'EMP-1010', name: 'Kiran V. Joshi', initials: 'KVJ', role: 'technician', dept: 'Instrumentation', plant: 'UTIL', shift: 'C', phone: '9876543219', email: 'kvj@gnfc.in', joined: '2020-08-01', status: 'offline', jobsDone: 178 },
-                { id: 'EMP-1011', name: 'Mahesh D. Trivedi', initials: 'MDT', role: 'technician', dept: 'Instrumentation', plant: 'M1', shift: 'A', phone: '9876543220', email: 'mdt@gnfc.in', joined: '2021-01-15', status: 'online', jobsDone: 134 },
-                { id: 'EMP-1012', name: 'Jayesh N. Parmar', initials: 'JNP', role: 'engineer', dept: 'Instrumentation', plant: 'CPSU', shift: 'General', phone: '9876543221', email: 'jnp@gnfc.in', joined: '2016-11-25', status: 'online', jobsDone: 445 },
-                { id: 'EMP-1013', name: 'Bhavesh R. Panchal', initials: 'BRP', role: 'technician', dept: 'Instrumentation', plant: 'BAGG', shift: 'B', phone: '9876543222', email: 'brp@gnfc.in', joined: '2019-05-10', status: 'offline', jobsDone: 267 },
-                { id: 'EMP-1014', name: 'Hardik S. Dave', initials: 'HSD', role: 'technician', dept: 'Instrumentation', plant: 'CMS', shift: 'A', phone: '9876543223', email: 'hsd@gnfc.in', joined: '2022-02-28', status: 'online', jobsDone: 89 },
-                { id: 'EMP-1015', name: 'Alpesh M. Rathod', initials: 'AMR', role: 'officer', dept: 'Instrumentation', plant: 'EA', shift: 'General', phone: '9876543224', email: 'amr@gnfc.in', joined: '2011-06-30', status: 'online', jobsDone: 1023 },
-                { id: 'EMP-1016', name: 'Vikram J. Soni', initials: 'VJS', role: 'technician', dept: 'Instrumentation', plant: 'DM', shift: 'C', phone: '9876543225', email: 'vjs@gnfc.in', joined: '2020-11-12', status: 'busy', jobsDone: 156 },
-                { id: 'EMP-1017', name: 'Chirag P. Modi', initials: 'CPM', role: 'engineer', dept: 'Instrumentation', plant: 'ANIPF', shift: 'General', phone: '9876543226', email: 'cpm@gnfc.in', joined: '2017-03-18', status: 'offline', jobsDone: 389 },
-                { id: 'EMP-1018', name: 'Devang K. Thakkar', initials: 'DKT', role: 'technician', dept: 'Instrumentation', plant: 'ASGP', shift: 'B', phone: '9876543227', email: 'dkt@gnfc.in', joined: '2021-09-05', status: 'online', jobsDone: 112 },
-                { id: 'EMP-1019', name: 'Gaurav B. Nayak', initials: 'GBN', role: 'admin', dept: 'Management', plant: 'INST WS', shift: 'General', phone: '9876543228', email: 'gbn@gnfc.in', joined: '2009-04-15', status: 'online', jobsDone: 0 },
-                { id: 'EMP-1020', name: 'Pranav S. Desai', initials: 'PSD', role: 'technician', dept: 'Instrumentation', plant: 'M2', shift: 'A', phone: '9876543229', email: 'psd@gnfc.in', joined: '2023-01-10', status: 'online', jobsDone: 45 },
-            ];
+        function openAddUserModal() {
+            modal.classList.remove('hidden');
+            // Trigger reflow
+            void modal.offsetWidth;
+            
+            // Animate in
+            backdrop.classList.remove('opacity-0');
+            panel.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+            panel.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+        }
 
-            window._allUsers = USERS;
-            window._currentTab = 'all';
-            window._searchQuery = '';
+        function closeUserModal() {
+            // Animate out
+            backdrop.classList.add('opacity-0');
+            panel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+            panel.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
 
-            // ── Stats ──
-            document.getElementById('stat-total').textContent = USERS.length;
-            document.getElementById('stat-online').textContent = USERS.filter(u => u.status === 'online').length;
-            document.getElementById('stat-engineers').textContent = USERS.filter(u => u.role === 'engineer').length;
-            document.getElementById('stat-technicians').textContent = USERS.filter(u => u.role === 'technician').length;
-
-            // ── Render Table ──
-            window.renderTable = function () {
-                let filtered = _allUsers;
-
-                if (_currentTab !== 'all') {
-                    filtered = filtered.filter(u => u.role === _currentTab);
-                }
-                if (_searchQuery) {
-                    const q = _searchQuery.toLowerCase();
-                    filtered = filtered.filter(u =>
-                        u.name.toLowerCase().includes(q) ||
-                        u.initials.toLowerCase().includes(q) ||
-                        u.id.toLowerCase().includes(q) ||
-                        u.plant.toLowerCase().includes(q) ||
-                        u.email.toLowerCase().includes(q)
-                    );
-                }
-
-                const tbody = document.getElementById('user-table-body');
-                tbody.innerHTML = '';
-
-                if (filtered.length === 0) {
-                    tbody.innerHTML = `
-          <tr>
-            <td colspan="9" class="text-center py-12 text-dark-muted">
-              <i class="ph ph-user-circle text-4xl mb-2 block opacity-30"></i>
-              <p class="text-xs font-bold">No users found</p>
-            </td>
-          </tr>`;
-                    document.getElementById('showing-count').textContent = 'Showing 0 of 0 users';
-                    return;
-                }
-
-                filtered.forEach(user => {
-                    const statusDot = user.status === 'online' ? 'status-online'
-                        : user.status === 'busy' ? 'status-busy' : 'status-offline';
-                    const statusLabel = user.status.charAt(0).toUpperCase() + user.status.slice(1);
-
-                    const roleBg = user.role === 'engineer' ? 'bg-gnfc-purple/10 text-gnfc-purple border-gnfc-purple/20'
-                        : user.role === 'technician' ? 'bg-gnfc-orange/10 text-gnfc-orange border-gnfc-orange/20'
-                            : user.role === 'officer' ? 'bg-gnfc-blue/10 text-gnfc-blue border-gnfc-blue/20'
-                                : 'bg-gnfc-red/10 text-gnfc-red border-gnfc-red/20';
-
-                    const avatarBg = user.role === 'engineer' ? '#B794F4'
-                        : user.role === 'technician' ? '#FF9900'
-                            : user.role === 'officer' ? '#5794F2' : '#F2495C';
-
-                    const shiftBg = user.shift === 'A' ? 'text-gnfc-green'
-                        : user.shift === 'B' ? 'text-gnfc-orange'
-                            : user.shift === 'C' ? 'text-gnfc-red' : 'text-gnfc-blue';
-
-                    tbody.innerHTML += `
-          <tr class="user-row border-b border-dark-border/50 cursor-pointer" onclick="showUserDetail('${user.id}')">
-            <td class="px-4 py-2.5">
-              <div class="flex items-center gap-2.5">
-                <div class="relative">
-                  <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=${avatarBg.replace('#', '')}&color=fff&size=32&font-size=0.4&bold=true"
-                    class="w-8 h-8 rounded-full border border-dark-border">
-                  <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-dark-panel ${statusDot}"></div>
-                </div>
-                <div>
-                  <p class="font-bold  text-xs leading-tight">${user.name}</p>
-                  <p class="text-[10px] text-dark-muted font-mono">${user.initials}</p>
-                </div>
-              </div>
-            </td>
-            <td class="px-4 py-2.5">
-              <span class="text-[10px] font-mono font-bold text-dark-muted">${user.id}</span>
-            </td>
-            <td class="px-4 py-2.5">
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-sm border ${roleBg} uppercase">${user.role}</span>
-            </td>
-            <td class="px-4 py-2.5 text-xs text-dark-muted">${user.dept}</td>
-            <td class="px-4 py-2.5">
-              <span class="text-xs font-bold text-gnfc-blue">${user.plant}</span>
-            </td>
-            <td class="px-4 py-2.5">
-              <span class="text-xs font-bold ${shiftBg}">Shift ${user.shift}</span>
-            </td>
-            <td class="px-4 py-2.5">
-              <div class="flex flex-col">
-                <span class="text-[10px] text-dark-muted"><i class="ph ph-phone mr-0.5"></i>${user.phone}</span>
-                <span class="text-[10px] text-gnfc-blue"><i class="ph ph-envelope mr-0.5"></i>${user.email}</span>
-              </div>
-            </td>
-            <td class="px-4 py-2.5">
-              <div class="flex items-center gap-1.5">
-                <div class="w-2 h-2 rounded-full ${statusDot}"></div>
-                <span class="text-[10px] font-bold text-dark-muted">${statusLabel}</span>
-              </div>
-            </td>
-            <td class="px-4 py-2.5 text-center">
-              <button onclick="event.stopPropagation(); showUserDetail('${user.id}')"
-                class="w-7 h-7 rounded bg-dark-bg border border-dark-border hover:border-gnfc-blue hover:text-gnfc-blue flex items-center justify-center text-dark-muted transition-all mx-auto">
-                <i class="ph-bold ph-eye text-xs"></i>
-              </button>
-            </td>
-          </tr>
-        `;
-                });
-
-                document.getElementById('showing-count').textContent = `Showing ${filtered.length} of ${_allUsers.length} users`;
-            };
-
-            // ── Filter by tab ──
-            window.filterTab = function (tab, btn) {
-                _currentTab = tab;
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                renderTable();
-            };
-
-            // ── Search ──
-            window.searchUsers = function (query) {
-                _searchQuery = query;
-                renderTable();
-            };
-
-            // ── User Detail Modal ──
-            window.showUserDetail = function (userId) {
-                const user = _allUsers.find(u => u.id === userId);
-                if (!user) return;
-
-                const avatarBg = user.role === 'engineer' ? 'B794F4'
-                    : user.role === 'technician' ? 'FF9900'
-                        : user.role === 'officer' ? '5794F2' : 'F2495C';
-
-                const statusDot = user.status === 'online' ? 'status-online'
-                    : user.status === 'busy' ? 'status-busy' : 'status-offline';
-
-                const roleBg = user.role === 'engineer' ? 'bg-gnfc-purple/10 text-gnfc-purple border-gnfc-purple/20'
-                    : user.role === 'technician' ? 'bg-gnfc-orange/10 text-gnfc-orange border-gnfc-orange/20'
-                        : user.role === 'officer' ? 'bg-gnfc-blue/10 text-gnfc-blue border-gnfc-blue/20'
-                            : 'bg-gnfc-red/10 text-gnfc-red border-gnfc-red/20';
-
-                const joinDate = new Date(user.joined);
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                const joinStr = `${joinDate.getDate()} ${months[joinDate.getMonth()]} ${joinDate.getFullYear()}`;
-                const years = new Date().getFullYear() - joinDate.getFullYear();
-
-                document.getElementById('user-modal-body').innerHTML = `
-        <div class="flex items-center gap-4 mb-5">
-          <div class="relative">
-            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=${avatarBg}&color=fff&size=64&font-size=0.35&bold=true"
-              class="w-16 h-16 rounded-full border-2 border-dark-border">
-            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-dark-panel ${statusDot}"></div>
-          </div>
-          <div>
-            <h3 class="text-lg font-bold ">${user.name}</h3>
-            <div class="flex items-center gap-2 mt-1">
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-sm border ${roleBg} uppercase">${user.role}</span>
-              <span class="text-[10px] font-mono text-dark-muted">${user.id}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Department</p>
-            <p class="text-xs font-bold ">${user.dept}</p>
-          </div>
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Plant Assignment</p>
-            <p class="text-xs font-bold text-gnfc-blue">${user.plant}</p>
-          </div>
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Shift</p>
-            <p class="text-xs font-bold ">Shift ${user.shift}</p>
-          </div>
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Jobs Completed</p>
-            <p class="text-xs font-bold text-gnfc-green">${user.jobsDone}</p>
-          </div>
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Phone</p>
-            <p class="text-xs font-bold "><i class="ph ph-phone mr-1 text-gnfc-blue"></i>${user.phone}</p>
-          </div>
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Email</p>
-            <p class="text-xs font-bold text-gnfc-blue"><i class="ph ph-envelope mr-1"></i>${user.email}</p>
-          </div>
-          <div class="bg-dark-bg rounded-md border border-dark-border p-3 col-span-2">
-            <p class="text-[10px] text-dark-muted font-bold uppercase tracking-wide mb-1">Joined Date</p>
-            <p class="text-xs font-bold "><i class="ph ph-calendar mr-1 text-gnfc-orange"></i>${joinStr} <span class="text-dark-muted font-normal">(${years} years)</span></p>
-          </div>
-        </div>
-      `;
-
-                const modal = document.getElementById('user-modal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            };
-
-            window.closeUserModal = function () {
-                const modal = document.getElementById('user-modal');
+            setTimeout(() => {
                 modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            };
+            }, 300); // Match transition duration
+        }
 
-            // Initial render
-            renderTable();
+        // Toggle Sidebar Mobile
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-overlay');
+        const toggleBtn = document.getElementById('sidebar-toggle');
 
-        })();
+        function toggleSidebar() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Sidebar Active State handling is done by nav-component now, 
+        // but we can ensure user_info is marked active if needed.
     </script>
-    <script src="/src/js/pagination.js"></script>
 </body>
 
 </html>

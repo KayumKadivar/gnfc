@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GNFC | Job History</title>
   <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
@@ -18,26 +19,26 @@
   <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
   <style>
     .datatable-input {
-      background-color: #111217;
-      border: 1px solid #2c3235;
-      color: #ececec;
+      background-color: var(--app-bg);
+      border: 1px solid var(--app-border);
+      color: var(--typo-primary);
     }
 
     .datatable-selector {
-      background-color: #111217;
-      border: 1px solid #2c3235;
-      color: #ececec;
+      background-color: var(--app-bg);
+      border: 1px solid var(--app-border);
+      color: var(--typo-primary);
     }
 
     .datatable-pagination a {
-      color: #ececec;
+      color: var(--typo-primary);
     }
 
     .datatable-pagination .datatable-active a,
     .datatable-pagination .datatable-active a:focus,
     .datatable-pagination .datatable-active a:hover {
-      background-color: #111217;
-      color: #ff8c00;
+      background-color: var(--app-bg);
+      color: var(--typo-orange);
     }
   </style>
   <style>
@@ -110,7 +111,7 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -144,18 +145,18 @@
 
       <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm my-4">
         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
-          <h3 class="text-xs font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
+          <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
             <i class="ph-bold ph-sliders-horizontal"></i> Search Criteria
           </h3>
           <div class="flex gap-2">
             <button
-              class="text-[11px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">Default
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Default
               Date</button>
             <button
-              class="text-[11px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">Prev
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Prev
               Year</button>
             <button
-              class="text-[11px] bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm text-dark-muted  transition-colors">This
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">This
               Year</button>
           </div>
         </div>
@@ -163,84 +164,84 @@
         <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-dark-muted uppercase">Loop</label>
+            <label class="font-12px fw-bold color-label text-upper">Loop</label>
             <div class="relative">
               <select
-                class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
                 <option>ALL</option>
                 <option>100</option>
                 <option>200</option>
               </select>
               <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
             </div>
           </div>
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-dark-muted uppercase">Tag</label>
+            <label class="font-12px fw-bold color-label text-upper">Tag</label>
             <div class="relative">
               <select id="tagSelect"
-                class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
                 <option value="">ALL</option>
               </select>
               <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
             </div>
           </div>
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-dark-muted uppercase">Type of Job</label>
+            <label class="font-12px fw-bold color-label text-upper">Type of Job</label>
             <div class="relative">
               <select
-                class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
                 <option>ALL</option>
                 <option>CMS JOB</option>
                 <option>PM JOB</option>
                 <option>BREAKDOWN</option>
               </select>
               <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
             </div>
           </div>
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-dark-muted uppercase">Instrument Type</label>
+            <label class="font-12px fw-bold color-label text-upper">Instrument Type</label>
             <div class="relative">
               <select
-                class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer">
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
                 <option>ALL</option>
                 <option>C/V (Control Valve)</option>
                 <option>PT (Pressure Tx)</option>
                 <option>FT (Flow Tx)</option>
               </select>
               <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none text-xs"></i>
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
             </div>
           </div>
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-dark-muted uppercase">Start Date</label>
+            <label class="font-12px fw-bold color-label text-upper">Start Date</label>
             <input type="date" value="2025-02-09"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
           </div>
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-dark-muted uppercase">End Date</label>
+            <label class="font-12px fw-bold color-label text-upper">End Date</label>
             <input type="date" value="2026-02-09"
-              class="w-full bg-dark-bg border border-dark-border  text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
+              class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
           </div>
 
           <div class="flex items-end gap-2">
             <div class="space-y-1 flex-1">
-              <label class="text-[11px] font-bold text-dark-muted uppercase">Filter Options</label>
+              <label class="font-12px fw-bold color-label text-upper">Filter Options</label>
               <div class="flex gap-2">
                 <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
                   <input type="checkbox" class="accent-gnfc-blue">
-                  <span class="text-xs text-dark-text">Remark</span>
+                  <span class="font-13px color-primary">Remark</span>
                 </div>
                 <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
                   <input type="checkbox" class="accent-gnfc-blue">
-                  <span class="text-xs text-dark-text">Attach</span>
+                  <span class="font-13px color-primary">Attach</span>
                 </div>
               </div>
             </div>
@@ -248,7 +249,7 @@
 
           <div class="flex items-end gap-2">
             <button
-              class="flex-1 bg-gnfc-blue hover:bg-blue-600 font-bold h-8 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wide "
+              class="flex-1 bg-gnfc-blue hover:bg-blue-600 fw-bold h-8 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide"
               onclick="renderTable()">
               <i class="ph-bold ph-lightning"></i> Apply
             </button>
@@ -259,10 +260,10 @@
 
       <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col flex-1 overflow-hidden">
         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center shrink-0">
-          <h3 class="text-xs font-bold  uppercase tracking-wider flex items-center gap-2">
-            <i class="ph-fill ph-table text-gnfc-orange"></i> Job Records
+          <h3 class="font-13px fw-bold text-upper ls-wider flex items-center gap-2">
+            <i class="ph-fill ph-table color-orange"></i> Job Records
           </h3>
-          <span class="text-[11px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono"
+          <span class="font-12px bg-dark-bg border border-dark-border px-2 py-0.5 rounded color-label typo-mono"
             id="recordCount">0 Records Found</span>
         </div>
 
@@ -270,7 +271,7 @@
           <table class="w-full text-left border-collapse">
             <thead class="bg-dark-header z-10">
               <tr
-                class="text-[11px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                class="font-12px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
                 <th rowspan="2"
                   class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-12 sticky left-0 z-20 shadow-[1px_0_0_0_#334155]">
                   Sr</th>
@@ -290,14 +291,14 @@
                 <th rowspan="1" class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Eng Remark
                 </th>
               </tr>
-              <tr class="text-[11px] text-gnfc-blue uppercase text-center border-b border-dark-border">
+              <tr class="font-12px color-blue text-upper text-center border-b border-dark-border">
                 <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Tag</th>
                 <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Job Type</th>
                 <th class="bg-dark-header border-r border-dark-border border-b px-2 py-1">Eng</th>
                 <th class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Exec Remark</th>
               </tr>
             </thead>
-            <tbody id="jobTableBody" class="text-xs font-mono">
+            <tbody id="jobTableBody" class="font-13px typo-mono">
             </tbody>
           </table>
         </div>
@@ -339,7 +340,7 @@
 
         <div class="mt-4">
           <label class="gnfc-modal-label">Description of Job</label>
-          <textarea id="modal-description" rows="5" class="gnfc-modal-input font-mono leading-relaxed"></textarea>
+          <textarea id="modal-description" rows="5" class="gnfc-modal-input typo-mono leading-relaxed"></textarea>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
@@ -375,12 +376,12 @@
             <label class="flex items-center gap-2 cursor-pointer select-none">
               <input type="checkbox" id="modal-attach-1"
                 class="accent-gnfc-blue bg-dark-bg border-dark-border w-4 h-4 rounded-sm">
-              <span class="text-xs text-dark-text">Report.pdf</span>
+              <span class="font-13px color-primary">Report.pdf</span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer select-none">
               <input type="checkbox" id="modal-attach-2"
                 class="accent-gnfc-blue bg-dark-bg border-dark-border w-4 h-4 rounded-sm">
-              <span class="text-xs text-dark-text">Image_001.jpg</span>
+              <span class="font-13px color-primary">Image_001.jpg</span>
             </label>
           </div>
         </div>
@@ -438,7 +439,7 @@
           tech: record.tech || '',
           eng: record.eng || '',
           attach: false,
-          remark: `<span class="text-[11px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm font-bold">${record.type === 'system' ? 'System' : 'General'} Export</span>`,
+          remark: `<span class="font-12px px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">${record.type === 'system' ? 'System' : 'General'} Export</span>`,
           isExported: true
         });
       });
@@ -487,35 +488,35 @@
       jobData.forEach(item => {
         const row = `
             <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group align-top ${item.isExported ? 'bg-emerald-500/5' : ''}">
-                <td class="border-r border-dark-border px-2 py-3 text-center text-gnfc-blue font-mono font-bold cursor-pointer hover:underline hover:text-blue-400 transition-colors bg-dark-panel shadow-[1px_0_0_0_#334155]" onclick="openJobDetailModal(${item.sr})">${item.sr}</td>
-                <td class="border-r border-dark-border px-2 py-3 text-center font-bold ">${item.area}</td>
+                <td class="border-r border-dark-border px-2 py-3 text-center color-blue typo-mono fw-bold cursor-pointer hover:underline hover-color-blue transition-colors bg-dark-panel shadow-[1px_0_0_0_#334155]" onclick="openJobDetailModal(${item.sr})">${item.sr}</td>
+                <td class="border-r border-dark-border px-2 py-3 text-center fw-bold ">${item.area}</td>
 
                 <td class="border-r border-dark-border px-3 py-3">
-                    <div class="text-xs text-dark-muted">${item.loop}</div>
-                    <div class="text-xs font-bold text-gnfc-blue mt-1">${item.tag}</div>
+                    <div class="font-13px color-label">${item.loop}</div>
+                    <div class="font-13px fw-bold color-blue mt-1">${item.tag}</div>
                 </td>
 
                 <td class="border-r border-dark-border px-3 py-3">
-                    <div class="text-xs  font-bold">${item.instType}</div>
-                    <div class="text-[11px] text-gnfc-orange mt-1 font-mono">${item.jobType}</div>
+                    <div class="font-13px fw-bold">${item.instType}</div>
+                    <div class="font-12px color-orange mt-1 typo-mono">${item.jobType}</div>
                 </td>
 
-                <td class="border-r border-dark-border px-3 py-3 font-mono text-dark-muted whitespace-nowrap">${formatDateDisplay(item.date)}</td>
+                <td class="border-r border-dark-border px-3 py-3 typo-mono color-label whitespace-nowrap">${formatDateDisplay(item.date)}</td>
 
-                <td class="border-r border-dark-border px-4 py-3 text-xs text-dark-text leading-relaxed cursor-pointer " onclick="openJobDetailModal(${item.sr})">
+                <td class="border-r border-dark-border px-4 py-3 font-13px color-primary leading-relaxed cursor-pointer " onclick="openJobDetailModal(${item.sr})">
                     ${item.desc.replace(/\n/g, '<br>')}
                 </td>
 
                 <td class="border-r border-dark-border px-2 py-3">
-                    <div class="text-[11px] text-dark-muted text-center">${item.tech || '-'}</div>
-                    <div class="text-xs font-bold  text-center mt-1">${item.eng}</div>
+                    <div class="font-12px color-label text-center">${item.tech || '-'}</div>
+                    <div class="font-13px fw-bold  text-center mt-1">${item.eng}</div>
                 </td>
 
                 <td class="border-r border-dark-border px-2 py-3 text-center">
-                    ${item.attach ? '<i class="ph-bold ph-paperclip text-gnfc-blue cursor-pointer"></i>' : '<span class="text-dark-muted opacity-30">-</span>'}
+                    ${item.attach ? '<i class="ph-bold ph-paperclip color-blue cursor-pointer"></i>' : '<span class="color-label opacity-30">-</span>'}
                 </td>
 
-                <td class="px-4 py-3 text-xs text-gnfc-red italic">
+                <td class="px-4 py-3 font-13px color-red italic">
                     ${item.remark}
                 </td>
             </tr>`;
@@ -602,9 +603,9 @@
         width: 400,
         padding: "1em",
         customClass: {
-          title: "text-lg",
-          htmlContainer: "text-sm",
-          popup: "text-xs"
+          title: "font-18px",
+          htmlContainer: "font-14px",
+          popup: "font-12px"
         },
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -623,9 +624,9 @@
               width: 400,
               padding: "1em",
               customClass: {
-                title: "text-lg",
-                htmlContainer: "text-sm",
-                popup: "text-xs"
+                title: "font-18px",
+                htmlContainer: "font-14px",
+                popup: "font-12px"
               }
             });
           }

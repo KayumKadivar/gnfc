@@ -2,10 +2,10 @@ const ThemeManager = {
     storageKey: 'gnfc_theme_settings',
 
     defaults: {
-        fontSize: 16,
-        mode: 'dark',
-        bgColor: '#111217',
-        panelColor: '#181b1f',
+        fontSize: 18,
+        mode: 'light',
+        // bgColor: '#111217',
+        // panelColor: '#181b1f',
     },
 
     modes: {
@@ -114,6 +114,15 @@ const ThemeManager = {
     },
 
     injectColorOverrides(theme) {
+        // Load typography.css once
+        if (!document.getElementById('typography-css')) {
+            const link = document.createElement('link');
+            link.id = 'typography-css';
+            link.rel = 'stylesheet';
+            link.href = '/src/css/typography.css';
+            document.head.appendChild(link);
+        }
+
         let styleTag = document.getElementById('theme-overrides');
         if (!styleTag) {
             styleTag = document.createElement('style');
@@ -125,6 +134,39 @@ const ThemeManager = {
             .map((size) => `[class~="text-[${size}px]"] { font-size: calc(${size}px * var(--app-font-scale)) !important; }`)
             .join('\n');
 
+        // Typography color vars based on theme mode
+        const isDark = theme.mode === 'dark';
+        const typoVars = isDark ? `
+                --typo-primary: #ffffff;
+                --typo-secondary: #d1d5db;
+                --typo-label: #9ca3af;
+                --typo-hint: #6b7280;
+                --typo-blue: #5794F2;
+                --typo-orange: #FF9900;
+                --typo-green: #73BF69;
+                --typo-red: #F2495C;
+                --typo-purple: #B794F4;
+                --typo-teal: #14b8a6;
+                --typo-cyan: #06b6d4;
+                --typo-amber: #f59e0b;
+        ` : `
+                --typo-primary: #111827;
+                --typo-secondary: #374151;
+                --typo-label: #4b5563;
+                --typo-hint: #6b7280;
+                --typo-blue: #2563eb;
+                --typo-orange: #d97706;
+                --typo-green: #059669;
+                --typo-red: #dc2626;
+                --typo-purple: #7c3aed;
+                --typo-teal: #0d9488;
+                --typo-cyan: #0891b2;
+                --typo-amber: #d97706;
+        `;
+
+        // Boost muted color for better readability
+        const boostedMuted = isDark ? '#d1d5db' : '#374151';
+
         styleTag.textContent = `
             :root {
                 --app-bg: ${theme.bgColor};
@@ -133,16 +175,25 @@ const ThemeManager = {
                 --app-border: ${theme.palette.border};
                 --app-text: ${theme.palette.text};
                 --app-text-strong: ${theme.palette.textStrong};
-                --app-muted: ${theme.palette.muted};
+                --app-muted: ${boostedMuted};
                 --app-sidebar: ${theme.palette.sidebar};
                 --app-sidebar-border: ${theme.palette.sidebarBorder};
                 --app-font-scale: ${theme.fontScale};
+                ${typoVars}
             }
 
             body {
                 background-color: var(--app-bg) !important;
                 color: var(--app-text);
             }
+
+            /* --- Tailwind Font Size Overrides for Accessibility --- */
+            .text-xs  { font-size: 14px !important; }
+            .text-sm  { font-size: 15px !important; }
+            .text-base { font-size: 16px !important; }
+            [class~="text-[9px]"]  { font-size: 12px !important; }
+            [class~="text-[10px]"] { font-size: 13px !important; }
+            [class~="text-[11px]"] { font-size: 14px !important; }
 
             ${pxScaleRules}
 
@@ -203,12 +254,7 @@ const ThemeManager = {
             }
 
             html[data-theme-mode="light"] .text-white {
-                color: var(--app-text-strong;
-            }
-            html[data-theme-mode="light"] .text-white,
-            html[data-theme-mode="light"] .text-white,
-            html[data-theme-mode="light"] .text-white {
-                color: var(--app-muted);
+                color: var(--app-text-strong);
             }
 
             html[data-theme-mode="dark"] .bg-slate-50,

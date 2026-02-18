@@ -34,15 +34,15 @@ const AddLogModal = {
                     <div class="modal__container w-full max-w-6xl border border-dark-border bg-dark-panel shadow-2xl overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="modal-add-log-title">
                         <div class="bg-dark-header p-3 border-b border-dark-border flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-sm bg-gnfc-blue/15 border border-gnfc-blue/30 text-gnfc-blue flex items-center justify-center">
-                                    <i class="ph-bold ph-clipboard-text text-lg"></i>
+                                <div class="w-9 h-9 rounded-sm bg-gnfc-blue/15 border border-gnfc-blue/30 color-blue flex items-center justify-center">
+                                    <i class="ph-bold ph-clipboard-text font-18px"></i>
                                 </div>
                                 <div>
-                                    <h2 id="modal-add-log-title" class="text-sm font-bold text-dark-text uppercase tracking-wider">Create Shift Log Entry</h2>
+                                    <h2 id="modal-add-log-title" class="font-14px fw-bold color-primary text-upper ls-wider">Create Shift Log Entry</h2>
                                 </div>
                             </div>
-                            <button class="p-2 rounded-sm text-dark-muted hover:text-dark-text hover:bg-dark-border/50 transition-colors" aria-label="Close" data-micromodal-close>
-                                <i class="ph-bold ph-x text-base pointer-events-none"></i>
+                            <button class="p-2 rounded-sm color-label hover-color-primary hover:bg-dark-border/50 transition-colors" aria-label="Close" data-micromodal-close>
+                                <i class="ph-bold ph-x font-16px pointer-events-none"></i>
                             </button>
                         </div>
 
@@ -50,9 +50,9 @@ const AddLogModal = {
                             <div class="p-3 space-y-3 overflow-auto">
                                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
                                     <div class="lg:col-span-3 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Date & Loop</label>
-                                        <input id="add-log-date" name="logDate" type="date" required class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
-                                        <select id="add-log-loop" name="loopName" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Date & Loop</label>
+                                        <input id="add-log-date" name="logDate" type="date" required class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <select id="add-log-loop" name="loopName" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                             <option value="N.A">N.A</option>
                                             <option value="FA">FA</option>
                                             <option value="MF">MF</option>
@@ -62,16 +62,16 @@ const AddLogModal = {
                                     </div>
 
                                     <div class="lg:col-span-5 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">InstTag</label>
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">InstTag</label>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                            <input id="add-log-tag" name="tagNo" type="text" placeholder="e.g. PT5087K" required class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
-                                            <input id="add-log-tag-detail" name="tagDetail" type="text" placeholder="Tag Detail" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                            <input id="add-log-tag" name="tagNo" type="text" placeholder="e.g. PT5087K" required class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                            <input id="add-log-tag-detail" name="tagDetail" type="text" placeholder="Tag Detail" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                         </div>
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Type Of Job</label>
-                                        <select id="add-log-job-type" name="jobType" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Type Of Job</label>
+                                        <select id="add-log-job-type" name="jobType" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                             <option value="Routine Check">Routine Check</option>
                                             <option value="PM">PM</option>
                                             <option value="Calibration">Calibration</option>
@@ -81,8 +81,8 @@ const AddLogModal = {
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Type Of Inst</label>
-                                        <select id="add-log-inst-type" name="instType" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Type Of Inst</label>
+                                        <select id="add-log-inst-type" name="instType" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                             <option value="Field Instrument">Field Instrument</option>
                                             <option value="Control Valve">Control Valve</option>
                                             <option value="Analyzer">Analyzer</option>
@@ -92,16 +92,16 @@ const AddLogModal = {
                                 </div>
 
                                 <div class="bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                    <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Job Description</label>
+                                    <label class="font-10px fw-bold color-blue text-upper ls-wide">Job Description</label>
                                     <textarea id="add-log-description" name="description" rows="5" required
                                         placeholder="Write the complete work details, observation and actions taken..."
-                                        class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-3 py-2 outline-none focus:border-gnfc-blue resize-y"></textarea>
+                                        class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-3 py-2 outline-none focus:border-gnfc-blue resize-y"></textarea>
                                 </div>
 
                                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Job Status</label>
-                                        <select id="add-log-status" name="jobStatus" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Job Status</label>
+                                        <select id="add-log-status" name="jobStatus" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                             <option value="OVER">OVER</option>
                                             <option value="PENDING">PENDING</option>
                                             <option value="WORKING">WORKING</option>
@@ -109,18 +109,18 @@ const AddLogModal = {
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Tech Name</label>
-                                        <input id="add-log-tech" name="techName" type="text" value="ENG_TESTER" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Tech Name</label>
+                                        <input id="add-log-tech" name="techName" type="text" value="ENG_TESTER" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Eng</label>
-                                        <input id="add-log-eng" name="engName" type="text" placeholder="Select ENG" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Eng</label>
+                                        <input id="add-log-eng" name="engName" type="text" placeholder="Select ENG" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Area</label>
-                                        <select id="add-log-area" name="area" class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Area</label>
+                                        <select id="add-log-area" name="area" class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                             <option value="N.A">N.A</option>
                                             <option value="FA">FA</option>
                                             <option value="MF">MF</option>
@@ -130,12 +130,12 @@ const AddLogModal = {
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Extra Duty</label>
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide">Extra Duty</label>
                                         <div class="grid grid-cols-2 gap-2">
-                                            <select id="add-log-ot-hr" name="extraHour" class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                            <select id="add-log-ot-hr" name="extraHour" class="bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                                 ${Array.from({ length: 13 }, (_, i) => `<option value="${i}">${i} Hr</option>`).join("")}
                                             </select>
-                                            <select id="add-log-ot-min" name="extraMin" class="bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
+                                            <select id="add-log-ot-min" name="extraMin" class="bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-2 py-1.5 outline-none focus:border-gnfc-blue">
                                                 <option value="00">00 Min</option>
                                                 <option value="15">15 Min</option>
                                                 <option value="30">30 Min</option>
@@ -145,8 +145,8 @@ const AddLogModal = {
                                     </div>
 
                                     <div class="lg:col-span-2 bg-dark-bg border border-dark-border rounded-sm p-3">
-                                        <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide block mb-2">Flags</label>
-                                        <div class="space-y-2 text-xs text-dark-text">
+                                        <label class="font-10px fw-bold color-blue text-upper ls-wide block mb-2">Flags</label>
+                                        <div class="space-y-2 font-12px color-primary">
                                             <label class="flex items-center gap-2 cursor-pointer select-none">
                                                 <input type="checkbox" id="add-log-emergency" name="emergencyCall" class="accent-red-600">
                                                 <span>Emergency Call</span>
@@ -164,21 +164,21 @@ const AddLogModal = {
                                 </div>
 
                                 <div class="bg-dark-bg border border-dark-border rounded-sm p-3 space-y-2">
-                                    <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Remarks</label>
+                                    <label class="font-10px fw-bold color-blue text-upper ls-wide">Remarks</label>
                                     <input id="add-log-remarks" name="remarks" type="text" placeholder="Optional remarks..."
-                                        class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-3 py-2 outline-none focus:border-gnfc-blue">
+                                        class="w-full bg-dark-panel border border-dark-border color-primary font-12px rounded-sm px-3 py-2 outline-none focus:border-gnfc-blue">
                                 </div>
                             </div>
 
                             <div class="bg-dark-header border-t border-dark-border p-3 flex items-center justify-between gap-3 shrink-0">
-                                <p class="text-[10px] text-dark-muted uppercase tracking-wider">Entry will be added to current table view.</p>
+                                <p class="font-10px color-label text-upper ls-wider">Entry will be added to current table view.</p>
                                 <div class="flex items-center gap-2">
                                     <button type="button" data-micromodal-close
-                                        class="px-4 py-1.5 text-xs font-bold border border-dark-border text-dark-muted hover:text-dark-text hover:bg-dark-border/50 rounded-sm transition-colors">
+                                        class="px-4 py-1.5 font-12px fw-bold border border-dark-border color-label hover-color-primary hover:bg-dark-border/50 rounded-sm transition-colors">
                                         Cancel
                                     </button>
                                     <button type="submit"
-                                        class="px-4 py-1.5 text-xs font-bold bg-gnfc-blue hover:bg-blue-600 text-white rounded-sm border border-gnfc-blue/70 shadow-lg shadow-blue-500/20 transition-colors flex items-center gap-2">
+                                        class="px-4 py-1.5 font-12px fw-bold bg-gnfc-blue hover:bg-blue-600 text-white rounded-sm border border-gnfc-blue/70 shadow-lg shadow-blue-500/20 transition-colors flex items-center gap-2">
                                         <i class="ph-bold ph-floppy-disk"></i>
                                         Save Entry
                                     </button>

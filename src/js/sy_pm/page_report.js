@@ -38,7 +38,7 @@ function showToast(message, tone = "info") {
   const root = getToastRoot();
   const toast = document.createElement("div");
 
-  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 font-medium text-sm border backdrop-blur-md";
+  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 fw-medium font-14px border backdrop-blur-md";
 
   if (tone === "error") {
     baseClasses += " bg-rose-950/90 text-rose-100 border-rose-800 shadow-rose-900/20";
@@ -47,16 +47,16 @@ function showToast(message, tone = "info") {
   } else if (tone === "success") {
     baseClasses += " bg-emerald-950/90 text-emerald-100 border-emerald-800 shadow-emerald-900/20";
   } else {
-    baseClasses += " bg-dark-panel/95 text-white border-dark-border shadow-black/50";
+    baseClasses += " bg-dark-panel/95 color-primary border-dark-border shadow-black/50";
   }
 
   toast.className = baseClasses + " translate-y-4 opacity-0";
 
   let icon = "";
-  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle text-lg shrink-0"></i>';
-  else if (tone === "warn") icon = '<i class="ph-bold ph-warning text-lg shrink-0"></i>';
-  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle text-lg shrink-0"></i>';
-  else icon = '<i class="ph-bold ph-info text-lg shrink-0 text-gnfc-orange"></i>';
+  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle font-18px shrink-0"></i>';
+  else if (tone === "warn") icon = '<i class="ph-bold ph-warning font-18px shrink-0"></i>';
+  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle font-18px shrink-0"></i>';
+  else icon = '<i class="ph-bold ph-info font-18px shrink-0 color-orange"></i>';
 
   toast.innerHTML = `${icon}<span>${text}</span>`;
   root.appendChild(toast);
@@ -161,12 +161,12 @@ function renderEmptyState(title, description, actionLabel = "") {
 
   return `
     <div class="flex flex-col items-center justify-center p-12 text-center rounded-xl border-2 border-dashed border-dark-border/50 bg-dark-bg/30">
-      <div class="w-16 h-16 rounded-full bg-dark-panel border border-dark-border flex items-center justify-center mb-4 text-dark-muted">
+      <div class="w-16 h-16 rounded-full bg-dark-panel border border-dark-border flex items-center justify-center mb-4 color-label">
         <i class="ph-duotone ph-folder-open text-3xl"></i>
       </div>
-      <h3 class="text-white font-bold text-lg mb-1">${safeTitle}</h3>
-      <p class="text-dark-muted text-sm max-w-[280px] leading-relaxed">${safeDescription}</p>
-      ${safeAction ? `<span class="inline-block mt-5 px-3 py-1.5 rounded-full bg-gnfc-orange/10 text-gnfc-orange text-[10px] font-bold uppercase tracking-wider border border-gnfc-orange/20 animate-pulse">${safeAction}</span>` : ""}
+      <h3 class="color-primary fw-bold font-18px mb-1">${safeTitle}</h3>
+      <p class="color-label font-14px max-w-[280px] leading-relaxed">${safeDescription}</p>
+      ${safeAction ? `<span class="inline-block mt-5 px-3 py-1.5 rounded-full bg-gnfc-orange/10 color-orange font-10px fw-bold text-upper ls-wider border border-gnfc-orange/20 animate-pulse">${safeAction}</span>` : ""}
     </div>
   `;
 }
@@ -278,10 +278,10 @@ function renderReportList() {
     item.dataset.reportId = report.id;
     item.innerHTML = `
       <div class="flex justify-between items-center w-full">
-        <span class="text-sm font-bold ${isActive ? 'text-white' : 'text-dark-text group-hover:text-white'}">${formatDate(report.reportDate)}</span>
-        ${isActive ? '<i class="ph-bold ph-check-circle text-gnfc-orange text-xs"></i>' : ''}
+        <span class="font-14px fw-bold ${isActive ? 'color-primary' : 'color-primary group-hover:color-white'}">${formatDate(report.reportDate)}</span>
+        ${isActive ? '<i class="ph-bold ph-check-circle color-orange font-12px"></i>' : ''}
       </div>
-      <span class="text-[10px] text-dark-muted font-mono uppercase tracking-wide">Updated ${formatDateTime(report.updatedAt)}</span>
+      <span class="font-10px color-label typo-mono text-upper ls-wide">Updated ${formatDateTime(report.updatedAt)}</span>
       ${isActive ? '<div class="absolute inset-y-0 left-0 w-1 bg-gnfc-orange"></div>' : ''}
     `;
     list.appendChild(item);
@@ -322,30 +322,30 @@ function renderEditor() {
 
   const bodyRows = activeReport.rows.map((row, index) => `
       <tr data-static-row-id="${row.staticRowId}" class="hover:bg-dark-header/30 transition-colors group">
-        <td class="px-3 py-2 text-center font-mono text-dark-muted text-[10px] border-r border-dark-border/10 w-10">${index + 1}</td>
-        <td class="px-3 py-2 font-medium text-dark-text text-xs border-r border-dark-border/10">${row.item}</td>
-        <td class="px-3 py-2 text-dark-muted text-xs leading-relaxed border-r border-dark-border/10">${row.action || "-"}</td>
-        <td class="px-3 py-2 text-dark-text font-mono text-[10px] bg-dark-bg/20 border-r border-dark-border/10">${row.referenceValue || "-"}</td>
+        <td class="px-3 py-2 text-center typo-mono color-label font-10px border-r border-dark-border/10 w-10">${index + 1}</td>
+        <td class="px-3 py-2 fw-medium color-primary font-12px border-r border-dark-border/10">${row.item}</td>
+        <td class="px-3 py-2 color-label font-12px leading-relaxed border-r border-dark-border/10">${row.action || "-"}</td>
+        <td class="px-3 py-2 color-primary typo-mono font-10px bg-dark-bg/20 border-r border-dark-border/10">${row.referenceValue || "-"}</td>
         <td class="p-2 border-r border-dark-border/10">
-          <textarea class="w-full bg-dark-bg border border-dark-border rounded px-2 py-1.5 text-xs text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted resize-y min-h-[60px]" data-field="observation" placeholder="Observation">${row.observation || ""}</textarea>
+          <textarea class="w-full bg-dark-bg border border-dark-border rounded px-2 py-1.5 font-12px color-primary focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted resize-y min-h-[60px]" data-field="observation" placeholder="Observation">${row.observation || ""}</textarea>
         </td>
         <td class="p-2">
-          <textarea class="w-full bg-dark-bg border border-dark-border rounded px-2 py-1.5 text-xs text-dark-text focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted resize-y min-h-[60px]" data-field="remark" placeholder="Remark">${row.remark || ""}</textarea>
+          <textarea class="w-full bg-dark-bg border border-dark-border rounded px-2 py-1.5 font-12px color-primary focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none transition-all placeholder:text-dark-muted resize-y min-h-[60px]" data-field="remark" placeholder="Remark">${row.remark || ""}</textarea>
         </td>
       </tr>
     `).join("");
 
   wrapper.innerHTML = `
     <div class="rounded-lg border border-dark-border overflow-hidden bg-dark-panel">
-      <table class="w-full text-left text-xs border-collapse">
+      <table class="w-full text-left font-12px border-collapse">
         <thead>
           <tr>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border text-center">Sr</th>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/4">Item</th>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/5">Action</th>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border">Reference Value</th>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/5">Observation</th>
-            <th class="px-3 py-2 bg-dark-header text-dark-muted font-bold border-b border-dark-border w-1/6">Remark</th>
+            <th class="px-3 py-2 bg-dark-header color-label fw-bold border-b border-dark-border text-center">Sr</th>
+            <th class="px-3 py-2 bg-dark-header color-label fw-bold border-b border-dark-border w-1/4">Item</th>
+            <th class="px-3 py-2 bg-dark-header color-label fw-bold border-b border-dark-border w-1/5">Action</th>
+            <th class="px-3 py-2 bg-dark-header color-label fw-bold border-b border-dark-border">Reference Value</th>
+            <th class="px-3 py-2 bg-dark-header color-label fw-bold border-b border-dark-border w-1/5">Observation</th>
+            <th class="px-3 py-2 bg-dark-header color-label fw-bold border-b border-dark-border w-1/6">Remark</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-dark-border/30">${bodyRows}</tbody>

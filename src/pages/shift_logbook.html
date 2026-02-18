@@ -9,6 +9,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="stylesheet" href="/src/css/modal-ui.css">
   <script>
     window.activePage = 'shift_logbook_officer';
@@ -31,7 +32,7 @@
 </head>
 
 <body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+  class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -62,21 +63,21 @@
       <section class="bg-dark-panel border border-dark-border rounded-sm p-3 flex flex-col gap-3 shrink-0">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-wide">Time Range</label>
+            <label class="font-10px fw-bold color-blue text-upper ls-wide">Time Range</label>
             <div class="flex bg-dark-bg border border-dark-border rounded-sm p-0.5">
               <button id="tab-today" onclick="switchView('today')" type="button"
-                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Today</button>
+                class="tab-btn px-4 py-1.5 font-12px fw-bold rounded-sm transition-colors">Today</button>
               <button id="tab-prev" onclick="switchView('prev')" type="button"
-                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Prev Day</button>
+                class="tab-btn px-4 py-1.5 font-12px fw-bold rounded-sm transition-colors">Prev Day</button>
               <button id="tab-weekly" onclick="switchView('weekly')" type="button"
-                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Weekly</button>
+                class="tab-btn px-4 py-1.5 font-12px fw-bold rounded-sm transition-colors">Weekly</button>
               <button id="tab-monthly" onclick="switchView('monthly')" type="button"
-                class="tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors">Monthly</button>
+                class="tab-btn px-4 py-1.5 font-12px fw-bold rounded-sm transition-colors">Monthly</button>
             </div>
           </div>
 
           <button onclick="openAddModal()"
-            class="bg-gnfc-blue hover:bg-blue-600 text-white px-3 py-1.5 rounded-sm text-xs font-bold flex items-center gap-1">
+            class="bg-gnfc-blue hover:bg-blue-600 text-white px-3 py-1.5 rounded-sm font-12px fw-bold flex items-center gap-1">
             <i class="ph-bold ph-plus"></i> Add Entry
           </button>
         </div>
@@ -85,12 +86,12 @@
       <section class="bg-dark-panel border border-dark-border rounded-sm flex flex-col overflow-hidden">
         <div class="px-4 py-2 border-b border-dark-border flex justify-between items-center bg-dark-header shrink-0">
           <div class="flex items-center gap-2">
-            <i class="ph-fill ph-table text-gnfc-blue"></i>
-            <h3 class="text-sm font-bold text-dark-text" id="report-title">Log Report</h3>
-            <span class="text-xs text-dark-muted ml-2" id="report-date"></span>
+            <i class="ph-fill ph-table color-blue"></i>
+            <h3 class="font-14px fw-bold color-primary" id="report-title">Log Report</h3>
+            <span class="font-12px color-label ml-2" id="report-date"></span>
           </div>
-          <div class="text-xs font-mono text-dark-muted">
-            Count: <span id="record-count" class="text-white font-bold">0</span>
+          <div class="font-12px typo-mono color-label">
+            Count: <span id="record-count" class="color-white fw-bold">0</span>
           </div>
         </div>
 
@@ -98,7 +99,7 @@
           <table id="shift-log-table" class="w-full text-left border-collapse">
             <thead>
               <tr
-                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
+                class="bg-dark-header font-10px fw-bold color-label text-upper ls-wider text-center border-b border-dark-border">
                 <th rowspan="2" class="w-10 p-2 border-r border-dark-border">Sr</th>
                 <th class="w-24 p-2 border-r border-dark-border border-b border-dark-border">Shift</th>
                 <th class="w-32 p-2 border-r border-dark-border border-b border-dark-border">Tag No</th>
@@ -108,19 +109,19 @@
                 <th rowspan="2" class="min-w-[180px] p-2">Remarks</th>
               </tr>
               <tr
-                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-wider text-center border-b border-dark-border">
+                class="bg-dark-header font-10px fw-bold color-label text-upper ls-wider text-center border-b border-dark-border">
                 <th class="p-2 border-r border-dark-border">Time</th>
                 <th class="p-2 border-r border-dark-border">Type Of Job</th>
               </tr>
             </thead>
-            <tbody id="log-table-body" class="text-xs font-mono"></tbody>
+            <tbody id="log-table-body" class="font-12px typo-mono"></tbody>
           </table>
         </div>
       </section>
     </div>
 
     <footer
-      class="h-8 bg-dark-panel border-t border-dark-border px-4 flex items-center justify-between text-[10px] text-dark-muted uppercase tracking-wider shrink-0">
+      class="h-8 bg-dark-panel border-t border-dark-border px-4 flex items-center justify-between font-10px color-label text-upper ls-wider shrink-0">
       <span>GNFC Instrumentation Dept.</span>
       <span>Officer Logbook</span>
     </footer>
@@ -130,7 +131,7 @@
     <div class="gnfc-modal-shell">
       <div class="gnfc-modal-header">
         <h3 class="gnfc-modal-title">Add Officer Entry</h3>
-        <button onclick="closeAddModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+        <button onclick="closeAddModal()" class="gnfc-modal-close"><i class="ph-bold ph-x font-18px"></i></button>
       </div>
       <form id="shift-add-form">
         <div class="gnfc-modal-body gnfc-modal-body--tight">
@@ -201,7 +202,7 @@
       <div class="gnfc-modal-header">
         <h3 class="gnfc-modal-title">Officer's Log Book (Instrument)</h3>
         <button onclick="closeRemarkModal()" class="gnfc-modal-close">
-          <i class="ph-bold ph-x text-lg"></i>
+          <i class="ph-bold ph-x font-18px"></i>
         </button>
       </div>
       <div class="gnfc-modal-body gnfc-modal-body--tight">
@@ -253,8 +254,8 @@
     ];
 
     const tabs = ['today', 'prev', 'weekly', 'monthly'];
-    const TAB_ACTIVE_CLASS = 'tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors bg-dark-panel text-gnfc-orange border border-dark-border shadow-sm';
-    const TAB_INACTIVE_CLASS = 'tab-btn px-4 py-1.5 text-xs font-bold rounded-sm transition-colors text-dark-muted hover:text-white hover:bg-dark-header';
+    const TAB_ACTIVE_CLASS = 'tab-btn px-4 py-1.5 font-12px fw-bold rounded-sm transition-colors bg-dark-panel color-orange border border-dark-border shadow-sm';
+    const TAB_INACTIVE_CLASS = 'tab-btn px-4 py-1.5 font-12px fw-bold rounded-sm transition-colors color-label hover-color-white hover:bg-dark-header';
 
     const state = {
       view: 'weekly', // Default to weekly to show the data from images
@@ -305,7 +306,7 @@
             : 'Monthly Log Report';
 
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-dark-muted italic border-b border-dark-border">No entries found for this range.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center color-label italic border-b border-dark-border">No entries found for this range.</td></tr>';
         return;
       }
 
@@ -323,7 +324,7 @@
           html += `
              <tr class="date-header-row">
                <td colspan="7">
-                 <div class="flex items-center gap-2 border-b border-dark-border px-4 py-1.5 font-bold text-[10px] text-gnfc-orange uppercase">
+                 <div class="flex items-center gap-2 border-b border-dark-border px-4 py-1.5 fw-bold font-10px color-orange uppercase">
                    <i class="ph-fill ph-calendar-blank"></i>
                    ${formatDateFriendly(entry.date)}
                  </div>
@@ -336,32 +337,32 @@
         // 2. Render Row
         const status = String(entry.status || '').toUpperCase();
         const statusBadgeClass = status === 'OVER'
-          ? 'bg-gnfc-green/15 text-gnfc-green border border-gnfc-green/30'
-          : 'bg-gnfc-orange/15 text-gnfc-orange border border-gnfc-orange/30';
+          ? 'bg-gnfc-green/15 color-green border border-gnfc-green/30'
+          : 'bg-gnfc-orange/15 color-orange border border-gnfc-orange/30';
 
         // Reset serial number logic for display if needed, or keep global index
         const srNo = index + 1;
 
         html += `
-          <tr data-entry-id="${entry.id}" class="log-row-1 transition-colors border-b border-dark-border group">
-            <td rowspan="2" class="p-2 text-center text-dark-muted font-mono border-r border-dark-border">${srNo}</td>
-            <td class="p-2 text-center font-bold text-dark-text border-r border-dark-border">${safeText(entry.shift)}</td>
-            <td class="p-2 font-semibold text-gnfc-blue border-r border-dark-border">${safeText(entry.tagNo)}</td>
-            <td rowspan="2" class="p-2 text-dark-text leading-relaxed border-r border-dark-border">${safeText(entry.description)}</td>
-            <td rowspan="2" class="p-2 text-dark-text font-bold border-r border-dark-border whitespace-nowrap">${safeText(entry.officer)}</td>
+          <tr data-entry-id="${entry.id}" class="log-row-1 transition-colors border-b border-dark-border group hover:bg-white/5">
+            <td rowspan="2" class="p-2 text-center color-label typo-mono border-r border-dark-border font-12px">${srNo}</td>
+            <td class="p-2 text-center fw-bold color-primary border-r border-dark-border font-13px">${safeText(entry.shift)}</td>
+            <td class="p-2 fw-medium color-blue border-r border-dark-border font-13px">${safeText(entry.tagNo)}</td>
+            <td rowspan="2" class="p-2 color-primary leading-relaxed border-r border-dark-border font-13px">${safeText(entry.description)}</td>
+            <td rowspan="2" class="p-2 color-primary fw-bold border-r border-dark-border whitespace-nowrap font-13px">${safeText(entry.officer)}</td>
             <td rowspan="2" class="p-2 text-center border-r border-dark-border">
-              <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold ${statusBadgeClass}">${safeText(status || 'NA')}</span>
+              <span class="inline-block px-2 py-0.5 rounded font-10px fw-bold ${statusBadgeClass}">${safeText(status || 'NA')}</span>
             </td>
             <td rowspan="2" class="p-2 text-center">
-              <button onclick="openRemarkModal(${entry.id}, '${safeText(entry.remarks || '')}')" class="text-gnfc-blue hover:text-blue-400 transition-colors">
-                <i class="ph-fill ph-note-pencil text-lg"></i>
+              <button onclick="openRemarkModal(${entry.id}, '${safeText(entry.remarks || '')}')" class="color-blue hover-color-blue-400 transition-colors">
+                <i class="ph-fill ph-note-pencil font-18px"></i>
               </button>
             </td>
           </tr>
-          <tr data-entry-id="${entry.id}" class="log-row-2 transition-colors border-b border-dark-border group">
-            <td class="p-2 text-center text-[10px] text-dark-muted border-r border-dark-border">${safeText(entry.time)}</td>
-            <td class="p-2 text-[10px] border-r border-dark-border">
-              <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-dark-bg border border-dark-border text-dark-muted">${safeText(entry.jobType)}</span>
+          <tr data-entry-id="${entry.id}" class="log-row-2 transition-colors border-b border-dark-border group hover:bg-white/5">
+            <td class="p-2 text-center font-10px color-label border-r border-dark-border">${safeText(entry.time)}</td>
+            <td class="p-2 font-10px border-r border-dark-border">
+              <span class="inline-block px-1.5 py-0.5 rounded font-10px fw-bold bg-dark-bg border border-dark-border color-label">${safeText(entry.jobType)}</span>
             </td>
           </tr>
         `;

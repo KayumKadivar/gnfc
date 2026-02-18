@@ -113,7 +113,7 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -141,18 +141,18 @@
       <!-- ─── Top Bar: Welcome + Clock ─── -->
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-lg font-bold  tracking-tight">Good <span id="greeting-time">Morning</span>, Admin
+          <h2 class="font-18px fw-bold tracking-tight">Good <span id="greeting-time">Morning</span>, Admin
           </h2>
-          <p class="text-xs text-dark-muted mt-0.5">Plant operations overview for today</p>
+          <p class="font-14px color-label mt-0.5">Plant operations overview for today</p>
         </div>
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-2 bg-dark-panel border border-dark-border rounded-md px-3 py-2">
-            <i class="ph ph-calendar-blank text-gnfc-blue"></i>
-            <span id="live-date" class="text-xs font-mono font-bold text-dark-text">--</span>
+            <i class="ph ph-calendar-blank color-blue"></i>
+            <span id="live-date" class="font-14px font-mono fw-bold color-primary">--</span>
           </div>
           <div class="flex items-center gap-2 bg-dark-panel border border-dark-border rounded-md px-3 py-2">
-            <i class="ph ph-clock text-gnfc-orange"></i>
-            <span id="live-clock" class="text-xs font-mono font-bold text-dark-text tabular-nums">--:--:--</span>
+            <i class="ph ph-clock color-orange"></i>
+            <span id="live-clock" class="font-14px font-mono fw-bold color-primary tabular-nums">--:--:--</span>
           </div>
         </div>
       </div>
@@ -160,61 +160,60 @@
       <!-- ─── KPI STAT CARDS ─── -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
 
-        <!-- Total Jobs Today -->
+        <!-- Today Total Jobs -->
         <div
           class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-blue/40 transition-all cursor-default"
           style="--kpi-color: #5794F2">
           <div class="flex items-center justify-between mb-3">
             <div class="w-9 h-9 rounded-lg bg-gnfc-blue/10 flex items-center justify-center">
-              <i class="ph-fill ph-briefcase text-lg text-gnfc-blue"></i>
+              <i class="ph-fill ph-briefcase text-lg color-blue"></i>
             </div>
-            <span class="text-[10px] font-bold text-dark-muted uppercase tracking-wider">Today</span>
+            <span class="font-13px fw-bold color-label text-upper ls-wider">Today</span>
           </div>
-          <div class="text-2xl font-bold  counter-value" id="kpi-total">0</div>
-          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">Total Jobs</p>
+          <div class="typo-kpi counter-value" id="kpi-total">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">Today Total Jobs</p>
         </div>
 
-        <!-- Completed -->
+        <!-- Completed Jobs -->
         <div
           class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-green/40 transition-all cursor-default"
           style="--kpi-color: #73BF69">
           <div class="flex items-center justify-between mb-3">
             <div class="w-9 h-9 rounded-lg bg-gnfc-green/10 flex items-center justify-center">
-              <i class="ph-fill ph-check-circle text-lg text-gnfc-green"></i>
+              <i class="ph-fill ph-check-circle text-lg color-green"></i>
             </div>
-            <span class="text-[10px] font-bold text-gnfc-green bg-gnfc-green/10 px-1.5 py-0.5 rounded-sm"
-              id="kpi-completed-pct">0%</span>
+            <i class="ph-fill ph-checks color-green font-14px"></i>
           </div>
-          <div class="text-2xl font-bold  counter-value" id="kpi-completed">0</div>
-          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">Completed</p>
+          <div class="typo-kpi counter-value" id="kpi-completed">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">Completed Jobs</p>
         </div>
 
-        <!-- In Progress -->
+        <!-- ISO Jobs -->
         <div
           class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-orange/40 transition-all cursor-default"
           style="--kpi-color: #FF9900">
           <div class="flex items-center justify-between mb-3">
             <div class="w-9 h-9 rounded-lg bg-gnfc-orange/10 flex items-center justify-center">
-              <i class="ph-fill ph-hourglass-medium text-lg text-gnfc-orange"></i>
+              <i class="ph-fill ph-certificate text-lg color-orange"></i>
             </div>
-            <i class="ph-fill ph-arrow-up text-gnfc-orange text-xs"></i>
+            <span class="font-13px fw-bold color-orange bg-gnfc-orange/10 px-1.5 py-0.5 rounded-sm">ISO</span>
           </div>
-          <div class="text-2xl font-bold  counter-value" id="kpi-progress">0</div>
-          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">In Progress</p>
+          <div class="typo-kpi counter-value" id="kpi-iso">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">ISO Jobs</p>
         </div>
 
-        <!-- Pending -->
+        <!-- All Pending Jobs -->
         <div
           class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-red/40 transition-all cursor-default"
           style="--kpi-color: #F2495C">
           <div class="flex items-center justify-between mb-3">
             <div class="w-9 h-9 rounded-lg bg-gnfc-red/10 flex items-center justify-center">
-              <i class="ph-fill ph-warning-circle text-lg text-gnfc-red"></i>
+              <i class="ph-fill ph-warning-circle text-lg color-red"></i>
             </div>
-            <i class="ph-fill ph-arrow-down text-gnfc-red text-xs"></i>
+            <i class="ph-fill ph-arrow-down color-red font-14px"></i>
           </div>
-          <div class="text-2xl font-bold  counter-value" id="kpi-pending">0</div>
-          <p class="text-[10px] text-dark-muted font-bold mt-1 uppercase tracking-wide">Pending</p>
+          <div class="typo-kpi counter-value" id="kpi-pending">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">All Pending Jobs</p>
         </div>
       </div>
 
@@ -225,16 +224,16 @@
         <div class="lg:col-span-2 bg-dark-panel border border-dark-border rounded-md shadow-sm p-4 relative">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+              <h3 class="fw-bold font-15px color-blue flex items-center gap-2">
                 <i class="ph-fill ph-chart-line-up"></i>
                 Weekly Job Trends
               </h3>
-              <p class="text-[10px] text-dark-muted mt-0.5">Job creation vs completion over last 7 days</p>
+              <p class="font-13px color-label mt-0.5">Job creation vs completion over last 7 days</p>
             </div>
             <div class="flex gap-2">
-              <span class="flex items-center gap-1 text-[10px] text-dark-muted"><span
+              <span class="flex items-center gap-1 font-13px color-label"><span
                   class="w-2 h-2 rounded-full bg-gnfc-blue"></span> Created</span>
-              <span class="flex items-center gap-1 text-[10px] text-dark-muted"><span
+              <span class="flex items-center gap-1 font-13px color-label"><span
                   class="w-2 h-2 rounded-full bg-gnfc-green"></span> Completed</span>
             </div>
           </div>
@@ -244,11 +243,11 @@
         <!-- Live Plant Status (1/3 width, vertical list) -->
         <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm p-4 flex flex-col">
           <div class="flex items-center justify-between mb-3 shrink-0">
-            <h3 class="font-bold text-sm text-gnfc-orange flex items-center gap-2">
+            <h3 class="fw-bold font-15px color-orange flex items-center gap-2">
               <i class="ph-fill ph-factory"></i>
               Live Plant Status
             </h3>
-            <span class="text-[10px] font-mono text-gnfc-green animate-pulse">● LIVE</span>
+            <span class="font-13px font-mono color-green animate-pulse">● LIVE</span>
           </div>
           <div class="flex-1 overflow-y-auto pr-1 dashboard-scroll space-y-2" id="live-plant-status-list">
             <!-- JS Populated -->
@@ -262,11 +261,11 @@
         <!-- Col 1: Recent Activity -->
         <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm flex flex-col">
           <div class="flex items-center justify-between px-4 py-2.5 border-b border-dark-border shrink-0">
-            <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+            <h3 class="fw-bold font-15px color-blue flex items-center gap-2">
               <i class="ph-fill ph-pulse"></i>
               Recent Activity
             </h3>
-            <span class="text-[10px] font-bold text-dark-muted uppercase tracking-wide">All Plants</span>
+            <span class="font-13px fw-bold color-label text-upper ls-wide">All Plants</span>
           </div>
           <div id="activity-feed" class="p-4 space-y-3 overflow-y-auto max-h-[380px] dashboard-scroll">
             <!-- JS-populated -->
@@ -276,7 +275,7 @@
         <!-- Col 2: Job Distribution -->
         <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm flex flex-col">
           <div class="px-4 py-2.5 border-b border-dark-border shrink-0">
-            <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+            <h3 class="fw-bold font-15px color-blue flex items-center gap-2">
               <i class="ph-fill ph-chart-pie-slice"></i>
               Job Distribution
             </h3>
@@ -292,11 +291,11 @@
           <!-- Upcoming Schedules Widget -->
           <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm flex flex-col">
             <div class="px-4 py-2.5 border-b border-dark-border flex justify-between items-center bg-gnfc-blue/5">
-              <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+              <h3 class="fw-bold font-15px color-blue flex items-center gap-2">
                 <i class="ph-fill ph-calendar-check"></i>
                 Upcoming PMs
               </h3>
-              <span class="text-[10px] font-bold text-dark-muted">Next 48h</span>
+              <span class="font-13px fw-bold color-label">Next 48h</span>
             </div>
             <div id="upcoming-schedules-list" class="p-3 space-y-2">
               <!-- JS Populated -->
@@ -306,7 +305,7 @@
           <!-- Quick Actions (Compact) -->
           <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
             <div class="px-4 py-2.5 border-b border-dark-border">
-              <h3 class="font-bold text-sm text-gnfc-blue flex items-center gap-2">
+              <h3 class="fw-bold font-15px color-blue flex items-center gap-2">
                 <i class="ph-fill ph-lightning"></i>
                 Quick Actions
               </h3>
@@ -315,38 +314,38 @@
               <a href="/src/pages/technician_logbook.html"
                 class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-blue/40 rounded-md p-3 text-center group">
                 <i
-                  class="ph-fill ph-notebook text-xl text-gnfc-blue mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Logbook</span>
+                  class="ph-fill ph-notebook text-xl color-blue mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="font-13px fw-bold color-label group-hover: transition-colors">Logbook</span>
               </a>
               <a href="/src/pages/datewise_report.html"
                 class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-orange/40 rounded-md p-3 text-center group">
                 <i
-                  class="ph-fill ph-calendar-check text-xl text-gnfc-orange mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Reports</span>
+                  class="ph-fill ph-calendar-check text-xl color-orange mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="font-13px fw-bold color-label group-hover: transition-colors">Reports</span>
               </a>
               <a href="/src/pages/job_history.html"
                 class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-green/40 rounded-md p-3 text-center group">
                 <i
-                  class="ph-fill ph-clock-counter-clockwise text-xl text-gnfc-green mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">History</span>
+                  class="ph-fill ph-clock-counter-clockwise text-xl color-green mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="font-13px fw-bold color-label group-hover: transition-colors">History</span>
               </a>
               <a href="/src/pages/Sy_PM.html"
                 class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-purple/40 rounded-md p-3 text-center group">
                 <i
-                  class="ph-fill ph-wrench text-xl text-gnfc-purple mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">SY/PM</span>
+                  class="ph-fill ph-wrench text-xl color-purple mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="font-13px fw-bold color-label group-hover: transition-colors">SY/PM</span>
               </a>
               <a href="/src/pages/pending_log.html"
                 class="quick-action bg-dark-bg border border-dark-border hover:border-gnfc-red/40 rounded-md p-3 text-center group">
                 <i
-                  class="ph-fill ph-warning text-xl text-gnfc-red mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Pending</span>
+                  class="ph-fill ph-warning text-xl color-red mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="font-13px fw-bold color-label group-hover: transition-colors">Pending</span>
               </a>
               <a href="/src/pages/settings.html"
                 class="quick-action bg-dark-bg border border-dark-border hover:border-dark-muted/40 rounded-md p-3 text-center group">
                 <i
-                  class="ph-fill ph-gear text-xl text-dark-muted mb-1 block group-hover:scale-110 transition-transform"></i>
-                <span class="text-[10px] font-bold text-dark-muted group-hover: transition-colors">Settings</span>
+                  class="ph-fill ph-gear text-xl color-label mb-1 block group-hover:scale-110 transition-transform"></i>
+                <span class="font-13px fw-bold color-label group-hover: transition-colors">Settings</span>
               </a>
             </div>
           </div>
@@ -358,16 +357,16 @@
       <footer class="mt-auto border-t border-dark-border bg-dark-panel/50 py-4 px-6">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <div class="text-center md:text-left">
-            <p class="text-xs text-dark-muted font-medium">&copy; 2026 GNFC Ltd. <span class="mx-1">&bull;</span>
+            <p class="font-14px color-label fw-medium">&copy; 2026 GNFC Ltd. <span class="mx-1">&bull;</span>
               Instrumentation Dept.</p>
-            <p class="text-[10px] text-dark-muted mt-0.5">E-Logbook Dashboard <span class="opacity-50">v2.4.0</span></p>
+            <p class="font-13px color-label mt-0.5">E-Logbook Dashboard <span class="opacity-50">v2.4.0</span></p>
           </div>
           <div class="flex items-center gap-6">
-            <a href="#" class="text-xs text-dark-muted hover:text-gnfc-blue transition-colors font-medium">System
+            <a href="#" class="font-14px color-label hover-color-blue transition-colors fw-medium">System
               Status</a>
             <a href="#"
-              class="text-xs text-dark-muted hover:text-gnfc-blue transition-colors font-medium">Documentation</a>
-            <a href="#" class="text-xs text-dark-muted hover:text-gnfc-blue transition-colors font-medium">Support</a>
+              class="font-14px color-label hover-color-blue transition-colors fw-medium">Documentation</a>
+            <a href="#" class="font-14px color-label hover-color-blue transition-colors fw-medium">Support</a>
           </div>
         </div>
       </footer>
@@ -446,12 +445,19 @@
       });
 
       // ── KPI Stats ──
-      const totalJobs = allJobs.length;
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const todayTotalJobs = allJobs.filter(j => (j.targetDate || '').slice(0, 10) === todayIso).length;
       const completedJobs = allJobs.filter(j => j.status === '✓ OVER').length;
-      const inProgressJobs = allJobs.filter(j => j.status === 'IN PROGRESS').length;
+      const isoJobs = allJobs.filter(j => String(j.jobType || '').toUpperCase().includes('ISO')).length;
+      const normalizeStatus = (status) => String(status || '').trim().toUpperCase();
+      const isCompletedStatus = (status) => normalizeStatus(status).includes('OVER');
+      const isInProgressStatus = (status) => normalizeStatus(status) === 'IN PROGRESS';
+      const completedJobsSafe = allJobs.filter(j => isCompletedStatus(j.status)).length;
+      const pendingJobsSafe = allJobs.filter(j => !isCompletedStatus(j.status) && !isInProgressStatus(j.status)).length;
       const pendingJobs = allJobs.filter(j => !j.status || (j.status !== '✓ OVER' && j.status !== 'IN PROGRESS')).length;
 
       function animateCounter(el, target) {
+        if (!el) return;
         let current = 0;
         const step = Math.max(1, Math.ceil(target / 20));
         const interval = setInterval(() => {
@@ -462,13 +468,10 @@
       }
 
       setTimeout(() => {
-        animateCounter(document.getElementById('kpi-total'), totalJobs);
-        animateCounter(document.getElementById('kpi-completed'), completedJobs);
-        animateCounter(document.getElementById('kpi-progress'), inProgressJobs);
-        animateCounter(document.getElementById('kpi-pending'), pendingJobs);
-
-        const pct = totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
-        document.getElementById('kpi-completed-pct').textContent = pct + '%';
+        animateCounter(document.getElementById('kpi-total'), todayTotalJobs);
+        animateCounter(document.getElementById('kpi-completed'), completedJobsSafe);
+        animateCounter(document.getElementById('kpi-iso'), isoJobs);
+        animateCounter(document.getElementById('kpi-pending'), pendingJobsSafe);
       }, 200);
 
 
@@ -489,44 +492,44 @@
 
       if (recentJobs.length === 0) {
         activityFeed.innerHTML = `
-        <div class="text-center py-12 text-dark-muted">
+        <div class="text-center py-12 color-label">
           <i class="ph ph-clipboard-text text-4xl mb-2 block opacity-30"></i>
-          <p class="text-xs font-bold">No recent activity</p>
+          <p class="font-14px fw-bold">No recent activity</p>
         </div>`;
       } else {
         recentJobs.forEach(job => {
           const statusIcon = job.status === '✓ OVER'
-            ? '<i class="ph-fill ph-check-circle text-gnfc-green"></i>'
+            ? '<i class="ph-fill ph-check-circle color-green"></i>'
             : job.status === 'IN PROGRESS'
-              ? '<i class="ph-fill ph-hourglass-medium text-gnfc-orange"></i>'
-              : '<i class="ph-fill ph-clock text-gnfc-red"></i>';
+              ? '<i class="ph-fill ph-hourglass-medium color-orange"></i>'
+              : '<i class="ph-fill ph-clock color-red"></i>';
 
           const statusText = job.status || 'Pending';
-          const statusColor = job.status === '✓ OVER' ? 'text-gnfc-green'
-            : job.status === 'IN PROGRESS' ? 'text-gnfc-orange' : 'text-gnfc-red';
+          const statusColor = job.status === '✓ OVER' ? 'color-green'
+            : job.status === 'IN PROGRESS' ? 'color-orange' : 'color-red';
 
           const timeAgo = getTimeAgo(new Date(job.updatedAt || job.createdAt));
           const description = job.desc || job.jobType || 'No description';
 
           activityFeed.innerHTML += `
           <div class="activity-item flex gap-3">
-            <div class="w-8 h-8 rounded-full bg-dark-bg border border-dark-border flex items-center justify-center shrink-0 text-sm z-10">
+            <div class="w-8 h-8 rounded-full bg-dark-bg border border-dark-border flex items-center justify-center shrink-0 font-15px z-10">
               ${statusIcon}
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2 min-w-0">
-                  <span class="text-xs font-bold text-gnfc-blue">${job._plant}</span>
-                  <span class="text-dark-muted text-[10px]">•</span>
-                  <span class="text-xs font-bold  truncate">${job.tag || 'N.A'}</span>
-                  <span class="text-[10px] font-bold ${statusColor} bg-dark-bg px-1.5 py-0.5 rounded-sm border border-dark-border shrink-0">${statusText}</span>
+                  <span class="font-14px fw-bold color-blue">${job._plant}</span>
+                  <span class="color-label font-13px">•</span>
+                  <span class="font-14px fw-bold color-primary truncate">${job.tag || 'N.A'}</span>
+                  <span class="font-13px fw-bold ${statusColor} bg-dark-bg px-1.5 py-0.5 rounded-sm border border-dark-border shrink-0">${statusText}</span>
                 </div>
-                <span class="text-[10px] text-dark-muted font-mono shrink-0">${timeAgo}</span>
+                <span class="font-13px color-label font-mono shrink-0">${timeAgo}</span>
               </div>
-              <p class="text-[11px] text-dark-muted mt-0.5 truncate">${description}</p>
+              <p class="font-14px color-label mt-0.5 truncate">${description}</p>
               <div class="flex items-center gap-3 mt-1">
-                <span class="text-[10px] text-dark-muted"><i class="ph ph-user mr-0.5"></i>${job.tech || 'N.A'}</span>
-                <span class="text-[10px] text-dark-muted"><i class="ph ph-wrench mr-0.5"></i>${job.jobType || 'N.A'}</span>
+                <span class="font-13px color-label"><i class="ph ph-user mr-0.5"></i>${job.tech || 'N.A'}</span>
+                <span class="font-13px color-label"><i class="ph ph-wrench mr-0.5"></i>${job.jobType || 'N.A'}</span>
               </div>
             </div>
           </div>
@@ -619,7 +622,7 @@
         chart.render();
       } else {
         document.getElementById('job-distribution-chart').innerHTML =
-          '<div class="text-center text-dark-muted"><p class="text-sm">No job data available</p></div>';
+          '<div class="text-center color-label"><p class="font-15px">No job data available</p></div>';
       }
 
 
@@ -676,18 +679,18 @@
 
       topPlants.forEach(plant => {
         let status = 'Operational';
-        let statusColor = 'text-gnfc-green';
+        let statusColor = 'color-green';
         let bgColor = 'bg-gnfc-green/10';
         let icon = 'ph-check-circle';
 
         if (criticalPlants.includes(plant)) {
           status = 'Critical Alert';
-          statusColor = 'text-gnfc-red';
+          statusColor = 'color-red';
           bgColor = 'bg-gnfc-red/10';
           icon = 'ph-warning-circle';
         } else if (maintenancePlants.includes(plant)) {
           status = 'Maintenance';
-          statusColor = 'text-gnfc-orange';
+          statusColor = 'color-orange';
           bgColor = 'bg-gnfc-orange/10';
           icon = 'ph-wrench';
         }
@@ -699,13 +702,13 @@
                      <i class="ph-fill ${icon} text-lg"></i>
                   </div>
                   <div>
-                     <div class="text-xs font-bold text-white">${plant}</div>
-                     <div class="text-[10px] text-dark-muted">${status}</div>
+                     <div class="font-14px fw-bold color-white">${plant}</div>
+                     <div class="font-13px color-label">${status}</div>
                   </div>
                </div>
                <div class="text-right">
-                  <div class="text-[10px] font-mono font-bold text-dark-text">98%</div>
-                  <div class="text-[9px] text-dark-muted uppercase">Eff.</div>
+                  <div class="font-13px font-mono fw-bold color-primary">98%</div>
+                  <div class="font-12px color-label text-upper">Eff.</div>
                </div>
             </div>
           `;
@@ -720,16 +723,16 @@
       ];
 
       if (schedules.length === 0) {
-        schedulesContainer.innerHTML = '<p class="text-[10px] text-dark-muted text-center py-2">No upcoming schedules</p>';
+        schedulesContainer.innerHTML = '<p class="font-13px color-label text-center py-2">No upcoming schedules</p>';
       } else {
         schedules.forEach(item => {
           schedulesContainer.innerHTML += `
                <div class="flex items-center gap-2 p-2 rounded bg-dark-bg/30 border-l-2 border-${item.color}">
                   <div class="flex-1 min-w-0">
-                     <div class="text-[11px] font-bold text-dark-text truncate">${item.title}</div>
-                     <div class="text-[9px] text-dark-muted font-mono uppercase tracking-wide">${item.type}</div>
+                     <div class="font-14px fw-bold color-primary truncate">${item.title}</div>
+                     <div class="font-12px color-label font-mono text-upper ls-wide">${item.type}</div>
                   </div>
-                  <div class="bg-dark-panel border border-dark-border px-1.5 py-0.5 rounded text-[10px] font-bold text-${item.color}">
+                  <div class="bg-dark-panel border border-dark-border px-1.5 py-0.5 rounded font-13px fw-bold text-${item.color}">
                      ${item.due}
                   </div>
                </div>

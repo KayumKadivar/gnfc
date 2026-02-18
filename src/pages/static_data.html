@@ -2,211 +2,171 @@
 <html lang="en" class="dark">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SY_PM Static Data | GNFC</title>
-  <link rel="stylesheet" href="/src/css/ios-fonts.css">
-  <link rel="stylesheet" href="/src/css/modal-ui.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script src="/src/js/tailwind_config.js"></script>
-  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--app-bg, #111217);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--app-border, #2c3235);
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--app-muted, #8e8e9e);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SY_PM Static Data | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'static_data';</script>
 </head>
 
-<body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
+<body class="bg-dark-bg text-dark-text font-inter antialiased selection:bg-gnfc-orange/30 selection:text-white pb-20">
 
-  <script src="/src/js/theme_manager.js"></script>
-  <script src="/src/js/sidebar.js"></script>
-  <script src="/src/js/header.js"></script>
-
-  <div id="sidebar-container" class="relative z-20"></div>
-  <script>
-    try {
-      renderSidebar('technician_logbook');
-    } catch (error) {
-      console.error(error);
-    }
-  </script>
-
-  <main class="flex-1 flex flex-col overflow-hidden relative z-10">
+    <!-- Header will be rendered here -->
     <div id="header-container"></div>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
-      <div id="plant-nav-container"></div>
-      <script src="/src/js/plant_nav.js"></script>
-      <script>
-        try {
-          renderPlantNav('sy_pm');
-        } catch (error) {
-          console.error(error);
-        }
-      </script>
+    <main class="pt-24 px-4 max-w-7xl mx-auto space-y-6 animate-fade-in-up">
 
-      <!-- Context Section -->
-      <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg">
-        <div class="flex justify-between items-start gap-4 flex-wrap">
-          <div>
-            <h2 id="sy-context-heading" class="text-lg font-bold text-white">SY_PM Context</h2>
-            <p class="text-sm  mt-1">Static records are scoped to selected system and frequency.</p>
-          </div>
-          <div class="flex gap-2 flex-wrap text-[11px] font-bold uppercase tracking-wider">
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border ">
-              System <strong id="sy-chip-system" class="text-dark-text">-</strong>
-            </span>
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border ">
-              Frequency <strong id="sy-chip-frequency" class="text-dark-text">-</strong>
-            </span>
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border ">
-              Rows <strong id="static-record-count" class="text-dark-text">0 records</strong>
-            </span>
-          </div>
-        </div>
-        <div class="flex gap-3 mt-5 flex-wrap">
-          <button id="btn-add-record" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
-            <i class="ph-bold ph-plus text-sm"></i> Add Row
-          </button>
-          <button id="btn-edit-instruction" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
-            <i class="ph-bold ph-note-pencil text-sm"></i> Edit Instruction
-          </button>
-          <button id="btn-go-report" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-gnfc-orange border border-gnfc-orange/30 text-xs font-bold rounded-lg transition-all active:scale-95">
-            <i class="ph-bold ph-file-text text-sm"></i> Open Report Workspace
-          </button>
-        </div>
-      </section>
-
-      <!-- Table Section -->
-      <section class="rounded-xl border border-dark-border bg-dark-panel p-0 shadow-lg overflow-hidden flex flex-col">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr class="bg-dark-header uppercase tracking-wider border-b border-dark-border">
-                <th class="px-4 py-3 font-bold w-16 text-center">Sr</th>
-                <th class="px-4 py-3 font-bold">Item</th>
-                <th class="px-4 py-3 font-bold">Action</th>
-                <th class="px-4 py-3 font-bold">Reference Value</th>
-                <th class="px-4 py-3 font-bold w-32 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="static-table-body" class="divide-y divide-dark-border text-dark-text">
-              <!-- Rows injected by JS -->
-            </tbody>
-          </table>
-        </div>
-        <div id="static-empty" class="hidden p-8 text-center text-sm">No records found.</div>
-      </section>
-
-      <!-- Instruction Section -->
-      <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg mb-8">
-        <div class="flex justify-between items-center mb-3">
-          <div>
-            <h3 class="text-sm font-bold text-white">General Instruction</h3>
-            <p class="text-xs  mt-0.5">Instruction content is shared with report generation and blank
-              format print.</p>
-          </div>
-          <div class="text-[10px]  font-mono" id="instruction-updated-at">Updated: -</div>
-        </div>
-        <div id="instruction-preview"
-          class="p-3 rounded-lg bg-dark-bg border border-dark-border text-xs text-dark-text leading-relaxed font-mono whitespace-pre-wrap min-h-[60px]">
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- Add/Edit Modal -->
-  <div id="static-row-modal" class="gnfc-modal-overlay hidden" aria-hidden="true">
-    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
-      <div class="gnfc-modal-header">
-        <h3 id="static-row-modal-title" class="gnfc-modal-title">Add Static Record</h3>
-        <button type="button" data-close-modal="true" class="gnfc-modal-close">
-          <i class="ph-bold ph-x text-lg"></i>
-        </button>
-      </div>
-      <form id="static-row-form" class="flex flex-col flex-1 overflow-hidden">
-        <div class="gnfc-modal-body">
-          <div>
-            <label class="gnfc-modal-label" for="static-item">Item</label>
-            <input id="static-item" class="gnfc-modal-input" type="text" maxlength="250"
-              placeholder="Enter checklist item">
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <!-- Context Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <label class="gnfc-modal-label" for="static-action">Action</label>
-              <input id="static-action" class="gnfc-modal-input" type="text" maxlength="250"
-                placeholder="Action guidance">
+                <div class="flex items-center gap-3 mb-1">
+                    <span id="static-chip-system" class="px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 font-12px fw-bold text-upper ls-wider border border-blue-500/20">
+                        --
+                    </span>
+                    <span id="static-chip-frequency" class="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 font-12px fw-bold text-upper ls-wider border border-purple-500/20">
+                        --
+                    </span>
+                </div>
+                <h2 id="static-context-heading" class="font-24px fw-bold color-primary tracking-tight">
+                    Loading context...
+                </h2>
+                <p class="font-14px color-label mt-1">Manage static report items and reference values <span id="static-record-count" class="ml-2 px-2 py-0.5 rounded-full bg-dark-panel border border-dark-border font-10px fw-bold color-label">0 records</span></p>
             </div>
-            <div>
-              <label class="gnfc-modal-label" for="static-reference">Reference Value</label>
-              <input id="static-reference" class="gnfc-modal-input" type="text" maxlength="180"
-                placeholder="Reference value">
+            <div class="flex items-center gap-3">
+                <button type="button" onclick="window.history.back()" class="px-4 py-2 rounded-lg border border-dark-border bg-dark-panel hover:bg-dark-header color-primary font-14px fw-medium transition-colors">
+                    Back
+                </button>
+                <button id="btn-add-item" class="flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-orange-600 color-primary rounded-lg font-14px fw-medium transition-all shadow-lg shadow-orange-500/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="ph-bold ph-plus"></i>
+                    <span>Add Item</span>
+                </button>
+                <button id="btn-instruction" class="flex items-center gap-2 px-4 py-2 bg-dark-panel hover:bg-dark-header border border-dark-border color-primary rounded-lg font-14px fw-medium transition-all active:scale-95">
+                    <i class="ph-bold ph-info"></i>
+                    <span>Instructions</span>
+                </button>
             </div>
-          </div>
         </div>
-        <div class="gnfc-modal-footer">
-          <button type="button" data-close-modal="true" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
-          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- Instruction Modal -->
-  <div id="instruction-modal" class="gnfc-modal-overlay hidden" aria-hidden="true">
-    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
-      <div class="gnfc-modal-header">
-        <h3 class="gnfc-modal-title">Edit Instruction</h3>
-        <button type="button" data-close-modal="true" class="gnfc-modal-close">
-          <i class="ph-bold ph-x text-lg" data-close-modal="true"></i>
-        </button>
-      </div>
-      <form id="instruction-form" class="flex flex-col flex-1 overflow-hidden">
-        <div class="gnfc-modal-body">
-          <div>
-            <label class="gnfc-modal-label" for="instruction-input">Instruction Text</label>
-            <textarea id="instruction-input" class="gnfc-modal-input" style="min-height:150px;"
-              placeholder="Enter report instruction"></textarea>
-          </div>
+        <!-- Static Data List -->
+        <div class="bg-dark-panel border border-dark-border rounded-xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-dark-header border-b border-dark-border">
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider w-16 text-center">Sr</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider w-1/4">Item Name</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider w-1/4">Action</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider">Reference</th>
+                            <th class="px-6 py-4 font-12px fw-bold color-label text-upper ls-wider text-right w-32">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="static-list-body" class="divide-y divide-dark-border/50">
+                        <!-- Rows rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="static-empty-state" class="hidden flex flex-col items-center justify-center p-12 text-center">
+                <div class="w-16 h-16 rounded-full bg-dark-bg border border-dark-border flex items-center justify-center mb-4 color-label">
+                    <i class="ph-duotone ph-list-dashes text-3xl"></i>
+                </div>
+                <h3 class="font-16px fw-bold color-primary mb-1">No static items found</h3>
+                <p class="font-14px color-label max-w-[280px]">Add items to define the structure of your report.</p>
+                <button onclick="document.getElementById('btn-add-item').click()" class="mt-4 px-4 py-2 rounded-lg bg-dark-header hover:bg-dark-border border border-dark-border color-primary font-12px fw-medium transition-colors">
+                    Create First Item
+                </button>
+            </div>
         </div>
-        <div class="gnfc-modal-footer">
-          <button type="button" data-close-modal="true" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
-          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Update Instruction</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <script type="module" src="/src/js/sy_pm/page_static.js"></script>
-  <script src="/src/js/emg_call_modal.js"></script>
-  <script src="/src/js/pagination.js"></script>
+    </main>
+
+    <!-- Add/Edit Item Modal -->
+    <div id="item-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" data-close-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop"></div>
+
+        <!-- Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-dark-panel text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-dark-border opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" id="modal-panel">
+                    
+                    <div class="bg-dark-header px-4 py-3 sm:px-6 border-b border-dark-border flex justify-between items-center">
+                        <h3 class="font-18px fw-bold color-primary" id="modal-title">Add Static Item</h3>
+                        <button class="rounded-lg p-2 color-label hover:color-primary hover:bg-white/5 transition-colors" data-close-modal="true">
+                            <i class="ph ph-x font-20px"></i>
+                        </button>
+                    </div>
+
+                    <div class="px-4 py-5 sm:p-6 space-y-4">
+                        <input type="hidden" id="item-id">
+                        
+                        <div>
+                            <label class="block font-12px fw-medium color-label mb-1.5">Item Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="item-name" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted" placeholder="e.g., Temperature (TI-101)">
+                        </div>
+
+                        <div>
+                            <label class="block font-12px fw-medium color-label mb-1.5">Action / Parameter</label>
+                            <input type="text" id="item-action" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted" placeholder="e.g., Check Reading">
+                        </div>
+
+                        <div>
+                            <label class="block font-12px fw-medium color-label mb-1.5">Reference Value</label>
+                            <input type="text" id="item-reference" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted font-mono" placeholder="e.g., 50-80 °C">
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-header px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3 border-t border-dark-border">
+                        <button type="button" id="btn-save-item" class="w-full inline-flex justify-center rounded-lg border border-transparent bg-gnfc-orange px-4 py-2 text-base font-14px fw-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-gnfc-orange focus:ring-offset-2 focus:ring-offset-dark-panel sm:ml-3 sm:w-auto sm:text-sm transition-all shadow-lg shadow-orange-500/20">
+                            Save Item
+                        </button>
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-lg border border-dark-border bg-dark-panel px-4 py-2 text-base font-14px fw-medium color-primary shadow-sm hover:bg-dark-bg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-dark-panel sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all" data-close-modal="true">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instruction Modal -->
+    <div id="instruction-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" data-close-modal="true">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="instruction-backdrop"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-dark-panel text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-xl border border-dark-border opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" id="instruction-panel">
+                    <div class="bg-dark-header px-4 py-3 sm:px-6 border-b border-dark-border flex justify-between items-center">
+                        <h3 class="font-18px fw-bold color-primary">Report Instructions</h3>
+                        <button class="rounded-lg p-2 color-label hover:color-primary hover:bg-white/5 transition-colors" data-close-modal="true">
+                            <i class="ph ph-x font-20px"></i>
+                        </button>
+                    </div>
+                    <div class="px-4 py-5 sm:p-6">
+                        <label class="block font-12px fw-medium color-label mb-1.5">General Instructions</label>
+                        <textarea id="instruction-text" class="w-full bg-dark-bg border border-dark-border rounded-lg px-3 py-2 color-primary text-sm focus:ring-1 focus:ring-gnfc-orange focus:border-gnfc-orange outline-none transition-all placeholder:text-dark-muted resize-y min-h-[120px]" placeholder="Enter instructions for this report..."></textarea>
+                        <p class="mt-2 font-10px color-label text-right" id="instruction-updated">Last updated: -</p>
+                    </div>
+                    <div class="bg-dark-header px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3 border-t border-dark-border">
+                        <button type="button" id="btn-save-instruction" class="w-full inline-flex justify-center rounded-lg border border-transparent bg-gnfc-orange px-4 py-2 text-base font-14px fw-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-gnfc-orange focus:ring-offset-2 focus:ring-offset-dark-panel sm:ml-3 sm:w-auto sm:text-sm transition-all shadow-lg shadow-orange-500/20">
+                            Save Instructions
+                        </button>
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-lg border border-dark-border bg-dark-panel px-4 py-2 text-base font-14px fw-medium color-primary shadow-sm hover:bg-dark-bg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-dark-panel sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all" data-close-modal="true">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/js/sy_pm/page_static.js"></script>
 </body>
 
 </html>

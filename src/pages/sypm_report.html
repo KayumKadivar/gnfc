@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GNFC | SY_PM Report Workspace</title>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,23 +14,10 @@
   <script src="/src/js/tailwind_config.js"></script>
 
   <style>
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--app-bg, #111217);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--app-border, #2c3235);
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--app-muted, #8e8e9e);
-    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--app-bg, #0f1115); }
+    ::-webkit-scrollbar-thumb { background: var(--app-border, #2a2e36); border-radius: 10px; }
 
     @media print {
       body>*:not(#print-preview-modal) {
@@ -73,7 +61,7 @@
 </head>
 
 <body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
+  class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange selection:text-white relative">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -105,101 +93,101 @@
       <section class="rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg">
         <div class="flex justify-between items-start gap-4 flex-wrap">
           <div>
-            <h2 id="report-context-heading" class="text-lg font-bold text-dark-text">Report Context</h2>
-            <p class="text-sm text-dark-muted mt-1">Generate, edit and manage report instances for selected
+            <h2 id="report-context-heading" class="font-18px fw-bold color-primary">Report Context</h2>
+            <p class="font-12px color-secondary mt-1">Generate, edit and manage report instances for selected
               system-frequency pair.</p>
           </div>
 
-          <div class="flex gap-2 flex-wrap text-[11px] font-bold uppercase tracking-wider">
+          <div class="flex gap-2 flex-wrap font-10px fw-bold uppercase tracking-wider">
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-              System <strong id="report-chip-system" class="text-dark-text">-</strong>
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border color-label">
+              System <strong id="report-chip-system" class="color-primary">-</strong>
             </span>
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-              Frequency <strong id="report-chip-frequency" class="text-dark-text">-</strong>
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border color-label">
+              Frequency <strong id="report-chip-frequency" class="color-primary">-</strong>
             </span>
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-              Reports <strong id="report-count" class="text-dark-text">0</strong>
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border color-label">
+              Reports <strong id="report-count" class="color-primary">0</strong>
             </span>
             <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border text-dark-muted">
-              Static <strong id="report-static-count" class="text-dark-text">0</strong>
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-bg border border-dark-border color-label">
+              Static <strong id="report-static-count" class="color-primary">0</strong>
             </span>
           </div>
         </div>
 
         <div class="flex flex-wrap gap-3 mt-5">
           <button id="btn-go-static" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
-            <i class="ph-bold ph-database text-sm"></i> Static Data
+            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border color-primary font-12px fw-bold rounded-lg transition-all border border-dark-border active:scale-95">
+            <i class="ph-bold ph-database font-14px"></i> Static Data
           </button>
 
           <button id="btn-view-instruction" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
-            <i class="ph-bold ph-info text-sm"></i> Instructions
+            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border color-primary font-12px fw-bold rounded-lg transition-all border border-dark-border active:scale-95">
+            <i class="ph-bold ph-info font-14px"></i> Instructions
           </button>
 
           <button id="btn-blank-format" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
-            <i class="ph-bold ph-printer text-sm"></i> Blank Format
+            class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border color-primary font-12px fw-bold rounded-lg transition-all border border-dark-border active:scale-95">
+            <i class="ph-bold ph-printer font-14px"></i> Blank Format
           </button>
 
           <button id="btn-generate-report" type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
-            <i class="ph-bold ph-plus-circle text-sm"></i> Generate Report
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gnfc-orange hover:bg-amber-600 text-white font-12px fw-bold rounded-lg transition-all shadow-lg shadow-gnfc-orange/20 active:scale-95">
+            <i class="ph-bold ph-plus-circle font-14px"></i> Generate Report
           </button>
         </div>
       </section>
 
       <section class="grid grid-cols-1 xl:grid-cols-12 gap-4">
         <div class="xl:col-span-3 rounded-xl border border-dark-border bg-dark-panel p-4 shadow-lg min-h-[560px] flex flex-col">
-          <h3 class="text-sm font-bold text-dark-text">Report History</h3>
-          <p class="text-[11px] text-dark-muted mt-1 mb-3">Select a report to view/edit.</p>
+          <h3 class="font-14px fw-bold color-primary">Report History</h3>
+          <p class="font-11px color-label mt-1 mb-3">Select a report to view/edit.</p>
           <div id="report-list" class="flex-1 overflow-y-auto pr-1 space-y-2"></div>
         </div>
 
         <div class="xl:col-span-9 rounded-xl border border-dark-border bg-dark-panel shadow-lg overflow-hidden flex flex-col min-h-[560px]">
           <div class="px-4 py-3 border-b border-dark-border bg-dark-header flex items-center justify-between gap-3">
-            <h3 class="text-sm font-bold text-dark-text flex items-center gap-2">
-              <i class="ph-fill ph-note-pencil text-gnfc-orange"></i>
+            <h3 class="font-14px fw-bold color-primary flex items-center gap-2">
+              <i class="ph-fill ph-note-pencil color-orange"></i>
               Report Editor
             </h3>
-            <span id="report-editor-meta" class="text-[10px] font-mono text-dark-muted">-</span>
+            <span id="report-editor-meta" class="font-10px typo-mono color-label">-</span>
           </div>
 
           <div id="report-editor-container" class="flex-1 overflow-auto p-4 bg-dark-bg/30"></div>
 
           <div class="px-4 py-3 border-t border-dark-border bg-dark-header/70 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
             <div class="flex items-center flex-wrap gap-3">
-              <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted flex items-center gap-2">
+              <label class="font-10px fw-bold uppercase tracking-wider color-label flex items-center gap-2">
                 Checked By 1
                 <input id="report-checked-1" type="text" placeholder="PBS"
-                  class="bg-dark-bg border border-dark-border rounded px-2 py-1 text-xs text-dark-text focus:border-gnfc-orange focus:outline-none uppercase font-mono w-20" />
+                  class="bg-dark-bg border border-dark-border rounded px-2 py-1 font-12px color-primary focus:border-gnfc-orange focus:outline-none uppercase typo-mono w-20" />
               </label>
-              <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted flex items-center gap-2">
+              <label class="font-10px fw-bold uppercase tracking-wider color-label flex items-center gap-2">
                 Checked By 2
                 <input id="report-checked-2" type="text" placeholder="PNV"
-                  class="bg-dark-bg border border-dark-border rounded px-2 py-1 text-xs text-dark-text focus:border-gnfc-orange focus:outline-none uppercase font-mono w-20" />
+                  class="bg-dark-bg border border-dark-border rounded px-2 py-1 font-12px color-primary focus:border-gnfc-orange focus:outline-none uppercase typo-mono w-20" />
               </label>
             </div>
 
             <div class="flex items-center gap-2 flex-wrap">
               <button id="btn-cancel-report" type="button"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border text-dark-text text-xs font-bold rounded-lg transition-all border border-dark-border active:scale-95">
+                class="inline-flex items-center gap-2 px-4 py-2 bg-dark-header hover:bg-dark-border color-primary font-12px fw-bold rounded-lg transition-all border border-dark-border active:scale-95">
                 Cancel
               </button>
 
               <button id="btn-delete-report" type="button"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 text-xs font-bold rounded-lg transition-all active:scale-95">
-                <i class="ph-bold ph-trash text-sm"></i>
+                class="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 font-12px fw-bold rounded-lg transition-all active:scale-95">
+                <i class="ph-bold ph-trash font-14px"></i>
                 Delete
               </button>
 
               <button id="btn-save-report" type="button"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition-all shadow-lg shadow-emerald-900/20 active:scale-95">
-                <i class="ph-bold ph-floppy-disk text-sm"></i>
+                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-12px fw-bold rounded-lg transition-all shadow-lg shadow-emerald-900/20 active:scale-95">
+                <i class="ph-bold ph-floppy-disk font-14px"></i>
                 Save Changes
               </button>
             </div>
@@ -213,18 +201,18 @@
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-close-modal="true"></div>
     <div class="relative w-full max-w-2xl m-4 mx-auto bg-dark-panel border border-dark-border rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
       <div class="px-5 py-4 border-b border-dark-border bg-dark-header rounded-t-xl flex items-center justify-between">
-        <h3 class="text-sm font-bold text-dark-text uppercase tracking-wide">Work Instruction</h3>
-        <button type="button" data-close-modal="true" class="text-dark-muted hover:text-dark-text transition-colors">
-          <i class="ph-bold ph-x text-lg pointer-events-none"></i>
+        <h3 class="font-14px fw-bold color-primary uppercase tracking-wide">Work Instruction</h3>
+        <button type="button" data-close-modal="true" class="color-label hover-color-primary transition-colors">
+          <i class="ph-bold ph-x font-18px pointer-events-none"></i>
         </button>
       </div>
       <div class="p-5 overflow-y-auto">
-        <div id="report-instruction-text" class="text-dark-text whitespace-pre-wrap leading-relaxed text-sm"></div>
+        <div id="report-instruction-text" class="color-primary whitespace-pre-wrap leading-relaxed font-14px"></div>
       </div>
       <div class="px-5 py-3 border-t border-dark-border bg-dark-header/70 rounded-b-xl flex justify-between items-center">
-        <div id="report-instruction-updated" class="text-[10px] text-dark-muted font-mono">-</div>
+        <div id="report-instruction-updated" class="font-10px color-label typo-mono">-</div>
         <button type="button" data-close-modal="true"
-          class="px-4 py-2 bg-dark-panel border border-dark-border text-dark-text text-xs font-bold rounded hover:bg-dark-border transition-colors">Close</button>
+          class="px-4 py-2 bg-dark-panel border border-dark-border color-primary font-12px fw-bold rounded hover:bg-dark-border transition-colors">Close</button>
       </div>
     </div>
   </div>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pending Log Report | GNFC</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -48,7 +49,7 @@
     </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
 
     <script src="/src/js/theme_manager.js"></script>
     <script src="/src/js/sidebar.js"></script>
@@ -93,15 +94,15 @@
                     <!-- Header with title and Delete All -->
                     <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <i class="ph-fill ph-hourglass-medium text-gnfc-orange"></i>
-                            <h3 class="font-bold text-sm">Pending Log Report</h3>
+                            <i class="ph-fill ph-hourglass-medium color-orange"></i>
+                            <h3 class="fw-bold font-14px">Pending Log Report</h3>
                             <span id="pendingCount"
-                                class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono ml-2">0
+                                class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded color-label typo-mono ml-2">0
                                 Pending</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <button onclick="deleteAllPending()"
-                                class="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-sm transition-all shadow-lg shadow-red-500/20">
+                                class="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white font-12px fw-bold rounded-sm transition-all shadow-lg shadow-red-500/20">
                                 <i class="ph-bold ph-trash"></i>Delete All
                             </button>
                         </div>
@@ -119,7 +120,7 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr
-                                    class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                                    class="bg-dark-header font-10px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
                                     <th class="border-r border-dark-border p-2 w-10">Sr</th>
                                     <th class="border-r border-dark-border p-2 min-w-[80px]">TagNo</th>
                                     <th class="border-r border-dark-border p-2 min-w-[180px]">Job</th>
@@ -130,7 +131,7 @@
                                     <th class="p-2 w-14">Del</th>
                                 </tr>
                             </thead>
-                            <tbody id="pendingTableBody" class="text-xs">
+                            <tbody id="pendingTableBody" class="font-12px">
                                 <!-- Pending log data will be populated here -->
                             </tbody>
                         </table>
@@ -253,26 +254,26 @@
             if (pendingData.length === 0) {
                 tbody.innerHTML = `
           <tr>
-            <td colspan="8" class="p-8 text-center text-dark-muted">
-              <i class="ph-bold ph-check-circle text-3xl text-emerald-400 mb-2 block"></i>
-              <span class="text-sm font-bold">No pending jobs</span>
-              <p class="text-[11px] mt-1">All assigned jobs have been completed by technicians.</p>
+            <td colspan="8" class="p-8 text-center color-label">
+              <i class="ph-bold ph-check-circle text-3xl color-green mb-2 block"></i>
+              <span class="font-14px fw-bold">No pending jobs</span>
+              <p class="font-11px mt-1">All assigned jobs have been completed by technicians.</p>
             </td>
           </tr>
         `;
             } else {
                 tbody.innerHTML = pendingData.map((row, idx) => `
           <tr class="border-b border-dark-border hover:bg-white/5 transition-colors ${idx % 2 === 0 ? 'bg-dark-bg/30' : ''}" id="row-${idx}">
-            <td class="border-r border-dark-border p-2 text-center font-bold">${row.sr}</td>
-            <td class="border-r border-dark-border p-2 font-mono text-gnfc-orange font-bold">${row.tagNo}</td>
-            <td class="border-r border-dark-border p-2 text-[11px] leading-relaxed">${row.job}</td>
-            <td class="border-r border-dark-border p-2 text-center font-bold">${row.tech}</td>
-            <td class="border-r border-dark-border p-2 text-[11px] leading-relaxed">${row.desc || '-'}</td>
+            <td class="border-r border-dark-border p-2 text-center fw-bold">${row.sr}</td>
+            <td class="border-r border-dark-border p-2 typo-mono color-orange fw-bold">${row.tagNo}</td>
+            <td class="border-r border-dark-border p-2 font-11px leading-relaxed">${row.job}</td>
+            <td class="border-r border-dark-border p-2 text-center fw-bold">${row.tech}</td>
+            <td class="border-r border-dark-border p-2 font-11px leading-relaxed">${row.desc || '-'}</td>
             <td class="border-r border-dark-border p-2 text-center">${row.techStatus || '-'}</td>
-            <td class="border-r border-dark-border p-2 text-[10px]">${row.remarks || '-'}</td>
+            <td class="border-r border-dark-border p-2 font-10px">${row.remarks || '-'}</td>
             <td class="p-2 text-center">
               <button onclick="deletePending(${idx})" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-1 rounded transition-all" title="Delete this pending job">
-                <i class="ph-fill ph-trash text-base"></i>
+                <i class="ph-fill ph-trash font-16px"></i>
               </button>
             </td>
           </tr>
@@ -303,9 +304,9 @@
                 width: 400,
                 padding: "1em",
                 customClass: {
-                    title: "text-lg",
-                    htmlContainer: "text-sm",
-                    popup: "text-xs"
+                    title: "font-18px",
+                    htmlContainer: "font-14px",
+                    popup: "font-12px"
                 },
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
@@ -351,9 +352,9 @@
                 width: 400,
                 padding: "1em",
                 customClass: {
-                    title: "text-lg",
-                    htmlContainer: "text-sm",
-                    popup: "text-xs"
+                    title: "font-18px",
+                    htmlContainer: "font-14px",
+                    popup: "font-12px"
                 },
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
@@ -379,9 +380,9 @@
                             width: 400,
                             padding: "1em",
                             customClass: {
-                                title: "text-lg",
-                                htmlContainer: "text-sm",
-                                popup: "text-xs"
+                                title: "font-18px",
+                                htmlContainer: "font-14px",
+                                popup: "font-12px"
                             }
                         });
                     }, rows.length * 50 + 300);
@@ -399,4 +400,4 @@
     <script src="/src/js/pagination.js"></script>
 </body>
 
-</html>>
+</html>

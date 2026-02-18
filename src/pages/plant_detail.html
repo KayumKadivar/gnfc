@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plant Detail | GNFC</title>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="stylesheet" href="/src/css/modal-ui.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -42,7 +43,7 @@
 </head>
 
 <body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+  class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -87,16 +88,16 @@
           <div class="flex items-center gap-4 w-full xl:w-auto">
             <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border overflow-x-auto max-w-full">
               <button id="btn-tomorrow" onclick="switchView(this, 'tomorrow')"
-                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Tomorrow</button>
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Tomorrow</button>
               <button id="btn-today" onclick="switchView(this, 'today')"
-                class="tab-btn px-3 py-1 text-[11px] font-bold text-gnfc-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
+                class="tab-btn px-3 py-1 font-14px fw-bold color-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
               <button id="btn-prev" onclick="switchView(this, 'prev')"
-                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">PrevDay</button>
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">PrevDay</button>
               <div class="w-px bg-dark-border mx-1 my-1"></div>
               <button id="btn-weekly" onclick="switchView(this, 'weekly')"
-                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Weekly</button>
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Weekly</button>
               <button id="btn-monthly" onclick="switchView(this, 'monthly')"
-                class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Monthly</button>
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Monthly</button>
             </div>
           </div>
 
@@ -106,158 +107,203 @@
             <!-- Quick Actions Group -->
             <div class="flex items-center gap-1 flex-wrap">
               <button onclick="AddLogModal.open()"
-                class="flex items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white text-xs font-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+                class="flex items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
                 <i class="ph-bold ph-plus"></i> Add Direct Job
               </button>
 
-              <div class="relative group">
-                <!-- <button
-                    class="flex items-center gap-2 px-3 py-1.5 bg-gnfc-blue/10 hover:bg-gnfc-blue/20 text-gnfc-blue border border-gnfc-blue/30 text-xs font-bold rounded-sm transition-colors">
-                    <i class="ph-bold ph-user-plus"></i> Assign
-                    <i class="ph-bold ph-caret-down text-[10px]"></i>
-                  </button> -->
-                <!-- Dropdown for Assign -->
-                <div
-                  class="absolute right-0 top-full mt-1 w-40 bg-dark-panel border border-dark-border shadow-xl rounded-sm p-1 hidden group-hover:block z-20">
-                  <button id="assign-today-btn" onclick="openJobModal('assign', 'today')"
-                    class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
-                    Assign Today
+
+              <!-- Assigned Job Cards (Engineer/Manager only) -->
+              <div id="assigned-jobs-section" class="mt-4">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-1 h-6 rounded-full bg-gradient-to-b from-gnfc-orange to-gnfc-red"></div>
+                  <h3 class="fw-bold font-15px tracking-tight section-label cursor-default color-primary">Assigned Jobs</h3>
+                  <div class="h-px flex-1 bg-gradient-to-r from-dark-border/50 to-transparent"></div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+                  <button onclick="window.location.href='/src/pages/shift_logbook.html?view=assigned_today'"
+                    class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-orange/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-orange/5">
+                    <div class="flex items-start justify-between mb-3">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-gnfc-orange/10 border border-gnfc-orange/20 flex items-center justify-center group-hover:bg-gnfc-orange/20 group-hover:scale-110 transition-all duration-300">
+                        <i class="ph-fill ph-clipboard-text text-lg color-orange"></i>
+                      </div>
+                      <i
+                        class="ph-bold ph-arrow-up-right color-label group-hover-color-orange transition-colors font-15px"></i>
+                    </div>
+                    <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">Assigned</p>
+                    <h4 class="font-15px fw-bold group-hover-color-orange transition-colors">Today's Job</h4>
+                    <style>
+                      #assigned-jobs-section .qa-card:nth-child(1)::before {
+                        background: linear-gradient(90deg, #FF9900, #F2495C);
+                      }
+                    </style>
                   </button>
-                  <button id="assign-tomorrow-btn" onclick="openJobModal('assign', 'tomorrow')"
-                    class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
-                    Assign Tomorrow
+
+                  <button onclick="window.location.href='/src/pages/shift_logbook.html?view=assigned_tomorrow'"
+                    class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-red/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-red/5">
+                    <div class="flex items-start justify-between mb-3">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-gnfc-red/10 border border-gnfc-red/20 flex items-center justify-center group-hover:bg-gnfc-red/20 group-hover:scale-110 transition-all duration-300">
+                        <i class="ph-fill ph-calendar-star text-lg color-red"></i>
+                      </div>
+                      <i
+                        class="ph-bold ph-arrow-up-right color-label group-hover-color-red transition-colors font-15px"></i>
+                    </div>
+                    <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">Assigned</p>
+                    <h4 class="font-15px fw-bold group-hover-color-red transition-colors">Tomorrow's Job</h4>
+                    <style>
+                      #assigned-jobs-section .qa-card:nth-child(2)::before {
+                        background: linear-gradient(90deg, #F2495C, #B794F4);
+                      }
+                    </style>
                   </button>
+
                 </div>
               </div>
+
+              <script>
+                // Hide assigned job cards for Technician role
+                (function () {
+                  const role = localStorage.getItem('userRole') || 'technician';
+                  if (role === 'technician') {
+                    const section = document.getElementById('assigned-jobs-section');
+                    if (section) section.style.display = 'none';
+                  }
+                })();
+              </script>
+
             </div>
-
-            <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
-
-            <!-- Tools Group -->
-            <div class="flex items-center gap-2">
-              <button id="toggle-pending-btn" onclick="togglePendingMode()"
-                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-gnfc-orange text-xs font-bold rounded-sm transition-colors"
-                title="Show Pending Logs">
-                <i class="ph-bold ph-clock"></i> Pending
-              </button>
-
-              <button id="job-reminder-btn" onclick="openReminderModal()"
-                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-purple-400 text-xs font-bold rounded-sm transition-colors"
-                title="Job Planner / Reminders">
-                <i class="ph-bold ph-calendar-check"></i> Planner
-              </button>
-
-              <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
-                class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-sm transition-colors animate-pulse">
-                <i class="ph-bold ph-warning"></i> Acknowledge
-              </button>
-            </div>
-
           </div>
-        </div>
-      </div>
 
-      <!-- Filters Drawer (Collapsible) -->
-      <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
-        <div class="flex flex-col md:flex-row items-center gap-4 text-xs">
+          <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+
+          <!-- Tools Group -->
           <div class="flex items-center gap-2">
-            <span class="text-dark-muted font-mono uppercase">Range:</span>
-            <input type="date" id="start-date" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-            <span class="text-dark-muted">-</span>
-            <input type="date" id="end-date" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+            <button id="toggle-pending-btn" onclick="togglePendingMode()"
+              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover-color-orange font-14px fw-bold rounded-sm transition-colors"
+              title="Show Pending Logs">
+              <i class="ph-bold ph-clock"></i> Pending
+            </button>
+
+            <button id="job-reminder-btn" onclick="openReminderModal()"
+              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover:text-purple-400 font-14px fw-bold rounded-sm transition-colors"
+              title="Job Planner / Reminders">
+              <i class="ph-bold ph-calendar-check"></i> Planner
+            </button>
+
+            <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
+              class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 font-14px fw-bold rounded-sm transition-colors animate-pulse">
+              <i class="ph-bold ph-warning"></i> Acknowledge
+            </button>
           </div>
 
-          <div class="flex items-center gap-2 flex-1">
-            <span class="text-dark-muted font-mono uppercase">Type:</span>
-            <select id="job-type-select" onchange="applyFilters()"
-              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
-              <option value="">All Jobs</option>
-            </select>
-          </div>
+        </div>
+      </div>
+    </div>
 
-          <button onclick="toggleJobFilter()" class="text-dark-muted hover:text-white"><i
-              class="ph-bold ph-x"></i></button>
+    <!-- Filters Drawer (Collapsible) -->
+    <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
+      <div class="flex flex-col md:flex-row items-center gap-4 font-14px">
+        <div class="flex items-center gap-2">
+          <span class="color-secondary typo-mono text-upper">Range:</span>
+          <input type="date" id="start-date" onchange="applyFilters()"
+            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+          <span class="color-secondary">-</span>
+          <input type="date" id="end-date" onchange="applyFilters()"
+            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+        </div>
+
+        <div class="flex items-center gap-2 flex-1">
+          <span class="color-secondary typo-mono text-upper">Type:</span>
+          <select id="job-type-select" onchange="applyFilters()"
+            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
+            <option value="">All Jobs</option>
+          </select>
+        </div>
+
+        <button onclick="toggleJobFilter()" class="color-secondary hover-color-white"><i
+            class="ph-bold ph-x"></i></button>
+      </div>
+    </div>
+
+    <div id="dynamic-view-container"
+      class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+      <div
+        class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+        <div class="flex items-center gap-2">
+          <i class="ph-fill ph-table text-blue-600 dark:color-blue"></i>
+          <span id="view-title" class="font-15px fw-bold text-slate-800 dark:color-primary">Today Log Book</span>
+          <span id="record-count"
+            class="ml-2 font-13px bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:color-secondary typo-mono">0
+            Records</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <i
+              class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 color-secondary font-14px"></i>
+            <input type="text" id="table-search" placeholder="Search logs..."
+              onkeyup="plantLogTable.setSearch(this.value)"
+              class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border color-primary font-14px rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+          </div>
+          <span id="view-date" class="font-14px typo-mono color-blue dark:color-orange">--.--.----</span>
         </div>
       </div>
 
-      <div id="dynamic-view-container"
-        class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
-        <div
-          class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
-          <div class="flex items-center gap-2">
-            <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
-            <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
-            <span id="record-count"
-              class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0
-              Records</span>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <div class="relative">
-              <i
-                class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
-              <input type="text" id="table-search" placeholder="Search logs..."
-                onkeyup="plantLogTable.setSearch(this.value)"
-                class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
-            </div>
-            <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">--.--.----</span>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto flex-1">
-          <table id="plant-table" class="w-full text-left border-collapse">
-            <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header ">
-              <tr
-                class="text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer transition-colors"
-                  onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer transition-colors"
-                  onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-                </th>
-                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer transition-colors"
-                  onclick="plantLogTable.sort('tag')">Loop No <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-                </th>
-                <th
-                  class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer transition-colors"
-                  onclick="plantLogTable.sort('jobType')">Job <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-                </th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer transition-colors"
-                  onclick="plantLogTable.sort('tech')">Tech</th>
-                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] transition-colors">
-                  Description
-                </th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer transition-colors"
-                  onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                  <div class="flex items-center justify-between cursor-pointer transition-colors p-1 rounded"
-                    onclick="plantLogTable.sort('status')">
-                    <span>Status</span>
-                  </div>
-                  <button onclick="toggleStatusFilter(event)"
-                    class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
-                    <i class="ph-bold ph-funnel text-xs"></i>
-                  </button>
-                  <div id="status-filter-dropdown"
-                    class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
-                  </div>
-                </th>
-                <th rowspan="2" class="p-2 min-w-[120px] transition-colors">Remarks</th>
-                <th rowspan="2" class="p-2 w-10 transition-colors" title="Add To History">H</th>
-              </tr>
-              <tr
-                class="text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th class="border-r border-dark-border p-2 transition-colors">Tag No</th>
-                <th class="border-r border-dark-border p-2 transition-colors">Type of Job</th>
-              </tr>
-            </thead>
-            <tbody id="plantTableBody" class="text-xs font-mono"></tbody>
-          </table>
-        </div>
-
-        <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
+      <div class="overflow-x-auto flex-1">
+        <table id="plant-table" class="w-full text-left border-collapse">
+          <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header ">
+            <tr
+              class="font-13px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+              <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer transition-colors"
+                onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+              <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer transition-colors"
+                onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+              </th>
+              <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer transition-colors"
+                onclick="plantLogTable.sort('tag')">Loop No <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+              </th>
+              <th
+                class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border fw-black cursor-pointer transition-colors"
+                onclick="plantLogTable.sort('jobType')">Job <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
+              </th>
+              <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer transition-colors"
+                onclick="plantLogTable.sort('tech')">Tech</th>
+              <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] transition-colors">
+                Description
+              </th>
+              <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer transition-colors"
+                onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
+              <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
+                <div class="flex items-center justify-between cursor-pointer transition-colors p-1 rounded"
+                  onclick="plantLogTable.sort('status')">
+                  <span>Status</span>
+                </div>
+                <button onclick="toggleStatusFilter(event)"
+                  class="absolute top-5 right-6 color-secondary hover-color-blue focus:outline-none p-1 rounded hover:bg-white/5">
+                  <i class="ph-bold ph-funnel font-14px"></i>
+                </button>
+                <div id="status-filter-dropdown"
+                  class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
+                </div>
+              </th>
+              <th rowspan="2" class="p-2 min-w-[120px] transition-colors">Remarks</th>
+              <th rowspan="2" class="p-2 w-10 transition-colors" title="Add To History">H</th>
+            </tr>
+            <tr
+              class="font-13px fw-bold text-slate-500 dark:color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+              <th class="border-r border-dark-border p-2 transition-colors">Tag No</th>
+              <th class="border-r border-dark-border p-2 transition-colors">Type of Job</th>
+            </tr>
+          </thead>
+          <tbody id="plantTableBody" class="font-14px typo-mono"></tbody>
+        </table>
       </div>
+
+      <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
+    </div>
     </div>
   </main>
 
@@ -309,8 +355,7 @@
           </div>
 
           <div id="job-modal-ojr" class="border border-dark-border rounded-sm overflow-hidden mt-4">
-            <div
-              class="px-3 py-2 border-b border-dark-border bg-dark-panel text-[10px] font-bold text-gnfc-blue uppercase">
+            <div class="px-3 py-2 border-b border-dark-border bg-dark-panel font-13px fw-bold color-blue text-upper">
               Operation Job Register / Weekly Pending</div>
             <div class="max-h-32 overflow-auto divide-y divide-dark-border" id="ojr-pending-list"></div>
           </div>
@@ -346,138 +391,147 @@
         <div class="gnfc-modal-body" style="max-height:70vh;">
           <div class="space-y-6">
 
-          <!-- Top Context Strip -->
-          <div
-            class="grid grid-cols-3 gap-px bg-dark-border border border-dark-border rounded-sm overflow-hidden text-xs shadow-sm">
-            <div class="bg-[#22252b] p-3">
-              <label class="gnfc-modal-label">Date</label>
-              <input id="edit-job-date" type="text" readonly
-                class="w-full bg-transparent border-none p-0 text-white font-mono focus:ring-0 cursor-default">
-            </div>
-            <div class="bg-[#22252b] p-3 border-l border-dark-border">
-              <label class="gnfc-modal-label">Assigned To</label>
-              <input id="edit-job-assigned-to" type="text" readonly
-                class="w-full bg-transparent border-none p-0 text-gnfc-blue font-bold focus:ring-0 cursor-default">
-            </div>
-            <div class="bg-[#22252b] p-3 border-l border-dark-border">
-              <label class="gnfc-modal-label">Assigned By</label>
-              <input id="edit-job-by" type="text" readonly
-                class="w-full bg-transparent border-none p-0 text-white focus:ring-0 cursor-default">
-            </div>
-          </div>
-
-          <!-- Job Details Card -->
-          <div class="space-y-2">
-            <h4
-              class="text-[10px] font-bold text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-gnfc-blue"></span> Job Context
-            </h4>
-            <div class="bg-[#1e2126] border border-dark-border rounded-sm p-4 space-y-4 shadow-sm">
-              <div>
-                <label class="gnfc-modal-label">Job Summary</label>
-                <textarea id="edit-job-summary" rows="1" readonly
-                  class="gnfc-modal-input resize-none font-medium"></textarea>
+            <!-- Top Context Strip -->
+            <div
+              class="grid grid-cols-3 gap-px bg-dark-border border border-dark-border rounded-sm overflow-hidden font-14px shadow-sm">
+              <div class="bg-[#22252b] p-3">
+                <label class="gnfc-modal-label">Date</label>
+                <input id="edit-job-date" type="text" readonly
+                  class="w-full bg-transparent border-none p-0 color-primary typo-mono focus:ring-0 cursor-default">
               </div>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <label class="gnfc-modal-label">Date</label>
-                  <input id="edit-job-detail-date" type="text" readonly class="gnfc-modal-input" style="color:#94a3b8;">
-                </div>
-                <div class="md:col-span-2">
-                  <label class="gnfc-modal-label">Loop / Tag</label>
-                  <input id="edit-job-loop-tag" type="text" readonly class="gnfc-modal-input" style="color:#3b82f6;font-family:monospace;font-weight:500;">
-                </div>
-                <div>
-                  <label class="gnfc-modal-label">Type</label>
-                  <input id="edit-job-type" type="text" readonly class="gnfc-modal-input">
-                  <input id="edit-job-inst" type="hidden">
-                </div>
+              <div class="bg-[#22252b] p-3 border-l border-dark-border">
+                <label class="gnfc-modal-label">Assigned To</label>
+                <input id="edit-job-assigned-to" type="text" readonly
+                  class="w-full bg-transparent border-none p-0 color-blue fw-bold focus:ring-0 cursor-default">
+              </div>
+              <div class="bg-[#22252b] p-3 border-l border-dark-border">
+                <label class="gnfc-modal-label">Assigned By</label>
+                <input id="edit-job-by" type="text" readonly
+                  class="w-full bg-transparent border-none p-0 color-primary focus:ring-0 cursor-default">
               </div>
             </div>
-          </div>
 
-          <!-- Execution / Update Section -->
-          <div class="space-y-3">
-            <h4
-              class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Execution Update
-            </h4>
-
-            <div class="space-y-4">
-              <div>
-                <label class="gnfc-modal-label" style="color:#f1f5f9;">Description / Remarks <span style="color:#f87171;">*</span></label>
-                <textarea id="edit-job-desc" rows="4"
-                  class="gnfc-modal-input font-mono leading-relaxed"
-                  style="font-size:0.875rem;"
-                  placeholder="Enter detailed job description..."></textarea>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Job Details Card -->
+            <div class="space-y-2">
+              <h4 class="font-13px fw-bold color-blue text-upper ls-widest flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-gnfc-blue"></span> Job Context
+              </h4>
+              <div class="bg-[#1e2126] border border-dark-border rounded-sm p-4 space-y-4 shadow-sm">
                 <div>
-                  <label class="gnfc-modal-label">Current Status</label>
-                  <div class="relative">
-                    <select id="edit-job-status" class="gnfc-modal-input" style="padding-left:0.75rem;padding-right:2rem;height:2.25rem;font-weight:700;appearance:none;cursor:pointer;">
-                      <option value="IN PROGRESS">IN PROGRESS</option>
-                      <option value="✓ OVER">✓ OVER</option>
-                      <option value="HOLD">HOLD</option>
-                    </select>
-                    <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none"></i>
+                  <label class="gnfc-modal-label">Job Summary</label>
+                  <textarea id="edit-job-summary" rows="1" readonly
+                    class="gnfc-modal-input resize-none fw-medium"></textarea>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label class="gnfc-modal-label">Date</label>
+                    <input id="edit-job-detail-date" type="text" readonly class="gnfc-modal-input"
+                      style="color:#94a3b8;">
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="gnfc-modal-label">Loop / Tag</label>
+                    <input id="edit-job-loop-tag" type="text" readonly class="gnfc-modal-input"
+                      style="color:#3b82f6;font-family:monospace;font-weight:500;">
+                  </div>
+                  <div>
+                    <label class="gnfc-modal-label">Type</label>
+                    <input id="edit-job-type" type="text" readonly class="gnfc-modal-input">
+                    <input id="edit-job-inst" type="hidden">
                   </div>
                 </div>
-                <div>
-                  <label class="gnfc-modal-label">Extra Duty (Hrs)</label>
-                  <input id="edit-job-extra-hours" type="number" min="0" step="1" class="gnfc-modal-input" style="height:2.25rem;font-family:monospace;">
-                </div>
               </div>
+            </div>
 
-              <div class="pt-4 border-t border-dark-border/50">
-                <div class="grid grid-cols-2 gap-4">
+            <!-- Execution / Update Section -->
+            <div class="space-y-3">
+              <h4 class="font-13px fw-bold color-green text-upper ls-widest flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Execution Update
+              </h4>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="gnfc-modal-label" style="color:#f1f5f9;">Description / Remarks <span
+                      style="color:#f87171;">*</span></label>
+                  <textarea id="edit-job-desc" rows="4" class="gnfc-modal-input typo-mono leading-relaxed"
+                    style="font-size:0.875rem;" placeholder="Enter detailed job description..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label class="gnfc-modal-label">Technician</label>
+                    <label class="gnfc-modal-label">Current Status</label>
                     <div class="relative">
-                      <select id="edit-job-tech" class="gnfc-modal-input" style="appearance:none;"></select>
-                      <i class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-dark-muted text-[10px] pointer-events-none"></i>
+                      <select id="edit-job-status" class="gnfc-modal-input"
+                        style="padding-left:0.75rem;padding-right:2rem;height:2.25rem;font-weight:700;appearance:none;cursor:pointer;">
+                        <option value="IN PROGRESS">IN PROGRESS</option>
+                        <option value="✓ OVER">✓ OVER</option>
+                        <option value="HOLD">HOLD</option>
+                      </select>
+                      <i
+                        class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none"></i>
                     </div>
                   </div>
                   <div>
-                    <label class="gnfc-modal-label">Engineer</label>
-                    <div class="relative">
-                      <select id="edit-job-engineer" class="gnfc-modal-input" style="appearance:none;"></select>
-                      <i class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-dark-muted text-[10px] pointer-events-none"></i>
-                    </div>
-                  </div>
-                  <div class="hidden">
-                    <select id="edit-job-area"></select>
+                    <label class="gnfc-modal-label">Extra Duty (Hrs)</label>
+                    <input id="edit-job-extra-hours" type="number" min="0" step="1" class="gnfc-modal-input"
+                      style="height:2.25rem;font-family:monospace;">
                   </div>
                 </div>
-              </div>
 
-              <!-- Emergency Toggle -->
-              <div class="pt-2 flex justify-end">
-                <label class="flex items-center gap-3 cursor-pointer group select-none">
-                  <span class="text-xs font-bold text-dark-muted group-hover:text-gnfc-orange transition-colors">Emergency Call</span>
-                  <div class="relative">
-                    <input id="edit-job-emergency" type="checkbox" class="sr-only peer">
-                    <div class="w-9 h-5 bg-dark-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gnfc-orange/90 transition-colors"></div>
+                <div class="pt-4 border-t border-dark-border/50">
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="gnfc-modal-label">Technician</label>
+                      <div class="relative">
+                        <select id="edit-job-tech" class="gnfc-modal-input" style="appearance:none;"></select>
+                        <i
+                          class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 color-secondary font-13px pointer-events-none"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="gnfc-modal-label">Engineer</label>
+                      <div class="relative">
+                        <select id="edit-job-engineer" class="gnfc-modal-input" style="appearance:none;"></select>
+                        <i
+                          class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 color-secondary font-13px pointer-events-none"></i>
+                      </div>
+                    </div>
+                    <div class="hidden">
+                      <select id="edit-job-area"></select>
+                    </div>
                   </div>
-                </label>
+                </div>
+
+                <!-- Emergency Toggle -->
+                <div class="pt-2 flex justify-end">
+                  <label class="flex items-center gap-3 cursor-pointer group select-none">
+                    <span
+                      class="font-14px fw-bold color-secondary group-hover-color-orange transition-colors">Emergency
+                      Call</span>
+                    <div class="relative">
+                      <input id="edit-job-emergency" type="checkbox" class="sr-only peer">
+                      <div
+                        class="w-9 h-5 bg-dark-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gnfc-orange/90 transition-colors">
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
               </div>
-
             </div>
-          </div>
 
-          <div id="edit-warning"
-            class="hidden p-3 bg-amber-500/10 border border-amber-500/30 rounded-sm flex items-start gap-2">
-            <i class="ph-bold ph-warning text-amber-500 mt-0.5"></i>
-            <p class="text-xs text-amber-200" id="edit-warning-text"></p>
-          </div>
+            <div id="edit-warning"
+              class="hidden p-3 bg-amber-500/10 border border-amber-500/30 rounded-sm flex items-start gap-2">
+              <i class="ph-bold ph-warning text-amber-500 mt-0.5"></i>
+              <p class="font-14px text-amber-200" id="edit-warning-text"></p>
+            </div>
 
           </div>
         </div>
 
         <!-- Footer -->
         <div class="gnfc-modal-footer">
-          <button type="button" onclick="closeEditModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="button" onclick="closeEditModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
           <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
         </div>
       </form>
@@ -504,22 +558,24 @@
                 <option value="executive">Executive</option>
               </select>
             </div>
-            <label class="flex items-center gap-2 text-xs mt-5">
+            <label class="flex items-center gap-2 font-14px mt-5">
               <input id="remark-ack-tech" type="checkbox" class="accent-gnfc-blue">
               Ack by Technician
             </label>
-            <label class="flex items-center gap-2 text-xs mt-5">
+            <label class="flex items-center gap-2 font-14px mt-5">
               <input id="remark-ack-eng" type="checkbox" class="accent-gnfc-blue">
               Ack by Engineer
             </label>
           </div>
           <div class="mt-3">
             <label class="gnfc-modal-label">New Remark</label>
-            <textarea id="remark-text" rows="3" class="gnfc-modal-input" placeholder="Remarks are append-only"></textarea>
+            <textarea id="remark-text" rows="3" class="gnfc-modal-input"
+              placeholder="Remarks are append-only"></textarea>
           </div>
         </div>
         <div class="gnfc-modal-footer">
-          <button type="button" onclick="closeRemarkModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+          <button type="button" onclick="closeRemarkModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
           <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Append Remark</button>
         </div>
       </form>
@@ -539,7 +595,8 @@
       </div>
       <div class="gnfc-modal-footer">
         <button type="button" onclick="closeAckModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
-        <button type="button" onclick="acknowledgeSelectedRemarks()" class="gnfc-modal-btn gnfc-modal-btn-primary">Acknowledge Selected</button>
+        <button type="button" onclick="acknowledgeSelectedRemarks()"
+          class="gnfc-modal-btn gnfc-modal-btn-primary">Acknowledge Selected</button>
       </div>
     </div>
   </div>
@@ -552,7 +609,8 @@
       </div>
       <div id="reminder-list" class="gnfc-modal-body gnfc-modal-body--tight" style="overflow-y:auto;"></div>
       <div class="gnfc-modal-footer">
-        <button type="button" onclick="closeReminderModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+        <button type="button" onclick="closeReminderModal()"
+          class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
       </div>
     </div>
   </div>
@@ -568,10 +626,12 @@
         <p class="gnfc-modal-subtitle">Add To History</p>
       </div>
       <div class="gnfc-modal-body gnfc-modal-body--tight" style="text-align:center;">
-        <p class="text-xs font-bold text-dark-muted uppercase tracking-wide mb-4">Select History Type</p>
+        <p class="font-14px fw-bold color-secondary text-upper ls-wide mb-4">Select History Type</p>
         <div class="flex items-center justify-center gap-3">
-          <button onclick="selectHistoryType('system')" class="gnfc-modal-btn gnfc-modal-btn-primary">System History</button>
-          <button onclick="selectHistoryType('general')" class="gnfc-modal-btn gnfc-modal-btn-success">General History</button>
+          <button onclick="selectHistoryType('system')" class="gnfc-modal-btn gnfc-modal-btn-primary">System
+            History</button>
+          <button onclick="selectHistoryType('general')" class="gnfc-modal-btn gnfc-modal-btn-success">General
+            History</button>
         </div>
       </div>
       <div class="gnfc-modal-footer" style="justify-content:center;">
@@ -590,7 +650,8 @@
         </div>
         <div class="flex items-center gap-2">
           <span id="history-type-badge"
-            class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm font-bold">General History</span>
+            class="font-13px px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">General
+            History</span>
           <button onclick="closeGeneralHistoryModal()" class="gnfc-modal-close">
             <i class="ph-bold ph-x text-lg"></i>
           </button>
@@ -598,7 +659,7 @@
       </div>
 
       <div class="gnfc-modal-body gnfc-modal-body--tight" style="overflow-y:auto;max-height:70vh;">
-        <p class="text-xs font-bold text-emerald-400 mb-4">New Record</p>
+        <p class="font-14px fw-bold color-green mb-4">New Record</p>
 
         <!-- Row 1: Date/Loop, InstTag, Type of Job, Type of Inst -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -638,7 +699,7 @@
         <!-- Job Description -->
         <div class="space-y-1 mt-4">
           <label class="gnfc-modal-label" style="color:#f87171;">Job Description</label>
-          <textarea id="hist-desc" rows="4" class="gnfc-modal-input font-mono leading-relaxed"></textarea>
+          <textarea id="hist-desc" rows="4" class="gnfc-modal-input typo-mono leading-relaxed"></textarea>
         </div>
 
         <!-- Row 2: Job Status, Tech Name, Eng, Area -->

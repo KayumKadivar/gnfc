@@ -6,32 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Name Wise Report | GNFC</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
-    <link rel="stylesheet" href="/src/css/modal-ui.css">
     <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
     <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--app-bg, #111217);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--app-border, #2c3235);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--app-muted, #8e8e9e);
-        }
-
         /* MicroModal base */
         .modal {
             display: none;
@@ -47,7 +30,7 @@
     </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
 
     <script src="/src/js/theme_manager.js"></script>
     <script src="/src/js/sidebar.js"></script>
@@ -87,30 +70,30 @@
 
             <div class="w-full">
                 <!-- Filter Bar -->
-                <div class="border border-dark-border rounded-sm p-4 shadow-sm flex gap-5 flex-wrap items-end my-4">
+                <div class="border border-dark-border rounded-sm p-4 shadow-sm flex gap-5 flex-wrap items-end my-4 bg-dark-panel">
 
                     <!-- Start Date -->
                     <div class="flex flex-col gap-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">Start
+                        <label class="font-10px fw-bold text-upper ls-wider color-label">Start
                             Date</label>
                         <input type="date" id="startDateFilter"
-                            class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
+                            class="bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
                     </div>
 
                     <!-- End Date -->
                     <div class="flex flex-col gap-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">End
+                        <label class="font-10px fw-bold text-upper ls-wider color-label">End
                             Date</label>
                         <input type="date" id="endDateFilter"
-                            class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
+                            class="bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-1.5 min-w-[150px] focus:border-gnfc-blue outline-none transition-all">
                     </div>
 
                     <!-- Select Name -->
                     <div class="flex flex-col gap-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-wider text-dark-muted">Select
+                        <label class="font-10px fw-bold text-upper ls-wider color-label">Select
                             Name</label>
                         <select id="nameFilter"
-                            class="bg-dark-bg border border-dark-border text-xs rounded px-3 py-1.5 min-w-[180px] focus:border-gnfc-blue outline-none transition-all">
+                            class="bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-1.5 min-w-[180px] focus:border-gnfc-blue outline-none transition-all">
                             <option value="">All Technicians</option>
                             <option value="PBS">PBS</option>
                             <option value="NRK">NRK</option>
@@ -127,11 +110,11 @@
                     <!-- Action Buttons -->
                     <div class="flex items-end gap-2">
                         <button onclick="resetFilters()"
-                            class="px-3 py-1.5 bg-transparent border border-dark-border text-dark-muted hover:border-white/30 text-[11px] font-bold rounded transition-all">
+                            class="px-3 py-1.5 bg-transparent border border-dark-border color-label hover-border-white-30 font-11px fw-bold rounded-sm transition-all hover-color-primary">
                             <i class="ph-bold ph-x mr-1"></i>RESET
                         </button>
                         <button onclick="generateReport()"
-                            class="px-4 py-1.5 bg-gnfc-blue hover:bg-blue-500 text-[11px] font-bold rounded transition-all shadow-lg shadow-gnfc-blue/20">
+                            class="px-4 py-1.5 bg-gnfc-blue hover:bg-blue-500 text-white font-11px fw-bold rounded-sm transition-all shadow-lg shadow-gnfc-blue/20">
                             <i class="ph-bold ph-sparkle mr-1"></i>GENERATE
                         </button>
                     </div>
@@ -143,15 +126,15 @@
                 style="display:none;">
                 <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <i class="ph-fill ph-user-list text-gnfc-blue"></i>
-                        <h3 class="font-bold text-sm" id="reportTitle">Name Wise Report</h3>
+                        <i class="ph-fill ph-user-list color-blue font-16px"></i>
+                        <h3 class="fw-bold font-14px color-primary" id="reportTitle">Name Wise Report</h3>
                     </div>
                     <div class="flex items-center gap-3">
                         <span id="recordCount"
-                            class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded text-dark-muted font-mono">0
+                            class="font-10px bg-dark-bg border border-dark-border px-2 py-0.5 rounded-sm color-label typo-mono">0
                             Records</span>
                         <button onclick="exportReport()"
-                            class="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded-sm transition-all">
+                            class="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-12px fw-bold rounded-sm transition-all">
                             <i class="ph-bold ph-download-simple"></i>Export
                         </button>
                     </div>
@@ -161,10 +144,10 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr
-                                class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest text-center border-b border-dark-border">
+                                class="bg-dark-header font-10px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
                                 <th class="border-r border-dark-border p-2 w-10">Sr</th>
                                 <th class="border-r border-dark-border p-2 min-w-[100px]">Assign Job<br><span
-                                        class="text-[9px] text-dark-muted/60">Assign To</span></th>
+                                        class="font-9px color-secondary">Assign To</span></th>
                                 <th class="border-r border-dark-border p-2 w-24">Date</th>
                                 <th class="border-r border-dark-border p-2 w-14">Tech</th>
                                 <th class="border-r border-dark-border p-2 min-w-[90px]">TagNo</th>
@@ -174,7 +157,7 @@
                                 <th class="p-2 w-14">OT Hr</th>
                             </tr>
                         </thead>
-                        <tbody id="reportTableBody" class="text-xs">
+                        <tbody id="reportTableBody" class="font-12px typo-mono">
                             <!-- Report data will be populated here -->
                         </tbody>
                     </table>
@@ -276,18 +259,18 @@
             const tbody = document.getElementById('reportTableBody');
             tbody.innerHTML = sampleData.map((row, idx) => `
         <tr class="border-b border-dark-border hover:bg-white/5 transition-colors ${idx % 2 === 0 ? 'bg-dark-bg/30' : ''}">
-          <td class="border-r border-dark-border p-2 text-center font-bold">${row.sr}</td>
+          <td class="border-r border-dark-border p-2 text-center fw-bold color-label font-12px">${row.sr}</td>
           <td class="border-r border-dark-border p-2">
-            <div class="text-[11px] leading-tight whitespace-pre-line">${row.assignJob || '-'}</div>
-            ${row.assignTo ? `<div class="text-[10px] text-gnfc-orange mt-1 font-bold">${row.assignTo}</div>` : ''}
+            <div class="font-11px leading-tight whitespace-pre-line color-primary">${row.assignJob || '-'}</div>
+            ${row.assignTo ? `<div class="font-10px color-orange mt-1 fw-bold">${row.assignTo}</div>` : ''}
           </td>
-          <td class="border-r border-dark-border p-2 text-center font-mono text-dark-muted">${row.date}</td>
-          <td class="border-r border-dark-border p-2 text-center font-bold">${row.tech}</td>
-          <td class="border-r border-dark-border p-2 font-mono text-dark-muted">${row.tagNo}</td>
-          <td class="border-r border-dark-border p-2 text-[10px] whitespace-pre-line">${row.typeOfJob}</td>
-          <td class="border-r border-dark-border p-2 text-[11px] leading-relaxed">${row.desc}</td>
-          <td class="border-r border-dark-border p-2 text-[10px]">${row.remarks || '-'}</td>
-          <td class="p-2 text-center font-mono">${row.otHour}</td>
+          <td class="border-r border-dark-border p-2 text-center typo-mono color-label font-12px">${row.date}</td>
+          <td class="border-r border-dark-border p-2 text-center fw-bold color-primary font-12px">${row.tech}</td>
+          <td class="border-r border-dark-border p-2 typo-mono color-blue fw-medium font-12px">${row.tagNo}</td>
+          <td class="border-r border-dark-border p-2 font-10px whitespace-pre-line color-label">${row.typeOfJob}</td>
+          <td class="border-r border-dark-border p-2 font-11px leading-relaxed color-secondary">${row.desc}</td>
+          <td class="border-r border-dark-border p-2 font-10px color-label">${row.remarks || '-'}</td>
+          <td class="p-2 text-center typo-mono color-primary font-12px">${row.otHour}</td>
         </tr>
       `).join('');
 

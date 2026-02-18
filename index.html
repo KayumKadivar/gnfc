@@ -72,6 +72,26 @@
           <form id="loginForm" action="/src/pages/dashboard.html" class="space-y-5">
 
             <div class="space-y-1.5">
+              <label class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
+                Login As
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" data-role="technician" data-user-name="Technician"
+                  class="role-btn py-2.5 px-2 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:border-teal-300 hover:text-teal-700 transition-colors">
+                  Technician
+                </button>
+                <button type="button" data-role="engineer" data-user-name="Engineer"
+                  class="role-btn py-2.5 px-2 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:border-teal-300 hover:text-teal-700 transition-colors">
+                  Engineer
+                </button>
+                <button type="button" data-role="manager" data-user-name="Manager"
+                  class="role-btn py-2.5 px-2 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:border-teal-300 hover:text-teal-700 transition-colors">
+                  Manager
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
               <label for="ec-no" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
                 EC Number
               </label>
@@ -118,13 +138,13 @@
               </div>
             </div>
 
-            <div class="pt-2">
+            <!-- <div id="sign-in-row" class="pt-2">
               <button type="submit" id="submitBtn"
                 class="w-full relative overflow-hidden bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2 group">
                 <span>Sign In</span>
                 <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
               </button>
-            </div>
+            </div> -->
           </form>
         </div>
       </div>
@@ -132,6 +152,52 @@
 
     </div>
   </main>
+
+  <script>
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(`${inputId}-icon`);
+      if (!input || !icon) return;
+
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      icon.classList.toggle('ph-eye', !isPassword);
+      icon.classList.toggle('ph-eye-slash', isPassword);
+    }
+
+    function selectRole(button, shouldRedirect) {
+      const buttons = document.querySelectorAll('.role-btn');
+      const signInRow = document.getElementById('sign-in-row');
+
+      buttons.forEach((btn) => {
+        btn.classList.remove('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
+        btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
+      });
+
+      button.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
+      button.classList.add('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
+
+      localStorage.setItem('userRole', button.dataset.role || '');
+      localStorage.setItem('currentUserName', button.dataset.userName || 'Admin User');
+
+      if (signInRow) signInRow.classList.add('hidden');
+      if (shouldRedirect) window.location.href = '/src/pages/dashboard.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('.role-btn');
+      const currentRole = localStorage.getItem('userRole');
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => selectRole(button, true));
+      });
+
+      if (currentRole) {
+        const currentButton = document.querySelector(`.role-btn[data-role="${currentRole}"]`);
+        if (currentButton) selectRole(currentButton, false);
+      }
+    });
+  </script>
 </body>
 
 </html>
