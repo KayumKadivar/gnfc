@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GNFC | Instrument Type Analysis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
@@ -46,7 +47,8 @@
   </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange/30 selection:text-white">
+<body
+  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange/30 selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -80,7 +82,7 @@
       </script>
 
       <div class="bg-dark-panel rounded-xl border border-dark-border shadow-sm overflow-hidden">
-        <div class="px-4 py-3 border-b border-dark-border flex justify-between items-center bg-dark-header">
+        <div class="px-4 py-3border-b border-dark-border flex justify-between items-center bg-dark-header">
           <h2 class="font-12px fw-bold color-primary uppercase tracking-widest flex items-center gap-2">
             <i class="ph-bold ph-funnel color-orange"></i> Apply Filters
           </h2>
@@ -88,51 +90,71 @@
 
         <div class="p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-4">
-            <label class="block font-10px fw-bold color-label uppercase tracking-wider mb-1.5">Time Range Selection</label>
-            <div class="flex bg-dark-bg border border-dark-border rounded-lg h-9 items-center px-2 group focus-within:border-gnfc-orange focus-within:ring-1 focus-within:ring-gnfc-orange/50 transition-all">
-              <input type="date" id="start-date" onchange="applyFilters()" class="bg-transparent font-12px color-primary focus:outline-none w-full appearance-none py-1">
+            <label class="block font-10px fw-bold color-label uppercase tracking-wider mb-1.5">Time Range
+              Selection</label>
+            <div
+              class="flex bg-dark-bg border border-dark-border rounded-lg h-9 items-center px-2 group focus-within:border-gnfc-orange focus-within:ring-1 focus-within:ring-gnfc-orange/50 transition-all">
+              <input type="date" id="start-date" onchange="applyFilters()"
+                class="bg-transparent font-12px color-primary focus:outline-none w-full appearance-none py-1">
               <span class="px-2 color-label">|</span>
-              <input type="date" id="end-date" onchange="applyFilters()" class="bg-transparent font-12px color-primary focus:outline-none w-full appearance-none py-1">
+              <input type="date" id="end-date" onchange="applyFilters()"
+                class="bg-transparent font-12px color-primary focus:outline-none w-full appearance-none py-1">
             </div>
           </div>
 
           <div class="lg:col-span-5">
-            <label class="block font-10px fw-bold color-label uppercase tracking-wider mb-1.5">Select Type of Instrument</label>
+            <label class="block font-10px fw-bold color-label uppercase tracking-wider mb-1.5">Select Type of
+              Instrument</label>
             <div class="relative">
-              <select id="job-type-select" onchange="applyFilters()" class="w-full h-9 bg-dark-bg border border-dark-border color-primary font-12px rounded-lg pl-3 pr-8 focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none cursor-pointer appearance-none fw-medium transition-all group">
+              <select id="job-type-select" onchange="applyFilters()"
+                class="w-full h-9 bg-dark-bg border border-dark-border color-primary font-12px rounded-lg pl-3 pr-8 focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none cursor-pointer appearance-none fw-medium transition-all group">
                 <option value="">All Instrument Types</option>
               </select>
-              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none font-12px color-label group-hover:color-primary transition-colors"></i>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none font-12px color-label group-hover:color-primary transition-colors"></i>
             </div>
           </div>
 
           <div class="lg:col-span-3 flex items-end gap-2">
-            <button onclick="applyFilters()" class="flex-1 h-9 bg-gnfc-orange hover:bg-orange-600 color-primary font-12px fw-bold rounded-lg shadow-lg shadow-orange-500/20 active:scale-95 transition-all">APPLY</button>
-            <button onclick="resetFilters()" class="h-9 px-4 bg-transparent border border-dark-border hover:bg-dark-header color-label hover:color-primary font-12px fw-bold rounded-lg active:scale-95 transition-all">RESET</button>
+            <button onclick="applyFilters()"
+              class="flex-1 h-9 bg-gnfc-orange hover:bg-orange-600 color-primary font-12px fw-bold rounded-lg shadow-lg shadow-orange-500/20 active:scale-95 transition-all">APPLY</button>
+            <button onclick="resetFilters()"
+              class="h-9 px-4 bg-transparent border border-dark-border hover:bg-dark-header color-label hover:color-primary font-12px fw-bold rounded-lg active:scale-95 transition-all">RESET</button>
           </div>
         </div>
       </div>
 
       <div class="bg-dark-panel rounded-xl border border-dark-border overflow-hidden min-h-[400px]">
-        <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex justify-between items-center">
+        <div class="bg-dark-header border-b border-dark-border p-2 flex justify-between items-center">
           <h3 class="font-12px fw-bold color-primary uppercase tracking-wider flex items-center gap-2">
             <i class="ph-fill ph-table color-emerald"></i> Type of Instrument Report
           </h3>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse" style="table-layout: fixed;">
             <thead>
-              <tr class="bg-dark-header font-10px fw-bold color-label uppercase tracking-widest text-center border-b border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-12">Sr</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Area</th>
-                <th class="border-r border-dark-border px-3 py-2 w-40 border-b border-dark-border/50">Loop / Tag</th>
-                <th class="border-r border-dark-border px-3 py-2 min-w-[200px] border-b border-dark-border/50 text-white">Job</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-20">Tech</th>
-                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px]">Description</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-24">Eng</th>
-                <th rowspan="2" class="border-r border-dark-border px-3 py-3 w-28">Status</th>
-                <th rowspan="2" class="px-3 py-3 min-w-[120px]">Remarks</th>
+              <tr
+                class="bg-dark-header font-10px fw-bold color-label uppercase tracking-widest text-center border-b border-dark-border">
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[45px]">Sr</th>
+
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Area</th>
+
+                <th class="border-r border-dark-border px-3 py-2 w-[120px] border-b border-dark-border/50">Loop / Tag
+                </th>
+
+                <th class="border-r border-dark-border px-3 py-2 w-[180px] border-b border-dark-border/50 text-white">
+                  Job</th>
+
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Tech</th>
+
+                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[400px]">Description</th>
+
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[80px]">Eng</th>
+
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[100px]">Status</th>
+
+                <th rowspan="2" class="p-2 w-[120px]">Remarks</th>
               </tr>
               <tr class="bg-dark-header font-10px fw-bold color-blue uppercase text-center border-b border-dark-border">
                 <th class="border-r border-dark-border px-3 py-1">Tag No</th>
@@ -255,24 +277,25 @@
           const statusColor = item.status === '✓ OVER' ? 'text-emerald-500' : 'text-amber-500';
           const row = `
                 <tr class="hover:bg-dark-header/50 transition-colors border-b border-dark-border/50 group">
-                    <td class="border-r border-dark-border/30 px-2 py-3 text-center typo-mono font-10px color-label">${item.sr}</td>
-                    <td class="border-r border-dark-border/30 px-2 py-3 font-12px fw-bold color-blue text-center">${item.area}</td>
-                    <td class="border-r border-dark-border/30 px-3 py-3">
-                        <div class="font-12px fw-bold color-primary tracking-tighter">${item.tag}</div>
+                    <td class="border-r border-dark-border/30 p-2 text-center typo-mono font-10px color-label">${item.sr}</td>
+                    <td class="border-r border-dark-border/30 p-2 font-12px fw-bold color-blue text-center">${item.area}</td>
+                    <td class="border-r border-dark-border/30 p-2">
+                        <div class="font-12px fw-bold color-primary tracking-tighter ">${item.tag}</div>
+                        <div class="border-b border-dark-border/30"></div>
                         <div class="font-10px color-label mt-1 uppercase">${item.tagSubtitle}</div>
                     </td>
-                    <td class="border-r border-dark-border/30 px-3 py-3">
+                    <td class="border-r border-dark-border/30 p-2">
                         <div class="font-12px leading-tight color-primary">${item.jobType}</div>
                     </td>
-                    <td class="border-r border-dark-border/30 px-2 py-3 text-center font-10px fw-bold color-label">${item.tech}</td>
-                    <td class="border-r border-dark-border/30 px-4 py-3 font-12px color-primary leading-relaxed opacity-90">${item.desc}</td>
-                    <td class="border-r border-dark-border/30 px-2 py-3 text-center font-10px fw-bold color-label">${item.engineer}</td>
-                    <td class="border-r border-dark-border/30 px-2 py-3 text-center">
+                    <td class="border-r border-dark-border/30 p-2 text-center font-10px fw-bold color-label">${item.tech}</td>
+                    <td class="border-r border-dark-border/30 p-2 font-12px color-primary leading-relaxed opacity-90">${item.desc}</td>
+                    <td class="border-r border-dark-border/30 p-2 text-center font-10px fw-bold color-label">${item.engineer}</td>
+                    <td class="border-r border-dark-border/30 p-2 text-center">
                         <span class="font-10px fw-black uppercase tracking-widest ${statusColor} px-2 py-1 bg-dark-bg border border-dark-border rounded-sm">
                             ${item.status}
                         </span>
                     </td>
-                    <td class="px-2 py-3"></td>
+                    <td class="p-2"></td>
                 </tr>`;
           tbody.innerHTML += row;
         });

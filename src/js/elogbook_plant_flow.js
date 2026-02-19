@@ -17,7 +17,7 @@
     modalTargetView: "today",
     activeUser: {
       name: "PHS",
-      role: "engineer"
+      role: "engineer",
     },
     allJobs: [],
     jobsByView: {
@@ -25,18 +25,32 @@
       tomorrow: [],
       prev: [],
       weekly: [],
-      monthly: []
+      monthly: [],
     },
     technicians: ["PHS", "NRK", "DPB", "AMS", "PHB", "IT", "KBP"],
     engineers: ["PHS", "AMS", "PHB", "MIV", "VAA"],
     areas: ["FA", "MF", "DCS", "UTIL", "AA", "INST"],
-    jobTypes: ["Routine Check", "Calibration", "Breakdown", "Abnormality", "ISO14001", "Shutdown"],
-    instrumentTypes: ["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER", "DCS", "OTHERS"],
+    jobTypes: [
+      "Routine Check",
+      "Calibration",
+      "Breakdown",
+      "Abnormality",
+      "ISO14001",
+      "Shutdown",
+    ],
+    instrumentTypes: [
+      "TRANSMITTER",
+      "CONTROL VALVE",
+      "SWITCH",
+      "ANALYZER",
+      "DCS",
+      "OTHERS",
+    ],
     loopTagMap: {
       "Loop-202": ["PT5087K", "PT5082A", "PT5091F"],
       "Loop-101": ["FT5021A", "FT5021B", "FT5023K"],
       "Loop-DCS": ["SYS-1", "SYS-MAIN", "ESD-CHK"],
-      "Loop-UTIL": ["AIR-COMP", "COND-VALVE", "LT38358"]
+      "Loop-UTIL": ["AIR-COMP", "COND-VALVE", "LT38358"],
     },
     ojrPending: [
       {
@@ -47,7 +61,7 @@
         jobType: "Breakdown",
         instType: "TRANSMITTER",
         desc: "Operation observed unstable flow trend in shift A.",
-        source: "OJR"
+        source: "OJR",
       },
       {
         id: "OJR-2",
@@ -57,10 +71,10 @@
         jobType: "Routine Check",
         instType: "ANALYZER",
         desc: "Compressor pressure fluctuations reported by operations.",
-        source: "OJR"
-      }
+        source: "OJR",
+      },
     ],
-    jobPlannerDue: []
+    jobPlannerDue: [],
   };
 
   function pad2(value) {
@@ -72,6 +86,16 @@
     const date = ElogbookStore.parseIsoDate(isoDate);
     if (!date) return "--/--/----";
     return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()}`;
+  }
+
+  function toReadableDate(dateValue) {
+    const fallbackDate = isoDateToSlash(toIsoDate(new Date()));
+    const raw = String(dateValue || "").trim();
+    if (!raw) return fallbackDate;
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(raw)) return raw;
+    if (/^\d{2}\.\d{2}\.\d{4}$/.test(raw)) return raw.replaceAll(".", "/");
+    const slashDate = isoDateToSlash(raw);
+    return slashDate === "--/--/----" ? fallbackDate : slashDate;
   }
 
   function toIsoDate(date) {
@@ -104,8 +128,10 @@
   }
 
   function getStatusClass(color) {
-    if (color === "green") return "color-green bg-gnfc-green/10 border-gnfc-green/20";
-    if (color === "orange") return "color-orange bg-gnfc-orange/10 border-gnfc-orange/20";
+    if (color === "green")
+      return "color-green bg-gnfc-green/10 border-gnfc-green/20";
+    if (color === "orange")
+      return "color-orange bg-gnfc-orange/10 border-gnfc-orange/20";
     return "color-secondary bg-slate-100 dark:bg-dark-bg border-slate-300 dark:border-dark-border";
   }
 
@@ -127,11 +153,12 @@
       document.body.appendChild(container);
     }
 
-    const toneClass = tone === "error"
-      ? "bg-red-600/90 border-red-500"
-      : tone === "warn"
-        ? "bg-amber-600/90 border-amber-500"
-        : "bg-blue-600/90 border-blue-500";
+    const toneClass =
+      tone === "error"
+        ? "bg-red-600/90 border-red-500"
+        : tone === "warn"
+          ? "bg-amber-600/90 border-amber-500"
+          : "bg-blue-600/90 border-blue-500";
 
     const toast = document.createElement("div");
     toast.className = `font-14px fw-bold border ${toneClass} text-white px-3 py-2 rounded shadow-lg`;
@@ -151,19 +178,29 @@
     if (queryView) {
       currentView = normalizeView(queryView);
     } else {
-      currentView = normalizeView(ElogbookStore.getTechnicianSelectedView() || "today");
+      currentView = normalizeView(
+        ElogbookStore.getTechnicianSelectedView() || "today",
+      );
     }
 
     global.currentView = currentView;
   }
 
   function refreshLocalData() {
-    elogbookState.allJobs = ElogbookStore.getPlantJobs(elogbookState.selectedPlant);
-    elogbookState.jobsByView = ElogbookStore.getPlantJobsByView(elogbookState.selectedPlant, new Date());
+    elogbookState.allJobs = ElogbookStore.getPlantJobs(
+      elogbookState.selectedPlant,
+    );
+    elogbookState.jobsByView = ElogbookStore.getPlantJobsByView(
+      elogbookState.selectedPlant,
+      new Date(),
+    );
   }
 
   function persistLocalData() {
-    ElogbookStore.setPlantJobs(elogbookState.selectedPlant, elogbookState.allJobs);
+    ElogbookStore.setPlantJobs(
+      elogbookState.selectedPlant,
+      elogbookState.allJobs,
+    );
     refreshLocalData();
   }
 
@@ -181,8 +218,12 @@
     let rows = [...getCurrentViewJobs()];
 
     const jobType = document.getElementById("job-type-select")?.value || "";
-    const startDate = parseDateInput(document.getElementById("start-date")?.value || "");
-    const endDate = parseDateInput(document.getElementById("end-date")?.value || "");
+    const startDate = parseDateInput(
+      document.getElementById("start-date")?.value || "",
+    );
+    const endDate = parseDateInput(
+      document.getElementById("end-date")?.value || "",
+    );
 
     if (elogbookState.pendingOnlyMode) {
       rows = rows.filter((job) => job.pendingWrite);
@@ -197,14 +238,15 @@
         const date = ElogbookStore.parseIsoDate(job.targetDate);
         if (!date) return false;
         if (startDate && date < startDate) return false;
-        if (endDate && date > new Date(endDate.getTime() + DAY_MS - 1)) return false;
+        if (endDate && date > new Date(endDate.getTime() + DAY_MS - 1))
+          return false;
         return true;
       });
     }
 
     return rows.map((job, index) => ({
       ...job,
-      sr: pad2(index + 1)
+      sr: pad2(index + 1),
     }));
   }
 
@@ -221,13 +263,18 @@
   function renderJobRow(job, index, rows) {
     const rowClass = job.emergency ? "bg-amber-500/10" : "";
     const srClass = job.pendingWrite ? "bg-pink-500/20 cursor-pointer" : "";
-    const descClass = job.abnormality ? "border border-red-500/60 rounded-sm px-1.5 py-1" : "";
+    const descClass = job.abnormality
+      ? "border border-red-500/60 rounded-sm px-1.5 py-1"
+      : "";
     const badgeClass = getStatusClass(statusColor(job.status));
     const pendingAck = hasPendingAck(job);
     const ref = `By:${job.engineer || elogbookState.activeUser.name} : ${isoDateToSlash(job.targetDate)}`;
     const isGroupedView = currentView === "weekly" || currentView === "monthly";
-    const previousRow = Array.isArray(rows) && index > 0 ? rows[index - 1] : null;
-    const showDaySeparator = isGroupedView && (!previousRow || previousRow.targetDate !== job.targetDate);
+    const previousRow =
+      Array.isArray(rows) && index > 0 ? rows[index - 1] : null;
+    const showDaySeparator =
+      isGroupedView &&
+      (!previousRow || previousRow.targetDate !== job.targetDate);
     const daySeparatorRow = showDaySeparator
       ? `
       <tr class="bg-amber-50/60 dark:bg-amber-500/5 border-y border-gray-200 dark:border-dark-border">
@@ -244,16 +291,19 @@
     return `
       ${daySeparatorRow}
       <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-200 dark:border-dark-border group ${rowClass}">
-        <td class="p-2 align-top text-center typo-mono border-r border-gray-200 dark:border-dark-border ${srClass}">${safeText(job.sr)}</td>
+        <td class="p-2 align-top text-center typo-mono border-r border-gray-200 dark:border-dark-border ${srClass}" ${job.pendingWrite ? `onclick="event.stopPropagation(); openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
         <td class="p-2 align-top fw-bold color-primary border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
         <td class="p-2 align-top border-r border-gray-200 dark:border-dark-border">
-          <div class="flex items-start justify-between gap-2">
             <div>
-              <div class="font-14px color-blue fw-bold">${safeText(job.loop)}</div>
-              <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono">${safeText(job.tag)}</span>
+            <div class="flex items-center gap-2">
+              <div class="font-14px color-blue fw-semibold">${safeText(job.loop)}</div>
+              <div class="flex items-center gap-2">
+                ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="font-13px px-1 py-0.5 border border-red-500/50 color-red rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
+              </div>
+              </div>
+              <div class="border-b border-gnfc-dark py-1.5 w-100"></div>
+              <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono line">${safeText(job.tag)}</span>
             </div>
-            ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="font-13px px-1 py-0.5 border border-red-500/50 color-red rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
-          </div>
         </td>
         <td class="p-2 align-top border-r border-gray-200 dark:border-dark-border">
           <div class="fw-medium color-primary">${safeText(job.jobType)}</div>
@@ -269,17 +319,31 @@
           <div class="font-13px color-secondary">${safeText(makeInitials(job.engineer || ""))}</div>
         </td>
         <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border">
-          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-13px fw-bold border whitespace-nowrap ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px color-pink fw-bold">ASSIGNED</span>`}
+          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs font-10px fw-bold border whitespace-nowrap ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px color-pink fw-bold">ASSIGNED</span>`}
         </td>
+
+      ${["today", "tomorrow"].includes(currentView) ? `
+      <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" onclick="openPriorityModal('${job.id}')">
+        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full font-12px fw-bold ${job.priority > 0 ? "bg-purple-100 dark:bg-purple-900/30 color-purple" : "bg-gray-100 dark:bg-dark-bg color-secondary"}">
+          ${job.priority || 0}
+        </span>
+      </td>` : ""}
+
         <td class="p-2 align-top text-center color-secondary border-r border-gray-200 dark:border-dark-border">
-          <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-13px hover-color-blue transition-colors">
-            <i class="ph-bold ph-chat-circle-dots"></i>
-          </button>
-          ${pendingAck ? `<div class="mt-1 font-13px color-orange">Ack pending</div>` : ""}
+          <div class="flex flex-row items-center">
+            <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-13px hover-color-blue transition-colors">
+              <i class="ph-bold ph-chat-circle-dots"></i>
+            </button>
+            ${pendingAck ? `<div class="mt-1 font-13px color-orange">Ack pending</div>` : ""}
+          </div>
         </td>
+        
+        ${["today", "tomorrow"].includes(currentView) ? "" : `
         <td class="p-2 align-top text-center">
-          ${job.status === "✓ OVER" ? `<a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer" title="Add to History">H</a> <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer" title="Add to History">PM</a>` : ""}
-        </td>
+          ${job.status === "✓ OVER" ? `
+          <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer block border-b" title="Add to History">H</a> 
+          <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer block" title="Add to History">PM</a>` : ""}
+        </td>`}
       </tr>
     `;
   }
@@ -302,7 +366,9 @@
   function updatePendingModeButton() {
     const button = document.getElementById("toggle-pending-btn");
     if (!button) return;
-    button.textContent = elogbookState.pendingOnlyMode ? "Pending Log (ON)" : "Pending Log";
+    button.textContent = elogbookState.pendingOnlyMode
+      ? "Pending Log (ON)"
+      : "Pending Log";
     button.classList.toggle("bg-gnfc-orange/20", elogbookState.pendingOnlyMode);
   }
 
@@ -312,7 +378,8 @@
       (elogbookState.jobsByView[viewName] || []).forEach((job) => {
         (job.remarks || []).forEach((remark) => {
           if (elogbookState.activeUser.role === "technician") {
-            if (remark.ackTech && !remark.ackByTech) pending.push({ viewName, job, remark });
+            if (remark.ackTech && !remark.ackByTech)
+              pending.push({ viewName, job, remark });
           } else if (remark.ackEng && !remark.ackByEng) {
             pending.push({ viewName, job, remark });
           }
@@ -359,15 +426,24 @@
 
   function getViewDateText(viewName) {
     const now = startOfDay(new Date());
-    if (viewName === "today") return isoDateToSlash(toIsoDate(now)).replaceAll("/", ".");
-    if (viewName === "tomorrow") return isoDateToSlash(toIsoDate(new Date(now.getTime() + DAY_MS))).replaceAll("/", ".");
-    if (viewName === "prev") return isoDateToSlash(toIsoDate(new Date(now.getTime() - DAY_MS))).replaceAll("/", ".");
+    if (viewName === "today")
+      return isoDateToSlash(toIsoDate(now)).replaceAll("/", ".");
+    if (viewName === "tomorrow")
+      return isoDateToSlash(
+        toIsoDate(new Date(now.getTime() + DAY_MS)),
+      ).replaceAll("/", ".");
+    if (viewName === "prev")
+      return isoDateToSlash(
+        toIsoDate(new Date(now.getTime() - DAY_MS)),
+      ).replaceAll("/", ".");
     if (viewName === "weekly") {
       const start = new Date(now.getTime() - 6 * DAY_MS);
       return `${isoDateToSlash(toIsoDate(start)).replaceAll("/", ".")} - ${isoDateToSlash(toIsoDate(now)).replaceAll("/", ".")}`;
     }
     if (viewName === "monthly") {
-      const start = new Date(now.getTime() - (MONTHLY_WINDOW_DAYS - 1) * DAY_MS);
+      const start = new Date(
+        now.getTime() - (MONTHLY_WINDOW_DAYS - 1) * DAY_MS,
+      );
       return `Last ${MONTHLY_WINDOW_DAYS} Days: ${isoDateToSlash(toIsoDate(start)).replaceAll("/", ".")} - ${isoDateToSlash(toIsoDate(now)).replaceAll("/", ".")}`;
     }
     return now.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
@@ -379,17 +455,39 @@
     elogbookState.pendingOnlyMode = false;
 
     document.querySelectorAll(".tab-btn").forEach((btn) => {
-      btn.className = "tab-btn px-4 py-1 font-14px fw-medium color-secondary hover-color-primary transition-colors";
+      btn.className =
+        "tab-btn px-4 py-1 font-14px fw-medium color-secondary hover-color-primary transition-colors";
     });
 
     if (buttonEl) {
-      buttonEl.className = "tab-btn px-4 py-1 font-14px fw-bold color-active bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
+      buttonEl.className =
+        "tab-btn px-4 py-1 font-14px fw-bold color-active bg-white dark:bg-[#323232] shadow-sm border border-slate-200 dark:border-dark-border rounded-sm transition-colors";
     }
 
     const viewTitleEl = document.getElementById("view-title");
     const viewDateEl = document.getElementById("view-date");
     if (viewTitleEl) viewTitleEl.textContent = getViewTitle(currentView);
     if (viewDateEl) viewDateEl.textContent = getViewDateText(currentView);
+
+    // Toggle Add Column Header based on view
+    const addColHeader = document.getElementById("add-column-header");
+    if (addColHeader) {
+      if (["today", "tomorrow"].includes(currentView)) {
+        addColHeader.classList.add("hidden");
+      } else {
+        addColHeader.classList.remove("hidden");
+      }
+    }
+
+    // Toggle Priority Column Header based on view
+    const prioColHeader = document.getElementById("priority-column-header");
+    if (prioColHeader) {
+      if (["today", "tomorrow"].includes(currentView)) {
+        prioColHeader.classList.remove("hidden");
+      } else {
+        prioColHeader.classList.add("hidden");
+      }
+    }
 
     if (["today", "prev", "weekly"].includes(currentView)) {
       ElogbookStore.setTechnicianSelectedView(currentView);
@@ -424,7 +522,7 @@
     if (index < 0) return null;
     return {
       index,
-      job: elogbookState.allJobs[index]
+      job: elogbookState.allJobs[index],
     };
   }
 
@@ -432,7 +530,9 @@
     const listEl = document.getElementById("ojr-pending-list");
     if (!listEl) return;
 
-    const weeklyPending = (elogbookState.jobsByView.weekly || []).filter((job) => job.pendingWrite);
+    const weeklyPending = (elogbookState.jobsByView.weekly || []).filter(
+      (job) => job.pendingWrite,
+    );
     const rows = [
       ...elogbookState.ojrPending.map((item) => ({ ...item, rowType: "ojr" })),
       ...weeklyPending.map((item) => ({
@@ -444,12 +544,13 @@
         instType: item.typeOfInst,
         desc: item.desc || "Pending from weekly logbook",
         tech: item.tech,
-        rowType: "weekly"
-      }))
+        rowType: "weekly",
+      })),
     ];
 
     if (!rows.length) {
-      listEl.innerHTML = '<div class="px-3 py-2 font-14px color-secondary">No OJR / Weekly pending jobs.</div>';
+      listEl.innerHTML =
+        '<div class="px-3 py-2 font-14px color-secondary">No OJR / Weekly pending jobs.</div>';
       return;
     }
 
@@ -475,37 +576,75 @@
     const editArea = document.getElementById("edit-job-area");
 
     if (techSelect) {
-      techSelect.innerHTML = elogbookState.technicians.map((tech) => `<option value="${safeText(tech)}">${safeText(tech)}</option>`).join("");
+      techSelect.innerHTML = elogbookState.technicians
+        .map(
+          (tech) =>
+            `<option value="${safeText(tech)}">${safeText(tech)}</option>`,
+        )
+        .join("");
     }
 
     if (loopSelect) {
       loopSelect.innerHTML = Object.keys(elogbookState.loopTagMap)
-        .map((loop) => `<option value="${safeText(loop)}">${safeText(loop)}</option>`)
+        .map(
+          (loop) =>
+            `<option value="${safeText(loop)}">${safeText(loop)}</option>`,
+        )
         .join("");
     }
 
     if (areaSelect) {
-      areaSelect.innerHTML = elogbookState.areas.map((area) => `<option value="${safeText(area)}">${safeText(area)}</option>`).join("");
+      areaSelect.innerHTML = elogbookState.areas
+        .map(
+          (area) =>
+            `<option value="${safeText(area)}">${safeText(area)}</option>`,
+        )
+        .join("");
     }
 
     if (typeSelect) {
-      typeSelect.innerHTML = elogbookState.jobTypes.map((type) => `<option value="${safeText(type)}">${safeText(type)}</option>`).join("");
+      typeSelect.innerHTML = elogbookState.jobTypes
+        .map(
+          (type) =>
+            `<option value="${safeText(type)}">${safeText(type)}</option>`,
+        )
+        .join("");
     }
 
     if (instSelect) {
-      instSelect.innerHTML = elogbookState.instrumentTypes.map((inst) => `<option value="${safeText(inst)}">${safeText(inst)}</option>`).join("");
+      instSelect.innerHTML = elogbookState.instrumentTypes
+        .map(
+          (inst) =>
+            `<option value="${safeText(inst)}">${safeText(inst)}</option>`,
+        )
+        .join("");
     }
 
     if (editTech) {
-      editTech.innerHTML = elogbookState.technicians.map((tech) => `<option value="${safeText(tech)}">${safeText(tech)}</option>`).join("");
+      editTech.innerHTML = elogbookState.technicians
+        .map(
+          (tech) =>
+            `<option value="${safeText(tech)}">${safeText(tech)}</option>`,
+        )
+        .join("");
     }
 
     if (editEngineer) {
-      editEngineer.innerHTML = elogbookState.engineers.map((engineer) => `<option value="${safeText(engineer)}">${safeText(engineer)}</option>`).join("");
+      editEngineer.innerHTML = elogbookState.engineers
+        .map(
+          (engineer) =>
+            `<option value="${safeText(engineer)}">${safeText(engineer)}</option>`,
+        )
+        .join("");
     }
 
     if (editArea) {
-      editArea.innerHTML = elogbookState.areas.map((area) => `<option value="${safeText(area)}">${safeText(area)}</option>`).join("");
+      editArea.innerHTML = elogbookState.areas
+        .map(
+          (area) =>
+            `<option value="${safeText(area)}">${safeText(area)}</option>`,
+        )
+        .join("");
     }
 
     filterTagsForLoop();
@@ -518,7 +657,11 @@
     if (!tagSelect) return;
 
     const tags = elogbookState.loopTagMap[loopName] || [];
-    tagSelect.innerHTML = tags.map((tag) => `<option value="${safeText(tag)}">${safeText(tag)}</option>`).join("");
+    tagSelect.innerHTML = tags
+      .map(
+        (tag) => `<option value="${safeText(tag)}">${safeText(tag)}</option>`,
+      )
+      .join("");
   }
 
   function openOverlay(overlayId) {
@@ -541,20 +684,23 @@
 
     const titleEl = document.getElementById("job-modal-title");
     if (titleEl) {
-      titleEl.textContent = elogbookState.modalMode === "add"
-        ? "Add Job By Technician"
-        : `Assign Job (${elogbookState.modalTargetView})`;
+      titleEl.textContent =
+        elogbookState.modalMode === "add"
+          ? "Add Job By Technician"
+          : `Assign Job (${elogbookState.modalTargetView})`;
     }
 
     const baseDate = startOfDay(new Date());
-    const targetDate = elogbookState.modalTargetView === "tomorrow"
-      ? new Date(baseDate.getTime() + DAY_MS)
-      : baseDate;
+    const targetDate =
+      elogbookState.modalTargetView === "tomorrow"
+        ? new Date(baseDate.getTime() + DAY_MS)
+        : baseDate;
 
     const pre = prefill || {};
 
     const dateInput = document.getElementById("job-date");
-    if (dateInput) dateInput.value = `${isoDateToSlash(toIsoDate(targetDate))} (server stamp)`;
+    if (dateInput)
+      dateInput.value = `${isoDateToSlash(toIsoDate(targetDate))} (server stamp)`;
 
     const techSelect = document.getElementById("job-tech");
     const techCustom = document.getElementById("job-tech-custom");
@@ -567,18 +713,23 @@
 
     if (techSelect) techSelect.value = pre.tech || elogbookState.technicians[0];
     if (techCustom) techCustom.value = "";
-    if (loopSelect) loopSelect.value = pre.loop || Object.keys(elogbookState.loopTagMap)[0];
+    if (loopSelect)
+      loopSelect.value = pre.loop || Object.keys(elogbookState.loopTagMap)[0];
     filterTagsForLoop();
 
     const tagSelect = document.getElementById("job-tag");
     if (tagSelect) {
-      const defaultTag = pre.tag || (elogbookState.loopTagMap[loopSelect?.value || ""] || [])[0] || "";
+      const defaultTag =
+        pre.tag ||
+        (elogbookState.loopTagMap[loopSelect?.value || ""] || [])[0] ||
+        "";
       tagSelect.value = defaultTag;
     }
 
     if (areaSelect) areaSelect.value = pre.area || elogbookState.areas[0];
     if (typeSelect) typeSelect.value = pre.jobType || elogbookState.jobTypes[0];
-    if (instSelect) instSelect.value = pre.instType || elogbookState.instrumentTypes[0];
+    if (instSelect)
+      instSelect.value = pre.instType || elogbookState.instrumentTypes[0];
     if (descInput) descInput.value = pre.desc || "";
 
     if (elogbookState.modalMode === "add") {
@@ -603,7 +754,8 @@
 
   function createJobPayloadFromModal() {
     const techFromList = document.getElementById("job-tech")?.value || "";
-    const techFromInput = document.getElementById("job-tech-custom")?.value.trim() || "";
+    const techFromInput =
+      document.getElementById("job-tech-custom")?.value.trim() || "";
     const loop = document.getElementById("job-loop")?.value || "";
     const tag = document.getElementById("job-tag")?.value || "";
     const area = document.getElementById("job-area")?.value || "";
@@ -618,7 +770,7 @@
       area,
       jobType,
       inst,
-      desc
+      desc,
     };
   }
 
@@ -626,15 +778,24 @@
     event.preventDefault();
 
     const payload = createJobPayloadFromModal();
-    if (!payload.tech || !payload.loop || !payload.tag || !payload.area || !payload.jobType || !payload.inst || !payload.desc) {
+    if (
+      !payload.tech ||
+      !payload.loop ||
+      !payload.tag ||
+      !payload.area ||
+      !payload.jobType ||
+      !payload.inst ||
+      !payload.desc
+    ) {
       showNotice("All fields are compulsory for job save.", "error");
       return;
     }
 
     const baseDate = startOfDay(new Date());
-    const targetDate = elogbookState.modalTargetView === "tomorrow"
-      ? new Date(baseDate.getTime() + DAY_MS)
-      : baseDate;
+    const targetDate =
+      elogbookState.modalTargetView === "tomorrow"
+        ? new Date(baseDate.getTime() + DAY_MS)
+        : baseDate;
 
     const now = new Date().toISOString();
     const newJob = {
@@ -655,20 +816,31 @@
       abnormality: payload.jobType === "Abnormality",
       extraDutyHours: 0,
       shift: "A",
-      source: elogbookState.modalMode === "assign" ? `Assign(${elogbookState.modalTargetView})` : "Technician Add",
+      source:
+        elogbookState.modalMode === "assign"
+          ? `Assign(${elogbookState.modalTargetView})`
+          : "Technician Add",
       desc: payload.desc,
-      remarks: []
+      remarks: [],
     };
 
     elogbookState.allJobs.unshift(newJob);
     persistLocalData();
     closeJobModal();
 
-    if (currentView === elogbookState.modalTargetView || elogbookState.modalMode === "add") {
+    if (
+      currentView === elogbookState.modalTargetView ||
+      elogbookState.modalMode === "add"
+    ) {
       refreshTable();
     }
 
-    showNotice(elogbookState.modalMode === "assign" ? "Job assigned successfully." : "Job added successfully.", "info");
+    showNotice(
+      elogbookState.modalMode === "assign"
+        ? "Job assigned successfully."
+        : "Job added successfully.",
+      "info",
+    );
   }
 
   function cloneJobForReassign(job) {
@@ -693,7 +865,7 @@
       shift: job.shift || "A",
       source: "Re-Assigned",
       desc: "",
-      remarks: []
+      remarks: [],
     };
   }
 
@@ -736,19 +908,28 @@
       const el = document.getElementById(id);
       if (!el) return;
       const nextValue = String(value || "");
-      const hasOption = Array.from(el.options || []).some((option) => option.value === nextValue);
+      const hasOption = Array.from(el.options || []).some(
+        (option) => option.value === nextValue,
+      );
       if (nextValue && !hasOption) {
         const option = document.createElement("option");
         option.value = nextValue;
         option.textContent = nextValue;
         el.appendChild(option);
       }
-      el.value = nextValue || (el.options[0]?.value || "");
+      el.value = nextValue || el.options[0]?.value || "";
     };
 
-    const displayDate = isoDateToSlash(job.targetDate || toIsoDate(new Date()));
-    const summaryPrefix = [job.loop, job.tag, job.jobType].filter(Boolean).join(" | ");
-    const summaryText = summaryPrefix && job.desc ? `${summaryPrefix} - ${job.desc}` : (summaryPrefix || job.desc || "");
+    const displayDate = toReadableDate(
+      job.targetDate || job.date || toIsoDate(new Date()),
+    );
+    const summaryPrefix = [job.loop, job.tag, job.jobType]
+      .filter(Boolean)
+      .join(" | ");
+    const summaryText =
+      summaryPrefix && job.desc
+        ? `${summaryPrefix} - ${job.desc}`
+        : summaryPrefix || job.desc || "";
 
     setVal("edit-job-id", job.id);
     const displayId = document.getElementById("edit-job-id-display");
@@ -792,12 +973,18 @@
     }
 
     const desc = document.getElementById("edit-job-desc")?.value.trim() || "";
-    const status = document.getElementById("edit-job-status")?.value || "IN PROGRESS";
-    const tech = document.getElementById("edit-job-tech")?.value || job.tech || "";
+    const status =
+      document.getElementById("edit-job-status")?.value || "IN PROGRESS";
+    const tech =
+      document.getElementById("edit-job-tech")?.value || job.tech || "";
     const engineer = document.getElementById("edit-job-engineer")?.value || "";
     const area = document.getElementById("edit-job-area")?.value || "N.A";
-    const extraHours = Number(document.getElementById("edit-job-extra-hours")?.value || 0);
-    const emergency = Boolean(document.getElementById("edit-job-emergency")?.checked);
+    const extraHours = Number(
+      document.getElementById("edit-job-extra-hours")?.value || 0,
+    );
+    const emergency = Boolean(
+      document.getElementById("edit-job-emergency")?.checked,
+    );
 
     if (!desc) {
       showNotice("Description is required before save.", "error");
@@ -811,7 +998,9 @@
     job.area = area;
     job.emergency = emergency;
     job.pendingWrite = false;
-    job.extraDutyHours = Number.isFinite(extraHours) ? Math.max(0, Math.trunc(extraHours)) : 0;
+    job.extraDutyHours = Number.isFinite(extraHours)
+      ? Math.max(0, Math.trunc(extraHours))
+      : 0;
     job.abnormality = job.jobType === "Abnormality";
     job.updatedAt = new Date().toISOString();
 
@@ -826,8 +1015,15 @@
 
     if (job.jobType === "ISO14001" && status === "✓ OVER") {
       const instUpper = String(job.typeOfInst || "").toUpperCase();
-      if (["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER"].includes(instUpper)) {
-        showNotice(`PM detail form popup (${instUpper}) is required in backend flow.`, "warn");
+      if (
+        ["TRANSMITTER", "CONTROL VALVE", "SWITCH", "ANALYZER"].includes(
+          instUpper,
+        )
+      ) {
+        showNotice(
+          `PM detail form popup (${instUpper}) is required in backend flow.`,
+          "warn",
+        );
       }
     }
   }
@@ -837,19 +1033,18 @@
     if (!history) return;
 
     const remarks = Array.isArray(job.remarks) ? job.remarks : [];
-    if (!remarks.length) {
-      history.innerHTML = '<div class="px-3 py-2 font-14px color-secondary">No remarks yet.</div>';
-      return;
-    }
 
-    history.innerHTML = remarks.map((remark) => {
-      const tone = remark.type === "executive" ? "color-green" : "color-purple";
-      const pending = [];
-      if (remark.ackTech && !remark.ackByTech) pending.push("Tech Ack Pending");
-      if (remark.ackEng && !remark.ackByEng) pending.push("Eng Ack Pending");
-      const state = pending.length ? pending.join(" | ") : "Acknowledged";
+    history.innerHTML = remarks
+      .map((remark) => {
+        const tone =
+          remark.type === "executive" ? "color-green" : "color-purple";
+        const pending = [];
+        if (remark.ackTech && !remark.ackByTech)
+          pending.push("Tech Ack Pending");
+        if (remark.ackEng && !remark.ackByEng) pending.push("Eng Ack Pending");
+        const state = pending.length ? pending.join(" | ") : "Acknowledged";
 
-      return `
+        return `
         <div class="px-3 py-2 font-14px">
           <div class="flex items-center justify-between">
             <span class="fw-bold ${tone}">${safeText(String(remark.type || "engineer").toUpperCase())}</span>
@@ -859,7 +1054,8 @@
           <div class="mt-1 font-13px color-orange">${safeText(state)}</div>
         </div>
       `;
-    }).join("");
+      })
+      .join("");
   }
 
   function openRemarkModal(jobId) {
@@ -874,10 +1070,10 @@
     setVal("remark-job-id", jobId);
     setVal("remark-text", "");
 
-    const plantTitle = document.getElementById("remark-modal-plant");
-    if (plantTitle) plantTitle.textContent = elogbookState.selectedPlant;
+    // const plantTitle = document.getElementById("remark-modal-plant");
+    // if (plantTitle) plantTitle.textContent = elogbookState.selectedPlant;
 
-    const userLabel = document.getElementById("remark-modal-user");
+    const userLabel = document.getElementById("remark-by-display");
     if (userLabel) userLabel.textContent = elogbookState.activeUser.name;
 
     const statusOver = document.getElementById("remark-status-over");
@@ -905,9 +1101,13 @@
 
     const text = document.getElementById("remark-text")?.value.trim() || "";
     const type = document.getElementById("remark-type")?.value || "engineer";
-    const ackTech = Boolean(document.getElementById("remark-ack-tech")?.checked);
+    const ackTech = Boolean(
+      document.getElementById("remark-ack-tech")?.checked,
+    );
     const ackEng = Boolean(document.getElementById("remark-ack-eng")?.checked);
-    const markOver = Boolean(document.getElementById("remark-status-over")?.checked);
+    const markOver = Boolean(
+      document.getElementById("remark-status-over")?.checked,
+    );
 
     if (!text) {
       showNotice("Remark text is required.", "error");
@@ -919,11 +1119,13 @@
       type,
       text,
       author: elogbookState.activeUser.name,
-      date: isoDateToSlash(toIsoDate(new Date())) + ` ${pad2(new Date().getHours())}:${pad2(new Date().getMinutes())}`,
+      date:
+        isoDateToSlash(toIsoDate(new Date())) +
+        ` ${pad2(new Date().getHours())}:${pad2(new Date().getMinutes())}`,
       ackTech,
       ackEng,
       ackByTech: false,
-      ackByEng: false
+      ackByEng: false,
     };
 
     if (!Array.isArray(located.job.remarks)) {
@@ -954,12 +1156,15 @@
     if (!list) return;
 
     if (!pending.length) {
-      list.innerHTML = '<div class="px-3 py-2 font-14px color-secondary">No pending acknowledgements.</div>';
+      list.innerHTML =
+        '<div class="px-3 py-2 font-14px color-secondary">No pending acknowledgements.</div>';
       openOverlay("ack-modal");
       return;
     }
 
-    list.innerHTML = pending.map(({ job, remark }) => `
+    list.innerHTML = pending
+      .map(
+        ({ job, remark }) => `
       <label class="flex items-start gap-2 px-3 py-2 font-14px hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
         <input type="checkbox" class="mt-0.5 ack-check accent-blue-600" data-job-id="${safeText(job.id)}" data-remark-id="${safeText(remark.id)}">
         <div>
@@ -968,7 +1173,9 @@
           <div class="font-13px color-orange mt-1">${safeText(remark.author)} | ${safeText(remark.date)}</div>
         </div>
       </label>
-    `).join("");
+    `,
+      )
+      .join("");
 
     openOverlay("ack-modal");
   }
@@ -978,7 +1185,9 @@
   }
 
   function acknowledgeSelectedRemarks() {
-    const selected = Array.from(document.querySelectorAll(".ack-check:checked"));
+    const selected = Array.from(
+      document.querySelectorAll(".ack-check:checked"),
+    );
     if (!selected.length) {
       showNotice("Select at least one remark to acknowledge.", "warn");
       return;
@@ -1011,12 +1220,15 @@
     if (!list) return;
 
     if (!elogbookState.jobPlannerDue.length) {
-      list.innerHTML = '<div class="font-14px color-secondary">No due jobs from Job Planner.</div>';
+      list.innerHTML =
+        '<div class="font-14px color-secondary">No due jobs from Job Planner.</div>';
       openOverlay("reminder-modal");
       return;
     }
 
-    list.innerHTML = elogbookState.jobPlannerDue.map((job) => `
+    list.innerHTML = elogbookState.jobPlannerDue
+      .map(
+        (job) => `
       <div class="border border-gray-200 dark:border-dark-border rounded-sm p-3 flex items-start justify-between gap-3 bg-gray-50 dark:bg-transparent">
         <div>
           <div class="font-14px fw-bold color-primary">${safeText(job.tag)} <span class="color-purple">(${safeText(job.jobType)})</span></div>
@@ -1025,7 +1237,9 @@
         </div>
         <button onclick="assignReminder('${safeText(job.id)}')" class="font-13px px-2 py-1 rounded-sm border border-purple-200 dark:border-purple-500/40 color-purple hover:bg-purple-100 dark:hover:bg-purple-500/20 transition-colors">Assign</button>
       </div>
-    `).join("");
+    `,
+      )
+      .join("");
 
     openOverlay("reminder-modal");
   }
@@ -1035,7 +1249,9 @@
   }
 
   function assignReminder(reminderId) {
-    const reminder = elogbookState.jobPlannerDue.find((item) => item.id === reminderId);
+    const reminder = elogbookState.jobPlannerDue.find(
+      (item) => item.id === reminderId,
+    );
     if (!reminder) return;
     closeReminderModal();
     openJobModal("assign", "today", reminder);
@@ -1045,9 +1261,12 @@
     let payload = null;
 
     if (rowType === "ojr") {
-      payload = elogbookState.ojrPending.find((item) => item.id === sourceId) || null;
+      payload =
+        elogbookState.ojrPending.find((item) => item.id === sourceId) || null;
     } else {
-      const weekly = (elogbookState.jobsByView.weekly || []).find((item) => item.id === sourceId);
+      const weekly = (elogbookState.jobsByView.weekly || []).find(
+        (item) => item.id === sourceId,
+      );
       if (weekly) {
         payload = {
           area: weekly.area,
@@ -1056,7 +1275,7 @@
           jobType: weekly.jobType,
           instType: weekly.typeOfInst,
           desc: weekly.desc || "Re-assigned from weekly pending",
-          tech: weekly.tech
+          tech: weekly.tech,
         };
       }
     }
@@ -1066,9 +1285,14 @@
   }
 
   function checkPendingThresholdAlerts() {
-    const pendingCount = elogbookState.allJobs.filter((job) => job.pendingWrite).length;
+    const pendingCount = elogbookState.allJobs.filter(
+      (job) => job.pendingWrite,
+    ).length;
     if (pendingCount > 150) {
-      showNotice("Pending jobs exceeded 150. Pending log opened automatically.", "error");
+      showNotice(
+        "Pending jobs exceeded 150. Pending log opened automatically.",
+        "error",
+      );
       elogbookState.pendingOnlyMode = true;
       refreshTable();
       return;
@@ -1083,10 +1307,13 @@
       renderHeader({
         title: `${elogbookState.selectedPlant} Logbook`,
         breadcrumbs: [
-          { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
-          { label: `${elogbookState.selectedPlant} Plant Detail` }
+          {
+            label: "Technician Log",
+            href: "/src/pages/technician_logbook.html",
+          },
+          { label: `${elogbookState.selectedPlant} Plant Detail` },
         ],
-        backLink: "/src/pages/technician_logbook.html"
+        backLink: "/src/pages/technician_logbook.html",
       });
     }
 
@@ -1100,7 +1327,9 @@
 
   function initReminders() {
     const today = toIsoDate(new Date());
-    const tomorrow = toIsoDate(new Date(startOfDay(new Date()).getTime() + DAY_MS));
+    const tomorrow = toIsoDate(
+      new Date(startOfDay(new Date()).getTime() + DAY_MS),
+    );
     elogbookState.jobPlannerDue = [
       {
         id: "JP-1",
@@ -1110,7 +1339,7 @@
         jobType: "ISO14001",
         instType: "TRANSMITTER",
         dueDate: today,
-        desc: "ISO planned PM due today."
+        desc: "ISO planned PM due today.",
       },
       {
         id: "JP-2",
@@ -1120,8 +1349,8 @@
         jobType: "ISO14001",
         instType: "SWITCH",
         dueDate: tomorrow,
-        desc: "Switch panel compliance check due tomorrow."
-      }
+        desc: "Switch panel compliance check due tomorrow.",
+      },
     ];
   }
 
@@ -1148,7 +1377,15 @@
       });
     }
 
-    ["job-modal", "edit-modal", "remark-modal", "ack-modal", "reminder-modal", "history-type-modal", "general-history-modal"].forEach((id) => {
+    [
+      "job-modal",
+      "edit-modal",
+      "remark-modal",
+      "ack-modal",
+      "reminder-modal",
+      "history-type-modal",
+      "general-history-modal",
+    ].forEach((id) => {
       const overlay = document.getElementById(id);
       if (!overlay) return;
       overlay.addEventListener("click", (event) => {
@@ -1169,7 +1406,7 @@
       containerId: "#plant-table",
       data: getFilteredJobs(),
       itemsPerPage: 6,
-      onRender: renderJobRow
+      onRender: renderJobRow,
     });
 
     global.plantLogTable = plantLogTable;
@@ -1178,7 +1415,8 @@
 
   function initInitialView() {
     const targetId = currentView === "prev" ? "btn-prev" : `btn-${currentView}`;
-    const button = document.getElementById(targetId) || document.getElementById("btn-today");
+    const button =
+      document.getElementById(targetId) || document.getElementById("btn-today");
     activateView(currentView, button);
   }
 
@@ -1215,7 +1453,10 @@
     if (type === "system") {
       // System History — auto-export and redirect
       const located = getJobById(historyTargetJobId);
-      if (!located) { showNotice("Job not found.", "error"); return; }
+      if (!located) {
+        showNotice("Job not found.", "error");
+        return;
+      }
       const job = located.job;
 
       const record = {
@@ -1231,10 +1472,12 @@
         tech: job.tech || "",
         eng: job.engineer || elogbookState.activeUser.name,
         status: "OVER",
-        exportedAt: new Date().toISOString()
+        exportedAt: new Date().toISOString(),
       };
 
-      const saved = JSON.parse(localStorage.getItem("gnfc_job_history") || "[]");
+      const saved = JSON.parse(
+        localStorage.getItem("gnfc_job_history") || "[]",
+      );
       saved.unshift(record);
       localStorage.setItem("gnfc_job_history", JSON.stringify(saved));
       showNotice("System History record exported successfully.", "info");
@@ -1243,17 +1486,28 @@
 
     // General History — open the form modal pre-filled
     const located = getJobById(historyTargetJobId);
-    if (!located) { showNotice("Job not found.", "error"); return; }
+    if (!located) {
+      showNotice("Job not found.", "error");
+      return;
+    }
     const job = located.job;
 
-    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ""; };
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val || "";
+    };
     const setSelect = (id, val) => {
       const el = document.getElementById(id);
       if (!el) return;
       const v = String(val || "");
-      const has = Array.from(el.options).some(o => o.value === v);
-      if (v && !has) { const opt = document.createElement("option"); opt.value = v; opt.textContent = v; el.appendChild(opt); }
-      el.value = v || (el.options[0]?.value || "");
+      const has = Array.from(el.options).some((o) => o.value === v);
+      if (v && !has) {
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
+        el.appendChild(opt);
+      }
+      el.value = v || el.options[0]?.value || "";
     };
 
     setVal("hist-date", job.targetDate || toIsoDate(new Date()));
@@ -1289,7 +1543,7 @@
       tech: document.getElementById("hist-tech")?.value || "",
       eng: document.getElementById("hist-eng")?.value || "",
       area: document.getElementById("hist-area")?.value || "",
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
 
     if (!record.desc) {
@@ -1328,7 +1582,72 @@
   global.closeHistoryTypeModal = closeHistoryTypeModal;
   global.selectHistoryType = selectHistoryType;
   global.closeGeneralHistoryModal = closeGeneralHistoryModal;
+  function openPriorityModal(jobId) {
+    const located = getJobById(jobId);
+    if (!located) return;
+    
+    const currentPriority = located.job.priority || 0;
+    document.getElementById("priority-job-id").value = jobId;
+    document.getElementById("priority-value").value = currentPriority;
+    
+    const grid = document.getElementById("priority-grid");
+    if (grid) {
+      grid.innerHTML = "";
+      for (let i = 0; i <= 25; i++) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = i;
+        const isSelected = i === currentPriority;
+        
+        // Base classes
+        let classes = "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95";
+        
+        // Conditional classes
+        if (isSelected) {
+          classes += " bg-purple-600 text-white border-purple-600 shadow-md ring-2 ring-purple-200 dark:ring-purple-900";
+        } else {
+          classes += " bg-white dark:bg-dark-elem border-gray-200 dark:border-dark-border color-primary hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300";
+        }
+        
+        btn.className = classes;
+        
+        // Click handler
+        btn.onclick = () => {
+          document.getElementById("priority-value").value = i;
+          // Update visual state
+          Array.from(grid.children).forEach(child => {
+            child.className = "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95 bg-white dark:bg-dark-elem border-gray-200 dark:border-dark-border color-primary hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300";
+          });
+          btn.className = "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95 bg-purple-600 text-white border-purple-600 shadow-md ring-2 ring-purple-200 dark:ring-purple-900";
+        };
+        
+        grid.appendChild(btn);
+      }
+    }
+    
+    openOverlay("priority-modal");
+  }
+
+  function closePriorityModal() {
+    closeOverlay("priority-modal");
+  }
+
+  function savePriority(e) {
+    e.preventDefault();
+    const jobId = document.getElementById("priority-job-id").value;
+    const priority = parseInt(document.getElementById("priority-value").value, 10);
+    
+    updateJobInState(jobId, { priority });
+    closePriorityModal();
+    showNotice(`Priority set to ${priority}`, "success");
+    refreshTable();
+  }
+
+  document.getElementById("priority-modal-form")?.addEventListener("submit", savePriority);
+
   global.addToHistory = addToHistory;
+  global.openPriorityModal = openPriorityModal;
+  global.closePriorityModal = closePriorityModal;
 
   document.addEventListener("DOMContentLoaded", bootstrap);
 })(window);
