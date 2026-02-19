@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
-    <script>window.activePage = 'plant_status';</script>
+    <script>window.activePage = 'plants';</script>
     <style>
         .page-shell {
             padding: 1rem;
@@ -129,7 +129,7 @@
     <script src="/src/js/theme_manager.js"></script>
     <script src="/src/js/sidebar.js"></script>
     <div id="sidebar-container"></div>
-    <script>renderSidebar('plant_status');</script>
+    <script>renderSidebar('plants');</script>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
@@ -139,7 +139,7 @@
             renderHeader({
                 title: "Plant Units",
                 breadcrumbs: [
-                    { label: "Plant Status" }
+                    { label: "Plant" }
                 ],
                 backLink: "/src/pages/dashboard.html"
             });

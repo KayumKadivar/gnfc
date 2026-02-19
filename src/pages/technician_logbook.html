@@ -260,17 +260,17 @@
               <div class="h-5 w-px bg-dark-border/50"></div>
               <div class="flex bg-dark-bg/80 p-1 rounded-lg border border-dark-border/50 gap-x-1">
                 <button data-view="today"
-                  class="time-btn px-4 py-1.5 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent"
+                  class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent"
                   aria-pressed="true">
                   Today
                 </button>
                 <button data-view="prev"
-                  class="time-btn px-4 py-1.5 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-white"
+                  class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-black"
                   aria-pressed="false">
                   Prev Day
                 </button>
                 <button data-view="weekly"
-                  class="time-btn px-4 py-1.5 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-white"
+                  class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-black"
                   aria-pressed="false">
                   Weekly
                 </button>
@@ -428,13 +428,13 @@
         const btnView = btn.dataset.view || "";
         const isActive = btnView === selectedView;
 
-        btn.className = "time-btn px-4 py-2 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent";
+        btn.className = "time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent";
 
         if (isActive) {
           btn.classList.add("bg-gnfc-blue", "color-white", "shadow-md", "shadow-gnfc-blue/20");
           btn.setAttribute("aria-pressed", "true");
         } else {
-          btn.classList.add("color-secondary", "hover-color-white", "hover:bg-white/5");
+          btn.classList.add("color-secondary", "hover-color-black", "hover:bg-white/5");
           btn.setAttribute("aria-pressed", "false");
         }
       });
