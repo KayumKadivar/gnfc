@@ -5,16 +5,125 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Assign Today | GNFC E-Logbook</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Shared Styles -->
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  
+  <script src="/src/js/tailwind_config.js"></script>
+
+  <style>
+    /* Custom Input Styles to match theme */
+    .form-select,
+    .form-input,
+    .form-textarea {
+      background-color: var(--app-bg) !important;
+      border-color: var(--app-border) !important;
+      color: var(--app-text) !important;
+      border-width: 1px;
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      /* Slightly taller for 16px */
+      width: 100%;
+      outline: none;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px !important;
+      /* User requested 16px */
+    }
+
+    /* Custom Select Arrow Styling */
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+    }
+
+    .form-select:focus,
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: #FF9900 !important;
+      box-shadow: 0 0 0 2px rgba(255, 153, 0, 0.1);
+    }
+
+    /* Option Styling (Best effort for consistent dark theme) */
+    option {
+      background-color: var(--app-panel);
+      color: var(--app-text);
+      padding: 8px;
+    }
+
+    /* Table Styles (aligned with plant_detail style) */
+    .theme-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .theme-table thead {
+      background: #f1f5f9;
+    }
+
+    html.dark .theme-table thead {
+      background: var(--app-panel-alt, #22252b);
+    }
+
+    .theme-table th {
+      color: #475569;
+      border: 1px solid var(--app-border);
+      padding: 0.75rem 1rem;
+      /* Increased padding */
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 15px;
+      /* Increased font size */
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    html.dark .theme-table th {
+      color: var(--typo-secondary, #d1d5db);
+    }
+
+    .theme-table td {
+      border: 1px solid var(--app-border);
+      padding: 12px 16px;
+      /* Increased padding */
+      color: var(--app-text);
+      vertical-align: middle;
+      font-size: 16px;
+      /* Increased font size for data */
+      line-height: 1.5;
+    }
+
+    .theme-table tr:hover td {
+      background-color: rgba(148, 163, 184, 0.08);
+    }
+
+    html.dark .theme-table tr:hover td {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .theme-table tbody tr:nth-child(even) td {
+      background-color: rgba(148, 163, 184, 0.04);
+    }
+
+    html.dark .theme-table tbody tr:nth-child(even) td {
+      background-color: rgba(255, 255, 255, 0.015);
+    }
+  </style>
 </head>
 
-<body class="h-screen flex overflow-hidden">
+<body
+  class="bg-dark-bg text-dark-text font-sans antialiased h-screen flex overflow-hidden selection:bg-gnfc-orange/30 selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -23,7 +132,7 @@
   <script>renderSidebar('assigntoday');</script>
 
   <main class="flex-1 flex flex-col overflow-hidden transition-colors duration-300">
-    
+
     <div id="header-container"></div>
     <script src="/src/js/header.js"></script>
     <script>
@@ -34,164 +143,298 @@
       });
     </script>
 
-    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-5">
 
-      <div class="dashboard-panel p-4 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-6">
-          <div class="border-r pr-6 border-slate-200 dark:border-slate-700">
-            <span class="text-xs font-bold text-slate-400 block mb-1 uppercase">Today's Date</span>
+      <!-- Stats / Top Bar -->
+      <div
+        class="bg-dark-panel border border-dark-border rounded-lg p-2 flex flex-wrap items-center justify-between gap-3 shadow-md">
+        <div class="flex items-center gap-4">
+          <div class="border-r pr-4 border-dark-border">
             <div class="flex items-center gap-2">
-              <i class="ph ph-calendar text-blue-600 text-xl"></i>
-              <span id="assign-date" class="font-mono text-lg font-bold">--/--/----</span>
+              <i class="ph-duotone ph-calendar color-blue font-18px"></i>
+              <span id="assign-date" class="font-mono font-14px fw-bold color-primary">--/--/----</span>
             </div>
           </div>
-          <div class="flex gap-8">
-            <div>
-              <label>Current Plant</label>
-              <span id="plant-name" class="font-bold text-blue-700 dark:text-blue-400">BOILER</span>
+          <div class="flex gap-4 items-center">
+            <div class="flex items-center gap-2">
+              <label class="font-12px color-label">Plant:</label>
+              <span id="plant-name" class="fw-bold color-blue font-14px">BOILER</span>
             </div>
-            <div>
-              <label>Engineer Logged</label>
-              <span id="assign-user" class="font-bold text-slate-800 dark:text-slate-200 uppercase">ENG_TESTER</span>
+            <div class="flex items-center gap-2">
+              <label class="font-12px color-label">Engineer:</label>
+              <span id="assign-user" class="fw-bold color-primary font-14px uppercase">ENG_TESTER</span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
-          <button onclick="openCJLModal()" class="btn-outline flex items-center gap-2">
-            <i class="ph ph-list-checks"></i> Current Week
+        <div class="flex items-center gap-2">
+          <button onclick="openCJLModal()"
+            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium">
+            <i class="ph ph-list-checks"></i> Joblist
           </button>
-          <button onclick="openSEModal()" class="btn-outline flex items-center gap-2">
-            <i class="ph ph-warning-circle"></i> S/E Jobs
+          <button onclick="openSEModal()"
+            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium">
+            <i class="ph ph-warning-circle"></i> S/D
           </button>
-          <button onclick="openSearchModal()" class="btn-outline flex items-center gap-2">
-            <i class="ph ph-magnifying-glass"></i> Search Tag
+          <button onclick="openSearchModal()"
+            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium">
+            <i class="ph ph-magnifying-glass"></i> Search
           </button>
-          <button onclick="assignOPJobs()" class="btn-primary flex items-center gap-2">
-            <i class="ph-bold ph-plus-circle"></i> Assign OP Jobs
+          <button type="button" onclick="assignOPJobs()"
+            class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition-all flex items-center gap-1.5 font-14px fw-bold">
+            <i class="ph-bold ph-plus-circle"></i> Assign ISO
           </button>
         </div>
       </div>
 
-      <div class="grid grid-cols-12 gap-6">
-        
-        <!-- Assignment Form -->
-        <div class="col-span-12 xl:col-span-4 space-y-6">
-          <div class="dashboard-panel bg-panel bg-white dark:bg-[#1e293b]">
-            <div class="panel-header bg-slate-50 dark:bg-[#0f172a] border-b border-slate-200 dark:border-[#334155]">
-              <i class="ph-fill ph-note-pencil text-blue-600"></i>
-              <span class="font-bold text-slate-700 dark:text-slate-200">Job Assignment Form</span>
-            </div>
-            <div class="p-5 space-y-4">
-              <div>
-                <label>Assigned To Technician</label>
-                <select id="form-assigned-to">
+      <div class="flex flex-col gap-3">
+
+        <!-- Top: Horizontal Job Assignment Form -->
+        <div
+          class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-lg shadow-md shrink-0">
+          <div
+            class="bg-slate-50 dark:bg-dark-header border-b border-slate-200 dark:border-dark-border px-4 py-2 flex items-center gap-2 rounded-lg">
+            <i class="ph-duotone ph-note-pencil text-blue-600 font-16px"></i>
+            <span class="fw-bold text-slate-700 dark:color-primary font-14px">Job Assignment Form</span>
+          </div>
+
+          <div class="p-4 grid grid-cols-12 gap-4">
+
+            <!-- Row 1: Assigned To, Job Type, Area -->
+            <div class="col-span-12 lg:col-span-4">
+              <label class="block font-12px fw-bold color-secondary mb-1">Assigned To</label>
+              <div class="relative">
+                <select id="form-assigned-to"
+                  class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
                   <option value="">Select Tech</option>
-                  <option>PVS</option><option>VWM</option><option>BDR</option><option>PRP</option><option>JDB</option><option>JMD</option><option>BSU</option><option>CNJ_ISD</option><option>TECH_TESTER</option>
+                  <option>PVS</option>
+                  <option>VWM</option>
+                  <option>BDR</option>
+                  <option>PRP</option>
+                  <option>JDB</option>
+                  <option>JMD</option>
+                  <option>BSU</option>
+                  <option>CNJ_ISD</option>
+                  <option>TECH_TESTER</option>
                 </select>
-              </div>
-              
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label>Type of Job</label>
-                  <select id="form-job-type">
-                    <option value="">-- Select --</option>
-                    <option>PM</option><option>DOCUMENTATION</option><option>HOUSE KEEPING</option><option>ABNORMALITY</option><option>MODIFICATION</option><option>ISO14001</option><option>OHSAS18001</option><option>SYSTEM BACKUP</option><option>REVAMP</option><option>DEFECT MAINTENANCE</option><option>CONFIGURATION</option><option>SPARE REPAIR</option><option>SCRAP</option><option>MATL RETURN</option><option>RANGE CHANGE</option><option>CARD FAILURE</option><option>INST FAILURE</option><option>INSPECTION</option><option>CASH PURCHASE</option><option>PROCESS REQMT</option><option>N.A.</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Loop Name</label>
-                  <select id="form-loop"><option>N.A.</option></select>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label>Area</label>
-                  <select id="form-area">
-                    <option>N.A.</option>
-                    <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option><option>TG-1</option><option>TG-2</option><option>COMMON</option><option>CPSU-HRSG</option><option>CPSU-GT</option><option>CPSU-BOP</option><option>CPSU-BMS</option><option>CHP</option><option>ASH</option><option>NG STN</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Type of Inst</label>
-                  <select id="form-inst-type">
-                    <option value="">-- Select --</option>
-                    <option>ANALYZER</option><option>C/V</option><option>ENVIRON MONITORING</option><option>MACHINE MONITORING</option><option>PA SYSTEM</option><option>PC</option><option>PCV</option><option>ROTAMETER</option><option>SCANNER</option><option>SWITCH</option><option>PRIMARY ELEMENT</option><option>TG/PG</option><option>TX</option><option>N.A.</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label>Tag Number</label>
-                <select id="form-tag"><option>NOTAG</option></select>
-              </div>
-
-              <div>
-                <label>Job Description</label>
-                <textarea id="form-jobs-desc" rows="4" placeholder="Enter task details here..."></textarea>
-              </div>
-
-              <div class="flex gap-3 pt-2">
-                <button onclick="saveAssignment()" class="btn-primary flex-1">SAVE JOB</button>
-                <button onclick="cancelAssignment()" class="btn-outline flex-1">CLEAR FORM</button>
+                <i
+                  class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
               </div>
             </div>
+
+            <div class="col-span-12 lg:col-span-4">
+              <label class="block font-12px fw-bold color-secondary mb-1">Job Type</label>
+              <div class="relative">
+                <select id="form-job-type"
+                  class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
+                  <option value="">-- Select --</option>
+                  <option>PM</option>
+                  <option>DOCUMENTATION</option>
+                  <option>HOUSE KEEPING</option>
+                  <option>ABNORMALITY</option>
+                  <option>MODIFICATION</option>
+                  <option>ISO14001</option>
+                  <option>OHSAS18001</option>
+                  <option>SYSTEM BACKUP</option>
+                  <option>REVAMP</option>
+                  <option>DEFECT MAINTENANCE</option>
+                  <option>CONFIGURATION</option>
+                  <option>SPARE REPAIR</option>
+                  <option>SCRAP</option>
+                  <option>MATL RETURN</option>
+                  <option>RANGE CHANGE</option>
+                  <option>CARD FAILURE</option>
+                  <option>INST FAILURE</option>
+                  <option>INSPECTION</option>
+                  <option>CASH PURCHASE</option>
+                  <option>PROCESS REQMT</option>
+                  <option>N.A.</option>
+                </select>
+                <i
+                  class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+              </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4">
+              <label class="block font-12px fw-bold color-secondary mb-1">Area</label>
+              <div class="relative">
+                <select id="form-area"
+                  class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
+                  <option>N.A.</option>
+                  <option>BOILER-1</option>
+                  <option>BOILER-2</option>
+                  <option>BOILER-3</option>
+                  <option>BOILER-4</option>
+                  <option>TG-1</option>
+                  <option>TG-2</option>
+                  <option>COMMON</option>
+                  <option>CPSU-HRSG</option>
+                  <option>CPSU-GT</option>
+                  <option>CPSU-BOP</option>
+                  <option>CPSU-BMS</option>
+                  <option>CHP</option>
+                  <option>ASH</option>
+                  <option>NG STN</option>
+                </select>
+                <i
+                  class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+              </div>
+            </div>
+
+            <!-- Row 2: Loop Name, Inst Type, Tag No -->
+            <div class="col-span-12 lg:col-span-4">
+              <label class="block font-12px fw-bold color-secondary mb-1">Loop Name</label>
+              <div class="relative">
+                <select id="form-loop"
+                  class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
+                  <option>N.A.</option>
+                </select>
+                <i
+                  class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+              </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4">
+              <label class="block font-12px fw-bold color-secondary mb-1">Inst Type</label>
+              <div class="relative">
+                <select id="form-inst-type"
+                  class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
+                  <option value="">-- Select --</option>
+                  <option>ANALYZER</option>
+                  <option>C/V</option>
+                  <option>ENVIRON MONITORING</option>
+                  <option>MACHINE MONITORING</option>
+                  <option>PA SYSTEM</option>
+                  <option>PC</option>
+                  <option>PCV</option>
+                  <option>ROTAMETER</option>
+                  <option>SCANNER</option>
+                  <option>SWITCH</option>
+                  <option>PRIMARY ELEMENT</option>
+                  <option>TG/PG</option>
+                  <option>TX</option>
+                  <option>N.A.</option>
+                </select>
+                <i
+                  class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+              </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4">
+              <label class="block font-12px fw-bold color-secondary mb-1">Tag No</label>
+              <div class="relative">
+                <select id="form-tag"
+                  class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
+                  <option>NOTAG</option>
+                </select>
+                <i
+                  class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+              </div>
+            </div>
+
+            <!-- Row 3: Description -->
+            <div class="col-span-12">
+              <label class="block font-12px fw-bold color-secondary mb-1">Description</label>
+              <textarea id="form-jobs-desc" rows="3"
+                class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-2 font-14px focus:border-blue-500 focus:outline-none placeholder-slate-400"
+                placeholder="Enter task details..."></textarea>
+            </div>
+
+            <!-- Row 4: Actions (Right Aligned) -->
+            <div class="col-span-12 flex justify-end gap-3 pt-2">
+              <button onclick="saveAssignment()"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-6 rounded shadow-md flex items-center justify-center gap-2 transition-colors">
+                SAVE
+              </button>
+              <button onclick="cancelAssignment()"
+                class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border hover:bg-slate-50 text-slate-700 dark:text-gray-300 font-bold py-1.5 px-4 rounded flex items-center justify-center gap-2 transition-colors shadow-md">
+                Cancel
+              </button>
+            </div>
+
           </div>
         </div>
 
-        <!-- Right Side: Tabbed Interface -->
-        <div class="col-span-12 xl:col-span-8 space-y-4">
-          
+        <!-- Bottom: OJR / Tables Area -->
+        <div class="flex flex-col mt-4">
+
           <!-- Tabs Navigation -->
-          <div class="flex border-b border-slate-200 dark:border-slate-700">
-             <button id="tab-ojr" onclick="switchTab('ojr')" class="btn-tab active flex items-center gap-2">
-                <i class="ph-bold ph-article"></i> Operation Job Register
-             </button>
-             <button id="tab-pending" onclick="switchTab('pending')" class="btn-tab flex items-center gap-2">
-                <i class="ph-bold ph-timer"></i> Weekly Pending Jobs
-             </button>
+          <div class="flex border-b border-dark-border gap-4 px-1 mb-3">
+            <button id="tab-ojr" onclick="switchTab('ojr')"
+              class="pb-2 border-b-2 border-gnfc-orange color-orange font-14px fw-bold flex items-center gap-2 transition-all">
+              <i class="ph-bold ph-article"></i> Operation Job Register
+            </button>
+            <button id="tab-pending" onclick="switchTab('pending')"
+              class="pb-2 border-b-2 border-transparent hover:border-dark-muted color-label hover-color-primary font-14px fw-medium flex items-center gap-2 transition-all">
+              <i class="ph-bold ph-timer"></i> Weekly Pending Jobs
+            </button>
           </div>
 
           <!-- OJR Panel -->
-          <div id="panel-ojr" class="dashboard-panel h-[600px] flex flex-col">
-            <div class="panel-header justify-between py-2 bg-slate-50 dark:bg-[#0f172a] shrink-0">
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">Operation Job Register</span>
-                <span id="ojr-count" class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-0.5 rounded-full text-xs font-bold">0 Records</span>
+          <div id="panel-ojr"
+            class="bg-dark-panel border border-dark-border rounded-lg flex flex-col shadow-md overflow-hidden flex-1 ">
+            <div
+              class="bg-dark-header border-b border-dark-border px-3 py-1.5 flex justify-between items-center shrink-0">
+              <div class="flex items-center gap-3">
+                <span class="fw-bold color-primary font-14px">Operation Job Register</span>
+                <span id="ojr-count"
+                  class="bg-blue-500/10 text-blue-500 px-1.5 py-0.5 rounded text-[10px] font-bold">0</span>
               </div>
-              <select id="filter-shutdown" style="width: auto !important; padding: 4px 10px !important;">
-                <option>RUNNING</option><option>SHUTDOWN</option><option>HOLD</option>
-              </select>
+              <div class="relative w-40">
+                <select id="filter-shutdown"
+                  class="w-full appearance-none bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1 pr-8 font-13px fw-bold focus:border-blue-500 focus:outline-none shadow-md cursor-pointer hover:border-blue-400 transition-colors">
+                  <option>RUNNING</option>
+                  <option>SHUTDOWN</option>
+                  <option>HOLD</option>
+                </select>
+                <i
+                  class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+              </div>
             </div>
-            
-            <div class="overflow-y-auto custom-scrollbar flex-1">
-              <table id="ojr-table" class="g-table">
+
+            <div class="overflow-y-auto custom-scroll flex-1">
+              <table id="ojr-table" class="w-full text-left font-14px theme-table">
                 <thead>
                   <tr>
-                    <th class="w-12">Sr</th><th class="w-28">Date</th><th class="w-28">TagNo</th><th class="w-24">Area</th><th>Description</th><th class="w-24">Status</th><th class="w-20">ENG</th><th class="w-24">Assign</th>
+                    <th class="w-10">Sr</th>
+                    <th class="w-24">Date</th>
+                    <th class="w-24">TagNo</th>
+                    <th class="w-20">Area</th>
+                    <th>Description</th>
+                    <th class="w-36">Status</th>
+                    <th class="w-16">ENG</th>
+                    <th class="w-20">Assign</th>
                   </tr>
                 </thead>
-                <tbody id="ojr-table-body" class="text-sm text-center"></tbody>
+                <tbody id="ojr-table-body" class="text-center"></tbody>
               </table>
             </div>
           </div>
 
           <!-- Pending Jobs Panel -->
-          <div id="panel-pending" class="dashboard-panel h-[600px] flex-col hidden">
-            <div class="panel-header border-l-4 border-l-amber-500 py-2 bg-slate-50 dark:bg-[#0f172a] shrink-0">
-              <i class="ph-fill ph-timer text-amber-500"></i>
-              <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">Weekly Pending Jobs</span>
-              <span id="pending-count" class="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200 px-2 py-0.5 rounded-full text-xs font-bold ml-3">0 Records</span>
+          <div id="panel-pending"
+            class="bg-dark-panel border border-dark-border rounded-lg flex-col hidden shadow-md overflow-hidden flex-1">
+            <div class="bg-dark-header border-b border-dark-border px-3 py-1.5 flex items-center gap-3">
+              <i class="ph-duotone ph-timer text-amber-500 font-16px"></i>
+              <span class="fw-bold color-primary font-14px">Weekly Pending Jobs</span>
+              <span id="pending-count"
+                class="bg-amber-500/10 text-amber-500 px-1.5 py-0.5 rounded text-[10px] font-bold border border-amber-500/20">0</span>
             </div>
-            <div class="overflow-y-auto custom-scrollbar flex-1">
-              <table id="pending-table" class="g-table">
+            <div class="overflow-y-auto custom-scroll flex-1 h-[500px]">
+              <table id="pending-table" class="w-full text-left font-14px theme-table">
                 <thead>
                   <tr>
-                    <th class="w-12">Sr</th><th class="w-28">Date</th><th class="w-28">Tag</th><th class="w-32">Job</th><th>Description</th><th class="w-24">Status</th><th class="w-20">Tech</th><th class="w-24">ReAssign</th>
+                    <th class="w-10">Sr</th>
+                    <th class="w-24">Date</th>
+                    <th class="w-24">Tag</th>
+                    <th class="w-28">Job</th>
+                    <th>Description</th>
+                    <th class="w-36">Status</th>
+                    <th class="w-16">Tech</th>
+                    <th class="w-20">ReAssign</th>
                   </tr>
                 </thead>
-                <tbody id="pending-table-body" class="text-sm text-center"></tbody>
+                <tbody id="pending-table-body" class="text-center"></tbody>
               </table>
             </div>
           </div>
@@ -200,43 +443,210 @@
       </div>
     </div>
 
-    <!-- Modals -->
-    <div id="cjl-modal" class="fixed inset-0 z-[9999] hidden">
-      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeCJLModal()"></div>
-      <div class="relative modal-content w-11/12 max-w-7xl mx-auto mt-12 flex flex-col max-h-[85vh]">
-        <div class="p-4 border-b flex justify-between items-center bg-slate-50 dark:bg-[#0f172a] rounded-t-xl border-slate-200 dark:border-[#334155]">
-          <span class="font-bold text-slate-800 dark:text-slate-100 uppercase">Current Job List (<span id="cjl-plant-name"></span>)</span>
-          <button onclick="closeCJLModal()" class="text-2xl font-bold text-slate-500 hover:text-red-600">&times;</button>
+    <!-- Modals (GNFC Standard) -->
+    <div id="cjl-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
+      onclick="handleModalBackdrop(event, 'cjl-modal')">
+      <div class="gnfc-modal-shell gnfc-modal-shell--full">
+        <div class="gnfc-modal-header">
+          <div>
+            <h3 class="gnfc-modal-title">Current Job List</h3>
+            <p class="gnfc-modal-subtitle">Plant: <span id="cjl-plant-name"></span></p>
+          </div>
+          <button type="button" onclick="closeCJLModal()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
         </div>
-        <div class="overflow-auto custom-scrollbar">
-          <table id="cjl-table" class="g-table text-xs">
-            <thead class="sticky top-0 bg-white">
-              <tr><th>Sr</th><th>Area/Tag</th><th>Description</th><th>Category</th><th>Target</th><th>Status</th><th>EngRemark</th><th>ExRemark</th></tr>
-            </thead>
-            <tbody id="cjl-table-body" class="text-center"></tbody>
-          </table>
+        <div class="gnfc-modal-body gnfc-modal-body--tight">
+          <div class="border border-dark-border rounded-sm p-3 mb-3 bg-dark-header/20">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+              <div>
+                <label for="cjl-filter-category" class="gnfc-modal-label">Category</label>
+                <select id="cjl-filter-category" class="gnfc-modal-input" onchange="onCJLFilterChange()">
+                  <option value="ALL">ALL</option>
+                </select>
+              </div>
+              <div id="cjl-area-wrap">
+                <label for="cjl-filter-area" class="gnfc-modal-label">Area</label>
+                <select id="cjl-filter-area" class="gnfc-modal-input" onchange="onCJLFilterChange()">
+                  <option value="ALL">ALL</option>
+                </select>
+              </div>
+              <div id="cjl-job-wrap" class="hidden">
+                <label for="cjl-filter-job" class="gnfc-modal-label">Job</label>
+                <select id="cjl-filter-job" class="gnfc-modal-input" onchange="onCJLFilterChange()">
+                  <option value="ALL">ALL</option>
+                </select>
+              </div>
+              <div class="flex md:justify-end">
+                <button type="button" onclick="openCJLAttachmentModal()"
+                  class="gnfc-modal-btn gnfc-modal-btn-primary w-full md:w-auto">
+                  <i class="ph-bold ph-paperclip"></i> Attachment
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="border border-dark-border rounded-sm overflow-auto custom-scroll max-h-[62vh]">
+            <table id="cjl-table" class="w-full theme-table font-14px">
+              <thead class="sticky top-0 z-10">
+                <tr>
+                  <th>Sr</th>
+                  <th>Area/Tag</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Target</th>
+                  <th>Status</th>
+                  <th>EngRemark</th>
+                  <th>ExRemark</th>
+                </tr>
+              </thead>
+              <tbody id="cjl-table-body" class="text-center"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeCJLModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
         </div>
       </div>
     </div>
 
-    <div id="search-modal" class="fixed inset-0 z-[9999] hidden">
-      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeSearchModal()"></div>
-      <div class="relative modal-content w-full max-w-2xl mx-auto mt-24 p-6 dark:bg-[#1e293b]">
-        <div class="flex justify-between mb-4 border-b dark:border-[#334155] pb-3">
-          <span class="font-bold text-blue-600">SEARCH TAG HISTORY</span>
-          <button onclick="closeSearchModal()" class="text-xl dark:text-white">&times;</button>
+    <div id="cjl-attachment-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
+      onclick="handleModalBackdrop(event, 'cjl-attachment-modal')">
+      <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+        <div class="gnfc-modal-header">
+          <div>
+            <h3 class="gnfc-modal-title">Joblist Attachments</h3>
+            <p class="gnfc-modal-subtitle">Upload supporting file(s)</p>
+          </div>
+          <button type="button" onclick="closeCJLAttachmentModal()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
         </div>
-        <div class="flex gap-3">
-          <input id="search-tag-input" type="text" class="g-input" placeholder="Type Tag Number (e.g. 101-LT)...">
-          <button onclick="searchByTag()" class="btn-primary">SEARCH</button>
+        <div class="gnfc-modal-body space-y-4">
+          <div>
+            <label for="cjl-attachment-file" class="gnfc-modal-label">Choose File</label>
+            <input id="cjl-attachment-file" type="file" class="gnfc-modal-input" />
+          </div>
+          <p id="cjl-attachment-feedback" class="font-13px color-secondary"></p>
+          <p class="font-13px color-label">Note: Max size 10MB per upload.</p>
         </div>
-        <div class="mt-4 border dark:border-[#334155] rounded overflow-hidden">
-          <table class="g-table text-xs">
-            <thead><tr><th>Tag</th><th>Description</th><th>Type</th><th>Assign</th></tr></thead>
-            <tbody id="search-table-body" class="text-center">
-              <tr><td colspan="4" class="py-8 text-slate-400 italic">No search results to display</td></tr>
-            </tbody>
-          </table>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="handleCJLAttachmentUpload()"
+            class="gnfc-modal-btn gnfc-modal-btn-primary">Upload</button>
+          <button type="button" onclick="closeCJLAttachmentModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sd-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
+      onclick="handleModalBackdrop(event, 'sd-modal')">
+      <div class="gnfc-modal-shell gnfc-modal-shell--full">
+        <div class="gnfc-modal-header">
+          <div>
+            <h3 class="gnfc-modal-title">Shutdown Job List</h3>
+            <p class="gnfc-modal-subtitle">Plant: <span id="sd-plant-name"></span></p>
+          </div>
+          <button type="button" onclick="closeSEModal()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+        <div class="gnfc-modal-body gnfc-modal-body--tight">
+          <div class="border border-dark-border rounded-sm overflow-auto custom-scroll max-h-[68vh]">
+            <table id="sd-table" class="w-full theme-table font-14px">
+              <thead class="sticky top-0 z-10">
+                <tr>
+                  <th class="w-12">Sr</th>
+                  <th class="w-28">Area / Tag</th>
+                  <th class="w-48">Description</th>
+                  <th class="w-32">MatReqmnt</th>
+                  <th class="w-28">PreSDActivity</th>
+                  <th class="w-28">Int Dep Cordination</th>
+                  <th class="w-28">Ext Dep Cordination</th>
+                  <th class="w-[20%]">Eng Remark/ Ex Remark</th>
+                </tr>
+              </thead>
+              <tbody id="sd-table-body" class="text-left align-top"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeSEModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="iso-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
+      onclick="handleModalBackdrop(event, 'iso-modal')">
+      <div class="gnfc-modal-shell gnfc-modal-shell--full">
+        <div class="gnfc-modal-header">
+          <div>
+            <h3 class="gnfc-modal-title">Assign ISO Jobs</h3>
+            <p class="gnfc-modal-subtitle">Plant: <span id="iso-plant-name"></span></p>
+          </div>
+          <button type="button" onclick="closeISOModal()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+        <div class="gnfc-modal-body gnfc-modal-body--tight">
+          <div class="border border-dark-border rounded-sm overflow-auto custom-scroll max-h-[68vh]">
+            <table id="iso-table" class="w-full theme-table font-14px">
+              <thead class="sticky top-0 z-10">
+                <tr>
+                  <th class="w-12">Sr</th>
+                  <th class="w-24">Tag</th>
+                  <th>Equipment</th>
+                  <th>Cali/Check Procedure</th>
+                  <th class="w-24 text-center">Freq Of Check (Days)</th>
+                  <th class="w-32">DUE DATE</th>
+                  <th class="w-20">Assign</th>
+                </tr>
+              </thead>
+              <tbody id="iso-table-body" class="text-center"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeISOModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="search-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
+      onclick="handleModalBackdrop(event, 'search-modal')">
+      <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+        <div class="gnfc-modal-header">
+          <h3 class="gnfc-modal-title">Search Tag History</h3>
+          <button type="button" onclick="closeSearchModal()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+        <div class="gnfc-modal-body gnfc-modal-body--tight space-y-4">
+          <div class="flex gap-3">
+            <input id="search-tag-input" type="text" class="gnfc-modal-input"
+              placeholder="Type Tag Number (e.g. 101-LT)...">
+            <button type="button" onclick="searchByTag()" class="gnfc-modal-btn gnfc-modal-btn-primary">Search</button>
+          </div>
+          <div class="border border-dark-border rounded-sm overflow-hidden">
+            <table class="w-full theme-table font-14px">
+              <thead>
+                <tr>
+                  <th>Tag</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Assign</th>
+                </tr>
+              </thead>
+              <tbody id="search-table-body" class="text-center">
+                <tr>
+                  <td colspan="4" class="py-8 color-muted italic">No search results to display</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeSearchModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
         </div>
       </div>
     </div>
@@ -244,123 +654,656 @@
   </main>
 
   <script>
+    // Security: XSS Prevention
+    function escapeHTML(str) {
+      if (typeof str !== 'string') return str;
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag));
+    }
+
     // Tab Switching Logic
     function switchTab(tabId) {
-        // Toggle Buttons
-        document.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('active'));
-        document.getElementById(`tab-${tabId}`).classList.add('active');
+      // Toggle Buttons
+      const btnOjr = document.getElementById('tab-ojr');
+      const btnPending = document.getElementById('tab-pending');
 
-        // Toggle Panels
-        document.getElementById('panel-ojr').classList.add('hidden');
-        document.getElementById('panel-ojr').classList.remove('flex');
-        
+      if (tabId === 'ojr') {
+        btnOjr.classList.add('border-gnfc-orange', 'color-orange', 'fw-bold');
+        btnOjr.classList.remove('border-transparent', 'color-label', 'fw-medium');
+
+        btnPending.classList.remove('border-gnfc-orange', 'color-orange', 'fw-bold');
+        btnPending.classList.add('border-transparent', 'color-label', 'fw-medium');
+
+        document.getElementById('panel-ojr').classList.remove('hidden');
+        document.getElementById('panel-ojr').classList.add('flex');
         document.getElementById('panel-pending').classList.add('hidden');
         document.getElementById('panel-pending').classList.remove('flex');
+      } else {
+        btnPending.classList.add('border-gnfc-orange', 'color-orange', 'fw-bold');
+        btnPending.classList.remove('border-transparent', 'color-label', 'fw-medium');
 
-        const activePanel = document.getElementById(`panel-${tabId}`);
-        activePanel.classList.remove('hidden');
-        activePanel.classList.add('flex');
+        btnOjr.classList.remove('border-gnfc-orange', 'color-orange', 'fw-bold');
+        btnOjr.classList.add('border-transparent', 'color-label', 'fw-medium');
+
+        document.getElementById('panel-pending').classList.remove('hidden');
+        document.getElementById('panel-pending').classList.add('flex');
+        document.getElementById('panel-ojr').classList.add('hidden');
+        document.getElementById('panel-ojr').classList.remove('flex');
+      }
+    }
+
+    const cjlStatusColors = {
+      'PENDING': 'bg-red-500/10 text-red-500',
+      'IN PROGRESS': 'bg-blue-500/10 text-blue-500',
+      'HOLD': 'bg-amber-500/10 text-amber-500',
+      'COMPLETED': 'bg-emerald-500/10 text-emerald-500'
+    };
+    let cjlRows = [];
+    let sdRows = [];
+    let isoRows = [];
+    let pendingData = []; // Promoted to global scope
+    let cjlHeaderMode = 'area';
+    const cjlFilterState = { category: 'ALL', area: 'ALL', job: 'ALL' };
+
+    window.fillAssignmentForm = function (index) {
+      console.log('fillAssignmentForm called with index:', index);
+      const idx = parseInt(index, 10);
+      if (isNaN(idx)) return;
+
+      console.log('pendingData:', pendingData);
+      const row = pendingData[idx];
+      if (!row) {
+        console.error('Row not found for index:', idx);
+        return;
+      }
+
+      // Auto-fill fields
+      const assignedToSelect = document.getElementById('form-assigned-to');
+      if (assignedToSelect) {
+        assignedToSelect.value = row.tech;
+        console.log('Set assigned to:', row.tech);
+      }
+
+      const jobDescInput = document.getElementById('form-jobs-desc');
+      if (jobDescInput) {
+        jobDescInput.value = row.desc;
+        console.log('Set desc:', row.desc);
+      }
+
+      const areaSelect = document.getElementById('form-area');
+      if (areaSelect) {
+        areaSelect.value = row.area;
+        console.log('Set area:', row.area);
+      }
+
+      const tagSelect = document.getElementById('form-tag');
+      if (tagSelect) {
+        // Create option if it doesn't exist, or select it
+        let optionExists = false;
+        for (let i = 0; i < tagSelect.options.length; i++) {
+          if (tagSelect.options[i].value === row.tag) {
+            tagSelect.selectedIndex = i;
+            optionExists = true;
+            break;
+          }
+        }
+        if (!optionExists) {
+          const newOption = new Option(row.tag, row.tag);
+          tagSelect.add(newOption);
+          tagSelect.value = row.tag;
+          console.log('Added new tag option:', row.tag);
+        }
+        console.log('Set tag:', row.tag);
+      }
+
+      // Scroll to form for better UX
+      const formElement = document.getElementById('form-assigned-to');
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        formElement.focus();
+      }
+    };
+
+    function getUniqueCJLValues(key) {
+      return [...new Set((cjlRows || []).map((row) => String(row[key] || '').trim()).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
+    }
+
+    function setSelectOptions(selectId, values) {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+
+      const previousValue = select.value || 'ALL';
+      select.innerHTML = '';
+      const allOption = new Option('ALL', 'ALL');
+      select.add(allOption);
+      values.forEach((value) => select.add(new Option(value, value)));
+      select.value = values.includes(previousValue) ? previousValue : 'ALL';
+    }
+
+    function populateCJLHeaderOptions() {
+      setSelectOptions('cjl-filter-category', getUniqueCJLValues('category'));
+      setSelectOptions('cjl-filter-area', getUniqueCJLValues('area'));
+      setSelectOptions('cjl-filter-job', getUniqueCJLValues('job'));
+    }
+
+    function setCJLHeaderMode(mode) {
+      cjlHeaderMode = mode === 'job' ? 'job' : 'area';
+      const areaWrap = document.getElementById('cjl-area-wrap');
+      const jobWrap = document.getElementById('cjl-job-wrap');
+
+      if (areaWrap) areaWrap.classList.toggle('hidden', cjlHeaderMode === 'job');
+      if (jobWrap) jobWrap.classList.toggle('hidden', cjlHeaderMode !== 'job');
+
+      if (cjlHeaderMode === 'job') {
+        cjlFilterState.area = 'ALL';
+        const areaSelect = document.getElementById('cjl-filter-area');
+        if (areaSelect) areaSelect.value = 'ALL';
+      } else {
+        cjlFilterState.job = 'ALL';
+        const jobSelect = document.getElementById('cjl-filter-job');
+        if (jobSelect) jobSelect.value = 'ALL';
+      }
+    }
+
+    function onCJLFilterChange() {
+      const categorySelect = document.getElementById('cjl-filter-category');
+      const areaSelect = document.getElementById('cjl-filter-area');
+      const jobSelect = document.getElementById('cjl-filter-job');
+
+      cjlFilterState.category = categorySelect ? categorySelect.value : 'ALL';
+      cjlFilterState.area = areaSelect ? areaSelect.value : 'ALL';
+      cjlFilterState.job = jobSelect ? jobSelect.value : 'ALL';
+      renderCJLTable();
+    }
+
+    function getFilteredCJLRows() {
+      return (cjlRows || []).filter((row) => {
+        if (cjlFilterState.category !== 'ALL' && row.category !== cjlFilterState.category) return false;
+        if (cjlHeaderMode === 'area' && cjlFilterState.area !== 'ALL' && row.area !== cjlFilterState.area) return false;
+        if (cjlHeaderMode === 'job' && cjlFilterState.job !== 'ALL' && row.job !== cjlFilterState.job) return false;
+        return true;
+      });
+    }
+
+    function renderCJLTable() {
+      const tableBody = document.getElementById('cjl-table-body');
+      if (!tableBody) return;
+
+      const filteredRows = getFilteredCJLRows();
+
+      if (!Array.isArray(filteredRows) || filteredRows.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-8 color-muted italic text-center">No current jobs found</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = filteredRows.map((row, index) => `
+        <tr class="transition-colors border-b border-dark-border hover:bg-dark-header">
+          <td class="font-mono color-muted">${index + 1}</td>
+          <td class="text-left"><span class="font-bold color-blue">${escapeHTML(row.area)}</span> <span class="color-label">/ ${escapeHTML(row.tag)}</span></td>
+          <td class="text-left font-medium color-primary">${escapeHTML(row.desc)}</td>
+          <td class="color-label">${escapeHTML(row.category)}</td>
+          <td class="font-mono color-label">${escapeHTML(row.target)}</td>
+          <td><span class="${cjlStatusColors[row.status] || 'text-slate-400'} px-2 py-0.5 rounded text-[10px] font-bold border">${escapeHTML(row.status)}</span></td>
+          <td class="text-left color-label">${escapeHTML(row.engRemark)}</td>
+          <td class="text-left color-label">${escapeHTML(row.exRemark)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderSDTable() {
+      const tableBody = document.getElementById('sd-table-body');
+      if (!tableBody) return;
+
+      if (!Array.isArray(sdRows) || sdRows.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 color-muted italic text-center">No S/D jobs found</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = sdRows.map((row) => `
+        <tr class="transition-colors border-b border-dark-border hover:bg-dark-header">
+          <td class="font-mono color-muted align-top py-3">${escapeHTML(String(row.sr))}</td>
+          <td class="align-top py-3">
+            <div class="flex flex-col">
+                <span class="fw-bold color-primary">${escapeHTML(row.area)}</span>
+                <span class="font-mono color-blue text-xs mt-1 border-t border-dark-border pt-1 inline-block">${escapeHTML(row.tag)}</span>
+            </div>
+          </td>
+          <td class="text-left font-medium color-primary align-top py-3 pr-4 leading-relaxed">${escapeHTML(row.desc)}</td>
+          <td class="text-left color-label align-top py-3 text-xs italic">${escapeHTML(row.matReqmnt)}</td>
+          <td class="text-left color-label align-top py-3 text-xs italic">${escapeHTML(row.preSDActivity)}</td>
+          <td class="text-left color-label align-top py-3 text-xs italic">${escapeHTML(row.intDepCoordination)}</td>
+          <td class="text-left color-label align-top py-3 text-xs italic">${escapeHTML(row.extDepCoordination)}</td>
+          <td class="text-left align-top py-3">
+              <div class="flex flex-col">
+                ${row.engRemark ? `<div class="flex items-start gap-1.5"><i class="ph-bold ph-chat-text text-amber-500 mt-0.5"></i><span class="text-xs color-text">${escapeHTML(row.engRemark)}</span></div>` : ''}
+                <div class="border-b border-dark-border py-0.5"></div>
+                ${row.exRemark ? `<span class="color-red mt-0.5">${escapeHTML(row.exRemark)}</span>` : ''}
+              </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderISOTable() {
+      const tableBody = document.getElementById('iso-table-body');
+      if (!tableBody) return;
+
+      if (!Array.isArray(isoRows) || isoRows.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 color-muted italic text-center">No ISO jobs available</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = isoRows.map((row) => `
+        <tr class="transition-colors border-b border-dark-border hover:bg-dark-header">
+          <td class="font-mono color-muted align-top py-3">${escapeHTML(String(row.sr))}</td>
+          <td class="fw-bold color-blue align-top py-3 text-left">
+            <a href="#" class="hover:underline">${escapeHTML(row.tag)}</a>
+          </td>
+          <td class="text-left font-medium color-primary align-top py-3">${escapeHTML(row.equipment)}</td>
+          <td class="text-left color-label align-top py-3 text-sm">${escapeHTML(row.procedure)}</td>
+          <td class="font-mono color-label align-top py-3 text-center">${escapeHTML(String(row.freqDays))}</td>
+          <td class="align-top py-3">
+             <div class="flex flex-col gap-1 items-start">
+                <span class="font-mono text-xs color-primary">${escapeHTML(row.dueDate)}</span>
+                <span class="font-mono text-xs color-muted">${escapeHTML(row.fromDate)}</span>
+             </div>
+          </td>
+          <td class="align-top py-3 text-center">
+            <button class="color-blue hover:color-orange font-bold text-xs hover:underline uppercase transition-colors">Assign</button>
+          </td>
+        </tr>
+      `).join('');
     }
 
     // Initialize Page
     (function init() {
       const now = new Date();
       document.getElementById('assign-date').textContent = now.toLocaleDateString('en-GB');
-      
+
       const plant = new URLSearchParams(window.location.search).get('plant') || 'BOILER';
-      document.getElementById('plant-name').textContent = plant;
-      document.getElementById('cjl-plant-name').textContent = plant;
+      document.getElementById('plant-name').textContent = escapeHTML(plant);
+      document.getElementById('cjl-plant-name').textContent = escapeHTML(plant);
+      document.getElementById('sd-plant-name').textContent = escapeHTML(plant);
+      document.getElementById('iso-plant-name').textContent = escapeHTML(plant);
 
       // --- Realistic Data Population ---
       const sampleTags = ['LT-102', 'PT-301', 'TT-504', 'FT-201', 'CV-101', 'XV-405', 'AT-902', 'PI-112', 'LI-304', 'TI-506', 'FI-203', 'ZT-801'];
       const sampleAreas = ['BOILER-1', 'BOILER-2', 'TG-1', 'COMMON', 'ASH', 'CHP'];
       const sampleDescs = [
-        'Routine check of level sensor accuracy', 
-        'Pressure transmitter calibration due', 
-        'Temperature fluctuation observed', 
-        'Flow meter reading erratic', 
-        'Control valve stuck at 50%', 
-        'Solenoid valve coil replacement', 
-        'Analyzer showing drift', 
-        'Gauge glass cleaning', 
-        'Vibration monitoring check', 
-        'Cable tray inspection', 
-        'Junction box tightneing', 
+        'Routine check of level sensor accuracy',
+        'Pressure transmitter calibration due',
+        'Temperature fluctuation observed',
+        'Flow meter reading erratic',
+        'Control valve stuck at 50%',
+        'Solenoid valve coil replacement',
+        'Analyzer showing drift',
+        'Gauge glass cleaning',
+        'Vibration monitoring check',
+        'Cable tray inspection',
+        'Junction box tightneing',
         'Signal drop out investigation'
       ];
       const statuses = ['PENDING', 'IN PROGRESS', 'HOLD', 'COMPLETED'];
       const techs = ['PVS', 'VWM', 'BDR', 'PRP', 'JDB', 'JMD', 'BSU', 'TECH_TESTER'];
 
       function generateRows(count) {
-          return Array.from({length: count}).map((_, i) => {
-              return {
-                  sr: i + 1,
-                  date: '19/02/2026',
-                  tag: sampleTags[Math.floor(Math.random() * sampleTags.length)],
-                  area: sampleAreas[Math.floor(Math.random() * sampleAreas.length)],
-                  desc: sampleDescs[Math.floor(Math.random() * sampleDescs.length)],
-                  status: statuses[Math.floor(Math.random() * statuses.length)],
-                  tech: techs[Math.floor(Math.random() * techs.length)],
-              };
-          });
+        return Array.from({ length: count }).map((_, i) => {
+          return {
+            sr: i + 1,
+            date: '19/02/2026',
+            tag: sampleTags[Math.floor(Math.random() * sampleTags.length)],
+            area: sampleAreas[Math.floor(Math.random() * sampleAreas.length)],
+            desc: sampleDescs[Math.floor(Math.random() * sampleDescs.length)],
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+            tech: techs[Math.floor(Math.random() * techs.length)],
+          };
+        });
       }
+
+      const statusColors = cjlStatusColors;
 
       // Populate OJR Table (15 rows)
       const ojrData = generateRows(15);
       document.getElementById('ojr-count').textContent = `${ojrData.length} Records`;
       document.getElementById('ojr-table-body').innerHTML = ojrData.map(d => `
-        <tr class="transition-colors border-b dark:border-slate-700">
-          <td class="bg-slate-50 dark:bg-[#1e293b] font-mono text-slate-400 dark:text-slate-500">${d.sr}</td>
-          <td class="font-mono text-slate-600 dark:text-slate-300">${d.date}</td>
-          <td class="font-bold text-blue-600 dark:text-blue-400">${d.tag}</td>
-          <td class="text-slate-600 dark:text-slate-300">${d.area}</td>
-          <td class="text-left font-medium text-slate-700 dark:text-slate-200">${d.desc}</td>
-          <td><span class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded text-[10px] font-bold">${d.status}</span></td>
-          <td class="font-bold text-slate-700 dark:text-slate-300">${d.tech}</td>
-          <td><button class="text-blue-600 dark:text-blue-400 font-bold hover:underline">Assign</button></td>
+        <tr class="transition-colors border-b border-dark-border hover:bg-dark-header">
+          <td class="font-mono color-muted">${d.sr}</td>
+          <td class="font-mono color-label">${d.date}</td>
+          <td class="font-bold color-blue">${escapeHTML(d.tag)}</td>
+          <td class="color-label">${escapeHTML(d.area)}</td>
+          <td class="text-left font-medium color-primary">${escapeHTML(d.desc)}</td>
+          <td><span class="${statusColors[d.status]} px-2 py-0.5 rounded text-[10px] font-bold border">${escapeHTML(d.status)}</span></td>
+          <td class="font-bold color-label">${escapeHTML(d.tech)}</td>
+          <td><button class="color-blue hover:color-orange font-bold hover:underline transition-colors">Assign</button></td>
         </tr>
       `).join('');
 
       // Populate Pending Table (10 rows)
-      const pendingData = generateRows(10);
+      pendingData = generateRows(10); // Assign to global variable
       document.getElementById('pending-count').textContent = `${pendingData.length} Records`;
-      document.getElementById('pending-table-body').innerHTML = pendingData.map(d => `
-        <tr class="transition-colors border-b dark:border-slate-700">
-          <td class="bg-slate-50 dark:bg-[#1e293b] font-mono text-slate-400 dark:text-slate-500">${d.sr}</td>
-          <td class="font-mono text-slate-600 dark:text-slate-300">${d.date}</td>
-          <td class="font-bold text-blue-600 dark:text-blue-400">${d.tag}</td>
-          <td class="text-slate-600 dark:text-slate-300">MAINTENANCE</td>
-          <td class="text-left font-medium text-slate-700 dark:text-slate-200">${d.desc}</td>
-          <td><span class="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded text-[10px] font-bold">${d.status}</span></td>
-          <td class="font-bold text-slate-700 dark:text-slate-300">${d.tech}</td>
-          <td><button class="text-blue-600 dark:text-blue-400 font-bold hover:underline">ReAssign</button></td>
+      document.getElementById('pending-table-body').innerHTML = pendingData.map((d, i) => `
+        <tr class="transition-colors border-b border-dark-border hover:bg-dark-header">
+          <td class="font-mono color-muted">${d.sr}</td>
+          <td class="font-mono color-label">${d.date}</td>
+          <td class="font-bold color-blue">${escapeHTML(d.tag)}</td>
+          <td class="color-label">MAINTENANCE</td>
+          <td class="text-left font-medium color-primary">${escapeHTML(d.desc)}</td>
+          <td><span class="${statusColors[d.status]} px-2 py-0.5 rounded text-[10px] font-bold border">${escapeHTML(d.status)}</span></td>
+          <td class="font-bold color-label">${escapeHTML(d.tech)}</td>
+          <td><button onclick="fillAssignmentForm(this.getAttribute('data-index'))" data-index="${i}" class="color-blue hover:color-orange font-bold hover:underline transition-colors">ReAssign</button></td>
         </tr>
       `).join('');
+
+      // Populate Current Job List Modal table
+      cjlRows = [
+        ...ojrData.map((row) => ({ ...row, category: 'OJR', engRemark: `Tech: ${row.tech}`, exRemark: '-' })),
+        ...pendingData.map((row) => ({ ...row, category: 'WEEKLY PENDING', engRemark: '-', exRemark: 'Awaiting execution' }))
+      ].map((row, index) => ({
+        sr: index + 1,
+        area: row.area,
+        tag: row.tag,
+        desc: row.desc,
+        category: row.category,
+        job: row.job || ['Routine Check', 'Calibration', 'Abnormality', 'Inspection', 'Maintenance'][index % 5],
+        target: row.date,
+        status: row.status,
+        engRemark: row.engRemark,
+        exRemark: row.exRemark
+      }));
+
+      populateCJLHeaderOptions();
+      setCJLHeaderMode('area');
+
+      sdRows = [
+        {
+          sr: 1,
+          area: "BOILER-1",
+          tag: "1TE1563_3",
+          desc: "Boiler 1 AB elevation, the visible flame scanner 2/4 contact was not coming. Upon checking, it was found that the DCS DI card R3M3 CH-11 (P3-5,6) was faulty.",
+          category: "DCS",
+          matReqmnt: "",
+          preSDActivity: "",
+          intDepCoordination: "",
+          extDepCoordination: "",
+          engRemark: "Card replacement required.",
+          exRemark: ""
+        },
+        {
+          sr: 2,
+          area: "BOILER-1",
+          tag: "1TE1563_3",
+          desc: "FSH Metal temp element showing higher side.",
+          category: "FIELD INST",
+          matReqmnt: "Element issue from store.",
+          preSDActivity: "Element from store.",
+          intDepCoordination: "",
+          extDepCoordination: "",
+          engRemark: "",
+          exRemark: ""
+        },
+        {
+          sr: 3,
+          area: "NG STN",
+          tag: "GC",
+          desc: "GC shed structure welding work to be done",
+          category: "FIELD INST",
+          matReqmnt: "",
+          preSDActivity: "",
+          intDepCoordination: "",
+          extDepCoordination: "",
+          engRemark: "Welder arranged by mech dept.",
+          exRemark: "Pending due to clearance."
+        },
+        {
+          sr: 4,
+          area: "BOILER-2",
+          tag: "2PV2543A_3",
+          desc: "Boiler-2 C1R5M8-AO card CH-04 RCF C channel to be check for not responding.",
+          category: "DCS",
+          matReqmnt: "",
+          preSDActivity: "",
+          intDepCoordination: "TSD job",
+          extDepCoordination: "",
+          engRemark: "DCS logic verification needed.",
+          exRemark: "DCS Team informed."
+        }
+      ];
+
+      const isoProcedures = [
+        "ULTRASONIC LEVEL : SENSOR TO BE CLEANED AND RESPONSE TO BE CHECKED.",
+        "FOUR POINTS CALIBRATION BY APPLYING ACTUAL VARIABLE.",
+        "Calibration to be done with standard CH4 2.5% gas cylinder.",
+        "Calibration to be done with standard CH4 2.5% gas cylinder.",
+        "Calibration to be done with standard CH4 2.5% gas cylinder.",
+        "CHECK ZERO AND SPAN WITH STANDARD SAMPLE."
+      ];
+
+      const isoEquipments = [
+        "ASH SLURRY SUMP LEVEL",
+        "ASH WATER SUMP LEVEL",
+        "Gas detecor installed at B-2 NG stn",
+        "Gas detecor installed at B-3 NG stn",
+        "Gas detecor installed at main NG station",
+        "ANALYZER HOUSE"
+      ];
+
+      function formatDateDDMMYYYY(inputDate) {
+        const d = new Date(inputDate);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+      }
+
+      function addDays(inputDate, days) {
+        const d = new Date(inputDate);
+        d.setDate(d.getDate() + Number(days || 0));
+        return d;
+      }
+
+      const isoTemplateRows = [
+        { tag: 'LT-2', equipment: 'ASH SLURRY SUMP LEVEL', procedure: isoProcedures[0], freqDays: 90, fromDate: '2026-01-28' },
+        { tag: 'LT-1', equipment: 'ASH WATER SUMP LEVEL', procedure: isoProcedures[1], freqDays: 90, fromDate: '2026-01-28' },
+        { tag: '2GRA2511', equipment: isoEquipments[2], procedure: isoProcedures[2], freqDays: 365, fromDate: '2025-08-20' },
+        { tag: '3GRA2511', equipment: isoEquipments[3], procedure: isoProcedures[3], freqDays: 365, fromDate: '2025-08-20' },
+        { tag: 'GRA1631', equipment: isoEquipments[4], procedure: isoProcedures[4], freqDays: 365, fromDate: '2025-04-01' }
+      ];
+
+      isoRows = isoTemplateRows.map((row, index) => {
+        const dueDate = addDays(row.fromDate, row.freqDays);
+        return {
+          sr: index + 1,
+          tag: row.tag,
+          equipment: row.equipment,
+          procedure: row.procedure,
+          freqDays: row.freqDays,
+          fromDate: formatDateDDMMYYYY(row.fromDate),
+          dueDate: formatDateDDMMYYYY(dueDate)
+        };
+      });
+
+      renderCJLTable();
+      renderSDTable();
+      renderISOTable();
 
     })();
 
     // Modal and Button Functions
-    function openCJLModal() { document.getElementById('cjl-modal').classList.remove('hidden'); }
-    function closeCJLModal() { document.getElementById('cjl-modal').classList.add('hidden'); }
-    function openSearchModal() { document.getElementById('search-modal').classList.remove('hidden'); }
-    function closeSearchModal() { document.getElementById('search-modal').classList.add('hidden'); }
-    
-    // Updated saveAssignment - No Alert
-    function saveAssignment() { 
-        // Logic to clear form or show a subtle notification could go here
-        console.log("Job Assigned and Recorded.");
-        // Optional: flash the button or show a small toast
-        const btn = document.querySelector('button[onclick="saveAssignment()"]');
-        const originalText = btn.textContent;
-        btn.textContent = "SAVED!";
-        btn.classList.add('bg-green-600');
-        setTimeout(() => {
-            btn.textContent = originalText;
-            btn.classList.remove('bg-green-600');
-        }, 1500);
+    const modalIds = ['cjl-modal', 'cjl-attachment-modal', 'sd-modal', 'iso-modal', 'search-modal'];
+
+    function setModalState(modalId, isOpen) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      modal.classList.toggle('is-open', isOpen);
+      modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
     }
-    
-    function cancelAssignment() { if(confirm("Clear all inputs?")) location.reload(); }
+
+    function handleModalBackdrop(event, modalId) {
+      if (event.target === event.currentTarget) {
+        if (modalId === 'cjl-attachment-modal') {
+          closeCJLAttachmentModal();
+          return;
+        }
+        setModalState(modalId, false);
+      }
+    }
+
+    function closeAllModals() {
+      modalIds.forEach((modalId) => setModalState(modalId, false));
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeAllModals();
+    });
+
+    function openCJLModal() {
+      populateCJLHeaderOptions();
+      setCJLHeaderMode(cjlHeaderMode);
+      renderCJLTable();
+      setModalState('cjl-modal', true);
+    }
+    function closeCJLModal() { setModalState('cjl-modal', false); }
+    function openCJLAttachmentModal() {
+      const feedback = document.getElementById('cjl-attachment-feedback');
+      if (feedback) feedback.textContent = '';
+      setModalState('cjl-attachment-modal', true);
+    }
+    function closeCJLAttachmentModal() {
+      setModalState('cjl-attachment-modal', false);
+      setCJLHeaderMode('job');
+      renderCJLTable();
+    }
+    function handleCJLAttachmentUpload() {
+      const fileInput = document.getElementById('cjl-attachment-file');
+      const feedback = document.getElementById('cjl-attachment-feedback');
+      if (!fileInput || !feedback) return;
+
+      if (!fileInput.files || !fileInput.files.length) {
+        feedback.textContent = 'Please choose a file to upload.';
+        return;
+      }
+
+      feedback.textContent = `Uploaded: ${fileInput.files[0].name}`;
+      setTimeout(() => {
+        fileInput.value = '';
+        closeCJLAttachmentModal();
+      }, 450);
+    }
+    function openSEModal() {
+      renderSDTable();
+      setModalState('sd-modal', true);
+    }
+    function closeSEModal() { setModalState('sd-modal', false); }
+    function assignOPJobs() {
+      renderISOTable();
+      setModalState('iso-modal', true);
+    }
+    function assignISOJobs() { assignOPJobs(); }
+    function closeISOModal() { setModalState('iso-modal', false); }
+    function openSearchModal() { setModalState('search-modal', true); }
+    function closeSearchModal() { setModalState('search-modal', false); }
+    function searchByTag() {
+      const query = (document.getElementById('search-tag-input')?.value || '').trim().toLowerCase();
+      const results = cjlRows.filter((row) =>
+        String(row.tag).toLowerCase().includes(query)
+      );
+      const tbody = document.getElementById('search-table-body');
+      if (!tbody) return;
+      if (!query || results.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-8 color-muted italic text-center">No search results to display</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = results.map((row) => `
+        <tr>
+          <td class="font-bold color-blue">${escapeHTML(row.tag)}</td>
+          <td class="text-left color-primary">${escapeHTML(row.desc)}</td>
+          <td class="color-label">${escapeHTML(row.category)}</td>
+          <td><button class="color-blue hover:color-orange font-bold hover:underline transition-colors">Assign</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function refreshUI() {
+      const btn = document.querySelector('button[onclick="refreshUI()"] i');
+      if (btn) btn.classList.add('animate-spin');
+
+      // Simulate data refresh
+      setTimeout(() => {
+        if (typeof renderOJRTable === 'function') renderOJRTable();
+        if (typeof renderPendingTable === 'function') renderPendingTable();
+        if (btn) btn.classList.remove('animate-spin');
+        console.log("UI Refreshed");
+      }, 600);
+    }
+
+    // Updated saveAssignment - No Alert, clears form via DOM
+    function saveAssignment() {
+      console.log("Job Assigned and Recorded.");
+      const btn = document.querySelector('button[onclick="saveAssignment()"]');
+      const originalText = btn.innerHTML; // Use innerHTML to preserve icon
+      btn.innerHTML = '<i class="ph-bold ph-check"></i> SAVED!';
+      btn.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+      btn.classList.remove('bg-gnfc-orange', 'hover:bg-orange-600');
+
+      // Clear inputs
+      document.getElementById('form-assigned-to').value = "";
+      document.getElementById('form-job-type').value = "";
+      document.getElementById('form-area').value = "N.A.";
+      // Reset dynamic selects if needed - simple reset
+      const formLoop = document.getElementById('form-loop');
+      if (formLoop) formLoop.innerHTML = "<option>N.A.</option>";
+
+      document.getElementById('form-inst-type').value = "";
+
+      const formTag = document.getElementById('form-tag');
+      if (formTag) formTag.innerHTML = "<option>NOTAG</option>";
+
+      document.getElementById('form-jobs-desc').value = "";
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+        btn.classList.add('bg-gnfc-orange', 'hover:bg-orange-600');
+      }, 1500);
+    }
+
+    function cancelAssignment() {
+      if (confirm("Clear all inputs?")) {
+        // Clear inputs directly
+        document.getElementById('form-assigned-to').value = "";
+        document.getElementById('form-job-type').value = "";
+        document.getElementById('form-area').value = "N.A.";
+        document.getElementById('form-inst-type').value = "";
+        document.getElementById('form-jobs-desc').value = "";
+
+        // Reset dynamic fields
+        const formTag = document.getElementById('form-tag');
+        if (formTag) {
+          formTag.innerHTML = "<option>NOTAG</option>";
+          formTag.value = "NOTAG";
+        }
+      }
+    }
+
   </script>
 </body>
+
 </html>

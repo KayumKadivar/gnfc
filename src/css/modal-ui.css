@@ -124,6 +124,20 @@ html[data-theme-mode="light"] {
   width: min(980px, 96vw);
 }
 
+.gnfc-modal-shell--2xl {
+  width: min(1400px, 98vw);
+}
+
+.gnfc-modal-shell--3xl {
+  width: min(1600px, 98vw);
+}
+
+.gnfc-modal-shell--full {
+  width: 98vw;
+  height: 95vh;
+  max-height: 95vh;
+}
+
 /* ── Header ──────────────────────────────────────────────── */
 .gnfc-modal-header {
   display: flex;

@@ -5,6 +5,7 @@
   const STORAGE_VERSION = 1;
   const BACKUP_PREFIX = "gnfc_elogbook_v1_backup_";
   const DAY_MS = 24 * 60 * 60 * 1000;
+  const MONTHLY_WINDOW_DAYS = 40;
   const DEFAULT_PLANTS = [
     "AA", "AAQM", "AMM", "ANIPF", "ANITDI",
     "ASGP", "BAGG", "BOILER", "CMS", "CPSU",
@@ -449,7 +450,7 @@
     const tomorrowText = toIsoDate(new Date(now.getTime() + DAY_MS));
     const prevText = toIsoDate(new Date(now.getTime() - DAY_MS));
     const weeklyStart = new Date(now.getTime() - 6 * DAY_MS);
-    const monthlyStart = new Date(now.getTime() - 90 * DAY_MS);
+    const monthlyStart = new Date(now.getTime() - (MONTHLY_WINDOW_DAYS - 1) * DAY_MS);
 
     const parseDateSafe = (value) => parseIsoDate(value) || startOfDay(new Date());
     const resolveJobTargetDate = (job) => {
@@ -517,7 +518,7 @@
     const today = toIsoDate(now);
     const prev = toIsoDate(new Date(now.getTime() - DAY_MS));
     const weeklyStart = new Date(now.getTime() - 6 * DAY_MS);
-    const monthlyStart = new Date(now.getTime() - 90 * DAY_MS);
+    const monthlyStart = new Date(now.getTime() - (MONTHLY_WINDOW_DAYS - 1) * DAY_MS);
 
     return entries
       .filter((entry) => !plant || entry.plant === plant)

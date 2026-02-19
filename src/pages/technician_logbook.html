@@ -58,15 +58,14 @@
     /* ===== PLANT CARD ===== */
     .plant-card {
       background: rgba(15, 23, 42, 0.26);
-      border: 1px solid rgba(148, 163, 184, 0.22);
-      border: 3px solid #5794F2;
+      border: 2px solid #475569;
+      /* Slate-600 */
       transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
 
     .plant-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(87, 148, 242, 0.45);
-      border: #5794F2;
+      border-color: #5794F2;
       box-shadow: 0 8px 18px rgba(2, 6, 23, 0.2);
     }
 
@@ -257,8 +256,8 @@
                 </div>
                 <span class="font-14px fw-bold text-upper ls-widest color-secondary">Time Range</span>
               </div>
-              <div class="h-5 w-px bg-dark-border/50"></div>
-              <div class="flex bg-dark-bg/80 p-1 rounded-lg border border-dark-border/50 gap-x-1">
+              <div class="h-5 w-px bg-slate-600"></div>
+              <div class="flex bg-dark-bg/80 p-1 rounded-lg border border-slate-700 gap-x-1">
                 <button data-view="today"
                   class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent"
                   aria-pressed="true">
@@ -292,10 +291,10 @@
 
       <!-- Plant Units Grid -->
       <div class="px-4 py-2">
-        <div class="glass-card rounded-xl border border-dark-border/40 overflow-hidden animate-fade-in"
+        <div class="glass-card rounded-xl border-2 border-slate-600 overflow-hidden animate-fade-in"
           style="animation-delay: 0.1s;">
 
-          <div class="flex items-center justify-between px-5 py-3 border-b border-dark-border/40">
+          <div class="flex items-center justify-between px-5 py-3 border-b border-slate-700">
             <div class="flex items-center gap-3">
               <div class="w-1 h-5 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-teal"></div>
               <h3 class="fw-bold font-18px tracking-tight section-label cursor-default">Select Plant Unit</h3>
@@ -316,13 +315,13 @@
           <div class="flex items-center gap-3 mb-4">
             <div class="w-1 h-6 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-purple"></div>
             <h3 class="fw-bold font-18px tracking-tight section-label cursor-default">Officer Logbook Quick Access</h3>
-            <div class="h-px flex-1 bg-gradient-to-r from-dark-border/50 to-transparent"></div>
+            <div class="h-px flex-1 bg-gradient-to-r from-slate-600 to-transparent"></div>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
 
             <button onclick="window.location.href='/src/pages/shift_logbook.html?view=today'"
-              class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-blue/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-blue/5">
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-blue p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-blue/5">
               <div class="qa-card-top" style="--qa-color: #5794F2;">
               </div>
               <div class="flex items-start justify-between mb-3">
@@ -331,7 +330,8 @@
                   <i class="ph-fill ph-calendar-check color-blue text-lg"></i>
                 </div>
                 <!-- <i class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-blue/60 transition-colors font-15px"></i> -->
-                 <i class="ph-bold ph-arrow-up-right color-secondary group-hover-color-blue transition-colors font-15px"></i>
+                <i
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-blue transition-colors font-15px"></i>
               </div>
               <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
               <h4 class="font-15px fw-bold group-hover-color-blue transition-colors">Today</h4>
@@ -343,7 +343,7 @@
             </button>
 
             <button onclick="window.location.href='/src/pages/shift_logbook.html?view=prev'"
-              class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-teal/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-teal/5">
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-teal p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-teal/5">
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-teal/10 border border-gnfc-teal/20 flex items-center justify-center group-hover:bg-gnfc-teal/20 group-hover:scale-110 transition-all duration-300">
@@ -362,7 +362,7 @@
             </button>
 
             <button onclick="window.location.href='/src/pages/shift_logbook.html?view=weekly'"
-              class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-purple/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-purple/5">
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-purple p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-purple/5">
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-purple/10 border border-gnfc-purple/20 flex items-center justify-center group-hover:bg-gnfc-purple/20 group-hover:scale-110 transition-all duration-300">
@@ -381,7 +381,7 @@
             </button>
 
             <button onclick="window.location.href='/src/pages/shift_logbook.html?view=monthly'"
-              class="qa-card glass-card border border-dark-border/40 hover:border-gnfc-emerald/40 p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-emerald/5">
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-emerald p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-emerald/5">
               <div class="flex items-start justify-between mb-3">
                 <div
                   class="w-10 h-10 rounded-xl bg-gnfc-emerald/10 border border-gnfc-emerald/20 flex items-center justify-center group-hover:bg-gnfc-emerald/20 group-hover:scale-110 transition-all duration-300">
@@ -406,7 +406,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-dark-border/40 py-2.5 px-4 bg-dark-panel/50 backdrop-blur-sm">
+    <footer class="border-t border-slate-700 py-2.5 px-4 bg-dark-panel/50 backdrop-blur-sm">
       <div class="flex items-center justify-between">
         <p class="font-13px color-secondary fw-medium">Instrument Department &bull; GNFC Ltd.</p>
         <p class="font-13px text-dark-muted/40 typo-mono">&copy; 2026</p>

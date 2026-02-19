@@ -4,8 +4,6 @@ const ThemeManager = {
     defaults: {
         fontSize: 18,
         mode: 'light',
-        // bgColor: '#111217',
-        // panelColor: '#181b1f',
     },
 
     modes: {
@@ -37,7 +35,20 @@ const ThemeManager = {
     },
 
     init() {
+        this.setupSystemListener();
         this.applySettings();
+    },
+
+    setupSystemListener() {
+        if (window.matchMedia) {
+            this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            this.mediaQuery.addEventListener('change', (e) => {
+                const settings = this.getSettings();
+                if (settings.mode === 'system') {
+                    this.applySettings(); // Re-apply to pick up new system preference
+                }
+            });
+        }
     },
 
     getSettings() {
@@ -51,16 +62,45 @@ const ThemeManager = {
         }
 
         const merged = { ...this.defaults, ...parsed };
-        if (merged.mode !== 'dark' && merged.mode !== 'light') {
-            merged.mode = this.inferModeFromLegacySettings(merged);
+
+        // Validation: Ensure mode is valid
+        if (merged.mode !== 'dark' && merged.mode !== 'light' && merged.mode !== 'system') {
+            // If legacy data has specific colors, try to infer, otherwise default
+            if (this.isValidHex(merged.bgColor)) {
+                merged.mode = this.inferModeFromLegacySettings(merged);
+            } else {
+                merged.mode = this.defaults.mode;
+            }
         }
 
-        const palette = this.getPalette(merged.mode);
+        // Return raw settings (mode can be 'system')
+        // We resolve 'system' to actual colors during application, not here.
+        // But for bgColor/panelColor, if they are custom, we keep them.
+        // If mode is system, we might need to resolve palette now to provide fallback colors?
+        // Actually, let's keep it simple: getSettings returns the *intent*.
+
+        // However, existing code might expect bgColor to be populated.
+        // If system, we need to know what system is right now to populate default bg/panel if not custom.
+
+        const effectiveMode = this.resolveMode(merged.mode);
+        const palette = this.getPalette(effectiveMode);
+
         merged.fontSize = this.sanitizeFontSize(merged.fontSize);
+        // Only use custom colors if they are valid, else use palette
         merged.bgColor = this.isValidHex(merged.bgColor) ? merged.bgColor : palette.bg;
         merged.panelColor = this.isValidHex(merged.panelColor) ? merged.panelColor : palette.panel;
 
         return merged;
+    },
+
+    resolveMode(mode) {
+        if (mode === 'system') {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
+        return mode;
     },
 
     saveSettings(settings) {
@@ -70,24 +110,34 @@ const ThemeManager = {
     },
 
     setMode(mode) {
-        const palette = this.getPalette(mode);
-        if (!palette) return;
-
-        const next = this.getSettings();
+        // mode can be 'light', 'dark', or 'system'
+        const next = this.getSettings(); // Get current settings including custom fonts
         next.mode = mode;
+
+        // Reset custom colors when switching modes to ensure we pick up new palette defaults
+        // unless the user explicitly set them (which we don't track separately, so let's reset to palette)
+        // In this app version, we don't have a UI for custom colors, so safe to reset.
+        const effectiveMode = this.resolveMode(mode);
+        const palette = this.getPalette(effectiveMode);
         next.bgColor = palette.bg;
         next.panelColor = palette.panel;
+
         this.saveSettings(next);
     },
 
     normalizeSettings(settings = {}) {
-        const mode = settings.mode === 'light' ? 'light' : settings.mode === 'dark' ? 'dark' : this.defaults.mode;
-        const palette = this.getPalette(mode);
+        let mode = settings.mode;
+        if (mode !== 'light' && mode !== 'dark' && mode !== 'system') {
+            mode = this.defaults.mode;
+        }
+
+        const effectiveMode = this.resolveMode(mode);
+        const palette = this.getPalette(effectiveMode);
 
         return {
             ...this.defaults,
             ...settings,
-            mode,
+            mode, // Store 'system' if that's what it is
             fontSize: this.sanitizeFontSize(settings.fontSize),
             bgColor: this.isValidHex(settings.bgColor) ? settings.bgColor : palette.bg,
             panelColor: this.isValidHex(settings.panelColor) ? settings.panelColor : palette.panel,
@@ -95,22 +145,42 @@ const ThemeManager = {
     },
 
     applySettings() {
-        const settings = this.getSettings();
-        const palette = this.getPalette(settings.mode);
-        const fontScale = settings.fontSize / this.defaults.fontSize;
+        const settings = this.getSettings(); // This gets the INTENT (system/light/dark)
+        const effectiveMode = this.resolveMode(settings.mode); // Resolves system -> light/dark
+        const palette = this.getPalette(effectiveMode);
 
-        document.documentElement.classList.toggle('dark', settings.mode === 'dark');
-        document.documentElement.setAttribute('data-theme-mode', settings.mode);
-        document.documentElement.style.colorScheme = settings.mode;
-        document.documentElement.style.fontSize = `${settings.fontSize}px`;
+        // Font Scale Logic
+        // If fontSize is the default (18), we allow CSS media queries to control the root size (Responsive).
+        // If fontSize has been changed by user, we force it as an inline style (User Override).
+        const isDefaultSize = settings.fontSize === this.defaults.fontSize;
+
+        // Apply class to html
+        document.documentElement.classList.toggle('dark', effectiveMode === 'dark');
+        document.documentElement.setAttribute('data-theme-mode', effectiveMode);
+        document.documentElement.style.colorScheme = effectiveMode;
+
+        if (isDefaultSize) {
+            document.documentElement.style.removeProperty('font-size');
+        } else {
+            document.documentElement.style.fontSize = `${settings.fontSize}px`;
+        }
+
+        // Calculate scale for manual adjustments if needed, though with responsive root, scale is implicit.
+        // We keep app-font-scale param for compatibility, but relative to 16px base.
+        const fontScale = settings.fontSize / 16;
 
         this.injectColorOverrides({
-            mode: settings.mode,
+            mode: effectiveMode,
             bgColor: settings.bgColor,
             panelColor: settings.panelColor,
             palette,
             fontScale,
         });
+
+        // Dispatch a custom event
+        window.dispatchEvent(new CustomEvent('themeChanged', {
+            detail: { mode: settings.mode, effectiveMode: effectiveMode }
+        }));
     },
 
     injectColorOverrides(theme) {
@@ -130,8 +200,13 @@ const ThemeManager = {
             document.head.appendChild(styleTag);
         }
 
+        // Convert arbitrary Tailwind text-[Npx] classes to REM based on 16px base
+        // This ensures they scale with the root font-size
         const pxScaleRules = [8, 9, 10, 11, 12, 13, 14, 15, 16]
-            .map((size) => `[class~="text-[${size}px]"] { font-size: calc(${size}px * var(--app-font-scale)) !important; }`)
+            .map((size) => {
+                const rem = size / 16;
+                return `[class~="text-[${size}px]"] { font-size: ${rem}rem !important; }`;
+            })
             .join('\n');
 
         // Typography color vars based on theme mode
@@ -187,13 +262,17 @@ const ThemeManager = {
                 color: var(--app-text);
             }
 
-            /* --- Tailwind Font Size Overrides for Accessibility --- */
-            .text-xs  { font-size: 14px !important; }
-            .text-sm  { font-size: 15px !important; }
-            .text-base { font-size: 16px !important; }
-            [class~="text-[9px]"]  { font-size: 12px !important; }
-            [class~="text-[10px]"] { font-size: 13px !important; }
-            [class~="text-[11px]"] { font-size: 14px !important; }
+            /* --- Tailwind Font Size Overrides for Accessibility (Converted to REM) --- */
+            /* Using REM allows these to scale if the user/system changes the root font size */
+            /* Base assumption: 1rem = 16px (browser default) */
+            
+            .text-xs  { font-size: 0.875rem !important; }  /* 14px */
+            .text-sm  { font-size: 0.9375rem !important; } /* 15px */
+            .text-base { font-size: 1rem !important; }     /* 16px */
+            
+            [class~="text-[9px]"]  { font-size: 0.75rem !important; }   /* 12px */
+            [class~="text-[10px]"] { font-size: 0.8125rem !important; } /* 13px */
+            [class~="text-[11px]"] { font-size: 0.875rem !important; }  /* 14px */
 
             ${pxScaleRules}
 
@@ -254,7 +333,7 @@ const ThemeManager = {
             }
 
             html[data-theme-mode="light"] .text-white {
-                color: var(--app-text-strong);
+                color: white;
             }
 
             html[data-theme-mode="dark"] .bg-slate-50,

@@ -25,8 +25,8 @@ function renderHeader(config) {
       
       <!-- Left: Title & Breadcrumbs -->
       <div class="flex flex-col justify-center gap-0.5">
-          <h1 class="font-16px fw-bold color-primary tracking-wide leading-tight">${title}</h1>
-            <nav class="flex items-center gap-1.5 font-13px fw-semibold color-label text-upper tracking-wider">
+          <h1 class="font-17px fw-bold color-primary tracking-wide leading-tight">${title}</h1>
+            <nav class="flex items-center gap-1.5 font-15px fw-semibold color-label text-upper tracking-wider">
             ${breadcrumbsHTML}
           </nav>
       </div>

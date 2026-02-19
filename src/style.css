@@ -11,14 +11,14 @@
   --color-gnfc-darker: #060a12;
   --color-gnfc-navy: #0f172a;
   --color-gnfc-slate: #1e293b;
-  
+
   /* Accent Colors */
   --color-gnfc-teal: #14b8a6;
   --color-gnfc-cyan: #06b6d4;
   --color-gnfc-emerald: #10b981;
   --color-gnfc-amber: #f59e0b;
   --color-gnfc-rose: #f43f5e;
-  
+
   /* Glass Colors */
   --color-glass-white: rgba(255, 255, 255, 0.05);
   --color-glass-border: rgba(255, 255, 255, 0.1);
@@ -26,7 +26,25 @@
 
 /* Base Styles */
 html {
+  /* Responsive Root Font Size */
   font-size: 16px;
+  /* Base for mobile/small screens */
+
+  @media (min-width: 1024px) {
+    font-size: 17px;
+    /* Large Screens (Laptops) */
+  }
+
+  @media (min-width: 1440px) {
+    font-size: 18px;
+    /* Extra Large Screens (Desktops) */
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 20px;
+    /* 4K / Ultra Wide */
+  }
+
   scroll-behavior: smooth;
 }
 
@@ -48,7 +66,7 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
@@ -406,7 +424,7 @@ body {
 .section-card:hover {
   transform: translateY(-4px);
   border-color: rgba(20, 184, 166, 0.4);
-  box-shadow: 
+  box-shadow:
     0 12px 35px rgba(0, 0, 0, 0.3),
     0 0 0 1px rgba(20, 184, 166, 0.3),
     0 0 20px rgba(20, 184, 166, 0.1);
@@ -495,18 +513,24 @@ body {
    ======================================== */
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(20, 184, 166, 0.5);
   }
+
   50% {
     box-shadow: 0 0 20px rgba(20, 184, 166, 0.8);
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -516,9 +540,11 @@ body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -568,7 +594,8 @@ body {
    Focus States
    ======================================== */
 
-a:focus, button:focus {
+a:focus,
+button:focus {
   outline: 2px solid #14b8a6;
   outline-offset: 2px;
 }
@@ -590,7 +617,9 @@ a:focus, button:focus {
 
 .bg-dark-gradient {
   background: linear-gradient(135deg, #0a0f1a 0%, #0f172a 50%, #1e293b 100%);
-}@import "tailwindcss";
+}
+
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 /* ========================================
@@ -603,14 +632,14 @@ a:focus, button:focus {
   --color-gnfc-darker: #060a12;
   --color-gnfc-navy: #0f172a;
   --color-gnfc-slate: #1e293b;
-  
+
   /* Accent Colors */
   --color-gnfc-teal: #14b8a6;
   --color-gnfc-cyan: #06b6d4;
   --color-gnfc-emerald: #10b981;
   --color-gnfc-amber: #f59e0b;
   --color-gnfc-rose: #f43f5e;
-  
+
   /* Glass Colors */
   --color-glass-white: rgba(255, 255, 255, 0.05);
   --color-glass-border: rgba(255, 255, 255, 0.1);
@@ -640,7 +669,7 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
@@ -998,7 +1027,7 @@ body {
 .section-card:hover {
   transform: translateY(-4px);
   border-color: rgba(20, 184, 166, 0.4);
-  box-shadow: 
+  box-shadow:
     0 12px 35px rgba(0, 0, 0, 0.3),
     0 0 0 1px rgba(20, 184, 166, 0.3),
     0 0 20px rgba(20, 184, 166, 0.1);
@@ -1087,18 +1116,24 @@ body {
    ======================================== */
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(20, 184, 166, 0.5);
   }
+
   50% {
     box-shadow: 0 0 20px rgba(20, 184, 166, 0.8);
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -1108,9 +1143,11 @@ body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -1160,7 +1197,8 @@ body {
    Focus States
    ======================================== */
 
-a:focus, button:focus {
+a:focus,
+button:focus {
   outline: 2px solid #14b8a6;
   outline-offset: 2px;
 }

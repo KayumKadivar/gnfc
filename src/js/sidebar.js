@@ -1,5 +1,5 @@
-const SIDEBAR_COLLAPSED_CLASS = 'w-12';
-const SIDEBAR_EXPANDED_CLASS = 'w-48';
+const SIDEBAR_COLLAPSED_CLASS = 'w-16';
+const SIDEBAR_EXPANDED_CLASS = 'w-52';
 
 function getLoggedInUser() {
     const role = (localStorage.getItem('userRole') || '').toLowerCase();
@@ -83,8 +83,8 @@ function renderSidebar(activePageId) {
               <div onmouseenter="showSidebarTooltip(event, '${tooltipName}')" onmouseleave="hideSidebarTooltip()" class="flex items-center gap-3 color-secondary hover-color-primary cursor-pointer transition overflow-hidden ${isCollapsed ? 'justify-center' : ''}">
                   <img src="${avatarUrl}" class="w-8 h-8 rounded-full border border-[#2c3235] shrink-0">
                   <div class="flex-1 ${textClass} whitespace-nowrap transition-opacity duration-300">
-                      <p class="font-15px fw-medium leading-none">${currentUser.name}</p>
-                      <p class="color-blue font-14px" onclick="logout()">Sign out</p>
+                      <p class="font-16px fw-medium leading-none">${currentUser.name}</p>
+                      <p class="color-blue font-16px" onclick="logout()">Sign out</p>
                   </div>
                   <i class="ph-bold ph-sign-out ${textClass}" onclick="logout()"></i>
               </div>

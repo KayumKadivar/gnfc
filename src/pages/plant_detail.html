@@ -14,6 +14,90 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
+    .plant-detail-readable {
+      --plant-readable-line-height: 1.45;
+    }
+
+    .plant-detail-readable .font-10px,
+    .plant-detail-readable .font-11px,
+    .plant-detail-readable .font-12px,
+    .plant-detail-readable .font-13px,
+    .plant-detail-readable .font-14px,
+    .plant-detail-readable .font-15px,
+    .plant-detail-readable .font-16px,
+    .plant-detail-readable .font-18px {
+      line-height: var(--plant-readable-line-height) !important;
+    }
+
+    .plant-detail-readable .font-10px {
+      font-size: clamp(12px, calc(10px + 0.2vw), 14px) !important;
+    }
+
+    .plant-detail-readable .font-11px {
+      font-size: clamp(13px, calc(11px + 0.22vw), 15px) !important;
+    }
+
+    .plant-detail-readable .font-12px {
+      font-size: clamp(14px, calc(12px + 0.25vw), 16px) !important;
+    }
+
+    .plant-detail-readable .font-13px {
+      font-size: clamp(15px, calc(13px + 0.24vw), 17px) !important;
+    }
+
+    .plant-detail-readable .font-14px {
+      font-size: clamp(16px, calc(14px + 0.26vw), 18px) !important;
+    }
+
+    .plant-detail-readable .font-15px {
+      font-size: clamp(17px, calc(15px + 0.24vw), 19px) !important;
+    }
+
+    .plant-detail-readable .font-16px {
+      font-size: clamp(18px, calc(16px + 0.23vw), 20px) !important;
+    }
+
+    .plant-detail-readable .font-18px {
+      font-size: clamp(20px, calc(18px + 0.24vw), 22px) !important;
+    }
+
+    .plant-detail-readable .text-\[8px\] {
+      font-size: 12px !important;
+    }
+
+    .plant-detail-readable .text-\[9px\] {
+      font-size: 13px !important;
+    }
+
+    .plant-detail-readable .text-\[11px\] {
+      font-size: 14px !important;
+    }
+
+    .plant-detail-readable .text-\[12px\] {
+      font-size: 15px !important;
+    }
+
+    .plant-detail-readable .gnfc-modal-title {
+      font-size: clamp(16px, calc(14px + 0.2vw), 18px);
+      line-height: 1.35;
+    }
+
+    .plant-detail-readable .gnfc-modal-subtitle,
+    .plant-detail-readable .gnfc-modal-label {
+      font-size: clamp(12px, calc(10px + 0.14vw), 14px);
+      line-height: 1.4;
+    }
+
+    .plant-detail-readable .gnfc-modal-input,
+    .plant-detail-readable .gnfc-modal-btn {
+      font-size: clamp(14px, calc(12px + 0.16vw), 16px);
+    }
+
+    .plant-detail-readable #plant-table thead th,
+    .plant-detail-readable #plant-table tbody td {
+      line-height: 1.5;
+    }
+
     #plant-table tbody tr {
       transition: background-color .18s ease;
     }
@@ -22,13 +106,13 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 10px;
+      font-size: clamp(12px, calc(10px + 0.2vw), 14px);
       font-weight: 700;
       background: #f3f4f6;
       border: 1px solid #e5e7eb;
       color: #374151;
       border-radius: 4px;
-      padding: 0.2rem 0.5rem;
+      padding: 0.3rem 0.55rem;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
@@ -43,7 +127,7 @@
 </head>
 
 <body
-  class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+  class="plant-detail-readable bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -151,15 +235,9 @@
                 <i class="ph-bold ph-warning"></i> Acknowledge
               </button>
             </div>
-
-
           </div>
         </div>
-
-
       </div>
-
-
 
       <!-- Filters Drawer (Collapsible) -->
       <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
@@ -210,44 +288,32 @@
         </div>
 
         <div class="overflow-x-auto flex-1">
-          <table id="plant-table" class="w-full text-left border-collapse">
+          <table id="plant-table" class="w-full min-w-[1280px] table-fixed text-left border-collapse">
             <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header ">
               <tr
                 class="font-13px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border p-2 w-12 cursor-pointer transition-colors"
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[72px] cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-20 cursor-pointer transition-colors"
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[96px] cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
                 </th>
-                <th class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer transition-colors"
+                <th class="border-r border-b px-3 py-2 w-[200px] border-dark-border cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('tag')">Loop No <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
                 </th>
                 <th
-                  class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border fw-black cursor-pointer transition-colors"
+                  class="border-r border-b px-3 py-2 w-[230px] border-dark-border fw-black cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('jobType')">Job <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
                 </th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-16 cursor-pointer transition-colors"
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[84px] cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('tech')">Tech</th>
-                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] transition-colors">
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[280px] transition-colors">
                   Description
                 </th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-24 cursor-pointer transition-colors"
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[120px] cursor-pointer transition-colors"
                   onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-                <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                  <div class="flex items-center justify-between cursor-pointer transition-colors p-1 rounded"
-                    onclick="plantLogTable.sort('status')">
-                    <span>Status</span>
-                  </div>
-                  <button onclick="toggleStatusFilter(event)"
-                    class="absolute top-5 right-6 color-secondary hover-color-blue focus:outline-none p-1 rounded hover:bg-white/5">
-                    <i class="ph-bold ph-funnel font-14px"></i>
-                  </button>
-                  <div id="status-filter-dropdown"
-                    class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
-                  </div>
-                </th>
-                <th rowspan="2" class="p-2 min-w-[120px] transition-colors">Remarks</th>
-                <th rowspan="2" class="p-2 w-10 transition-colors" title="Add To History">H</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[150px] transition-colors">Status</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[96px] transition-colors">Remarks</th>
+                <th rowspan="2" class="p-2 w-[48px] transition-colors" title="Add To History">Add </th>
               </tr>
               <tr
                 class="font-13px fw-bold text-slate-500 dark:color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
@@ -495,44 +561,70 @@
   </div>
 
   <div id="remark-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
-      <div class="gnfc-modal-header">
-        <h3 class="gnfc-modal-title">Remarks</h3>
-        <button onclick="closeRemarkModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium" style="max-width: 800px;">
+
+      <!-- Legacy Header Style -->
+      <div class="bg-white dark:bg-dark-panel border-b border-dark-border p-2 text-center">
+        <h3 id="remark-modal-plant" class="font-16px fw-bold color-blue text-upper">PLANT NAME</h3>
       </div>
+
       <form id="remark-modal-form">
-        <div class="gnfc-modal-body gnfc-modal-body--tight">
-          <input id="remark-job-id" type="hidden">
-          <div id="remark-history"
-            class="max-h-40 overflow-auto border border-dark-border rounded-sm divide-y divide-dark-border">
+        <input id="remark-job-id" type="hidden">
+
+        <div class="gnfc-modal-body p-0">
+
+          <!-- Allow "Remark By" strip -->
+          <div
+            class="border-b border-dark-border px-3 py-1 bg-gray-50 dark:bg-dark-header flex items-center justify-between">
+            <span class="font-14px fw-bold color-primary">Remark By : <span id="remark-modal-user"
+                class="color-blue text-upper">--</span></span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-            <div>
-              <label class="gnfc-modal-label">Remark Type</label>
-              <select id="remark-type" class="gnfc-modal-input">
-                <option value="engineer">Engineer</option>
-                <option value="executive">Executive</option>
+
+          <!-- Split Content -->
+          <div class="grid grid-cols-2 h-64">
+            <!-- Left: History -->
+            <div class="border-r border-dark-border flex flex-col">
+              <div class="bg-gray-100 dark:bg-dark-bg flex-1 p-2 overflow-y-auto font-13px space-y-2"
+                id="remark-history">
+                <!-- History items -->
+              </div>
+            </div>
+
+            <!-- Right: Input -->
+            <div class="flex flex-col p-2">
+              <textarea id="remark-text"
+                class="flex-1 w-full bg-transparent border border-dark-border rounded-sm p-2 font-14px resize-none focus:border-blue-500 outline-none"
+                placeholder="Enter remark..."></textarea>
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div class="p-3 border-t border-dark-border bg-gray-50 dark:bg-dark-header space-y-2 text-center">
+            <label class="inline-flex items-center gap-2 font-14px fw-bold color-blue cursor-pointer select-none">
+              Mark the job status as "OVER":
+              <input id="remark-status-over" type="checkbox" class="accent-blue-600 h-4 w-4 rounded-sm border-gray-300">
+            </label>
+            <br>
+            <label class="inline-flex items-center gap-2 font-14px fw-bold color-blue cursor-pointer select-none">
+              Remark Acknowledgement By Technician:
+              <input id="remark-ack-tech" type="checkbox" class="accent-blue-600 h-4 w-4 rounded-sm border-gray-300">
+            </label>
+            <div class="hidden">
+              <input id="remark-ack-eng" type="checkbox">
+              <select id="remark-type">
+                <option value="engineer">eng</option>
               </select>
             </div>
-            <label class="flex items-center gap-2 font-14px mt-5">
-              <input id="remark-ack-tech" type="checkbox" class="accent-gnfc-blue">
-              Ack by Technician
-            </label>
-            <label class="flex items-center gap-2 font-14px mt-5">
-              <input id="remark-ack-eng" type="checkbox" class="accent-gnfc-blue">
-              Ack by Engineer
-            </label>
           </div>
-          <div class="mt-3">
-            <label class="gnfc-modal-label">New Remark</label>
-            <textarea id="remark-text" rows="3" class="gnfc-modal-input"
-              placeholder="Remarks are append-only"></textarea>
-          </div>
+
         </div>
-        <div class="gnfc-modal-footer">
+
+        <!-- Legacy Footer -->
+        <div class="p-3 border-t border-dark-border bg-white dark:bg-dark-panel flex items-center justify-center gap-3">
+          <button type="submit"
+            class="px-4 py-1.5 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold text-sm rounded shadow-sm border border-gray-400 transition-colors">SAVE</button>
           <button type="button" onclick="closeRemarkModal()"
-            class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
-          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Append Remark</button>
+            class="px-4 py-1.5 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold text-sm rounded shadow-sm border border-gray-400 transition-colors">cancel</button>
         </div>
       </form>
     </div>

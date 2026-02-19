@@ -4,7 +4,7 @@
   "use strict";
 
   const DAY_MS = 24 * 60 * 60 * 1000;
-  const STATUS_FILTER_ALL = "__all__";
+  const MONTHLY_WINDOW_DAYS = 40;
   const VIEW_KEYS = ["today", "tomorrow", "prev", "weekly", "monthly"];
 
   let currentView = "today";
@@ -13,7 +13,6 @@
   const elogbookState = {
     selectedPlant: "AA",
     pendingOnlyMode: false,
-    selectedStatus: "",
     modalMode: "assign",
     modalTargetView: "today",
     activeUser: {
@@ -178,7 +177,7 @@
     return parsed ? startOfDay(parsed) : null;
   }
 
-  function getFilteredJobs(includeStatus) {
+  function getFilteredJobs() {
     let rows = [...getCurrentViewJobs()];
 
     const jobType = document.getElementById("job-type-select")?.value || "";
@@ -203,10 +202,6 @@
       });
     }
 
-    if (includeStatus && elogbookState.selectedStatus) {
-      rows = rows.filter((job) => job.status === elogbookState.selectedStatus);
-    }
-
     return rows.map((job, index) => ({
       ...job,
       sr: pad2(index + 1)
@@ -223,20 +218,35 @@
     });
   }
 
-  function renderJobRow(job) {
+  function renderJobRow(job, index, rows) {
     const rowClass = job.emergency ? "bg-amber-500/10" : "";
     const srClass = job.pendingWrite ? "bg-pink-500/20 cursor-pointer" : "";
     const descClass = job.abnormality ? "border border-red-500/60 rounded-sm px-1.5 py-1" : "";
     const badgeClass = getStatusClass(statusColor(job.status));
-    const canEdit = !job.locked;
     const pendingAck = hasPendingAck(job);
     const ref = `By:${job.engineer || elogbookState.activeUser.name} : ${isoDateToSlash(job.targetDate)}`;
+    const isGroupedView = currentView === "weekly" || currentView === "monthly";
+    const previousRow = Array.isArray(rows) && index > 0 ? rows[index - 1] : null;
+    const showDaySeparator = isGroupedView && (!previousRow || previousRow.targetDate !== job.targetDate);
+    const daySeparatorRow = showDaySeparator
+      ? `
+      <tr class="bg-amber-50/60 dark:bg-amber-500/5 border-y border-gray-200 dark:border-dark-border">
+        <td colspan="10" class="px-3 py-2 font-14px fw-bold color-orange">
+          <span class="inline-flex items-center gap-1.5">
+            <i class="ph-bold ph-folder-simple"></i>
+            ${safeText(isoDateToSlash(job.targetDate))}
+          </span>
+        </td>
+      </tr>
+    `
+      : "";
 
     return `
+      ${daySeparatorRow}
       <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-200 dark:border-dark-border group ${rowClass}">
-        <td class="p-2 text-center typo-mono border-r border-gray-200 dark:border-dark-border ${srClass}" ${canEdit ? `onclick="openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
-        <td class="p-2 fw-bold color-primary border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
-        <td class="p-2 border-r border-gray-200 dark:border-dark-border">
+        <td class="p-2 align-top text-center typo-mono border-r border-gray-200 dark:border-dark-border ${srClass}">${safeText(job.sr)}</td>
+        <td class="p-2 align-top fw-bold color-primary border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
+        <td class="p-2 align-top border-r border-gray-200 dark:border-dark-border">
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="font-14px color-blue fw-bold">${safeText(job.loop)}</div>
@@ -245,31 +255,30 @@
             ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="font-13px px-1 py-0.5 border border-red-500/50 color-red rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
           </div>
         </td>
-        <td class="p-2 border-r border-gray-200 dark:border-dark-border">
+        <td class="p-2 align-top border-r border-gray-200 dark:border-dark-border">
           <div class="fw-medium color-primary">${safeText(job.jobType)}</div>
           <div class="font-13px color-secondary mt-0.5">${safeText(ref)}</div>
           <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono">${safeText(job.typeOfInst)}</span>
         </td>
-        <td class="p-2 text-center fw-bold color-secondary border-r border-gray-200 dark:border-dark-border">${safeText(job.tech)}</td>
-        <td class="p-2 color-primary border-r border-gray-200 dark:border-dark-border leading-relaxed">
+        <td class="p-2 align-top text-center fw-bold color-secondary border-r border-gray-200 dark:border-dark-border">${safeText(job.tech)}</td>
+        <td class="p-2 align-top color-primary border-r border-gray-200 dark:border-dark-border leading-relaxed">
           <div class="${descClass}">${safeText(job.desc || (job.pendingWrite ? "Assigned. Awaiting technician log entry." : ""))}</div>
         </td>
-        <td class="p-2 text-center border-r border-gray-200 dark:border-dark-border">
+        <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border">
           <div class="fw-bold color-primary">${safeText(job.engineer || "--")}</div>
           <div class="font-13px color-secondary">${safeText(makeInitials(job.engineer || ""))}</div>
         </td>
-        <td class="p-2 text-center border-r border-gray-200 dark:border-dark-border">
-          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-13px fw-bold border ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px color-pink">ASSIGNED</span>`}
-          ${canEdit ? `<button onclick="event.stopPropagation(); openEditModal('${job.id}')" class="mt-1 font-13px px-1.5 py-0.5 rounded border border-gray-300 dark:border-dark-border color-secondary hover-color-blue hover:border-blue-600 dark:hover:border-gnfc-blue shadow-sm">Edit</button>` : `<div class="mt-1 font-13px color-secondary">Locked</div>`}
+        <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border">
+          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-13px fw-bold border whitespace-nowrap ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px color-pink fw-bold">ASSIGNED</span>`}
         </td>
-        <td class="p-2 color-secondary">
-          <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-13px px-1.5 py-0.5 border border-gray-300 dark:border-dark-border rounded-sm hover:border-blue-600 dark:hover:border-gnfc-blue hover-color-blue transition-colors shadow-sm">
-            <i class="ph-bold ph-chat-circle-dots"></i> ${Array.isArray(job.remarks) ? job.remarks.length : 0}
+        <td class="p-2 align-top text-center color-secondary border-r border-gray-200 dark:border-dark-border">
+          <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-13px hover-color-blue transition-colors">
+            <i class="ph-bold ph-chat-circle-dots"></i>
           </button>
           ${pendingAck ? `<div class="mt-1 font-13px color-orange">Ack pending</div>` : ""}
         </td>
-        <td class="p-2 text-center border-l border-gray-200 dark:border-dark-border">
-          ${job.status === "✓ OVER" ? `<a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer" title="Add to History">H</a>` : ""}
+        <td class="p-2 align-top text-center">
+          ${job.status === "✓ OVER" ? `<a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer" title="Add to History">H</a> <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer" title="Add to History">PM</a>` : ""}
         </td>
       </tr>
     `;
@@ -288,19 +297,6 @@
         option.textContent = type;
         select.appendChild(option);
       });
-  }
-
-  function populateStatusDropdown() {
-    const dropdown = document.getElementById("status-filter-dropdown");
-    if (!dropdown) return;
-    const statuses = [...new Set(getFilteredJobs(false).map((job) => job.status).filter(Boolean))].sort();
-
-    let html = `<button class="w-full text-left px-2 py-1 font-14px hover:bg-slate-100 dark:hover:bg-dark-border ${elogbookState.selectedStatus ? "" : "color-blue"}" onclick="filterStatus('${STATUS_FILTER_ALL}')">All</button>`;
-    statuses.forEach((status) => {
-      const selectedClass = elogbookState.selectedStatus === status ? "color-blue" : "";
-      html += `<button class="w-full text-left px-2 py-1 font-14px hover:bg-slate-100 dark:hover:bg-dark-border ${selectedClass}" onclick="filterStatus('${safeText(status)}')">${safeText(status)}</button>`;
-    });
-    dropdown.innerHTML = html;
   }
 
   function updatePendingModeButton() {
@@ -341,7 +337,7 @@
 
   function refreshTable() {
     if (!plantLogTable) return;
-    const rows = getFilteredJobs(true);
+    const rows = getFilteredJobs();
     plantLogTable.setData(rows);
 
     const searchInput = document.getElementById("table-search");
@@ -349,7 +345,6 @@
       plantLogTable.setSearch(searchInput.value || "");
     }
 
-    populateStatusDropdown();
     updatePendingModeButton();
     updateAcknowledgeButton();
   }
@@ -370,6 +365,10 @@
     if (viewName === "weekly") {
       const start = new Date(now.getTime() - 6 * DAY_MS);
       return `${isoDateToSlash(toIsoDate(start)).replaceAll("/", ".")} - ${isoDateToSlash(toIsoDate(now)).replaceAll("/", ".")}`;
+    }
+    if (viewName === "monthly") {
+      const start = new Date(now.getTime() - (MONTHLY_WINDOW_DAYS - 1) * DAY_MS);
+      return `Last ${MONTHLY_WINDOW_DAYS} Days: ${isoDateToSlash(toIsoDate(start)).replaceAll("/", ".")} - ${isoDateToSlash(toIsoDate(now)).replaceAll("/", ".")}`;
     }
     return now.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
   }
@@ -413,30 +412,6 @@
     const bar = document.getElementById("job-filter-bar");
     if (!bar) return;
     bar.classList.toggle("hidden");
-  }
-
-  function toggleStatusFilter(event) {
-    event.stopPropagation();
-    const dropdown = document.getElementById("status-filter-dropdown");
-    if (!dropdown) return;
-
-    dropdown.classList.toggle("hidden");
-    if (dropdown.classList.contains("hidden")) return;
-
-    const onOutsideClick = (e) => {
-      if (!e.target.closest("#status-filter-dropdown") && !e.target.closest('button[onclick="toggleStatusFilter(event)"]')) {
-        dropdown.classList.add("hidden");
-        document.removeEventListener("click", onOutsideClick);
-      }
-    };
-    document.addEventListener("click", onOutsideClick);
-  }
-
-  function filterStatus(statusValue) {
-    elogbookState.selectedStatus = statusValue === STATUS_FILTER_ALL ? "" : statusValue;
-    const dropdown = document.getElementById("status-filter-dropdown");
-    if (dropdown) dropdown.classList.add("hidden");
-    refreshTable();
   }
 
   function togglePendingMode() {
@@ -899,6 +874,15 @@
     setVal("remark-job-id", jobId);
     setVal("remark-text", "");
 
+    const plantTitle = document.getElementById("remark-modal-plant");
+    if (plantTitle) plantTitle.textContent = elogbookState.selectedPlant;
+
+    const userLabel = document.getElementById("remark-modal-user");
+    if (userLabel) userLabel.textContent = elogbookState.activeUser.name;
+
+    const statusOver = document.getElementById("remark-status-over");
+    if (statusOver) statusOver.checked = false;
+
     const ackTech = document.getElementById("remark-ack-tech");
     const ackEng = document.getElementById("remark-ack-eng");
     if (ackTech) ackTech.checked = false;
@@ -923,6 +907,7 @@
     const type = document.getElementById("remark-type")?.value || "engineer";
     const ackTech = Boolean(document.getElementById("remark-ack-tech")?.checked);
     const ackEng = Boolean(document.getElementById("remark-ack-eng")?.checked);
+    const markOver = Boolean(document.getElementById("remark-status-over")?.checked);
 
     if (!text) {
       showNotice("Remark text is required.", "error");
@@ -947,6 +932,11 @@
     located.job.remarks.push(remark);
     located.job.updatedAt = new Date().toISOString();
 
+    if (markOver) {
+      located.job.status = "✓ OVER";
+      if (!located.job.tech) located.job.tech = elogbookState.activeUser.name; // Auto-assign if empty? Or just ensure it has a tech.
+    }
+
     persistLocalData();
     renderRemarkHistory(located.job);
 
@@ -954,7 +944,8 @@
     if (remarkText) remarkText.value = "";
 
     refreshTable();
-    showNotice("Remark appended. Existing remarks remain immutable.", "info");
+    closeRemarkModal(); // Close on SAVE as per legacy flow
+    showNotice("Remark saved.", "info");
   }
 
   function openAckModal() {
@@ -1176,7 +1167,7 @@
   function initTable() {
     plantLogTable = new PlantLogTable({
       containerId: "#plant-table",
-      data: getFilteredJobs(true),
+      data: getFilteredJobs(),
       itemsPerPage: 6,
       onRender: renderJobRow
     });
@@ -1317,8 +1308,6 @@
   global.switchView = switchView;
   global.applyFilters = applyFilters;
   global.toggleJobFilter = toggleJobFilter;
-  global.toggleStatusFilter = toggleStatusFilter;
-  global.filterStatus = filterStatus;
   global.togglePendingMode = togglePendingMode;
   global.filterTagsForLoop = filterTagsForLoop;
   global.openJobModal = openJobModal;

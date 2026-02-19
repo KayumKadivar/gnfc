@@ -194,9 +194,9 @@ class PlantLogTable {
                 No entries found for this view.
             </td></tr>`;
         } else {
-            paginatedData.forEach(item => {
+            paginatedData.forEach((item, index) => {
                 if (this.onRender) {
-                    tbody.innerHTML += this.onRender(item);
+                    tbody.innerHTML += this.onRender(item, index, paginatedData);
                 } else {
                     tbody.innerHTML += this.createRow(item);
                 }

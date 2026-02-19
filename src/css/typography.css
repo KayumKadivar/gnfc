@@ -9,55 +9,182 @@
    1. FONT SIZES (Pixel-Based)
    ======================================== */
 
-.font-10px { font-size: 10px !important; }
-.font-11px { font-size: 11px !important; }
-.font-12px { font-size: 12px !important; }
-.font-13px { font-size: 13px !important; }
-.font-14px { font-size: 14px !important; }
-.font-15px { font-size: 15px !important; }
-.font-16px { font-size: 16px !important; }
-.font-18px { font-size: 18px !important; }
-.font-20px { font-size: 20px !important; }
-.font-22px { font-size: 22px !important; }
-.font-24px { font-size: 24px !important; }
-.font-28px { font-size: 28px !important; }
-.font-32px { font-size: 32px !important; }
-.font-36px { font-size: 36px !important; }
-.font-40px { font-size: 40px !important; }
-.font-48px { font-size: 48px !important; }
+.font-10px {
+  font-size: 0.625rem !important;
+}
+
+/* 10px */
+.font-11px {
+  font-size: 0.6875rem !important;
+}
+
+/* 11px */
+.font-12px {
+  font-size: 0.75rem !important;
+}
+
+/* 12px */
+.font-13px {
+  font-size: 0.8125rem !important;
+}
+
+/* 13px */
+.font-14px {
+  font-size: 0.875rem !important;
+}
+
+/* 14px */
+.font-15px {
+  font-size: 0.9375rem !important;
+}
+
+/* 15px */
+.font-16px {
+  font-size: 1rem !important;
+}
+
+/* 16px */
+.font-18px {
+  font-size: 1.125rem !important;
+}
+
+/* 18px */
+.font-20px {
+  font-size: 1.25rem !important;
+}
+
+/* 20px */
+.font-22px {
+  font-size: 1.375rem !important;
+}
+
+/* 22px */
+.font-24px {
+  font-size: 1.5rem !important;
+}
+
+/* 24px */
+.font-28px {
+  font-size: 1.75rem !important;
+}
+
+/* 28px */
+.font-32px {
+  font-size: 2rem !important;
+}
+
+/* 32px */
+.font-36px {
+  font-size: 2.25rem !important;
+}
+
+/* 36px */
+.font-40px {
+  font-size: 2.5rem !important;
+}
+
+/* 40px */
+.font-48px {
+  font-size: 3rem !important;
+}
+
+/* 48px */
 
 /* ========================================
    2. FONT WEIGHTS
    ======================================== */
 
-.fw-light     { font-weight: 300 !important; }
-.fw-normal    { font-weight: 400 !important; }
-.fw-medium    { font-weight: 500 !important; }
-.fw-semibold  { font-weight: 600 !important; }
-.fw-bold      { font-weight: 700 !important; }
-.fw-extrabold { font-weight: 800 !important; }
-.fw-black     { font-weight: 900 !important; }
+.fw-light {
+  font-weight: 300 !important;
+}
+
+.fw-normal {
+  font-weight: 400 !important;
+}
+
+.fw-medium {
+  font-weight: 500 !important;
+}
+
+.fw-semibold {
+  font-weight: 600 !important;
+}
+
+.fw-bold {
+  font-weight: 700 !important;
+}
+
+.fw-extrabold {
+  font-weight: 800 !important;
+}
+
+.fw-black {
+  font-weight: 900 !important;
+}
 
 /* ========================================
    3. LINE HEIGHTS
    ======================================== */
 
-.lh-1    { line-height: 1 !important; }
-.lh-12   { line-height: 1.25 !important; }
-.lh-13   { line-height: 1.375 !important; }
-.lh-15  { line-height: 1.5 !important; }
-.lh-16 { line-height: 1.625 !important; }
-.lh-2   { line-height: 2 !important; }
+.lh-1 {
+  line-height: 1 !important;
+}
+
+.lh-12 {
+  line-height: 1.25 !important;
+}
+
+.lh-13 {
+  line-height: 1.375 !important;
+}
+
+.lh-15 {
+  line-height: 1.5 !important;
+}
+
+.lh-16 {
+  line-height: 1.625 !important;
+}
+
+.lh-2 {
+  line-height: 2 !important;
+}
 
 /* Fixed line heights */
-.lh-16px { line-height: 16px !important; }
-.lh-18px { line-height: 18px !important; }
-.lh-20px { line-height: 20px !important; }
-.lh-24px { line-height: 24px !important; }
-.lh-28px { line-height: 28px !important; }
-.lh-32px { line-height: 32px !important; }
-.lh-36px { line-height: 36px !important; }
-.lh-40px { line-height: 40px !important; }
+/* Fixed line heights converted to rem/unitless where appropriate or kept as px if strictly needed, 
+   but for responsive text, unitless is usually better. 
+   However, preserving the class intent (px height) with rem calculation based on 16px base. */
+.lh-16px {
+  line-height: 1rem !important;
+}
+
+.lh-18px {
+  line-height: 1.125rem !important;
+}
+
+.lh-20px {
+  line-height: 1.25rem !important;
+}
+
+.lh-24px {
+  line-height: 1.5rem !important;
+}
+
+.lh-28px {
+  line-height: 1.75rem !important;
+}
+
+.lh-32px {
+  line-height: 2rem !important;
+}
+
+.lh-36px {
+  line-height: 2.25rem !important;
+}
+
+.lh-40px {
+  line-height: 2.5rem !important;
+}
 
 /* ========================================
    4. FONT COLORS — HIGH CONTRAST
@@ -85,24 +212,70 @@
 }
 
 /* --- Accent Colors --- */
-.color-blue   { color: var(--typo-blue, #5794F2) !important; }
-.color-orange  { color: var(--typo-orange, #FF9900) !important; }
-.color-green   { color: var(--typo-green, #73BF69) !important; }
-.color-red     { color: var(--typo-red, #F2495C) !important; }
-.color-purple  { color: var(--typo-purple, #B794F4) !important; }
-.color-teal    { color: var(--typo-teal, #14b8a6) !important; }
-.color-cyan    { color: var(--typo-cyan, #06b6d4) !important; }
-.color-amber   { color: var(--typo-amber, #f59e0b) !important; }
-.color-white   { color: #ffffff !important; }
-.color-black   { color: #000000 !important; }
+.color-blue {
+  color: var(--typo-blue, #5794F2) !important;
+}
+
+.color-orange {
+  color: var(--typo-orange, #FF9900) !important;
+}
+
+.color-green {
+  color: var(--typo-green, #73BF69) !important;
+}
+
+.color-red {
+  color: var(--typo-red, #F2495C) !important;
+}
+
+.color-purple {
+  color: var(--typo-purple, #B794F4) !important;
+}
+
+.color-teal {
+  color: var(--typo-teal, #14b8a6) !important;
+}
+
+.color-cyan {
+  color: var(--typo-cyan, #06b6d4) !important;
+}
+
+.color-amber {
+  color: var(--typo-amber, #f59e0b) !important;
+}
+
+.color-white {
+  color: #ffffff !important;
+}
+
+.color-black {
+  color: #000000 !important;
+}
 
 /* --- Hover Colors --- */
-.hover-color-primary:hover   { color: var(--typo-primary, #ffffff) !important; }
-.hover-color-secondary:hover { color: var(--typo-secondary, #d1d5db) !important; }
-.hover-color-label:hover     { color: var(--typo-label, #9ca3af) !important; }
-.hover-color-blue:hover      { color: var(--typo-blue, #5794F2) !important; }
-.hover-color-orange:hover    { color: var(--typo-orange, #FF9900) !important; }
-.hover-color-white:hover     { color: #ffffff !important; }
+.hover-color-primary:hover {
+  color: var(--typo-primary, #ffffff) !important;
+}
+
+.hover-color-secondary:hover {
+  color: var(--typo-secondary, #d1d5db) !important;
+}
+
+.hover-color-label:hover {
+  color: var(--typo-label, #9ca3af) !important;
+}
+
+.hover-color-blue:hover {
+  color: var(--typo-blue, #5794F2) !important;
+}
+
+.hover-color-orange:hover {
+  color: var(--typo-orange, #FF9900) !important;
+}
+
+.hover-color-white:hover {
+  color: #ffffff !important;
+}
 
 /* --- Focus / Group Focus Colors --- */
 .focus-color-blue:focus,
@@ -114,29 +287,65 @@
    5. LETTER SPACING
    ======================================== */
 
-.ls-tighter  { letter-spacing: -0.05em !important; }
-.ls-tight    { letter-spacing: -0.025em !important; }
-.ls-normal   { letter-spacing: 0em !important; }
-.ls-wide     { letter-spacing: 0.025em !important; }
-.ls-wider    { letter-spacing: 0.05em !important; }
-.ls-widest   { letter-spacing: 0.1em !important; }
+.ls-tighter {
+  letter-spacing: -0.05em !important;
+}
+
+.ls-tight {
+  letter-spacing: -0.025em !important;
+}
+
+.ls-normal {
+  letter-spacing: 0em !important;
+}
+
+.ls-wide {
+  letter-spacing: 0.025em !important;
+}
+
+.ls-wider {
+  letter-spacing: 0.05em !important;
+}
+
+.ls-widest {
+  letter-spacing: 0.1em !important;
+}
 
 /* ========================================
    6. TEXT TRANSFORM
    ======================================== */
 
-.text-upper     { text-transform: uppercase !important; }
-.text-lower     { text-transform: lowercase !important; }
-.text-capitalize { text-transform: capitalize !important; }
-.text-no-transform { text-transform: none !important; }
+.text-upper {
+  text-transform: uppercase !important;
+}
+
+.text-lower {
+  text-transform: lowercase !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+.text-no-transform {
+  text-transform: none !important;
+}
 
 /* ========================================
    7. TEXT ALIGNMENT
    ======================================== */
 
-.text-left   { text-align: left !important; }
-.text-center { text-align: center !important; }
-.text-right  { text-align: right !important; }
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
 
 /* ========================================
    8. TEXT VISIBILITY & OVERFLOW
@@ -148,20 +357,47 @@
   white-space: nowrap !important;
 }
 
-.text-wrap    { white-space: normal !important; }
-.text-nowrap  { white-space: nowrap !important; }
-.text-break   { word-break: break-word !important; overflow-wrap: break-word !important; }
-.text-hidden  { visibility: hidden !important; }
-.text-visible { visibility: visible !important; }
-.text-clip    { overflow: hidden !important; text-overflow: clip !important; }
+.text-wrap {
+  white-space: normal !important;
+}
+
+.text-nowrap {
+  white-space: nowrap !important;
+}
+
+.text-break {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.text-hidden {
+  visibility: hidden !important;
+}
+
+.text-visible {
+  visibility: visible !important;
+}
+
+.text-clip {
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
 
 /* ========================================
    9. TEXT DECORATION
    ======================================== */
 
-.text-underline    { text-decoration: underline !important; }
-.text-line-through { text-decoration: line-through !important; }
-.text-no-underline { text-decoration: none !important; }
+.text-underline {
+  text-decoration: underline !important;
+}
+
+.text-line-through {
+  text-decoration: line-through !important;
+}
+
+.text-no-underline {
+  text-decoration: none !important;
+}
 
 
 /* ========================================
@@ -171,7 +407,8 @@
 
 /* Page title */
 .typo-page-title {
-  font-size: 24px !important;
+  font-size: 1.5rem !important;
+  /* 24px */
   font-weight: 700 !important;
   line-height: 1.25 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -179,7 +416,8 @@
 
 /* Section heading */
 .typo-section-title {
-  font-size: 18px !important;
+  font-size: 1.125rem !important;
+  /* 18px */
   font-weight: 700 !important;
   line-height: 1.375 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -187,7 +425,8 @@
 
 /* Card heading */
 .typo-card-title {
-  font-size: 16px !important;
+  font-size: 1rem !important;
+  /* 16px */
   font-weight: 700 !important;
   line-height: 1.375 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -195,7 +434,8 @@
 
 /* Body text */
 .typo-body {
-  font-size: 15px !important;
+  font-size: 0.9375rem !important;
+  /* 15px */
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -203,7 +443,8 @@
 
 /* Body small */
 .typo-body-sm {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;
+  /* 14px */
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-secondary, #d1d5db) !important;
@@ -211,7 +452,8 @@
 
 /* Label / Caption */
 .typo-label {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
+  /* 13px */
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-transform: uppercase !important;
@@ -221,7 +463,8 @@
 
 /* Table header text */
 .typo-table-head {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
+  /* 13px */
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-transform: uppercase !important;
@@ -231,7 +474,8 @@
 
 /* Table cell text */
 .typo-table-cell {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;
+  /* 14px */
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -239,7 +483,8 @@
 
 /* KPI/Stat number */
 .typo-kpi {
-  font-size: 28px !important;
+  font-size: 1.75rem !important;
+  /* 28px */
   font-weight: 700 !important;
   line-height: 1 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -247,7 +492,8 @@
 
 /* Badge text */
 .typo-badge {
-  font-size: 12px !important;
+  font-size: 0.75rem !important;
+  /* 12px */
   font-weight: 700 !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
@@ -256,14 +502,16 @@
 
 /* Sidebar link text */
 .typo-sidebar {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;
+  /* 14px */
   font-weight: 500 !important;
   line-height: 1.25 !important;
 }
 
 /* Sidebar section label */
 .typo-sidebar-label {
-  font-size: 11px !important;
+  font-size: 0.6875rem !important;
+  /* 11px */
   font-weight: 700 !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
@@ -273,7 +521,8 @@
 
 /* Form label */
 .typo-form-label {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
+  /* 13px */
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-transform: uppercase !important;
@@ -283,7 +532,8 @@
 
 /* Form input text */
 .typo-form-input {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;
+  /* 14px */
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -292,14 +542,16 @@
 /* Monospace text (IDs, codes, timestamps) */
 .typo-mono {
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
+  /* 13px */
   font-weight: 700 !important;
   line-height: 1.25 !important;
 }
 
 /* Footer text */
 .typo-footer {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
+  /* 13px */
   font-weight: 500 !important;
   line-height: 1.5 !important;
   color: var(--typo-label, #9ca3af) !important;
@@ -307,7 +559,8 @@
 
 /* Status text (small colored labels) */
 .typo-status {
-  font-size: 12px !important;
+  font-size: 0.75rem !important;
+  /* 12px */
   font-weight: 800 !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
@@ -316,7 +569,8 @@
 
 /* Breadcrumb */
 .typo-breadcrumb {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
+  /* 13px */
   font-weight: 500 !important;
   line-height: 1.25 !important;
   color: var(--typo-label, #9ca3af) !important;
@@ -324,7 +578,8 @@
 
 /* Button text */
 .typo-btn {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;
+  /* 14px */
   font-weight: 700 !important;
   line-height: 1 !important;
   letter-spacing: 0.025em !important;
@@ -332,7 +587,8 @@
 
 /* Button small */
 .typo-btn-sm {
-  font-size: 12px !important;
+  font-size: 0.75rem !important;
+  /* 12px */
   font-weight: 700 !important;
   line-height: 1 !important;
   letter-spacing: 0.05em !important;
@@ -341,7 +597,8 @@
 
 /* Tooltip text */
 .typo-tooltip {
-  font-size: 12px !important;
+  font-size: 0.75rem !important;
+  /* 12px */
   font-weight: 700 !important;
   line-height: 1.25 !important;
   color: var(--typo-primary, #ffffff) !important;
