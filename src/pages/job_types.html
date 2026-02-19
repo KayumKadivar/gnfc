@@ -132,30 +132,32 @@
           </h3>
         </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse" style="table-layout: fixed;">
-                        <thead>
-                            <tr class="bg-dark-header font-10px fw-bold color-label uppercase tracking-widest text-center border-b border-dark-border">
-                                <th rowspan="2" class="border-r border-dark-border p-2 w-[45px]">Sr</th>
-                                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Area</th>
-                                <th class="border-r border-dark-border px-3 py-2 w-[120px] border-b border-dark-border/50">LoopNo</th>
-                                <th class="border-r border-dark-border px-3 py-2 w-[350px] border-b border-dark-border/50">Job</th> <!-- Wider Job Column -->
-                                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Tech</th>
-                                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px]">Description</th>
-                                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Eng</th> <!-- Changed Tech to Eng -->
-                                <th rowspan="2" class="border-r border-dark-border p-2 w-[100px]">Status</th>
-                                <th rowspan="2" class="border-r border-dark-border p-2 w-[120px]">Remarks</th>
-                                <th rowspan="2" class="p-2 w-[50px]">Add</th>
-                            </tr>
-                            <tr class="bg-dark-header font-10px fw-bold color-blue uppercase text-center border-b border-dark-border">
-                                <th class="border-r border-dark-border px-3 py-1">Tag No</th>
-                                <th class="border-r border-dark-border px-3 py-1">Type of Job</th>
-                            </tr>
-                        </thead>
-                        <tbody id="plantTableBody" class="font-12px typo-mono">
-                        </tbody>
-                    </table>
-                </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse" style="table-layout: fixed;">
+            <thead>
+              <tr
+                class="bg-dark-header font-10px fw-bold color-label uppercase tracking-widest text-center border-b border-dark-border">
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[45px]">Sr</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Area</th>
+                <th class="border-r border-dark-border px-3 py-2 w-[120px] border-b border-dark-border/50">LoopNo</th>
+                <th class="border-r border-dark-border px-3 py-2 w-[350px] border-b border-dark-border/50">Job</th>
+                <!-- Wider Job Column -->
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Tech</th>
+                <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[350px]">Description</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Eng</th> <!-- Changed Tech to Eng -->
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[100px]">Status</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-[120px]">Remarks</th>
+                <th rowspan="2" class="p-2 w-[50px]">Add</th>
+              </tr>
+              <tr class="bg-dark-header font-10px fw-bold color-blue uppercase text-center border-b border-dark-border">
+                <th class="border-r border-dark-border px-3 py-1">Tag No</th>
+                <th class="border-r border-dark-border px-3 py-1">Type of Job</th>
+              </tr>
+            </thead>
+            <tbody id="plantTableBody" class="font-12px typo-mono">
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>
@@ -264,13 +266,13 @@
                 </td>
             </tr>`;
 
-                groupedData[date].forEach(item => {
-                    const statusColor = item.status === '✓ OVER' ? 'text-emerald-500' : 'text-amber-500';
-                    const lines = item.jobType.split('\\n');
-                    const jobTitle = lines[0] || '';
-                    const jobType = lines.length > 1 ? lines[1] : '';
+        groupedData[date].forEach(item => {
+          const statusColor = item.status === '✓ OVER' ? 'text-emerald-500' : 'text-amber-500';
+          const lines = item.jobType.split('\\n');
+          const jobTitle = lines[0] || '';
+          const jobType = lines.length > 1 ? lines[1] : '';
 
-                    const row = `
+          const row = `
                 <tr class="hover:bg-dark-header/50 transition-colors border-b border-dark-border/50 group">
                     <td class="border-r border-dark-border/30 px-2 py-3 text-center typo-mono font-10px color-label">${item.sr}</td>
                     <td class="border-r border-dark-border/30 px-2 py-3 font-12px fw-bold color-blue text-center">${item.area}</td>
@@ -306,8 +308,8 @@
                         <a href="#" class="color-blue fw-bold hover:underline block">PM</a>` : ""}
                     </td>
                 </tr>`;
-                    tbody.innerHTML += row;
-                });
+          tbody.innerHTML += row;
+        });
       });
     }
 
