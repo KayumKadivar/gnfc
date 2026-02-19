@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assign Today | GNFC E-Logbook</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+</head>
+
+<body class="h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('assigntoday');</script>
+
+  <main class="flex-1 flex flex-col overflow-hidden transition-colors duration-300">
+    
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Assign Today",
+        breadcrumbs: [{ label: "Technician Log", href: "/src/pages/technician_logbook.html" }, { label: "Assign Today" }],
+        backLink: "/src/pages/technician_logbook.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <div class="dashboard-panel p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-6">
+          <div class="border-r pr-6 border-slate-200 dark:border-slate-700">
+            <span class="text-xs font-bold text-slate-400 block mb-1 uppercase">Today's Date</span>
+            <div class="flex items-center gap-2">
+              <i class="ph ph-calendar text-blue-600 text-xl"></i>
+              <span id="assign-date" class="font-mono text-lg font-bold">--/--/----</span>
+            </div>
+          </div>
+          <div class="flex gap-8">
+            <div>
+              <label>Current Plant</label>
+              <span id="plant-name" class="font-bold text-blue-700 dark:text-blue-400">BOILER</span>
+            </div>
+            <div>
+              <label>Engineer Logged</label>
+              <span id="assign-user" class="font-bold text-slate-800 dark:text-slate-200 uppercase">ENG_TESTER</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="openCJLModal()" class="btn-outline flex items-center gap-2">
+            <i class="ph ph-list-checks"></i> Current Week
+          </button>
+          <button onclick="openSEModal()" class="btn-outline flex items-center gap-2">
+            <i class="ph ph-warning-circle"></i> S/E Jobs
+          </button>
+          <button onclick="openSearchModal()" class="btn-outline flex items-center gap-2">
+            <i class="ph ph-magnifying-glass"></i> Search Tag
+          </button>
+          <button onclick="assignOPJobs()" class="btn-primary flex items-center gap-2">
+            <i class="ph-bold ph-plus-circle"></i> Assign OP Jobs
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6">
+        
+        <!-- Assignment Form -->
+        <div class="col-span-12 xl:col-span-4 space-y-6">
+          <div class="dashboard-panel bg-panel bg-white dark:bg-[#1e293b]">
+            <div class="panel-header bg-slate-50 dark:bg-[#0f172a] border-b border-slate-200 dark:border-[#334155]">
+              <i class="ph-fill ph-note-pencil text-blue-600"></i>
+              <span class="font-bold text-slate-700 dark:text-slate-200">Job Assignment Form</span>
+            </div>
+            <div class="p-5 space-y-4">
+              <div>
+                <label>Assigned To Technician</label>
+                <select id="form-assigned-to">
+                  <option value="">Select Tech</option>
+                  <option>PVS</option><option>VWM</option><option>BDR</option><option>PRP</option><option>JDB</option><option>JMD</option><option>BSU</option><option>CNJ_ISD</option><option>TECH_TESTER</option>
+                </select>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label>Type of Job</label>
+                  <select id="form-job-type">
+                    <option value="">-- Select --</option>
+                    <option>PM</option><option>DOCUMENTATION</option><option>HOUSE KEEPING</option><option>ABNORMALITY</option><option>MODIFICATION</option><option>ISO14001</option><option>OHSAS18001</option><option>SYSTEM BACKUP</option><option>REVAMP</option><option>DEFECT MAINTENANCE</option><option>CONFIGURATION</option><option>SPARE REPAIR</option><option>SCRAP</option><option>MATL RETURN</option><option>RANGE CHANGE</option><option>CARD FAILURE</option><option>INST FAILURE</option><option>INSPECTION</option><option>CASH PURCHASE</option><option>PROCESS REQMT</option><option>N.A.</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Loop Name</label>
+                  <select id="form-loop"><option>N.A.</option></select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label>Area</label>
+                  <select id="form-area">
+                    <option>N.A.</option>
+                    <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option><option>TG-1</option><option>TG-2</option><option>COMMON</option><option>CPSU-HRSG</option><option>CPSU-GT</option><option>CPSU-BOP</option><option>CPSU-BMS</option><option>CHP</option><option>ASH</option><option>NG STN</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Type of Inst</label>
+                  <select id="form-inst-type">
+                    <option value="">-- Select --</option>
+                    <option>ANALYZER</option><option>C/V</option><option>ENVIRON MONITORING</option><option>MACHINE MONITORING</option><option>PA SYSTEM</option><option>PC</option><option>PCV</option><option>ROTAMETER</option><option>SCANNER</option><option>SWITCH</option><option>PRIMARY ELEMENT</option><option>TG/PG</option><option>TX</option><option>N.A.</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label>Tag Number</label>
+                <select id="form-tag"><option>NOTAG</option></select>
+              </div>
+
+              <div>
+                <label>Job Description</label>
+                <textarea id="form-jobs-desc" rows="4" placeholder="Enter task details here..."></textarea>
+              </div>
+
+              <div class="flex gap-3 pt-2">
+                <button onclick="saveAssignment()" class="btn-primary flex-1">SAVE JOB</button>
+                <button onclick="cancelAssignment()" class="btn-outline flex-1">CLEAR FORM</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Tabbed Interface -->
+        <div class="col-span-12 xl:col-span-8 space-y-4">
+          
+          <!-- Tabs Navigation -->
+          <div class="flex border-b border-slate-200 dark:border-slate-700">
+             <button id="tab-ojr" onclick="switchTab('ojr')" class="btn-tab active flex items-center gap-2">
+                <i class="ph-bold ph-article"></i> Operation Job Register
+             </button>
+             <button id="tab-pending" onclick="switchTab('pending')" class="btn-tab flex items-center gap-2">
+                <i class="ph-bold ph-timer"></i> Weekly Pending Jobs
+             </button>
+          </div>
+
+          <!-- OJR Panel -->
+          <div id="panel-ojr" class="dashboard-panel h-[600px] flex flex-col">
+            <div class="panel-header justify-between py-2 bg-slate-50 dark:bg-[#0f172a] shrink-0">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">Operation Job Register</span>
+                <span id="ojr-count" class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-2 py-0.5 rounded-full text-xs font-bold">0 Records</span>
+              </div>
+              <select id="filter-shutdown" style="width: auto !important; padding: 4px 10px !important;">
+                <option>RUNNING</option><option>SHUTDOWN</option><option>HOLD</option>
+              </select>
+            </div>
+            
+            <div class="overflow-y-auto custom-scrollbar flex-1">
+              <table id="ojr-table" class="g-table">
+                <thead>
+                  <tr>
+                    <th class="w-12">Sr</th><th class="w-28">Date</th><th class="w-28">TagNo</th><th class="w-24">Area</th><th>Description</th><th class="w-24">Status</th><th class="w-20">ENG</th><th class="w-24">Assign</th>
+                  </tr>
+                </thead>
+                <tbody id="ojr-table-body" class="text-sm text-center"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Pending Jobs Panel -->
+          <div id="panel-pending" class="dashboard-panel h-[600px] flex-col hidden">
+            <div class="panel-header border-l-4 border-l-amber-500 py-2 bg-slate-50 dark:bg-[#0f172a] shrink-0">
+              <i class="ph-fill ph-timer text-amber-500"></i>
+              <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">Weekly Pending Jobs</span>
+              <span id="pending-count" class="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200 px-2 py-0.5 rounded-full text-xs font-bold ml-3">0 Records</span>
+            </div>
+            <div class="overflow-y-auto custom-scrollbar flex-1">
+              <table id="pending-table" class="g-table">
+                <thead>
+                  <tr>
+                    <th class="w-12">Sr</th><th class="w-28">Date</th><th class="w-28">Tag</th><th class="w-32">Job</th><th>Description</th><th class="w-24">Status</th><th class="w-20">Tech</th><th class="w-24">ReAssign</th>
+                  </tr>
+                </thead>
+                <tbody id="pending-table-body" class="text-sm text-center"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="cjl-modal" class="fixed inset-0 z-[9999] hidden">
+      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeCJLModal()"></div>
+      <div class="relative modal-content w-11/12 max-w-7xl mx-auto mt-12 flex flex-col max-h-[85vh]">
+        <div class="p-4 border-b flex justify-between items-center bg-slate-50 dark:bg-[#0f172a] rounded-t-xl border-slate-200 dark:border-[#334155]">
+          <span class="font-bold text-slate-800 dark:text-slate-100 uppercase">Current Job List (<span id="cjl-plant-name"></span>)</span>
+          <button onclick="closeCJLModal()" class="text-2xl font-bold text-slate-500 hover:text-red-600">&times;</button>
+        </div>
+        <div class="overflow-auto custom-scrollbar">
+          <table id="cjl-table" class="g-table text-xs">
+            <thead class="sticky top-0 bg-white">
+              <tr><th>Sr</th><th>Area/Tag</th><th>Description</th><th>Category</th><th>Target</th><th>Status</th><th>EngRemark</th><th>ExRemark</th></tr>
+            </thead>
+            <tbody id="cjl-table-body" class="text-center"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="search-modal" class="fixed inset-0 z-[9999] hidden">
+      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeSearchModal()"></div>
+      <div class="relative modal-content w-full max-w-2xl mx-auto mt-24 p-6 dark:bg-[#1e293b]">
+        <div class="flex justify-between mb-4 border-b dark:border-[#334155] pb-3">
+          <span class="font-bold text-blue-600">SEARCH TAG HISTORY</span>
+          <button onclick="closeSearchModal()" class="text-xl dark:text-white">&times;</button>
+        </div>
+        <div class="flex gap-3">
+          <input id="search-tag-input" type="text" class="g-input" placeholder="Type Tag Number (e.g. 101-LT)...">
+          <button onclick="searchByTag()" class="btn-primary">SEARCH</button>
+        </div>
+        <div class="mt-4 border dark:border-[#334155] rounded overflow-hidden">
+          <table class="g-table text-xs">
+            <thead><tr><th>Tag</th><th>Description</th><th>Type</th><th>Assign</th></tr></thead>
+            <tbody id="search-table-body" class="text-center">
+              <tr><td colspan="4" class="py-8 text-slate-400 italic">No search results to display</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Tab Switching Logic
+    function switchTab(tabId) {
+        // Toggle Buttons
+        document.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('active'));
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+
+        // Toggle Panels
+        document.getElementById('panel-ojr').classList.add('hidden');
+        document.getElementById('panel-ojr').classList.remove('flex');
+        
+        document.getElementById('panel-pending').classList.add('hidden');
+        document.getElementById('panel-pending').classList.remove('flex');
+
+        const activePanel = document.getElementById(`panel-${tabId}`);
+        activePanel.classList.remove('hidden');
+        activePanel.classList.add('flex');
+    }
+
+    // Initialize Page
+    (function init() {
+      const now = new Date();
+      document.getElementById('assign-date').textContent = now.toLocaleDateString('en-GB');
+      
+      const plant = new URLSearchParams(window.location.search).get('plant') || 'BOILER';
+      document.getElementById('plant-name').textContent = plant;
+      document.getElementById('cjl-plant-name').textContent = plant;
+
+      // --- Realistic Data Population ---
+      const sampleTags = ['LT-102', 'PT-301', 'TT-504', 'FT-201', 'CV-101', 'XV-405', 'AT-902', 'PI-112', 'LI-304', 'TI-506', 'FI-203', 'ZT-801'];
+      const sampleAreas = ['BOILER-1', 'BOILER-2', 'TG-1', 'COMMON', 'ASH', 'CHP'];
+      const sampleDescs = [
+        'Routine check of level sensor accuracy', 
+        'Pressure transmitter calibration due', 
+        'Temperature fluctuation observed', 
+        'Flow meter reading erratic', 
+        'Control valve stuck at 50%', 
+        'Solenoid valve coil replacement', 
+        'Analyzer showing drift', 
+        'Gauge glass cleaning', 
+        'Vibration monitoring check', 
+        'Cable tray inspection', 
+        'Junction box tightneing', 
+        'Signal drop out investigation'
+      ];
+      const statuses = ['PENDING', 'IN PROGRESS', 'HOLD', 'COMPLETED'];
+      const techs = ['PVS', 'VWM', 'BDR', 'PRP', 'JDB', 'JMD', 'BSU', 'TECH_TESTER'];
+
+      function generateRows(count) {
+          return Array.from({length: count}).map((_, i) => {
+              return {
+                  sr: i + 1,
+                  date: '19/02/2026',
+                  tag: sampleTags[Math.floor(Math.random() * sampleTags.length)],
+                  area: sampleAreas[Math.floor(Math.random() * sampleAreas.length)],
+                  desc: sampleDescs[Math.floor(Math.random() * sampleDescs.length)],
+                  status: statuses[Math.floor(Math.random() * statuses.length)],
+                  tech: techs[Math.floor(Math.random() * techs.length)],
+              };
+          });
+      }
+
+      // Populate OJR Table (15 rows)
+      const ojrData = generateRows(15);
+      document.getElementById('ojr-count').textContent = `${ojrData.length} Records`;
+      document.getElementById('ojr-table-body').innerHTML = ojrData.map(d => `
+        <tr class="transition-colors border-b dark:border-slate-700">
+          <td class="bg-slate-50 dark:bg-[#1e293b] font-mono text-slate-400 dark:text-slate-500">${d.sr}</td>
+          <td class="font-mono text-slate-600 dark:text-slate-300">${d.date}</td>
+          <td class="font-bold text-blue-600 dark:text-blue-400">${d.tag}</td>
+          <td class="text-slate-600 dark:text-slate-300">${d.area}</td>
+          <td class="text-left font-medium text-slate-700 dark:text-slate-200">${d.desc}</td>
+          <td><span class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded text-[10px] font-bold">${d.status}</span></td>
+          <td class="font-bold text-slate-700 dark:text-slate-300">${d.tech}</td>
+          <td><button class="text-blue-600 dark:text-blue-400 font-bold hover:underline">Assign</button></td>
+        </tr>
+      `).join('');
+
+      // Populate Pending Table (10 rows)
+      const pendingData = generateRows(10);
+      document.getElementById('pending-count').textContent = `${pendingData.length} Records`;
+      document.getElementById('pending-table-body').innerHTML = pendingData.map(d => `
+        <tr class="transition-colors border-b dark:border-slate-700">
+          <td class="bg-slate-50 dark:bg-[#1e293b] font-mono text-slate-400 dark:text-slate-500">${d.sr}</td>
+          <td class="font-mono text-slate-600 dark:text-slate-300">${d.date}</td>
+          <td class="font-bold text-blue-600 dark:text-blue-400">${d.tag}</td>
+          <td class="text-slate-600 dark:text-slate-300">MAINTENANCE</td>
+          <td class="text-left font-medium text-slate-700 dark:text-slate-200">${d.desc}</td>
+          <td><span class="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded text-[10px] font-bold">${d.status}</span></td>
+          <td class="font-bold text-slate-700 dark:text-slate-300">${d.tech}</td>
+          <td><button class="text-blue-600 dark:text-blue-400 font-bold hover:underline">ReAssign</button></td>
+        </tr>
+      `).join('');
+
+    })();
+
+    // Modal and Button Functions
+    function openCJLModal() { document.getElementById('cjl-modal').classList.remove('hidden'); }
+    function closeCJLModal() { document.getElementById('cjl-modal').classList.add('hidden'); }
+    function openSearchModal() { document.getElementById('search-modal').classList.remove('hidden'); }
+    function closeSearchModal() { document.getElementById('search-modal').classList.add('hidden'); }
+    
+    // Updated saveAssignment - No Alert
+    function saveAssignment() { 
+        // Logic to clear form or show a subtle notification could go here
+        console.log("Job Assigned and Recorded.");
+        // Optional: flash the button or show a small toast
+        const btn = document.querySelector('button[onclick="saveAssignment()"]');
+        const originalText = btn.textContent;
+        btn.textContent = "SAVED!";
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('bg-green-600');
+        }, 1500);
+    }
+    
+    function cancelAssignment() { if(confirm("Clear all inputs?")) location.reload(); }
+  </script>
+</body>
+</html>

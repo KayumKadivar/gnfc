@@ -78,7 +78,7 @@ function renderPlantNav(activePageId) {
 
     // ─── Style Tokens ────────────────────────────────────────────────
     const cls = {
-        pill: 'relative flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-semibold rounded-md transition-all duration-150 whitespace-nowrap select-none',
+        pill: 'relative flex items-center gap-1.5 px-2.5 py-1.5 font-13px font-semibold rounded-md transition-all duration-150 whitespace-nowrap select-none',
         active: 'bg-gnfc-blue text-white shadow-sm shadow-blue-500/25',
         inactive: 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.06]',
         separator: 'w-px h-5 bg-gray-200 dark:bg-[#2c3235] mx-1 shrink-0',

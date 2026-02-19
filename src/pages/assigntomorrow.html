@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assign Tomorrow | GNFC E-Logbook</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'assigntomorrow';</script>
+  <style>
+    #ojr-table tbody tr, #pending-table tbody tr { transition: background-color .18s ease; }
+  </style>
+</head>
+
+<body class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('assigntomorrow');</script>
+
+  <main class="theme-contrast-lock flex-1 flex flex-col overflow-hidden">
+
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Assign Tomorrow",
+        breadcrumbs: [
+          { label: "Technician Log", href: "/src/pages/technician_logbook.html" },
+          { label: "Assign Tomorrow" }
+        ],
+        backLink: "/src/pages/technician_logbook.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg space-y-4">
+
+      <!-- ═══ ACTION TOOLBAR ═══ -->
+      <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4">
+        <div class="flex flex-wrap justify-between gap-4">
+
+          <!-- Left: Info -->
+          <div class="flex items-center gap-4 w-full xl:w-auto">
+            <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border">
+              <span class="px-3 py-1 font-14px fw-bold color-orange bg-dark-panel shadow-sm rounded-[2px]">Tomorrow</span>
+            </div>
+            <span class="font-14px color-secondary">
+              <i class="ph ph-calendar-blank mr-1"></i>
+              <span id="assign-date" class="typo-mono fw-bold color-orange">--</span>
+            </span>
+            <span class="font-14px color-secondary">
+              <i class="ph ph-factory mr-1"></i>
+              <span id="plant-name" class="fw-bold color-primary">BOILER</span>
+            </span>
+            <span class="font-14px color-secondary">
+              <i class="ph ph-user mr-1"></i>
+              <span id="assign-user" class="fw-bold color-blue">ENG_TESTER</span>
+            </span>
+          </div>
+
+          <!-- Right: Tab actions -->
+          <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
+            <button onclick="switchTab(this,'current')"
+              class="tab-btn px-3 py-1.5 font-14px fw-bold color-orange bg-dark-bg shadow-sm rounded-[2px] border border-dark-border transition-all">Current Week</button>
+            <button onclick="switchTab(this,'sejobs')"
+              class="tab-btn px-3 py-1.5 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">S/E Jobs</button>
+            <button onclick="switchTab(this,'search')"
+              class="tab-btn px-3 py-1.5 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Search Tag</button>
+
+            <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+
+            <button onclick="assignOPJobs()"
+              class="items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              <i class="ph-bold ph-plus"></i> Assign OP Jobs
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ JOB ASSIGNMENT FORM ═══ -->
+      <div class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm">
+        <!-- Panel Header -->
+        <div class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-clipboard-text text-orange-500 dark:color-orange"></i>
+            <span class="font-15px fw-bold text-slate-800 dark:color-primary">Job Assignment — Tomorrow</span>
+          </div>
+        </div>
+
+        <!-- Form Body -->
+        <div class="p-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="gnfc-modal-label">Assigned To</label>
+              <select id="form-assigned-to" class="gnfc-modal-input">
+                <option value="">Select Tech</option>
+                <option>PVS</option><option>VWM</option><option>BDR</option><option>PRP</option><option>JDB</option><option>JMD</option><option>BSU</option><option>CNJ_ISD</option><option>TECH_TESTER</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Type of Job</label>
+              <select id="form-job-type" class="gnfc-modal-input">
+                <option value="">-- Select --</option>
+                <option>PM</option><option>DOCUMENTATION</option><option>HOUSE KEEPING</option><option>ABNORMALITY</option><option>MODIFICATION</option><option>ISO14001</option><option>OHSAS18001</option><option>SYSTEM BACKUP</option><option>REVAMP</option><option>DEFECT MAINTENANCE</option><option>CONFIGURATION</option><option>SPARE REPAIR</option><option>SCRAP</option><option>MATL RETURN</option><option>RANGE CHANGE</option><option>CARD FAILURE</option><option>INST FAILURE</option><option>INSPECTION</option><option>CASH PURCHASE</option><option>PROCESS REQMT</option><option>N.A.</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Loop Name</label>
+              <select id="form-loop" class="gnfc-modal-input">
+                <option>N.A.</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Area</label>
+              <select id="form-area" class="gnfc-modal-input">
+                <option>N.A.</option>
+                <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option><option>TG-1</option><option>TG-2</option><option>COMMON</option><option>CPSU-HRSG</option><option>CPSU-GT</option><option>CPSU-BOP</option><option>CPSU-BMS</option><option>CHP</option><option>ASH</option><option>NG STN</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Type of Inst</label>
+              <select id="form-inst-type" class="gnfc-modal-input">
+                <option value="">-- Select --</option>
+                <option>ANALYZER</option><option>C/V</option><option>ENVIRON MONITORING</option><option>MACHINE MONITORING</option><option>PA SYSTEM</option><option>PC</option><option>PCV</option><option>ROTAMETER</option><option>SCANNER</option><option>SWITCH</option><option>PRIMARY ELEMENT</option><option>TG/PG</option><option>TX</option><option>N.A.</option>
+              </select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Tag No</label>
+              <select id="form-tag" class="gnfc-modal-input">
+                <option>NOTAG</option>
+              </select>
+            </div>
+            <div class="md:col-span-3">
+              <label class="gnfc-modal-label">Description</label>
+              <textarea id="form-jobs-desc" rows="6" class="gnfc-modal-input" placeholder="Enter job description"></textarea>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 mt-4">
+            <button type="button" onclick="saveAssignment()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+              <i class="ph-bold ph-floppy-disk"></i> Save
+            </button>
+            <button type="button" onclick="cancelAssignment()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ OPERATION JOB REGISTER TABLE ═══ -->
+      <div class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+        <div class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-table text-blue-600 dark:color-blue"></i>
+            <span class="font-15px fw-bold text-slate-800 dark:color-primary">Operation Job Register Monthly/Pending</span>
+            <span id="ojr-count"
+              class="ml-2 font-13px bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:color-secondary typo-mono">0 Records</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="filter-shutdown"
+              class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border color-primary font-13px rounded-sm px-2 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none transition-colors">
+              <option>SHU/DOWN</option><option>SHUTDOWN</option><option>RUNNING</option><option>HOLD</option>
+            </select>
+          </div>
+        </div>
+        <div class="overflow-x-auto flex-1">
+          <table id="ojr-table" class="w-full text-left border-collapse">
+            <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header">
+              <tr class="font-13px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th rowspan="2" class="border-r border-dark-border p-2 w-12">Sr</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-24">Date</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-24">Tag No</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 w-20">Area</th>
+                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[250px]">Description</th>
+                <th colspan="2" class="border-r border-dark-border p-2 w-40 border-b">Status</th>
+                <th rowspan="2" class="p-2 w-20">Assign</th>
+              </tr>
+              <tr class="font-12px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th class="border-r border-dark-border p-1 w-20">ENG</th>
+                <th class="border-r border-dark-border p-1 w-20"></th>
+              </tr>
+            </thead>
+            <tbody id="ojr-table-body" class="font-14px"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ LOGBOOK WEEKLY PENDING JOBS ═══ -->
+      <div class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
+        <div class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-clock-countdown text-orange-500 dark:color-orange"></i>
+            <span class="font-15px fw-bold text-slate-800 dark:color-primary">Logbook Weekly Pending Jobs</span>
+            <span id="pending-count"
+              class="ml-2 font-13px bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:color-secondary typo-mono">0 Records</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto flex-1">
+          <table id="pending-table" class="w-full text-left border-collapse">
+            <thead class="bg-slate-100 hover:bg-slate-200 dark:bg-dark-header">
+              <tr class="font-13px fw-bold color-secondary text-upper ls-widest text-center border-b border-slate-200 dark:border-dark-border">
+                <th class="border-r border-dark-border p-2 w-12">Sr</th>
+                <th class="border-r border-dark-border p-2 w-24">Date</th>
+                <th class="border-r border-dark-border p-2 w-24">Tag</th>
+                <th class="border-r border-dark-border p-2 w-32">Job</th>
+                <th class="border-r border-dark-border p-2 min-w-[250px]">Description</th>
+                <th class="border-r border-dark-border p-2 w-24">Status</th>
+                <th class="border-r border-dark-border p-2 w-16">Tech</th>
+                <th class="p-2 w-20">ReAssign</th>
+              </tr>
+            </thead>
+            <tbody id="pending-table-body" class="font-14px"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ── TOMORROW's Date ──
+      const now = new Date();
+      now.setDate(now.getDate() + 1);
+      const dd = String(now.getDate()).padStart(2, '0');
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const yyyy = now.getFullYear();
+      document.getElementById('assign-date').textContent = `${dd}/${mm}/${yyyy}`;
+
+      // ── Plant ──
+      const params = new URLSearchParams(window.location.search);
+      const plant = params.get('plant') || 'BOILER';
+      document.getElementById('plant-name').textContent = plant;
+
+      // ── User ──
+      const userName = localStorage.getItem('currentUserName') || 'ENG_TESTER';
+      document.getElementById('assign-user').textContent = userName;
+
+      // ── Store data ──
+      const state = window.ElogbookStore ? ElogbookStore.loadState() : { plants: {} };
+      const plantData = (state.plants && state.plants[plant]) || {};
+      const jobs = plantData.jobs || [];
+
+      // ── Render row ──
+      function renderRow(i, job, isPending) {
+        const sClass = job.status === '✓ OVER' ? 'color-green' : job.status === 'HOLD' ? 'color-orange' : 'color-blue';
+        const bg = i % 2 === 0 ? '' : 'bg-slate-50 dark:bg-dark-bg/40';
+        return `<tr class="${bg} hover:bg-blue-50 dark:hover:bg-white/[.03] border-b border-slate-200 dark:border-dark-border">
+          <td class="p-2 text-center border-r border-slate-200 dark:border-dark-border color-secondary">${i + 1}</td>
+          <td class="p-2 text-center border-r border-slate-200 dark:border-dark-border typo-mono">${job.targetDate || '--'}</td>
+          <td class="p-2 text-center border-r border-slate-200 dark:border-dark-border fw-bold color-blue">${job.tag || 'NOTAG'}</td>
+          <td class="p-2 text-center border-r border-slate-200 dark:border-dark-border">${isPending ? (job.jobType || '--') : (job.area || '--')}</td>
+          <td class="p-2 border-r border-slate-200 dark:border-dark-border">${job.desc || job.jobType || '--'}</td>
+          <td class="p-2 text-center border-r border-slate-200 dark:border-dark-border"><span class="font-12px fw-bold ${sClass}">${job.status || 'U/P'}</span></td>
+          <td class="p-2 text-center border-r border-slate-200 dark:border-dark-border fw-bold">${job.tech || '--'}</td>
+          <td class="p-2 text-center">
+            <button onclick="${isPending ? 'reassignJob' : 'assignJob'}(${i})"
+              class="px-2 py-0.5 bg-gnfc-blue/10 hover:bg-gnfc-blue/20 color-blue font-12px fw-bold rounded-sm border border-gnfc-blue/20 transition-colors">
+              ${isPending ? 'ReAssign' : 'Assign'}
+            </button>
+          </td>
+        </tr>`;
+      }
+
+      // ── OJR ──
+      const ojrBody = document.getElementById('ojr-table-body');
+      const pendingOJR = jobs.filter(j => j.status !== '✓ OVER');
+      document.getElementById('ojr-count').textContent = pendingOJR.length + ' Records';
+      if (pendingOJR.length === 0) {
+        ojrBody.innerHTML = '<tr><td colspan="8" class="text-center py-8 color-secondary font-14px">No pending operation jobs</td></tr>';
+      } else {
+        ojrBody.innerHTML = pendingOJR.map((j, i) => renderRow(i, j, false)).join('');
+      }
+
+      // ── Pending ──
+      const pendingBody = document.getElementById('pending-table-body');
+      const weeklyPending = jobs.filter(j => j.status !== '✓ OVER' && j.status !== 'IN PROGRESS');
+      document.getElementById('pending-count').textContent = weeklyPending.length + ' Records';
+      if (weeklyPending.length === 0) {
+        pendingBody.innerHTML = '<tr><td colspan="8" class="text-center py-8 color-secondary font-14px">No weekly pending jobs</td></tr>';
+      } else {
+        pendingBody.innerHTML = weeklyPending.map((j, i) => renderRow(i, j, true)).join('');
+      }
+
+      // ── Dropdowns ──
+      const loops = [...new Set(jobs.map(j => j.loop).filter(Boolean))];
+      const loopSel = document.getElementById('form-loop');
+      loops.forEach(l => { const o = document.createElement('option'); o.value = l; o.textContent = l; loopSel.appendChild(o); });
+
+      const tags = [...new Set(jobs.map(j => j.tag).filter(Boolean))];
+      const tagSel = document.getElementById('form-tag');
+      tags.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; tagSel.appendChild(o); });
+
+      const areas = [...new Set(jobs.map(j => j.area).filter(Boolean))];
+      const areaSel = document.getElementById('form-area');
+      areas.forEach(a => {
+        if (!Array.from(areaSel.options).some(o => o.value === a)) {
+          const o = document.createElement('option'); o.value = a; o.textContent = a; areaSel.appendChild(o);
+        }
+      });
+    })();
+
+    function switchTab(el, tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('color-orange', 'bg-dark-bg', 'bg-dark-panel', 'shadow-sm');
+        b.classList.add('color-secondary');
+      });
+      el.classList.add('color-orange', 'bg-dark-bg', 'shadow-sm');
+      el.classList.remove('color-secondary');
+    }
+
+    function saveAssignment() {
+      const to = document.getElementById('form-assigned-to').value;
+      const desc = document.getElementById('form-jobs-desc').value;
+      if (!to) return alert('Please select a technician.');
+      if (!desc.trim()) return alert('Please enter a job description.');
+      alert('Job assigned for tomorrow!');
+      cancelAssignment();
+    }
+
+    function cancelAssignment() {
+      document.getElementById('form-assigned-to').value = '';
+      document.getElementById('form-jobs-desc').value = '';
+      document.getElementById('form-job-type').value = '';
+      document.getElementById('form-tag').value = 'NOTAG';
+    }
+
+    function assignOPJobs() { alert('Assign OP Jobs'); }
+    function assignJob(i) { alert('Assigning job #' + (i + 1) + ' for tomorrow'); }
+    function reassignJob(i) { alert('Reassigning job #' + (i + 1) + ' for tomorrow'); }
+  </script>
+
+</body>
+
+</html>
