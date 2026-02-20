@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -7,6 +7,7 @@
   <title>GNFC | Job History</title>
   <link rel="stylesheet" href="/src/css/modal-ui.css">
   <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
@@ -148,15 +149,26 @@
           <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
             <i class="ph-bold ph-sliders-horizontal"></i> Search Criteria
           </h3>
+
           <div class="flex gap-2">
-            <button
+            <div>
+              <button
+                class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-8 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-6"
+                onclick="openAddJobModal()">
+                Add Job
+              </button>
+            </div>
+            <button id="filter-btn-default" onclick="setDateFilter('default')"
               class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Default
               Date</button>
-            <button
+            <button id="filter-btn-prev" onclick="setDateFilter('prev')"
               class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Prev
               Year</button>
-            <button
+            <button id="filter-btn-this" onclick="setDateFilter('this')"
               class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">This
+              Year</button>
+            <button id="filter-btn-next" onclick="setDateFilter('next')"
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Next
               Year</button>
           </div>
         </div>
@@ -192,12 +204,9 @@
           <div class="space-y-1">
             <label class="font-12px fw-bold color-label text-upper">Type of Job</label>
             <div class="relative">
-              <select
+              <select id="filter-jobtype"
                 class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
-                <option>ALL</option>
-                <option>CMS JOB</option>
-                <option>PM JOB</option>
-                <option>BREAKDOWN</option>
+                <option value="">ALL</option>
               </select>
               <i
                 class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
@@ -207,12 +216,9 @@
           <div class="space-y-1">
             <label class="font-12px fw-bold color-label text-upper">Instrument Type</label>
             <div class="relative">
-              <select
+              <select id="filter-insttype"
                 class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
-                <option>ALL</option>
-                <option>C/V (Control Valve)</option>
-                <option>PT (Pressure Tx)</option>
-                <option>FT (Flow Tx)</option>
+                <option value="">ALL</option>
               </select>
               <i
                 class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
@@ -221,13 +227,13 @@
 
           <div class="space-y-1">
             <label class="font-12px fw-bold color-label text-upper">Start Date</label>
-            <input type="date" value="2025-02-09"
+            <input type="date" id="filter-start-date" value="2025-02-09"
               class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
           </div>
 
           <div class="space-y-1">
             <label class="font-12px fw-bold color-label text-upper">End Date</label>
-            <input type="date" value="2026-02-09"
+            <input type="date" id="filter-end-date" value="2026-02-09"
               class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
           </div>
 
@@ -263,42 +269,32 @@
           <h3 class="font-13px fw-bold text-upper ls-wider flex items-center gap-2">
             <i class="ph-fill ph-table color-orange"></i> Job Records
           </h3>
-          <span class="font-12px bg-dark-bg border border-dark-border px-2 py-0.5 rounded color-label typo-mono"
+          <span class="font-12px bg-dark-bg border border-dark-border px-2 py-0.5 rounded color-label "
             id="recordCount">0 Records Found</span>
         </div>
 
-        <div class="overflow-auto flex-1 relative">
-          <table class="w-full text-left border-collapse">
-            <thead class="bg-dark-header z-10">
-              <tr
-                class="font-12px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
-                <th rowspan="2"
-                  class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-12 sticky left-0 z-20 shadow-[1px_0_0_0_#334155]">
-                  Sr</th>
-                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-16">Area</th>
-                <th class="bg-dark-header border-r border-dark-border px-3 py-2 w-32 border-b border-dark-border/50 ">
-                  Loop</th>
-                <th
-                  class="bg-dark-header border-r border-dark-border px-3 py-2 min-w-[120px] border-b border-dark-border/50 ">
-                  Inst Type</th>
-                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-3 py-3 w-28">Date</th>
-                <th rowspan="2"
-                  class="bg-dark-header border-r border-dark-border border-b px-4 py-3 min-w-[400px] text-left">
-                  Description of Job</th>
-                <th class="bg-dark-header border-r border-dark-border px-2 py-2 w-20 border-b border-dark-border/50 ">
-                  Tech</th>
-                <th rowspan="2" class="bg-dark-header border-r border-dark-border border-b px-2 py-3 w-12">Attch</th>
-                <th rowspan="1" class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Eng Remark
-                </th>
+        <div class="gnfc-table-container overflow-auto flex-1 relative">
+          <table class="gnfc-table">
+            <thead class="gnfc-thead z-10">
+              <tr>
+                <th rowspan="2" class="gnfc-th w-12 sticky left-0 z-20 shadow-[1px_0_0_0_#e5e7eb]">Sr</th>
+                <th rowspan="2" class="gnfc-th w-16 border-r border-gray-300">Area</th>
+                <th class="gnfc-th w-32 border-b border-gray-300 border-r border-gray-300">Loop</th>
+                <th class="gnfc-th min-w-[120px] border-b border-gray-300 border-r border-gray-300">Inst Type</th>
+                <th rowspan="2" class="gnfc-th w-28 border-r border-gray-300">Date</th>
+                <th rowspan="2" class="gnfc-th min-w-[400px] text-left border-r border-gray-300">Description of Job</th>
+                <th class="gnfc-th w-20 border-b border-gray-300 border-r border-gray-300">Tech</th>
+                <th rowspan="2" class="gnfc-th w-12 border-r border-gray-300">Attch</th>
+                <th rowspan="1" class="gnfc-th min-w-[200px] border-b border-gray-300">Eng Remark</th>
               </tr>
-              <tr class="font-12px color-blue text-upper text-center border-b border-dark-border">
-                <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Tag</th>
-                <th class="bg-dark-header border-r border-dark-border border-b px-3 py-1">Job Type</th>
-                <th class="bg-dark-header border-r border-dark-border border-b px-2 py-1">Eng</th>
-                <th class="bg-dark-header border-b border-dark-border px-4 py-3 min-w-[200px]">Exec Remark</th>
+              <tr>
+                <th class="gnfc-th border-r border-gray-300 px-3 py-1">Tag</th>
+                <th class="gnfc-th border-r border-gray-300 px-3 py-1">Job Type</th>
+                <th class="gnfc-th border-r border-gray-300 px-2 py-1">Eng</th>
+                <th class="gnfc-th min-w-[200px]">Exec Remark</th>
               </tr>
             </thead>
-            <tbody id="jobTableBody" class="font-13px typo-mono">
+            <tbody id="jobTableBody" class="gnfc-tbody">
             </tbody>
           </table>
         </div>
@@ -317,7 +313,7 @@
       </div>
 
       <div class="gnfc-modal-body" style="overflow-y:auto;">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label class="gnfc-modal-label">Area</label>
             <select id="modal-area" class="gnfc-modal-input">
@@ -326,6 +322,12 @@
               <option>300</option>
               <option>600</option>
               <option>700</option>
+            </select>
+          </div>
+          <div>
+            <label class="gnfc-modal-label">Type of Inst</label>
+            <select id="modal-insttype" class="gnfc-modal-input">
+              <!-- Populated via JS -->
             </select>
           </div>
           <div>
@@ -340,7 +342,7 @@
 
         <div class="mt-4">
           <label class="gnfc-modal-label">Description of Job</label>
-          <textarea id="modal-description" rows="5" class="gnfc-modal-input typo-mono leading-relaxed"></textarea>
+          <textarea id="modal-description" rows="5" class="gnfc-modal-input  leading-relaxed"></textarea>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
@@ -355,9 +357,7 @@
           <div>
             <label class="gnfc-modal-label">Type of Job</label>
             <select id="modal-jobtype" class="gnfc-modal-input">
-              <option>CMS JOB</option>
-              <option>PM JOB</option>
-              <option>BREAKDOWN</option>
+              <!-- Populated via JS -->
             </select>
           </div>
           <div>
@@ -370,19 +370,48 @@
           </div>
         </div>
 
-        <div class="bg-dark-bg border border-dark-border p-3 rounded-sm mt-4">
-          <label class="gnfc-modal-label" style="margin-bottom:0.5rem;">Attachments</label>
-          <div class="flex gap-4">
-            <label class="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" id="modal-attach-1"
-                class="accent-gnfc-blue bg-dark-bg border-dark-border w-4 h-4 rounded-sm">
-              <span class="font-13px color-primary">Report.pdf</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" id="modal-attach-2"
-                class="accent-gnfc-blue bg-dark-bg border-dark-border w-4 h-4 rounded-sm">
-              <span class="font-13px color-primary">Image_001.jpg</span>
-            </label>
+        <div class="mt-4">
+          <label class="gnfc-modal-label mb-1">Attachments</label>
+          <div class="grid grid-cols-2 gap-3">
+            <!-- Attach 1 -->
+            <div>
+                <div id="attach-card-1" onclick="openAttachmentModal(1)" class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
+                    <div class="flex items-center gap-2.5 overflow-hidden">
+                        <div class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                            <i class="ph-fill ph-file-text text-lg"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 1</span>
+                            <span id="display-attach-1" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+                </div>
+                <div id="attach-msg-1" class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
+                     <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 1</span>
+                     <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
+                </div>
+            </div>
+
+            <!-- Attach 2 -->
+             <div>
+                <div id="attach-card-2" onclick="openAttachmentModal(2)" class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
+                    <div class="flex items-center gap-2.5 overflow-hidden">
+                         <div class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                            <i class="ph-fill ph-file-text text-lg"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 2</span>
+                            <span id="display-attach-2" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
+                        </div>
+                    </div>
+                    <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+                </div>
+                <div id="attach-msg-2" class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
+                     <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 2</span>
+                     <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
+                </div>
+            </div>
           </div>
         </div>
 
@@ -399,28 +428,81 @@
       </div>
 
       <div class="gnfc-modal-footer gnfc-modal-footer--space-between">
-        <button onclick="deleteJob()" class="gnfc-modal-btn gnfc-modal-btn-danger">Delete Entry</button>
-        <div class="flex gap-3">
+        <button id="modal-delete-btn" onclick="deleteJob()" class="gnfc-modal-btn gnfc-modal-btn-danger">Delete Entry</button>
+        <div class="flex gap-3 ml-auto">
           <button onclick="closeJobDetailModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
-          <button onclick="saveJobDetails()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
+          <button id="modal-save-btn" onclick="saveJobDetails()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Attachment Upload Modal -->
+  <div id="attachment-modal" class="gnfc-modal-overlay" aria-hidden="true" style="z-index: 140;">
+      <div class="gnfc-modal-shell gnfc-modal-shell--narrow">
+          <!-- Header -->
+          <div class="gnfc-modal-header">
+              <div>
+                  <h3 class="gnfc-modal-title">Upload Attachment</h3>
+                  <p class="gnfc-modal-subtitle font-12px">Add supporting documents</p>
+              </div>
+              <button onclick="closeAttachmentModal()" class="gnfc-modal-close">
+                  <i class="ph-bold ph-x"></i>
+              </button>
+          </div>
+
+          <!-- Body -->
+          <div class="gnfc-modal-body">
+              <!-- Upload Zone -->
+              <div class="relative group">
+                  <input type="file" id="upload-file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileSelect(this)">
+                  <div id="upload-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50/50 group-hover:border-blue-400 transition-all duration-200">
+                      <div class="bg-white p-2 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform duration-200">
+                          <i class="ph-duotone ph-cloud-arrow-up text-xl text-blue-500"></i>
+                      </div>
+                      <p class="font-12px font-semibold text-gray-700 mb-1">Click to upload or drag and drop</p>
+                      <p class="font-11px">Upload pdf file (max. 10MB)</p>
+                  </div>
+              </div>
+
+              <!-- Selected File Display (Hidden initially) -->
+              <div id="file-preview" class="hidden bg-blue-50 border border-blue-100 rounded-lg p-3 items-center justify-between">
+                  <div class="flex items-center gap-3 overflow-hidden">
+                      <div class="bg-white p-2 rounded text-blue-600">
+                          <i class="ph-fill ph-file-text text-xl"></i>
+                      </div>
+                      <div class="flex flex-col min-w-0">
+                          <span id="preview-filename" class="font-12px font-semibold text-gray-800 truncate">filename.pdf</span>
+                          <span id="preview-filesize" class="font-11px text-gray-500">0 KB</span>
+                      </div>
+                  </div>
+                  <button onclick="clearFileSelection()" class="text-gray-400 hover:text-red-500 transition-colors p-1">
+                      <i class="ph-bold ph-trash"></i>
+                  </button>
+              </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="gnfc-modal-footer">
+              <button onclick="closeAttachmentModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+              <button onclick="saveAttachment()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save File</button>
+          </div>
+      </div>
+  </div>
+
   <script>
     // Sample Data Mocking
     const jobData = [
-      { sr: 1, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '2026-01-13', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 2, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '2026-01-09', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 3, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-12-13', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 4, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-12-13', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: Wrong entry. ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 5, area: '300', loop: '0301', tag: 'FV301A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-15', desc: 'Defect: DROPPED FOR HEAVY VIBRATION IN VALVE. PLUG+STEM IS BROKEN. NEW STEM TO BE MFG. PLUG TO BE REPAIRED.\nJob Done: Valve was sent to Micron due to heavy vibration and plug broken issues. After dismantling and inspection, it was found that the body, bonnet were damaged and required repairs. Machining of the bonnet (including welding) was carried out. Plug, stem and metal seat ring were found damaged and replaced.', tech: '', eng: 'MAJ', attach: true, remark: 'URGENT REQUIREMENT' },
-      { sr: 6, area: '300', loop: '3101', tag: 'FV3101A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-15', desc: 'Defect: C/V Passing and jerky operation.\nJob Done: *Late job entry* Valve sent to Micron due to passing and jerking. Metal seat ring and Soft seat provided by micron (PTFE) replaced in control valve. valve was tested and found ok.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 7, area: '600', loop: '0606', tag: 'FV606', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: FV606 act dropped for overhauling.\nJob Done: Actuator was sent to Micron due to a passing issue. After dismantling and inspecting the valve, Replaced seal kit (By micron), rework of stem, actuator casing bolt SS M6 size 18 nos., Rework of body by Drilling, tapping.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 8, area: '700', loop: '0710', tag: 'HV710', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: Control valve Passing 1X2500\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, stem, plug and metal seat ring were damaged and required repair. Machining carried out.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 9, area: '700', loop: '7508', tag: 'HV7508', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: Control valve passing 2X600\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, plug and metal seat ring were damaged and required repair.', tech: '', eng: 'MAJ', attach: false, remark: '' },
-      { sr: 10, area: '200', loop: '0203', tag: 'FV0203BA', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: C/V having noise below 70% MV.\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that plug was damaged and required repair. Machining of the plug along with lapping work (for the plug only), was carried out. Also Bottom bushing and new key were replaced.', tech: '', eng: 'MAJ', attach: false, remark: '' }
+      { sr: 1, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '2026-01-13', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 2, area: '400', loop: '0208', tag: 'FV0208B', instType: 'C/V', jobType: 'CMS JOB', date: '2026-01-09', desc: 'Defect: C/V is not closing during pressurized (in line condition).\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 3, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-12-13', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 4, area: '200', loop: '0216', tag: 'FV0216A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-12-13', desc: 'Defect: LV0203AA control sent to micron for its body to be used in FV0216A.\nJob Done: Wrong entry. ignore this entry. (CMS Incharge: MAJ)', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 5, area: '300', loop: '0301', tag: 'FV301A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-15', desc: 'Defect: DROPPED FOR HEAVY VIBRATION IN VALVE. PLUG+STEM IS BROKEN. NEW STEM TO BE MFG. PLUG TO BE REPAIRED.\nJob Done: Valve was sent to Micron due to heavy vibration and plug broken issues. After dismantling and inspection, it was found that the body, bonnet were damaged and required repairs. Machining of the bonnet (including welding) was carried out. Plug, stem and metal seat ring were found damaged and replaced.', tech: '', eng: 'MAJ', attach: true, remark: 'URGENT REQUIREMENT', execRemark: '' },
+      { sr: 6, area: '300', loop: '3101', tag: 'FV3101A', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-15', desc: 'Defect: C/V Passing and jerky operation.\nJob Done: *Late job entry* Valve sent to Micron due to passing and jerking. Metal seat ring and Soft seat provided by micron (PTFE) replaced in control valve. valve was tested and found ok.', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 7, area: '600', loop: '0606', tag: 'FV606', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: FV606 act dropped for overhauling.\nJob Done: Actuator was sent to Micron due to a passing issue. After dismantling and inspecting the valve, Replaced seal kit (By micron), rework of stem, actuator casing bolt SS M6 size 18 nos., Rework of body by Drilling, tapping.', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 8, area: '700', loop: '0710', tag: 'HV710', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: Control valve Passing 1X2500\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, stem, plug and metal seat ring were damaged and required repair. Machining carried out.', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 9, area: '700', loop: '7508', tag: 'HV7508', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: Control valve passing 2X600\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that body, bonnet, plug and metal seat ring were damaged and required repair.', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' },
+      { sr: 10, area: '200', loop: '0203', tag: 'FV0203BA', instType: 'C/V', jobType: 'CMS JOB', date: '2025-11-13', desc: 'Defect: C/V having noise below 70% MV.\nJob Done: Valve was sent to Micron due to a passing issue in the control valve. After dismantling and inspecting the valve, it was found that plug was damaged and required repair. Machining of the plug along with lapping work (for the plug only), was carried out. Also Bottom bushing and new key were replaced.', tech: '', eng: 'MAJ', attach: false, remark: '', execRemark: '' }
     ];
 
     // Load exported history from localStorage
@@ -439,7 +521,7 @@
           tech: record.tech || '',
           eng: record.eng || '',
           attach: false,
-          remark: `<span class="font-12px px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">${record.type === 'system' ? 'System' : 'General'} Export</span>`,
+          remark: `<span class="font-12px px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">${record.type === 'system' ? 'System' : 'General'} </span>`,
           isExported: true
         });
       });
@@ -457,6 +539,137 @@
       tagSelect.appendChild(option);
     });
 
+    // --- Dynamic Dropdown Population ---
+
+    // Data from job_types.html
+    const JOB_TYPES = [
+      "PM", "DOCUMENTATION", "HOUSE KEEPING", "ABNORMALITY", "MODIFICATION",
+      "ISO14001", "FIELD JOB", "REVAMP", "DEFECT MAINTENANCE", "CONFIGURATION",
+      "SPARE REPAIR", "SCRAP", "MATL RETURN", "RANGE CHANGE", "CARD FAILURE",
+      "INST FAILURE", "INSPECTION", "CASH PURCHASE", "PROCESS REQMT", "N.A."
+    ];
+
+    // Data from instrument_types.html
+    const INST_TYPES = [
+      "ANALYZER", "C/V", "TX", "SWITCH", "PRIMARY ELEMENT",
+      "SCANNER", "PCV", "ROTAMETER", "ENVIRON MONITORING",
+      "MACHINE MONITORING", "PA SYSTEM", "PC", "N.A."
+    ];
+
+    function populateDropdowns() {
+      // 1. Filter: Type of Job
+      const filterJobType = document.getElementById('filter-jobtype');
+      if (filterJobType) {
+        filterJobType.innerHTML = '<option value="">ALL</option>';
+        JOB_TYPES.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = type;
+          filterJobType.appendChild(option);
+        });
+      }
+
+      // 2. Filter: Instrument Type
+      const filterInstType = document.getElementById('filter-insttype');
+      if (filterInstType) {
+        filterInstType.innerHTML = '<option value="">ALL</option>';
+        INST_TYPES.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = type;
+          filterInstType.appendChild(option);
+        });
+      }
+
+      // 3. Modal: Type of Job
+      const modalJobType = document.getElementById('modal-jobtype');
+      if (modalJobType) {
+        modalJobType.innerHTML = ''; // Clear existing
+        JOB_TYPES.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = type;
+          modalJobType.appendChild(option);
+        });
+      }
+
+      // 4. Modal: Type of Inst
+      const modalInstType = document.getElementById('modal-insttype');
+      if (modalInstType) {
+        modalInstType.innerHTML = ''; // Clear existing
+        INST_TYPES.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          option.textContent = type;
+          modalInstType.appendChild(option);
+        });
+      }
+    }
+
+    // Call population function
+    populateDropdowns();
+
+    // --- Date Filter Logic ---
+    function setDateFilter(type) {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      let startDate, endDate;
+
+      // Helper to format YYYY-MM-DD for input[type="date"]
+      const formatDateInput = (date) => {
+        const d = String(date.getDate()).padStart(2, '0');
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const y = date.getFullYear();
+        return `${y}-${m}-${d}`;
+      };
+
+      switch (type) {
+        case 'default':
+          // Default: Today - 1 Year to Today (Standard practice)
+          endDate = new Date();
+          startDate = new Date();
+          startDate.setFullYear(startDate.getFullYear() - 1);
+          break;
+        case 'prev':
+          // Previous Year: Jan 1 to Dec 31
+          startDate = new Date(currentYear - 1, 0, 1);
+          endDate = new Date(currentYear - 1, 11, 31);
+          break;
+        case 'this':
+          // This Year: Jan 1 to Dec 31
+          startDate = new Date(currentYear, 0, 1);
+          endDate = new Date(currentYear, 11, 31);
+          break;
+        case 'next':
+          // Next Year: Jan 1 to Dec 31
+          startDate = new Date(currentYear + 1, 0, 1);
+          endDate = new Date(currentYear + 1, 11, 31);
+          break;
+      }
+
+      // Update Inputs
+      if (startDate && endDate) {
+        document.getElementById('filter-start-date').value = formatDateInput(startDate);
+        document.getElementById('filter-end-date').value = formatDateInput(endDate);
+      }
+
+      // Update Button Styles (Active State)
+      const buttons = ['default', 'prev', 'this', 'next'];
+      buttons.forEach(btnType => {
+        const btn = document.getElementById(`filter-btn-${btnType}`);
+        if (btnType === type) {
+          // Active Style: Blue Border + Blue Text (or similar indication)
+          btn.classList.add('border-gnfc-blue', 'color-blue', 'bg-blue-500/10');
+          btn.classList.remove('border-dark-border', 'color-secondary', 'bg-dark-bg');
+        } else {
+          // Inactive Style: Reset
+          btn.classList.remove('border-gnfc-blue', 'color-blue', 'bg-blue-500/10');
+          btn.classList.add('border-dark-border', 'color-secondary', 'bg-dark-bg');
+        }
+      });
+    }
+
+
     // Helper to format date for display (DD/MM/YYYY)
     function formatDateDisplay(isoDate) {
       if (!isoDate) return '';
@@ -469,6 +682,7 @@
 
     let dataTable;
     var currentJobId = null;
+    var currentUploadSlot = null; // 1 or 2
 
     // Render Table
     function renderTable() {
@@ -487,37 +701,42 @@
 
       jobData.forEach(item => {
         const row = `
-            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group align-top ${item.isExported ? 'bg-emerald-500/5' : ''}">
-                <td class="border-r border-dark-border px-2 py-3 text-center color-blue typo-mono fw-bold cursor-pointer hover:underline hover-color-blue transition-colors bg-dark-panel shadow-[1px_0_0_0_#334155]" onclick="openJobDetailModal(${item.sr})">${item.sr}</td>
-                <td class="border-r border-dark-border px-2 py-3 text-center fw-bold ">${item.area}</td>
+            <tr class="gnfc-tr group align-top ${item.isExported ? 'bg-green-50' : ''}">
+                <td class="gnfc-td text-center text-blue-600  fw-bold cursor-pointer hover:underline border-r border-gray-300 sticky left-0 z-10 bg-white group-hover:bg-gray-50 shadow-[1px_0_0_0_#e5e7eb]" onclick="openJobDetailModal(${item.sr})">${item.sr}</td>
+                <td class="gnfc-td text-center fw-bold border-r border-gray-300 text-black">${item.area}</td>
 
-                <td class="border-r border-dark-border px-3 py-3">
-                    <div class="font-13px color-label">${item.loop}</div>
-                    <div class="font-13px fw-bold color-blue mt-1">${item.tag}</div>
+                <td class="gnfc-td border-r border-gray-300">
+                    <div class="font-13px">${item.loop}</div>
+                    <div class="border-b border-gray-300 mt-1"></div>
+                    <div class="font-13px fw-bold text-blue-600 mt-1">${item.tag}</div>
                 </td>
 
-                <td class="border-r border-dark-border px-3 py-3">
-                    <div class="font-13px fw-bold">${item.instType}</div>
-                    <div class="font-12px color-orange mt-1 typo-mono">${item.jobType}</div>
+                <td class="gnfc-td border-r border-gray-300">
+                    <div class="font-14px fw-bold text-black">${item.instType}</div>
+                    <div class="border-b border-gray-300 mt-1"></div>
+                    <div class="font-14px text-orange-600 mt-1 ">${item.jobType}</div>
                 </td>
 
-                <td class="border-r border-dark-border px-3 py-3 typo-mono color-label whitespace-nowrap">${formatDateDisplay(item.date)}</td>
+                <td class="gnfc-td  whitespace-nowrap border-r border-gray-300">${formatDateDisplay(item.date)}</td>
 
-                <td class="border-r border-dark-border px-4 py-3 font-13px color-primary leading-relaxed cursor-pointer " onclick="openJobDetailModal(${item.sr})">
+                <td class="gnfc-td text-black leading-relaxed cursor-pointer border-r border-gray-300" onclick="openJobDetailModal(${item.sr})">
                     ${item.desc.replace(/\n/g, '<br>')}
                 </td>
 
-                <td class="border-r border-dark-border px-2 py-3">
-                    <div class="font-12px color-label text-center">${item.tech || '-'}</div>
-                    <div class="font-13px fw-bold  text-center mt-1">${item.eng}</div>
+                <td class="gnfc-td border-r border-gray-300">
+                    <div class="font-14px  text-center">${item.tech || '-'}</div>
+                    <div class="border-b border-gray-300 mt-1"></div>
+                    <div class="font-14px fw-bold text-black text-center mt-1">${item.eng}</div>
                 </td>
 
-                <td class="border-r border-dark-border px-2 py-3 text-center">
-                    ${item.attach ? '<i class="ph-bold ph-paperclip color-blue cursor-pointer"></i>' : '<span class="color-label opacity-30">-</span>'}
+                <td class="gnfc-td text-center border-r border-gray-300">
+                    ${item.attach ? '<i class="ph-bold ph-paperclip text-blue-600 cursor-pointer"></i>' : '<span class="opacity-30">-</span>'}
                 </td>
 
-                <td class="px-4 py-3 font-13px color-red italic">
-                    ${item.remark}
+                <td class="gnfc-td border-r border-gray-300">
+                    <div class="font-14px text-red-600 italic leading-snug">${item.remark || '-'}</div>
+                    <div class="border-b border-gray-300 mt-1 mb-1"></div>
+                    <div class="font-14px text-blue-600 leading-snug">${item.execRemark || '-'}</div>
                 </td>
             </tr>`;
         tbody.innerHTML += row;
@@ -544,6 +763,45 @@
     renderTable();
 
 
+    function openAddJobModal() {
+      currentJobId = null; // Reset for new entry
+
+      // Clear form fields
+      document.getElementById('modal-area').value = '400'; // Default
+      document.getElementById('modal-loop').value = '';
+      document.getElementById('modal-tag').value = '';
+      document.getElementById('modal-insttype').value = 'C/V'; // Default
+      document.getElementById('modal-description').value = '';
+      document.getElementById('modal-date').value = new Date().toISOString().split('T')[0]; // Today
+      document.getElementById('modal-tech').value = '';
+      document.getElementById('modal-jobtype').value = 'PM'; // Default
+      document.getElementById('modal-eng').value = 'MAJ'; // Default
+      
+      // Clear Remarks
+      document.getElementById('modal-eng-remark').value = '';
+      document.getElementById('modal-exec-remark').value = '';
+      
+       // Reset Attachments
+      document.getElementById('display-attach-1').textContent = '-';
+      document.getElementById('display-attach-2').textContent = '-';
+      
+      // UI Changes for "Add" mode
+      document.querySelector('.gnfc-modal-title').textContent = "Add New Job";
+      document.getElementById('modal-delete-btn').style.display = 'none';
+      document.getElementById('modal-save-btn').textContent = "Add Job";
+
+      // Attachment Logic: Show Message, Hide interactive part
+      document.getElementById('attach-card-1').classList.add('hidden');
+      document.getElementById('attach-msg-1').classList.remove('hidden');
+      document.getElementById('attach-card-2').classList.add('hidden');
+      document.getElementById('attach-msg-2').classList.remove('hidden');
+
+      // Open modal
+      const overlay = document.getElementById('job-detail-overlay');
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+
     function openJobDetailModal(srNumber) {
       const job = jobData.find(j => j.sr === srNumber);
       if (!job) return;
@@ -554,19 +812,37 @@
       document.getElementById('modal-area').value = job.area;
       document.getElementById('modal-loop').value = job.loop;
       document.getElementById('modal-tag').value = job.tag;
+      document.getElementById('modal-insttype').value = job.instType || 'C/V';
       document.getElementById('modal-description').value = job.desc;
       document.getElementById('modal-date').value = job.date; // Expects YYYY-MM-DD
       document.getElementById('modal-tech').value = job.tech || '';
       document.getElementById('modal-jobtype').value = job.jobType;
       document.getElementById('modal-eng').value = job.eng;
 
-      // Set attachments (mock logic)
-      document.getElementById('modal-attach-1').checked = job.attach;
-      document.getElementById('modal-attach-2').checked = false;
+      // Set attachments (mock logic display)
+      // For now, if 'attach' is true in data, show a dummy name for Attach1, else '-'
+      if (job.attach) {
+          document.getElementById('display-attach-1').textContent = 'Report.pdf'; 
+      } else {
+           document.getElementById('display-attach-1').textContent = '-';
+      }
+       document.getElementById('display-attach-2').textContent = '-'; // Default logic for now
+
 
       // Set remarks
       document.getElementById('modal-eng-remark').value = job.remark || '';
-      document.getElementById('modal-exec-remark').value = '';
+      document.getElementById('modal-exec-remark').value = job.execRemark || '';
+       
+        // Reset Attachments for "Edit" mode
+      document.querySelector('.gnfc-modal-title').textContent = "Job History Detail";
+      document.getElementById('modal-delete-btn').style.display = 'block';
+      document.getElementById('modal-save-btn').textContent = "Save Changes";
+
+       // Attachment Logic: Hide Message, Show interactive part
+      document.getElementById('attach-card-1').classList.remove('hidden');
+      document.getElementById('attach-msg-1').classList.add('hidden');
+      document.getElementById('attach-card-2').classList.remove('hidden');
+      document.getElementById('attach-msg-2').classList.add('hidden');
 
       // Open modal
       const overlay = document.getElementById('job-detail-overlay');
@@ -582,21 +858,89 @@
     }
 
     function saveJobDetails() {
+      const area = document.getElementById('modal-area').value;
+      const loop = document.getElementById('modal-loop').value;
+      const tag = document.getElementById('modal-tag').value;
+      const instType = document.getElementById('modal-insttype').value;
+      const desc = document.getElementById('modal-description').value;
+      const date = document.getElementById('modal-date').value;
+      const tech = document.getElementById('modal-tech').value;
+      const jobType = document.getElementById('modal-jobtype').value;
+      const eng = document.getElementById('modal-eng').value;
+      const remark = document.getElementById('modal-eng-remark').value;
+      const execRemark = document.getElementById('modal-exec-remark').value;
+      // Simple check: if Attach1 has text other than '-', consider it attached
+      const isAttached = document.getElementById('display-attach-1').textContent !== '-';
+
       if (currentJobId !== null) {
-        // Update local mock data
+        // Edit existing
         const idx = jobData.findIndex(j => j.sr === currentJobId);
         if (idx > -1) {
-          jobData[idx].desc = document.getElementById('modal-description').value;
-          jobData[idx].remark = document.getElementById('modal-eng-remark').value;
-          jobData[idx].tag = document.getElementById('modal-tag').value;
-          renderTable();
+          jobData[idx].area = area;
+          jobData[idx].loop = loop;
+          jobData[idx].tag = tag;
+          jobData[idx].instType = instType;
+          jobData[idx].desc = desc;
+          jobData[idx].date = date;
+          jobData[idx].tech = tech;
+          jobData[idx].jobType = jobType;
+          jobData[idx].eng = eng;
+          jobData[idx].remark = remark;
+          jobData[idx].execRemark = execRemark;
+          jobData[idx].attach = isAttached;
+          
+          closeJobDetailModal(); // Close first
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Updated!',
+            text: 'Job details have been updated.',
+            timer: 1500,
+            showConfirmButton: false, 
+            width: 300,
+            padding: "1em",
+            customClass: { popup: "font-12px" }
+          });
         }
+      } else {
+        // Add new
+        const newSr = jobData.length > 0 ? Math.max(...jobData.map(j => j.sr)) + 1 : 1;
+        const newJob = {
+          sr: newSr,
+          area: area,
+          loop: loop,
+          tag: tag,
+          instType: instType,
+          jobType: jobType,
+          date: date,
+          desc: desc, // Note: using 'desc' to match data structure, not 'description'
+          tech: tech,
+          eng: eng,
+          attach: isAttached,
+          remark: remark,
+          execRemark: execRemark
+        };
+        jobData.push(newJob);
+        
+        closeJobDetailModal(); // Close first
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Added!',
+            text: 'New job has been added.',
+            timer: 1500,
+            showConfirmButton: false,
+            width: 400,
+            padding: "1em",
+            customClass: { popup: "font-12px" }
+          });
       }
-      closeJobDetailModal();
+      
+      renderTable();
     }
 
-    function deleteJob() {
-      Swal.fire({
+    async function deleteJob() {
+      const result = await Swal.fire({
         title: "Are you sure?",
         text: "Do you want to delete this job entry?",
         icon: "warning",
@@ -611,26 +955,27 @@
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const idx = jobData.findIndex(j => j.sr === currentJobId);
-          if (idx > -1) {
-            jobData.splice(idx, 1);
-            renderTable();
-            Swal.fire({
-              title: "Deleted!",
-              text: "The job entry has been deleted.",
-              icon: "success",
-              width: 400,
-              padding: "1em",
-              customClass: {
-                title: "font-18px",
-                htmlContainer: "font-14px",
-                popup: "font-12px"
-              }
-            });
-          }
-          closeJobDetailModal();
+      });
+
+      if (!result.isConfirmed) return;
+
+      const idx = jobData.findIndex(j => j.sr === currentJobId);
+      if (idx === -1) return;
+
+      jobData.splice(idx, 1);
+      closeJobDetailModal();
+      renderTable();
+
+      Swal.fire({
+        title: "Deleted!",
+        text: "The job entry has been deleted.",
+        icon: "success",
+        width: 400,
+        padding: "1em",
+        customClass: {
+          title: "font-18px",
+          htmlContainer: "font-14px",
+          popup: "font-12px"
         }
       });
     }
@@ -645,6 +990,84 @@
           }
         });
       }
+    });
+
+    // Attachment Modal Logic
+    function openAttachmentModal(slot) {
+        currentUploadSlot = slot;
+        clearFileSelection(); // Reset state
+        
+        const modal = document.getElementById('attachment-modal');
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeAttachmentModal() {
+        const modal = document.getElementById('attachment-modal');
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        currentUploadSlot = null;
+    }
+
+    function handleFileSelect(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            
+            // Update UI to show selected file
+            document.getElementById('upload-zone').classList.add('hidden');
+            const preview = document.getElementById('file-preview');
+            preview.classList.remove('hidden');
+            preview.classList.add('flex');
+            
+            document.getElementById('preview-filename').textContent = file.name;
+            document.getElementById('preview-filesize').textContent = formatFileSize(file.size);
+        }
+    }
+
+    function clearFileSelection() {
+        const input = document.getElementById('upload-file-input');
+        if(input) input.value = '';
+        
+        document.getElementById('upload-zone').classList.remove('hidden');
+        const preview = document.getElementById('file-preview');
+        preview.classList.add('hidden');
+        preview.classList.remove('flex');
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function saveAttachment() {
+        const fileInput = document.getElementById('upload-file-input');
+        if (fileInput.files.length > 0 && currentUploadSlot) {
+            const fileName = fileInput.files[0].name;
+            
+            // Update the display in the main modal
+            const displayId = `display-attach-${currentUploadSlot}`;
+            const displayEl = document.getElementById(displayId);
+            if(displayEl) {
+                displayEl.textContent = fileName;
+                displayEl.classList.add('text-blue-600', 'fw-bold');
+            }
+        }
+        closeAttachmentModal();
+    }
+    
+    // Click outside to close attachment modal
+    document.addEventListener('DOMContentLoaded', () => {
+        const attachModal = document.getElementById('attachment-modal');
+        if (attachModal) {
+             attachModal.addEventListener('click', (event) => {
+                if (event.target === attachModal) {
+                    closeAttachmentModal();
+                }
+            });
+        }
     });
 
   </script>

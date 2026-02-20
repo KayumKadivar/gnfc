@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>EMG Call Report | Modern UI</title>
@@ -131,7 +131,7 @@
         // --- RENDER LOGIC ---
         function renderTable(data) {
             const tbody = document.getElementById('log-body');
-            tbody.innerHTML = '';
+            tbody.innerHTML = '';   
             let totalOT = 0;
 
             data.forEach(log => {
@@ -152,7 +152,7 @@
                             <span class="inline-block px-2 py-0.5 border ${typeClass} rounded-[2px] text-[10px] font-bold tracking-wide">${log.type}</span>
                         </td>
                         <td class="px-6 py-3 border-r border-dark-border text-gray-300 relative group-hover:text-white transition-colors">
-                            <div class="line-clamp-2 hover:line-clamp-none cursor-help leading-relaxed" title="${log.desc}">
+                            <div class="cursor-help leading-relaxed">
                                 ${log.desc}
                             </div>
                         </td>

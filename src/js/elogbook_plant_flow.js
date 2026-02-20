@@ -277,12 +277,12 @@
       (!previousRow || previousRow.targetDate !== job.targetDate);
     const daySeparatorRow = showDaySeparator
       ? `
-      <tr class="bg-amber-50/60 dark:bg-amber-500/5 border-y border-gray-200 dark:border-dark-border">
-        <td colspan="10" class="px-3 py-2 font-14px fw-bold color-orange">
-          <span class="inline-flex items-center gap-1.5">
-            <i class="ph-bold ph-folder-simple"></i>
+      <tr class="gnfc-tr-group">
+        <td colspan="10" class="p-0">
+          <div class="gnfc-td-group">
+            <i class="ph-bold ph-calendar-blank"></i>
             ${safeText(isoDateToSlash(job.targetDate))}
-          </span>
+          </div>
         </td>
       </tr>
     `
@@ -290,60 +290,74 @@
 
     return `
       ${daySeparatorRow}
-      <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-200 dark:border-dark-border group ${rowClass}">
-        <td class="p-2 align-top text-center typo-mono border-r border-gray-200 dark:border-dark-border ${srClass}" ${job.pendingWrite ? `onclick="event.stopPropagation(); openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
-        <td class="p-2 align-top fw-bold color-primary border-r border-gray-200 dark:border-dark-border">${safeText(job.area)}</td>
-        <td class="p-2 align-top border-r border-gray-200 dark:border-dark-border">
+      <tr class="gnfc-tr group ${rowClass}">
+        <td class="gnfc-td text-center typo-mono ${srClass}" ${job.pendingWrite ? `onclick="event.stopPropagation(); openEditModal('${job.id}')"` : ""}>${safeText(job.sr)}</td>
+        <td class="gnfc-td fw-bold text-black">${safeText(job.area)}</td>
+        <td class="gnfc-td">
             <div>
             <div class="flex items-center gap-2">
-              <div class="font-14px color-blue fw-semibold">${safeText(job.loop)}</div>
+              <div class="font-13px text-blue-600 fw-semibold">${safeText(job.loop)}</div>
               <div class="flex items-center gap-2">
                 ${job.pendingWrite ? `<button onclick="event.stopPropagation(); reassignJob('${job.id}')" class="font-13px px-1 py-0.5 border border-red-500/50 color-red rounded-sm hover:bg-red-500/20" title="Re-Assign Same Job">^^</button>` : ""}
               </div>
               </div>
-              <div class="border-b border-gnfc-dark py-1.5 w-100"></div>
-              <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono line">${safeText(job.tag)}</span>
+              <div class="border-b border-gray-200 my-1.5 w-full"></div>
+              <span class="inline-block font-16px text-gray-600 bg-white px-1.5 py-0.5 rounded border border-gray-300 fw-semibold">${safeText(job.tag)}</span>
             </div>
         </td>
-        <td class="p-2 align-top border-r border-gray-200 dark:border-dark-border">
-          <div class="fw-medium color-primary">${safeText(job.jobType)}</div>
-          <div class="font-13px color-secondary mt-0.5">${safeText(ref)}</div>
-          <span class="inline-block mt-1 font-13px color-secondary bg-gray-100 dark:bg-dark-bg px-1.5 py-0.5 rounded border border-gray-200 dark:border-dark-border typo-mono">${safeText(job.typeOfInst)}</span>
+        <td class="gnfc-td">
+
+          <div class="fw-medium text-black">${safeText(job.jobType)}</div>
+          <div class="font-14px text-gray-500 mt-0.5">${safeText(ref)}</div>
+          <div class="border-b border-gray-200 my-1.5 w-full"></div>
+          <span class="inline-block mt-1 font-14px text-gray-00 bg-white px-1.5 py-0.5 rounded border border-gray-300 fw-semibold">${safeText(job.typeOfInst)}</span>
         </td>
-        <td class="p-2 align-top text-center fw-bold color-secondary border-r border-gray-200 dark:border-dark-border">${safeText(job.tech)}</td>
-        <td class="p-2 align-top color-primary border-r border-gray-200 dark:border-dark-border leading-relaxed">
+        <td class="gnfc-td text-center fw-bold text-gray-600">${safeText(job.tech)}</td>
+        <td class="gnfc-td leading-relaxed text-black">
           <div class="${descClass}">${safeText(job.desc || (job.pendingWrite ? "Assigned. Awaiting technician log entry." : ""))}</div>
         </td>
-        <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border">
-          <div class="fw-bold color-primary">${safeText(job.engineer || "--")}</div>
-          <div class="font-13px color-secondary">${safeText(makeInitials(job.engineer || ""))}</div>
+        <td class="gnfc-td text-center">
+          <div class="fw-semibold text-black">${safeText(job.engineer || "--")}</div>
+          <div class="border-b border-gray-200 my-1.5 w-full"></div>
+          <div class="font-13px text-gray-500">${safeText(makeInitials(job.engineer || ""))}</div>
         </td>
-        <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border">
-          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs font-10px fw-bold border whitespace-nowrap ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px color-pink fw-bold">ASSIGNED</span>`}
+        <td class="gnfc-td text-center">
+          ${job.status ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-xs font-10px fw-bold border whitespace-nowrap ${badgeClass}">${safeText(job.status)}</span>` : `<span class="font-13px text-pink-600 fw-bold">ASSIGNED</span>`}
         </td>
 
-      ${["today", "tomorrow"].includes(currentView) ? `
-      <td class="p-2 align-top text-center border-r border-gray-200 dark:border-dark-border cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" onclick="openPriorityModal('${job.id}')">
+      ${
+        ["today", "tomorrow"].includes(currentView)
+          ? `
+      <td class="gnfc-td text-center cursor-pointer hover:bg-gray-100 transition-colors" onclick="openPriorityModal('${job.id}')">
         <span class="inline-flex items-center justify-center w-6 h-6 rounded-full font-12px fw-bold ${job.priority > 0 ? "bg-purple-100 dark:bg-purple-900/30 color-purple" : "bg-gray-100 dark:bg-dark-bg color-secondary"}">
           ${job.priority || 0}
         </span>
-      </td>` : ""}
+      </td>`
+          : ""
+      }
 
-        <td class="p-2 align-top text-center color-secondary border-r border-gray-200 dark:border-dark-border">
+        <td class="gnfc-td text-center">
           <div class="flex flex-row items-center">
-            <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-13px hover-color-blue transition-colors">
-              <i class="ph-bold ph-chat-circle-dots"></i>
+            <button onclick="openRemarkModal('${job.id}')" class="inline-flex items-center gap-1 font-18px text-orange-500 hover:text-orange-600 transition-all transform hover:scale-110" title="Manage Remarks">
+              <i class="ph-fill ph-chat-circle-dots"></i>
             </button>
-            ${pendingAck ? `<div class="mt-1 font-13px color-orange">Ack pending</div>` : ""}
           </div>
         </td>
         
-        ${["today", "tomorrow"].includes(currentView) ? "" : `
-        <td class="p-2 align-top text-center">
-          ${job.status === "✓ OVER" ? `
-          <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer block border-b" title="Add to History">H</a> 
-          <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="color-blue fw-bold font-14px hover:underline cursor-pointer block" title="Add to History">PM</a>` : ""}
-        </td>`}
+        ${
+          ["today", "tomorrow"].includes(currentView)
+            ? ""
+            : `
+        <td class="gnfc-td text-center">
+          ${
+            job.status === "✓ OVER"
+              ? `
+          <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="text-blue-600 fw-bold font-14px hover:underline cursor-pointer block border-b border-gray-200" title="Add to History">H</a> 
+          <a href="javascript:void(0)" onclick="event.stopPropagation(); openAddToHistoryModal('${job.id}')" class="text-blue-600 fw-bold font-14px hover:underline cursor-pointer block" title="Add to History">PM</a>`
+              : ""
+          }
+        </td>`
+        }
       </tr>
     `;
   }
@@ -1585,11 +1599,11 @@
   function openPriorityModal(jobId) {
     const located = getJobById(jobId);
     if (!located) return;
-    
+
     const currentPriority = located.job.priority || 0;
     document.getElementById("priority-job-id").value = jobId;
     document.getElementById("priority-value").value = currentPriority;
-    
+
     const grid = document.getElementById("priority-grid");
     if (grid) {
       grid.innerHTML = "";
@@ -1598,33 +1612,38 @@
         btn.type = "button";
         btn.textContent = i;
         const isSelected = i === currentPriority;
-        
+
         // Base classes
-        let classes = "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95";
-        
+        let classes =
+          "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95";
+
         // Conditional classes
         if (isSelected) {
-          classes += " bg-purple-600 text-white border-purple-600 shadow-md ring-2 ring-purple-200 dark:ring-purple-900";
+          classes +=
+            " bg-purple-600 text-white border-purple-600 shadow-md ring-2 ring-purple-200 dark:ring-purple-900";
         } else {
-          classes += " bg-white dark:bg-dark-elem border-gray-200 dark:border-dark-border color-primary hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300";
+          classes +=
+            " bg-white dark:bg-dark-elem border-gray-200 dark:border-dark-border color-primary hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300";
         }
-        
+
         btn.className = classes;
-        
+
         // Click handler
         btn.onclick = () => {
           document.getElementById("priority-value").value = i;
           // Update visual state
-          Array.from(grid.children).forEach(child => {
-            child.className = "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95 bg-white dark:bg-dark-elem border-gray-200 dark:border-dark-border color-primary hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300";
+          Array.from(grid.children).forEach((child) => {
+            child.className =
+              "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95 bg-white dark:bg-dark-elem border-gray-200 dark:border-dark-border color-primary hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300";
           });
-          btn.className = "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95 bg-purple-600 text-white border-purple-600 shadow-md ring-2 ring-purple-200 dark:ring-purple-900";
+          btn.className =
+            "w-full aspect-square flex items-center justify-center rounded-sm font-14px fw-bold border transition-all transform active:scale-95 bg-purple-600 text-white border-purple-600 shadow-md ring-2 ring-purple-200 dark:ring-purple-900";
         };
-        
+
         grid.appendChild(btn);
       }
     }
-    
+
     openOverlay("priority-modal");
   }
 
@@ -1635,15 +1654,20 @@
   function savePriority(e) {
     e.preventDefault();
     const jobId = document.getElementById("priority-job-id").value;
-    const priority = parseInt(document.getElementById("priority-value").value, 10);
-    
+    const priority = parseInt(
+      document.getElementById("priority-value").value,
+      10,
+    );
+
     updateJobInState(jobId, { priority });
     closePriorityModal();
     showNotice(`Priority set to ${priority}`, "success");
     refreshTable();
   }
 
-  document.getElementById("priority-modal-form")?.addEventListener("submit", savePriority);
+  document
+    .getElementById("priority-modal-form")
+    ?.addEventListener("submit", savePriority);
 
   global.addToHistory = addToHistory;
   global.openPriorityModal = openPriorityModal;

@@ -12,7 +12,7 @@
   <!-- Shared Styles -->
   <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="stylesheet" href="/src/css/modal-ui.css">
-
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
@@ -147,21 +147,21 @@
 
       <!-- Stats / Top Bar -->
       <div
-        class="bg-dark-panel border border-dark-border rounded-lg p-2 flex flex-wrap items-center justify-between gap-3 shadow-md">
+        class="bg-dark-panel border border-dark-border rounded-lg p-4 flex flex-wrap items-center justify-between gap-3 shadow-md">
         <div class="flex items-center gap-4">
           <div class="border-r pr-4 border-dark-border">
             <div class="flex items-center gap-2">
               <i class="ph-duotone ph-calendar color-blue font-18px"></i>
-              <span id="assign-date" class="font-mono font-14px fw-bold color-primary">--/--/----</span>
+              <span id="assign-date" class="font-mono font-16px fw-bold color-primary">--/--/----</span>
             </div>
           </div>
           <div class="flex gap-4 items-center">
             <div class="flex items-center gap-2">
-              <label class="font-12px color-label">Plant:</label>
+              <label class="font-16px color-label">Plant:</label>
               <span id="plant-name" class="fw-bold color-blue font-14px">BOILER</span>
             </div>
             <div class="flex items-center gap-2">
-              <label class="font-12px color-label">Engineer:</label>
+              <label class="font-16px color-label">Engineer:</label>
               <span id="assign-user" class="fw-bold color-primary font-14px uppercase">ENG_TESTER</span>
             </div>
           </div>
@@ -169,16 +169,16 @@
 
         <div class="flex items-center gap-2">
           <button onclick="openCJLModal()"
-            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium">
+            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium shadow-sm">
             <i class="ph ph-list-checks"></i> Joblist
           </button>
           <button onclick="openSEModal()"
-            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium">
+            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium shadow-sm">
             <i class="ph ph-warning-circle"></i> S/D
           </button>
           <button onclick="openSearchModal()"
-            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium">
-            <i class="ph ph-magnifying-glass"></i> Search Tag 
+            class="px-2 py-1 rounded border border-dark-border hover:bg-dark-header color-label hover-color-primary transition-all flex items-center gap-1.5 font-14px fw-medium shadow-sm">
+            <i class="ph ph-magnifying-glass"></i> Search Tag
           </button>
           <button type="button" onclick="assignOPJobs()"
             class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition-all flex items-center gap-1.5 font-14px fw-bold">
@@ -202,7 +202,7 @@
 
             <!-- Row 1: Assigned To, Job Type, Area -->
             <div class="col-span-12 lg:col-span-4">
-              <label class="block font-12px fw-bold color-secondary mb-1">Assigned To</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Assigned To</label>
               <div class="relative">
                 <select id="form-assigned-to"
                   class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
@@ -223,7 +223,7 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4">
-              <label class="block font-12px fw-bold color-secondary mb-1">Job Type</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Job Type</label>
               <div class="relative">
                 <select id="form-job-type"
                   class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
@@ -256,7 +256,7 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4">
-              <label class="block font-12px fw-bold color-secondary mb-1">Area</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Area</label>
               <div class="relative">
                 <select id="form-area"
                   class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
@@ -283,7 +283,7 @@
 
             <!-- Row 2: Loop Name, Inst Type, Tag No -->
             <div class="col-span-12 lg:col-span-4">
-              <label class="block font-12px fw-bold color-secondary mb-1">Loop Name</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Loop Name</label>
               <div class="relative">
                 <select id="form-loop"
                   class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
@@ -295,7 +295,7 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4">
-              <label class="block font-12px fw-bold color-secondary mb-1">Inst Type</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Inst Type</label>
               <div class="relative">
                 <select id="form-inst-type"
                   class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
@@ -321,7 +321,7 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4">
-              <label class="block font-12px fw-bold color-secondary mb-1">Tag No</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Tag No</label>
               <div class="relative">
                 <select id="form-tag"
                   class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-1.5 font-14px focus:border-blue-500 focus:outline-none appearance-none">
@@ -334,7 +334,7 @@
 
             <!-- Row 3: Description -->
             <div class="col-span-12">
-              <label class="block font-12px fw-bold color-secondary mb-1">Description</label>
+              <label class="block font-16px fw-bold color-secondary mb-1">Description</label>
               <textarea id="form-jobs-desc" rows="3"
                 class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-300 dark:border-dark-border rounded px-3 py-2 font-14px focus:border-blue-500 focus:outline-none placeholder-slate-400"
                 placeholder="Enter task details..."></textarea>
@@ -457,7 +457,7 @@
           </button>
         </div>
         <div class="gnfc-modal-body gnfc-modal-body--tight">
-          <div class="border border-dark-border rounded-sm p-3 mb-3 bg-dark-header/20">
+          <div class="border border-dark-border p-4 mb-3 bg-dark-header/20 rounded-md shadow-sm">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
               <div>
                 <label for="cjl-filter-category" class="gnfc-modal-label">Category</label>
@@ -485,7 +485,7 @@
               </div>
             </div>
           </div>
-          <div class="border border-dark-border rounded-sm overflow-auto custom-scroll max-h-[62vh]">
+          <div class="border border-dark-border rounded-md shadow-sm overflow-auto custom-scroll max-h-[62vh]">
             <table id="cjl-table" class="w-full theme-table font-14px">
               <thead class="sticky top-0 z-10">
                 <tr>
@@ -567,14 +567,14 @@
             <table id="sd-table" class="w-full theme-table font-14px">
               <thead class="sticky top-0 z-10">
                 <tr>
-                  <th class="w-12">Sr</th>
+                  <th class="w-10">Sr</th>
                   <th class="w-28">Area / Tag</th>
                   <th class="w-48">Description</th>
-                  <th class="w-32">MatReqmnt</th>
+                  <th class="w-32 ">MatReqmnt</th>
                   <th class="w-28">PreSDActivity</th>
-                  <th class="w-28">Int Dep Cordination</th>
-                  <th class="w-28">Ext Dep Cordination</th>
-                  <th class="w-[20%]">Eng Remark/ Ex Remark</th>
+                  <th class="w-24">int Dep </br> Cordination</th>
+                  <th class="w-24">Ext Dep </br> Cordination</th>
+                  <th class="w-[20%]">Eng Remark </br> Ex Remark</th>
                 </tr>
               </thead>
               <tbody id="sd-table-body" class="text-left align-top"></tbody>
@@ -625,32 +625,45 @@
 
     <div id="search-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
       onclick="handleModalBackdrop(event, 'search-modal')">
-      <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-shell gnfc-modal-shell--large">
         <div class="gnfc-modal-header">
           <h3 class="gnfc-modal-title">Search Tag History</h3>
           <button type="button" onclick="closeSearchModal()" class="gnfc-modal-close" aria-label="Close">
             <i class="ph-bold ph-x text-lg"></i>
           </button>
         </div>
-        <div class="gnfc-modal-body gnfc-modal-body--tight space-y-4">
-          <div class="flex gap-3">
-            <input id="search-tag-input" type="text" class="gnfc-modal-input"
-              placeholder="Type Tag Number (e.g. 101-LT)...">
-            <button type="button" onclick="searchByTag()" class="gnfc-modal-btn gnfc-modal-btn-primary">Search</button>
+        <div class="gnfc-modal-body space-y-4">
+          <!-- Modern Search Bar -->
+          <div class="flex items-center gap-2 bg-dark-header/40 p-3 rounded-md border border-dark-border">
+            <div class="relative flex-1">
+              <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 color-secondary"></i>
+              <input id="search-tag-input" type="text"
+                class="w-full pl-9 pr-4 py-2 bg-dark-bg border border-dark-border rounded focus:border-gnfc-blue focus:outline-none font-14px color-primary"
+                placeholder="Search Tag (e.g. 111)" value="111">
+            </div>
+            <button type="button" onclick="searchByTag()"
+              class="bg-gnfc-blue hover:bg-gnfc-blue/90 text-white font-bold py-2 px-6 rounded transition-all flex items-center gap-2">
+              <i class="ph-bold ph-arrow-right"></i> GO
+            </button>
           </div>
-          <div class="border border-dark-border rounded-sm overflow-hidden">
+
+          <!-- Modern Table -->
+          <div class="overflow-x-auto rounded-md border border-dark-border shadow-inner">
             <table class="w-full theme-table font-14px">
               <thead>
                 <tr>
-                  <th>Tag</th>
-                  <th>Description</th>
-                  <th>Type</th>
-                  <th>Assign</th>
+                  <th class="w-[15%]">Tag</th>
+                  <th class="w-[45%]">Description</th>
+                  <th class="w-[15%]">Inst Type</th>
+                  <th class="w-[15%]">Function</th>
+                  <th class="w-[10%]">Action</th>
                 </tr>
               </thead>
               <tbody id="search-table-body" class="text-center">
                 <tr>
-                  <td colspan="4" class="py-8 color-muted italic">No search results to display</td>
+                  <td colspan="5" class="py-8 text-center italic color-muted">
+                    Enter a tag name above to search history
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -1049,7 +1062,7 @@
           sr: 1,
           area: "BOILER-1",
           tag: "1TE1563_3",
-          desc: "Boiler 1 AB elevation, the visible flame scanner 2/4 contact was not coming. Upon checking, it was found that the DCS DI card R3M3 CH-11 (P3-5,6) was faulty.",
+          desc: "Boiler 1 AB elevation, the visible flame scanner 2/4 contact was not coming.",
           category: "DCS",
           matReqmnt: "",
           preSDActivity: "",
@@ -1230,25 +1243,41 @@
     }
     function assignISOJobs() { assignOPJobs(); }
     function closeISOModal() { setModalState('iso-modal', false); }
-    function openSearchModal() { setModalState('search-modal', true); }
+    function openSearchModal() {
+      setModalState('search-modal', true);
+      setTimeout(searchByTag, 10);
+    }
     function closeSearchModal() { setModalState('search-modal', false); }
     function searchByTag() {
       const query = (document.getElementById('search-tag-input')?.value || '').trim().toLowerCase();
-      const results = cjlRows.filter((row) =>
+
+      // Dummy data matching the image
+      const dummyResults = [
+        { tag: 'TT191111', desc: 'MP STEAM TEMP BEFORE C/V', type: 'TX', func: '' },
+        { tag: 'PT191110', desc: 'MP STEAM PRESS BEFORE C/V', type: 'TX', func: '' }
+      ];
+
+      const results = query === '111' ? dummyResults : (cjlRows || []).filter((row) =>
         String(row.tag).toLowerCase().includes(query)
       );
+
       const tbody = document.getElementById('search-table-body');
       if (!tbody) return;
-      if (!query || results.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-8 color-muted italic text-center">No search results to display</td></tr>`;
+
+      if (!query || (results.length === 0 && query !== '111')) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center italic opacity-60">No search results to display</td></tr>`;
         return;
       }
+
       tbody.innerHTML = results.map((row) => `
-        <tr>
+        <tr class="transition-colors border-b border-dark-border hover:bg-dark-header">
           <td class="font-bold color-blue">${escapeHTML(row.tag)}</td>
-          <td class="text-left color-primary">${escapeHTML(row.desc)}</td>
-          <td class="color-label">${escapeHTML(row.category)}</td>
-          <td><button class="color-blue hover:color-orange font-bold hover:underline transition-colors">Assign</button></td>
+          <td class="text-left font-medium color-primary">${escapeHTML(row.desc)}</td>
+          <td class="text-center color-label">${escapeHTML(row.type || 'TX')}</td>
+          <td class="text-center color-label">${escapeHTML(row.func || '')}</td>
+          <td class="text-center">
+            <button class="color-blue hover:color-orange font-bold hover:underline transition-colors uppercase text-xs">Assign</button>
+          </td>
         </tr>
       `).join('');
     }

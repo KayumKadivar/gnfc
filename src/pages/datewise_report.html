@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme-mode="light">
 
 <head>
   <meta charset="UTF-8">
@@ -11,39 +11,77 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
-    /* Custom Scrollbar */
+    /* GNFC Report Standard Styles */
+    :root {
+      --report-header-bg: #e5e1d1;
+      --report-border: #999999;
+      --report-text: #000000;
+      --report-link: #0000ee;
+      --date-row-bg: #f8f8f8;
+    }
+
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--app-bg, #0f1115); }
-    ::-webkit-scrollbar-thumb { background: var(--app-border, #2a2e36); border-radius: 10px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+
+    .report-table {
+      border: 1px solid var(--report-border);
+      color: var(--report-text);
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+    }
+
+    .report-table th {
+      background-color: var(--report-header-bg);
+      border: 1px solid var(--report-border);
+      padding: 4px;
+      font-weight: bold;
+      text-transform: none;
+      color: #000;
+      vertical-align: middle;
+    }
+
+    .report-table td {
+      border: 1px solid var(--report-border);
+      padding: 4px 6px;
+      vertical-align: top;
+      line-height: 1.4;
+    }
 
     .date-row {
-      background-color: #1f242b;
-      font-weight: 800;
-      color: #f59e0b;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-    
-    html[data-theme-mode="light"] .date-row {
-        background-color: #f1f5f9;
-        color: #d97706;
-        border-bottom: 1px solid #e2e8f0;
+      background-color: #fffff0;
+      font-weight: bold;
     }
 
-    .date-row td {
-      border-color: #2a2e36 !important;
+    .add-link {
+      color: var(--report-link);
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+      text-align: center;
     }
-    html[data-theme-mode="light"] .date-row td {
-      border-color: #e2e8f0 !important;
+    .add-link:hover {
+      text-decoration: underline;
     }
+
+    .no-border-bottom { border-bottom: none !important; }
+    .no-border-top { border-top: none !important; }
+    
+    /* Override for the page container to match light theme */
+    .bg-dark-bg { background-color: #ffffff !important; }
+    .bg-dark-panel { background-color: #ffffff !important; border: 1px solid #ccc !important; }
+    .color-primary { color: #000 !important; }
+    .color-label { color: #333 !important; }
+    .border-dark-border { border-color: #ccc !important; }
   </style>
 </head>
 
-<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange/30 selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -58,12 +96,12 @@
     }
   </script>
 
-  <main class="theme-contrast-lock flex-1 flex flex-col h-screen overflow-hidden">
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
     <div id="header-container"></div>
     <script>
       renderHeader({
-        title: "Acetic Acid Logbook",
+        title: "Date Wise Report",
         breadcrumbs: [
           { label: "Technician Log", href: "technician_logbook.html" },
           { label: "Plant Detail", href: "plant_detail.html" },
@@ -73,7 +111,7 @@
       });
     </script>
 
-    <div class="p-4 bg-dark-bg overflow-y-auto">
+    <div class="p-4 overflow-y-auto">
       <!-- Top Navigation Bar -->
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
@@ -81,66 +119,59 @@
         renderPlantNav('datewise_report');
       </script>
       <div class="w-full">
-        <!-- Compact Horizontal Filter Bar -->
-        <div class="bg-dark-panel border border-dark-border rounded-sm p-4 shadow-sm flex gap-2 my-4 flex-wrap">
-
-            <!-- Plant Area / Tag No -->
+        <!-- Filter Bar -->
+        <div class="bg-white border border-gray-300 rounded-sm p-4 shadow-sm flex gap-4 my-4 flex-wrap items-center">
             <div class="flex items-center gap-3">
-              <label class="font-10px fw-bold color-label text-upper ls-wider">Tag No</label>
+              <label class="font-11px fw-bold color-label text-upper ls-wider">Tag No</label>
               <select id="tagNoFilter"
-                class="bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-1.5 min-w-[100px] focus:border-gnfc-blue outline-none transition-all">
+                class="bg-white border border-gray-300 text-black font-1px rounded-sm px-3 py-1.5 min-w-[120px] outline-none">
                   <option value="">All Tags</option>
                   <option value="FVC0208A">FVC0208A</option>
                   <option value="LV412B">LV412B</option>
-                <option value="PT-101A">PT-101A</option>
-                <option value="FT-205C">FT-205C</option>
-                <option value="TIC-305">TIC-305</option>
-                <option value="PIC-401">PIC-401</option>
               </select>
           </div>
           <div class="flex items-center gap-3">
-              <label class="block font-10px fw-bold color-label text-upper ls-wider mb-2">Report Period</label>
-              <div class="flex items-center gap-2 bg-dark-bg border border-dark-border rounded-sm px-3 py-1.5">
-                  <input type="date" id="startDateFilter" class="bg-transparent color-primary font-12px outline-none">
-                  <span class="color-label fw-bold font-12px">to</span>
-                  <input type="date" id="endDateFilter" class="bg-transparent color-primary font-12px outline-none">
+              <label class="font-14px fw-bold color-label text-upper ls-wider">Report Period</label>
+              <div class="flex items-center gap-2">
+                  <input type="date" id="startDateFilter" class="border border-gray-300 rounded-sm px-2 py-1 font-14px">
+                  <span class="text-gray-500 font-14px">to</span>
+                  <input type="date" id="endDateFilter" class="border border-gray-300 rounded-sm px-2 py-1 font-14px">
               </div>
           </div>
-          <button onclick="location.reload()" class="px-4 py-2 border border-dark-border color-label font-12px fw-bold rounded-sm hover:bg-white/5 hover-color-primary transition-colors h-9">Reset</button>
+          <button onclick="location.reload()" class="px-3 py-1 border border-gray-300 bg-gray-100 text-black font-14px fw-bold rounded-sm hover:bg-gray-100 transition-colors h-9">Reset</button>
       </div>
 
-      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-2xl overflow-hidden">
-        <div class="px-4 py-3 bg-dark-header border-b border-dark-border flex justify-between items-center">
-          <h3 class="fw-bold font-14px flex items-center gap-2 color-primary">
-            <i class="ph-fill ph-calendar-check color-blue font-16px"></i>
-            Datewise Log Book: <span id="dateDisplay" class="color-secondary">09/02/2026 to 16/02/2026</span>
+      <div class="border border-gray-300 rounded-sm shadow-sm overflow-hidden">
+        <div class="px-4 py-2 bg-gray-50 border-b border-gray-300 flex justify-between items-center">
+          <h3 class="fw-bold font-13px color-primary">
+            Datewise Log Book: <span id="dateDisplay" class="text-blue-700">01/12/2023 to 31/12/2023</span>
           </h3>
-          <button class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-sm font-12px fw-bold flex items-center gap-2 transition-colors">
-              <i class="ph-bold ph-download-simple"></i> Export
-          </button>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse report-table">
-            <thead>
-              <tr class="text-center font-10px fw-bold color-label text-upper ls-wider bg-dark-header">
-                <th rowspan="2" class="w-12 border-r border-b border-dark-border p-2">Sr</th>
-                <th rowspan="2" class="w-16 border-r border-b border-dark-border p-2">Area</th>
-                <th colspan="2" class="w-64 border-r border-b border-dark-border p-2">Loop No</th>
-                <th colspan="2" class="min-w-[300px] border-r border-b border-dark-border p-2">Job</th>
-                <th rowspan="2" class="w-24 border-r border-b border-dark-border p-2">Tech / Eng</th>
-                <th rowspan="2" class="w-20 border-r border-b border-dark-border p-2">Status</th>
-                <th rowspan="2" class="w-24 border-r border-b border-dark-border p-2">Remarks</th>
-                <th rowspan="2" class="w-12 border-b border-dark-border p-2">Add</th>
+         <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
+          <table class="gnfc-table min-w-[1400px]" style="table-layout: fixed;">
+                  <thead class="gnfc-thead">
+              <tr>
+                <th rowspan="2" class="gnfc-th w-[40px]">Sr</th>
+                <th rowspan="2" class="gnfc-th w-[120px]">Area</th>
+                
+                <th class="gnfc-th w-[120px] border-b border-gray-400">Loop No</th>
+                <th class="gnfc-th w-[250px] border-b border-gray-400">Job</th>
+                
+                <th rowspan="2" class="gnfc-th w-[70px]">Tech</th>
+                <th rowspan="2" class="gnfc-th min-w-[350px]">Description</th>
+                <th rowspan="2" class="gnfc-th w-[80px]">Tech</th> 
+                <th rowspan="2" class="gnfc-th w-[80px]">Status</th>
+                <th rowspan="2" class="gnfc-th w-[160px]">Remarks</th>
+                <th rowspan="2" class="gnfc-th w-[70px]">Add</th>
               </tr>
-              <tr class="text-center font-10px fw-bold color-blue text-upper ls-wider bg-dark-header">
-                <th class="border-r border-b border-dark-border p-2">Tag No</th>
-                <th class="border-r border-b border-dark-border p-2">Type / Date</th>
-                <th class="border-r border-b border-dark-border w-20 p-2">Tech</th>
-                <th class="border-b border-dark-border text-left px-4 p-2">Description</th>
+              <tr>
+                <th class="gnfc-th top-[35px] border-b border-gray-400">Tag No</th>
+                <th class="gnfc-th top-[35px] border-b border-gray-400">Type Of Job</th>
               </tr>
             </thead>
-            <tbody id="reportTableBody" class="typo-mono font-12px">
+            <tbody id="reportTableBody">
+              <!-- Rows injected here -->
             </tbody>
           </table>
         </div>
@@ -151,16 +182,45 @@
 
   <script>
     const sampleData = [
-      { date: '15/02/2026', sr: 1, area: 'FA', tagNo: 'FVC0208A', type: 'Routine Check\nSys FB : 19/02/2026', tech: 'NRK', desc: 'TFAB AR not meter correct required The meter has been In input other while flow.', engr: 'MAJ', status: 'OVER', remarks: 'Ø 0' },
-      { date: '15/02/2026', sr: 2, area: 'FA', tagNo: 'N.A.', type: 'N.A.', tech: 'NRK', desc: 'Job is declared - shutdown established and The other of equipment is disturbed including all other. Contact OccS / E would ALL information checked with fire team all...', engr: 'MAJ', status: 'OVER', remarks: '' },
-      { date: '14/02/2026', sr: 3, area: 'FA', tagNo: 'N.A.', type: 'DCS PT-FI shutdown', tech: 'NRK', desc: 'I was in any action manually 24-72/ Panel Improbable Indicating, panel/monitor functionality was checked, panel are in process and the connection of details RCCTUA Corrected FA0, such DCEA...', engr: 'MAJ', status: 'OVER', remarks: '' }
+      { 
+        date: '01/12/2023', sr: 1, area: 'N.A', 
+        loopNo: 'N.A', tagNo: 'NOTAG', 
+        job: '', typeOfJob: 'PM', 
+        tech1: '', 
+        descLine1: 'Boiler CPP CPSU system round taken found OK. All visible and UV flame scanner', 
+        descLine2: 'checked found OK.', 
+        tech2: 'PVS', status: 'OVER', remarks: '', 
+        addH: 'H', addPM: 'PM' 
+      },
+      { 
+        date: '01/12/2023', sr: 2, area: 'COMMON', 
+        loopNo: 'N.A.', tagNo: 'NOTAG', 
+        job: 'BHEL Boilers and CPSU Trend report to be prepared as per tags given by process dept.(By:ARP : 01/12/2025)', 
+        typeOfJob: 'PROCESS REQMT', 
+        tech1: 'JDB', 
+        descLine1: 'BHEL Boilers 1 and 2 prepared as per tags given by process dept. further job u/p.', 
+        descLine2: '', 
+        tech2: 'JDB', status: 'U/P', remarks: '', 
+        addH: 'H', addPM: 'PM' 
+      },
+      { 
+        date: '01/12/2023', sr: 3, area: 'N.A.', 
+        loopNo: 'N.A.', tagNo: 'NOTAG', 
+        job: 'UV flame scanner detector tube to be checked for PO:6200022682(By:ARP : 01/12/2025)', 
+        typeOfJob: 'INSPECTION', 
+        tech1: 'BSU', 
+        descLine1: 'Four UV tube checked all found defective. Same shown to IE. Job u/p.', 
+        descLine2: '', 
+        tech2: 'BSU', status: 'U/P', remarks: '', 
+        addH: 'H', addPM: 'PM' 
+      }
     ];
 
     function generateReport() {
       const tbody = document.getElementById('reportTableBody');
       tbody.innerHTML = '';
 
-      // Group by date for headers
+      // Group by date
       const grouped = sampleData.reduce((acc, item) => {
         if (!acc[item.date]) acc[item.date] = [];
         acc[item.date].push(item);
@@ -168,43 +228,54 @@
       }, {});
 
       Object.keys(grouped).forEach(date => {
-        // Add Date Grouping Row
+        // Date Grouping Row
         tbody.innerHTML += `
-          <tr class="date-row">
-            <td colspan="10" class="px-4 py-2 border-y border-dark-border">
-               <div class="flex items-center gap-2"><i class="ph ph-calendar"></i> ${date}</div>
-            </td>
-          </tr>`;
+          <tr class="gnfc-tr-group">
+                <td colspan="10" class="gnfc-td-group">
+                    <i class="ph-fill ph-calendar-blank"></i> ${date}
+                </td>
+            </tr>`;
 
         grouped[date].forEach(item => {
+          // Each record consists of two table rows to match the image structure
           tbody.innerHTML += `
-            <tr class="hover:bg-white/5 transition-colors border-b border-dark-border">
-              <td class="text-center font-bold color-label border-r border-dark-border p-2">${item.sr}</td>
-              <td class="text-center font-bold color-blue border-r border-dark-border p-2">${item.area}</td>
-              <td class="font-bold color-primary text-center border-r border-dark-border p-2">${item.tagNo}</td>
-              <td class="text-[10px] color-secondary whitespace-pre-line text-center border-r border-dark-border p-2">${item.type}</td>
-              <td class="text-center font-bold color-label border-r border-dark-border p-2">${item.tech}</td>
-              <td class="color-primary leading-relaxed text-[11px] px-4 min-w-[300px] border-r border-dark-border p-2">${item.desc}</td>
-              <td class="text-center border-r border-dark-border p-2">
-                <div class="font-bold border-b border-dark-border pb-1 mb-1 color-primary">${item.tech}</div>
-                <div class="font-bold color-blue">${item.engr}</div>
-              </td>
-              <td class="text-center border-r border-dark-border p-2">
-                <span class="px-2 py-1 rounded-sm bg-emerald-500/10 text-emerald-400 fw-black font-10px border border-emerald-500/20">${item.status}</span>
-              </td>
-              <td class="color-label italic text-center border-r border-dark-border p-2">${item.remarks || '-'}</td>
-              <td class="text-center p-2">
-                <button class="color-blue hover-color-blue-400 transition-colors"><i class="ph-bold ph-plus-circle font-18px"></i></button>
-              </td>
-            </tr>`;
+            <tr class="gnfc-tr">
+                    <td class="gnfc-td text-center font-16px text-black">${item.sr}</td>
+                    
+                    <td class="gnfc-td font-16px text-black">${item.area}</td>
+                    
+                    <td class="gnfc-td align-top">
+                        <div class="gnfc-cell-divider font-16px text-black">${item.loopNo}</div>
+                        <div class="font-14px fw-bold color-blue">${item.tagNo}</div>
+                    </td>
+
+                    <td class="gnfc-td align-top">
+                        <div class="gnfc-cell-divider font-16px text-black">${item.job}</div>
+                        <div class="font-16px text-black">${item.typeOfJob}</div>
+                    </td>
+
+                    <td class="gnfc-td text-center font-16px text-black">${item.tech1}</td>
+                    
+                    <td class="gnfc-td font-16px text-black">${item.desc}</td>
+                    
+                    <td class="gnfc-td text-center font-16px text-black">${item.tech2}</td>
+                    
+                    <td class="gnfc-td text-center font-16px text-black">${item.status}</td>
+                    
+                    <td class="gnfc-td"></td>
+                    
+                    <td class="gnfc-td text-center align-top">
+                        <a href="#" class="gnfc-link-action block mb-1" style="border-bottom: 1px solid #d1d5db; padding-bottom: 0.25rem;">H</a>
+                        <a href="#" class="gnfc-link-action block pt-1">PM</a>
+                    </td>
+                </tr>`;
         });
       });
     }
 
-    // Initialize dates
     window.onload = () => {
-      document.getElementById('startDateFilter').value = "2026-02-09";
-      document.getElementById('endDateFilter').value = "2026-02-16";
+      document.getElementById('startDateFilter').value = "2023-12-01";
+      document.getElementById('endDateFilter').value = "2023-12-31";
       generateReport();
     };
   </script>

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
   <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <script>
     window.activePage = 'shift_logbook_officer';
   </script>
@@ -95,26 +96,24 @@
           </div>
         </div>
 
-        <div class="flex-1 overflow-auto">
-          <table id="shift-log-table" class="w-full text-left border-collapse">
-            <thead>
-              <tr
-                class="bg-dark-header font-10px fw-bold color-label text-upper ls-wider text-center border-b border-dark-border">
-                <th rowspan="2" class="w-10 p-2 border-r border-dark-border">Sr</th>
-                <th class="w-24 p-2 border-r border-dark-border border-b border-dark-border">Shift</th>
-                <th class="w-32 p-2 border-r border-dark-border border-b border-dark-border">Tag No</th>
-                <th rowspan="2" class="p-2 border-r border-dark-border text-center min-w-[280px]">Description</th>
-                <th rowspan="2" class="w-32 p-2 border-r border-dark-border">Eng</th>
-                <th rowspan="2" class="w-20 p-2 border-r border-dark-border">Status</th>
-                <th rowspan="2" class="min-w-[180px] p-2">Remarks</th>
+        <div class="gnfc-table-container flex-1 overflow-auto">
+          <table id="shift-log-table" class="gnfc-table">
+            <thead class="gnfc-thead">
+              <tr>
+                <th rowspan="2" class="gnfc-th w-10">Sr</th>
+                <th class="gnfc-th w-24 border-b border-gray-400">Shift</th>
+                <th class="gnfc-th w-32 border-b border-gray-400">Tag No</th>
+                <th rowspan="2" class="gnfc-th min-w-[280px]">Description</th>
+                <th rowspan="2" class="gnfc-th w-32">Eng</th>
+                <th rowspan="2" class="gnfc-th w-20">Status</th>
+                <th rowspan="2" class="gnfc-th min-w-[180px]">Remarks</th>
               </tr>
-              <tr
-                class="bg-dark-header font-10px fw-bold color-label text-upper ls-wider text-center border-b border-dark-border">
-                <th class="p-2 border-r border-dark-border">Time</th>
-                <th class="p-2 border-r border-dark-border">Type Of Job</th>
+              <tr>
+                <th class="gnfc-th border-b border-gray-400">Time</th>
+                <th class="gnfc-th border-b border-gray-400">Type Of Job</th>
               </tr>
             </thead>
-            <tbody id="log-table-body" class="font-12px typo-mono"></tbody>
+            <tbody id="log-table-body" class="gnfc-tbody"></tbody>
           </table>
         </div>
       </section>
@@ -322,12 +321,10 @@
         // 1. Inject Date Header if needed
         if (isGroupedView && !processedDates.has(entry.date)) {
           html += `
-             <tr class="date-header-row">
-               <td colspan="7">
-                 <div class="flex items-center gap-2 border-b border-dark-border px-4 py-1.5 fw-bold font-10px color-orange uppercase">
-                   <i class="ph-fill ph-calendar-blank"></i>
-                   ${formatDateFriendly(entry.date)}
-                 </div>
+             <tr class="gnfc-tr-group">
+               <td colspan="7" class="gnfc-td-group">
+                  <i class="ph-fill ph-calendar-blank"></i>
+                  ${formatDateFriendly(entry.date)}
                </td>
              </tr>
            `;
@@ -336,33 +333,31 @@
 
         // 2. Render Row
         const status = String(entry.status || '').toUpperCase();
-        const statusBadgeClass = status === 'OVER'
-          ? 'bg-gnfc-green/15 color-green border border-gnfc-green/30'
-          : 'bg-gnfc-orange/15 color-orange border border-gnfc-orange/30';
+        const statusBadgeClass = status === 'OVER' ? 'gnfc-status over' : 'gnfc-status pending';
 
         // Reset serial number logic for display if needed, or keep global index
         const srNo = index + 1;
 
         html += `
-          <tr data-entry-id="${entry.id}" class="log-row-1 transition-colors border-b border-dark-border group hover:bg-white/5">
-            <td rowspan="2" class="p-2 text-center color-label typo-mono border-r border-dark-border font-12px">${srNo}</td>
-            <td class="p-2 text-center fw-bold color-primary border-r border-dark-border font-13px">${safeText(entry.shift)}</td>
-            <td class="p-2 fw-medium color-blue border-r border-dark-border font-13px">${safeText(entry.tagNo)}</td>
-            <td rowspan="2" class="p-2 color-primary leading-relaxed border-r border-dark-border font-13px">${safeText(entry.description)}</td>
-            <td rowspan="2" class="p-2 color-primary fw-bold border-r border-dark-border whitespace-nowrap font-13px">${safeText(entry.officer)}</td>
-            <td rowspan="2" class="p-2 text-center border-r border-dark-border">
-              <span class="inline-block px-2 py-0.5 rounded font-10px fw-bold ${statusBadgeClass}">${safeText(status || 'NA')}</span>
+          <tr data-entry-id="${entry.id}" class="gnfc-tr group">
+            <td rowspan="2" class="gnfc-td text-center text-black font-12px">${srNo}</td>
+            <td class="gnfc-td text-center fw-bold text-black font-13px">${safeText(entry.shift)}</td>
+            <td class="gnfc-td fw-medium color-blue font-13px">${safeText(entry.tagNo)}</td>
+            <td rowspan="2" class="gnfc-td text-black leading-relaxed font-13px">${safeText(entry.description)}</td>
+            <td rowspan="2" class="gnfc-td text-black fw-bold whitespace-nowrap font-13px">${safeText(entry.officer)}</td>
+            <td rowspan="2" class="gnfc-td text-center">
+              <span class="${statusBadgeClass}">${safeText(status || 'NA')}</span>
             </td>
-            <td rowspan="2" class="p-2 text-center">
+            <td rowspan="2" class="gnfc-td text-center">
               <button onclick="openRemarkModal(${entry.id}, '${safeText(entry.remarks || '')}')" class="color-blue hover-color-blue-400 transition-colors">
                 <i class="ph-fill ph-note-pencil font-18px"></i>
               </button>
             </td>
           </tr>
-          <tr data-entry-id="${entry.id}" class="log-row-2 transition-colors border-b border-dark-border group hover:bg-white/5">
-            <td class="p-2 text-center font-10px color-label border-r border-dark-border">${safeText(entry.time)}</td>
-            <td class="p-2 font-10px border-r border-dark-border">
-              <span class="inline-block px-1.5 py-0.5 rounded font-10px fw-bold bg-dark-bg border border-dark-border color-label">${safeText(entry.jobType)}</span>
+          <tr data-entry-id="${entry.id}" class="gnfc-tr group">
+            <td class="gnfc-td text-center font-10px color-label">${safeText(entry.time)}</td>
+            <td class="gnfc-td font-10px">
+              <span class="inline-block px-1.5 py-0.5 rounded font-10px fw-bold bg-gray-100 border border-gray-300 color-label">${safeText(entry.jobType)}</span>
             </td>
           </tr>
         `;

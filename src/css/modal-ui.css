@@ -144,7 +144,7 @@ html[data-theme-mode="light"] {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 1rem;
   border-bottom: 1px solid var(--gnfc-modal-shell-border);
   background: var(--gnfc-modal-header-bg);
   flex-shrink: 0;
@@ -161,7 +161,7 @@ html[data-theme-mode="light"] {
 
 .gnfc-modal-subtitle {
   margin: 0;
-  font-size: 0.625rem;
+  font-size: 11px;
   font-weight: 600;
   color: var(--gnfc-modal-subtitle-color);
   font-family: monospace;
@@ -197,7 +197,7 @@ html[data-theme-mode="light"] {
 .gnfc-modal-body {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 1rem;
   background: var(--gnfc-modal-body-bg);
 }
 
@@ -319,6 +319,7 @@ html[data-theme-mode="light"] {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.25rem;
+  padding: 5px;
 }
 
 .gnfc-modal-input {

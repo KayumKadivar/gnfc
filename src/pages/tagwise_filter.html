@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
   <link rel="stylesheet" href="/src/css/typography.css">
   <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
     /* MicroModal base */
@@ -113,30 +114,25 @@
         </div>
 
         <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm flex-1 flex flex-col overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr
-                  class="bg-dark-header font-10px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
-                  <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-10">Sr</th>
-                  <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Area</th>
-                  <th class="border-r border-dark-border px-2 py-1 w-32 border-b border-dark-border ">LoopNo
-                  </th>
-                  <th class="border-r border-dark-border px-2 py-1 min-w-[150px] border-b border-dark-border ">
-                    Job</th>
-                  <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Tech</th>
-                  <th rowspan="2" class="border-r border-dark-border px-4 py-3 min-w-[300px] text-left">Description</th>
-                  <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-16">Tech</th>
-                  <th rowspan="2" class="border-r border-dark-border px-2 py-3 w-20">Status</th>
-                  <th rowspan="2" class="px-4 py-3 min-w-[150px]">Remarks</th>
+          <div class="gnfc-table-container overflow-x-auto">
+            <table class="gnfc-table">
+              <thead class="gnfc-thead">
+                <tr>
+                  <th rowspan="2" class="gnfc-th w-10 border-r border-gray-400">Sr</th>
+                  <th rowspan="2" class="gnfc-th w-16 border-r border-gray-400">Area</th>
+                  <th class="gnfc-th w-32 border-b border-gray-400 border-r border-gray-400">LoopNo</th>
+                  <th class="gnfc-th min-w-[150px] border-b border-gray-400 border-r border-gray-400">Job</th>
+                  <th rowspan="2" class="gnfc-th w-16 border-r border-gray-400">Tech</th>
+                  <th rowspan="2" class="gnfc-th min-w-[300px] text-left border-r border-gray-400">Description</th>
+                  <th rowspan="2" class="gnfc-th w-20 border-r border-gray-400">Status</th>
+                  <th rowspan="2" class="gnfc-th min-w-[150px]">Remarks</th>
                 </tr>
-                <tr
-                  class="bg-dark-header font-9px fw-bold color-blue text-upper ls-wide text-center border-b border-dark-border">
-                  <th class="border-r border-dark-border px-2 py-1">TagNo</th>
-                  <th class="border-r border-dark-border px-2 py-1">TypeOfJob</th>
+                <tr>
+                  <th class="gnfc-th border-r border-gray-400 px-2 py-1">TagNo</th>
+                  <th class="gnfc-th border-r border-gray-400 px-2 py-1">TypeOfJob</th>
                 </tr>
               </thead>
-              <tbody id="reportTableBody" class="font-12px typo-mono">
+              <tbody id="reportTableBody" class="gnfc-tbody">
                 <!-- Rows injected via JS -->
               </tbody>
             </table>
@@ -239,9 +235,11 @@
       historyData.forEach(group => {
         // 1. Date Header Row
         const headerRow = `
-                    <tr class="border-y border-dark-border">
-                        <td colspan="9" class="px-4 py-1.5 font-11px fw-bold color-orange text-upper ls-wide flex items-center gap-2">
-                            <i class="ph-fill ph-calendar-blank"></i> ${group.date}
+                    <tr class="gnfc-tr-group">
+                        <td colspan="8" class="p-0">
+                            <div class="gnfc-td-group">
+                                <i class="ph-bold ph-calendar-blank"></i> ${group.date}
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -249,40 +247,37 @@
 
         // 2. Data Rows
         group.items.forEach(item => {
-          const statusClass = item.status === 'OVER'
-            ? 'color-green bg-gnfc-green/10 border-gnfc-green/20'
-            : 'color-orange bg-gnfc-orange/10 border-gnfc-orange/20';
+          const statusClass = item.status === 'OVER' ? 'gnfc-status over' : 'gnfc-status pending';
 
           const row = `
-                        <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
-                            <td class="border-r border-dark-border px-2 py-3 text-center color-label typo-mono">${item.sr}</td>
-                            <td class="border-r border-dark-border px-2 py-3 fw-bold text-center color-primary">${item.area}</td>
+                        <tr class="gnfc-tr group">
+                            <td class="gnfc-td text-center text-gray-500 typo-mono border-r border-gray-300">${item.sr}</td>
+                            <td class="gnfc-td fw-bold text-center text-black border-r border-gray-300">${item.area}</td>
 
-                            <td class="border-r border-dark-border px-2 py-3">
-                                <div class="font-12px color-label">${item.loop}</div>
-                                <div class="font-12px fw-bold color-blue mt-1">${item.tag}</div>
+                            <td class="gnfc-td border-r border-gray-300">
+                                <div class="font-14px text-gray-500">${item.loop}</div>
+                                <div class="font-14px fw-bold text-blue-600 mt-1">${item.tag}</div>
                             </td>
 
-                            <td class="border-r border-dark-border px-2 py-3">
-                                <div class="font-12px leading-tight mb-1 color-primary" title="${item.job}">${item.job || '-'}</div>
-                                <span class="font-9px fw-bold color-orange text-upper bg-dark-bg px-1 rounded border border-dark-border">${item.type}</span>
+                            <td class="gnfc-td border-r border-gray-300">
+                                <div class="font-15px leading-tight mb-1 text-black" title="${item.job}">${item.job || '-'}</div>
+                                <div class="border my-1"></div>
+                                <span class="font-9px fw-semibold text-orange-600 text-upper bg-white px-2 rounded border border-gray-300">${item.type}</span>
                             </td>
 
-                            <td class="border-r border-dark-border px-2 py-3 text-center fw-bold color-primary font-12px">${item.tech1}</td>
+                            <td class="gnfc-td text-center fw-bold text-gray-600 font-12px border-r border-gray-300">${item.tech1}</td>
 
-                            <td class="border-r border-dark-border px-4 py-3 font-12px color-primary leading-relaxed">
+                            <td class="gnfc-td font-16px text-black leading-relaxed border-r border-gray-300">
                                 ${item.desc}
                             </td>
 
-                            <td class="border-r border-dark-border px-2 py-3 text-center fw-bold color-primary font-12px">${item.tech2}</td>
-
-                            <td class="border-r border-dark-border px-2 py-3 text-center">
-                                <span class="inline-block font-10px fw-black text-upper ls-widest px-2 py-0.5 rounded-sm border ${statusClass}">
+                            <td class="gnfc-td text-center border-r border-gray-300">
+                                <span class="${statusClass}">
                                     ${item.status}
                                 </span>
                             </td>
 
-                            <td class="px-2 py-3"></td>
+                            <td class="gnfc-td"></td>
                         </tr>
                     `;
           tbody.innerHTML += row;

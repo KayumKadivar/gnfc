@@ -1,33 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GNFC | Instrument Type Analysis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
+    /* Scrollbar styling */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
-
     ::-webkit-scrollbar-track {
       background: #111217;
     }
-
     ::-webkit-scrollbar-thumb {
       background: #2C3235;
       border-radius: 4px;
     }
-
     ::-webkit-scrollbar-thumb:hover {
       background: #444;
     }
@@ -36,19 +34,21 @@
     .modal {
       display: none;
     }
-
     .modal.is-open {
       display: block;
     }
-
     .modal.is-open .gnfc-modal-overlay {
       display: flex;
+    }
+    
+    /* Custom utility for the table cell borders */
+    .cell-divider {
+      border-bottom: 1px solid rgba(75, 85, 99, 0.4); /* dark border color */
     }
   </style>
 </head>
 
-<body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange/30 selection:text-white">
+<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-orange/30 selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -74,95 +74,77 @@
     </script>
 
     <div class="flex-1 overflow-y-auto p-4 space-y-4 animate-fade-in-up">
-      <!-- Top Navigation Bar -->
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
       <script>
         renderPlantNav('instrument_types');
       </script>
 
-      <div class="bg-dark-panel rounded-xl border border-dark-border shadow-sm overflow-hidden">
-        <div class="px-4 py-3border-b border-dark-border flex justify-between items-center bg-dark-header">
-          <h2 class="font-12px fw-bold color-primary uppercase tracking-widest flex items-center gap-2">
+      <div class="bg-dark-panel rounded-md border border-dark-border shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b border-dark-border flex justify-between items-center bg-dark-header">
+          <h2 class="font-14px fw-bold color-primary uppercase tracking-widest flex items-center gap-2">
             <i class="ph-bold ph-funnel color-orange"></i> Apply Filters
           </h2>
         </div>
 
         <div class="p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div class="lg:col-span-4">
-            <label class="block font-10px fw-bold color-label uppercase tracking-wider mb-1.5">Time Range
-              Selection</label>
-            <div
-              class="flex bg-dark-bg border border-dark-border rounded-lg h-9 items-center px-2 group focus-within:border-gnfc-orange focus-within:ring-1 focus-within:ring-gnfc-orange/50 transition-all">
-              <input type="date" id="start-date" onchange="applyFilters()"
-                class="bg-transparent font-12px color-primary focus:outline-none w-full appearance-none py-1">
+            <label class="block font-14px fw-bold color-label uppercase tracking-wider mb-1.5">START DATE | END DATE</label>
+            <div class="flex bg-dark-bg border border-dark-border rounded-lg h-9 items-center px-2 group focus-within:border-gnfc-orange focus-within:ring-1 focus-within:ring-gnfc-orange/50 transition-all">
+              <input type="date" id="start-date" onchange="applyFilters()" class="bg-transparent font-14px color-primary focus:outline-none w-full appearance-none py-1">
               <span class="px-2 color-label">|</span>
-              <input type="date" id="end-date" onchange="applyFilters()"
-                class="bg-transparent font-12px color-primary focus:outline-none w-full appearance-none py-1">
+              <input type="date" id="end-date" onchange="applyFilters()" class="bg-transparent font-14px color-primary focus:outline-none w-full appearance-none py-1">
             </div>
           </div>
 
           <div class="lg:col-span-5">
-            <label class="block font-10px fw-bold color-label uppercase tracking-wider mb-1.5">Select Type of
-              Instrument</label>
+            <label class="block font-14px fw-bold color-label uppercase tracking-wider mb-1.5">SELECT TYPE OF INST :</label>
             <div class="relative">
-              <select id="job-type-select" onchange="applyFilters()"
-                class="w-full h-9 bg-dark-bg border border-dark-border color-primary font-12px rounded-lg pl-3 pr-8 focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none cursor-pointer appearance-none fw-medium transition-all group">
-                <option value="">All Instrument Types</option>
-              </select>
-              <i
-                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none font-12px color-label group-hover:color-primary transition-colors"></i>
+              <select id="inst-type-select" onchange="applyFilters()" class="w-full h-9 bg-dark-bg border border-dark-border color-primary font-14px rounded-lg pl-3 pr-8 focus:border-gnfc-orange focus:ring-1 focus:ring-gnfc-orange/50 outline-none cursor-pointer appearance-none fw-medium transition-all group">
+                </select>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none font-12px color-label group-hover:color-primary transition-colors"></i>
             </div>
           </div>
 
           <div class="lg:col-span-3 flex items-end gap-2">
-            <button onclick="applyFilters()"
-              class="flex-1 h-9 bg-gnfc-orange hover:bg-orange-600 color-primary font-12px fw-bold rounded-lg shadow-lg shadow-orange-500/20 active:scale-95 transition-all">APPLY</button>
-            <button onclick="resetFilters()"
-              class="h-9 px-4 bg-transparent border border-dark-border hover:bg-dark-header color-label hover:color-primary font-12px fw-bold rounded-lg active:scale-95 transition-all">RESET</button>
+            <button onclick="applyFilters()" class="flex-1 h-9 bg-gnfc-orange hover:bg-orange-600 color-primary font-12px fw-bold rounded-lg shadow-lg shadow-orange-500/20 active:scale-95 transition-all">APPLY</button>
+            <button onclick="resetFilters()" class="h-9 px-4 bg-transparent border border-dark-border hover:bg-dark-header color-label hover:color-primary font-12px fw-bold rounded-lg active:scale-95 transition-all">RESET</button>
           </div>
         </div>
       </div>
 
-      <div class="bg-dark-panel rounded-xl border border-dark-border overflow-hidden min-h-[400px]">
-        <div class="bg-dark-header border-b border-dark-border p-2 flex justify-between items-center">
-          <h3 class="font-12px fw-bold color-primary uppercase tracking-wider flex items-center gap-2">
-            <i class="ph-fill ph-table color-emerald"></i> Type of Instrument Report
+      <div class="gnfc-table-container rounded-md shadow-md">
+        <div class="gnfc-table-header">
+          <h3 class="font-14px fw-bold text-black uppercase tracking-wider flex items-center gap-2">
+            <i class="ph-fill ph-table text-emerald-600 font-14px"></i> Type OF Inst Report
           </h3>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse" style="table-layout: fixed;">
-            <thead>
-              <tr
-                class="bg-dark-header font-10px fw-bold color-label uppercase tracking-widest text-center border-b border-dark-border">
-                <th rowspan="2" class="border-r border-dark-border p-2 w-[45px]">Sr</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Area</th>
-
-                <th class="border-r border-dark-border px-3 py-2 w-[120px] border-b border-dark-border/50">Loop / Tag
-                </th>
-
-                <th class="border-r border-dark-border px-3 py-2 w-[180px] border-b border-dark-border/50 text-white">
-                  Job</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-[70px]">Tech</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 min-w-[400px]">Description</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-[80px]">Eng</th>
-
-                <th rowspan="2" class="border-r border-dark-border p-2 w-[100px]">Status</th>
-
-                <th rowspan="2" class="p-2 w-[120px]">Remarks</th>
+        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
+          <table class="gnfc-table min-w-[1400px]" style="table-layout: fixed;">
+            <thead class="gnfc-thead">
+              <tr>
+                <th rowspan="2" class="gnfc-th w-[40px]">Sr</th>
+                <th rowspan="2" class="gnfc-th w-[120px]">Area</th>
+                
+                <th class="gnfc-th w-[120px] border-b border-gray-400">Loop No</th>
+                <th class="gnfc-th w-[250px] border-b border-gray-400">Job</th>
+                
+                <th rowspan="2" class="gnfc-th w-[80px]">Tech</th>
+                <th rowspan="2" class="gnfc-th min-w-[350px]">Description</th>
+                <th rowspan="2" class="gnfc-th w-[80px]">Tech</th> 
+                <th rowspan="2" class="gnfc-th w-[80px]">Status</th>
+                <th rowspan="2" class="gnfc-th w-[160px]">Remarks</th>
+                <th rowspan="2" class="gnfc-th w-[70px]">Add</th>
               </tr>
-              <tr class="bg-dark-header font-10px fw-bold color-blue uppercase text-center border-b border-dark-border">
-                <th class="border-r border-dark-border px-3 py-1">Tag No</th>
-                <th class="border-r border-dark-border px-3 py-1">Instrument Detail</th>
+              <tr>
+                <th class="gnfc-th top-[35px] border-b border-gray-400">Tag No</th>
+                <th class="gnfc-th top-[35px] border-b border-gray-400">Type Of Inst</th>
               </tr>
             </thead>
-            <tbody id="plantTableBody" class="font-12px typo-mono">
-            </tbody>
+            
+            <tbody id="plantTableBody" class="gnfc-tbody">
+              </tbody>
           </table>
         </div>
       </div>
@@ -171,35 +153,35 @@
   </main>
 
   <script>
-    // Data Source (Same as original)
-    const plantLogData = {
-      today: [
-        { sr: '1', date: '01/01/2026', area: '200', tag: 'N.A', tagSubtitle: 'FVC0208A', jobType: 'To be checked as reported CV is not open beyond 75% of MV (By MAJ: 01/01/2026)(Reassign by MAJ 01/01/2026)\nCIV', jobRef: '', tech: 'GAZ', desc: 'Reported That CV is not getting close more than 75%. -Actuator tube removed and checked valve close up to 75% and than stuck up. -Valve isolated and Drain by process and operation was checked and operation was found ok, it was found getting open and close 0-100%. When valve taken in line and checked by process how it was stopped at 75% position.', engineer: 'GAZ', engInitials: '', status: 'U/P', statusClass: 'text-amber-500' }
-      ],
-      tomorrow: [],
-      prev: [
-        { sr: '2', date: '31/12/2025', area: '400', tag: 'N.A', tagSubtitle: 'LV412B', jobType: 'C/V', jobRef: '', tech: 'MR_', desc: 'Process reported that valve not response to signal so checked at field and found that its CAM was out of line and its mounting screw was loose, tightening is done -After that response checked output was not responding so both output port opened and air supply on off done and response checked now positioner is responding to signal -thread sealant to be provide in cam mounting screw as preventive action.', engineer: 'MR_', engInitials: '', status: '✓ OVER', statusClass: 'text-emerald-500' },
-        { sr: '3', date: '31/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'HV0207B', jobType: 'C/V', jobRef: '', tech: 'PJR', desc: 'Control valve are Fully open on Handwheel So R0201B Shutdown taken by process and required to close it so Hand wheel Made Release. Now valve is fully close.', engineer: 'PJR', engInitials: '', status: '✓ OVER', statusClass: 'text-emerald-500' },
-        { sr: '4', date: '30/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Spare CV received from Store related PM to be done.(By:DKV : 30/12/2025)\nC/V', jobRef: '', tech: 'MRL', desc: '1/2 inch NPT machining is done for hydro test in both 6 inch 300 flange -Passing with water test taken at 10 bar no passing found -Body hydro test taken at 25bar. no leakage is found. Air passing test taken at 6 bar pressure from both side one by one not a single bubble found as leakage. -Stopper bolt provided', engineer: 'MR_', engInitials: '', status: '✓ OVER', statusClass: 'text-emerald-500' },
-        { sr: '5', date: '29/12/2025', area: '200', tag: 'N.A', tagSubtitle: 'V4A-XV0209A', jobType: 'V4A related shutdown simulation defect to be attend.(By:MAJ : 29/12/2025)\nC/V', jobRef: '', tech: 'GAZ', desc: 'V4Avalve was found slight slow in closing so its Pnumatic SOV vent port was checked, it was found block so spare brand new 2 vent port issued and installed in both Pupet valve(1 Inch size) and operation time was checked now it was found ok.', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-emerald-500' },
-        { sr: '6', date: '29/12/2025', area: '100', tag: 'N.A', tagSubtitle: 'FV2325', jobType: 'Spare CV received from Store related PM to be done.(By:MAJ : 29/12/2025)\nC/V', jobRef: '', tech: 'MRL', desc: 'Flange issued machining in flange is required so sent to central workshop.', engineer: 'MR_', engInitials: '', status: 'U/P', statusClass: 'text-amber-500' },
-        { sr: '7', date: '29/12/2025', tag: 'N.A', tagSubtitle: 'FV003AB', jobType: 'C/V', jobRef: '', tech: 'GAZ', desc: 'Reported that valve was not getting operate in between 0-35% so checked it was Air to close valve and its span was found higher side, span slight adjusted and set and 50% and further stroke was checked and found matching -Start open at 9%', engineer: 'GAZ', engInitials: '', status: '✓ OVER', statusClass: 'text-emerald-500' },
-        { sr: '8', date: '29/12/2025', area: '700', tag: 'N.A', tagSubtitle: 'FV791', jobType: 'To be checked as reported CV having gland leakage (By:MAJ : 29/12/2025)(Reassign by:MAJ 29/12/2025)\nC/V', jobRef: '', tech: 'PJR', desc: 'After process clearance and valve put on MANUAL From DCS, online Gland Tightening done. Now there is no any leakage found in it.', engineer: 'PJR', engInitials: '', status: '✓ OVER', statusClass: 'text-emerald-500' }
-      ],
-      weekly: [],
-      monthly: []
-    };
+    // 1. Array of Instrument Types exactly as shown in Screenshot 1
+    const INST_TYPES = [
+      "ANALYZER", "C/V", "TX", "SWITCH", "PRIMARY ELEMENT", 
+      "SCANNER", "PCV", "ROTAMETER", "ENVIRON MONITORING", 
+      "MACHINE MONITORING", "PA SYSTEM", "PC", "N.A."
+    ];
 
-    function getAllData() {
-      return [...plantLogData.today, ...plantLogData.prev, ...plantLogData.weekly, ...plantLogData.monthly];
-    }
+    // 2. Mock Data based exactly on Screenshot 2 and 3
+    const plantLogData = [
+      // 28/01/2026 Data
+      { sr: '1', date: '28/01/2026', area: 'ASH', loopNo: 'N.A.', tagNo: 'Ac-1', job: 'Removed Pneumatic switch to be repaired.(By:ARP : 28/01/2026)', typeOfInst: 'N.A.', tech1: 'BSU', desc: 'Removed pneumatic switch repaired by seal kit replacement.', tech2: 'BSU', status: 'OVER' },
+      { sr: '2', date: '28/01/2026', area: 'ASH', loopNo: 'N.A.', tagNo: 'Ca-7', job: 'Removed Power Cylinder to be repaired.(By:ARP : 28/01/2026)', typeOfInst: 'N.A.', tech1: 'BSU', desc: 'Removed power cylinder repaired.', tech2: 'BSU', status: 'OVER' },
+      
+      // 24/01/2026 Data
+      { sr: '3', date: '24/01/2026', area: 'ASH', loopNo: 'N.A.', tagNo: 'KPUMP2', job: 'Removed DV1 Power cylinder to be repaired. (By:ARP : 24/01/2026)', typeOfInst: 'N.A.', tech1: 'BDR', desc: 'During checking found its piston seal rings are also damaged, same informed to IE, as spare seal kit is not available cylinder boxed up and kept in workshop.', tech2: 'BDR', status: 'OVER' },
+      
+      // 19/01/2026 Data
+      { sr: '4', date: '19/01/2026', area: 'ASH', loopNo: 'N.A.', tagNo: 'Ab-3', job: 'Removed power cylinder to be repaired.(By:ARP : 19/01/2026)', typeOfInst: 'N.A.', tech1: 'JDB', desc: 'Removed power cylinder repaired done.', tech2: 'JDB', status: 'OVER' },
+      
+      // Image 3 Data (Scanners)
+      { sr: '8', date: '27/12/2025', area: 'BOILER-2', loopNo: 'N.A.', tagNo: '2UV_FS', job: 'Removed UV Flame Scanner to be checked.(By:ARP : 27/12/2025)', typeOfInst: 'SCANNER', tech1: 'JDB', desc: 'Removed UV Flame Scanner check and found its flame sensor tube is faulty so its replace with spare and check its operation found ok.', tech2: 'JDB', status: 'OVER' },
+      { sr: '10', date: '22/12/2025', area: 'BOILER-3', loopNo: 'N.A.', tagNo: '3UV_FS', job: 'Removed UV Flame Scanner to be repaired.(By:ARP : 22/12/2025)', typeOfInst: 'SCANNER', tech1: 'JDB', desc: 'Removed 2nos UV Flame Scanner check found its flame sensor tube faulty so its replace with spare and check its operation found ok.', tech2: 'JDB', status: 'OVER' }
+    ];
 
-    function populateJobTypeDropdown() {
-      const allData = getAllData();
-      const jobTypes = [...new Set(allData.map(item => item.jobType).filter(Boolean))].sort();
-      const select = document.getElementById('job-type-select');
+    // Populates the exact Instrument Type dropdown from the image
+    function populateDropdown() {
+      const select = document.getElementById('inst-type-select');
       select.innerHTML = '<option value="">All Instrument Types</option>';
-      jobTypes.forEach(type => {
+      INST_TYPES.forEach(type => {
         const option = document.createElement('option');
         option.value = type;
         option.textContent = type;
@@ -207,26 +189,30 @@
       });
     }
 
+    // Resets filters and reloads table
     function resetFilters() {
       document.getElementById('start-date').value = '';
       document.getElementById('end-date').value = '';
-      document.getElementById('job-type-select').value = '';
+      document.getElementById('inst-type-select').value = '';
       applyFilters();
     }
 
+    // Filter logic
     function applyFilters() {
-      const jobType = document.getElementById('job-type-select').value;
+      const typeFilter = document.getElementById('inst-type-select').value;
       const startDate = document.getElementById('start-date').value;
       const endDate = document.getElementById('end-date').value;
-      let filteredData = getAllData();
+      
+      let filteredData = plantLogData;
 
-      if (jobType) filteredData = filteredData.filter(item => item.jobType === jobType);
+      if (typeFilter) filteredData = filteredData.filter(item => item.typeOfInst === typeFilter);
 
       if (startDate || endDate) {
         filteredData = filteredData.filter(item => {
           if (!item.date) return false;
           const [d, m, y] = item.date.split('/').map(Number);
           const itemDate = new Date(y, m - 1, d);
+          
           if (startDate) {
             const start = new Date(startDate);
             start.setHours(0, 0, 0, 0);
@@ -240,24 +226,27 @@
           return true;
         });
       }
-      renderPlantTable(filteredData);
+      renderTable(filteredData);
     }
 
-    function renderPlantTable(data) {
+    // Renders the HTML table 
+    function renderTable(data) {
       const tbody = document.getElementById('plantTableBody');
       tbody.innerHTML = '';
 
       if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center font-14px color-label italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-12 text-center font-14px color-label italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
         return;
       }
 
+      // Group records by their Date
       const groupedData = data.reduce((acc, item) => {
         if (!acc[item.date]) acc[item.date] = [];
         acc[item.date].push(item);
         return acc;
       }, {});
 
+      // Sort dates descending
       const sortedDates = Object.keys(groupedData).sort((a, b) => {
         const [d1, m1, y1] = a.split('/').map(Number);
         const [d2, m2, y2] = b.split('/').map(Number);
@@ -265,54 +254,55 @@
       });
 
       sortedDates.forEach(date => {
-        // Date Header Row
+        // Render Date Header Row
         tbody.innerHTML += `
-            <tr class="border-y border-dark-border bg-dark-bg/50">
-                <td colspan="9" class="px-4 py-2 font-10px fw-bold color-orange uppercase flex items-center gap-2">
+            <tr class="gnfc-tr-group">
+                <td colspan="10" class="gnfc-td-group">
                     <i class="ph-fill ph-calendar-blank"></i> ${date}
                 </td>
             </tr>`;
 
+        // Render Data Rows under each Date
         groupedData[date].forEach(item => {
-          const statusColor = item.status === '✓ OVER' ? 'text-emerald-500' : 'text-amber-500';
           const row = `
-                <tr class="hover:bg-dark-header/50 transition-colors border-b border-dark-border/50 group">
-                    <td class="border-r border-dark-border/30 p-2 text-center typo-mono font-10px color-label">${item.sr}</td>
-                    <td class="border-r border-dark-border/30 p-2 font-12px fw-bold color-blue text-center">${item.area}</td>
-                    <td class="border-r border-dark-border/30 p-2">
-                        <div class="font-12px fw-bold color-primary tracking-tighter ">${item.tag}</div>
-                        <div class="border-b border-dark-border/30"></div>
-                        <div class="font-10px color-label mt-1 uppercase">${item.tagSubtitle}</div>
+                <tr class="gnfc-tr">
+                    <td class="gnfc-td text-center font-16px text-black">${item.sr}</td>
+                    
+                    <td class="gnfc-td font-16px text-black">${item.area}</td>
+                    
+                    <td class="gnfc-td align-top">
+                        <div class="gnfc-cell-divider font-16px text-black">${item.loopNo}</div>
+                        <div class="font-14px fw-bold color-blue">${item.tagNo}</div>
                     </td>
-                    <td class="border-r border-dark-border/30 p-2">
-                        <div class="font-12px leading-tight color-primary">${item.jobType}</div>
+
+                    <td class="gnfc-td align-top">
+                        <div class="gnfc-cell-divider font-16px text-black">${item.job}</div>
+                        <div class="font-16px text-black">${item.typeOfInst}</div>
                     </td>
-                    <td class="border-r border-dark-border/30 p-2 text-center font-10px fw-bold color-label">${item.tech}</td>
-                    <td class="border-r border-dark-border/30 p-2 font-12px color-primary leading-relaxed opacity-90">${item.desc}</td>
-                    <td class="border-r border-dark-border/30 p-2 text-center font-10px fw-bold color-label">${item.engineer}</td>
-                    <td class="border-r border-dark-border/30 p-2 text-center">
-                        <span class="font-10px fw-black uppercase tracking-widest ${statusColor} px-2 py-1 bg-dark-bg border border-dark-border rounded-sm">
-                            ${item.status}
-                        </span>
+
+                    <td class="gnfc-td text-center font-16px text-black">${item.tech1}</td>
+                    
+                    <td class="gnfc-td font-16px text-black">${item.desc}</td>
+                    
+                    <td class="gnfc-td text-center font-16px text-black">${item.tech2}</td>
+                    
+                    <td class="gnfc-td text-center font-16px text-black">${item.status}</td>
+                    
+                    <td class="gnfc-td"></td>
+                    
+                    <td class="gnfc-td text-center align-top">
+                        <a href="#" class="gnfc-link-action block mb-1" style="border-bottom: 1px solid #d1d5db; padding-bottom: 0.25rem;">H</a>
+                        <a href="#" class="gnfc-link-action block pt-1">PM</a>
                     </td>
-                    <td class="p-2"></td>
                 </tr>`;
           tbody.innerHTML += row;
         });
       });
     }
 
-    // Initialize Page
-    const dateEl = document.getElementById('current-date');
-    if (dateEl) {
-      const now = new Date();
-      dateEl.textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-    }
-    populateJobTypeDropdown();
+    // Initialize the page on load
+    populateDropdown();
     applyFilters(); 
   </script>
-  <script src="/src/js/emg_call_modal.js"></script>
-  <script src="/src/js/pagination.js"></script>
 </body>
-
 </html>

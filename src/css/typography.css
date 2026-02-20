@@ -1,91 +1,70 @@
-/* ========================================
-   GNFC Typography System
-   Centralized reusable classes for font sizes,
-   colors, weights, line heights & visibility.
-   Government project: Age 30-60 readability.
-   ======================================== */
 
 /* ========================================
    1. FONT SIZES (Pixel-Based)
    ======================================== */
 
 .font-10px {
-  font-size: 0.625rem !important;
+  font-size: 10px !important;
 }
 
-/* 10px */
 .font-11px {
-  font-size: 0.6875rem !important;
+  font-size: 11px !important;
 }
 
-/* 11px */
 .font-12px {
-  font-size: 0.75rem !important;
+  font-size: 12px !important;
 }
 
-/* 12px */
 .font-13px {
-  font-size: 0.8125rem !important;
+  font-size: 13px !important;
 }
 
-/* 13px */
 .font-14px {
-  font-size: 0.875rem !important;
+  font-size: 14px !important;
 }
 
-/* 14px */
 .font-15px {
-  font-size: 0.9375rem !important;
+  font-size: 15px !important;
 }
 
-/* 15px */
 .font-16px {
-  font-size: 1rem !important;
+  font-size: 16px !important;
 }
 
-/* 16px */
 .font-18px {
-  font-size: 1.125rem !important;
+  font-size: 18px !important;
 }
 
-/* 18px */
 .font-20px {
-  font-size: 1.25rem !important;
+  font-size: 20px !important;
 }
 
-/* 20px */
 .font-22px {
-  font-size: 1.375rem !important;
+  font-size: 22px !important;
 }
 
-/* 22px */
 .font-24px {
-  font-size: 1.5rem !important;
+  font-size: 24px !important;
 }
 
-/* 24px */
 .font-28px {
-  font-size: 1.75rem !important;
+  font-size: 28px !important;
 }
 
-/* 28px */
 .font-32px {
-  font-size: 2rem !important;
+  font-size: 32px !important;
 }
 
-/* 32px */
 .font-36px {
-  font-size: 2.25rem !important;
+  font-size: 36px !important;
 }
 
-/* 36px */
 .font-40px {
-  font-size: 2.5rem !important;
+  font-size: 40px !important;
 }
 
-/* 40px */
 .font-48px {
-  font-size: 3rem !important;
+  font-size: 48px !important;
 }
 
 /* 48px */
@@ -150,40 +129,40 @@
   line-height: 2 !important;
 }
 
-/* Fixed line heights */
-/* Fixed line heights converted to rem/unitless where appropriate or kept as px if strictly needed, 
-   but for responsive text, unitless is usually better. 
-   However, preserving the class intent (px height) with rem calculation based on 16px base. */
+.lh-14px {
+  line-height: 14px !important;
+}
+
 .lh-16px {
-  line-height: 1rem !important;
+  line-height: 16px !important;
 }
 
 .lh-18px {
-  line-height: 1.125rem !important;
+  line-height: 18px !important;
 }
 
 .lh-20px {
-  line-height: 1.25rem !important;
+  line-height: 20px !important;
 }
 
 .lh-24px {
-  line-height: 1.5rem !important;
+  line-height: 24px !important;
 }
 
 .lh-28px {
-  line-height: 1.75rem !important;
+  line-height: 28px !important;
 }
 
 .lh-32px {
-  line-height: 2rem !important;
+  line-height: 32px !important;
 }
 
 .lh-36px {
-  line-height: 2.25rem !important;
+  line-height: 36px !important;
 }
 
 .lh-40px {
-  line-height: 2.5rem !important;
+  line-height: 40px !important;
 }
 
 /* ========================================
@@ -203,7 +182,7 @@
 
 /* --- Label / Caption (Still clearly visible) --- */
 .color-label {
-  color: var(--typo-label, #9ca3af) !important;
+  color: var(--typo-label, #ffffff) !important;
 }
 
 /* --- Disabled / Hint (Lightest allowed) --- */
@@ -407,8 +386,7 @@
 
 /* Page title */
 .typo-page-title {
-  font-size: 1.5rem !important;
-  /* 24px */
+  font-size: 24px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -416,8 +394,7 @@
 
 /* Section heading */
 .typo-section-title {
-  font-size: 1.125rem !important;
-  /* 18px */
+  font-size: 18px !important;
   font-weight: 700 !important;
   line-height: 1.375 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -425,8 +402,7 @@
 
 /* Card heading */
 .typo-card-title {
-  font-size: 1rem !important;
-  /* 16px */
+  font-size: 16px !important;
   font-weight: 700 !important;
   line-height: 1.375 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -434,8 +410,7 @@
 
 /* Body text */
 .typo-body {
-  font-size: 0.9375rem !important;
-  /* 15px */
+  font-size: 15px !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -443,8 +418,7 @@
 
 /* Body small */
 .typo-body-sm {
-  font-size: 0.875rem !important;
-  /* 14px */
+  font-size: 14px !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-secondary, #d1d5db) !important;
@@ -452,8 +426,7 @@
 
 /* Label / Caption */
 .typo-label {
-  font-size: 0.8125rem !important;
-  /* 13px */
+  font-size: 13px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-transform: uppercase !important;
@@ -463,8 +436,7 @@
 
 /* Table header text */
 .typo-table-head {
-  font-size: 0.8125rem !important;
-  /* 13px */
+  font-size: 13px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-transform: uppercase !important;
@@ -472,10 +444,8 @@
   color: var(--typo-blue, #5794F2) !important;
 }
 
-/* Table cell text */
 .typo-table-cell {
-  font-size: 0.875rem !important;
-  /* 14px */
+  font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -483,8 +453,7 @@
 
 /* KPI/Stat number */
 .typo-kpi {
-  font-size: 1.75rem !important;
-  /* 28px */
+  font-size: 28px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -492,8 +461,7 @@
 
 /* Badge text */
 .typo-badge {
-  font-size: 0.75rem !important;
-  /* 12px */
+  font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
@@ -502,16 +470,14 @@
 
 /* Sidebar link text */
 .typo-sidebar {
-  font-size: 0.875rem !important;
-  /* 14px */
+  font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.25 !important;
 }
 
 /* Sidebar section label */
 .typo-sidebar-label {
-  font-size: 0.6875rem !important;
-  /* 11px */
+  font-size: 11px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
@@ -521,8 +487,7 @@
 
 /* Form label */
 .typo-form-label {
-  font-size: 0.8125rem !important;
-  /* 13px */
+  font-size: 13px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-transform: uppercase !important;
@@ -532,8 +497,7 @@
 
 /* Form input text */
 .typo-form-input {
-  font-size: 0.875rem !important;
-  /* 14px */
+  font-size: 14px !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
   color: var(--typo-primary, #ffffff) !important;
@@ -542,16 +506,14 @@
 /* Monospace text (IDs, codes, timestamps) */
 .typo-mono {
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
-  font-size: 0.8125rem !important;
-  /* 13px */
+  font-size: 13px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
 }
 
 /* Footer text */
 .typo-footer {
-  font-size: 0.8125rem !important;
-  /* 13px */
+  font-size: 13px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
   color: var(--typo-label, #9ca3af) !important;
@@ -559,8 +521,7 @@
 
 /* Status text (small colored labels) */
 .typo-status {
-  font-size: 0.75rem !important;
-  /* 12px */
+  font-size: 12px !important;
   font-weight: 800 !important;
   line-height: 1 !important;
   text-transform: uppercase !important;
@@ -569,8 +530,7 @@
 
 /* Breadcrumb */
 .typo-breadcrumb {
-  font-size: 0.8125rem !important;
-  /* 13px */
+  font-size: 13px !important;
   font-weight: 500 !important;
   line-height: 1.25 !important;
   color: var(--typo-label, #9ca3af) !important;
@@ -578,8 +538,7 @@
 
 /* Button text */
 .typo-btn {
-  font-size: 0.875rem !important;
-  /* 14px */
+  font-size: 14px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   letter-spacing: 0.025em !important;
@@ -587,8 +546,7 @@
 
 /* Button small */
 .typo-btn-sm {
-  font-size: 0.75rem !important;
-  /* 12px */
+  font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   letter-spacing: 0.05em !important;
@@ -597,8 +555,7 @@
 
 /* Tooltip text */
 .typo-tooltip {
-  font-size: 0.75rem !important;
-  /* 12px */
+  font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   color: var(--typo-primary, #ffffff) !important;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
     <link rel="stylesheet" href="/src/css/modal-ui.css">
+    <link rel="stylesheet" href="/src/css/table-style.css">
     <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -116,22 +117,21 @@
                     </div>
 
                     <!-- Table -->
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr
-                                    class="bg-dark-header font-10px fw-bold color-label text-upper ls-widest text-center border-b border-dark-border">
-                                    <th class="border-r border-dark-border p-2 w-10">Sr</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[80px]">TagNo</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[180px]">Job</th>
-                                    <th class="border-r border-dark-border p-2 w-14">Tech</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[250px]">Description</th>
-                                    <th class="border-r border-dark-border p-2 w-20">Tech<br>Status</th>
-                                    <th class="border-r border-dark-border p-2 min-w-[120px]">Remarks</th>
-                                    <th class="p-2 w-14">Del</th>
+                    <div class="gnfc-table-container overflow-x-auto">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th w-10">Sr</th>
+                                    <th class="gnfc-th min-w-[80px]">TagNo</th>
+                                    <th class="gnfc-th min-w-[180px]">Job</th>
+                                    <th class="gnfc-th w-14">Tech</th>
+                                    <th class="gnfc-th min-w-[250px]">Description</th>
+                                    <th class="gnfc-th w-20">Tech<br>Status</th>
+                                    <th class="gnfc-th min-w-[120px]">Remarks</th>
+                                    <th class="gnfc-th w-14">Del</th>
                                 </tr>
                             </thead>
-                            <tbody id="pendingTableBody" class="font-12px">
+                            <tbody id="pendingTableBody" class="gnfc-tbody">
                                 <!-- Pending log data will be populated here -->
                             </tbody>
                         </table>
@@ -256,22 +256,22 @@
           <tr>
             <td colspan="8" class="p-8 text-center color-label">
               <i class="ph-bold ph-check-circle text-3xl color-green mb-2 block"></i>
-              <span class="font-14px fw-bold">No pending jobs</span>
-              <p class="font-11px mt-1">All assigned jobs have been completed by technicians.</p>
+              <span class="fw-bold font-15px">No pending jobs</span>
+              <p class="font-15px mt-1">All assigned jobs have been completed by technicians.</p>
             </td>
           </tr>
         `;
             } else {
                 tbody.innerHTML = pendingData.map((row, idx) => `
-          <tr class="border-b border-dark-border hover:bg-white/5 transition-colors ${idx % 2 === 0 ? 'bg-dark-bg/30' : ''}" id="row-${idx}">
-            <td class="border-r border-dark-border p-2 text-center fw-bold">${row.sr}</td>
-            <td class="border-r border-dark-border p-2 typo-mono color-orange fw-bold">${row.tagNo}</td>
-            <td class="border-r border-dark-border p-2 font-11px leading-relaxed">${row.job}</td>
-            <td class="border-r border-dark-border p-2 text-center fw-bold">${row.tech}</td>
-            <td class="border-r border-dark-border p-2 font-11px leading-relaxed">${row.desc || '-'}</td>
-            <td class="border-r border-dark-border p-2 text-center">${row.techStatus || '-'}</td>
-            <td class="border-r border-dark-border p-2 font-10px">${row.remarks || '-'}</td>
-            <td class="p-2 text-center">
+          <tr class="gnfc-tr ${idx % 2 === 0 ? 'bg-gray-50' : ''}" id="row-${idx}">
+            <td class="gnfc-td text-center fw-bold text-black font-15px">${row.sr}</td>
+            <td class="gnfc-td color-orange fw-bold font-15px">${row.tagNo}</td>
+            <td class="gnfc-td leading-relaxed text-black font-15px">${row.job}</td>
+            <td class="gnfc-td text-center fw-semibold text-black font-15px">${row.tech}</td>
+            <td class="gnfc-td leading-relaxed text-black font-15px">${row.desc || '-'}</td>
+            <td class="gnfc-td text-center text-black font-15px">${row.techStatus || '-'}</td>
+            <td class="gnfc-td text-black font-15px">${row.remarks || '-'}</td>
+            <td class="gnfc-td text-center">
               <button onclick="deletePending(${idx})" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-1 rounded transition-all" title="Delete this pending job">
                 <i class="ph-fill ph-trash font-16px"></i>
               </button>

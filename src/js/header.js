@@ -21,12 +21,12 @@ function renderHeader(config) {
   }).join('');
 
   const html = `
-    <header class="h-14 bg-white dark:bg-[#1a1d21] border-b border-gray-200 dark:border-[#2c3235] flex items-center justify-between px-6 shrink-0 z-20 relative shadow-sm transition-colors duration-300">
+    <header class="h-14 bg-white dark:bg-[#1a1d21] border-b border-gray-200 dark:border-[#2c3235] flex items-center justify-between px-6 shrink-0 z-20 relative shadow-md transition-colors duration-300">
       
       <!-- Left: Title & Breadcrumbs -->
       <div class="flex flex-col justify-center gap-0.5">
-          <h1 class="font-17px fw-bold color-primary tracking-wide leading-tight">${title}</h1>
-            <nav class="flex items-center gap-1.5 font-15px fw-semibold color-label text-upper tracking-wider">
+          <h1 class="font-15px fw-bold color-primary tracking-wide leading-tight">${title}</h1>
+            <nav class="flex items-center gap-1.5 font-10px fw-bold color-label text-upper tracking-wider">
             ${breadcrumbsHTML}
           </nav>
       </div>

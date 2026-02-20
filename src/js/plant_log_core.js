@@ -113,19 +113,19 @@ class PlantLogTable {
 
     renderHeader(columns) {
         return columns.map(col => {
-            if (!col.sortable) return `<th class="${col.class} font-13px fw-bold color-label text-upper ls-widest">${col.label}</th>`;
+            if (!col.sortable) return `<th class="${col.class} gnfc-th">${col.label}</th>`;
 
             const icon = this.sortColumn === col.key
                 ? (this.sortDirection === 'asc' ? 'ph-caret-up' : 'ph-caret-down')
                 : 'ph-caret-up-down'; 
 
-            const activeClass = this.sortColumn === col.key ? 'color-blue' : 'color-label';
+            const activeClass = this.sortColumn === col.key ? 'text-blue-600' : 'text-gray-500';
 
             return `
-                <th class="${col.class} font-13px fw-bold color-label text-upper ls-widest cursor-pointer hover:bg-white/5 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
+                <th class="${col.class} gnfc-th cursor-pointer hover:bg-gray-200 transition-colors select-none" onclick="plantLogTable.sort('${col.key}')">
                     <div class="flex items-center gap-1 justify-between">
                         <span>${col.label}</span>
-                        <i class="ph-fill ${icon} ${activeClass} font-12px"></i>
+                        <i class="ph-fill ${icon} ${activeClass} font-10px"></i>
                     </div>
                 </th>
             `;
@@ -140,35 +140,35 @@ class PlantLogTable {
 
     createRow(item) {
         const statusClass = item.statusColor === 'green'
-            ? 'color-green bg-gnfc-green/10 border-gnfc-green/20'
-            : 'color-orange bg-gnfc-orange/10 border-gnfc-orange/20';
+            ? 'gnfc-status over'
+            : 'gnfc-status pending';
 
         return `
-            <tr class="border-b border-dark-border group transition-all duration-150 hover:bg-white/5" style="border-left: 3px solid transparent;">
-                <td class="p-2.5 text-center typo-mono font-12px border-r border-dark-border color-label">${item.sr}</td>
-                <td class="p-2.5 fw-bold font-13px border-r border-dark-border color-primary">${item.area}</td>
-                <td class="p-2.5 border-r border-dark-border">
+            <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center typo-mono font-16px text-black">${item.sr}</td>
+                <td class="gnfc-td fw-bold font-13px text-black">${item.area}</td>
+                <td class="gnfc-td">
                     <div class="font-13px color-blue fw-bold">${item.tag}</div>
-                    <span class="inline-block mt-1 font-11px px-1.5 py-0.5 rounded-sm typo-mono color-label bg-dark-bg border border-dark-border">${item.tagSubtitle}</span>
+                    <span class="inline-block mt-1 font-11px px-1.5 py-0.5 rounded-sm typo-mono color-label bg-white border border-gray-300">${item.tagSubtitle}</span>
                 </td>
-                <td class="p-2.5 border-r border-dark-border">
-                    <div class="fw-medium font-13px color-primary">${item.jobType}</div>
+                <td class="gnfc-td">
+                    <div class="fw-medium font-13px text-black">${item.jobType}</div>
                     <div class="font-11px mt-0.5 color-label">${item.jobRef}</div>
-                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded-sm font-11px fw-bold bg-gnfc-blue/10 color-blue border border-dark-border">${item.jobLabel}</span>` : ''}
+                    ${item.jobLabel ? `<span class="inline-block mt-1 px-1.5 py-0.5 rounded-sm font-11px fw-bold bg-blue-50 text-blue-600 border border-blue-100">${item.jobLabel}</span>` : ''}
                 </td>
-                <td class="p-2.5 text-center fw-bold border-r border-dark-border color-label font-13px">${item.tech}</td>
-                <td class="p-2.5 border-r border-dark-border leading-relaxed font-13px color-secondary">${item.desc}</td>
-                <td class="p-2.5 text-center border-r border-dark-border">
-                    <div class="fw-bold font-13px color-primary">${item.engineer}</div>
+                <td class="gnfc-td text-center fw-bold text-black font-13px">${item.tech}</td>
+                <td class="gnfc-td leading-relaxed font-13px text-black">${item.desc}</td>
+                <td class="gnfc-td text-center">
+                    <div class="fw-bold font-13px text-black">${item.engineer}</div>
                     <div class="font-11px color-label">${item.engInitials}</div>
                 </td>
-                <td class="p-2.5 text-center border-r border-dark-border">
+                <td class="gnfc-td text-center">
                     ${item.status ? `
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-11px fw-bold border ${statusClass}">
+                    <span class="${statusClass}">
                         ${item.status}
                     </span>` : ''}
                 </td>
-                <td class="p-2.5 font-13px color-label">${item.remarks}</td>
+                <td class="gnfc-td font-13px text-black">${item.remarks}</td>
             </tr>
         `;
     }

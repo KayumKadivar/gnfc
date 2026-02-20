@@ -18,7 +18,8 @@ function renderPlantNav(activePageId) {
         const params = new URLSearchParams();
         params.set('system', systemName);
         if (currentPlant) params.set('plant', currentPlant);
-        return `/src/pages/Sy_PM.html?${params.toString()}`;
+        return `#`;
+        // return `/src/pages/Sy_PM.html?${params.toString()}`;
     };
 
     // ─── Configuration ───────────────────────────────────────────────
@@ -66,19 +67,19 @@ function renderPlantNav(activePageId) {
             label: 'SY PM',
             icon: 'ph-gear-six',
             activeIds: ['sy_pm'],
-            items: [
-                { label: 'FOXBORO DCS', icon: 'ph-circuitry', href: buildSyPmHref('FOXBORO DCS') },
-                { label: 'YBL DCS', icon: 'ph-circuitry', href: buildSyPmHref('YBL DCS') },
-                { label: 'GHH DCS', icon: 'ph-circuitry', href: buildSyPmHref('GHH DCS') },
-                { label: 'TRICONEX ESD', icon: 'ph-shield-check', href: buildSyPmHref('TRICONEX ESD') },
-                { label: 'HAIL ESD', icon: 'ph-shield-check', href: buildSyPmHref('HAIL ESD') }
-            ]
+            // items: [
+            //     { label: 'FOXBORO DCS', icon: 'ph-circuitry', href: buildSyPmHref('FOXBORO DCS') },
+            //     { label: 'YBL DCS', icon: 'ph-circuitry', href: buildSyPmHref('YBL DCS') },
+            //     { label: 'GHH DCS', icon: 'ph-circuitry', href: buildSyPmHref('GHH DCS') },
+            //     { label: 'TRICONEX ESD', icon: 'ph-shield-check', href: buildSyPmHref('TRICONEX ESD') },
+            //     { label: 'HAIL ESD', icon: 'ph-shield-check', href: buildSyPmHref('HAIL ESD') }
+            // ]
         }
     ];
 
     // ─── Style Tokens ────────────────────────────────────────────────
     const cls = {
-        pill: 'relative flex items-center gap-1.5 px-2.5 py-1.5 font-13px font-semibold rounded-md transition-all duration-150 whitespace-nowrap select-none',
+        pill: 'relative flex items-center gap-1.5 px-2.5 py-1.5 font-15px font-semibold rounded-md transition-all duration-150 whitespace-nowrap select-none',
         active: 'bg-gnfc-blue text-white shadow-sm shadow-blue-500/25',
         inactive: 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/[0.06]',
         separator: 'w-px h-5 bg-gray-200 dark:bg-[#2c3235] mx-1 shrink-0',
@@ -156,7 +157,7 @@ function renderPlantNav(activePageId) {
     // ─── Main Container ──────────────────────────────────────────────
     navContainer.innerHTML = `
         <div class="sticky top-0 z-30">
-            <div class="bg-white dark:bg-[#111217] border-b border-gray-200 dark:border-[#2c3235] px-3 py-1.5">
+            <div class="bg-white dark:bg-[#111217] border-b border-gray-200 dark:border-[#2c3235] px-3 py-1.5 shadow-sm rounded-md">
                 <div class="flex items-center justify-between gap-3">
 
                     <nav class="flex items-center gap-1 flex-1 min-w-0 overflow-hidden flex-wrap">

@@ -4,11 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GNFC | Login</title>
+  <title>GNFC | Instrument Department</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script>
@@ -17,187 +16,170 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
+            outfit: ['Outfit', 'sans-serif'],
           },
-          animation: {
-            'float': 'float 6s ease-in-out infinite',
-            'gradient': 'gradient-shift 8s ease infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-              '50%': { transform: 'translateY(-10px) rotate(2deg)' },
-            },
-            'gradient-shift': {
-              '0%': { backgroundPosition: '0% 50%' },
-              '50%': { backgroundPosition: '100% 50%' },
-              '100%': { backgroundPosition: '0% 50%' },
+          colors: {
+            gnfc: {
+              navy: '#003366',
+              teal: '#008080',
+              cyan: '#00eeee',
             }
           }
         }
       }
     }
   </script>
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .main-canvas {
+      background: radial-gradient(circle at top right, #f0fdfa, transparent),
+                  radial-gradient(circle at bottom left, #eff6ff, transparent),
+                  #f8fafc;
+    }
+    /* .sidebar-link {
+        @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-bold uppercase tracking-widest text-slate-500 hover:text-teal-600 hover:bg-white animate-transition;
+    } */
+    /* .sidebar-link.active {
+        @apply text-teal-600 bg-white shadow-sm;
+    } */
+  </style>
 </head>
 
-<body
-  class="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-sky-50 to-teal-50 font-sans text-slate-800">
+<body class="h-screen main-canvas font-sans text-slate-900 flex flex-col overflow-hidden">
 
-  <div
-    class="absolute w-72 h-72 bg-teal-500/20 rounded-full blur-3xl -top-24 -right-24 animate-float pointer-events-none">
-  </div>
-  <div
-    class="absolute w-48 h-48 bg-cyan-500/15 rounded-full blur-3xl -bottom-12 -left-12 animate-float pointer-events-none"
-    style="animation-delay: 2s;"></div>
-  <div
-    class="absolute w-36 h-36 bg-blue-500/10 rounded-full blur-3xl top-1/2 left-1/5 animate-float pointer-events-none"
-    style="animation-delay: 4s;"></div>
-
-  <main class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10">
-    <div class="w-full max-w-md">
-
-      <div
-        class="bg-white/95 backdrop-blur-xl border border-black/5 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-black/5">
-
-        <div class="">
-          <img src="/src/assets/images/gnfc-full-logo.png"
-            onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';"
-            class="w-32 h-32 mx-auto object-contain" alt="GNFC Logo">
-        </div>
-
-        <div class="px-8 py-8 bg-white">
-          <p id="login-subtitle" class="text-slate-500 text-sm mb-8 leading-relaxed">
-            Welcome back. Please enter your credentials to access the system.
-          </p>
-
-          <form id="loginForm" action="/src/pages/dashboard.html" class="space-y-5">
-
-            <div class="space-y-1.5">
-              <label class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                Login As
-              </label>
-              <div class="grid grid-cols-3 gap-2">
-                <button type="button" data-role="technician" data-user-name="Technician"
-                  class="role-btn py-2.5 px-2 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:border-teal-300 hover:text-teal-700 transition-colors">
-                  Technician
-                </button>
-                <button type="button" data-role="engineer" data-user-name="Engineer"
-                  class="role-btn py-2.5 px-2 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:border-teal-300 hover:text-teal-700 transition-colors">
-                  Engineer
-                </button>
-                <button type="button" data-role="manager" data-user-name="Manager"
-                  class="role-btn py-2.5 px-2 text-[11px] font-bold uppercase tracking-wide rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:border-teal-300 hover:text-teal-700 transition-colors">
-                  Manager
-                </button>
-              </div>
-            </div>
-
-            <div class="space-y-1.5">
-              <label for="ec-no" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                EC Number
-              </label>
-              <div class="relative group">
-                <span
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
-                  <i class="ph-bold ph-user text-lg"></i>
-                </span>
-                <input type="text" id="ec-no" name="ec-no" placeholder="e.g. 123456"
-                  class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
-              </div>
-            </div>
-
-            <div class="space-y-1.5">
-              <label for="password" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                Password
-              </label>
-              <div class="relative group">
-                <span
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
-                  <i class="ph-bold ph-lock-key text-lg"></i>
-                </span>
-                <input type="password" id="password" name="password" placeholder="••••••••"
-                  class="w-full pl-10 pr-10 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
-
-                <button type="button" onclick="togglePassword('password')"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
-                  <i class="ph-bold ph-eye" id="password-icon"></i>
-                </button>
-              </div>
-            </div>
-
-            <div id="email-row" class="space-y-1.5">
-              <label for="email-password" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                Email Password
-              </label>
-              <div class="relative group">
-                <span
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
-                  <i class="ph-bold ph-envelope-simple text-lg"></i>
-                </span>
-                <input type="password" id="email-password" name="email-password" placeholder="Email Password"
-                  class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
-              </div>
-            </div>
-
-            <!-- <div id="sign-in-row" class="pt-2">
-              <button type="submit" id="submitBtn"
-                class="w-full relative overflow-hidden bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2 group">
-                <span>Sign In</span>
-                <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
-              </button>
-            </div> -->
-          </form>
+  <!-- Fixed Branding Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-[1400px] mx-auto px-6 h-24 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-16 w-auto object-contain" alt="GNFC Logo">
+        <div class="h-12 w-px bg-slate-200"></div>
+        <div>
+          <h1 class="font-outfit font-black text-gnfc-navy text-2xl tracking-tight uppercase leading-none">Gujarat Narmada Valley Fertilizers & Chemicals Limited</h1>
+          <p class="text-lg font-bold text-teal-600 mt-1">Instrument Department</p>
         </div>
       </div>
+      <a href="/login.html" class="flex items-center gap-2 px-6 py-3 bg-gnfc-navy text-white rounded-full font-bold uppercase tracking-widest shadow-lg hover:bg-slate-800 transition-all">
+        <i class="ph-bold ph-sign-in"></i>
+        <span>Login</span>
+      </a>
     </div>
-
+    
+    <!-- Teal Welcome Bar -->
+    <div class="bg-teal-700 py-2">
+        <div class="max-w-[1400px] mx-auto px-6">
+            <p class="text-[11px] font-bold text-teal-50 uppercase tracking-[0.3em] text-center lg:text-right italic">
+              Welcome to the web world of Instrument department !
+            </p>
+        </div>
     </div>
-  </main>
+  </header>
 
-  <script>
-    function togglePassword(inputId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(`${inputId}-icon`);
-      if (!input || !icon) return;
+  <div class="flex-1 flex max-w-[1400px] mx-auto w-full p-6 gap-6 h-full overflow-hidden">
+    
+    <!-- Precise Sidebar -->
+    <!-- Precise Sidebar (Fixed Position) -->
+    <aside class="w-64 flex flex-col gap-2 shrink-0 py-6">
+        <div class="glass p-4 rounded-2xl flex flex-col gap-1">
+            <a href="/login.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-teal-700 font-bold text-[18px] uppercase tracking-widest bg-white shadow-sm hover:translate-x-1 transition-all">
+                <i class="ph-bold ph-arrow-square-out text-lg"></i>
+                <span>IIMS</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+                <i class="ph-bold ph-lightning text-lg"></i>
+                <span>UTILITY</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+                <i class="ph-bold ph-clipboard-text text-lg"></i>
+                <span>OPR. JOB REG</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+                <i class="ph-bold ph-files text-lg"></i>
+                <span>ENG. DOC</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+                <i class="ph-bold ph-question text-lg"></i>
+                <span>HELP</span>
+            </a>
+        </div>
+    </aside>
 
-      const isPassword = input.type === 'password';
-      input.type = isPassword ? 'text' : 'password';
-      icon.classList.toggle('ph-eye', !isPassword);
-      icon.classList.toggle('ph-eye-slash', isPassword);
-    }
+    <!-- Scrollable Content Area -->
+    <main class="flex-1 glass rounded-3xl p-12 overflow-y-auto border border-white/60 shadow-xl my-6">
+        
+        <div class="max-w-4xl space-y-10">
+            
+            <div class="space-y-6">
+                <p class="text-xl font-medium text-slate-800 leading-relaxed italic">
+                    This web site provides comprehensive support for doing every activity carried out by Instrumentation professionals in GNFC.
+                </p>
+                <p class="text-slate-600 leading-relaxed">
+                    It has been designed and evolved completely in-house, after continuous efforts of more than five years and presently it has taken shape of a most professionally designed software platform which encompasses all activities of Instrumentation professionals. As a matter of fact, any maintenance department can use it with minor modifications in only some of its modules.
+                </p>
+            </div>
 
-    function selectRole(button, shouldRedirect) {
-      const buttons = document.querySelectorAll('.role-btn');
-      const signInRow = document.getElementById('sign-in-row');
+            <div class="bg-teal-50/50 p-8 rounded-2xl border border-teal-100">
+                <h2 class="text-teal-800 font-black uppercase tracking-widest text-sm mb-4">Mission statement:</h2>
+                <p class="text-teal-900 leading-relaxed font-semibold">
+                    100% Computerization of all our work practices on a single platform, which is built on a standard DBMS software, is easy to navigate, which meets our customized work requirements, which is platform free as far as the applications are concerned, and, which is 100% secured and authentic as far as data security and integrity are concerned. The system should have standard professional Hardware platform in terms of Server machine, which meets storage reliability, and communication speed requirements.
+                </p>
+            </div>
 
-      buttons.forEach((btn) => {
-        btn.classList.remove('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
-        btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
-      });
+            <p class="text-slate-700 font-bold italic">
+                It has three main sections, namely, <span class="text-teal-600">Integrated Instrument Management System (IIMS)</span>, <span class="text-teal-600">Utility Section</span> and <span class="text-teal-600">HELP section.</span>
+            </p>
 
-      button.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
-      button.classList.add('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
+            <div class="space-y-12 pt-6">
+                <!-- IIMS Section -->
+                <div>
+                    <h3 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="w-8 h-px bg-teal-200"></span>
+                        <span>IIMS section</span>
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-7 pl-10 border-l-2 border-teal-50">
+                        IIMS section provides platform for Online Operation Job register, E log Book, Engineering documentation, maintenance records and History, Modules for Electronic Lab and Centralized Control Valve Maintenance Service module, Procurement system module, Preventive and other scheduled maintenance modules, archiving of all kinds of communications and correspondences, etc. Powerful search and report generation facilities and reminder systems are built in.
+                    </p>
+                </div>
 
-      localStorage.setItem('userRole', button.dataset.role || '');
-      localStorage.setItem('currentUserName', button.dataset.userName || 'Admin User');
+                <!-- Utility Section -->
+                <div>
+                    <h3 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="w-8 h-px bg-teal-200"></span>
+                        <span>Utility section</span>
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-7 pl-10 border-l-2 border-teal-50">
+                        Utility section provides supporting information of various kinds, such as brief information of the personnel of Instrument Department, engineering standards and specifications related to Instrumentation work practices, various communication formats, technical literature, information on ISO14000 and SAP, brief information of various plants and product of GNFC etc. It has database on contacts in various other industries. It has a posting area for news and views pertaining to happenings in Instrumentation at GNFC.
+                    </p>
+                </div>
 
-      if (signInRow) signInRow.classList.add('hidden');
-      if (shouldRedirect) window.location.href = '/src/pages/dashboard.html';
-    }
+                <!-- HELP Section -->
+                <div>
+                    <h3 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="w-8 h-px bg-teal-200"></span>
+                        <span>HELP section</span>
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-7 pl-10 border-l-2 border-teal-50">
+                        HELP section provides very elaborate document describing all the features and procedures to put every module to maximum use.
+                    </p>
+                </div>
+            </div>
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const buttons = document.querySelectorAll('.role-btn');
-      const currentRole = localStorage.getItem('userRole');
+            <div class="pt-16 pb-8 border-t border-slate-100 flex flex-col items-center lg:items-start">
+                <p class="text-2xl font-outfit font-bold text-slate-800 italic mb-6">Enjoy your stay!</p>
+                <div class="text-center lg:text-left">
+                    <p class="text-xl font-black text-gnfc-navy tracking-tight">P A Mankad</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-teal-600">Instrument Department</p>
+                </div>
+            </div>
 
-      buttons.forEach((button) => {
-        button.addEventListener('click', () => selectRole(button, true));
-      });
+        </div>
 
-      if (currentRole) {
-        const currentButton = document.querySelector(`.role-btn[data-role="${currentRole}"]`);
-        if (currentButton) selectRole(currentButton, false);
-      }
-    });
-  </script>
+    </main>
+  </div>
+
 </body>
 
 </html>

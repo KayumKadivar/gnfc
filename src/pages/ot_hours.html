@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -66,26 +66,26 @@
       <!-- Search Criteria Panel -->
       <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm">
         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
-          <h3 class="font-12px fw-bold color-blue text-upper ls-widest flex items-center gap-2">
+          <h3 class="font-14px fw-bold color-blue text-upper ls-widest flex items-center gap-2">
             <i class="ph-bold ph-clock"></i> OT Report Criteria
           </h3>
         </div>
         <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div class="space-y-1">
-            <label class="font-10px fw-bold color-label text-upper ls-wide">Start Date</label>
+            <label class="font-12px fw-bold color-label text-upper ls-wide">Start Date</label>
             <input type="date" value="2026-02-01" id="startDate"
               class="w-full bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
           <div class="space-y-1">
-            <label class="font-10px fw-bold color-label text-upper ls-wide">End Date</label>
+            <label class="font-12px fw-bold color-label text-upper ls-wide">End Date</label>
             <input type="date" value="2026-02-28" id="endDate"
               class="w-full bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none">
           </div>
           <div class="space-y-1">
-            <label class="font-10px fw-bold color-label text-upper ls-wide">Select Name</label>
+            <label class="font-12px fw-bold color-label text-upper ls-wide">Select Name</label>
             <div class="relative">
               <select id="techSelect"
-                class="w-full bg-dark-bg border border-dark-border color-primary font-12px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer appearance-none">
+                class="w-full bg-dark-bg border border-dark-border color-primary font-14px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer appearance-none">
                 <option value="ALL">ALL</option>
                 <option value="DVP">DVP</option>
                 <option value="JKP">JKP</option>
@@ -167,12 +167,12 @@
         total += item.hours;
         const row = `
                 <tr class="hover:bg-white/5 transition-colors border-b border-dark-border group">
-                    <td class="border-r border-dark-border px-3 py-3 text-center color-primary">${formatDateDisplay(item.date)}</td>
-                    <td class="border-r border-dark-border px-2 py-3 text-center color-blue fw-bold">${item.tech}</td>
-                    <td class="border-r border-dark-border px-3 py-3 text-center color-primary">${item.tag}</td>
-                    <td class="border-r border-dark-border px-3 py-3 text-center color-orange">${item.jobType}</td>
-                    <td class="border-r border-dark-border px-4 py-3 color-secondary leading-relaxed text-left">${item.desc}</td>
-                    <td class="px-3 py-3 text-center fw-bold color-blue">${item.hours.toFixed(1)}</td>
+                    <td class="border-r border-dark-border p-2 text-center color-primary font-14px">${formatDateDisplay(item.date)}</td>
+                    <td class="border-r border-dark-border p-2 text-center color-blue fw-bold font-14px">${item.tech}</td>
+                    <td class="border-r border-dark-border p-2 text-center color-primary font-14px">${item.tag}</td>
+                    <td class="border-r border-dark-border p-2 text-center color-orange font-14px">${item.jobType}</td>
+                    <td class="border-r border-dark-border p-2 color-secondary leading-relaxed text-left font-14px">${item.desc}</td>
+                    <td class="p-2 text-center fw-bold color-blue font-14px">${item.hours.toFixed(1)}</td>
                 </tr>
             `;
         tbody.innerHTML += row;

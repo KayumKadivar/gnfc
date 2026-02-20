@@ -94,13 +94,8 @@ const ThemeManager = {
     },
 
     resolveMode(mode) {
-        if (mode === 'system') {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                return 'dark';
-            }
-            return 'light';
-        }
-        return mode;
+        // Enforce light mode only as per user request
+        return 'light';
     },
 
     saveSettings(settings) {
