@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modifications Suggested | GNFC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <style>
+    /* Modern Report Aesthetic (matching HSO) */
+    .report-container {
+      background: var(--app-panel);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--app-border);
+      color: var(--app-text);
+      font-size: 13px;
+    }
+
+    .report-header {
+      background: var(--app-panel-alt);
+      padding: 16px 20px;
+      border-bottom: 2px solid var(--app-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .report-title {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+      color: var(--app-text);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .report-table th {
+      background: var(--app-panel-alt);
+      color: var(--app-text);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--app-border);
+      border-right: 1px solid var(--app-border);
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .report-table th:last-child { border-right: none; }
+
+    .report-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--app-border);
+      border-right: 1px solid var(--app-border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .report-table td:last-child { border-right: none; }
+
+    .report-table tr:hover td {
+      background-color: rgba(59, 130, 246, 0.04);
+    }
+
+    .status-over {
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    .status-pending {
+      color: #f59e0b;
+      font-weight: 700;
+    }
+
+    .verify-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--app-primary);
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+  <div id="sidebar-container"></div>
+  <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="header-container"></div>
+    <script>
+      renderHeader({
+        title: "Modifications Suggested",
+        breadcrumbs: [
+          { label: "Technician Log", href: "technician_logbook.html" },
+          { label: "Plant Detail", href: "plant_detail.html" },
+          { label: "Modifications" }
+        ],
+        backLink: "plant_detail.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg space-y-4">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>renderPlantNav('modifications');</script>
+
+      <!-- Main Report Card -->
+      <div class="report-container shadow-md">
+        <div class="report-header">
+          <div class="report-title">
+            <i class="ph-duotone ph-gear-six text-blue-500"></i>
+            <span>Modifications Suggested</span>
+          </div>
+          <div class="flex items-center gap-4">
+             <div class="text-xs color-label font-mono bg-dark-bg px-3 py-1 rounded border border-dark-border">
+                PLANT: <span id="plant-id-display" class="color-orange fw-bold">BOILER</span>
+             </div>
+             <button class="bg-gnfc-blue hover:bg-blue-600 text-white px-4 py-1.5 rounded-md font-13px fw-bold flex items-center gap-1.5 shadow-sm transition-all">
+                <i class="ph-bold ph-export"></i> Export PDF
+             </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scroll" style="max-height: calc(100vh - 220px);">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th class="w-12 text-center fs-12px">Sr</th>
+                <th class="w-32 fs-12px">Tag No</th>
+                <th class="w-64 fs-12px">Description</th>
+                <th class="w-24 fs-12px">Suggested By</th>
+                <th class="w-24 fs-12px">Status</th>
+                <th class="w-64 fs-12px">Remarks</th>
+                <th class="w-16 text-center">Verify</th>
+              </tr>
+            </thead>
+            <tbody id="mod-table-body">
+              <!-- Rows injected via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const modData = [
+      {
+        sr: 1,
+        tag: '2PT1544',
+        desc: 'Zero checked found ok. Manifold and nipple required. Same informed to IE.',
+        tech: 'DSU',
+        status: 'OVER',
+        remarks: 'ok [written by: MMD Date: 17/03/2017]'
+      },
+      {
+        sr: 2,
+        tag: '4PCV1631B',
+        desc: 'As per process report its valve is not operate below 30 per due to valve stuck-up, then inform to process the output of PRCA1605 is look at 3.5 kg/cm2 lower limit due to this valve is not operate. After that as per IOM PROM 605 valve is change from 3.5 to 3.2 and trial taken HCPCV working normal. HELP page graphics modification required. Now showing PRCA1631B for HO and PRCA1531B for NC lower limit and higher limit lock value, but need to provide PRCA1605 for both HO and NO control loop output lower limit lock and higher limit lock this is help to process for smooth operation.',
+        tech: 'RMK',
+        status: 'OVER',
+        remarks: 'ok [written by: RMP Date: 19/08/2017]'
+      },
+      {
+        sr: 3,
+        tag: 'BDV-8420B',
+        desc: 'Its close limit switch not coming. Be checked in field and adjusted. Now its coming Tagging required in field.',
+        tech: 'BBU',
+        status: 'OVER',
+        remarks: 'ok [written by: MMD Date: 01/04/2017]'
+      },
+      {
+        sr: 4,
+        tag: 'SDV-9',
+        desc: 'Close Limit switch indication some time not coming so Proximity switch adjusted after that operation checked found ok. Proximity mounting required changes because of its not sensing target proper(For this modification show ASP-1 Discharge valve LS)',
+        tech: 'VVM',
+        status: 'OVER',
+        remarks: 'Good. [written by: AMD Date: 19/08/2017]\nE(MMD) Do needful. [written by: NTD Date: 21/04/2017]'
+      },
+      {
+        sr: 5,
+        tag: 'Aa-7',
+        desc: 'Vessel pressure low not coming so checked found that line block filter feel with ASH and Impulse line too. Both clean and operation checked found ok. Line block Impulse BS tube modification required.',
+        tech: 'VVM',
+        status: 'OVER',
+        remarks: 'What is your suggestion? [written by: AMD Date: 16/08/2018]\nCan we provide air flushing? [written by: NTD Date: 16/08/2018]'
+      },
+      {
+        sr: 6,
+        tag: 'PV-8420A',
+        desc: 'Control valve PM job done. Cleaning, Greasing done. Fitting Leakage checked and found ok. Diaphragm passing checked and found ok. Stroke checked found ok. -Start opening checked and found its 4.12 mA, its AFR replace with spare, tubing modification require, stroke check from control room.',
+        tech: 'JDB',
+        status: 'OVER',
+        remarks: 'ok [written by: RMP Date: 25/04/2018]'
+      },
+      {
+        sr: 7,
+        tag: 'PV-8420C',
+        desc: 'Control valve PM job done. Cleaning, Greasing done. Fitting Leakage checked and found ok. Diaphragm passing checked and found ok. Stroke checked found ok. -Start opening checked and found its 18.95 mA, its AFR replace with spare, tubing modification require, stroke check from control room.',
+        tech: 'JDB',
+        status: 'OVER',
+        remarks: 'ok by: RBL Date: 25/04/2018'
+      },
+      {
+        sr: 8,
+        tag: 'LT-2',
+        desc: 'Process require Slurry sump level High bypass for HP pump start so its LT cover try to open but its much more jam so LT remove with base and put on open atmosphere for HP pump start. -After Process clearance LT keep it on original place. -LT mounting base found totally corrode so its require proper base mounting.',
+        tech: 'MSA',
+        status: 'OVER',
+        remarks: 'ok [written by: RMP Date: 19/11/2018]'
+      }
+    ];
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[m];
+      });
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('mod-table-body');
+      tbody.innerHTML = modData.map(row => `
+        <tr>
+          <td class="text-center font-mono color-muted">${row.sr}</td>
+          <td class="font-bold color-blue font-mono">${escapeHTML(row.tag)}</td>
+          <td class="color-primary leading-relaxed font-14px">${escapeHTML(row.desc)}</td>
+          <td class="bg-gray-50/50 dark:bg-white/5 text-center font-bold color-label">${escapeHTML(row.tech)}</td>
+          <td class="text-center">
+            <span class="${row.status === 'OVER' ? 'status-over' : 'status-pending'} font-11px uppercase tracking-wider">${row.status}</span>
+          </td>
+          <td class="italic color-secondary text-xs">${escapeHTML(row.remarks).replace(/\n/g, '<br>')}</td>
+          <td class="text-center">
+            <input type="checkbox" class="verify-checkbox" />
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Initialize
+    const urlParams = new URLSearchParams(window.location.search);
+    const plant = urlParams.get('plant') || 'BOILER';
+    document.getElementById('plant-id-display').textContent = plant;
+    renderTable();
+
+  </script>
+</body>
+
+</html>

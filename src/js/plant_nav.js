@@ -60,21 +60,27 @@ function renderPlantNav(activePageId) {
                 { id: 'pending_log', label: 'Pending Log', icon: 'ph-hourglass-medium', href: '/src/pages/pending_log.html' }
             ]
         },
-        // Group 5 — System PM (dropdown with children)
         {
+            items: [
+                { id: 'modifications', label: 'Modifications', icon: 'ph-gear-fine', href: '/src/pages/modifications.html' },
+                { id: 'doc_change', label: 'Doc. Change', icon: 'ph-file-doc', href: '/src/pages/doc_change.html' }
+            ]
+        },
+        // Group 5 — System PM (dropdown with children)
+        /* {
             dropdown: true,
             id: 'sy_pm',
             label: 'SY PM',
             icon: 'ph-gear-six',
-            activeIds: ['sy_pm'],
-            // items: [
-            //     { label: 'FOXBORO DCS', icon: 'ph-circuitry', href: buildSyPmHref('FOXBORO DCS') },
-            //     { label: 'YBL DCS', icon: 'ph-circuitry', href: buildSyPmHref('YBL DCS') },
-            //     { label: 'GHH DCS', icon: 'ph-circuitry', href: buildSyPmHref('GHH DCS') },
-            //     { label: 'TRICONEX ESD', icon: 'ph-shield-check', href: buildSyPmHref('TRICONEX ESD') },
-            //     { label: 'HAIL ESD', icon: 'ph-shield-check', href: buildSyPmHref('HAIL ESD') }
-            // ]
-        }
+            activeIds: ['sy_pm', 'sy_pm1'],
+            items: [
+                { id: 'foxboro_dcs', label: 'FOXBORO DCS', icon: 'ph-circuitry', href: buildSyPmHref('FOXBORO DCS') },
+                { id: 'ybl_dcs', label: 'YBL DCS', icon: 'ph-circuitry', href: buildSyPmHref('YBL DCS') },
+                { id: 'ghh_dcs', label: 'GHH DCS', icon: 'ph-circuitry', href: buildSyPmHref('GHH DCS') },
+                { id: 'triconex_esd', label: 'TRICONEX ESD', icon: 'ph-shield-check', href: buildSyPmHref('TRICONEX ESD') },
+                { id: 'hail_esd', label: 'HAIL ESD', icon: 'ph-shield-check', href: buildSyPmHref('HAIL ESD') }
+            ]
+        } */
     ];
 
     // ─── Style Tokens ────────────────────────────────────────────────
@@ -188,7 +194,7 @@ function renderPlantNav(activePageId) {
         const panel = document.createElement('div');
         panel.id = ddId;
         panel.className = cls.dropdownPanel;
-        panel.innerHTML = group.items.map(child => {
+        panel.innerHTML = (group.items || []).map(child => {
             const childActive = isChildActive(child) || (child.id && child.id === activePageId);
             return `
                 <a href="${child.href}"
@@ -234,7 +240,6 @@ function renderPlantNav(activePageId) {
 
     const closeAll = () => {
         document.querySelectorAll('.pn-dropdown-portal').forEach(p => {
-            p.classList.remove(cls.dropdownPanelOpen.split(' ').join(','));
             // Remove each class individually
             cls.dropdownPanelOpen.split(' ').forEach(c => p.classList.remove(c));
         });

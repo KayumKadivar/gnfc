@@ -83,7 +83,7 @@
     <!-- Precise Sidebar -->
     <!-- Precise Sidebar (Fixed Position) -->
     <aside class="w-64 flex flex-col gap-2 shrink-0 py-6">
-        <div class="glass p-4 rounded-2xl flex flex-col gap-1">
+        <div class="glass p-4 rounded-2xl flex flex-col gap-1 shadow-md ">
             <a href="/login.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-teal-700 font-bold text-[18px] uppercase tracking-widest bg-white shadow-sm hover:translate-x-1 transition-all">
                 <i class="ph-bold ph-arrow-square-out text-lg"></i>
                 <span>IIMS</span>
@@ -110,64 +110,86 @@
     <!-- Scrollable Content Area -->
     <main class="flex-1 glass rounded-3xl p-12 overflow-y-auto border border-white/60 shadow-xl my-6">
         
-        <div class="max-w-4xl space-y-10">
+        <div class="max-w-4xl space-y-12">
             
             <div class="space-y-6">
-                <p class="text-xl font-medium text-slate-800 leading-relaxed italic">
-                    This web site provides comprehensive support for doing every activity carried out by Instrumentation professionals in GNFC.
-                </p>
-                <p class="text-slate-600 leading-relaxed">
-                    It has been designed and evolved completely in-house, after continuous efforts of more than five years and presently it has taken shape of a most professionally designed software platform which encompasses all activities of Instrumentation professionals. As a matter of fact, any maintenance department can use it with minor modifications in only some of its modules.
+                <h2 class="text-4xl font-outfit font-black text-gnfc-navy tracking-tight">
+                    Integrated Instrument Management System (IIMS)
+                </h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    IIMS is a comprehensive in-house developed digital platform designed to support and streamline
+                    all activities of Instrumentation professionals at GNFC. Built through continuous improvement
+                    and innovation, it integrates departmental operations into one secure, efficient, and user-friendly
+                    system.
                 </p>
             </div>
 
             <div class="bg-teal-50/50 p-8 rounded-2xl border border-teal-100">
-                <h2 class="text-teal-800 font-black uppercase tracking-widest text-sm mb-4">Mission statement:</h2>
-                <p class="text-teal-900 leading-relaxed font-semibold">
-                    100% Computerization of all our work practices on a single platform, which is built on a standard DBMS software, is easy to navigate, which meets our customized work requirements, which is platform free as far as the applications are concerned, and, which is 100% secured and authentic as far as data security and integrity are concerned. The system should have standard professional Hardware platform in terms of Server machine, which meets storage reliability, and communication speed requirements.
+                <h3 class="text-teal-800 font-extrabold uppercase tracking-widest text-sm mb-4 flex items-center gap-2">
+                    <i class="ph-bold ph-target text-lg"></i>
+                    <span>Our Mission</span>
+                </h3>
+                <p class="text-teal-900 leading-relaxed font-semibold text-lg">
+                    To achieve 100% computerization of Instrumentation work practices on a single, secure, DBMS-
+                    based platform that is easy to navigate, customized to our requirements, platform-independent,
+                    and fully reliable in terms of data integrity and security.
                 </p>
             </div>
 
-            <p class="text-slate-700 font-bold italic">
-                It has three main sections, namely, <span class="text-teal-600">Integrated Instrument Management System (IIMS)</span>, <span class="text-teal-600">Utility Section</span> and <span class="text-teal-600">HELP section.</span>
-            </p>
+            <div class="space-y-8">
+                <h3 class="text-slate-800 font-black uppercase tracking-widest text-sm mb-6 flex items-center gap-2">
+                    <span class="w-8 h-px bg-slate-300"></span>
+                    <span>Main Sections</span>
+                </h3>
 
-            <div class="space-y-12 pt-6">
-                <!-- IIMS Section -->
-                <div>
-                    <h3 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <span class="w-8 h-px bg-teal-200"></span>
-                        <span>IIMS section</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-7 pl-10 border-l-2 border-teal-50">
-                        IIMS section provides platform for Online Operation Job register, E log Book, Engineering documentation, maintenance records and History, Modules for Electronic Lab and Centralized Control Valve Maintenance Service module, Procurement system module, Preventive and other scheduled maintenance modules, archiving of all kinds of communications and correspondences, etc. Powerful search and report generation facilities and reminder systems are built in.
-                    </p>
-                </div>
+                <div class="grid gap-8">
+                    <!-- IIMS Section -->
+                    <div class="group">
+                        <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i class="ph-bold ph-cpu text-xl"></i>
+                            <span>IIMS Section</span>
+                        </h4>
+                        <p class="text-slate-600 leading-relaxed pl-7 border-l-2 border-teal-100 group-hover:border-teal-400 transition-colors">
+                            The operational core of the department, covering Online Job Register, E-Log Book, engineering
+                            documentation, maintenance records and history, electronic lab, control valve services,
+                            procurement, preventive maintenance, communication archiving, advanced search, reporting,
+                            and automated reminders.
+                        </p>
+                    </div>
 
-                <!-- Utility Section -->
-                <div>
-                    <h3 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <span class="w-8 h-px bg-teal-200"></span>
-                        <span>Utility section</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-7 pl-10 border-l-2 border-teal-50">
-                        Utility section provides supporting information of various kinds, such as brief information of the personnel of Instrument Department, engineering standards and specifications related to Instrumentation work practices, various communication formats, technical literature, information on ISO14000 and SAP, brief information of various plants and product of GNFC etc. It has database on contacts in various other industries. It has a posting area for news and views pertaining to happenings in Instrumentation at GNFC.
-                    </p>
-                </div>
+                    <!-- Utility Section -->
+                    <div class="group">
+                        <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i class="ph-bold ph-wrench text-xl"></i>
+                            <span>Utility Section</span>
+                        </h4>
+                        <p class="text-slate-600 leading-relaxed pl-7 border-l-2 border-teal-100 group-hover:border-teal-400 transition-colors">
+                            A centralized reference hub providing personnel information, engineering standards, technical
+                            literature, ISO/CPCB/SAP references, plant and product details, communication formats, and
+                            industry contact database.
+                        </p>
+                    </div>
 
-                <!-- HELP Section -->
-                <div>
-                    <h3 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <span class="w-8 h-px bg-teal-200"></span>
-                        <span>HELP section</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-7 pl-10 border-l-2 border-teal-50">
-                        HELP section provides very elaborate document describing all the features and procedures to put every module to maximum use.
-                    </p>
+                    <!-- Help Section -->
+                    <div class="group">
+                        <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <i class="ph-bold ph-question text-xl"></i>
+                            <span>Help Section</span>
+                        </h4>
+                        <p class="text-slate-600 leading-relaxed pl-7 border-l-2 border-teal-100 group-hover:border-teal-400 transition-colors">
+                            Comprehensive user guidance to ensure maximum and effective utilization of every module.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div class="pt-16 pb-8 border-t border-slate-100 flex flex-col items-center lg:items-start">
+            <div class="py-8 border-y border-slate-100">
+                <p class="text-center text-gnfc-navy font-bold text-xl tracking-wide italic">
+                    One Platform. Complete Control. Total Digital Integration.
+                </p>
+            </div>
+
+            <div class="pt-8 pb-12 flex flex-col items-center lg:items-start">
                 <p class="text-2xl font-outfit font-bold text-slate-800 italic mb-6">Enjoy your stay!</p>
                 <div class="text-center lg:text-left">
                     <p class="text-xl font-black text-gnfc-navy tracking-tight">P A Mankad</p>

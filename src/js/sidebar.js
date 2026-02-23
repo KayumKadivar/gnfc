@@ -186,5 +186,8 @@ function logout() {
     localStorage.removeItem('sidebarCollapsed');
     localStorage.removeItem('userRole');
     localStorage.removeItem('currentUserName');
+    localStorage.removeItem('gnfc_login_session_id');
+    localStorage.removeItem('gnfc_calibration_modal_shown_for_login');
+    sessionStorage.removeItem('gnfc_calibration_modal_shown');
     window.location.href = '/index.html';
 }

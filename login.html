@@ -181,7 +181,11 @@
       localStorage.setItem('currentUserName', button.dataset.userName || 'Admin User');
 
       if (signInRow) signInRow.classList.add('hidden');
-      if (shouldRedirect) window.location.href = '/src/pages/dashboard.html';
+      if (shouldRedirect) {
+        const loginSessionId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        localStorage.setItem('gnfc_login_session_id', loginSessionId);
+        window.location.href = '/src/pages/dashboard.html?fromLogin=1';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

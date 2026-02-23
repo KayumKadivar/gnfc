@@ -1542,6 +1542,16 @@
     closeOverlay("general-history-modal");
   }
 
+  function updateJobInState(jobId, updates) {
+    const located = getJobById(jobId);
+    if (!located) return false;
+
+    Object.assign(located.job, updates);
+    located.job.updatedAt = new Date().toISOString();
+    persistLocalData();
+    return true;
+  }
+
   function addToHistory() {
     const record = {
       id: `GH-${Date.now()}`,

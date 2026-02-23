@@ -119,6 +119,118 @@
     html.dark .theme-table tbody tr:nth-child(even) td {
       background-color: rgba(255, 255, 255, 0.015);
     }
+
+    /* Modern HSO Report Design */
+    .hso-report-container {
+      background: var(--app-panel);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--app-border);
+      color: var(--app-text);
+      font-size: 13px;
+    }
+
+    .hso-report-header {
+      background: var(--app-panel-alt);
+      padding: 16px 20px;
+      border-bottom: 2px solid var(--app-border);
+    }
+
+    .hso-report-title {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+      color: var(--app-text);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hso-report-section {
+      padding: 20px;
+      border-bottom: 1px solid var(--app-border);
+    }
+
+    .hso-report-section:last-child {
+      border-bottom: none;
+    }
+
+    .hso-section-label {
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--app-text-muted, #71717a);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hso-table-modern {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--app-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .hso-table-modern th {
+      background: var(--app-panel-alt);
+      color: var(--app-text);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--app-border);
+      border-right: 1px solid var(--app-border);
+      text-align: left;
+    }
+
+    .hso-table-modern th:last-child {
+      border-right: none;
+    }
+
+    .hso-table-modern td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--app-border);
+      border-right: 1px solid var(--app-border);
+      vertical-align: top;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+
+    .hso-table-modern td:last-child {
+      border-right: none;
+    }
+
+    .hso-table-modern tr:last-child td {
+      border-bottom: none;
+    }
+
+    .hso-table-modern tr:hover td {
+      background-color: rgba(59, 130, 246, 0.03);
+    }
+
+    .hso-badge-count {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--app-panel);
+      border: 1px solid var(--app-border);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--app-primary, #3b82f6);
+    }
+
+    .hso-empty-msg {
+      padding: 24px;
+      text-align: center;
+      color: var(--app-text-muted, #71717a);
+      font-style: italic;
+      font-size: 13px;
+    }
   </style>
 </head>
 
@@ -676,6 +788,104 @@
       </div>
     </div>
 
+    <div id="hso-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true"
+      onclick="handleModalBackdrop(event, 'hso-modal')">
+      <div class="gnfc-modal-shell gnfc-modal-shell--full">
+        <div class="gnfc-modal-header">
+          <div>
+            <h3 class="gnfc-modal-title">ISO/OHSAS/CPCB Due Jobs</h3>
+            <p class="gnfc-modal-subtitle">Plant: <span id="hso-plant-name"></span></p>
+          </div>
+          <button type="button" onclick="closeHSOModal()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+        <div class="gnfc-modal-body gnfc-modal-body--tight">
+          <div class="hso-report-container">
+            <!-- Report Header -->
+            <div class="hso-report-header">
+              <div class="hso-report-title">
+                <i class="ph-duotone ph-file-text text-blue-500"></i>
+                <span id="hso-sheet-title">BOILER</span>
+              </div>
+            </div>
+
+            <!-- ISO Section -->
+            <div class="hso-report-section">
+              <div class="hso-section-label">
+                <i class="ph-bold ph-certificate text-emerald-500"></i>
+                ISO14001/OHSAS18001 DUE JOBS
+                <span id="hso-iso-count" class="hso-badge-count">0</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="hso-table-modern">
+                  <thead>
+                    <tr>
+                      <th class="w-12 text-center">Sr</th>
+                      <th class="w-32">Tag</th>
+                      <th class="w-48">Equipment</th>
+                      <th>Cali/Check Procedure</th>
+                      <th class="w-32">Freq (Days)</th>
+                      <th class="w-32">Due Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hso-iso-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- CPCB Section -->
+            <div class="hso-report-section">
+              <div class="hso-section-label">
+                <i class="ph-bold ph-shield-check text-orange-500"></i>
+                CPCB DUE JOBS
+                <span id="hso-cpcb-count" class="hso-badge-count">0</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="hso-table-modern">
+                  <thead>
+                    <tr>
+                      <th class="w-12 text-center">Sr</th>
+                      <th class="w-32">Tag</th>
+                      <th>Cali/Check Procedure</th>
+                      <th class="w-32">Freq (Days)</th>
+                      <th class="w-32">Due Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hso-cpcb-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Job Planner Section -->
+            <div class="hso-report-section">
+              <div class="hso-section-label">
+                <i class="ph-bold ph-calendar-check text-blue-500"></i>
+                JOB PLANNER
+              </div>
+              <div class="overflow-x-auto">
+                <table class="hso-table-modern">
+                  <thead>
+                    <tr>
+                      <th class="w-12 text-center">Sr</th>
+                      <th class="w-32">Tag</th>
+                      <th>Description</th>
+                      <th class="w-32">Freq (Days)</th>
+                      <th class="w-32 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hso-job-planner-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeHSOModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <script>
@@ -731,6 +941,8 @@
     let cjlRows = [];
     let sdRows = [];
     let isoRows = [];
+    let cpcbRows = [];
+    let hsoPlannerRows = [];
     let pendingData = []; // Promoted to global scope
     let cjlHeaderMode = 'area';
     const cjlFilterState = { category: 'ALL', area: 'ALL', job: 'ALL' };
@@ -958,6 +1170,93 @@
       `).join('');
     }
 
+    function renderHSOModalTable() {
+      const isoBody = document.getElementById('hso-iso-table-body');
+      const cpcbBody = document.getElementById('hso-cpcb-table-body');
+      const plannerBody = document.getElementById('hso-job-planner-body');
+      const isoCount = document.getElementById('hso-iso-count');
+      const cpcbCount = document.getElementById('hso-cpcb-count');
+
+      if (!isoBody || !cpcbBody || !plannerBody || !isoCount || !cpcbCount) return;
+
+      isoCount.textContent = String(isoRows.length);
+      cpcbCount.textContent = String(cpcbRows.length);
+
+      // ISO Table
+      if (!Array.isArray(isoRows) || isoRows.length === 0) {
+        isoBody.innerHTML = '<tr><td colspan="6" class="hso-empty-msg">No ISO jobs due at this time.</td></tr>';
+      } else {
+        isoBody.innerHTML = isoRows.map((row) => `
+          <tr>
+            <td class="text-center font-mono color-muted">${escapeHTML(String(row.sr))}</td>
+            <td class="fw-bold color-blue">${escapeHTML(row.tag)}</td>
+            <td class="color-primary font-medium">${escapeHTML(row.equipment)}</td>
+            <td class="color-label text-xs">${escapeHTML(row.procedure)}</td>
+            <td class="text-center font-mono color-muted">${escapeHTML(String(row.freqDays))}</td>
+            <td class="text-center font-bold color-primary font-mono">${escapeHTML(row.dueDate)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // CPCB Table
+      if (!Array.isArray(cpcbRows) || cpcbRows.length === 0) {
+        cpcbBody.innerHTML = '<tr><td colspan="5" class="hso-empty-msg">No CPCB jobs due at this time.</td></tr>';
+      } else {
+        cpcbBody.innerHTML = cpcbRows.map((row) => `
+          <tr>
+            <td class="text-center font-mono color-muted">${escapeHTML(String(row.sr))}</td>
+            <td class="fw-bold color-orange">${escapeHTML(row.tag)}</td>
+            <td class="color-label text-xs">${escapeHTML(row.procedure)}</td>
+            <td class="text-center font-mono color-muted">${escapeHTML(String(row.freqDays))}</td>
+            <td class="text-center font-bold color-primary font-mono">${escapeHTML(row.dueDate)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Job Planner Table
+      if (!Array.isArray(hsoPlannerRows) || hsoPlannerRows.length === 0) {
+        plannerBody.innerHTML = '<tr><td colspan="5" class="hso-empty-msg">Job planner is currently empty.</td></tr>';
+      } else {
+        plannerBody.innerHTML = hsoPlannerRows.map((row) => `
+          <tr>
+            <td class="text-center font-mono color-muted">${escapeHTML(String(row.sr))}</td>
+            <td class="fw-bold color-blue">${escapeHTML(row.tag)}</td>
+            <td class="color-primary font-medium leading-relaxed">${escapeHTML(row.description)}</td>
+            <td class="text-center font-mono color-muted">${escapeHTML(String(row.freqDays))}</td>
+            <td class="text-center">
+              <button type="button" class="gnfc-modal-btn gnfc-modal-btn-primary !py-1 !px-3 font-12px uppercase shadow-sm" onclick="fillHSOPlannerToForm(${row.sr})">
+                <i class="ph-bold ph-plus"></i> Assign
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    window.fillHSOPlannerToForm = function (plannerSr) {
+      const selected = (hsoPlannerRows || []).find((row) => Number(row.sr) === Number(plannerSr));
+      if (!selected) return;
+
+      const tagSelect = document.getElementById('form-tag');
+      if (tagSelect) {
+        let optionExists = false;
+        for (let i = 0; i < tagSelect.options.length; i++) {
+          if (tagSelect.options[i].value === selected.tag) {
+            optionExists = true;
+            break;
+          }
+        }
+        if (!optionExists) tagSelect.add(new Option(selected.tag, selected.tag));
+        tagSelect.value = selected.tag;
+      }
+
+      const formDesc = document.getElementById('form-jobs-desc');
+      if (formDesc) formDesc.value = selected.description;
+
+      closeHSOModal();
+      document.getElementById('form-jobs-desc')?.focus();
+    };
+
     // Initialize Page
     (function init() {
       const now = new Date();
@@ -968,6 +1267,8 @@
       document.getElementById('cjl-plant-name').textContent = escapeHTML(plant);
       document.getElementById('sd-plant-name').textContent = escapeHTML(plant);
       document.getElementById('iso-plant-name').textContent = escapeHTML(plant);
+      document.getElementById('hso-plant-name').textContent = escapeHTML(plant);
+      document.getElementById('hso-sheet-title').textContent = escapeHTML(plant);
 
       // --- Realistic Data Population ---
       const sampleTags = ['LT-102', 'PT-301', 'TT-504', 'FT-201', 'CV-101', 'XV-405', 'AT-902', 'PI-112', 'LI-304', 'TI-506', 'FI-203', 'ZT-801'];
@@ -1165,14 +1466,39 @@
         };
       });
 
+      hsoPlannerRows = [
+        {
+          sr: 1,
+          tag: 'NOTAG',
+          description: 'Control room document file to be updated. Boiler, CPP, CPSU, ASH and CHP control room.',
+          freqDays: 60
+        },
+        {
+          sr: 2,
+          tag: 'GC',
+          description: 'Alarm/Events to be checked.',
+          freqDays: 30
+        },
+        {
+          sr: 3,
+          tag: 'NOTAG',
+          description: 'Boiler Instrument Workshop House Keeping Job.',
+          freqDays: 20
+        }
+      ];
+
+      cpcbRows = [];
+
       renderCJLTable();
       renderSDTable();
       renderISOTable();
+      renderHSOModalTable();
+      setTimeout(() => openHSOModal(), 120);
 
     })();
 
     // Modal and Button Functions
-    const modalIds = ['cjl-modal', 'cjl-attachment-modal', 'sd-modal', 'iso-modal', 'search-modal'];
+    const modalIds = ['cjl-modal', 'cjl-attachment-modal', 'sd-modal', 'iso-modal', 'search-modal', 'hso-modal'];
 
     function setModalState(modalId, isOpen) {
       const modal = document.getElementById(modalId);
@@ -1238,11 +1564,15 @@
     }
     function closeSEModal() { setModalState('sd-modal', false); }
     function assignOPJobs() {
-      renderISOTable();
-      setModalState('iso-modal', true);
+      openHSOModal();
     }
     function assignISOJobs() { assignOPJobs(); }
     function closeISOModal() { setModalState('iso-modal', false); }
+    function openHSOModal() {
+      renderHSOModalTable();
+      setModalState('hso-modal', true);
+    }
+    function closeHSOModal() { setModalState('hso-modal', false); }
     function openSearchModal() {
       setModalState('search-modal', true);
       setTimeout(searchByTag, 10);

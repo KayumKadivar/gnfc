@@ -44,7 +44,7 @@ function renderHeader(config) {
           </div>
         </div>
         
-        <div class="w-px h-8 bg-gray-200 dark:bg-[#2c3235]"></div>
+        <div class="flex items-center gap-2">
 
         <!-- Utility Group -->
         <div class="flex items-center gap-2">

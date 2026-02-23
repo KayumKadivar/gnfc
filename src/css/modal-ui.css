@@ -229,7 +229,7 @@ html[data-theme-mode="light"] {
 /* ── Buttons ─────────────────────────────────────────────── */
 .gnfc-modal-btn {
   min-height: 2rem;
-  padding: 0.5rem 1rem;
+  padding: 7px 1rem;
   border-radius: 0.125rem;
   border: 1px solid transparent;
   font-size: 0.75rem;

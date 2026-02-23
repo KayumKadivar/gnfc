@@ -2,7 +2,7 @@ const ThemeManager = {
     storageKey: 'gnfc_theme_settings',
 
     defaults: {
-        fontSize: 18,
+        fontSize: 20,
         mode: 'light',
     },
 
@@ -63,24 +63,13 @@ const ThemeManager = {
 
         const merged = { ...this.defaults, ...parsed };
 
-        // Validation: Ensure mode is valid
         if (merged.mode !== 'dark' && merged.mode !== 'light' && merged.mode !== 'system') {
-            // If legacy data has specific colors, try to infer, otherwise default
             if (this.isValidHex(merged.bgColor)) {
                 merged.mode = this.inferModeFromLegacySettings(merged);
             } else {
                 merged.mode = this.defaults.mode;
             }
         }
-
-        // Return raw settings (mode can be 'system')
-        // We resolve 'system' to actual colors during application, not here.
-        // But for bgColor/panelColor, if they are custom, we keep them.
-        // If mode is system, we might need to resolve palette now to provide fallback colors?
-        // Actually, let's keep it simple: getSettings returns the *intent*.
-
-        // However, existing code might expect bgColor to be populated.
-        // If system, we need to know what system is right now to populate default bg/panel if not custom.
 
         const effectiveMode = this.resolveMode(merged.mode);
         const palette = this.getPalette(effectiveMode);
@@ -94,7 +83,6 @@ const ThemeManager = {
     },
 
     resolveMode(mode) {
-        // Enforce light mode only as per user request
         return 'light';
     },
 
@@ -109,9 +97,6 @@ const ThemeManager = {
         const next = this.getSettings(); // Get current settings including custom fonts
         next.mode = mode;
 
-        // Reset custom colors when switching modes to ensure we pick up new palette defaults
-        // unless the user explicitly set them (which we don't track separately, so let's reset to palette)
-        // In this app version, we don't have a UI for custom colors, so safe to reset.
         const effectiveMode = this.resolveMode(mode);
         const palette = this.getPalette(effectiveMode);
         next.bgColor = palette.bg;
@@ -140,13 +125,11 @@ const ThemeManager = {
     },
 
     applySettings() {
-        const settings = this.getSettings(); // This gets the INTENT (system/light/dark)
-        const effectiveMode = this.resolveMode(settings.mode); // Resolves system -> light/dark
+        const settings = this.getSettings(); 
+        const effectiveMode = this.resolveMode(settings.mode); 
         const palette = this.getPalette(effectiveMode);
 
-        // Font Scale Logic
-        // If fontSize is the default (18), we allow CSS media queries to control the root size (Responsive).
-        // If fontSize has been changed by user, we force it as an inline style (User Override).
+      
         const isDefaultSize = settings.fontSize === this.defaults.fontSize;
 
         // Apply class to html
@@ -160,8 +143,6 @@ const ThemeManager = {
             document.documentElement.style.fontSize = `${settings.fontSize}px`;
         }
 
-        // Calculate scale for manual adjustments if needed, though with responsive root, scale is implicit.
-        // We keep app-font-scale param for compatibility, but relative to 16px base.
         const fontScale = settings.fontSize / 16;
 
         this.injectColorOverrides({
