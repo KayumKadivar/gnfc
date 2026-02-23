@@ -1,0 +1,487 @@
+/* ========================================
+   Admin Dashboard — Dark Theme Styles
+   Works with the portal CSS variable system
+   ======================================== */
+
+/* ── Top Bar ── */
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: var(--app-panel, #181b1f);
+    border: 1px solid var(--app-border, #23272e);
+    margin-bottom: 12px;
+}
+
+.admin-topbar-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--typo-hint, #6b7280);
+}
+
+.admin-topbar-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--typo-primary, #ffffff);
+}
+
+/* ── Card / Panel ── */
+.admin-card {
+    background: var(--app-panel, #181b1f);
+    border: 1px solid var(--app-border, #23272e);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.admin-card.border-dashed {
+    border-style: dashed;
+}
+
+/* ── Form Layout ── */
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-form-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: start;
+}
+
+@media (max-width: 640px) {
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-row-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.admin-form-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--typo-secondary, #d1d5db);
+}
+
+.admin-input {
+    height: 40px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--app-border, #23272e);
+    background: var(--app-bg, #111217);
+    padding: 0 12px;
+    font-size: 0.875rem;
+    color: var(--typo-primary, #ffffff);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-input:focus {
+    border-color: var(--typo-blue, #5794F2);
+    box-shadow: 0 0 0 3px rgba(87, 148, 242, 0.15);
+}
+
+.admin-input::placeholder {
+    color: var(--typo-hint, #6b7280);
+}
+
+.admin-select {
+    height: 40px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--app-border, #23272e);
+    background: var(--app-bg, #111217);
+    padding: 0 12px;
+    font-size: 0.875rem;
+    color: var(--typo-primary, #ffffff);
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+}
+
+.admin-select:focus {
+    border-color: var(--typo-blue, #5794F2);
+}
+
+.admin-textarea {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--app-border, #23272e);
+    background: var(--app-bg, #111217);
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    color: var(--typo-primary, #ffffff);
+    outline: none;
+    resize: vertical;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    transition: border-color 0.2s;
+}
+
+.admin-textarea:focus {
+    border-color: var(--typo-blue, #5794F2);
+}
+
+/* ── Form Table (used in mail schedule) ── */
+.admin-form-table {
+    border-radius: 10px;
+    border: 1px solid var(--app-border, #23272e);
+    overflow: hidden;
+}
+
+.admin-form-table-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border-bottom: 1px solid var(--app-border, #23272e);
+}
+
+.admin-form-table-row:last-child {
+    border-bottom: none;
+}
+
+.admin-form-table-label {
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--typo-secondary, #d1d5db);
+    border-right: 1px solid var(--app-border, #23272e);
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.admin-form-table-value {
+    padding: 10px 14px;
+}
+
+@media (max-width: 640px) {
+    .admin-form-table-row {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-table-label {
+        border-right: none;
+        border-bottom: 1px solid var(--app-border, #23272e);
+    }
+}
+
+/* ── Buttons ── */
+.admin-btn-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.admin-btn-primary {
+    background: var(--typo-blue, #5794F2);
+    color: #ffffff;
+    border-color: var(--typo-blue, #5794F2);
+}
+
+.admin-btn-primary:hover {
+    background: #4680d8;
+    border-color: #4680d8;
+}
+
+.admin-btn-secondary {
+    background: var(--app-bg, #111217);
+    color: var(--typo-primary, #ffffff);
+    border-color: var(--app-border, #23272e);
+}
+
+.admin-btn-secondary:hover {
+    background: var(--app-border, #23272e);
+}
+
+.admin-btn-danger {
+    background: rgba(242, 73, 92, 0.12);
+    color: #F2495C;
+    border-color: rgba(242, 73, 92, 0.3);
+}
+
+.admin-btn-danger:hover {
+    background: rgba(242, 73, 92, 0.22);
+}
+
+.admin-btn-sm {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--typo-secondary, #d1d5db);
+    border-color: var(--app-border, #23272e);
+    cursor: pointer;
+}
+
+.admin-btn-sm:hover {
+    background: var(--app-border, #23272e);
+    color: var(--typo-primary, #fff);
+}
+
+/* ── Tables ── */
+.admin-table-scroll {
+    overflow: auto;
+    border-radius: 8px;
+    border: 1px solid var(--app-border, #23272e);
+}
+
+/* Custom scrollbar for dark theme */
+.admin-table-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.admin-table-scroll::-webkit-scrollbar-track {
+    background: var(--app-bg, #111217);
+}
+
+.admin-table-scroll::-webkit-scrollbar-thumb {
+    background: var(--app-border, #23272e);
+    border-radius: 3px;
+}
+
+.admin-table-scroll::-webkit-scrollbar-thumb:hover {
+    background: #3a3f48;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+}
+
+.admin-table-head {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--typo-blue, #5794F2);
+    background: rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid var(--app-border, #23272e);
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.admin-table-row {
+    border-bottom: 1px solid var(--app-border, #23272e);
+    transition: background 0.15s;
+}
+
+.admin-table-row:hover {
+    background: rgba(87, 148, 242, 0.06);
+}
+
+.admin-table-row:last-child {
+    border-bottom: none;
+}
+
+.admin-table-cell {
+    padding: 7px 12px;
+    color: var(--typo-primary, #ffffff);
+}
+
+/* ── Checkbox & Radio ── */
+.admin-checkbox,
+.admin-radio {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--typo-blue, #5794F2);
+    cursor: pointer;
+}
+
+/* ── Modals ── */
+.admin-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+.admin-modal-center {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.admin-modal-box {
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--app-panel, #181b1f);
+    border: 1px solid var(--app-border, #23272e);
+    box-shadow: 0 25px 80px -20px rgba(0, 0, 0, 0.7);
+}
+
+.admin-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--app-border, #23272e);
+}
+
+.admin-modal-header h3 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--typo-primary, #ffffff);
+}
+
+.admin-modal-body {
+    padding: 16px 20px;
+}
+
+/* ── Sidebar ── */
+.admin-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--app-sidebar, #0e1013);
+    border-right: 1px solid var(--app-border, #23272e);
+    overflow-y: auto;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid var(--app-border, #23272e);
+}
+
+.admin-sidebar-logo img {
+    height: 28px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.admin-sidebar-logo span {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #FF9900;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.admin-sidebar-section {
+    padding: 6px 8px 2px;
+}
+
+.admin-sidebar-section-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--typo-hint, #6b7280);
+    padding: 8px 10px 4px;
+}
+
+.admin-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--typo-secondary, #d1d5db);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    margin-bottom: 1px;
+}
+
+.admin-sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--typo-primary, #ffffff);
+}
+
+.admin-sidebar-link.active {
+    background: rgba(255, 153, 0, 0.12);
+    color: #FF9900;
+    border-color: rgba(255, 153, 0, 0.25);
+    font-weight: 700;
+}
+
+.admin-sidebar-link i {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+}
+
+.admin-sidebar-link span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-sidebar-footer {
+    margin-top: auto;
+    padding: 10px 8px;
+    border-top: 1px solid var(--app-border, #23272e);
+}
+
+.admin-sidebar-exit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #F2495C;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.admin-sidebar-exit:hover {
+    background: rgba(242, 73, 92, 0.12);
+}
+
+.admin-sidebar-exit i {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+/* ── Utility ── */
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}

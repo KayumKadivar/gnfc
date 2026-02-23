@@ -9,7 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/src/js/tailwind_config.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <script src="/src/js/theme_manager.js"></script>
     <style>
         :root {
             --gnfc-ink: #0b2f57;
@@ -22,7 +25,7 @@
 
         body {
             font-family: 'Sora', sans-serif;
-            color: var(--gnfc-text);
+            color: var(--app-text, var(--gnfc-text));
             background:
                 radial-gradient(1200px 500px at -10% -10%, #dcecff 0%, transparent 55%),
                 radial-gradient(900px 600px at 110% 10%, #ffe8cc 0%, transparent 50%),
@@ -37,6 +40,84 @@
             backdrop-filter: blur(8px);
             background: rgba(255, 255, 255, 0.84);
         }
+
+        /* Dark mode overrides for admin login */
+        html[data-theme-mode="dark"] body {
+            background: var(--app-bg, #111217) !important;
+        }
+
+        html[data-theme-mode="dark"] .glass {
+            background: var(--app-panel, #181b1f) !important;
+            border-color: var(--app-border, #2c3235) !important;
+        }
+
+        html[data-theme-mode="dark"] .glow {
+            text-shadow: 0 0 16px rgba(255, 153, 0, 0.3);
+        }
+
+        html[data-theme-mode="dark"] input[type="text"],
+        html[data-theme-mode="dark"] input[type="password"] {
+            background: var(--app-bg, #111217) !important;
+            border-color: var(--app-border, #2c3235) !important;
+            color: var(--app-text, #ffffff) !important;
+        }
+
+        html[data-theme-mode="dark"] input:focus {
+            border-color: var(--typo-blue, #5794F2) !important;
+            box-shadow: 0 0 0 3px rgba(87, 148, 242, 0.15) !important;
+        }
+
+        html[data-theme-mode="dark"] .text-slate-500,
+        html[data-theme-mode="dark"] .text-slate-600,
+        html[data-theme-mode="dark"] .text-slate-700 {
+            color: var(--app-muted, #d1d5db) !important;
+        }
+
+        html[data-theme-mode="dark"] footer {
+            border-color: var(--app-border, #2c3235) !important;
+            color: var(--app-muted, #9ca3af) !important;
+        }
+
+        /* Theme controls styling */
+        .theme-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-ctrl-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid var(--app-border, var(--gnfc-line));
+            background: transparent;
+            color: var(--app-text, var(--gnfc-steel));
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-ctrl-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        html[data-theme-mode="dark"] .theme-ctrl-btn {
+            border-color: var(--app-border, #2c3235);
+            color: var(--app-muted, #d1d5db);
+        }
+
+        html[data-theme-mode="dark"] .theme-ctrl-btn:hover {
+            background: var(--app-border, #2c3235);
+            color: var(--app-text, #ffffff);
+        }
+
+        .theme-ctrl-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--app-border, var(--gnfc-line));
+        }
     </style>
 </head>
 
@@ -48,8 +129,25 @@
                 <i class="ph ph-house"></i>
                 Home
             </a>
-            <p class="hidden text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 sm:block">
-                Administrator Access</p>
+
+            <!-- Theme & Font Controls -->
+            <div class="flex items-center gap-3">
+                <div class="theme-controls">
+                    <button onclick="ThemeManager.decreaseFontSize()" class="theme-ctrl-btn" title="Decrease Font Size">
+                        <i class="ph-bold ph-text-aa" style="font-size:11px"></i>
+                    </button>
+                    <div class="theme-ctrl-divider"></div>
+                    <button onclick="ThemeManager.increaseFontSize()" class="theme-ctrl-btn" title="Increase Font Size">
+                        <i class="ph-bold ph-text-aa" style="font-size:15px"></i>
+                    </button>
+                    <div class="theme-ctrl-divider"></div>
+                    <button id="themeToggleBtn" class="theme-ctrl-btn" title="Toggle Theme">
+                        <i id="themeToggleIcon" class="ph ph-moon"></i>
+                    </button>
+                </div>
+                <p class="hidden text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 sm:block">
+                    Administrator Access</p>
+            </div>
         </header>
 
         <main class="">
@@ -141,7 +239,7 @@
                 </div> -->
             </section>
 
-        
+
         </main>
 
         <footer
@@ -161,17 +259,44 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Password toggle
             const passwordInput = document.getElementById('password');
             const toggleBtn = document.getElementById('togglePasswordBtn');
             const toggleIcon = document.getElementById('togglePasswordIcon');
-            if (!passwordInput || !toggleBtn || !toggleIcon) return;
+            if (passwordInput && toggleBtn && toggleIcon) {
+                toggleBtn.addEventListener('click', () => {
+                    const show = passwordInput.type === 'password';
+                    passwordInput.type = show ? 'text' : 'password';
+                    toggleIcon.className = show ? 'ph ph-eye-slash' : 'ph ph-eye';
+                    toggleBtn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+                });
+            }
 
-            toggleBtn.addEventListener('click', () => {
-                const show = passwordInput.type === 'password';
-                passwordInput.type = show ? 'text' : 'password';
-                toggleIcon.className = show ? 'ph ph-eye-slash' : 'ph ph-eye';
-                toggleBtn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-            });
+            // Theme toggle button
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeToggleIcon = document.getElementById('themeToggleIcon');
+
+            function updateThemeIcon() {
+                if (!themeToggleIcon) return;
+                const settings = ThemeManager.getSettings();
+                const mode = settings.mode || 'light';
+                themeToggleIcon.className = mode === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+            }
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const settings = ThemeManager.getSettings();
+                    const nextMode = settings.mode === 'dark' ? 'light' : 'dark';
+                    ThemeManager.setMode(nextMode);
+                    updateThemeIcon();
+                });
+            }
+
+            // Sync icon on load
+            updateThemeIcon();
+
+            // Listen for theme changes
+            window.addEventListener('themeChanged', () => updateThemeIcon());
         });
     </script>
 </body>

@@ -1,87 +1,100 @@
-const adminLinks = [
-    { key: 'privilege', label: 'Privilege', url: '#' },
-    { key: 'default_privilege', label: 'Default Privilege', url: '#' },
-    { key: 'user_privilege', label: 'User Privilege', url: '#' },
-    { key: 'plants', label: 'Plants', url: '#' },
-    { key: 'modules', label: 'Modules', url: '#' },
-    { key: 'user', label: 'User', url: '#' },
-    { key: 'user_plants', label: 'User-Plants', url: '#' },
-    { key: 'user_email', label: 'User-Email', url: '#' },
-    { key: 'change_password', label: 'Change Password', url: '#' },
-    { key: 'reset_password', label: 'Reset Password', url: '#' },
-    { key: 'admin_member', label: 'Admin Member', url: '#' },
-    { key: 'new_update_popup', label: 'New Update Popup', url: '#' },
-    { key: 'whats_new', label: "What's new", url: '#' },
-    { key: 'mail_schedule', label: 'Mail Schedule', url: '#' },
-    { key: 'login_info', label: 'Login Info', url: '#' },
-    { key: 'ex_dms_space', label: 'Space for Ex-DMS', url: '#' },
-    { label: 'Exit', url: '/index.html' }
-];
-
-const ACTIVE_CLASSES = ['bg-sky-500/15', 'text-white', 'border-l-sky-400'];
-const INACTIVE_CLASSES = ['text-slate-300', 'border-l-transparent'];
-
+/**
+ * Admin Sidebar — Dark-themed navigation
+ * Matches the main portal sidebar style with Phosphor icons.
+ */
 function initAdminSidebar() {
+    'use strict';
+
     const container = document.getElementById('adminSidebarContainer');
     if (!container) return;
 
-    const sidebarHTML = `
-        <div class="h-full flex flex-col">
-            <div class="border-b border-slate-800 bg-slate-950 px-4 py-4">
-                <p class="text-[11px] uppercase tracking-[0.25em] text-slate-400">Admin</p>
-                <p class="mt-1 text-sm font-semibold text-slate-100">Control Panel</p>
-            </div>
+    const sections = [
+        {
+            label: 'Masters',
+            items: [
+                { key: 'privilege', label: 'Privilege', icon: 'ph-shield-check' },
+                { key: 'default_privilege', label: 'Default Privilege', icon: 'ph-shield-star' },
+                { key: 'plants', label: 'Plants', icon: 'ph-factory' },
+                { key: 'modules', label: 'Modules', icon: 'ph-puzzle-piece' },
+            ]
+        },
+        {
+            label: 'Users',
+            items: [
+                { key: 'user', label: 'User Info', icon: 'ph-user-circle' },
+                { key: 'user_privilege', label: 'User Privilege', icon: 'ph-user-check' },
+                { key: 'user_plants', label: 'User Plants', icon: 'ph-tree-structure' },
+                { key: 'user_email', label: 'User Email', icon: 'ph-envelope' },
+                { key: 'admin_member', label: 'Admin Member', icon: 'ph-users-three' },
+            ]
+        },
+        {
+            label: 'Security',
+            items: [
+                { key: 'change_password', label: 'Change Password', icon: 'ph-key' },
+                { key: 'reset_password', label: 'Reset Password', icon: 'ph-arrow-counter-clockwise' },
+            ]
+        },
+        {
+            label: 'System',
+            items: [
+                { key: 'mail_schedule', label: 'Mail Schedule', icon: 'ph-calendar-check' },
+                { key: 'login_info', label: 'Login Info', icon: 'ph-signpost' },
+                { key: 'ex_dms_space', label: 'Ex-DMS Space', icon: 'ph-folder-open' },
+                { key: 'new_update_popup', label: 'Login Popup', icon: 'ph-bell' },
+                { key: 'whats_new', label: "What's New", icon: 'ph-sparkle' },
+            ]
+        }
+    ];
 
-            <nav class="flex-1 overflow-y-auto py-2 custom-scroll">
-                ${adminLinks.map((link) => `
-                    <a
-                        href="${link.url}"
-                        data-admin-view="${link.key || ''}"
-                        class="admin-nav-link block border-l-4 px-4 py-2.5 text-sm font-medium transition-colors duration-150 hover:bg-slate-800 hover:text-white border-l-transparent text-slate-300"
-                    >
-                        ${link.label}
-                    </a>
-                `).join('')}
-            </nav>
+    function renderSidebar(activeKey) {
+        const sectionsHtml = sections.map(section => `
+      <div class="admin-sidebar-section">
+        <div class="admin-sidebar-section-label">${section.label}</div>
+        ${section.items.map(item => `
+          <a class="admin-sidebar-link${item.key === activeKey ? ' active' : ''}" data-nav-key="${item.key}">
+            <i class="ph ${item.icon}"></i>
+            <span>${item.label}</span>
+          </a>
+        `).join('')}
+      </div>
+    `).join('');
+
+        container.innerHTML = `
+      <div class="admin-sidebar">
+        <div class="admin-sidebar-logo">
+          <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC">
+          <span>IIMS Admin</span>
         </div>
+        ${sectionsHtml}
+        <div class="admin-sidebar-footer">
+          <a class="admin-sidebar-exit" href="/index.html">
+            <i class="ph ph-sign-out"></i>
+            <span>Exit</span>
+          </a>
+        </div>
+      </div>
     `;
 
-    container.innerHTML = sidebarHTML;
-
-    const links = Array.from(container.querySelectorAll('.admin-nav-link'));
-
-    function setActiveLink(activeKey) {
-        links.forEach((link) => {
-            const key = link.dataset.adminView || '';
-            const isActive = key && key === activeKey;
-
-            link.classList.remove(...ACTIVE_CLASSES, ...INACTIVE_CLASSES);
-            link.classList.add(...(isActive ? ACTIVE_CLASSES : INACTIVE_CLASSES));
+        // Bind navigation clicks
+        container.querySelectorAll('[data-nav-key]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const key = link.dataset.navKey;
+                if (typeof window.renderAdminContent === 'function') {
+                    window.renderAdminContent(key);
+                }
+            });
         });
     }
 
-    links.forEach((link) => {
-        const viewKey = link.dataset.adminView || '';
-        const href = link.getAttribute('href');
+    // Set active state externally
+    window.setAdminSidebarActive = function setAdminSidebarActive(key) {
+        container.querySelectorAll('.admin-sidebar-link').forEach(link => {
+            link.classList.toggle('active', link.dataset.navKey === key);
+        });
+    };
 
-        if (viewKey) {
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                setActiveLink(viewKey);
-                if (typeof window.renderAdminContent === 'function') {
-                    window.renderAdminContent(viewKey);
-                }
-            });
-            return;
-        }
-
-        if (href === '#') {
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-            });
-        }
-    });
-
-    window.setAdminSidebarActive = setActiveLink;
-    setActiveLink('privilege');
+    // Initial render
+    renderSidebar('privilege');
 }

@@ -83,6 +83,10 @@ const ThemeManager = {
     },
 
     resolveMode(mode) {
+        if (mode === 'dark') return 'dark';
+        if (mode === 'system') {
+            return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        }
         return 'light';
     },
 
@@ -125,11 +129,11 @@ const ThemeManager = {
     },
 
     applySettings() {
-        const settings = this.getSettings(); 
-        const effectiveMode = this.resolveMode(settings.mode); 
+        const settings = this.getSettings();
+        const effectiveMode = this.resolveMode(settings.mode);
         const palette = this.getPalette(effectiveMode);
 
-      
+
         const isDefaultSize = settings.fontSize === this.defaults.fontSize;
 
         // Apply class to html
@@ -366,7 +370,7 @@ const ThemeManager = {
     sanitizeFontSize(size) {
         const numeric = Number.parseInt(size, 10);
         if (!Number.isFinite(numeric)) return this.defaults.fontSize;
-        return Math.min(24, Math.max(12, numeric));
+        return Math.min(28, Math.max(12, numeric));
     },
 
     isValidHex(value) {
@@ -397,7 +401,7 @@ const ThemeManager = {
     },
     increaseFontSize() {
         const current = this.getSettings();
-        const newSize = Math.min(28, current.fontSize + 1); // Max 24px
+        const newSize = Math.min(28, current.fontSize + 1); // Max 28px
         if (newSize !== current.fontSize) {
             this.saveSettings({ ...current, fontSize: newSize });
         }
