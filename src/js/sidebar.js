@@ -66,7 +66,7 @@ function renderSidebar(activePageId) {
             ${createLink("cms", "#", "ph-monitor", "CMS", isCollapsed)}
             ${createLink("inst_ws", "#", "ph-desktop", "INST WS", isCollapsed)}
             ${createLink("opr_job_reg", "#", "ph-clipboard-text", "OPR. Job Reg", isCollapsed)}
-            ${createLink("job_analysis", "/src/pages/job_types.html", "ph-chart-bar", "Job Analysis", isCollapsed)}
+            ${createLink("job_analysis", "#", "ph-chart-bar", "Job Analysis", isCollapsed)}
 
             <!-- Communication & Helpers -->
             ${createLink("send_mail", "#", "ph-envelope", "SEND MAIL", isCollapsed)}
@@ -74,7 +74,7 @@ function renderSidebar(activePageId) {
 
             <!-- System -->
             ${createLink("user_info", "/src/pages/user_info.html", "ph-user", "USER INFO", isCollapsed)}
-            ${createLink("settings", "/src/pages/settings.html", "ph-gear", "Settings", isCollapsed)}
+            ${createLink("settings", "#", "ph-gear", "Settings", isCollapsed)}
             ${createLink("help", "#", "ph-question", "Help", isCollapsed)}
      
           </nav>
