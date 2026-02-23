@@ -92,7 +92,7 @@
             <span class="font-12px color-label ml-2" id="report-date"></span>
           </div>
           <div class="font-12px typo-mono color-label">
-            Count: <span id="record-count" class="color-white fw-bold">0</span>
+            Count: <span id="record-count" class="fw-bold">0</span>
           </div>
         </div>
 
@@ -100,13 +100,13 @@
           <table id="shift-log-table" class="gnfc-table">
             <thead class="gnfc-thead">
               <tr>
-                <th rowspan="2" class="gnfc-th w-10">Sr</th>
+                <th rowspan="2" class="gnfc-th w-3">Sr</th>
                 <th class="gnfc-th w-24 border-b border-gray-400">Shift</th>
                 <th class="gnfc-th w-32 border-b border-gray-400">Tag No</th>
-                <th rowspan="2" class="gnfc-th min-w-[280px]">Description</th>
+                <th rowspan="2" class="gnfc-th min-w-[200px]">Description</th>
                 <th rowspan="2" class="gnfc-th w-32">Eng</th>
                 <th rowspan="2" class="gnfc-th w-20">Status</th>
-                <th rowspan="2" class="gnfc-th min-w-[180px]">Remarks</th>
+                <th rowspan="2" class="gnfc-th min-w-[250px]">Remarks</th>
               </tr>
               <tr>
                 <th class="gnfc-th border-b border-gray-400">Time</th>
@@ -228,27 +228,27 @@
       {
         id: 2, date: '2026-02-10', shift: 'C', time: '11 PM To 3 AM', tagNo: 'LT96028', jobType: 'MAINTENANCE',
         description: 'Process reported LT-96028 was showing sudden increase in level so LT checked and after dropped and its Zero showing found disturb so its Zero Calibration done and LT Boxup done.',
-        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+        officer: 'C.K.VARIA', status: 'OVER', remarks: 'Process reported LT-96028 was showing sudden increase in level so LT checked and after dropped and its Zero showing found disturb so its Zero Calibration done and LT Boxup done.'
       },
       {
         id: 3, date: '2026-02-10', shift: 'A', time: '6 AM To 2 PM', tagNo: 'LT36353', jobType: 'MAINTENANCE',
         description: 'LT36353 (TDI Ground and 1st floor): Process engineer having doubt on LT as the tank was overflow but LT was showing 1.27%, so checked in DCS but No errors observed. Physically checked its tapping and response in field... (Shortened for view)',
-        officer: 'M.D.MODI', status: 'OVER', remarks: ''
+        officer: 'M.D.MODI', status: 'OVER', remarks: 'LT36353 (TDI Ground and 1st floor): Process engineer having doubt on LT as the tank was overflow but LT was showing 1.27%, '
       },
       {
         id: 4, date: '2026-02-10', shift: 'C', time: '11 PM To 4 AM', tagNo: 'PT96002B', jobType: 'MAINTENANCE',
         description: 'PT box-up done as per process requirements.',
-        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+        officer: 'C.K.VARIA', status: 'OVER', remarks: 'PT box-up done as per process requirements.'
       },
       {
         id: 5, date: '2026-02-10', shift: 'C', time: '4 AM To 5 AM', tagNo: 'VT36132A', jobType: 'MAINTENANCE',
         description: 'Process reported reading fluctuating so sensor removed and again inserted properly after that found working ok.',
-        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+        officer: 'C.K.VARIA', status: 'OVER', remarks: 'Process reported reading fluctuating so sensor removed and again inserted properly after that found working ok.'
       },
       {
         id: 6, date: '2026-02-10', shift: 'C', time: '10 PM To 12 AM', tagNo: 'HY36255', jobType: 'MAINTENANCE',
         description: 'As per process requirement valve is closed by applying air in spring side.',
-        officer: 'C.K.VARIA', status: 'OVER', remarks: ''
+        officer: 'C.K.VARIA', status: 'OVER', remarks: 'Valve is closed by applying air in spring side.'
       }
     ];
 
@@ -272,14 +272,13 @@
 
     // Helper to format Date string
     function formatDateFriendly(dateStr) {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+      if (!dateStr) return '';
+      const [yyyy, mm, dd] = dateStr.split('-');
+      return `${dd}/${mm}/${yyyy}`;
     }
 
     function getRows() {
-      // Logic to filter the mock data based on the selected view
-      // Note: In a real app this would query the backend/store
-      const today = '2026-02-11'; // Fixed to match image date for demo
+      const today = '2026-02-11';
       const prev = '2026-02-10';
 
       if (state.view === 'today') return mockData.filter(d => d.date === today);
@@ -310,7 +309,6 @@
       }
 
       /* ================= GROUPING LOGIC START ================= */
-      // If Weekly or Monthly, we want to group by Date
       const isGroupedView = state.view === 'weekly' || state.view === 'monthly';
 
       let html = '';
@@ -322,9 +320,11 @@
         if (isGroupedView && !processedDates.has(entry.date)) {
           html += `
              <tr class="gnfc-tr-group">
-               <td colspan="7" class="gnfc-td-group">
-                  <i class="ph-fill ph-calendar-blank"></i>
-                  ${formatDateFriendly(entry.date)}
+               <td colspan="7" class="p-0">
+                  <div class="gnfc-td-group">
+                    <i class="ph-bold ph-calendar-blank"></i>
+                    ${formatDateFriendly(entry.date)}
+                  </div>
                </td>
              </tr>
            `;
@@ -348,10 +348,11 @@
             <td rowspan="2" class="gnfc-td text-center">
               <span class="${statusBadgeClass}">${safeText(status || 'NA')}</span>
             </td>
-            <td rowspan="2" class="gnfc-td text-center">
-              <button onclick="openRemarkModal(${entry.id}, '${safeText(entry.remarks || '')}')" class="color-blue hover-color-blue-400 transition-colors">
+            <td rowspan="2" class="gnfc-td">
+              <button onclick="openRemarkModal(${entry.id}, '${safeText(entry.remarks)}')" class="color-blue hover-color-blue-400 transition-colors">
                 <i class="ph-fill ph-note-pencil font-18px"></i>
               </button>
+              <span class="text-black leading-relaxed font-14px">${safeText(entry.remarks)}</span>
             </td>
           </tr>
           <tr data-entry-id="${entry.id}" class="gnfc-tr group">
@@ -411,8 +412,6 @@
 
     function saveEntry(event) {
       event.preventDefault();
-      // Mock save functionality
-      alert("Entry saved locally (Mock)");
       closeAddModal();
     }
 
@@ -442,7 +441,6 @@
       const entry = mockData.find(e => e.id === currentRemarkEntryId);
       if (entry) {
         entry.remarks = remarkText;
-        alert('Remark saved successfully!');
         closeRemarkModal();
         renderTable();
       }

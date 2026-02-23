@@ -253,7 +253,8 @@
 }
 
 .hover-color-white:hover {
-  color: #ffffff !important;
+ background-color: var(--typo-white, #241f1f) !important;
+ color: var(--typo-white, #ffffff) !important;
 }
 
 /* --- Focus / Group Focus Colors --- */

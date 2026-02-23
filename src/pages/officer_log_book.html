@@ -251,14 +251,14 @@
           </button>
 
           <!-- Old Shift Log Button -->
-          <button onclick="alert('Old Shift Log feature coming soon!')"
+          <!-- <button onclick="alert('Old Shift Log feature coming soon!')"
             class="relative overflow-hidden bg-dark-panel border border-gnfc-orange/50 hover:border-gnfc-orange p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
             <div class="absolute top-0 right-0 p-2 group-hover:opacity-20 transition-opacity">
               <i class="ph-fill ph-folder-open text-4xl color-orange"></i>
             </div>
             <p class="font-13px fw-bold color-secondary text-upper ls-wider mb-1">Archive</p>
             <h4 class="font-15px fw-bold color-white group-hover-color-orange transition-colors">Old Shift Log</h4>
-          </button>
+          </button> -->
 
         </div>
 
@@ -327,10 +327,10 @@
               <label class="gnfc-modal-label">Date Range</label>
               <div class="flex bg-dark-bg border border-dark-border rounded-sm h-9 items-center p-1">
                 <input type="date" id="oldReportsStartDate"
-                  class="bg-transparent font-14px color-white outline-none px-2 typo-mono h-full w-36">
-                <span class="text-dark-border px-1">to</span>
+                  class="bg-transparent font-14px outline-none px-2 typo-mono h-full w-36">
+                <span class="px-1">to</span>
                 <input type="date" id="oldReportsEndDate"
-                  class="bg-transparent font-14px color-white outline-none px-2 typo-mono h-full w-36">
+                  class="bg-transparent font-14px outline-none px-2 typo-mono h-full w-36">
               </div>
             </div>
           </div>
@@ -463,19 +463,19 @@
       const startDate = document.getElementById('oldReportsStartDate').value;
       const endDate = document.getElementById('oldReportsEndDate').value;
 
-      if (!engineer) {
-        alert('Please select an engineer name.');
-        return;
-      }
+      // if (!engineer) {
+      //   alert('Please select an engineer name.');
+      //   return;
+      // }
 
-      if (!startDate || !endDate) {
-        alert('Please select both start and end dates.');
-        return;
-      }
+      // if (!startDate || !endDate) {
+      //   alert('Please select both start and end dates.');
+      //   return;
+      // }
 
       // Here you can redirect to old reports page or make an API call
       console.log('Searching reports for:', { engineer, startDate, endDate });
-      alert(`Searching reports for ${engineer} from ${startDate} to ${endDate}`);
+      // alert(`Searching reports for ${engineer} from ${startDate} to ${endDate}`);
 
       // Close the modal
       closeOldReportsModal();

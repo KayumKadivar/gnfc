@@ -7,9 +7,7 @@
   const DAY_MS = 24 * 60 * 60 * 1000;
   const MONTHLY_WINDOW_DAYS = 40;
   const DEFAULT_PLANTS = [
-    "AA", "AAQM", "AMM", "ANIPF", "ANITDI",
-    "ASGP", "BAGG", "BOILER", "CMS", "CPSU",
-    "DM", "EA", "FA", "INST WS", "M1", "M2", "UREA", "UTIL", "DCS", "MF"
+    "BOILER"
   ];
 
   let memoryState = null;
@@ -127,7 +125,7 @@
         targetDate: toIsoDate(tomorrow),
         createdAt: nowIso(),
         updatedAt: nowIso(),
-        area: "AA",
+        area: "BOILER",
         loop: "Loop-UTIL",
         tag: "AIR-COMP",
         typeOfInst: "ANALYZER",

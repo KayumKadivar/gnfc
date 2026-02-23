@@ -122,21 +122,20 @@
               <h3 class="caldue-plant-title">${escapeHTML(plant)}</h3>
               <p class="caldue-plant-subtitle">${items.length} equipment item(s) pending review</p>
             </div>
-            <span class="caldue-chip">${items.length} due</span>
           </div>
 
           <div class="caldue-table-wrap">
-            <table class="caldue-table">
-              <thead>
+            <table class="caldue-table gnfc-table">
+              <thead class="gnfc-thead">
                 <tr>
-                  <th style="width:44px;">#</th>
-                  <th style="min-width:260px;">Equipment Item</th>
-                  <th style="width:120px;">Make</th>
-                  <th style="width:120px;">Model</th>
-                  <th style="width:140px;">Serial No.</th>
-                  <th style="width:120px;">Last Cal</th>
-                  <th style="width:120px;">Due Date</th>
-                  <th style="width:130px;">Status</th>
+                  <th class="gnfc-th" style="width:44px;">#</th>
+                  <th class="gnfc-th" style="min-width:260px;">Equipment Item</th>
+                  <th class="gnfc-th" style="width:120px;">Make</th>
+                  <th class="gnfc-th" style="width:120px;">Model</th>
+                  <th class="gnfc-th" style="width:140px;">Serial No.</th>
+                  <th class="gnfc-th" style="width:120px;">Last Cal</th>
+                  <th class="gnfc-th" style="width:120px;">Due Date</th>
+                  <th class="gnfc-th" style="width:130px;">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -282,19 +281,7 @@
           }
 
           #${MODAL_ID} .caldue-table thead th {
-            position: sticky;
-            top: 0;
-            z-index: 2;
-            text-align: left;
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #93c5fd;
-            background: rgba(15, 23, 42, 0.86);
             backdrop-filter: blur(5px);
-            border-bottom: 1px solid var(--app-border, #2c3235);
-            padding: 0.6rem 0.7rem;
           }
 
           #${MODAL_ID} .caldue-table tbody td {
@@ -355,7 +342,7 @@
           #${MODAL_ID} .caldue-status--overdue {
             border-color: rgba(239, 68, 68, 0.35);
             background: rgba(239, 68, 68, 0.14);
-            color: #fda4af;
+            color: #ff0524;
           }
 
           #${MODAL_ID} .caldue-status--today {
@@ -450,13 +437,13 @@
               </div>
             </div>
 
-            <div class="caldue-summary">
+          <!--  <div class="caldue-summary">
               <span class="caldue-pill"><i class="ph-bold ph-list-checks"></i>${totalItems} due items</span>
               <span class="caldue-pill caldue-pill--alert"><i class="ph-bold ph-factory"></i>${totalPlants} plant${totalPlants === 1 ? "" : "s"}</span>
               <button onclick="CalibrationModal.close()" class="gnfc-modal-close" aria-label="Close">
                 <i class="ph-bold ph-x font-16px pointer-events-none"></i>
               </button>
-            </div>
+            </div>  -->
           </div>
 
           <div class="gnfc-modal-body caldue-body">
@@ -480,7 +467,15 @@
 
   function show(force = false) {
     const isManualOpen = force === "manual";
-    const dueItems = global.CalibrationStore ? global.CalibrationStore.getDueItems() : [];
+    let dueItems = global.CalibrationStore ? global.CalibrationStore.getDueItems() : [];
+
+    // Filter by active plants in ElogbookStore
+    if (global.ElogbookStore) {
+      const state = global.ElogbookStore.loadState();
+      const activePlants = Object.keys(state.plants || {});
+      dueItems = dueItems.filter(item => activePlants.includes(item.plant));
+    }
+
     if (dueItems.length === 0) {
       if (global.NotificationManager) global.NotificationManager.removeNotification('cal-alert');
       return;

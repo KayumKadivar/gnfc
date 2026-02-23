@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNFC | Admin Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fff;
+        }
+        .admin-table {
+            border: 1px solid #999;
+            border-collapse: collapse;
+            width: 600px;
+        }
+        .admin-table td {
+            border: 1px solid #999;
+            padding: 4px 8px;
+        }
+        .bg-gray-legacy {
+            background-color: #d8d8c8;
+        }
+        .login-btn, .cancel-btn {
+            background-color: #d8d8c8;
+            border: 1px solid #666;
+            padding: 2px 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .login-btn:hover, .cancel-btn:hover {
+            background-color: #c8c8b8;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center pt-8">
+
+    <div class="text-center mb-4">
+        <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-24 mx-auto" alt="GNFC Logo">
+    </div>
+
+    <div class="text-center mb-12">
+        <h2 class="text-[#2e8b57] font-bold text-xl">Administrator Section IIMS</h2>
+    </div>
+
+    <form id="adminLoginForm" onsubmit="handleLogin(event)" class="mt-20">
+        <table class="admin-table">
+            <tr class="h-8">
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td class="bg-gray-legacy text-right font-bold text-sm w-1/2">User</td>
+                <td>
+                    <input type="text" id="username" class="w-full border border-gray-400 outline-none px-1" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-gray-legacy text-right font-bold text-sm">Password</td>
+                <td>
+                    <input type="password" id="password" class="w-full border border-gray-400 outline-none px-1" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center py-2">
+                    <div class="flex items-center justify-center gap-2">
+                        <i class="ph ph-lock-key"></i>
+                        <button type="submit" class="login-btn">Login</button>
+                        <button type="button" class="cancel-btn" onclick="window.location.href='/index.html'">Cancel</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <footer class="fixed bottom-0 w-full border-t border-gray-300 py-2">
+        <p class="text-[11px] text-[#ff0000] text-center font-bold">
+            Copyright &copy; by GNVFC Ltd, Bharuch | Designed & Developed By GNVFC Ltd ( IT Division ), Ahmedabad
+        </p>
+    </footer>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            // Simulating login - in a real app this would check credentials
+            localStorage.setItem('userRole', 'admin');
+            localStorage.setItem('currentUserName', 'Administrator');
+            window.location.href = '/src/pages/admin_panel.html';
+        }
+    </script>
+</body>
+</html>
