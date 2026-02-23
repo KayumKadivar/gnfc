@@ -1,0 +1,2862 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 999px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+  <div class="min-h-screen lg:flex">
+    <aside class="w-full bg-slate-900 text-slate-100 shadow-2xl lg:w-72">
+      <div id="adminSidebarContainer" class="h-full"></div>
+    </aside>
+
+    <main class="flex-1 space-y-6 p-4 sm:p-6 lg:p-8">
+      <header class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <div class="flex items-center justify-center gap-3 sm:gap-4">
+          <img class="h-16 w-auto sm:h-20" src="/src/assets/images/gnfc-logo.png"
+            onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo">
+          <div>
+            <h1 class="text-lg font-extrabold tracking-tight text-amber-600 sm:text-3xl">Gujarat Narmada Valley Fertilizers Company Limited</h1>
+            <p class="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-slate-500 sm:text-sm">Administrator Console</p>
+          </div>
+        </div>
+      </header>
+
+      <section id="adminContent" class="space-y-4"></section>
+
+      <footer class="pb-2 text-center text-xs text-slate-500 sm:text-sm">
+        Copyright &copy; by GNFC Ltd. Bharuch | Designed &amp; Developed By GNFC Ltd ( IT Division ), Ahmedabad
+      </footer>
+    </main>
+  </div>
+
+  <div id="plantsModalRoot" class="fixed inset-0 z-50 hidden"></div>
+
+  <script src="/src/js/admin_sidebar.js"></script>
+  <script>
+    const defaultPrivilegeRowsTech = [
+      { module: 'CMS', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'COMDMS', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'COSTSAVING_INSTWS', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'CYL', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'DOCUMENTATION', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'ELOGBOOK', add: true, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'ENG_LOG', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'ENGG_DOC', add: true, modify: true, del: false, engRemark: false, exRemark: false },
+      { module: 'EXEC-DOC', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'GATEPASS', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'IIMS_DOC', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'INDENT', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'INDUSTRY_INFO', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'INSTRUMENT_DATA', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'ISO', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'JBDETAIL', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'JOB_HISTORY', add: true, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'JOB_LIST', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'LAB_JOBREGISTER', add: true, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'MRS', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'OFF_LOGBOOK', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'OHSAS', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'PMFORM', add: true, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'POST', add: true, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'SPPADMIN', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'SYSTEM_PM', add: true, modify: true, del: false, engRemark: false, exRemark: false },
+      { module: 'TESTEQUIPMENT', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'TRAINING_DETAIL', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'UTILITY', add: false, modify: false, del: false, engRemark: false, exRemark: false },
+      { module: 'VENDORDETAIL', add: false, modify: true, del: false, engRemark: false, exRemark: false }
+    ];
+
+    const defaultPrivilegeRowsIeSie = [
+      { module: 'Module', add: false, modify: false, del: false, engRemark: false, exRemark: false }
+    ];
+
+    const userPrivilegeRows = [
+      { ec: '4985', name: 'ABC', group: 'Tech' },
+      { ec: '0491', name: 'ABG', group: 'Tech' },
+      { ec: '7366', name: 'abhay', group: 'Tech' },
+      { ec: '2546', name: 'ABO', group: 'R&D' },
+      { ec: '8215', name: 'AIP', group: 'Tech' },
+      { ec: '7369', name: 'akshay', group: 'Tech' },
+      { ec: '5954', name: 'AKV', group: 'SM' },
+      { ec: '7365', name: 'ALD', group: 'Tech' },
+      { ec: '5410', name: 'ALS', group: 'Tech' },
+      { ec: '2895', name: 'AMV', group: 'Tech' },
+      { ec: '9361', name: 'ANP', group: 'IE/SIE' },
+      { ec: '10856', name: 'ARP', group: 'IE/SIE' },
+      { ec: '2091', name: 'ATH', group: 'SM' },
+      { ec: '6138', name: 'ATL', group: 'Tech' },
+      { ec: '5470', name: 'AVP', group: 'IE/SIE' },
+      { ec: '7355', name: 'balbhadra', group: 'IE/SIE' },
+      { ec: '5936', name: 'BDR', group: 'Tech' },
+      { ec: '2892', name: 'BPB', group: 'SM' },
+      { ec: '4964', name: 'BSU', group: 'Tech' },
+      { ec: '8292', name: 'CBP', group: 'Tech' },
+      { ec: '9408', name: 'CHIRAG VARIA', group: 'IE/SIE' },
+      { ec: '0430', name: 'C-LAB', group: 'CLAB' },
+      { ec: '7478', name: 'CNJ_ISD', group: 'Tech' },
+      { ec: '5659', name: 'CRV', group: 'Tech' },
+      { ec: '2454', name: 'DBS', group: 'TS' },
+      { ec: '5910', name: 'DCS', group: 'Tech' },
+      { ec: '5916', name: 'DKL', group: 'Tech' },
+      { ec: '10854', name: 'DKV', group: 'IE/SIE' },
+      { ec: '9981', name: 'DMP', group: 'Tech' },
+      { ec: '6255', name: 'DNC', group: 'Tech' },
+      { ec: '7440', name: 'DVS', group: 'Tech' }
+    ];
+
+    const userInfoGroupOptions = [
+      'Tech',
+      'IE/SIE',
+      'M',
+      'SM',
+      'CM',
+      'AGM',
+      'GM',
+      'IED',
+      'GAT',
+      'DAT',
+      'GUEST',
+      'VISITOR',
+      'TS',
+      'CLAB',
+      'R&D',
+      'IAT',
+      'OVS',
+      'PURCHASE'
+    ];
+
+    const userInfoRows = userPrivilegeRows.map((row) => ({
+      ec: row.ec,
+      userName: row.name,
+      password: '',
+      group: row.group
+    }));
+
+    const userInfoGroupCodeMap = {
+      TECH: 1,
+      'IE/SIE': 2,
+      M: 3,
+      SM: 4,
+      CM: 12,
+      AGM: 13,
+      GM: 14,
+      IED: 17,
+      GAT: 18,
+      DAT: 19,
+      GUEST: 23,
+      VISITOR: 24,
+      TS: 25,
+      CLAB: 26,
+      'R&D': 27,
+      IAT: 28,
+      OVS: 29,
+      PURCHASE: 30
+    };
+
+    const userPlantsLookupSeedRows = [
+      { ec: '0', userName: 'GUEST', group: 'GUEST' },
+      { ec: '430', userName: 'C-LAB', group: 'CLAB' },
+      { ec: '1192', userName: 'SAS', group: 'GUEST' },
+      { ec: '1682', userName: 'PNV', group: 'SM' },
+      { ec: '2091', userName: 'ATH', group: 'SM' },
+      { ec: '2454', userName: 'DBS', group: 'TS' },
+      { ec: '2533', userName: 'MAD', group: 'SM' },
+      { ec: '2546', userName: 'ABO', group: 'R&D' },
+      { ec: '2729', userName: 'HRK', group: 'Tech' },
+      { ec: '2809', userName: 'LBK', group: 'Tech' },
+      { ec: '2891', userName: 'PMP', group: 'M' },
+      { ec: '2892', userName: 'BPB', group: 'SM' },
+      { ec: '2895', userName: 'AMV', group: 'Tech' },
+      { ec: '3039', userName: 'JMD', group: 'Tech' },
+      { ec: '3096', userName: 'MNP', group: 'Tech' },
+      { ec: '3098', userName: 'NRK', group: 'Tech' },
+      { ec: '3101', userName: 'HPM', group: 'M' },
+      { ec: '3126', userName: 'VVK', group: 'GUEST' },
+      { ec: '3169', userName: 'DVP', group: 'M' },
+      { ec: '3174', userName: 'SBP', group: 'Tech' },
+      { ec: '3182', userName: 'RKP', group: 'AGM' },
+      { ec: '3183', userName: 'PVS', group: 'Tech' },
+      { ec: '3718', userName: 'PSG', group: 'Tech' },
+      { ec: '3744', userName: 'RDC', group: 'M' },
+      { ec: '4028', userName: 'RJP', group: 'Tech' },
+      { ec: '4560', userName: 'RVP', group: 'IE/SIE' },
+      { ec: '4964', userName: 'BSU', group: 'Tech' },
+      { ec: '4985', userName: 'ABC', group: 'Tech' },
+      { ec: '5070', userName: 'KSP', group: 'SM' }
+    ];
+
+    const userPlantsPrivilegePlantRows = [
+      { name: 'ACETIC ACID', code: 'AA' },
+      { name: 'AAQM', code: 'AAQM' },
+      { name: 'AMMONIA', code: 'AMM' },
+      { name: 'ANIP FILLING', code: 'ANIPF' },
+      { name: 'ANITDI', code: 'ANITDI' },
+      { name: 'ASGP', code: 'ASGP' },
+      { name: 'BAGGING', code: 'BAGG' },
+      { name: 'BOILER', code: 'BOILER' },
+      { name: 'CLAB', code: 'CLAB' },
+      { name: 'CMS', code: 'CMS' },
+      { name: 'CPSU', code: 'CPSU' },
+      { name: 'DM', code: 'DM' },
+      { name: 'ETHYL ACETATE', code: 'EA' },
+      { name: 'ENG_LOG', code: 'ENG_LOG' },
+      { name: 'FORMIC ACID', code: 'FA' },
+      { name: 'INCS', code: 'INCS' },
+      { name: 'INST_WS', code: 'INSTWS' },
+      { name: 'ISO', code: 'ISO' },
+      { name: 'METHANOL-1', code: 'M1' },
+      { name: 'METHANOL-2', code: 'M2' },
+      { name: 'MINMAX', code: 'MINMAX' },
+      { name: 'NITRO PHOSPHATE', code: 'NPP' },
+      { name: 'OFF_LOGBOOK', code: 'OFFLOG' },
+      { name: 'PURCHASE', code: 'PURCHASE' },
+      { name: 'R&D', code: 'R&D' },
+      { name: 'SPP', code: 'SPP' },
+      { name: 'STORE', code: 'STORE' },
+      { name: 'UREA', code: 'UREA' },
+      { name: 'UTILITY', code: 'UTILITY' },
+      { name: 'UTILITY DOC', code: 'UTILDOC' }
+    ];
+
+    const userPlantsPrivilegeByEc = new Map();
+    const userEmailByEc = new Map();
+    const userPasswordByEc = new Map();
+    const adminMemberEcSet = new Set();
+    let adminCurrentPassword = 'admin';
+    const LOGIN_POPUP_STORAGE_KEY = 'gnfc_admin_login_popup_enabled';
+    const WHATS_NEW_STORAGE_KEY = 'gnfc_admin_whats_new_text';
+    const MAIL_SCHEDULE_STORAGE_KEY = 'gnfc_admin_mail_schedule_rows';
+    const DEFAULT_WHATS_NEW_TEXT = `<FONT COLOR=blue><I><b>GST CALCULATIONS ADDED IN INDENT MODULE
+<BR>
+CPCB MODLE IS DEVELOPED TO MAINTAIN CALIBRATION RECORDS OF CPCB RELATED INSTRUMENTS.</b></I></FONT>`;
+    const DEFAULT_MAIL_SCHEDULE_ROWS = [
+      {
+        id: 'monthly-po-report',
+        title: 'MONTHLY PO REPORT',
+        nextDue: '26/02/2026',
+        toType: 'All',
+        toAddress: '',
+        sender: 'noreply@gnfc.in',
+        frequencyDays: '0',
+        onDay: '',
+        onMonth: '',
+        onYear: '',
+        report: 'PO REPORT',
+        subject: 'Monthly PO Report',
+        message: ''
+      }
+    ];
+    const MAIL_SCHEDULE_TO_OPTIONS = ['All', 'Tech', 'IE/SIE', 'SM', 'M', 'CM', 'AGM', 'GM'];
+    const MAIL_SCHEDULE_SENDER_OPTIONS = ['noreply@gnfc.in', 'instrument@gnfc.in', 'admin@gnfc.in'];
+    const LOGIN_INFO_LAST_LOGIN_SEED = [
+      '29/01/2026 23:38:59',
+      '23/02/2026 13:43:33',
+      '16/03/2010 14:59:22',
+      '13/03/2024 16:16:12',
+      '03/06/2017 09:22:56',
+      '16/02/2022 16:21:48',
+      '23/02/2026 14:50:31',
+      '24/01/2026 10:38:51',
+      '22/02/2026 16:41:34',
+      '23/02/2026 10:29:50',
+      '23/02/2026 08:22:30',
+      '23/02/2026 14:00:20',
+      '23/02/2026 14:48:12',
+      '23/02/2026 14:12:29',
+      '21/02/2026 16:24:00',
+      '23/02/2026 09:19:54',
+      '23/02/2026 08:44:35',
+      '17/11/2012 14:31:56',
+      '23/02/2026 08:30:48',
+      '23/02/2026 09:27:38',
+      '23/02/2026 14:31:19',
+      '21/02/2026 15:21:11',
+      '23/02/2026 13:47:52',
+      '22/02/2026 11:12:08',
+      '22/02/2026 10:43:17',
+      '23/02/2026 12:32:04',
+      '23/02/2026 07:55:26',
+      '23/02/2026 10:12:42',
+      '23/02/2026 09:58:31'
+    ];
+    const LOGIN_INFO_MACHINE_SEED = [
+      '10.10.67.161',
+      '10.10.75.25',
+      '10.10.81.92',
+      '10.10.80.66',
+      '10.10.80.173',
+      '10.10.90.37',
+      '10.10.74.40',
+      '10.10.112.78',
+      '10.10.90.37',
+      '10.10.92.23',
+      '10.10.94.49',
+      '10.10.91.31',
+      '10.10.92.23',
+      '10.10.94.37',
+      '10.10.70.25',
+      '10.10.95.35',
+      '10.10.71.61',
+      '10.10.81.73',
+      '10.10.93.105',
+      '10.10.90.95',
+      '10.10.74.49',
+      '10.10.94.37',
+      '10.10.90.42',
+      '10.10.89.11',
+      '10.10.79.52',
+      '10.10.84.11',
+      '10.10.90.12',
+      '10.10.95.77',
+      '10.10.93.64'
+    ];
+    const LOGIN_INFO_HIT_COUNT_SEED = [
+      32, 3650, 6, 201, 4, 51, 14424, 40, 13629, 14767,
+      16327, 12640, 12284, 13826, 14761, 16228, 15607, 452, 17531, 18903,
+      6807, 13346, 15890, 10244, 9410, 16724, 19911, 8735, 11052
+    ];
+
+    function getStoredValue(key, fallbackValue) {
+      try {
+        const value = localStorage.getItem(key);
+        return value == null ? fallbackValue : value;
+      } catch (error) {
+        return fallbackValue;
+      }
+    }
+
+    function setStoredValue(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        // Ignore storage failures for local preview mode.
+      }
+    }
+
+    function getStoredJsonValue(key, fallbackValue) {
+      const raw = getStoredValue(key, '');
+      if (!raw) return fallbackValue;
+
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return fallbackValue;
+      }
+    }
+
+    let adminLoginPopupSelection = getStoredValue(LOGIN_POPUP_STORAGE_KEY, 'no');
+    if (adminLoginPopupSelection !== 'yes' && adminLoginPopupSelection !== 'no') {
+      adminLoginPopupSelection = 'no';
+    }
+
+    let whatsNewContent = getStoredValue(WHATS_NEW_STORAGE_KEY, DEFAULT_WHATS_NEW_TEXT);
+    let mailScheduleRows = getStoredJsonValue(MAIL_SCHEDULE_STORAGE_KEY, DEFAULT_MAIL_SCHEDULE_ROWS.map((row) => ({ ...row })));
+    if (!Array.isArray(mailScheduleRows) || !mailScheduleRows.length) {
+      mailScheduleRows = DEFAULT_MAIL_SCHEDULE_ROWS.map((row) => ({ ...row }));
+    }
+    let mailScheduleMode = 'list';
+    let mailScheduleEditingId = '';
+    let mailScheduleDraft = null;
+    let exDmsSelectedUserEc = '3182';
+
+    const plantMasterRows = [
+      { code: 'AA', name: 'ACETIC ACID' },
+      { code: 'AAQM', name: 'AAQM' },
+      { code: 'AMM', name: 'AMMONIA' },
+      { code: 'ANIPF', name: 'ANIF FILLING' },
+      { code: 'ANITDI', name: 'ANITDI' },
+      { code: 'ASGP', name: 'ASGP' },
+      { code: 'MINMAX', name: 'MINMAX' },
+      { code: 'NPP', name: 'NITRO PHOSPHATE' },
+      { code: 'OFFLOG', name: 'OFF_LOGBOOK' },
+      { code: 'PURCHASE', name: 'PURCHASE' },
+      { code: 'R&D', name: 'R&D' },
+      { code: 'SPP', name: 'SPP' },
+      { code: 'STORE', name: 'STORE' },
+      { code: 'UREA', name: 'UREA' },
+      { code: 'UTILDOC', name: 'UTILITY DOCUMENTS' },
+      { code: 'UTILITY', name: 'UTILITY' }
+    ];
+
+    const moduleMasterRows = Array.from(new Set(defaultPrivilegeRowsTech.map((row) => row.module)))
+      .map((module) => ({ module }));
+
+    let plantsModalEscHandler = null;
+    let privilegeModalEscHandler = null;
+    let moduleModalEscHandler = null;
+    let userInfoModalEscHandler = null;
+    const privilegeMasterRows = [
+      { code: '1', name: 'Tech' },
+      { code: '2', name: 'IE/SIE' },
+      { code: '3', name: 'M' },
+      { code: '4', name: 'SM' },
+      { code: '12', name: 'CM' },
+      { code: '13', name: 'AGM' },
+      { code: '14', name: 'GM' },
+      { code: '15', name: 'HOD' }
+    ];
+
+    function escapeHtml(value) {
+      const text = String(value ?? '');
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderTopBar(title) {
+      return `
+        <div class="rounded-xl bg-slate-900 px-4 py-3 text-white shadow-sm">
+          <div class="grid grid-cols-[120px_1fr_120px] items-center gap-2">
+            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-300">Menu</span>
+            <h2 class="text-center text-sm font-semibold sm:text-lg">${escapeHtml(title)}</h2>
+            <span></span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPermissionRows(rows) {
+      return rows.map((row) => `
+        <tr class="border-t border-slate-200 hover:bg-slate-50">
+          <td class="px-3 py-2 font-medium text-slate-700">${escapeHtml(row.module)}</td>
+          <td class="px-3 py-2 text-center"><input type="checkbox" class="h-4 w-4 rounded border-slate-400 text-sky-600"${row.add ? ' checked' : ''}></td>
+          <td class="px-3 py-2 text-center"><input type="checkbox" class="h-4 w-4 rounded border-slate-400 text-sky-600"${row.modify ? ' checked' : ''}></td>
+          <td class="px-3 py-2 text-center"><input type="checkbox" class="h-4 w-4 rounded border-slate-400 text-sky-600"${row.del ? ' checked' : ''}></td>
+          <td class="px-3 py-2 text-center"><input type="checkbox" class="h-4 w-4 rounded border-slate-400 text-sky-600"${row.engRemark ? ' checked' : ''}></td>
+          <td class="px-3 py-2 text-center"><input type="checkbox" class="h-4 w-4 rounded border-slate-400 text-sky-600"${row.exRemark ? ' checked' : ''}></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPrivilegeView() {
+      return `
+        ${renderTopBar('Master - Privilege')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="grid gap-4 sm:grid-cols-[180px_1fr] sm:items-center">
+            <label for="privilegeName" class="text-sm font-semibold text-slate-600">Privilege Name</label>
+            <input id="privilegeName" type="text" class="h-11 rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+          </div>
+          <div class="mt-6 flex justify-end gap-2">
+            <button id="privilegeAddBtn" type="button" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700">Add</button>
+            <button id="privilegeViewBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function filterPrivilegeRows(nameText) {
+      const query = String(nameText || '').trim().toLowerCase();
+      if (!query) return privilegeMasterRows;
+      return privilegeMasterRows.filter((row) => row.name.toLowerCase().includes(query) || row.code.toLowerCase().includes(query));
+    }
+
+    function buildPrivilegeTableRows(rows) {
+      if (!rows.length) {
+        return `
+          <tr>
+            <td colspan="3" class="px-3 py-5 text-center text-sm text-slate-500">No privilege records found.</td>
+          </tr>
+        `;
+      }
+
+      return rows.map((row, index) => `
+        <tr class="border-t border-slate-200 hover:bg-slate-50">
+          <td class="px-3 py-2 text-center">
+            <input type="radio" name="privilegeModalSelected" value="${escapeHtml(row.code)}" class="h-4 w-4 border-slate-400 text-sky-600"${index === 0 ? ' checked' : ''}>
+          </td>
+          <td class="px-3 py-2 text-sm font-semibold text-slate-700">${escapeHtml(row.code)}</td>
+          <td class="px-3 py-2 text-sm text-slate-600">${escapeHtml(row.name)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function openPrivilegeModal(rows) {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.innerHTML = `
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]" data-modal-close="overlay"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+          <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl">
+            <div class="flex items-center justify-between bg-slate-900 px-4 py-2 text-white">
+              <h3 class="text-sm font-semibold sm:text-base">Master - Privilege [ View ]</h3>
+              <button id="privilegeModalCloseTop" type="button" class="rounded border border-slate-500 px-2 py-1 text-xs hover:bg-slate-700">Close</button>
+            </div>
+
+            <div class="space-y-4 p-4 sm:p-6">
+              <div class="flex items-center gap-3">
+                <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo" class="h-14 w-auto">
+                <h4 class="text-base font-extrabold text-amber-600 sm:text-2xl">Gujarat Narmada Valley Fertilizers Company Limited</h4>
+              </div>
+
+              <div class="rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white sm:text-base">Master - Privilege [ View ]</div>
+
+              <div class="max-h-[360px] overflow-auto rounded-lg border border-slate-200 custom-scroll">
+                <table class="min-w-full text-left">
+                  <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th class="w-16 px-3 py-2 text-center text-sm font-semibold"></th>
+                      <th class="px-3 py-2 text-sm font-semibold">Privilege Code</th>
+                      <th class="px-3 py-2 text-sm font-semibold">Privilege Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${buildPrivilegeTableRows(rows)}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button id="privilegeModalModifyBtn" type="button" class="rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Modify</button>
+                <button id="privilegeModalDeleteBtn" type="button" class="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100">Delete</button>
+                <button id="privilegeModalCloseBottom" type="button" class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      root.classList.remove('hidden');
+
+      const closeTopBtn = document.getElementById('privilegeModalCloseTop');
+      const closeBottomBtn = document.getElementById('privilegeModalCloseBottom');
+      const modifyBtn = document.getElementById('privilegeModalModifyBtn');
+      const deleteBtn = document.getElementById('privilegeModalDeleteBtn');
+
+      if (closeTopBtn) closeTopBtn.addEventListener('click', closePrivilegeModal);
+      if (closeBottomBtn) closeBottomBtn.addEventListener('click', closePrivilegeModal);
+
+      if (modifyBtn) {
+        modifyBtn.addEventListener('click', () => {
+          modifyBtn.blur();
+        });
+      }
+
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          deleteBtn.blur();
+        });
+      }
+
+      root.addEventListener('click', (event) => {
+        if (event.target && event.target.dataset && event.target.dataset.modalClose === 'overlay') {
+          closePrivilegeModal();
+        }
+      }, { once: true });
+
+      privilegeModalEscHandler = (event) => {
+        if (event.key === 'Escape') {
+          closePrivilegeModal();
+        }
+      };
+      document.addEventListener('keydown', privilegeModalEscHandler);
+    }
+
+    function closePrivilegeModal() {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.classList.add('hidden');
+      root.innerHTML = '';
+
+      if (privilegeModalEscHandler) {
+        document.removeEventListener('keydown', privilegeModalEscHandler);
+        privilegeModalEscHandler = null;
+      }
+    }
+
+    function bindPrivilegeView() {
+      const privilegeNameInput = document.getElementById('privilegeName');
+      const addBtn = document.getElementById('privilegeAddBtn');
+      const viewBtn = document.getElementById('privilegeViewBtn');
+      if (!privilegeNameInput || !viewBtn) return;
+
+      const openFilteredModal = () => {
+        const rows = filterPrivilegeRows(privilegeNameInput.value);
+        openPrivilegeModal(rows);
+      };
+
+      if (addBtn) {
+        addBtn.addEventListener('click', () => {
+          privilegeNameInput.value = '';
+          privilegeNameInput.focus();
+        });
+      }
+
+      viewBtn.addEventListener('click', openFilteredModal);
+      privilegeNameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          openFilteredModal();
+        }
+      });
+    }
+
+    function renderDefaultPrivilegeView() {
+      return `
+        ${renderTopBar('Master - Department')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <h3 class="text-center text-lg font-extrabold tracking-wide text-slate-800 sm:text-xl">DEFAULT PRIVILEGE</h3>
+          <div class="mt-4 overflow-auto rounded-xl border border-slate-200 custom-scroll">
+            <table class="min-w-full text-xs sm:text-sm">
+              <tbody>
+                <tr class="bg-sky-100 text-slate-900">
+                  <th colspan="6" class="px-3 py-2 text-left font-semibold">Group: Tech</th>
+                </tr>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="px-3 py-2 text-left font-semibold">Module</th>
+                  <th class="px-3 py-2 text-center font-semibold">Add</th>
+                  <th class="px-3 py-2 text-center font-semibold">Modify</th>
+                  <th class="px-3 py-2 text-center font-semibold">Del</th>
+                  <th class="px-3 py-2 text-center font-semibold">Eng Remark</th>
+                  <th class="px-3 py-2 text-center font-semibold">Ex Remark</th>
+                </tr>
+                ${renderPermissionRows(defaultPrivilegeRowsTech)}
+                <tr class="bg-sky-100 text-slate-900">
+                  <th colspan="6" class="px-3 py-2 text-left font-semibold">Group: IE/SIE</th>
+                </tr>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="px-3 py-2 text-left font-semibold">Module</th>
+                  <th class="px-3 py-2 text-center font-semibold">Add</th>
+                  <th class="px-3 py-2 text-center font-semibold">Modify</th>
+                  <th class="px-3 py-2 text-center font-semibold">Del</th>
+                  <th class="px-3 py-2 text-center font-semibold">Eng Remark</th>
+                  <th class="px-3 py-2 text-center font-semibold">Ex Remark</th>
+                </tr>
+                ${renderPermissionRows(defaultPrivilegeRowsIeSie)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildUserPrivilegeSelectOptions(rows, selectedEc) {
+      const selected = String(selectedEc || '').trim();
+      if (!rows.length) {
+        return '<option value="">No records found</option>';
+      }
+
+      return rows.map((row) => {
+        const isSelected = row.ec === selected ? ' selected' : '';
+        return `<option value="${escapeHtml(row.ec)}"${isSelected}>${escapeHtml(row.ec)}</option>`;
+      }).join('');
+    }
+
+    function filterUserPrivilegeRows(filterText, selectedEc) {
+      const query = String(filterText || '').trim().toLowerCase();
+      const ecMatch = String(selectedEc || '').trim();
+
+      return userPrivilegeRows.filter((row) => {
+        if (ecMatch && row.ec !== ecMatch) return false;
+        if (!query) return true;
+
+        return row.ec.toLowerCase().includes(query)
+          || row.name.toLowerCase().includes(query)
+          || row.group.toLowerCase().includes(query);
+      });
+    }
+
+    function getUserByEc(ec) {
+      const targetEc = String(ec || '').trim();
+      if (!targetEc) return null;
+      return userPrivilegeRows.find((row) => row.ec === targetEc) || null;
+    }
+
+    function renderUserPrivilegeView() {
+      return `
+        ${renderTopBar('Master - User Privilege')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-lg font-extrabold tracking-wide text-slate-800 sm:text-2xl">USER PRIVILEGE</h3>
+
+          <div class="mx-auto mt-5 grid max-w-4xl gap-3 md:grid-cols-[80px_1fr_220px_auto] md:items-center">
+            <label for="userPrivilegeFilter" class="text-sm font-semibold text-slate-600 md:text-right">Filter</label>
+            <input id="userPrivilegeFilter" type="text" class="h-11 rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+            <select id="userPrivilegeSelect" class="h-11 rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+              <option value="">Select EC Number</option>
+              ${userPrivilegeRows.map((row) => `<option value="${escapeHtml(row.ec)}">${escapeHtml(row.ec)}</option>`).join('')}
+            </select>
+            <button id="userPrivilegeGo" type="button" class="h-11 rounded-lg bg-sky-600 px-4 text-sm font-semibold text-white hover:bg-sky-700">Go</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function getUserPlantRowsForUser(user) {
+      const group = String(user?.group || '').toLowerCase();
+      if (group === 'tech') return defaultPrivilegeRowsTech;
+
+      return defaultPrivilegeRowsTech.map((row) => ({
+        module: row.module,
+        add: false,
+        modify: false,
+        del: false,
+        engRemark: false,
+        exRemark: false
+      }));
+    }
+
+    function renderUserPlantsPrivilegeView(user) {
+      const rows = getUserPlantRowsForUser(user);
+
+      return `
+        ${renderTopBar('Master - Department')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+            <h3 class="text-lg font-extrabold tracking-wide text-slate-900">USER PLANTS PRIVILEGE</h3>
+            <div class="flex flex-wrap gap-2">
+              <button id="userPlantsDefaultBtn" type="button" class="rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Default</button>
+              <button id="userPlantsSaveBtn" type="button" class="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Save</button>
+              <button id="userPlantsCancelBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-2 text-sm sm:grid-cols-3">
+            <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"><span class="font-semibold text-slate-600">EC No:</span> ${escapeHtml(user.ec)}</div>
+            <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"><span class="font-semibold text-slate-600">User Name:</span> ${escapeHtml(user.name)}</div>
+            <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"><span class="font-semibold text-slate-600">Group:</span> ${escapeHtml(user.group)}</div>
+          </div>
+
+          <div class="custom-scroll mt-4 overflow-auto rounded-xl border border-slate-200">
+            <table class="min-w-full text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="px-3 py-2 text-left font-semibold">Module</th>
+                  <th class="px-3 py-2 text-center font-semibold">Add</th>
+                  <th class="px-3 py-2 text-center font-semibold">Modify</th>
+                  <th class="px-3 py-2 text-center font-semibold">Del</th>
+                  <th class="px-3 py-2 text-center font-semibold">Eng Remark</th>
+                  <th class="px-3 py-2 text-center font-semibold">Ex Remark</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderPermissionRows(rows)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function showUserPlantsPrivilege(user) {
+      const content = document.getElementById('adminContent');
+      if (!content || !user) return;
+
+      content.innerHTML = renderUserPlantsPrivilegeView(user);
+      bindUserPlantsPrivilegeView(user);
+
+      if (typeof window.setAdminSidebarActive === 'function') {
+        window.setAdminSidebarActive('user_privilege');
+      }
+    }
+
+    function bindUserPlantsPrivilegeView(user) {
+      const defaultBtn = document.getElementById('userPlantsDefaultBtn');
+      const saveBtn = document.getElementById('userPlantsSaveBtn');
+      const cancelBtn = document.getElementById('userPlantsCancelBtn');
+
+      if (defaultBtn) {
+        defaultBtn.addEventListener('click', () => {
+          showUserPlantsPrivilege(user);
+        });
+      }
+
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          saveBtn.blur();
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          window.renderAdminContent('user_privilege');
+        });
+      }
+    }
+
+    function getUserPlantsDirectoryRows() {
+      const byEc = new Map();
+
+      const pushRow = (row) => {
+        const ec = String(row?.ec || '').trim();
+        const userName = String(row?.userName || row?.name || '').trim();
+        const group = String(row?.group || '').trim() || 'Tech';
+        if (!ec || !userName) return;
+
+        byEc.set(ec, { ec, userName, group });
+      };
+
+      userPlantsLookupSeedRows.forEach(pushRow);
+      userPrivilegeRows.forEach((row) => {
+        pushRow({ ec: row.ec, userName: row.name, group: row.group });
+      });
+      userInfoRows.forEach((row) => {
+        pushRow({ ec: row.ec, userName: row.userName, group: row.group });
+      });
+
+      const rows = Array.from(byEc.values());
+      rows.sort((a, b) => {
+        const an = Number.parseInt(a.ec, 10);
+        const bn = Number.parseInt(b.ec, 10);
+        const aNumValid = Number.isFinite(an);
+        const bNumValid = Number.isFinite(bn);
+
+        if (aNumValid && bNumValid && an !== bn) return an - bn;
+        if (aNumValid !== bNumValid) return aNumValid ? -1 : 1;
+        return a.ec.localeCompare(b.ec);
+      });
+
+      return rows;
+    }
+
+    function filterUserPlantsDirectoryRows(filterText) {
+      const query = String(filterText || '').trim().toLowerCase();
+      const rows = getUserPlantsDirectoryRows();
+      if (!query) return rows;
+
+      return rows.filter((row) => {
+        return row.ec.toLowerCase().includes(query)
+          || row.userName.toLowerCase().includes(query)
+          || row.group.toLowerCase().includes(query);
+      });
+    }
+
+    function buildUserPlantsEcOptions(rows, selectedEc) {
+      const selected = String(selectedEc || '').trim();
+      if (!rows.length) {
+        return '<option value="">No records found</option>';
+      }
+
+      return rows.map((row) => {
+        const label = `${row.ec}    ${row.userName}    ${row.group}`;
+        const isSelected = row.ec === selected ? ' selected' : '';
+        return `<option value="${escapeHtml(row.ec)}"${isSelected}>${escapeHtml(label)}</option>`;
+      }).join('');
+    }
+
+    function renderUserPlantsLookupView() {
+      return `
+        ${renderTopBar('Master - Department')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-lg font-extrabold tracking-wide text-slate-900 sm:text-3xl">USER PLANTS PRIVILEGE</h3>
+
+          <div class="mx-auto mt-4 grid max-w-4xl gap-3 md:grid-cols-[72px_1fr_1fr_auto] md:items-center">
+            <label for="userPlantsFilter" class="text-sm font-semibold text-slate-700 md:text-right">Filter:</label>
+            <input id="userPlantsFilter" type="text" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500">
+            <select id="userPlantsEcSelect" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 font-mono text-sm outline-none focus:border-sky-500">
+              <option value="">Select EC Number</option>
+            </select>
+            <button id="userPlantsGoBtn" type="button" class="h-10 rounded border border-slate-400 bg-slate-100 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-200">Go</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function getUserPlantsSelectionSet(ec) {
+      const key = String(ec || '').trim();
+      if (!key) return new Set();
+
+      if (!userPlantsPrivilegeByEc.has(key)) {
+        userPlantsPrivilegeByEc.set(key, new Set());
+      }
+
+      return userPlantsPrivilegeByEc.get(key);
+    }
+
+    function buildUserPlantsPrivilegePlantTableRows(ec) {
+      const selectedSet = getUserPlantsSelectionSet(ec);
+      return userPlantsPrivilegePlantRows.map((row) => `
+        <tr class="border-t border-slate-300">
+          <td class="w-1/2 border-r border-slate-300 px-3 py-1 text-center text-sm font-semibold text-slate-800">${escapeHtml(row.name)}</td>
+          <td class="w-1/5 border-r border-slate-300 px-3 py-1 text-center text-sm font-semibold text-slate-800">${escapeHtml(row.code)}</td>
+          <td class="w-24 px-3 py-1 text-center">
+            <input type="checkbox" data-user-plants-code="${escapeHtml(row.code)}" class="h-4 w-4 rounded border-slate-400 text-sky-600"${selectedSet.has(row.code) ? ' checked' : ''}>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderUserPlantsAccessView(user) {
+      return `
+        ${renderTopBar('Master - Department')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-2">
+            <h3 class="flex-1 text-center text-xl font-extrabold tracking-wide text-slate-900">USER PLANTS PRIVILEGE</h3>
+            <button id="userPlantsAccessCancelBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-200">Cancel</button>
+          </div>
+
+          <div class="mt-3 grid gap-2 text-sm md:grid-cols-3 md:items-center">
+            <label class="font-semibold text-slate-700">EC No:<input type="text" readonly value="${escapeHtml(user.ec)}" class="ml-1 h-8 w-40 rounded border border-slate-400 bg-slate-50 px-2"></label>
+            <label class="font-semibold text-slate-700">User Name:<input type="text" readonly value="${escapeHtml(user.userName)}" class="ml-1 h-8 w-40 rounded border border-slate-400 bg-slate-50 px-2"></label>
+            <label class="font-semibold text-slate-700">Group:<input type="text" readonly value="${escapeHtml(user.group)}" class="ml-1 h-8 w-36 rounded border border-slate-400 bg-slate-50 px-2"></label>
+          </div>
+
+          <div class="custom-scroll mt-3 max-h-[560px] overflow-auto rounded border border-slate-300">
+            <table class="min-w-[760px] w-full border-collapse bg-white">
+              <tbody>
+                ${buildUserPlantsPrivilegePlantTableRows(user.ec)}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function showUserPlantsAccessView(user) {
+      const content = document.getElementById('adminContent');
+      if (!content || !user) return;
+
+      content.innerHTML = renderUserPlantsAccessView(user);
+      bindUserPlantsAccessView(user);
+
+      if (typeof window.setAdminSidebarActive === 'function') {
+        window.setAdminSidebarActive('user_plants');
+      }
+    }
+
+    function bindUserPlantsAccessView(user) {
+      const cancelBtn = document.getElementById('userPlantsAccessCancelBtn');
+      const checkboxes = Array.from(document.querySelectorAll('[data-user-plants-code]'));
+      const selectedSet = getUserPlantsSelectionSet(user.ec);
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          window.renderAdminContent('user_plants');
+        });
+      }
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+          const code = String(checkbox.dataset.userPlantsCode || '').trim();
+          if (!code) return;
+
+          if (checkbox.checked) {
+            selectedSet.add(code);
+          } else {
+            selectedSet.delete(code);
+          }
+        });
+      });
+    }
+
+    function bindUserPlantsLookupView() {
+      const filterInput = document.getElementById('userPlantsFilter');
+      const ecSelect = document.getElementById('userPlantsEcSelect');
+      const goBtn = document.getElementById('userPlantsGoBtn');
+      if (!filterInput || !ecSelect || !goBtn) return;
+
+      const applyFilter = () => {
+        const rows = filterUserPlantsDirectoryRows(filterInput.value);
+        const preferredEc = String(ecSelect.value || '').trim();
+        const hasPreferred = rows.some((row) => row.ec === preferredEc);
+        const selectedEc = hasPreferred ? preferredEc : (rows[0]?.ec || '');
+
+        ecSelect.innerHTML = '<option value="">Select EC Number</option>' + buildUserPlantsEcOptions(rows, selectedEc);
+        ecSelect.value = selectedEc;
+      };
+
+      const openSelected = () => {
+        const rows = filterUserPlantsDirectoryRows(filterInput.value);
+        const selectedEc = String(ecSelect.value || '').trim();
+        const selectedUser = rows.find((row) => row.ec === selectedEc) || rows[0] || null;
+        if (!selectedUser) return;
+
+        showUserPlantsAccessView(selectedUser);
+      };
+
+      filterInput.addEventListener('input', applyFilter);
+      filterInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          openSelected();
+        }
+      });
+
+      goBtn.addEventListener('click', openSelected);
+      applyFilter();
+    }
+
+    function upsertUserPrivilegeRowFromUserInfo(userInfo) {
+      const ec = String(userInfo?.ec || '').trim();
+      if (!ec) return;
+
+      const name = String(userInfo?.userName || '').trim();
+      const group = String(userInfo?.group || '').trim() || 'Tech';
+      const existingIndex = userPrivilegeRows.findIndex((row) => row.ec === ec);
+
+      if (existingIndex === -1) {
+        userPrivilegeRows.push({ ec, name, group });
+        return;
+      }
+
+      userPrivilegeRows[existingIndex].name = name;
+      userPrivilegeRows[existingIndex].group = group;
+    }
+
+    function removeUserPrivilegeRowByEc(ecNumber) {
+      const ec = String(ecNumber || '').trim();
+      if (!ec) return;
+
+      const existingIndex = userPrivilegeRows.findIndex((row) => row.ec === ec);
+      if (existingIndex !== -1) {
+        userPrivilegeRows.splice(existingIndex, 1);
+      }
+    }
+
+    function filterUserInfoRows(ecText, userNameText) {
+      const ecQuery = String(ecText || '').trim().toLowerCase();
+      const nameQuery = String(userNameText || '').trim().toLowerCase();
+
+      return userInfoRows.filter((row) => {
+        const ecMatch = !ecQuery || row.ec.toLowerCase().includes(ecQuery);
+        const nameMatch = !nameQuery || row.userName.toLowerCase().includes(nameQuery);
+        return ecMatch && nameMatch;
+      });
+    }
+
+    function getUserInfoGroupCode(groupName) {
+      const normalized = String(groupName || '').trim().toUpperCase();
+      return userInfoGroupCodeMap[normalized] || '';
+    }
+
+    function renderUserInfoView() {
+      return `
+        ${renderTopBar('Master - User Information')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mx-auto max-w-5xl overflow-hidden rounded-lg border border-slate-200">
+            <div class="grid border-b border-slate-200 sm:grid-cols-[240px_1fr]">
+              <label for="userInfoEcNumber" class="bg-slate-100 px-3 py-2 text-right text-sm font-semibold text-slate-700">E C Number</label>
+              <div class="bg-white px-3 py-2">
+                <input id="userInfoEcNumber" type="text" class="h-9 w-full max-w-[220px] rounded border border-slate-300 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+              </div>
+            </div>
+
+            <div class="grid border-b border-slate-200 sm:grid-cols-[240px_1fr]">
+              <label for="userInfoName" class="bg-slate-100 px-3 py-2 text-right text-sm font-semibold text-slate-700">User Name</label>
+              <div class="bg-white px-3 py-2">
+                <input id="userInfoName" type="text" class="h-9 w-full max-w-[320px] rounded border border-slate-300 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+              </div>
+            </div>
+
+            <div class="grid border-b border-slate-200 sm:grid-cols-[240px_1fr]">
+              <label for="userInfoPassword" class="bg-slate-100 px-3 py-2 text-right text-sm font-semibold text-slate-700">PassWord</label>
+              <div class="bg-white px-3 py-2">
+                <input id="userInfoPassword" type="password" class="h-9 w-full max-w-[220px] rounded border border-slate-300 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-[240px_1fr]">
+              <label for="userInfoGroup" class="bg-slate-100 px-3 py-2 text-right text-sm font-semibold text-slate-700">Group</label>
+              <div class="bg-white px-3 py-2">
+                <select id="userInfoGroup" class="h-9 w-full max-w-[220px] rounded border border-slate-300 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+                  ${userInfoGroupOptions.map((group) => `<option value="${escapeHtml(group)}"${group === 'Tech' ? ' selected' : ''}>${escapeHtml(group)}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mx-auto mt-6 max-w-5xl rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div class="flex justify-center gap-2">
+              <button id="userInfoAddBtn" type="button" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700">Add</button>
+              <button id="userInfoViewBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildUserInfoTableRows(rows, selectedEc) {
+      if (!rows.length) {
+        return `
+          <tr>
+            <td colspan="5" class="px-3 py-5 text-center text-sm text-slate-500">No user records found.</td>
+          </tr>
+        `;
+      }
+
+      const preferredEc = String(selectedEc || '').trim();
+      return rows.map((row, index) => `
+        <tr class="border-t border-slate-200 hover:bg-slate-50">
+          <td class="w-16 px-3 py-2 text-center">
+            <input type="radio" name="userInfoModalSelected" value="${escapeHtml(row.ec)}" class="h-4 w-4 border-slate-400 text-sky-600"${(preferredEc && row.ec === preferredEc) || (!preferredEc && index === 0) ? ' checked' : ''}>
+          </td>
+          <td class="px-3 py-2 text-sm font-semibold text-slate-700">${escapeHtml(row.ec)}</td>
+          <td class="px-3 py-2 text-sm text-slate-700">${escapeHtml(row.userName)}</td>
+          <td class="px-3 py-2 text-center text-sm text-slate-700">${escapeHtml(getUserInfoGroupCode(row.group))}</td>
+          <td class="px-3 py-2 text-sm text-slate-600">${escapeHtml(row.group)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getSelectedUserInfoFromModalRows(rows) {
+      if (!Array.isArray(rows) || !rows.length) return null;
+
+      const checkedInput = document.querySelector('input[name="userInfoModalSelected"]:checked');
+      const selectedEc = String(checkedInput?.value || '').trim();
+      if (selectedEc) {
+        const selectedRow = rows.find((row) => row.ec === selectedEc);
+        if (selectedRow) return selectedRow;
+      }
+
+      return rows[0] || null;
+    }
+
+    function openUserInfoUpdateModal(userInfo) {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root || !userInfo) return;
+
+      const originalEc = String(userInfo.ec || '').trim();
+      const originalUserName = String(userInfo.userName || '').trim();
+      const originalGroup = String(userInfo.group || '').trim() || 'Tech';
+
+      root.innerHTML = `
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]" data-modal-close="overlay"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+          <div class="w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl">
+            <div class="flex items-center justify-between bg-slate-900 px-4 py-2 text-white">
+              <h3 class="text-sm font-semibold sm:text-base">Master - User Information [ Update ]</h3>
+              <button id="userInfoUpdateCloseTop" type="button" class="rounded border border-slate-500 px-2 py-1 text-xs hover:bg-slate-700">Close</button>
+            </div>
+
+            <div class="space-y-5 p-4 sm:p-6">
+              <div class="flex items-center gap-3">
+                <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo" class="h-14 w-auto">
+                <h4 class="text-base font-extrabold text-amber-600 sm:text-2xl">Gujarat Narmada Valley Fertilizers Company Limited</h4>
+              </div>
+
+              <div class="rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white sm:text-base">Master - User Information [ Update ]</div>
+
+              <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div class="grid gap-3 sm:grid-cols-[180px_1fr] sm:items-center">
+                  <label for="userInfoUpdateEc" class="text-sm font-semibold text-slate-600">E C Number</label>
+                  <input id="userInfoUpdateEc" type="text" value="${escapeHtml(originalEc)}" class="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+
+                  <label for="userInfoUpdateName" class="text-sm font-semibold text-slate-600">User Name</label>
+                  <input id="userInfoUpdateName" type="text" value="${escapeHtml(originalUserName)}" class="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+
+                  <label for="userInfoUpdateGroup" class="text-sm font-semibold text-slate-600">GROUPNAME</label>
+                  <select id="userInfoUpdateGroup" class="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+                    ${userInfoGroupOptions.map((group) => `<option value="${escapeHtml(group)}"${group === originalGroup ? ' selected' : ''}>${escapeHtml(group)}</option>`).join('')}
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button id="userInfoUpdateSaveBtn" type="button" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700">Update</button>
+                <button id="userInfoUpdateBackBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      root.classList.remove('hidden');
+
+      const closeTopBtn = document.getElementById('userInfoUpdateCloseTop');
+      const backBtn = document.getElementById('userInfoUpdateBackBtn');
+      const saveBtn = document.getElementById('userInfoUpdateSaveBtn');
+      const ecInput = document.getElementById('userInfoUpdateEc');
+      const nameInput = document.getElementById('userInfoUpdateName');
+      const groupSelect = document.getElementById('userInfoUpdateGroup');
+
+      const goBackToView = (selectedEc) => {
+        const nextRows = filterUserInfoRows('', '');
+        openUserInfoModal(nextRows, selectedEc || originalEc);
+      };
+
+      if (closeTopBtn) closeTopBtn.addEventListener('click', closeUserInfoModal);
+      if (backBtn) backBtn.addEventListener('click', () => goBackToView(originalEc));
+
+      if (saveBtn && ecInput && nameInput && groupSelect) {
+        saveBtn.addEventListener('click', () => {
+          const nextEc = String(ecInput.value || '').trim();
+          const nextUserName = String(nameInput.value || '').trim();
+          const nextGroup = String(groupSelect.value || '').trim() || 'Tech';
+
+          if (!nextEc) {
+            ecInput.focus();
+            return;
+          }
+
+          if (!nextUserName) {
+            nameInput.focus();
+            return;
+          }
+
+          const duplicate = userInfoRows.find((row) => row.ec === nextEc && row.ec !== originalEc);
+          if (duplicate) {
+            ecInput.focus();
+            return;
+          }
+
+          const existingIndex = userInfoRows.findIndex((row) => row.ec === originalEc);
+          const previousPassword = existingIndex !== -1 ? String(userInfoRows[existingIndex].password || '') : '';
+          const nextUser = {
+            ec: nextEc,
+            userName: nextUserName,
+            password: previousPassword,
+            group: nextGroup
+          };
+
+          if (existingIndex !== -1) {
+            userInfoRows[existingIndex] = nextUser;
+          } else {
+            userInfoRows.push(nextUser);
+          }
+
+          if (nextEc !== originalEc) {
+            removeUserPrivilegeRowByEc(originalEc);
+          }
+          upsertUserPrivilegeRowFromUserInfo(nextUser);
+
+          goBackToView(nextEc);
+        });
+      }
+
+      const overlay = root.querySelector('[data-modal-close="overlay"]');
+      if (overlay) {
+        overlay.addEventListener('click', closeUserInfoModal);
+      }
+
+      if (userInfoModalEscHandler) {
+        document.removeEventListener('keydown', userInfoModalEscHandler);
+        userInfoModalEscHandler = null;
+      }
+
+      userInfoModalEscHandler = (event) => {
+        if (event.key === 'Escape') {
+          closeUserInfoModal();
+        }
+      };
+      document.addEventListener('keydown', userInfoModalEscHandler);
+    }
+
+    function openUserInfoModal(rows, selectedEc) {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.innerHTML = `
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]" data-modal-close="overlay"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+          <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl">
+            <div class="flex items-center justify-between bg-slate-900 px-4 py-2 text-white">
+              <h3 class="text-sm font-semibold sm:text-base">Master - LoginInfo [ View ]</h3>
+              <button id="userInfoModalCloseTop" type="button" class="rounded border border-slate-500 px-2 py-1 text-xs hover:bg-slate-700">Close</button>
+            </div>
+
+            <div class="space-y-4 p-4 sm:p-6">
+              <div class="flex items-center gap-3">
+                <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo" class="h-14 w-auto">
+                <h4 class="text-base font-extrabold text-amber-600 sm:text-2xl">Gujarat Narmada Valley Fertilizers Company Limited</h4>
+              </div>
+
+              <div class="rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white sm:text-base">Master - LoginInfo [ View ]</div>
+
+              <div class="max-h-[360px] overflow-auto rounded-lg border border-slate-200 custom-scroll">
+                <table class="min-w-full text-left">
+                  <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th class="w-16 px-3 py-2 text-center text-sm font-semibold"></th>
+                      <th class="px-3 py-2 text-sm font-semibold">E C Number</th>
+                      <th class="px-3 py-2 text-sm font-semibold">User Name</th>
+                      <th class="px-3 py-2 text-sm font-semibold">GROUP</th>
+                      <th class="px-3 py-2 text-sm font-semibold">GROUP NAME</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${buildUserInfoTableRows(rows, selectedEc)}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button id="userInfoModalUpdateBtn" type="button" class="rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Update</button>
+                <button id="userInfoModalDeleteBtn" type="button" class="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100">Delete</button>
+                <button id="userInfoModalCloseBottom" type="button" class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      root.classList.remove('hidden');
+
+      const closeTopBtn = document.getElementById('userInfoModalCloseTop');
+      const closeBottomBtn = document.getElementById('userInfoModalCloseBottom');
+      const updateBtn = document.getElementById('userInfoModalUpdateBtn');
+      const deleteBtn = document.getElementById('userInfoModalDeleteBtn');
+
+      if (closeTopBtn) closeTopBtn.addEventListener('click', closeUserInfoModal);
+      if (closeBottomBtn) closeBottomBtn.addEventListener('click', closeUserInfoModal);
+
+      if (updateBtn) {
+        updateBtn.addEventListener('click', () => {
+          const selected = getSelectedUserInfoFromModalRows(rows);
+          if (!selected) return;
+
+          openUserInfoUpdateModal({ ...selected });
+        });
+      }
+
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          const selected = getSelectedUserInfoFromModalRows(rows);
+          if (!selected) return;
+
+          const removeIndex = userInfoRows.findIndex((row) => row.ec === selected.ec);
+          if (removeIndex !== -1) {
+            userInfoRows.splice(removeIndex, 1);
+          }
+          removeUserPrivilegeRowByEc(selected.ec);
+
+          const nextRows = filterUserInfoRows('', '');
+          const nextSelected = nextRows[0]?.ec || '';
+          openUserInfoModal(nextRows, nextSelected);
+        });
+      }
+
+      const overlay = root.querySelector('[data-modal-close="overlay"]');
+      if (overlay) {
+        overlay.addEventListener('click', closeUserInfoModal);
+      }
+
+      if (userInfoModalEscHandler) {
+        document.removeEventListener('keydown', userInfoModalEscHandler);
+        userInfoModalEscHandler = null;
+      }
+
+      userInfoModalEscHandler = (event) => {
+        if (event.key === 'Escape') {
+          closeUserInfoModal();
+        }
+      };
+      document.addEventListener('keydown', userInfoModalEscHandler);
+    }
+
+    function closeUserInfoModal() {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.classList.add('hidden');
+      root.innerHTML = '';
+
+      if (userInfoModalEscHandler) {
+        document.removeEventListener('keydown', userInfoModalEscHandler);
+        userInfoModalEscHandler = null;
+      }
+    }
+
+    function bindUserInfoView() {
+      const ecInput = document.getElementById('userInfoEcNumber');
+      const userNameInput = document.getElementById('userInfoName');
+      const passwordInput = document.getElementById('userInfoPassword');
+      const groupSelect = document.getElementById('userInfoGroup');
+      const addBtn = document.getElementById('userInfoAddBtn');
+      const viewBtn = document.getElementById('userInfoViewBtn');
+
+      if (!ecInput || !userNameInput || !passwordInput || !groupSelect || !addBtn || !viewBtn) return;
+
+      const addOrUpdateUser = () => {
+        const ec = String(ecInput.value || '').trim();
+        const userName = String(userNameInput.value || '').trim();
+        const password = String(passwordInput.value || '').trim();
+        const group = String(groupSelect.value || '').trim() || 'Tech';
+
+        if (!ec) {
+          ecInput.focus();
+          return;
+        }
+
+        if (!userName) {
+          userNameInput.focus();
+          return;
+        }
+
+        if (!password) {
+          passwordInput.focus();
+          return;
+        }
+
+        const existingIndex = userInfoRows.findIndex((row) => row.ec === ec);
+        const nextUser = { ec, userName, password, group };
+
+        if (existingIndex === -1) {
+          userInfoRows.push(nextUser);
+        } else {
+          userInfoRows[existingIndex] = nextUser;
+        }
+
+        upsertUserPrivilegeRowFromUserInfo(nextUser);
+
+        ecInput.value = '';
+        userNameInput.value = '';
+        passwordInput.value = '';
+        groupSelect.value = 'Tech';
+        ecInput.focus();
+      };
+
+      const openView = () => {
+        const rows = filterUserInfoRows(ecInput.value, userNameInput.value);
+        openUserInfoModal(rows, ecInput.value);
+      };
+
+      addBtn.addEventListener('click', addOrUpdateUser);
+      viewBtn.addEventListener('click', openView);
+
+      [ecInput, userNameInput, passwordInput].forEach((input) => {
+        input.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            addOrUpdateUser();
+          }
+        });
+      });
+    }
+
+    function normalizeModuleName(value) {
+      return String(value || '')
+        .trim()
+        .replace(/\s+/g, ' ')
+        .toUpperCase()
+        .replace(/ /g, '_');
+    }
+
+    function filterModuleMasterRows(moduleText) {
+      const query = String(moduleText || '').trim().toLowerCase();
+      if (!query) return moduleMasterRows;
+
+      return moduleMasterRows.filter((row) => row.module.toLowerCase().includes(query));
+    }
+
+    function renderModulesView() {
+      return `
+        ${renderTopBar('MODULE MASTER')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mx-auto max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <div class="grid gap-3 sm:grid-cols-[180px_1fr] sm:items-center">
+              <label for="moduleMasterNameInput" class="text-sm font-semibold text-slate-600">MODULE NAME</label>
+              <input id="moduleMasterNameInput" type="text" class="h-11 rounded-lg border border-slate-300 bg-white px-3 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+            </div>
+          </div>
+
+          <div class="mx-auto mt-5 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div class="flex justify-center gap-2">
+              <button id="moduleMasterAddBtn" type="button" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700">Add</button>
+              <button id="moduleMasterViewBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildModuleMasterTableRows(rows, selectedModuleName) {
+      if (!rows.length) {
+        return `
+          <tr>
+            <td colspan="2" class="px-3 py-5 text-center text-sm text-slate-500">No modules found.</td>
+          </tr>
+        `;
+      }
+
+      const preferredModule = String(selectedModuleName || '').trim();
+      return rows.map((row, index) => `
+        <tr class="border-t border-slate-200 hover:bg-slate-50">
+          <td class="w-16 px-3 py-2 text-center">
+            <input type="radio" name="moduleModalSelected" value="${escapeHtml(row.module)}" class="h-4 w-4 border-slate-400 text-sky-600"${(preferredModule && row.module === preferredModule) || (!preferredModule && index === 0) ? ' checked' : ''}>
+          </td>
+          <td class="px-3 py-2 text-sm text-slate-700">${escapeHtml(row.module)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getSelectedModuleFromModalRows(rows) {
+      if (!Array.isArray(rows) || !rows.length) return null;
+
+      const checkedInput = document.querySelector('input[name="moduleModalSelected"]:checked');
+      const selectedModule = String(checkedInput?.value || '').trim();
+      if (selectedModule) {
+        const selectedRow = rows.find((row) => row.module === selectedModule);
+        if (selectedRow) return selectedRow;
+      }
+
+      return rows[0] || null;
+    }
+
+    function openModulesModal(filterText, selectedModuleName) {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      const rows = filterModuleMasterRows(filterText);
+
+      root.innerHTML = `
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]" data-modal-close="overlay"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+          <div class="w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl">
+            <div class="flex items-center justify-between bg-slate-900 px-4 py-2 text-white">
+              <h3 class="text-sm font-semibold sm:text-base">Master - Department [ View ]</h3>
+              <button id="modulesModalCloseTop" type="button" class="rounded border border-slate-500 px-2 py-1 text-xs hover:bg-slate-700">Close</button>
+            </div>
+
+            <div class="space-y-4 p-4 sm:p-6">
+              <div class="flex items-center gap-3">
+                <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo" class="h-14 w-auto">
+                <h4 class="text-base font-extrabold text-amber-600 sm:text-2xl">Gujarat Narmada Valley Fertilizers Company Limited</h4>
+              </div>
+
+              <div class="rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white sm:text-base">MASTER MODULES [ View ]</div>
+
+              <div class="max-h-[360px] overflow-auto rounded-lg border border-slate-200 custom-scroll">
+                <table class="min-w-full text-left">
+                  <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th class="w-16 px-3 py-2 text-center text-sm font-semibold"></th>
+                      <th class="px-3 py-2 text-sm font-semibold">MODULE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${buildModuleMasterTableRows(rows, selectedModuleName)}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button id="modulesModalDeleteBtn" type="button" class="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100">Delete</button>
+                <button id="modulesModalCloseBottom" type="button" class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      root.classList.remove('hidden');
+
+      const closeTopBtn = document.getElementById('modulesModalCloseTop');
+      const closeBottomBtn = document.getElementById('modulesModalCloseBottom');
+      const deleteBtn = document.getElementById('modulesModalDeleteBtn');
+
+      if (closeTopBtn) closeTopBtn.addEventListener('click', closeModulesModal);
+      if (closeBottomBtn) closeBottomBtn.addEventListener('click', closeModulesModal);
+
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          const selected = getSelectedModuleFromModalRows(rows);
+          if (!selected) return;
+
+          const removeIndex = moduleMasterRows.findIndex((row) => row.module === selected.module);
+          if (removeIndex !== -1) {
+            moduleMasterRows.splice(removeIndex, 1);
+          }
+
+          const nextRows = filterModuleMasterRows(filterText);
+          const nextSelected = nextRows[0]?.module || '';
+          openModulesModal(filterText, nextSelected);
+        });
+      }
+
+      const overlay = root.querySelector('[data-modal-close="overlay"]');
+      if (overlay) {
+        overlay.addEventListener('click', closeModulesModal);
+      }
+
+      if (moduleModalEscHandler) {
+        document.removeEventListener('keydown', moduleModalEscHandler);
+        moduleModalEscHandler = null;
+      }
+
+      moduleModalEscHandler = (event) => {
+        if (event.key === 'Escape') {
+          closeModulesModal();
+        }
+      };
+      document.addEventListener('keydown', moduleModalEscHandler);
+    }
+
+    function closeModulesModal() {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.classList.add('hidden');
+      root.innerHTML = '';
+
+      if (moduleModalEscHandler) {
+        document.removeEventListener('keydown', moduleModalEscHandler);
+        moduleModalEscHandler = null;
+      }
+    }
+
+    function bindModulesView() {
+      const moduleNameInput = document.getElementById('moduleMasterNameInput');
+      const addBtn = document.getElementById('moduleMasterAddBtn');
+      const viewBtn = document.getElementById('moduleMasterViewBtn');
+      if (!moduleNameInput || !addBtn || !viewBtn) return;
+
+      const openFilteredModal = () => {
+        openModulesModal(moduleNameInput.value, '');
+      };
+
+      addBtn.addEventListener('click', () => {
+        const moduleName = normalizeModuleName(moduleNameInput.value);
+        if (!moduleName) {
+          moduleNameInput.focus();
+          return;
+        }
+
+        const exists = moduleMasterRows.some((row) => row.module.toLowerCase() === moduleName.toLowerCase());
+        if (!exists) {
+          moduleMasterRows.push({ module: moduleName });
+        }
+
+        moduleNameInput.value = '';
+        moduleNameInput.focus();
+      });
+
+      viewBtn.addEventListener('click', openFilteredModal);
+      moduleNameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          openFilteredModal();
+        }
+      });
+    }
+
+    function filterPlantMasterRows(codeText, nameText) {
+      const codeQuery = String(codeText || '').trim().toLowerCase();
+      const nameQuery = String(nameText || '').trim().toLowerCase();
+
+      return plantMasterRows.filter((row) => {
+        const codeMatch = !codeQuery || row.code.toLowerCase().includes(codeQuery);
+        const nameMatch = !nameQuery || row.name.toLowerCase().includes(nameQuery);
+        return codeMatch && nameMatch;
+      });
+    }
+
+    function renderPlantsView() {
+      return `
+        ${renderTopBar('Master - Plants')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="grid gap-4 sm:grid-cols-[160px_1fr] sm:items-center">
+            <label for="plantCodeInput" class="text-sm font-semibold text-slate-600">Plant Code</label>
+            <input id="plantCodeInput" type="text" class="h-11 rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+
+            <label for="plantNameInput" class="text-sm font-semibold text-slate-600">Plant Name</label>
+            <input id="plantNameInput" type="text" class="h-11 rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100">
+          </div>
+
+          <div class="mt-6 flex justify-end gap-2">
+            <button id="plantsAddBtn" type="button" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700">Add</button>
+            <button id="plantsViewBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">View</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildPlantTableRows(rows, selectedCode) {
+      if (!rows.length) {
+        return `
+          <tr>
+            <td colspan="3" class="px-3 py-5 text-center text-sm text-slate-500">No plant records found.</td>
+          </tr>
+        `;
+      }
+
+      const preferredCode = String(selectedCode || '').trim();
+      return rows.map((row, index) => `
+        <tr class="border-t border-slate-200 hover:bg-slate-50">
+          <td class="px-3 py-2 text-center">
+            <input type="radio" name="plantModalSelected" value="${escapeHtml(row.code)}" class="h-4 w-4 border-slate-400 text-sky-600"${(preferredCode && row.code === preferredCode) || (!preferredCode && index === 0) ? ' checked' : ''}>
+          </td>
+          <td class="px-3 py-2 text-sm font-semibold text-slate-700">${escapeHtml(row.code)}</td>
+          <td class="px-3 py-2 text-sm text-slate-600">${escapeHtml(row.name)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getSelectedPlantFromModalRows(rows) {
+      if (!Array.isArray(rows) || !rows.length) return null;
+
+      const checkedInput = document.querySelector('input[name="plantModalSelected"]:checked');
+      const selectedCode = String(checkedInput?.value || '').trim();
+      if (selectedCode) {
+        const selectedRow = rows.find((row) => row.code === selectedCode);
+        if (selectedRow) return selectedRow;
+      }
+
+      return rows[0] || null;
+    }
+
+    function openPlantUpdateModal(plant, sourceRows) {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root || !plant) return;
+
+      const source = Array.isArray(sourceRows) && sourceRows.length ? sourceRows : plantMasterRows;
+
+      root.innerHTML = `
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]" data-modal-close="overlay"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+          <div class="w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl">
+            <div class="flex items-center justify-between bg-slate-900 px-4 py-2 text-white">
+              <h3 class="text-sm font-semibold sm:text-base">Master - Department [ Update ]</h3>
+              <button id="plantUpdateCloseTop" type="button" class="rounded border border-slate-500 px-2 py-1 text-xs hover:bg-slate-700">Close</button>
+            </div>
+
+            <div class="space-y-5 p-4 sm:p-6">
+              <div class="flex items-center gap-3">
+                <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo" class="h-14 w-auto">
+                <h4 class="text-base font-extrabold text-amber-600 sm:text-2xl">Gujarat Narmada Valley Fertilizers Company Limited</h4>
+              </div>
+
+              <div class="rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white sm:text-base">Master - Plant [ Update ]</div>
+
+              <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div class="grid gap-3 sm:grid-cols-[160px_1fr] sm:items-center">
+                  <label for="plantUpdateCode" class="text-sm font-semibold text-slate-600">Plant Code</label>
+                  <input id="plantUpdateCode" type="text" value="${escapeHtml(plant.code)}" readonly class="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none">
+
+                  <label for="plantUpdateName" class="text-sm font-semibold text-slate-600">Plant Name</label>
+                  <input id="plantUpdateName" type="text" value="${escapeHtml(plant.name)}" class="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100" required>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button id="plantUpdateSaveBtn" type="button" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700">Update</button>
+                <button id="plantUpdateBackBtn" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Back</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      root.classList.remove('hidden');
+
+      const closeTopBtn = document.getElementById('plantUpdateCloseTop');
+      const backBtn = document.getElementById('plantUpdateBackBtn');
+      const saveBtn = document.getElementById('plantUpdateSaveBtn');
+      const nameInput = document.getElementById('plantUpdateName');
+
+      const goBackToList = () => {
+        const refreshedRows = source.map((row) => ({ ...row }));
+        openPlantsModal(refreshedRows, plant.code);
+      };
+
+      if (closeTopBtn) closeTopBtn.addEventListener('click', closePlantsModal);
+      if (backBtn) backBtn.addEventListener('click', goBackToList);
+
+      if (saveBtn && nameInput) {
+        saveBtn.addEventListener('click', () => {
+          const nextName = String(nameInput.value || '').trim();
+          if (!nextName) {
+            nameInput.focus();
+            return;
+          }
+
+          const plantRow = plantMasterRows.find((row) => row.code === plant.code);
+          if (plantRow) plantRow.name = nextName;
+
+          plant.name = nextName;
+          goBackToList();
+        });
+      }
+
+      const overlay = root.querySelector('[data-modal-close="overlay"]');
+      if (overlay) {
+        overlay.addEventListener('click', closePlantsModal);
+      }
+
+      if (plantsModalEscHandler) {
+        document.removeEventListener('keydown', plantsModalEscHandler);
+        plantsModalEscHandler = null;
+      }
+
+      plantsModalEscHandler = (event) => {
+        if (event.key === 'Escape') {
+          closePlantsModal();
+        }
+      };
+      document.addEventListener('keydown', plantsModalEscHandler);
+    }
+
+    function openPlantsModal(rows, selectedCode) {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.innerHTML = `
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]" data-modal-close="overlay"></div>
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4">
+          <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl">
+            <div class="flex items-center justify-between bg-slate-900 px-4 py-2 text-white">
+              <h3 class="text-sm font-semibold sm:text-base">Master - Department [ View ]</h3>
+              <button id="plantsModalCloseTop" type="button" class="rounded border border-slate-500 px-2 py-1 text-xs hover:bg-slate-700">Close</button>
+            </div>
+
+            <div class="space-y-4 p-4 sm:p-6">
+              <div class="flex items-center gap-3">
+                <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC Logo" class="h-14 w-auto">
+                <h4 class="text-base font-extrabold text-amber-600 sm:text-2xl">Gujarat Narmada Valley Fertilizers Company Limited</h4>
+              </div>
+
+              <div class="rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white sm:text-base">Master - Plants [ View ]</div>
+
+              <div class="max-h-[360px] overflow-auto rounded-lg border border-slate-200 custom-scroll">
+                <table class="min-w-full text-left">
+                  <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                      <th class="w-16 px-3 py-2 text-center text-sm font-semibold"></th>
+                      <th class="px-3 py-2 text-sm font-semibold">Plant Code</th>
+                      <th class="px-3 py-2 text-sm font-semibold">Plant Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${buildPlantTableRows(rows, selectedCode)}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button id="plantsModalUpdateBtn" type="button" class="rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Update</button>
+                <button id="plantsModalDeleteBtn" type="button" class="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100">Delete</button>
+                <button id="plantsModalCloseBottom" type="button" class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      root.classList.remove('hidden');
+
+      const closeTopBtn = document.getElementById('plantsModalCloseTop');
+      const closeBottomBtn = document.getElementById('plantsModalCloseBottom');
+      const updateBtn = document.getElementById('plantsModalUpdateBtn');
+      const deleteBtn = document.getElementById('plantsModalDeleteBtn');
+
+      if (closeTopBtn) closeTopBtn.addEventListener('click', closePlantsModal);
+      if (closeBottomBtn) closeBottomBtn.addEventListener('click', closePlantsModal);
+
+      if (updateBtn) {
+        updateBtn.addEventListener('click', () => {
+          const selectedPlant = getSelectedPlantFromModalRows(rows);
+          if (!selectedPlant) return;
+
+          openPlantUpdateModal({ ...selectedPlant }, rows);
+        });
+      }
+
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          deleteBtn.blur();
+        });
+      }
+
+      const overlay = root.querySelector('[data-modal-close="overlay"]');
+      if (overlay) {
+        overlay.addEventListener('click', closePlantsModal);
+      }
+
+      if (plantsModalEscHandler) {
+        document.removeEventListener('keydown', plantsModalEscHandler);
+        plantsModalEscHandler = null;
+      }
+
+      plantsModalEscHandler = (event) => {
+        if (event.key === 'Escape') {
+          closePlantsModal();
+        }
+      };
+      document.addEventListener('keydown', plantsModalEscHandler);
+    }
+
+    function closePlantsModal() {
+      const root = document.getElementById('plantsModalRoot');
+      if (!root) return;
+
+      root.classList.add('hidden');
+      root.innerHTML = '';
+
+      if (plantsModalEscHandler) {
+        document.removeEventListener('keydown', plantsModalEscHandler);
+        plantsModalEscHandler = null;
+      }
+    }
+
+    function bindPlantsView() {
+      const codeInput = document.getElementById('plantCodeInput');
+      const nameInput = document.getElementById('plantNameInput');
+      const addBtn = document.getElementById('plantsAddBtn');
+      const viewBtn = document.getElementById('plantsViewBtn');
+
+      if (!codeInput || !nameInput || !viewBtn) return;
+
+      const openFilteredModal = () => {
+        const rows = filterPlantMasterRows(codeInput.value, nameInput.value);
+        openPlantsModal(rows);
+      };
+
+      if (addBtn) {
+        addBtn.addEventListener('click', () => {
+          codeInput.value = '';
+          nameInput.value = '';
+          codeInput.focus();
+        });
+      }
+
+      viewBtn.addEventListener('click', openFilteredModal);
+
+      codeInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          openFilteredModal();
+        }
+      });
+
+      nameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          openFilteredModal();
+        }
+      });
+    }
+
+    function bindUserPrivilegeView() {
+      const filterInput = document.getElementById('userPrivilegeFilter');
+      const ecSelect = document.getElementById('userPrivilegeSelect');
+      const goButton = document.getElementById('userPrivilegeGo');
+      if (!filterInput || !ecSelect || !goButton) return;
+
+      const applyFilter = () => {
+        const rows = filterUserPrivilegeRows(filterInput.value, '');
+        const preferredEc = String(ecSelect.value || '').trim();
+        const hasPreferredEc = rows.some((row) => row.ec === preferredEc);
+        const selectedEc = hasPreferredEc ? preferredEc : (rows[0]?.ec || '');
+
+        ecSelect.innerHTML = '<option value="">Select EC Number</option>' + buildUserPrivilegeSelectOptions(rows, selectedEc);
+        ecSelect.value = selectedEc;
+      };
+
+      const openSelectedUserPlantsPrivilege = () => {
+        const filteredRows = filterUserPrivilegeRows(filterInput.value, '');
+        const selectedUser =
+          getUserByEc(ecSelect.value)
+          || filteredRows[0]
+          || null;
+
+        if (!selectedUser) return;
+
+        showUserPlantsPrivilege(selectedUser);
+      };
+
+      goButton.addEventListener('click', openSelectedUserPlantsPrivilege);
+      filterInput.addEventListener('input', applyFilter);
+      ecSelect.addEventListener('change', () => {
+        ecSelect.blur();
+      });
+
+      filterInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          openSelectedUserPlantsPrivilege();
+        }
+      });
+
+      applyFilter();
+    }
+
+    function renderUserEmailView() {
+      return `
+        ${renderTopBar('')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-3xl font-extrabold text-slate-900">User Email Address</h3>
+
+          <div class="mx-auto mt-4 grid max-w-4xl gap-3 md:grid-cols-[72px_1fr_1fr] md:items-center">
+            <label for="userEmailFilter" class="text-sm font-semibold text-slate-700 md:text-right">Filter:</label>
+            <input id="userEmailFilter" type="text" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500">
+            <select id="userEmailSelect" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 font-mono text-sm outline-none focus:border-sky-500">
+              <option value="">Select EC Number</option>
+            </select>
+          </div>
+
+          <div class="mx-auto mt-3 grid max-w-4xl gap-3 md:grid-cols-[72px_1fr] md:items-center">
+            <label for="userEmailInput" class="text-sm font-semibold text-slate-700 md:text-right">Email:</label>
+            <input id="userEmailInput" type="email" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500">
+          </div>
+
+          <div class="mt-4 flex justify-center">
+            <button id="userEmailUpdateBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Update</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindUserEmailView() {
+      const filterInput = document.getElementById('userEmailFilter');
+      const ecSelect = document.getElementById('userEmailSelect');
+      const emailInput = document.getElementById('userEmailInput');
+      const updateBtn = document.getElementById('userEmailUpdateBtn');
+      if (!filterInput || !ecSelect || !emailInput || !updateBtn) return;
+
+      const syncSelectedEmail = () => {
+        const selectedEc = String(ecSelect.value || '').trim();
+        emailInput.value = selectedEc ? String(userEmailByEc.get(selectedEc) || '') : '';
+      };
+
+      const applyFilter = () => {
+        const rows = filterUserPlantsDirectoryRows(filterInput.value);
+        const preferredEc = String(ecSelect.value || '').trim();
+        const hasPreferred = rows.some((row) => row.ec === preferredEc);
+        const selectedEc = hasPreferred ? preferredEc : (rows[0]?.ec || '');
+
+        ecSelect.innerHTML = '<option value="">Select EC Number</option>' + buildUserPlantsEcOptions(rows, selectedEc);
+        ecSelect.value = selectedEc;
+        syncSelectedEmail();
+      };
+
+      updateBtn.addEventListener('click', () => {
+        const selectedEc = String(ecSelect.value || '').trim();
+        if (!selectedEc) return;
+
+        userEmailByEc.set(selectedEc, String(emailInput.value || '').trim());
+      });
+
+      ecSelect.addEventListener('change', syncSelectedEmail);
+      filterInput.addEventListener('input', applyFilter);
+      filterInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          updateBtn.click();
+        }
+      });
+
+      applyFilter();
+    }
+
+    function renderChangePasswordView() {
+      return `
+        ${renderTopBar('Change Password For Admin')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mx-auto grid max-w-2xl gap-3 sm:grid-cols-[1fr_1fr] sm:items-center">
+            <label for="adminChangeUser" class="text-right text-sm font-semibold text-slate-700">User</label>
+            <input id="adminChangeUser" type="text" value="admin" readonly class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm text-slate-700">
+
+            <label for="adminOldPassword" class="text-right text-sm font-semibold text-slate-700">Old Password</label>
+            <input id="adminOldPassword" type="password" class="h-10 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+
+            <label for="adminNewPassword" class="text-right text-sm font-semibold text-slate-700">New Password</label>
+            <input id="adminNewPassword" type="password" class="h-10 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+
+            <label for="adminConfirmPassword" class="text-right text-sm font-semibold text-slate-700">Confirm New Password</label>
+            <input id="adminConfirmPassword" type="password" class="h-10 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+          </div>
+
+          <div class="mt-6 flex justify-center gap-2">
+            <button id="adminChangeSubmitBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Submit</button>
+            <button id="adminChangeResetBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Reset</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindChangePasswordView() {
+      const oldPasswordInput = document.getElementById('adminOldPassword');
+      const newPasswordInput = document.getElementById('adminNewPassword');
+      const confirmPasswordInput = document.getElementById('adminConfirmPassword');
+      const submitBtn = document.getElementById('adminChangeSubmitBtn');
+      const resetBtn = document.getElementById('adminChangeResetBtn');
+      if (!oldPasswordInput || !newPasswordInput || !confirmPasswordInput || !submitBtn || !resetBtn) return;
+
+      const clearForm = () => {
+        oldPasswordInput.value = '';
+        newPasswordInput.value = '';
+        confirmPasswordInput.value = '';
+        oldPasswordInput.focus();
+      };
+
+      submitBtn.addEventListener('click', () => {
+        const oldPassword = String(oldPasswordInput.value || '');
+        const newPassword = String(newPasswordInput.value || '');
+        const confirmPassword = String(confirmPasswordInput.value || '');
+
+        if (!oldPassword || oldPassword !== adminCurrentPassword) {
+          oldPasswordInput.focus();
+          return;
+        }
+
+        if (!newPassword) {
+          newPasswordInput.focus();
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          confirmPasswordInput.focus();
+          return;
+        }
+
+        adminCurrentPassword = newPassword;
+        clearForm();
+      });
+
+      resetBtn.addEventListener('click', clearForm);
+    }
+
+    function renderResetPasswordView() {
+      return `
+        ${renderTopBar('')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-3xl font-extrabold text-slate-900">RESET PASSWORD</h3>
+
+          <div class="mx-auto mt-4 grid max-w-4xl gap-3 md:grid-cols-[72px_1fr_1fr_auto] md:items-center">
+            <label for="resetPasswordFilter" class="text-sm font-semibold text-slate-700 md:text-right">Filter:</label>
+            <input id="resetPasswordFilter" type="text" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500">
+            <select id="resetPasswordSelect" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 font-mono text-sm outline-none focus:border-sky-500">
+              <option value="">Select EC Number</option>
+            </select>
+            <button id="resetPasswordBtn" type="button" class="h-10 rounded border border-slate-400 bg-slate-100 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-200">Reset</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindResetPasswordView() {
+      const filterInput = document.getElementById('resetPasswordFilter');
+      const ecSelect = document.getElementById('resetPasswordSelect');
+      const resetBtn = document.getElementById('resetPasswordBtn');
+      if (!filterInput || !ecSelect || !resetBtn) return;
+
+      const applyFilter = () => {
+        const rows = filterUserPlantsDirectoryRows(filterInput.value);
+        const preferredEc = String(ecSelect.value || '').trim();
+        const hasPreferred = rows.some((row) => row.ec === preferredEc);
+        const selectedEc = hasPreferred ? preferredEc : (rows[0]?.ec || '');
+
+        ecSelect.innerHTML = '<option value="">Select EC Number</option>' + buildUserPlantsEcOptions(rows, selectedEc);
+        ecSelect.value = selectedEc;
+      };
+
+      resetBtn.addEventListener('click', () => {
+        const selectedEc = String(ecSelect.value || '').trim();
+        if (!selectedEc) return;
+
+        userPasswordByEc.set(selectedEc, '123456');
+      });
+
+      filterInput.addEventListener('input', applyFilter);
+      filterInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          resetBtn.click();
+        }
+      });
+
+      applyFilter();
+    }
+
+    function renderAdminMemberView() {
+      return `
+        ${renderTopBar('')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-3xl font-extrabold text-slate-900">Admin Member</h3>
+
+          <div class="mx-auto mt-4 grid max-w-4xl gap-3 md:grid-cols-[72px_1fr_1fr] md:items-center">
+            <label for="adminMemberFilter" class="text-sm font-semibold text-slate-700 md:text-right">Filter:</label>
+            <input id="adminMemberFilter" type="text" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm outline-none focus:border-sky-500">
+            <select id="adminMemberSelect" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 font-mono text-sm outline-none focus:border-sky-500">
+              <option value="">Select EC Number</option>
+            </select>
+          </div>
+
+          <div class="mt-4 flex justify-center gap-2">
+            <button id="adminMemberAddBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Add To Admin Grp</button>
+            <button id="adminMemberRemoveBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Remove From Admin Grp</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindAdminMemberView() {
+      const filterInput = document.getElementById('adminMemberFilter');
+      const ecSelect = document.getElementById('adminMemberSelect');
+      const addBtn = document.getElementById('adminMemberAddBtn');
+      const removeBtn = document.getElementById('adminMemberRemoveBtn');
+      if (!filterInput || !ecSelect || !addBtn || !removeBtn) return;
+
+      const applyFilter = () => {
+        const rows = filterUserPlantsDirectoryRows(filterInput.value);
+        const preferredEc = String(ecSelect.value || '').trim();
+        const hasPreferred = rows.some((row) => row.ec === preferredEc);
+        const selectedEc = hasPreferred ? preferredEc : (rows[0]?.ec || '');
+
+        ecSelect.innerHTML = '<option value="">Select EC Number</option>' + buildUserPlantsEcOptions(rows, selectedEc);
+        ecSelect.value = selectedEc;
+      };
+
+      addBtn.addEventListener('click', () => {
+        const selectedEc = String(ecSelect.value || '').trim();
+        if (!selectedEc) return;
+        adminMemberEcSet.add(selectedEc);
+      });
+
+      removeBtn.addEventListener('click', () => {
+        const selectedEc = String(ecSelect.value || '').trim();
+        if (!selectedEc) return;
+        adminMemberEcSet.delete(selectedEc);
+      });
+
+      filterInput.addEventListener('input', applyFilter);
+      filterInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          addBtn.click();
+        }
+      });
+
+      applyFilter();
+    }
+
+    function persistMailScheduleRows() {
+      setStoredValue(MAIL_SCHEDULE_STORAGE_KEY, JSON.stringify(mailScheduleRows));
+    }
+
+    function createMailScheduleEmptyDraft() {
+      return {
+        id: '',
+        title: '',
+        nextDue: '',
+        toType: 'All',
+        toAddress: '',
+        sender: MAIL_SCHEDULE_SENDER_OPTIONS[0],
+        frequencyDays: '0',
+        onDay: '',
+        onMonth: '',
+        onYear: '',
+        report: '',
+        subject: '',
+        message: ''
+      };
+    }
+
+    function formatDateDDMMYYYY(dateValue) {
+      const date = new Date(dateValue);
+      if (Number.isNaN(date.getTime())) return '-';
+
+      const dd = String(date.getDate()).padStart(2, '0');
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const yyyy = String(date.getFullYear());
+      return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function calculateMailScheduleNextDue(draft) {
+      const day = Number(draft.onDay);
+      const month = Number(draft.onMonth);
+      const year = Number(draft.onYear);
+      const hasOnDate = Number.isInteger(day) && day > 0
+        && Number.isInteger(month) && month > 0
+        && Number.isInteger(year) && year > 0;
+
+      if (hasOnDate) {
+        const nextDueDate = new Date(year, month - 1, day);
+        if (!Number.isNaN(nextDueDate.getTime())) {
+          return formatDateDDMMYYYY(nextDueDate);
+        }
+      }
+
+      const frequencyDays = Number(draft.frequencyDays);
+      if (Number.isFinite(frequencyDays) && frequencyDays > 0) {
+        const nextDueDate = new Date();
+        nextDueDate.setDate(nextDueDate.getDate() + frequencyDays);
+        return formatDateDDMMYYYY(nextDueDate);
+      }
+
+      return String(draft.nextDue || '-');
+    }
+
+    function buildMailScheduleSelectOptions(selectedId) {
+      if (!mailScheduleRows.length) {
+        return '<option value="">No schedule available</option>';
+      }
+
+      return mailScheduleRows.map((row) => {
+        const isSelected = selectedId ? row.id === selectedId : row.id === mailScheduleRows[0].id;
+        const optionLabel = `${row.title || 'Untitled'}    Next due:${row.nextDue || '-'}`;
+        return `<option value="${escapeHtml(row.id)}"${isSelected ? ' selected' : ''}>${escapeHtml(optionLabel)}</option>`;
+      }).join('');
+    }
+
+    function buildMailScheduleDropdownOptions(options, selectedValue, placeholder) {
+      const optionItems = options.map((option) => {
+        const value = String(option);
+        return `<option value="${escapeHtml(value)}"${value === String(selectedValue || '') ? ' selected' : ''}>${escapeHtml(value)}</option>`;
+      }).join('');
+
+      if (!placeholder) return optionItems;
+      const hasValue = String(selectedValue || '').trim().length > 0;
+      return `<option value=""${hasValue ? '' : ' selected'}>${escapeHtml(placeholder)}</option>${optionItems}`;
+    }
+
+    function renderMailScheduleListView() {
+      const defaultSelectedId = mailScheduleEditingId || mailScheduleRows[0]?.id || '';
+      return `
+        ${renderTopBar('Mail Schedule')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="mx-auto max-w-2xl">
+            <select id="mailScheduleSelect" size="1" class="h-11 w-full rounded border border-slate-400 bg-slate-50 px-2 text-sm font-semibold text-slate-700 outline-none focus:border-sky-500">
+              ${buildMailScheduleSelectOptions(defaultSelectedId)}
+            </select>
+
+            <div class="mt-3 flex justify-center gap-2">
+              <button id="mailScheduleEditBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Edit</button>
+              <button id="mailScheduleAddBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Add New</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMailScheduleFormView() {
+      const draft = mailScheduleDraft || createMailScheduleEmptyDraft();
+      const isEditing = Boolean(mailScheduleEditingId);
+      const dayOptions = Array.from({ length: 31 }, (_, index) => String(index + 1));
+      const monthOptions = Array.from({ length: 12 }, (_, index) => String(index + 1));
+      const yearOptions = Array.from({ length: 12 }, (_, index) => String(new Date().getFullYear() + index));
+
+      return `
+        ${renderTopBar('Mail schedule')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="overflow-hidden rounded-xl border border-slate-300">
+            <div class="grid border-b border-slate-300 bg-stone-100 sm:grid-cols-[140px_1fr]">
+              <label for="mailScheduleToType" class="border-b border-slate-300 px-3 py-2 text-sm font-bold text-slate-800 sm:border-b-0 sm:border-r">To:</label>
+              <div class="space-y-2 px-3 py-2">
+                <select id="mailScheduleToType" class="h-9 w-full rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                  ${buildMailScheduleDropdownOptions(MAIL_SCHEDULE_TO_OPTIONS, draft.toType, '')}
+                </select>
+                <input id="mailScheduleToAddress" type="text" value="${escapeHtml(draft.toAddress)}" class="h-9 w-full rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+              </div>
+            </div>
+
+            <div class="grid border-b border-slate-300 bg-stone-100 sm:grid-cols-[140px_1fr]">
+              <label for="mailScheduleSender" class="border-b border-slate-300 px-3 py-2 text-sm font-bold text-slate-800 sm:border-b-0 sm:border-r">Sender:</label>
+              <div class="px-3 py-2">
+                <select id="mailScheduleSender" class="h-9 w-full rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                  ${buildMailScheduleDropdownOptions(MAIL_SCHEDULE_SENDER_OPTIONS, draft.sender, '')}
+                </select>
+              </div>
+            </div>
+
+            <div class="grid border-b border-slate-300 bg-stone-100 sm:grid-cols-[140px_1fr]">
+              <span class="border-b border-slate-300 px-3 py-2 text-sm font-bold text-slate-800 sm:border-b-0 sm:border-r">Frequency</span>
+              <div class="px-3 py-2">
+                <div class="flex items-center gap-2">
+                  <input id="mailScheduleFrequency" type="number" min="0" value="${escapeHtml(draft.frequencyDays)}" class="h-9 w-24 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                  <span class="text-sm font-semibold text-slate-700">Days</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid border-b border-slate-300 bg-stone-100 sm:grid-cols-[140px_1fr]">
+              <span class="border-b border-slate-300 px-3 py-2 text-sm font-bold text-slate-800 sm:border-b-0 sm:border-r">ON</span>
+              <div class="px-3 py-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-sm font-semibold text-slate-700">D</span>
+                  <select id="mailScheduleDay" class="h-9 w-20 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                    ${buildMailScheduleDropdownOptions(dayOptions, draft.onDay, '-')}
+                  </select>
+                  <span class="text-sm font-semibold text-slate-700">M</span>
+                  <select id="mailScheduleMonth" class="h-9 w-20 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                    ${buildMailScheduleDropdownOptions(monthOptions, draft.onMonth, '-')}
+                  </select>
+                  <span class="text-sm font-semibold text-slate-700">Y</span>
+                  <select id="mailScheduleYear" class="h-9 w-24 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                    ${buildMailScheduleDropdownOptions(yearOptions, draft.onYear, '-')}
+                  </select>
+                  <span class="ml-2 text-sm font-bold text-slate-800">Report:</span>
+                  <input id="mailScheduleReport" type="text" value="${escapeHtml(draft.report)}" class="h-9 min-w-[170px] flex-1 rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+                </div>
+              </div>
+            </div>
+
+            <div class="grid border-b border-slate-300 bg-stone-100 sm:grid-cols-[140px_1fr]">
+              <label for="mailScheduleSubject" class="border-b border-slate-300 px-3 py-2 text-sm font-bold text-slate-800 sm:border-b-0 sm:border-r">Subject:</label>
+              <div class="px-3 py-2">
+                <input id="mailScheduleSubject" type="text" value="${escapeHtml(draft.subject)}" class="h-9 w-full rounded border border-slate-400 bg-white px-2 text-sm outline-none focus:border-sky-500">
+              </div>
+            </div>
+
+            <div class="grid bg-stone-100 sm:grid-cols-[140px_1fr]">
+              <label for="mailScheduleMessage" class="border-b border-slate-300 px-3 py-2 text-sm font-bold text-slate-800 sm:border-b-0 sm:border-r">Message:</label>
+              <div class="px-3 py-2">
+                <textarea id="mailScheduleMessage" rows="5" class="custom-scroll w-full rounded border border-slate-400 bg-white p-2 text-sm outline-none focus:border-sky-500">${escapeHtml(draft.message)}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-center gap-2">
+            <button id="mailScheduleSaveBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">${isEditing ? 'Update' : 'Add'}</button>
+            <button id="mailScheduleBackBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Back</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMailScheduleView() {
+      if (mailScheduleMode === 'form') {
+        return renderMailScheduleFormView();
+      }
+      return renderMailScheduleListView();
+    }
+
+    function bindMailScheduleListView() {
+      const scheduleSelect = document.getElementById('mailScheduleSelect');
+      const editBtn = document.getElementById('mailScheduleEditBtn');
+      const addBtn = document.getElementById('mailScheduleAddBtn');
+      if (!scheduleSelect || !editBtn || !addBtn) return;
+
+      addBtn.addEventListener('click', () => {
+        mailScheduleEditingId = '';
+        mailScheduleDraft = createMailScheduleEmptyDraft();
+        mailScheduleMode = 'form';
+        window.renderAdminContent('mail_schedule');
+      });
+
+      editBtn.addEventListener('click', () => {
+        const selectedId = String(scheduleSelect.value || '').trim();
+        if (!selectedId) return;
+
+        const selectedRow = mailScheduleRows.find((row) => row.id === selectedId);
+        if (!selectedRow) return;
+
+        mailScheduleEditingId = selectedId;
+        mailScheduleDraft = { ...selectedRow };
+        mailScheduleMode = 'form';
+        window.renderAdminContent('mail_schedule');
+      });
+    }
+
+    function bindMailScheduleFormView() {
+      const toTypeSelect = document.getElementById('mailScheduleToType');
+      const toAddressInput = document.getElementById('mailScheduleToAddress');
+      const senderSelect = document.getElementById('mailScheduleSender');
+      const frequencyInput = document.getElementById('mailScheduleFrequency');
+      const daySelect = document.getElementById('mailScheduleDay');
+      const monthSelect = document.getElementById('mailScheduleMonth');
+      const yearSelect = document.getElementById('mailScheduleYear');
+      const reportInput = document.getElementById('mailScheduleReport');
+      const subjectInput = document.getElementById('mailScheduleSubject');
+      const messageInput = document.getElementById('mailScheduleMessage');
+      const saveBtn = document.getElementById('mailScheduleSaveBtn');
+      const backBtn = document.getElementById('mailScheduleBackBtn');
+
+      if (!toTypeSelect || !toAddressInput || !senderSelect || !frequencyInput || !daySelect || !monthSelect || !yearSelect || !reportInput || !subjectInput || !messageInput || !saveBtn || !backBtn) {
+        return;
+      }
+
+      saveBtn.addEventListener('click', () => {
+        const draft = {
+          ...(mailScheduleDraft || createMailScheduleEmptyDraft()),
+          toType: String(toTypeSelect.value || 'All'),
+          toAddress: String(toAddressInput.value || '').trim(),
+          sender: String(senderSelect.value || ''),
+          frequencyDays: String(frequencyInput.value || '0').trim(),
+          onDay: String(daySelect.value || '').trim(),
+          onMonth: String(monthSelect.value || '').trim(),
+          onYear: String(yearSelect.value || '').trim(),
+          report: String(reportInput.value || '').trim(),
+          subject: String(subjectInput.value || '').trim(),
+          message: String(messageInput.value || '').trim()
+        };
+
+        if (!draft.title) {
+          draft.title = draft.report ? `${draft.report.toUpperCase()} REPORT` : 'MAIL REPORT';
+        }
+
+        draft.nextDue = calculateMailScheduleNextDue(draft);
+
+        if (mailScheduleEditingId) {
+          mailScheduleRows = mailScheduleRows.map((row) => (row.id === mailScheduleEditingId ? { ...draft, id: row.id } : row));
+        } else {
+          draft.id = `mail-schedule-${Date.now()}`;
+          mailScheduleRows = [draft, ...mailScheduleRows];
+        }
+
+        persistMailScheduleRows();
+        mailScheduleMode = 'list';
+        mailScheduleEditingId = '';
+        mailScheduleDraft = null;
+        window.renderAdminContent('mail_schedule');
+      });
+
+      backBtn.addEventListener('click', () => {
+        mailScheduleMode = 'list';
+        mailScheduleEditingId = '';
+        mailScheduleDraft = null;
+        window.renderAdminContent('mail_schedule');
+      });
+    }
+
+    function bindMailScheduleView() {
+      if (mailScheduleMode === 'form') {
+        bindMailScheduleFormView();
+        return;
+      }
+
+      bindMailScheduleListView();
+    }
+
+    function buildLoginInfoRows() {
+      const rows = getUserPlantsDirectoryRows();
+      return rows.map((row, index) => {
+        const fallbackOctet3 = 70 + (index % 26);
+        const fallbackOctet4 = 20 + ((index * 7) % 200);
+        const fallbackTime = `23/02/2026 ${String(8 + (index % 12)).padStart(2, '0')}:${String((index * 7) % 60).padStart(2, '0')}:${String((index * 11) % 60).padStart(2, '0')}`;
+        const normalizedUserName = String(row.userName || '').replace(/-/g, '').trim().toUpperCase() || 'USER';
+        return {
+          sr: index + 1,
+          userName: normalizedUserName,
+          ec: String(row.ec || ''),
+          groupCode: getUserInfoGroupCode(row.group),
+          lastLogin: LOGIN_INFO_LAST_LOGIN_SEED[index] || fallbackTime,
+          machineAddress: LOGIN_INFO_MACHINE_SEED[index] || `10.10.${fallbackOctet3}.${fallbackOctet4}`,
+          hitCount: LOGIN_INFO_HIT_COUNT_SEED[index] || (1000 + (index * 173))
+        };
+      });
+    }
+
+    function renderLoginInfoView() {
+      const rows = buildLoginInfoRows();
+      return `
+        ${renderTopBar('Login Information')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+          <div class="max-h-[68vh] overflow-auto rounded-lg border border-slate-300 custom-scroll">
+            <table class="min-w-full border-collapse text-xs text-slate-800 sm:text-sm">
+              <thead class="sticky top-0 z-10 bg-stone-100">
+                <tr>
+                  <th class="w-[64px] border border-slate-300 px-2 py-2 text-center font-bold">Sr</th>
+                  <th class="w-[220px] border border-slate-300 px-2 py-2 text-center font-bold">User</th>
+                  <th class="w-[130px] border border-slate-300 px-2 py-2 text-center font-bold">ECNO</th>
+                  <th class="w-[80px] border border-slate-300 px-2 py-2 text-center font-bold">Group</th>
+                  <th class="w-[260px] border border-slate-300 px-2 py-2 text-center font-bold">Last Login</th>
+                  <th class="w-[200px] border border-slate-300 px-2 py-2 text-center font-bold">Machine address</th>
+                  <th class="w-[120px] border border-slate-300 px-2 py-2 text-center font-bold">Hit Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows.map((row) => `
+                  <tr class="hover:bg-slate-50">
+                    <td class="border border-slate-300 px-2 py-1.5 text-left">${escapeHtml(row.sr)}</td>
+                    <td class="border border-slate-300 px-2 py-1.5 font-semibold">${escapeHtml(row.userName)}</td>
+                    <td class="border border-slate-300 px-2 py-1.5">${escapeHtml(row.ec)}</td>
+                    <td class="border border-slate-300 px-2 py-1.5">${escapeHtml(row.groupCode)}</td>
+                    <td class="border border-slate-300 px-2 py-1.5 font-mono">${escapeHtml(row.lastLogin)}</td>
+                    <td class="border border-slate-300 px-2 py-1.5 font-mono">${escapeHtml(row.machineAddress)}</td>
+                    <td class="border border-slate-300 px-2 py-1.5">${escapeHtml(row.hitCount)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildExDmsUserOptions(selectedEc) {
+      const selected = String(selectedEc || '').trim();
+      const rows = getUserPlantsDirectoryRows();
+      return rows.map((row) => {
+        const label = `${row.ec}:${String(row.userName || '').replace(/-/g, '').trim().toUpperCase()}`;
+        const isSelected = row.ec === selected ? ' selected' : '';
+        return `<option value="${escapeHtml(row.ec)}"${isSelected}>${escapeHtml(label)}</option>`;
+      }).join('');
+    }
+
+    function renderExDmsSpaceView() {
+      const selectedEc = exDmsSelectedUserEc || getUserPlantsDirectoryRows()[0]?.ec || '';
+      return `
+        ${renderTopBar('Ex-DMS Space')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+          <h3 class="text-4xl font-extrabold tracking-tight text-blue-900 sm:text-5xl">Ex-DMS Space</h3>
+
+          <div class="mx-auto mt-3 max-w-xs">
+            <select id="exDmsUserSelect" class="h-10 w-full rounded border border-slate-400 bg-slate-50 px-2 text-sm font-semibold outline-none focus:border-sky-500">
+              ${buildExDmsUserOptions(selectedEc)}
+            </select>
+          </div>
+
+          <div class="mt-4 flex justify-center">
+            <button id="exDmsCreateBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Create</button>
+          </div>
+
+          <p class="mt-12 text-4xl font-bold tracking-tight text-stone-800 sm:text-5xl">Instrument WebWorld</p>
+          <p id="exDmsStatus" class="mt-4 text-sm font-semibold text-emerald-700 opacity-0 transition-opacity">Space created.</p>
+        </div>
+      `;
+    }
+
+    function bindExDmsSpaceView() {
+      const userSelect = document.getElementById('exDmsUserSelect');
+      const createBtn = document.getElementById('exDmsCreateBtn');
+      const status = document.getElementById('exDmsStatus');
+      if (!userSelect || !createBtn) return;
+
+      userSelect.addEventListener('change', () => {
+        exDmsSelectedUserEc = String(userSelect.value || '').trim();
+      });
+
+      createBtn.addEventListener('click', () => {
+        exDmsSelectedUserEc = String(userSelect.value || '').trim();
+
+        if (status) {
+          const selectedOption = userSelect.options[userSelect.selectedIndex];
+          const selectedLabel = selectedOption ? selectedOption.text : exDmsSelectedUserEc;
+          status.textContent = `Space created for ${selectedLabel}`;
+          status.classList.remove('opacity-0');
+          window.setTimeout(() => {
+            status.classList.add('opacity-0');
+          }, 1800);
+        }
+      });
+    }
+
+    function renderNewUpdatePopupView() {
+      return `
+        ${renderTopBar('')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-3xl font-extrabold text-slate-900">LOGIN POPUP</h3>
+
+          <div class="mx-auto mt-4 grid max-w-xl gap-3 sm:grid-cols-[160px_1fr] sm:items-center">
+            <label for="newUpdatePopupSelect" class="text-sm font-semibold text-slate-700 sm:text-right">Select YES OR NO:</label>
+            <select id="newUpdatePopupSelect" class="h-10 rounded border border-slate-400 bg-slate-50 px-2 text-sm font-semibold text-slate-800 outline-none focus:border-sky-500">
+              <option value="yes"${adminLoginPopupSelection === 'yes' ? ' selected' : ''}>YES</option>
+              <option value="no"${adminLoginPopupSelection === 'no' ? ' selected' : ''}>NO</option>
+            </select>
+          </div>
+
+          <div class="mt-4 flex justify-center">
+            <button id="newUpdatePopupOkBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">OK</button>
+          </div>
+
+          <p id="newUpdatePopupSavedText" class="mt-3 text-center text-xs font-semibold text-emerald-600 opacity-0 transition-opacity">Saved.</p>
+        </div>
+      `;
+    }
+
+    function bindNewUpdatePopupView() {
+      const popupSelect = document.getElementById('newUpdatePopupSelect');
+      const okBtn = document.getElementById('newUpdatePopupOkBtn');
+      const savedText = document.getElementById('newUpdatePopupSavedText');
+      if (!popupSelect || !okBtn) return;
+
+      okBtn.addEventListener('click', () => {
+        const selectedValue = popupSelect.value === 'yes' ? 'yes' : 'no';
+        adminLoginPopupSelection = selectedValue;
+        setStoredValue(LOGIN_POPUP_STORAGE_KEY, selectedValue);
+
+        if (savedText) {
+          savedText.classList.remove('opacity-0');
+          window.setTimeout(() => {
+            savedText.classList.add('opacity-0');
+          }, 1200);
+        }
+      });
+    }
+
+    function renderWhatsNewView() {
+      return `
+        ${renderTopBar('')}
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 class="text-center text-3xl font-extrabold text-slate-900">What's new?</h3>
+
+          <div class="mx-auto mt-4 max-w-xl">
+            <textarea id="whatsNewTextarea" rows="11" class="custom-scroll w-full rounded border border-slate-400 bg-slate-50 p-3 font-mono text-sm text-slate-700 outline-none focus:border-sky-500">${escapeHtml(whatsNewContent)}</textarea>
+          </div>
+
+          <div class="mt-4 flex justify-center">
+            <button id="whatsNewSaveBtn" type="button" class="rounded border border-slate-400 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200">Save</button>
+          </div>
+
+          <p id="whatsNewSavedText" class="mt-3 text-center text-xs font-semibold text-emerald-600 opacity-0 transition-opacity">Saved.</p>
+        </div>
+      `;
+    }
+
+    function bindWhatsNewView() {
+      const whatsNewTextarea = document.getElementById('whatsNewTextarea');
+      const saveBtn = document.getElementById('whatsNewSaveBtn');
+      const savedText = document.getElementById('whatsNewSavedText');
+      if (!whatsNewTextarea || !saveBtn) return;
+
+      const saveWhatsNew = () => {
+        whatsNewContent = String(whatsNewTextarea.value || '');
+        setStoredValue(WHATS_NEW_STORAGE_KEY, whatsNewContent);
+
+        if (savedText) {
+          savedText.classList.remove('opacity-0');
+          window.setTimeout(() => {
+            savedText.classList.add('opacity-0');
+          }, 1200);
+        }
+      };
+
+      saveBtn.addEventListener('click', saveWhatsNew);
+      whatsNewTextarea.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+          event.preventDefault();
+          saveWhatsNew();
+        }
+      });
+    }
+
+    function renderComingSoonView(title) {
+      return `
+        ${renderTopBar(title)}
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+          <h3 class="text-lg font-semibold text-slate-700">${escapeHtml(title)} screen</h3>
+          <p class="mt-2 text-sm text-slate-500">This module is ready for the next phase.</p>
+        </div>
+      `;
+    }
+
+    window.renderAdminContent = function renderAdminContent(viewKey) {
+      const content = document.getElementById('adminContent');
+      if (!content) return;
+
+      closePlantsModal();
+      closePrivilegeModal();
+      closeModulesModal();
+      closeUserInfoModal();
+
+      let html = '';
+      if (viewKey === 'privilege') {
+        html = renderPrivilegeView();
+      } else if (viewKey === 'default_privilege') {
+        html = renderDefaultPrivilegeView();
+      } else if (viewKey === 'user_privilege') {
+        html = renderUserPrivilegeView();
+      } else if (viewKey === 'plants') {
+        html = renderPlantsView();
+      } else if (viewKey === 'modules') {
+        html = renderModulesView();
+      } else if (viewKey === 'user') {
+        html = renderUserInfoView();
+      } else if (viewKey === 'user_plants') {
+        html = renderUserPlantsLookupView();
+      } else if (viewKey === 'user_email') {
+        html = renderUserEmailView();
+      } else if (viewKey === 'change_password') {
+        html = renderChangePasswordView();
+      } else if (viewKey === 'reset_password') {
+        html = renderResetPasswordView();
+      } else if (viewKey === 'admin_member') {
+        html = renderAdminMemberView();
+      } else if (viewKey === 'mail_schedule') {
+        html = renderMailScheduleView();
+      } else if (viewKey === 'login_info') {
+        html = renderLoginInfoView();
+      } else if (viewKey === 'ex_dms_space') {
+        html = renderExDmsSpaceView();
+      } else if (viewKey === 'new_update_popup') {
+        html = renderNewUpdatePopupView();
+      } else if (viewKey === 'whats_new') {
+        html = renderWhatsNewView();
+      } else {
+        html = renderComingSoonView('Administrator');
+      }
+
+      content.innerHTML = html;
+
+      if (viewKey === 'user_privilege') {
+        bindUserPrivilegeView();
+      }
+
+      if (viewKey === 'plants') {
+        bindPlantsView();
+      }
+
+      if (viewKey === 'privilege') {
+        bindPrivilegeView();
+      }
+
+      if (viewKey === 'modules') {
+        bindModulesView();
+      }
+
+      if (viewKey === 'user') {
+        bindUserInfoView();
+      }
+
+      if (viewKey === 'user_plants') {
+        bindUserPlantsLookupView();
+      }
+
+      if (viewKey === 'user_email') {
+        bindUserEmailView();
+      }
+
+      if (viewKey === 'change_password') {
+        bindChangePasswordView();
+      }
+
+      if (viewKey === 'reset_password') {
+        bindResetPasswordView();
+      }
+
+      if (viewKey === 'admin_member') {
+        bindAdminMemberView();
+      }
+
+      if (viewKey === 'mail_schedule') {
+        bindMailScheduleView();
+      }
+
+      if (viewKey === 'ex_dms_space') {
+        bindExDmsSpaceView();
+      }
+
+      if (viewKey === 'new_update_popup') {
+        bindNewUpdatePopupView();
+      }
+
+      if (viewKey === 'whats_new') {
+        bindWhatsNewView();
+      }
+
+      if (typeof window.setAdminSidebarActive === 'function') {
+        window.setAdminSidebarActive(viewKey);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof initAdminSidebar === 'function') {
+        initAdminSidebar();
+      }
+      window.renderAdminContent('privilege');
+    });
+  </script>
+</body>
+
+</html>

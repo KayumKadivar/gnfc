@@ -46,10 +46,10 @@ function renderSidebar(activePageId) {
   
           <nav class="flex-1 overflow-y-auto overflow-x-hidden">
               
-            <!-- Dashboard  <!--
+            <!-- Dashboard  --!>
             ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard", isCollapsed)}
-            <!-- ${createLink("admin", "/src/pages/admin_panel.html", "ph-squares-four", "Admin", isCollapsed)}  -->
-
+            ${createLink("admin", "/src/pages/admin_panel.html", "ph-squares-four", "Admin", isCollapsed)}
+            
             <!-- Plants -->
             ${createLink("spp", "#", "ph-plant", "SPP", isCollapsed)}
             ${createLink("plants", "/src/pages/plant_status.html", "ph-buildings", "Plant", isCollapsed)}

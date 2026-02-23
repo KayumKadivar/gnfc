@@ -128,14 +128,14 @@
             <table class="caldue-table gnfc-table">
               <thead class="gnfc-thead">
                 <tr>
-                  <th class="gnfc-th" style="width:44px;">#</th>
-                  <th class="gnfc-th" style="min-width:260px;">Equipment Item</th>
-                  <th class="gnfc-th" style="width:120px;">Make</th>
-                  <th class="gnfc-th" style="width:120px;">Model</th>
-                  <th class="gnfc-th" style="width:140px;">Serial No.</th>
-                  <th class="gnfc-th" style="width:120px;">Last Cal</th>
-                  <th class="gnfc-th" style="width:120px;">Due Date</th>
-                  <th class="gnfc-th" style="width:130px;">Status</th>
+                  <th class="gnfc-th p-2 text-start" style="width:44px;">#</th>
+                  <th class="gnfc-th p-2 text-start" style="min-width:260px;">Equipment Item</th>
+                  <th class="gnfc-th p-2 text-start" style="width:120px;">Make</th>
+                  <th class="gnfc-th p-2 text-start" style="width:120px;">Model</th>
+                  <th class="gnfc-th p-2 text-start" style="width:140px;">Serial No.</th>
+                  <th class="gnfc-th p-2 text-start" style="width:120px;">Last Cal</th>
+                  <th class="gnfc-th p-2 text-start" style="width:120px;">Due Date</th>
+                  <th class="gnfc-th p-2 text-start" style="width:130px;">Status</th>
                 </tr>
               </thead>
               <tbody>
