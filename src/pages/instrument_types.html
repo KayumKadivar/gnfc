@@ -20,14 +20,14 @@
       height: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #111217;
+      background: var(--app-bg, #111217);
     }
     ::-webkit-scrollbar-thumb {
-      background: #2C3235;
+      background: var(--app-border, #2c3235);
       border-radius: 4px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #444;
+      background: var(--app-muted, #444);
     }
 
     /* MicroModal base */
@@ -43,7 +43,7 @@
     
     /* Custom utility for the table cell borders */
     .cell-divider {
-      border-bottom: 1px solid rgba(75, 85, 99, 0.4); /* dark border color */
+      border-bottom: 1px solid var(--app-border, rgba(75, 85, 99, 0.4));
     }
   </style>
 </head>
@@ -115,7 +115,7 @@
 
       <div class="gnfc-table-container rounded-md shadow-md">
         <div class="gnfc-table-header">
-          <h3 class="font-14px fw-bold text-black uppercase tracking-wider flex items-center gap-2">
+          <h3 class="font-14px fw-bold color-primary uppercase tracking-wider flex items-center gap-2">
             <i class="ph-fill ph-table text-emerald-600 font-14px"></i> Type OF Inst Report
           </h3>
         </div>
@@ -127,8 +127,8 @@
                 <th rowspan="2" class="gnfc-th w-[40px]">Sr</th>
                 <th rowspan="2" class="gnfc-th w-[120px]">Area</th>
                 
-                <th class="gnfc-th w-[120px] border-b border-gray-400">Loop No</th>
-                <th class="gnfc-th w-[250px] border-b border-gray-400">Job</th>
+                <th class="gnfc-th w-[120px] border-b border-dark-border">Loop No</th>
+                <th class="gnfc-th w-[250px] border-b border-dark-border">Job</th>
                 
                 <th rowspan="2" class="gnfc-th w-[80px]">Tech</th>
                 <th rowspan="2" class="gnfc-th min-w-[350px]">Description</th>
@@ -138,8 +138,8 @@
                 <th rowspan="2" class="gnfc-th w-[70px]">Add</th>
               </tr>
               <tr>
-                <th class="gnfc-th top-[35px] border-b border-gray-400">Tag No</th>
-                <th class="gnfc-th top-[35px] border-b border-gray-400">Type Of Inst</th>
+                <th class="gnfc-th top-[35px] border-b border-dark-border">Tag No</th>
+                <th class="gnfc-th top-[35px] border-b border-dark-border">Type Of Inst</th>
               </tr>
             </thead>
             
@@ -234,8 +234,14 @@
       const tbody = document.getElementById('plantTableBody');
       tbody.innerHTML = '';
 
+      const safeText = (value, fallback = '--') => {
+        if (value === null || value === undefined) return fallback;
+        const text = String(value).trim();
+        return text === '' ? fallback : text;
+      };
+
       if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-12 text-center font-14px color-label italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-12 text-center font-14px color-secondary italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
         return;
       }
 
@@ -264,34 +270,35 @@
 
         // Render Data Rows under each Date
         groupedData[date].forEach(item => {
+          const statusClass = safeText(item.status, '') === 'OVER' ? 'gnfc-status over' : 'gnfc-status pending';
           const row = `
                 <tr class="gnfc-tr">
-                    <td class="gnfc-td text-center font-16px text-black">${item.sr}</td>
+                    <td class="gnfc-td text-center font-16px color-primary">${safeText(item.sr)}</td>
                     
-                    <td class="gnfc-td font-16px text-black">${item.area}</td>
+                    <td class="gnfc-td font-16px color-primary">${safeText(item.area)}</td>
                     
                     <td class="gnfc-td align-top">
-                        <div class="gnfc-cell-divider font-16px text-black">${item.loopNo}</div>
-                        <div class="font-14px fw-bold color-blue">${item.tagNo}</div>
+                        <div class="gnfc-cell-divider font-16px color-primary">${safeText(item.loopNo)}</div>
+                        <div class="font-14px fw-bold color-blue">${safeText(item.tagNo)}</div>
                     </td>
 
                     <td class="gnfc-td align-top">
-                        <div class="gnfc-cell-divider font-16px text-black">${item.job}</div>
-                        <div class="font-16px text-black">${item.typeOfInst}</div>
+                        <div class="gnfc-cell-divider font-16px color-primary">${safeText(item.job)}</div>
+                        <div class="font-16px color-primary">${safeText(item.typeOfInst)}</div>
                     </td>
 
-                    <td class="gnfc-td text-center font-16px text-black">${item.tech1}</td>
+                    <td class="gnfc-td text-center font-16px color-primary">${safeText(item.tech1)}</td>
                     
-                    <td class="gnfc-td font-16px text-black">${item.desc}</td>
+                    <td class="gnfc-td font-16px color-primary">${safeText(item.desc)}</td>
                     
-                    <td class="gnfc-td text-center font-16px text-black">${item.tech2}</td>
+                    <td class="gnfc-td text-center font-16px color-primary">${safeText(item.tech2)}</td>
                     
-                    <td class="gnfc-td text-center font-16px text-black">${item.status}</td>
+                    <td class="gnfc-td text-center"><span class="${statusClass}">${safeText(item.status)}</span></td>
                     
                     <td class="gnfc-td"></td>
                     
                     <td class="gnfc-td text-center align-top">
-                        <a href="#" class="gnfc-link-action block mb-1" style="border-bottom: 1px solid #d1d5db; padding-bottom: 0.25rem;">H</a>
+                        <a href="#" class="gnfc-link-action block mb-1 border-b border-dark-border pb-1">H</a>
                         <a href="#" class="gnfc-link-action block pt-1">PM</a>
                     </td>
                 </tr>`;

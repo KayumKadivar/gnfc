@@ -1,5 +1,5 @@
 .gnfc-table-container {
-  background-color: #ffffff;
+  background-color: var(--app-panel, #ffffff);
   box-shadow: 0 1px 2px 0 rgba(10, 10, 10, 0.05);
   overflow: hidden;
   display: flex;
@@ -7,8 +7,8 @@
 }
 
 .gnfc-table-header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #d1d5db;
+  background-color: var(--app-panel, #ffffff);
+  border-bottom: 1px solid var(--app-border, #d1d5db);
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
@@ -22,22 +22,22 @@
 }
 
 .gnfc-thead {
-  background-color: #E5E5E5;
-  border-top: 1px solid #9ca3af;
+  background-color: var(--app-panel-alt, #e5e5e5);
+  border-top: 1px solid var(--app-border, #9ca3af);
 }
 
 .gnfc-thead tr {
-  border-bottom: 1px solid #9ca3af;
+  border-bottom: 1px solid var(--app-border, #9ca3af);
 }
 
 .gnfc-th {
   z-index: 20;
-  background-color: #E5E5E5;
-  border-right: 1px solid #9ca3af;
+  background-color: var(--app-panel-alt, #e5e5e5);
+  border-right: 1px solid var(--app-border, #9ca3af);
   padding: 8px;
   font-size: 15px;
   font-weight: 700;
-  color: #000000;
+  color: var(--app-text, #000000);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   text-align: center;
@@ -45,22 +45,22 @@
 }
 
 .gnfc-tbody {
-  background-color: #ffffff;
+  background-color: var(--app-panel, #ffffff);
   font-size: 16px;
-  color: #000000;
+  color: var(--app-text, #000000);
 }
 
 .gnfc-tr-group {
-  border-top: 1px solid #d1d5db;
-  border-bottom: 1px solid #d1d5db;
-  background-color: #f9fafb;
+  border-top: 1px solid var(--app-border, #d1d5db);
+  border-bottom: 1px solid var(--app-border, #d1d5db);
+  /* background-color: var(--app-bg, #f9fafb); */
 }
 
 .gnfc-td-group {
   padding: 0.5rem;
   font-size: 14px !important;
   font-weight: 700;
-  color: #1d4ed8;
+  color: var(--typo-blue, #1d4ed8);
   text-transform: uppercase;
   display: flex;
   align-items: center;
@@ -68,18 +68,18 @@
 }
 
 .gnfc-tr {
-  border-bottom: 1px solid #d1d5db;
+  border-bottom: 1px solid var(--app-border, #d1d5db);
   transition: background-color 0.15s ease;
 }
 
 .gnfc-tr:hover {
-  background-color: #f9fafb;
-  border-right: 1px solid #19468a;
-  border-left: 1px solid #19468a;
+  background-color: var(--app-panel-alt, #f9fafb);
+  border-right: 1px solid var(--app-border, #19468a);
+  border-left: 1px solid var(--app-border, #19468a);
 }
 
 .gnfc-td {
-  border-right: 1px solid #d1d5db;
+  border-right: 1px solid var(--app-border, #d1d5db);
   padding: 0.75rem 0.5rem;
   vertical-align: top;
 }
@@ -111,7 +111,7 @@
 }
 
 .gnfc-link-action {
-  color: #2563eb;
+  color: var(--typo-blue, #2563eb);
   font-weight: 700;
   text-decoration: none;
   font-size: 12px;
@@ -122,8 +122,38 @@
 }
 
 .gnfc-cell-divider {
-  border-bottom: 1px solid #d1d5db;
+  border-bottom: 1px solid var(--app-border, #d1d5db);
   margin-bottom: 0.25rem;
   padding-bottom: 0.25rem;
   width: 100%;
+}
+
+/* Keep utility text/background/border classes theme-aware inside gnfc tables. */
+.gnfc-table .text-black,
+.gnfc-table .text-gray-900,
+.gnfc-table .text-gray-800,
+.gnfc-table .text-gray-700 {
+  color: var(--app-text) !important;
+}
+
+.gnfc-table .text-gray-600,
+.gnfc-table .text-gray-500,
+.gnfc-table .text-gray-400 {
+  color: var(--app-muted) !important;
+}
+
+.gnfc-table .bg-white,
+.gnfc-table .bg-gray-50,
+.gnfc-table .bg-gray-100 {
+  background-color: var(--app-panel-alt) !important;
+}
+
+.gnfc-table .border-gray-200,
+.gnfc-table .border-gray-300,
+.gnfc-table .border-gray-400 {
+  border-color: var(--app-border) !important;
+}
+
+.gnfc-table .hover\:bg-gray-100:hover {
+  background-color: var(--app-panel-alt) !important;
 }

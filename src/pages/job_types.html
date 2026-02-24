@@ -22,14 +22,14 @@
       height: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f1f1; 
+      background: var(--app-bg, #f1f1f1);
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #c1c1c1; 
+      background: var(--app-border, #c1c1c1);
       border-radius: 3px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8; 
+      background: var(--app-muted, #a8a8a8);
     }
     
     ::-webkit-scrollbar {
@@ -38,16 +38,16 @@
     }
 
     ::-webkit-scrollbar-track {
-      background: #111217;
+      background: var(--app-bg, #111217);
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #2C3235;
+      background: var(--app-border, #2c3235);
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #444;
+      background: var(--app-muted, #444);
     }
 
     /* MicroModal base */
@@ -143,7 +143,7 @@
 
       <div class="gnfc-table-container shadow-md rounded-md">
         <div class="gnfc-table-header">
-          <h3 class="font-14px fw-bold text-black uppercase tracking-wider flex items-center gap-2">
+          <h3 class="font-14px fw-bold color-primary uppercase tracking-wider flex items-center gap-2">
             <i class="ph-fill ph-table text-emerald-600"></i> Job Type Analysis Report
           </h3>
         </div>
@@ -154,8 +154,8 @@
               <tr>
                 <th rowspan="2" class="gnfc-th w-[45px]">Sr</th>
                 <th rowspan="2" class="gnfc-th w-[80px]">Area</th>
-                <th class="gnfc-th w-[130px] border-b border-gray-400 h-[38px]">LoopNo</th>
-                <th class="gnfc-th w-[380px] border-b border-gray-400 h-[38px]">Job</th>
+                <th class="gnfc-th w-[130px] border-b border-dark-border h-[38px]">LoopNo</th>
+                <th class="gnfc-th w-[380px] border-b border-dark-border h-[38px]">Job</th>
                 <th rowspan="2" class="gnfc-th w-[60px]">Tech</th>
                 <th rowspan="2" class="gnfc-th w-[400px]">Description</th>
                 <th rowspan="2" class="gnfc-th w-[60px]">Eng</th>
@@ -164,8 +164,8 @@
                 <th rowspan="2" class="gnfc-th w-[70px]">Add</th>
               </tr>
               <tr>
-                <th class="gnfc-th top-[38px] border-b border-gray-400 h-[32px]">Tag No</th>
-                <th class="gnfc-th top-[38px] border-b border-gray-400 h-[32px]">Type of Job</th>
+                <th class="gnfc-th top-[38px] border-b border-dark-border h-[32px]">Tag No</th>
+                <th class="gnfc-th top-[38px] border-b border-dark-border h-[32px]">Type of Job</th>
               </tr>
             </thead>
             <tbody id="plantTableBody" class="gnfc-tbody">
@@ -254,8 +254,14 @@
       const tbody = document.getElementById('plantTableBody');
       tbody.innerHTML = '';
 
+      const safeText = (value, fallback = '--') => {
+        if (value === null || value === undefined) return fallback;
+        const text = String(value).trim();
+        return text === '' ? fallback : text;
+      };
+
       if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-12 text-center font-14px text-gray-500 italic border-b border-gray-300">No entries match query criteria.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="px-6 py-12 text-center font-14px color-secondary italic border-b border-dark-border">No entries match query criteria.</td></tr>`;
         return;
       }
 
@@ -281,40 +287,40 @@
             </tr>`;
 
         groupedData[date].forEach(item => {
-          const statusColor = item.status === 'OVER' ? 'text-emerald-500' : 'text-amber-500';
-          const jobTitle = item.jobTitle || '';
-          const jobType = item.jobType || '';
+          const statusClass = item.status === 'OVER' ? 'gnfc-status over' : 'gnfc-status pending';
+          const jobTitle = safeText(item.jobTitle, '');
+          const jobType = safeText(item.jobType, '');
 
           const row = `
                 <tr class="gnfc-tr">
-                    <td class="gnfc-td text-center typo-mono font-14px text-black">${item.sr}</td>
-                    <td class="gnfc-td font-14px fw-bold text-black text-center">${item.area}</td>
+                    <td class="gnfc-td text-center typo-mono font-14px color-primary">${safeText(item.sr)}</td>
+                    <td class="gnfc-td font-14px fw-bold color-primary text-center">${safeText(item.area)}</td>
                     
                     <td class="gnfc-td align-top">
-                        <div class="font-14px fw-bold text-black tracking-tighter mb-1">${item.tag}</div> <div class="border-b border-gray-300 w-full mb-1"></div>
-                        <div class="font-14px text-black uppercase fw-bold">${item.tagSubtitle}</div> </td>
+                        <div class="font-14px fw-bold color-primary tracking-tighter mb-1">${safeText(item.tag)}</div> <div class="border-b border-dark-border w-full mb-1"></div>
+                        <div class="font-14px color-primary uppercase fw-bold">${safeText(item.tagSubtitle)}</div> </td>
 
                     <td class="gnfc-td align-top">
-                        <div class="font-15px leading-tight text-black mb-1">${jobTitle}</div> <div class="border-b border-gray-300 w-full mb-1"></div>
-                        ${jobType ? `<div class="font-15px uppercase fw-bold text-black tracking-wide">${jobType}</div>` : ''} </td>
+                        <div class="font-15px leading-tight color-primary mb-1">${jobTitle || '--'}</div> <div class="border-b border-dark-border w-full mb-1"></div>
+                        ${jobType ? `<div class="font-15px uppercase fw-bold color-primary tracking-wide">${jobType}</div>` : ''} </td>
 
-                    <td class="gnfc-td text-center font-15px fw-bold text-black align-top">${item.tech}</td>
-                    <td class="gnfc-td font-15px text-black leading-relaxed align-top">${item.desc}</td>
-                    <td class="gnfc-td text-center font-15px fw-bold text-black align-top">${item.engineer}</td>
+                    <td class="gnfc-td text-center font-15px fw-bold color-primary align-top">${safeText(item.tech)}</td>
+                    <td class="gnfc-td font-15px color-primary leading-relaxed align-top">${safeText(item.desc)}</td>
+                    <td class="gnfc-td text-center font-15px fw-bold color-primary align-top">${safeText(item.engineer)}</td>
                     
                     <td class="gnfc-td text-center align-top">
-                        <span class="font-14px fw-bold uppercase tracking-widest text-black">
-                            ${item.status}
+                        <span class="${statusClass}">
+                            ${safeText(item.status)}
                         </span>
                     </td>
                     
-                    <td class="gnfc-td align-top font-13px text-black">
-                        <span class="font-semibold text-purple-600 block mb-1">Tag No:- ${item.tag} [written by: ${item.engineer} Date: ${item.date}]</span>
+                    <td class="gnfc-td align-top font-13px color-primary">
+                        <span class="font-semibold color-secondary block mb-1">Tag No:- ${safeText(item.tag)} [written by: ${safeText(item.engineer)} Date: ${safeText(item.date)}]</span>
                     </td> 
                     
                     <td class="gnfc-td text-center align-top font-11px">
-                        ${item.status === "OVER" ? `
-                        <a href="#" class="gnfc-link-action block mb-1" style="border-bottom: 1px solid #d1d5db; padding-bottom: 0.25rem;">H</a>
+                        ${safeText(item.status, '') === "OVER" ? `
+                        <a href="#" class="gnfc-link-action block mb-1 border-b border-dark-border pb-1">H</a>
                         <a href="#" class="gnfc-link-action block pt-1">PM</a>` : ""}
                     </td>
                 </tr>`;

@@ -75,7 +75,7 @@ function renderSidebar(activePageId) {
 
             <!-- System -->
             ${createLink("user_info", "/src/pages/user_info.html", "ph-user", "USER INFO", isCollapsed)}
-            ${createLink("settings", "#", "ph-gear", "Settings", isCollapsed)}
+            ${createLink("settings", "/src/pages/settings.html", "ph-gear", "Settings", isCollapsed)}
             ${createLink("help", "#", "ph-question", "Help", isCollapsed)}
      
           </nav>

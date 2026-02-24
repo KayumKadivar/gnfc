@@ -34,21 +34,51 @@ const ThemeManager = {
         },
     },
 
+    initialized: false,
+    systemListenerBound: false,
+    storageListenerBound: false,
+
     init() {
+        if (this.initialized) {
+            this.applySettings();
+            return;
+        }
+
+        this.initialized = true;
         this.setupSystemListener();
+        this.setupStorageListener();
         this.applySettings();
     },
 
     setupSystemListener() {
-        if (window.matchMedia) {
-            this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            this.mediaQuery.addEventListener('change', (e) => {
-                const settings = this.getSettings();
-                if (settings.mode === 'system') {
-                    this.applySettings(); // Re-apply to pick up new system preference
-                }
-            });
+        if (this.systemListenerBound || !window.matchMedia) return;
+
+        this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleSystemThemeChange = () => {
+            const settings = this.getSettings();
+            if (settings.mode === 'system') {
+                this.applySettings(); // Re-apply to pick up new system preference
+            }
+        };
+
+        if (typeof this.mediaQuery.addEventListener === 'function') {
+            this.mediaQuery.addEventListener('change', handleSystemThemeChange);
+        } else if (typeof this.mediaQuery.addListener === 'function') {
+            this.mediaQuery.addListener(handleSystemThemeChange);
         }
+
+        this.systemListenerBound = true;
+    },
+
+    setupStorageListener() {
+        if (this.storageListenerBound) return;
+
+        window.addEventListener('storage', (event) => {
+            if (event.key && event.key !== this.storageKey) return;
+            this.applySettings();
+        });
+
+        this.storageListenerBound = true;
     },
 
     getSettings() {
