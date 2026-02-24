@@ -48,7 +48,7 @@ function renderSidebar(activePageId) {
               
             <!-- Dashboard  --!>
             ${createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard", isCollapsed)}
-            ${createLink("admin", "/src/pages/admin_panel.html", "ph-squares-four", "Admin", isCollapsed)}
+            ${createLink("admin", "/src/pages/admin_login.html", "ph-squares-four", "Admin", isCollapsed)}
             
             <!-- Plants -->
             ${createLink("spp", "#", "ph-plant", "SPP", isCollapsed)}
