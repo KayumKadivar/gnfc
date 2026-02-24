@@ -1,8 +1,9 @@
 const ThemeManager = {
     storageKey: 'gnfc_theme_settings',
+    legacyDefaultFontSize: 20,
 
     defaults: {
-        fontSize: 20,
+        fontSize: 16,
         mode: 'light',
     },
 
@@ -92,6 +93,12 @@ const ThemeManager = {
         }
 
         const merged = { ...this.defaults, ...parsed };
+        const hasStoredFontSize = Object.prototype.hasOwnProperty.call(parsed, 'fontSize');
+
+        // Migrate old default (20px) to new default (16px) so the base UI scale stays normal.
+        if (hasStoredFontSize && Number.parseInt(parsed.fontSize, 10) === this.legacyDefaultFontSize) {
+            merged.fontSize = this.defaults.fontSize;
+        }
 
         if (merged.mode !== 'dark' && merged.mode !== 'light' && merged.mode !== 'system') {
             if (this.isValidHex(merged.bgColor)) {

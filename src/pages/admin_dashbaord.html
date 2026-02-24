@@ -76,35 +76,35 @@
 
       <!-- Header -->
       <header
-        class="h-12 bg-[var(--app-panel)] border-b border-[var(--app-border)] flex items-center justify-between px-5 shrink-0">
+        class="h-14 bg-[var(--app-panel)] border-b border-[var(--app-border)] flex items-center justify-between px-5 shrink-0">
         <div class="flex items-center gap-3">
-          <i class="ph ph-gear-six font-18px color-blue"></i>
-          <h1 class="font-14px fw-bold color-primary tracking-wide">Administrator</h1>
+          <i class="ph ph-gear-six font-20px color-blue"></i>
+          <h1 class="font-16px fw-bold color-primary tracking-wide">Administrator</h1>
         </div>
         <div class="flex items-center gap-2">
           <!-- Font Size Controls -->
           <div class="flex items-center bg-[var(--app-bg)] border border-[var(--app-border)] rounded-md p-0.5">
             <button onclick="ThemeManager.decreaseFontSize()"
-              class="w-7 h-7 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
+              class="w-9 h-9 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
               title="Decrease Size">
-              <i class="ph-bold ph-text-aa font-11px"></i>
+              <i class="ph-bold ph-text-aa font-12px"></i>
             </button>
-            <div class="w-px h-3 bg-[var(--app-border)]"></div>
+            <div class="w-px h-4 bg-[var(--app-border)]"></div>
             <button onclick="ThemeManager.increaseFontSize()"
-              class="w-7 h-7 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
+              class="w-9 h-9 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
               title="Increase Size">
-              <i class="ph-bold ph-text-aa font-14px"></i>
+              <i class="ph-bold ph-text-aa font-16px"></i>
             </button>
           </div>
           <!-- Theme Toggle -->
           <button id="themeToggleBtn"
-            class="w-8 h-8 flex items-center justify-center bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] color-label rounded-md transition-colors"
+            class="w-10 h-10 flex items-center justify-center bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] color-label rounded-md transition-colors"
             title="Toggle Theme">
-            <i id="themeToggleIcon" class="ph ph-moon"></i>
+            <i id="themeToggleIcon" class="ph ph-moon font-16px"></i>
           </button>
           <!-- Back -->
           <button onclick="window.location.href='/src/pages/dashboard.html'"
-            class="flex items-center gap-1.5 h-8 px-3 bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] font-13px fw-bold color-primary rounded-md transition-all">
+            class="flex items-center gap-1.5 h-10 px-4 bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] font-15px fw-bold color-primary rounded-md transition-all">
             <i class="ph-bold ph-arrow-u-up-left"></i>
             <span>Back</span>
           </button>
@@ -146,6 +146,7 @@
   <script src="/src/js/admin/views/ex_dms_view.js"></script>
   <script src="/src/js/admin/views/update_popup_view.js"></script>
   <script src="/src/js/admin/views/whats_new_view.js"></script>
+  <script src="/src/js/admin/views/admin_dashboard_view.js"></script>
 
   <!-- Initialization -->
   <script>
@@ -173,7 +174,7 @@
       if (typeof initAdminSidebar === 'function') {
         initAdminSidebar();
       }
-      window.renderAdminContent('privilege');
+      window.renderAdminContent('dashboard');
 
       // Theme toggle
       const themeToggleBtn = document.getElementById('themeToggleBtn');

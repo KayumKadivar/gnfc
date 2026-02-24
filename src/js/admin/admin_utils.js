@@ -37,12 +37,24 @@ const AdminUtils = (() => {
     }
 
     /** Render the dark-themed top bar for each section */
-    function renderTopBar(title) {
+    function renderTopBar(title, icon, subtitle) {
+        const iconHtml = icon
+            ? `<span class="admin-topbar-icon"><i class="ph ${escapeHtml(icon)}"></i></span>`
+            : '';
+        const subtitleHtml = subtitle
+            ? `<span class="admin-topbar-subtitle">${escapeHtml(subtitle)}</span>`
+            : '';
         return `
-      <div class="admin-topbar">
+     <!-- <div class="admin-topbar">
         <span class="admin-topbar-label">MENU</span>
-        <h2 class="admin-topbar-title">${escapeHtml(title)}</h2>
-        <span></span>
+        <div class="admin-topbar-left">
+          ${iconHtml}
+          <div class="admin-topbar-text">
+            <h2 class="admin-topbar-title">${escapeHtml(title)}</h2>
+            ${subtitleHtml}
+          </div>
+        </div>
+        <span></span> --!>
       </div>
     `;
     }

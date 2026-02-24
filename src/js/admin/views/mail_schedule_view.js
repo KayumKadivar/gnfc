@@ -2,56 +2,56 @@
  * Mail Schedule View — List & Form for mail scheduling
  */
 const MailScheduleView = (() => {
-    'use strict';
+  'use strict';
 
-    function persistRows() {
-        AdminUtils.setStoredValue(AdminData.STORAGE_KEYS.MAIL_SCHEDULE, JSON.stringify(AdminData.mailScheduleRows));
+  function persistRows() {
+    AdminUtils.setStoredValue(AdminData.STORAGE_KEYS.MAIL_SCHEDULE, JSON.stringify(AdminData.mailScheduleRows));
+  }
+
+  function createEmptyDraft() {
+    return {
+      id: '', title: '', nextDue: '', toType: 'All', toAddress: '',
+      sender: AdminData.MAIL_SCHEDULE_SENDER_OPTIONS[0], frequencyDays: '0',
+      onDay: '', onMonth: '', onYear: '', report: '', subject: '', message: ''
+    };
+  }
+
+  function calculateNextDue(draft) {
+    const day = Number(draft.onDay), month = Number(draft.onMonth), year = Number(draft.onYear);
+    const hasOn = Number.isInteger(day) && day > 0 && Number.isInteger(month) && month > 0 && Number.isInteger(year) && year > 0;
+    if (hasOn) {
+      const d = new Date(year, month - 1, day);
+      if (!isNaN(d.getTime())) return AdminUtils.formatDateDDMMYYYY(d);
     }
-
-    function createEmptyDraft() {
-        return {
-            id: '', title: '', nextDue: '', toType: 'All', toAddress: '',
-            sender: AdminData.MAIL_SCHEDULE_SENDER_OPTIONS[0], frequencyDays: '0',
-            onDay: '', onMonth: '', onYear: '', report: '', subject: '', message: ''
-        };
+    const freq = Number(draft.frequencyDays);
+    if (Number.isFinite(freq) && freq > 0) {
+      const d = new Date(); d.setDate(d.getDate() + freq);
+      return AdminUtils.formatDateDDMMYYYY(d);
     }
+    return String(draft.nextDue || '-');
+  }
 
-    function calculateNextDue(draft) {
-        const day = Number(draft.onDay), month = Number(draft.onMonth), year = Number(draft.onYear);
-        const hasOn = Number.isInteger(day) && day > 0 && Number.isInteger(month) && month > 0 && Number.isInteger(year) && year > 0;
-        if (hasOn) {
-            const d = new Date(year, month - 1, day);
-            if (!isNaN(d.getTime())) return AdminUtils.formatDateDDMMYYYY(d);
-        }
-        const freq = Number(draft.frequencyDays);
-        if (Number.isFinite(freq) && freq > 0) {
-            const d = new Date(); d.setDate(d.getDate() + freq);
-            return AdminUtils.formatDateDDMMYYYY(d);
-        }
-        return String(draft.nextDue || '-');
-    }
+  function buildDropdown(options, selectedValue, placeholder) {
+    const items = options.map(opt =>
+      `<option value="${AdminUtils.escapeHtml(opt)}"${opt === String(selectedValue || '') ? ' selected' : ''}>${AdminUtils.escapeHtml(opt)}</option>`
+    ).join('');
+    if (!placeholder) return items;
+    const hasVal = String(selectedValue || '').trim().length > 0;
+    return `<option value=""${hasVal ? '' : ' selected'}>${AdminUtils.escapeHtml(placeholder)}</option>${items}`;
+  }
 
-    function buildDropdown(options, selectedValue, placeholder) {
-        const items = options.map(opt =>
-            `<option value="${AdminUtils.escapeHtml(opt)}"${opt === String(selectedValue || '') ? ' selected' : ''}>${AdminUtils.escapeHtml(opt)}</option>`
-        ).join('');
-        if (!placeholder) return items;
-        const hasVal = String(selectedValue || '').trim().length > 0;
-        return `<option value=""${hasVal ? '' : ' selected'}>${AdminUtils.escapeHtml(placeholder)}</option>${items}`;
-    }
+  function renderListView() {
+    const defaultId = AdminData.mailScheduleEditingId || AdminData.mailScheduleRows[0]?.id || '';
+    const options = AdminData.mailScheduleRows.length
+      ? AdminData.mailScheduleRows.map(row => {
+        const label = `${row.title || 'Untitled'}    Next due:${row.nextDue || '-'}`;
+        const isSel = row.id === defaultId ? ' selected' : '';
+        return `<option value="${AdminUtils.escapeHtml(row.id)}"${isSel}>${AdminUtils.escapeHtml(label)}</option>`;
+      }).join('')
+      : '<option value="">No schedule available</option>';
 
-    function renderListView() {
-        const defaultId = AdminData.mailScheduleEditingId || AdminData.mailScheduleRows[0]?.id || '';
-        const options = AdminData.mailScheduleRows.length
-            ? AdminData.mailScheduleRows.map(row => {
-                const label = `${row.title || 'Untitled'}    Next due:${row.nextDue || '-'}`;
-                const isSel = row.id === defaultId ? ' selected' : '';
-                return `<option value="${AdminUtils.escapeHtml(row.id)}"${isSel}>${AdminUtils.escapeHtml(label)}</option>`;
-            }).join('')
-            : '<option value="">No schedule available</option>';
-
-        return `
-      ${AdminUtils.renderTopBar('Mail Schedule')}
+    return `
+      ${AdminUtils.renderTopBar('Mail Schedule', 'ph-calendar-check', 'Automated email dispatch schedules')}
       <div class="admin-card">
         <div class="max-w-2xl mx-auto">
           <select id="mailScheduleSelect" class="admin-select w-full">${options}</select>
@@ -66,17 +66,17 @@ const MailScheduleView = (() => {
         </div>
       </div>
     `;
-    }
+  }
 
-    function renderFormView() {
-        const draft = AdminData.mailScheduleDraft || createEmptyDraft();
-        const isEditing = Boolean(AdminData.mailScheduleEditingId);
-        const dayOpts = Array.from({ length: 31 }, (_, i) => String(i + 1));
-        const monthOpts = Array.from({ length: 12 }, (_, i) => String(i + 1));
-        const yearOpts = Array.from({ length: 12 }, (_, i) => String(new Date().getFullYear() + i));
+  function renderFormView() {
+    const draft = AdminData.mailScheduleDraft || createEmptyDraft();
+    const isEditing = Boolean(AdminData.mailScheduleEditingId);
+    const dayOpts = Array.from({ length: 31 }, (_, i) => String(i + 1));
+    const monthOpts = Array.from({ length: 12 }, (_, i) => String(i + 1));
+    const yearOpts = Array.from({ length: 12 }, (_, i) => String(new Date().getFullYear() + i));
 
-        return `
-      ${AdminUtils.renderTopBar('Mail Schedule')}
+    return `
+      ${AdminUtils.renderTopBar('Mail Schedule', 'ph-calendar-check', 'Configure schedule details')}
       <div class="admin-card">
         <div class="admin-form-table">
           <div class="admin-form-table-row">
@@ -135,98 +135,98 @@ const MailScheduleView = (() => {
         </div>
       </div>
     `;
-    }
+  }
 
-    function render() {
-        return AdminData.mailScheduleMode === 'form' ? renderFormView() : renderListView();
-    }
+  function render() {
+    return AdminData.mailScheduleMode === 'form' ? renderFormView() : renderListView();
+  }
 
-    function bindListView() {
-        const select = document.getElementById('mailScheduleSelect');
-        const editBtn = document.getElementById('mailScheduleEditBtn');
-        const addBtn = document.getElementById('mailScheduleAddBtn');
-        if (!select || !editBtn || !addBtn) return;
+  function bindListView() {
+    const select = document.getElementById('mailScheduleSelect');
+    const editBtn = document.getElementById('mailScheduleEditBtn');
+    const addBtn = document.getElementById('mailScheduleAddBtn');
+    if (!select || !editBtn || !addBtn) return;
 
-        addBtn.addEventListener('click', () => {
-            AdminData.mailScheduleEditingId = '';
-            AdminData.mailScheduleDraft = createEmptyDraft();
-            AdminData.mailScheduleMode = 'form';
-            window.renderAdminContent('mail_schedule');
-        });
+    addBtn.addEventListener('click', () => {
+      AdminData.mailScheduleEditingId = '';
+      AdminData.mailScheduleDraft = createEmptyDraft();
+      AdminData.mailScheduleMode = 'form';
+      window.renderAdminContent('mail_schedule');
+    });
 
-        editBtn.addEventListener('click', () => {
-            const id = String(select.value || '').trim();
-            if (!id) return;
-            const row = AdminData.mailScheduleRows.find(r => r.id === id);
-            if (!row) return;
-            AdminData.mailScheduleEditingId = id;
-            AdminData.mailScheduleDraft = { ...row };
-            AdminData.mailScheduleMode = 'form';
-            window.renderAdminContent('mail_schedule');
-        });
-    }
+    editBtn.addEventListener('click', () => {
+      const id = String(select.value || '').trim();
+      if (!id) return;
+      const row = AdminData.mailScheduleRows.find(r => r.id === id);
+      if (!row) return;
+      AdminData.mailScheduleEditingId = id;
+      AdminData.mailScheduleDraft = { ...row };
+      AdminData.mailScheduleMode = 'form';
+      window.renderAdminContent('mail_schedule');
+    });
+  }
 
-    function bindFormView() {
-        const els = {
-            toType: document.getElementById('mailScheduleToType'),
-            toAddr: document.getElementById('mailScheduleToAddress'),
-            sender: document.getElementById('mailScheduleSender'),
-            freq: document.getElementById('mailScheduleFrequency'),
-            day: document.getElementById('mailScheduleDay'),
-            month: document.getElementById('mailScheduleMonth'),
-            year: document.getElementById('mailScheduleYear'),
-            report: document.getElementById('mailScheduleReport'),
-            subject: document.getElementById('mailScheduleSubject'),
-            message: document.getElementById('mailScheduleMessage'),
-            save: document.getElementById('mailScheduleSaveBtn'),
-            back: document.getElementById('mailScheduleBackBtn'),
-        };
-        if (!els.save || !els.back) return;
+  function bindFormView() {
+    const els = {
+      toType: document.getElementById('mailScheduleToType'),
+      toAddr: document.getElementById('mailScheduleToAddress'),
+      sender: document.getElementById('mailScheduleSender'),
+      freq: document.getElementById('mailScheduleFrequency'),
+      day: document.getElementById('mailScheduleDay'),
+      month: document.getElementById('mailScheduleMonth'),
+      year: document.getElementById('mailScheduleYear'),
+      report: document.getElementById('mailScheduleReport'),
+      subject: document.getElementById('mailScheduleSubject'),
+      message: document.getElementById('mailScheduleMessage'),
+      save: document.getElementById('mailScheduleSaveBtn'),
+      back: document.getElementById('mailScheduleBackBtn'),
+    };
+    if (!els.save || !els.back) return;
 
-        els.save.addEventListener('click', () => {
-            const draft = {
-                ...(AdminData.mailScheduleDraft || createEmptyDraft()),
-                toType: els.toType?.value || 'All',
-                toAddress: els.toAddr?.value.trim() || '',
-                sender: els.sender?.value || '',
-                frequencyDays: els.freq?.value.trim() || '0',
-                onDay: els.day?.value.trim() || '',
-                onMonth: els.month?.value.trim() || '',
-                onYear: els.year?.value.trim() || '',
-                report: els.report?.value.trim() || '',
-                subject: els.subject?.value.trim() || '',
-                message: els.message?.value.trim() || '',
-            };
-            if (!draft.title) draft.title = draft.report ? `${draft.report.toUpperCase()} REPORT` : 'MAIL REPORT';
-            draft.nextDue = calculateNextDue(draft);
+    els.save.addEventListener('click', () => {
+      const draft = {
+        ...(AdminData.mailScheduleDraft || createEmptyDraft()),
+        toType: els.toType?.value || 'All',
+        toAddress: els.toAddr?.value.trim() || '',
+        sender: els.sender?.value || '',
+        frequencyDays: els.freq?.value.trim() || '0',
+        onDay: els.day?.value.trim() || '',
+        onMonth: els.month?.value.trim() || '',
+        onYear: els.year?.value.trim() || '',
+        report: els.report?.value.trim() || '',
+        subject: els.subject?.value.trim() || '',
+        message: els.message?.value.trim() || '',
+      };
+      if (!draft.title) draft.title = draft.report ? `${draft.report.toUpperCase()} REPORT` : 'MAIL REPORT';
+      draft.nextDue = calculateNextDue(draft);
 
-            if (AdminData.mailScheduleEditingId) {
-                AdminData.mailScheduleRows = AdminData.mailScheduleRows.map(r => r.id === AdminData.mailScheduleEditingId ? { ...draft, id: r.id } : r);
-            } else {
-                draft.id = `mail-schedule-${Date.now()}`;
-                AdminData.mailScheduleRows = [draft, ...AdminData.mailScheduleRows];
-            }
+      if (AdminData.mailScheduleEditingId) {
+        AdminData.mailScheduleRows = AdminData.mailScheduleRows.map(r => r.id === AdminData.mailScheduleEditingId ? { ...draft, id: r.id } : r);
+      } else {
+        draft.id = `mail-schedule-${Date.now()}`;
+        AdminData.mailScheduleRows = [draft, ...AdminData.mailScheduleRows];
+      }
 
-            persistRows();
-            AdminData.mailScheduleMode = 'list';
-            AdminData.mailScheduleEditingId = '';
-            AdminData.mailScheduleDraft = null;
-            window.renderAdminContent('mail_schedule');
-        });
+      persistRows();
+      AdminData.mailScheduleMode = 'list';
+      AdminData.mailScheduleEditingId = '';
+      AdminData.mailScheduleDraft = null;
+      window.renderAdminContent('mail_schedule');
+    });
 
-        els.back.addEventListener('click', () => {
-            AdminData.mailScheduleMode = 'list';
-            AdminData.mailScheduleEditingId = '';
-            AdminData.mailScheduleDraft = null;
-            window.renderAdminContent('mail_schedule');
-        });
-    }
+    els.back.addEventListener('click', () => {
+      AdminData.mailScheduleMode = 'list';
+      AdminData.mailScheduleEditingId = '';
+      AdminData.mailScheduleDraft = null;
+      window.renderAdminContent('mail_schedule');
+    });
+  }
 
-    function bind() {
-        AdminData.mailScheduleMode === 'form' ? bindFormView() : bindListView();
-    }
+  function bind() {
+    AdminData.mailScheduleMode === 'form' ? bindFormView() : bindListView();
+  }
 
-    return { render, bind };
+  return { render, bind };
 })();
 
 AdminRouter.register('mail_schedule', MailScheduleView);
