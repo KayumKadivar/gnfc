@@ -233,8 +233,8 @@
                                 <td class="admin-table-cell">
                                     <span class="admin-dash-group-badge">${AdminUtils.escapeHtml(r.group)}</span>
                                 </td>
-                                <td class="admin-table-cell font-mono font-14px color-secondary">${AdminUtils.escapeHtml(r.lastLogin)}</td>
-                                <td class="admin-table-cell font-mono font-14px color-secondary">${AdminUtils.escapeHtml(r.machine)}</td>
+                                <td class="admin-table-cell font-mono font-16px color-secondary">${AdminUtils.escapeHtml(r.lastLogin)}</td>
+                                <td class="admin-table-cell font-mono font-16px color-secondary">${AdminUtils.escapeHtml(r.machine)}</td>
                                 <td class="admin-table-cell fw-bold">${r.hits.toLocaleString()}</td>
                             </tr>
                         `).join('')}
