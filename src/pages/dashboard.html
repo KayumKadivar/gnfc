@@ -168,9 +168,11 @@
             <i class="ph-bold ph-bell-ringing color-red"></i>
             Active Alerts & Notications
           </h2>
-          <button onclick="NotificationManager.clearAll()" class="font-10px fw-extrabold color-label hover-color-primary uppercase tracking-widest transition-colors">Clear All</button>
+          <button onclick="NotificationManager.clearAll()"
+            class="font-10px fw-extrabold color-label hover-color-primary uppercase tracking-widest transition-colors">Clear
+            All</button>
         </div>
-        
+
         <div id="dashboard-notifications-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- Notifications injected here -->
         </div>
@@ -181,11 +183,11 @@
 
         <!-- Calibration Due (New) -->
         <div id="kpi-card-cal"
-          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 transition-all cursor-pointer shadow-sm group hidden" 
-          style="--kpi-color: #F2495C"
-          onclick="window.CalibrationModal && CalibrationModal.show('manual')">
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 transition-all cursor-pointer shadow-sm group hidden"
+          style="--kpi-color: #F2495C" onclick="window.CalibrationModal && CalibrationModal.show('manual')">
           <div class="flex items-center justify-between mb-3">
-            <div class="w-9 h-9 rounded-lg bg-gnfc-red/10 flex items-center justify-center group-hover:bg-gnfc-red/20 transition-colors">
+            <div
+              class="w-9 h-9 rounded-lg bg-gnfc-red/10 flex items-center justify-center group-hover:bg-gnfc-red/20 transition-colors">
               <i class="ph-fill ph-warning-diamond text-lg color-red"></i>
             </div>
             <span class="font-13px fw-bold color-red animate-pulse">ACTION</span>
@@ -258,7 +260,8 @@
             <i class="ph-bold ph-megaphone color-blue"></i>
             Important Announcements
           </h2>
-          <button class="bg-gnfc-blue/10 hover:bg-gnfc-blue/20 color-blue px-3 py-1.5 rounded-md font-11px fw-bold transition-all flex items-center gap-2">
+          <button
+            class="bg-gnfc-blue/10 hover:bg-gnfc-blue/20 color-blue px-3 py-1.5 rounded-md font-11px fw-bold transition-all flex items-center gap-2">
             <i class="ph-bold ph-plus"></i>
             Post Notice
           </button>
@@ -373,7 +376,7 @@
         animateCounter(document.getElementById('kpi-completed'), completedJobsSafe);
         animateCounter(document.getElementById('kpi-iso'), isoJobs);
         animateCounter(document.getElementById('kpi-pending'), pendingJobsSafe);
-        
+
         if (calCount > 0) {
           const calCard = document.getElementById('kpi-card-cal');
           calCard.classList.remove('hidden');
@@ -417,10 +420,10 @@
         if (!container) return;
 
         container.innerHTML = notices.map(notice => {
-          const priorityClass = notice.priority === 'urgent' ? 'border-l-4 border-red-500 bg-red-500/5' : 
-                               notice.priority === 'important' ? 'border-l-4 border-orange-500 bg-orange-500/5' : 
-     'border-l-4 border-blue-500 bg-blue-500/5';
-          
+          const priorityClass = notice.priority === 'urgent' ? 'border-l-4 border-red-500 bg-red-500/5' :
+            notice.priority === 'important' ? 'border-l-4 border-orange-500 bg-orange-500/5' :
+              'border-l-4 border-blue-500 bg-blue-500/5';
+
           const pinIcon = notice.pinned ? '<i class="ph-fill ph-push-pin color-orange font-14px"></i>' : '';
 
           return `
@@ -448,7 +451,7 @@
       renderNoticeboard();
 
       // ── Notice Modal Logic ──
-      window.openNoticeModal = function(id) {
+      window.openNoticeModal = function (id) {
         const notice = notices.find(n => n.id === id);
         if (!notice) return;
 
