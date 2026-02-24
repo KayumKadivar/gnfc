@@ -375,47 +375,53 @@
           <div class="grid grid-cols-2 gap-3">
             <!-- Attach 1 -->
             <div>
-                <div id="attach-card-1" onclick="openAttachmentModal(1)" class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
-                    <div class="flex items-center gap-2.5 overflow-hidden">
-                        <div class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
-                            <i class="ph-fill ph-file-text text-lg"></i>
-                        </div>
-                        <div class="flex flex-col min-w-0">
-                            <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 1</span>
-                            <span id="display-attach-1" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
-                        </div>
-                    </div>
-                    <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+              <div id="attach-card-1" onclick="openAttachmentModal(1)"
+                class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                  <div
+                    class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                    <i class="ph-fill ph-file-text text-lg"></i>
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 1</span>
+                    <span id="display-attach-1" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
+                  </div>
                 </div>
-                <div id="attach-msg-1" class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
-                     <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 1</span>
-                     <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
-                </div>
+                <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+              </div>
+              <div id="attach-msg-1"
+                class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
+                <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 1</span>
+                <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
+              </div>
             </div>
 
             <!-- Attach 2 -->
-             <div>
-                <div id="attach-card-2" onclick="openAttachmentModal(2)" class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
-                    <div class="flex items-center gap-2.5 overflow-hidden">
-                         <div class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
-                            <i class="ph-fill ph-file-text text-lg"></i>
-                        </div>
-                        <div class="flex flex-col min-w-0">
-                            <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 2</span>
-                            <span id="display-attach-2" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
-                        </div>
-                    </div>
-                    <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+            <div>
+              <div id="attach-card-2" onclick="openAttachmentModal(2)"
+                class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                  <div
+                    class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                    <i class="ph-fill ph-file-text text-lg"></i>
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 2</span>
+                    <span id="display-attach-2" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
+                  </div>
                 </div>
-                <div id="attach-msg-2" class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
-                     <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 2</span>
-                     <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
-                </div>
+                <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+              </div>
+              <div id="attach-msg-2"
+                class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
+                <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 2</span>
+                <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
           <div>
             <label class="gnfc-modal-label">Engineer's Remark</label>
             <textarea id="modal-eng-remark" rows="3" class="gnfc-modal-input"></textarea>
@@ -428,10 +434,12 @@
       </div>
 
       <div class="gnfc-modal-footer gnfc-modal-footer--space-between">
-        <button id="modal-delete-btn" onclick="deleteJob()" class="gnfc-modal-btn gnfc-modal-btn-danger">Delete Entry</button>
+        <button id="modal-delete-btn" onclick="deleteJob()" class="gnfc-modal-btn gnfc-modal-btn-danger">Delete
+          Entry</button>
         <div class="flex gap-3 ml-auto">
           <button onclick="closeJobDetailModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
-          <button id="modal-save-btn" onclick="saveJobDetails()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
+          <button id="modal-save-btn" onclick="saveJobDetails()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save
+            Changes</button>
         </div>
       </div>
     </div>
@@ -439,55 +447,59 @@
 
   <!-- Attachment Upload Modal -->
   <div id="attachment-modal" class="gnfc-modal-overlay" aria-hidden="true" style="z-index: 140;">
-      <div class="gnfc-modal-shell gnfc-modal-shell--narrow">
-          <!-- Header -->
-          <div class="gnfc-modal-header">
-              <div>
-                  <h3 class="gnfc-modal-title">Upload Attachment</h3>
-                  <p class="gnfc-modal-subtitle font-12px">Add supporting documents</p>
-              </div>
-              <button onclick="closeAttachmentModal()" class="gnfc-modal-close">
-                  <i class="ph-bold ph-x"></i>
-              </button>
-          </div>
-
-          <!-- Body -->
-          <div class="gnfc-modal-body">
-              <!-- Upload Zone -->
-              <div class="relative group">
-                  <input type="file" id="upload-file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileSelect(this)">
-                  <div id="upload-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50/50 group-hover:border-blue-400 transition-all duration-200">
-                      <div class="bg-white p-2 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform duration-200">
-                          <i class="ph-duotone ph-cloud-arrow-up text-xl text-blue-500"></i>
-                      </div>
-                      <p class="font-12px font-semibold text-gray-700 mb-1">Click to upload or drag and drop</p>
-                      <p class="font-11px">Upload pdf file (max. 10MB)</p>
-                  </div>
-              </div>
-
-              <!-- Selected File Display (Hidden initially) -->
-              <div id="file-preview" class="hidden bg-blue-50 border border-blue-100 rounded-lg p-3 items-center justify-between">
-                  <div class="flex items-center gap-3 overflow-hidden">
-                      <div class="bg-white p-2 rounded text-blue-600">
-                          <i class="ph-fill ph-file-text text-xl"></i>
-                      </div>
-                      <div class="flex flex-col min-w-0">
-                          <span id="preview-filename" class="font-12px font-semibold text-gray-800 truncate">filename.pdf</span>
-                          <span id="preview-filesize" class="font-11px text-gray-500">0 KB</span>
-                      </div>
-                  </div>
-                  <button onclick="clearFileSelection()" class="text-gray-400 hover:text-red-500 transition-colors p-1">
-                      <i class="ph-bold ph-trash"></i>
-                  </button>
-              </div>
-          </div>
-
-          <!-- Footer -->
-          <div class="gnfc-modal-footer">
-              <button onclick="closeAttachmentModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
-              <button onclick="saveAttachment()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save File</button>
-          </div>
+    <div class="gnfc-modal-shell gnfc-modal-shell--narrow">
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">Upload Attachment</h3>
+          <p class="gnfc-modal-subtitle font-12px">Add supporting documents</p>
+        </div>
+        <button onclick="closeAttachmentModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x"></i>
+        </button>
       </div>
+
+      <!-- Body -->
+      <div class="gnfc-modal-body">
+        <!-- Upload Zone -->
+        <div class="relative group">
+          <input type="file" id="upload-file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            onchange="handleFileSelect(this)">
+          <div id="upload-zone"
+            class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50/50 group-hover:border-blue-400 transition-all duration-200">
+            <div
+              class="bg-white p-2 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform duration-200">
+              <i class="ph-duotone ph-cloud-arrow-up text-xl text-blue-500"></i>
+            </div>
+            <p class="font-12px font-semibold text-gray-700 mb-1">Click to upload or drag and drop</p>
+            <p class="font-11px">Upload pdf file (max. 10MB)</p>
+          </div>
+        </div>
+
+        <!-- Selected File Display (Hidden initially) -->
+        <div id="file-preview"
+          class="hidden bg-blue-50 border border-blue-100 rounded-lg p-3 items-center justify-between">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="bg-white p-2 rounded text-blue-600">
+              <i class="ph-fill ph-file-text text-xl"></i>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span id="preview-filename" class="font-12px font-semibold text-gray-800 truncate">filename.pdf</span>
+              <span id="preview-filesize" class="font-11px text-gray-500">0 KB</span>
+            </div>
+          </div>
+          <button onclick="clearFileSelection()" class="text-gray-400 hover:text-red-500 transition-colors p-1">
+            <i class="ph-bold ph-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="gnfc-modal-footer">
+        <button onclick="closeAttachmentModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button onclick="saveAttachment()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save File</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -776,15 +788,15 @@
       document.getElementById('modal-tech').value = '';
       document.getElementById('modal-jobtype').value = 'PM'; // Default
       document.getElementById('modal-eng').value = 'MAJ'; // Default
-      
+
       // Clear Remarks
       document.getElementById('modal-eng-remark').value = '';
       document.getElementById('modal-exec-remark').value = '';
-      
-       // Reset Attachments
+
+      // Reset Attachments
       document.getElementById('display-attach-1').textContent = '-';
       document.getElementById('display-attach-2').textContent = '-';
-      
+
       // UI Changes for "Add" mode
       document.querySelector('.gnfc-modal-title').textContent = "Add New Job";
       document.getElementById('modal-delete-btn').style.display = 'none';
@@ -822,23 +834,23 @@
       // Set attachments (mock logic display)
       // For now, if 'attach' is true in data, show a dummy name for Attach1, else '-'
       if (job.attach) {
-          document.getElementById('display-attach-1').textContent = 'Report.pdf'; 
+        document.getElementById('display-attach-1').textContent = 'Report.pdf';
       } else {
-           document.getElementById('display-attach-1').textContent = '-';
+        document.getElementById('display-attach-1').textContent = '-';
       }
-       document.getElementById('display-attach-2').textContent = '-'; // Default logic for now
+      document.getElementById('display-attach-2').textContent = '-'; // Default logic for now
 
 
       // Set remarks
       document.getElementById('modal-eng-remark').value = job.remark || '';
       document.getElementById('modal-exec-remark').value = job.execRemark || '';
-       
-        // Reset Attachments for "Edit" mode
+
+      // Reset Attachments for "Edit" mode
       document.querySelector('.gnfc-modal-title').textContent = "Job History Detail";
       document.getElementById('modal-delete-btn').style.display = 'block';
       document.getElementById('modal-save-btn').textContent = "Save Changes";
 
-       // Attachment Logic: Hide Message, Show interactive part
+      // Attachment Logic: Hide Message, Show interactive part
       document.getElementById('attach-card-1').classList.remove('hidden');
       document.getElementById('attach-msg-1').classList.add('hidden');
       document.getElementById('attach-card-2').classList.remove('hidden');
@@ -888,7 +900,7 @@
           jobData[idx].remark = remark;
           jobData[idx].execRemark = execRemark;
           jobData[idx].attach = isAttached;
-          
+
           closeJobDetailModal(); // Close first
 
           Swal.fire({
@@ -896,7 +908,7 @@
             title: 'Updated!',
             text: 'Job details have been updated.',
             timer: 1500,
-            showConfirmButton: false, 
+            showConfirmButton: false,
             width: 300,
             padding: "1em",
             customClass: { popup: "font-12px" }
@@ -921,21 +933,21 @@
           execRemark: execRemark
         };
         jobData.push(newJob);
-        
+
         closeJobDetailModal(); // Close first
 
         Swal.fire({
-            icon: 'success',
-            title: 'Added!',
-            text: 'New job has been added.',
-            timer: 1500,
-            showConfirmButton: false,
-            width: 400,
-            padding: "1em",
-            customClass: { popup: "font-12px" }
-          });
+          icon: 'success',
+          title: 'Added!',
+          text: 'New job has been added.',
+          timer: 1500,
+          showConfirmButton: false,
+          width: 400,
+          padding: "1em",
+          customClass: { popup: "font-12px" }
+        });
       }
-      
+
       renderTable();
     }
 
@@ -994,80 +1006,80 @@
 
     // Attachment Modal Logic
     function openAttachmentModal(slot) {
-        currentUploadSlot = slot;
-        clearFileSelection(); // Reset state
-        
-        const modal = document.getElementById('attachment-modal');
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
+      currentUploadSlot = slot;
+      clearFileSelection(); // Reset state
+
+      const modal = document.getElementById('attachment-modal');
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
     }
 
     function closeAttachmentModal() {
-        const modal = document.getElementById('attachment-modal');
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        currentUploadSlot = null;
+      const modal = document.getElementById('attachment-modal');
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      currentUploadSlot = null;
     }
 
     function handleFileSelect(input) {
-        if (input.files && input.files[0]) {
-            const file = input.files[0];
-            
-            // Update UI to show selected file
-            document.getElementById('upload-zone').classList.add('hidden');
-            const preview = document.getElementById('file-preview');
-            preview.classList.remove('hidden');
-            preview.classList.add('flex');
-            
-            document.getElementById('preview-filename').textContent = file.name;
-            document.getElementById('preview-filesize').textContent = formatFileSize(file.size);
-        }
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+
+        // Update UI to show selected file
+        document.getElementById('upload-zone').classList.add('hidden');
+        const preview = document.getElementById('file-preview');
+        preview.classList.remove('hidden');
+        preview.classList.add('flex');
+
+        document.getElementById('preview-filename').textContent = file.name;
+        document.getElementById('preview-filesize').textContent = formatFileSize(file.size);
+      }
     }
 
     function clearFileSelection() {
-        const input = document.getElementById('upload-file-input');
-        if(input) input.value = '';
-        
-        document.getElementById('upload-zone').classList.remove('hidden');
-        const preview = document.getElementById('file-preview');
-        preview.classList.add('hidden');
-        preview.classList.remove('flex');
+      const input = document.getElementById('upload-file-input');
+      if (input) input.value = '';
+
+      document.getElementById('upload-zone').classList.remove('hidden');
+      const preview = document.getElementById('file-preview');
+      preview.classList.add('hidden');
+      preview.classList.remove('flex');
     }
 
     function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
     function saveAttachment() {
-        const fileInput = document.getElementById('upload-file-input');
-        if (fileInput.files.length > 0 && currentUploadSlot) {
-            const fileName = fileInput.files[0].name;
-            
-            // Update the display in the main modal
-            const displayId = `display-attach-${currentUploadSlot}`;
-            const displayEl = document.getElementById(displayId);
-            if(displayEl) {
-                displayEl.textContent = fileName;
-                displayEl.classList.add('text-blue-600', 'fw-bold');
-            }
+      const fileInput = document.getElementById('upload-file-input');
+      if (fileInput.files.length > 0 && currentUploadSlot) {
+        const fileName = fileInput.files[0].name;
+
+        // Update the display in the main modal
+        const displayId = `display-attach-${currentUploadSlot}`;
+        const displayEl = document.getElementById(displayId);
+        if (displayEl) {
+          displayEl.textContent = fileName;
+          displayEl.classList.add('text-blue-600', 'fw-bold');
         }
-        closeAttachmentModal();
+      }
+      closeAttachmentModal();
     }
-    
+
     // Click outside to close attachment modal
     document.addEventListener('DOMContentLoaded', () => {
-        const attachModal = document.getElementById('attachment-modal');
-        if (attachModal) {
-             attachModal.addEventListener('click', (event) => {
-                if (event.target === attachModal) {
-                    closeAttachmentModal();
-                }
-            });
-        }
+      const attachModal = document.getElementById('attachment-modal');
+      if (attachModal) {
+        attachModal.addEventListener('click', (event) => {
+          if (event.target === attachModal) {
+            closeAttachmentModal();
+          }
+        });
+      }
     });
 
   </script>

@@ -174,7 +174,9 @@
 
         if (unitGrid) {
             unitGrid.innerHTML = units.map((unit) => {
-                const href = `/src/pages/plant_detail.html?plant=${encodeURIComponent(unit)}&view=today`;
+                const href = unit === 'BOILER'
+                    ? `/src/pages/boiler_dashboard.html`
+                    : `/src/pages/plant_detail.html?plant=${encodeURIComponent(unit)}&view=today`;
                 return `
                     <a href="${href}" class="unit-card" aria-label="Open ${unit}">
                         <span class="unit-name">${unit}</span>

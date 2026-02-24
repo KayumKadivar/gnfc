@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boiler Dashboard | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
+    <style>
+        .page-header-card {
+            background: linear-gradient(135deg, rgba(87, 148, 242, 0.08) 0%, rgba(15, 23, 42, 0.4) 100%);
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #5794f2, transparent);
+            opacity: 0.6;
+        }
+
+        .boiler-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-height: 4rem;
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(15, 23, 42, 0.3);
+            box-shadow: 0 1px 6px -2px rgba(0, 0, 0, 0.1);
+            color: var(--app-text, #e6edf3);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boiler-card::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #5794f2;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .boiler-card-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            background: rgba(87, 148, 242, 0.1);
+            color: #5794f2;
+            font-size: 1.125rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .boiler-card:hover {
+            border-color: rgba(87, 148, 242, 0.4);
+            background: rgba(15, 23, 42, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.25), 0 0 12px -4px rgba(87, 148, 242, 0.1);
+        }
+
+        .boiler-card:hover::after {
+            opacity: 1;
+        }
+
+        .boiler-card:hover .boiler-card-icon {
+            background: #5794f2;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .boiler-card-span-2 {
+            grid-column: span 1;
+        }
+
+        /* Light Theme Overrides */
+        html[data-theme-mode="light"] .page-header-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-color: #d6deea;
+            box-shadow: 0 4px 16px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        html[data-theme-mode="light"] .boiler-card {
+            background: #ffffff;
+            border-color: #d6deea;
+            box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.05);
+            color: #1e293b;
+        }
+
+        html[data-theme-mode="light"] .boiler-card-icon {
+            background: #f0f6ff;
+            color: #2563eb;
+        }
+
+        html[data-theme-mode="light"] .boiler-card:hover {
+            border-color: #5794f2;
+            background: #ffffff;
+            box-shadow: 0 6px 20px -4px rgba(37, 99, 235, 0.1);
+        }
+
+        html[data-theme-mode="light"] .boiler-card:hover .boiler-card-icon {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        @media (min-width: 768px) {
+            .boiler-card-span-2 {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "Boiler Dashboard",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler" }
+                ],
+                backLink: "/src/pages/plant_status.html"
+            });
+        </script>
+
+        <div class="flex-1 overflow-y-auto p-3 md:p-4 bg-dark-bg">
+            <div class="max-w-5xl mx-auto space-y-4">
+
+                <!-- Welcome & Filter Section -->
+                <div class="page-header-card p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-inner">
+                            <i class="ph-fill ph-user-circle text-blue-500 font-24px"></i>
+                        </div>
+                        <div>
+                            <p class="font-11px fw-bold color-secondary text-upper ls-widest mb-0 tracking-[0.1em]">
+                                Welcome Back</p>
+                            <h2 class="font-18px md:font-20px fw-black color-primary leading-none tracking-tight"
+                                id="tester-name">Tester</h2>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-center gap-2 w-full sm:w-auto bg-dark-bg/50 backdrop-blur-sm rounded-lg border border-dark-border p-1.5 shadow-sm">
+                        <label class="font-12px fw-bold color-secondary text-upper tracking-wider pl-2 shrink-0">Area
+                            :</label>
+                        <div class="relative w-full sm:w-48">
+                            <select
+                                class="w-full appearance-none bg-dark-panel sm:bg-dark-bg border border-dark-border color-primary rounded-md pl-3 pr-8 py-1.5 outline-none focus:border-gnfc-blue font-13px fw-bold transition-colors cursor-pointer shadow-sm">
+                                <option>ALL</option>
+                                <option>N.A.</option>
+                                <option>ASH</option>
+                                <option>BOILER-1</option>
+                                <option>BOILER-2</option>
+                                <option>BOILER-3</option>
+                                <option>BOILER-4</option>
+                                <option>CHP</option>
+                                <option>COMMON</option>
+                                <option>CPSU-BMS</option>
+                                <option>CPSU-DGP</option>
+                                <option>CPSU-ST</option>
+                                <option>CPSU-HRSG</option>
+                                <option>NG STN</option>
+                                <option>TG-1</option>
+                                <option>TG-2</option>
+                            </select>
+                            <i
+                                class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 color-secondary pointer-events-none font-12px"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <a href="/src/pages/boiler_inst_data.html" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-database"></i></div>
+                        <span>Inst Data</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-arrows-clockwise"></i></div>
+                        <span>Loop Data</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-wrench"></i></div>
+                        <span>PM Master</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-tree-structure"></i></div>
+                        <span>Logic Diagram</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-list-dashes"></i></div>
+                        <span>JB Detail</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-folder-open"></i></div>
+                        <span>Document Management System</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-clock-counter-clockwise"></i></div>
+                        <span>General Job History</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-warning-circle"></i></div>
+                        <span>Alarm Trip Setting Report</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-desktop"></i></div>
+                        <span>System Job History</span>
+                    </a>
+                    <a href="#" class="boiler-card">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-calendar-plus"></i></div>
+                        <span>Mail Scheduler</span>
+                    </a>
+                    <a href="#" class="boiler-card boiler-card-span-2 relative">
+                        <div class="boiler-card-icon"><i class="ph-fill ph-file-dashed"></i></div>
+                        <span>Circular Log File</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Set user name dynamically
+        const role = (localStorage.getItem('userRole') || '').toLowerCase();
+        const storedName = (localStorage.getItem('currentUserName') || '').trim();
+        const fallbackName = role === 'technician' ? 'Technician' : role === 'engineer' ? 'Engineer' : 'Admin User';
+        document.getElementById('tester-name').textContent = storedName || fallbackName;
+    </script>
+</body>
+
+</html>

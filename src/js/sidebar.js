@@ -117,9 +117,9 @@ function createLink(id, url, icon, text, isCollapsed) {
       <a href="${url}" 
          onmouseenter="showSidebarTooltip(event, '${text}')" 
          onmouseleave="hideSidebarTooltip()"
-         class="flex items-center gap-3 px-4 py-1.5 transition-all duration-200 group ${activeClass} ${justifyClass}">
+         class="flex items-center gap-3 px-4 py-1.5 transition-all duration-200 group font-18px ${activeClass} ${justifyClass}">
           <i class="ph ${icon} text-lg ${isActive ? "color-orange" : ""} shrink-0"></i>
-          <span class="fw-medium font-15px whitespace-nowrap transition-opacity duration-300 ${spanClass} sidebar-text">${text}</span>
+          <span class="fw-medium font-20px whitespace-nowrap transition-opacity duration-300 ${spanClass} sidebar-text">${text}</span>
       </a>`;
 }
 
