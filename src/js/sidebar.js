@@ -1,5 +1,5 @@
-const SIDEBAR_COLLAPSED_CLASS = 'w-16';
-const SIDEBAR_EXPANDED_CLASS = 'w-52';
+const SIDEBAR_COLLAPSED_CLASS = 'w-20';
+const SIDEBAR_EXPANDED_CLASS = 'w-60';
 
 function getLoggedInUser() {
     const role = (localStorage.getItem('userRole') || '').toLowerCase();
