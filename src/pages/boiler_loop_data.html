@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop Data | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <link rel="stylesheet" href="/src/css/table-style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
+    <style>
+        .loop-section {
+            background: var(--app-panel, #ffffff);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        .loop-section-header {
+            background: var(--app-panel-alt, #f1f5f9);
+            border-bottom: 1px solid var(--app-border, #d1d5db);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--app-text, #1e293b);
+        }
+        .loop-row {
+            display: flex;
+            border-bottom: 1px solid var(--app-border, #e5e7eb);
+        }
+        .loop-row:last-child { border-bottom: none; }
+        .loop-label {
+            width: 180px;
+            min-width: 180px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 800;
+            color: var(--app-text, #374151);
+            background: var(--app-panel-alt, #fefce8);
+            border-right: 1px solid var(--app-border, #d1d5db);
+            display: flex;
+            align-items: center;
+        }
+        .loop-value {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--app-text, #1e293b);
+        }
+        .loop-value input, .loop-value textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--app-text, #1e293b);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .loop-value textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .loop-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .loop-split > div {
+            border-right: 1px solid var(--app-border, #d1d5db);
+        }
+        .loop-split > div:last-child { border-right: none; }
+
+        .find-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 0.75rem;
+            background: var(--app-panel, #ffffff);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .find-bar label {
+            font-size: 0.8125rem;
+            font-weight: 800;
+            color: var(--app-text, #1e293b);
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+        .find-bar input {
+            width: 180px;
+            height: 2rem;
+            background: var(--app-panel-alt, #f9fafb);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.25rem;
+            padding: 0 0.5rem;
+            color: var(--app-text, #1e293b);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            outline: none;
+        }
+        .find-bar input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.12);
+        }
+        .find-bar select {
+            height: 2rem;
+            background: var(--app-panel-alt, #f9fafb);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.25rem;
+            padding: 0 0.5rem;
+            color: var(--app-text, #1e293b);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            outline: none;
+        }
+        .find-btn {
+            height: 2rem;
+            padding: 0 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid var(--app-border, #d1d5db);
+            background: var(--app-panel-alt, #f3f4f6);
+            color: var(--app-text, #374151);
+            transition: all 0.15s;
+        }
+        .find-btn:hover { background: var(--app-border, #e5e7eb); }
+        .find-btn.primary {
+            background: #2563eb;
+            color: #fff;
+            border-color: #1d4ed8;
+        }
+        .find-btn.primary:hover { background: #1d4ed8; }
+
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            height: 1.75rem;
+            padding: 0 0.75rem;
+            background: var(--app-panel-alt, #f3f4f6);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--app-text, #374151);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .add-btn:hover { background: var(--app-border, #e5e7eb); }
+    </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "Loop Data",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
+                    { label: "Loop Data" }
+                ],
+                backLink: "/src/pages/boiler_inst_data.html"
+            });
+        </script>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+            <div class="max-w-6xl mx-auto">
+
+                <!-- Find Loop Bar -->
+                <div class="find-bar">
+                    <label>Find Loop</label>
+                    <input type="text" id="find-loop-input" placeholder="Enter loop..." value="">
+                    <button class="find-btn primary" onclick="findLoop()"><i class="ph-bold ph-magnifying-glass"></i></button>
+                    <label style="margin-left:0.5rem;">Area :</label>
+                    <select id="area-select">
+                        <option selected>ALL</option>
+                        <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option>
+                        <option>BOP</option><option>COMMON</option><option>TG-1</option><option>TG-2</option>
+                    </select>
+                </div>
+
+                <!-- Loop Name & Service -->
+                <div class="loop-section">
+                    <div class="loop-row">
+                        <div class="loop-label">LOOP NAME :</div>
+                        <div class="loop-value"><input type="text" id="loop-name" readonly></div>
+                    </div>
+                    <div class="loop-row">
+                        <div class="loop-label">SERVICE :</div>
+                        <div class="loop-value"><input type="text" id="loop-service" readonly></div>
+                    </div>
+                </div>
+
+                <!-- Loop Schematic & Special Document -->
+                <div class="loop-section">
+                    <div class="loop-split">
+                        <div>
+                            <div class="loop-section-header" style="text-align:center;">LOOP SCHEMATIC</div>
+                            <div style="padding: 0.75rem; min-height: 60px;">
+                                <span id="loop-schematic" style="font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="loop-section-header" style="text-align:center;">SPECIAL DOCUMENT</div>
+                            <div style="padding: 0.75rem; min-height: 60px;">
+                                <span id="loop-special-doc" style="font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Helpful Hints & Special Instructions -->
+                <div class="loop-section">
+                    <div class="loop-split">
+                        <div>
+                            <div class="loop-section-header" style="text-align:center;">HELPFUL HINTS</div>
+                            <div style="padding: 0.75rem; min-height: 80px;">
+                                <textarea id="loop-hints" style="width:100%; border:none; outline:none; background:transparent; resize:vertical; min-height:60px; font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);" readonly></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="loop-section-header" style="text-align:center;">SPECIAL INSTRUCTIONS</div>
+                            <div style="padding: 0.75rem; min-height: 80px;">
+                                <textarea id="loop-instructions" style="width:100%; border:none; outline:none; background:transparent; resize:vertical; min-height:60px; font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loop Components Table -->
+                <div class="gnfc-table-container rounded-lg border border-dark-border">
+                    <div style="overflow-x:auto;">
+                        <table class="gnfc-table" id="components-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th" colspan="5" style="text-align:center; letter-spacing:0.15em;">LOOP COMPONENTS</th>
+                                </tr>
+                                <tr>
+                                    <th class="gnfc-th" style="width:5%;">Sr</th>
+                                    <th class="gnfc-th" style="width:20%;">Tag No</th>
+                                    <th class="gnfc-th" style="width:35%;">Description</th>
+                                    <th class="gnfc-th" style="width:20%;">Inst Type</th>
+                                    <th class="gnfc-th" style="width:20%;">Make / Model</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gnfc-tbody" id="components-body">
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td" colspan="5" style="text-align:center; padding:1.5rem; font-style:italic; color:var(--app-muted,#6b7280);">Search for a loop to view components</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Add button -->
+                <div style="text-align:center; margin-top:0.75rem;">
+                    <button class="add-btn" onclick="alert('Add component feature coming soon')"><i class="ph-bold ph-plus"></i> Add</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mock Loop Data
+        const loopDatabase = {
+            "LS-10-101": {
+                name: "MAIN STEAM PRESSURE LOOP",
+                service: "STEAM HEADER PRESSURE MONITORING & CONTROL",
+                schematic: "DWG-BLR-101-SCH",
+                specialDoc: "SP-DOC-101",
+                hints: "Check impulse tubing for blockage before calibration.\nEnsure manifold valve positions are correct.",
+                instructions: "Use 2oo3 voting for trip functions.\nCalibrate at 0%, 25%, 50%, 75%, 100% of range.",
+                components: [
+                    { tag: "10-PT-101A", desc: "MAIN STEAM HEADER PRESSURE TX-A", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
+                    { tag: "10-PT-101B", desc: "MAIN STEAM HEADER PRESSURE TX-B", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
+                    { tag: "10-PT-101C", desc: "MAIN STEAM HEADER PRESSURE TX-C", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
+                    { tag: "10-PI-101", desc: "MAIN STEAM PRESSURE INDICATOR", type: "GUAGE", make: "WIKA / 232.50" },
+                ]
+            },
+            "LS-FG-101": {
+                name: "FUEL GAS CONTROL LOOP",
+                service: "NATURAL GAS FLOW CONTROL TO BURNERS",
+                schematic: "DWG-BLR-FG-101",
+                specialDoc: "",
+                hints: "Verify gas pressure upstream of CV before testing.\nCheck positioner feedback signal.",
+                instructions: "Stroke test CV quarterly.\nVerify tight shut-off during annual shutdown.",
+                components: [
+                    { tag: "XLGDFGV1D", desc: "FUEL GAS CV 1D", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
+                    { tag: "XLGDFGV1E", desc: "FUEL GAS CV 1E", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
+                    { tag: "XLGDFGV1F", desc: "FUEL GAS CV 1F", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
+                ]
+            },
+            "LS-C1-008": {
+                name: "COMPRESSOR BEARING TEMPERATURE LOOP",
+                service: "BEARING TEMPERATURE MONITORING",
+                schematic: "DWG-COMP-008",
+                specialDoc: "SP-COMP-MAINT-008",
+                hints: "RTD wiring: 3-wire configuration.\nCheck for ambient temperature drift.",
+                instructions: "High alarm: 110°C, Trip: 125°C.\nVerify thermowell integrity annually.",
+                components: [
+                    { tag: "ZT1777385", desc: "COMPRESSOR BEARING TEMP", type: "RTD PT100", make: "EMERSON / 3144P" },
+                    { tag: "ZT1777393", desc: "COMPRESSOR BEARING TEMP BACKUP", type: "RTD PT100", make: "EMERSON / 3144P" },
+                ]
+            }
+        };
+
+        const findInput = document.getElementById('find-loop-input');
+
+        findInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') findLoop();
+        });
+
+        function findLoop() {
+            const query = findInput.value.trim().toUpperCase();
+            const loop = loopDatabase[query];
+
+            if (!loop) {
+                // Try partial match
+                const matchKey = Object.keys(loopDatabase).find(k => k.includes(query) || loopDatabase[k].name.toUpperCase().includes(query));
+                if (matchKey) {
+                    loadLoop(matchKey, loopDatabase[matchKey]);
+                    findInput.value = matchKey;
+                } else {
+                    alert('Loop not found. Try: LS-10-101, LS-FG-101, or LS-C1-008');
+                }
+                return;
+            }
+            loadLoop(query, loop);
+        }
+
+        function loadLoop(id, data) {
+            document.getElementById('loop-name').value = data.name;
+            document.getElementById('loop-service').value = data.service;
+            document.getElementById('loop-schematic').textContent = data.schematic || '—';
+            document.getElementById('loop-special-doc').textContent = data.specialDoc || '—';
+            document.getElementById('loop-hints').value = data.hints;
+            document.getElementById('loop-instructions').value = data.instructions;
+
+            const tbody = document.getElementById('components-body');
+            if (data.components.length === 0) {
+                tbody.innerHTML = '<tr class="gnfc-tr"><td class="gnfc-td" colspan="5" style="text-align:center; padding:1.5rem; font-style:italic; color:var(--app-muted,#6b7280);">No components found</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.components.map((c, i) => `
+                <tr class="gnfc-tr" style="cursor:pointer;" onclick="window.location.href='/src/pages/boiler_inst_data.html?tag=${encodeURIComponent(c.tag)}'">
+                    <td class="gnfc-td text-center" style="font-size:13px; font-weight:600;">${i + 1}</td>
+                    <td class="gnfc-td" style="font-size:13px; font-weight:800; color:var(--typo-blue, #1d4ed8);">${c.tag}</td>
+                    <td class="gnfc-td" style="font-size:13px; font-weight:600;">${c.desc}</td>
+                    <td class="gnfc-td text-center" style="font-size:13px; font-weight:600;">${c.type}</td>
+                    <td class="gnfc-td" style="font-size:13px; font-weight:600;">${c.make}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Check URL params
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const loopId = urlParams.get('loop');
+            if (loopId && loopDatabase[loopId]) {
+                findInput.value = loopId;
+                loadLoop(loopId, loopDatabase[loopId]);
+            }
+        });
+    </script>
+</body>
+
+</html>

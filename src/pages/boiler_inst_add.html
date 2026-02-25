@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Instrument | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
+    <style>
+        .form-section {
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 1px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--app-muted, #9aa7b5);
+            margin-bottom: 0.375rem;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 2.75rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.5rem;
+            padding: 0 0.875rem;
+            color: var(--app-text, #e6edf3);
+            font-size: 0.875rem;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: #5794f2;
+            box-shadow: 0 0 0 3px rgba(87, 148, 242, 0.15);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .section-title {
+            font-size: 0.8125rem;
+            font-weight: 800;
+            color: #5794f2;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--app-border, #2c3235), transparent);
+        }
+
+        .action-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            padding: 0.625rem 1rem;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.5) 100%);
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            height: 2.25rem;
+            padding: 0 0.875rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.375rem;
+            color: var(--app-text, #e6edf3);
+            font-size: 0.8125rem;
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .action-button:hover {
+            background: rgba(87, 148, 242, 0.12);
+            border-color: rgba(87, 148, 242, 0.35);
+            color: #73b0ff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px -2px rgba(87, 148, 242, 0.2);
+        }
+
+        .action-button.btn-save {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.4);
+            padding: 0 1.5rem;
+        }
+        .action-button.btn-save:hover {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.5);
+            color: #ffffff;
+        }
+
+        .action-button.btn-cancel {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 2px 8px -2px rgba(239, 68, 68, 0.4);
+            padding: 0 1.5rem;
+        }
+        .action-button.btn-cancel:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            box-shadow: 0 4px 12px -2px rgba(239, 68, 68, 0.5);
+            color: #ffffff;
+        }
+
+        /* Light Theme */
+        html[data-theme-mode="light"] .form-section {
+            background: #ffffff;
+            border-color: #d6deea;
+        }
+        html[data-theme-mode="light"] .form-group-label { color: #64748b; }
+        html[data-theme-mode="light"] .form-input {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #1e293b;
+        }
+        html[data-theme-mode="light"] .form-input:focus { background: #ffffff; }
+        html[data-theme-mode="light"] .action-toolbar {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-color: #d6deea;
+        }
+        html[data-theme-mode="light"] .action-button {
+            background: #ffffff;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "Add New Instrument",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
+                    { label: "Add New" }
+                ],
+                backLink: "/src/pages/boiler_inst_data.html"
+            });
+        </script>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+            <div class="max-w-8xl mx-auto space-y-4">
+
+                <!-- General Information -->
+                <div class="form-section" style="border-left: 3px solid #10b981;">
+                    <div class="section-title" style="color: #10b981;"><i class="ph-fill ph-note-pencil"></i> Add New Instrument</div>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div>
+                            <label class="form-group-label">Area</label>
+                            <select class="form-input" id="ef-area">
+                                <option>ALL</option><option>ASH</option>
+                                <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option>
+                                <option>BOP</option><option>COMMON</option>
+                                <option>CPSU/EMS</option><option>CPSU/GI</option><option>CPSU-U1</option>
+                                <option>CRUSHINGS</option><option>NA STN</option>
+                                <option>TG-1</option><option>TG-2</option>
+                            </select>
+                        </div>
+                        <div><label class="form-group-label">Tag No</label><input type="text" class="form-input" id="ef-tag_no"></div>
+                        <div class="md:col-span-2"><label class="form-group-label">Description</label><input type="text" class="form-input" id="ef-description"></div>
+                        <div>
+                            <label class="form-group-label">Host</label>
+                            <select class="form-input" id="ef-host">
+                                <option></option><option>DCS</option><option>PLC</option><option>ESD</option><option>LOCAL</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controller & IO Module -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div class="form-section m-0">
+                        <div class="section-title"><i class="ph-fill ph-cpu"></i> Controller</div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="form-group-label">Type</label><input type="text" class="form-input" id="ef-ctrl_type"></div>
+                            <div><label class="form-group-label">No</label><input type="text" class="form-input" id="ef-ctrl_no"></div>
+                        </div>
+                    </div>
+                    <div class="form-section m-0">
+                        <div class="section-title"><i class="ph-fill ph-cpu"></i> IO Module</div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div><label class="form-group-label">Type</label><input type="text" class="form-input" id="ef-io_type"></div>
+                            <div><label class="form-group-label">SW ID</label><input type="text" class="form-input" id="ef-sw_id"></div>
+                            <div><label class="form-group-label">Location</label><input type="text" class="form-input" id="ef-io_loc"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Channel, ESD, Range -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div class="form-section m-0">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="form-group-label">CH</label><input type="text" class="form-input" id="ef-channel"></div>
+                            <div><label class="form-group-label">ESD Sheet</label><input type="text" class="form-input" id="ef-esd"></div>
+                        </div>
+                    </div>
+                    <div class="form-section m-0">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="form-group-label">Eng Range</label><input type="text" class="form-input" id="ef-eng_range"></div>
+                            <div><label class="form-group-label">Cal Range</label><input type="text" class="form-input" id="ef-cal_range"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip Settings -->
+                <div class="form-section">
+                    <div class="section-title"><i class="ph-fill ph-warning-circle"></i> Trip Settings</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div><label class="form-group-label">Trip H/HH</label><input type="text" class="form-input" id="ef-trip_h"></div>
+                        <div><label class="form-group-label">Function</label><input type="text" class="form-input" id="ef-func_h"></div>
+                        <div><label class="form-group-label">Trip L/LL</label><input type="text" class="form-input" id="ef-trip_l"></div>
+                        <div><label class="form-group-label">Function</label><input type="text" class="form-input" id="ef-func_l"></div>
+                    </div>
+                </div>
+
+                <!-- Specifications -->
+                <div class="form-section">
+                    <div class="section-title"><i class="ph-fill ph-wrench"></i> Specifications</div>
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
+                        <div class="md:col-span-2"><label class="form-group-label">Loop Function</label><input type="text" class="form-input" id="ef-loop_func"></div>
+                        <div>
+                            <label class="form-group-label">Inst Type</label>
+                            <select class="form-input" id="ef-inst_type">
+                                <option></option><option>ANALYZER</option><option>CV</option><option>GUAGE</option>
+                                <option>PRIMARY ELEMENT</option><option>RADIO</option><option>SCANNER</option>
+                                <option>RDV</option><option>RTI METER</option><option>TGMSO</option>
+                                <option>SWITCH</option><option>TRANSMITTER</option><option>RTD PT100</option>
+                                <option>CONTROL VALVE</option><option>ENVRON MONITORING</option>
+                                <option>MACHINE MONITORING</option><option>UPS SYSTEM</option>
+                                <option>RADAR</option><option>PH SENSOR</option><option>O2 SENSOR</option>
+                                <option>LI</option><option>MPA</option><option>MAGNETIC</option>
+                            </select>
+                        </div>
+                        <div><label class="form-group-label">Make</label><input type="text" class="form-input" id="ef-make"></div>
+                        <div><label class="form-group-label">Model</label><input type="text" class="form-input" id="ef-model"></div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div><label class="form-group-label">SRNO</label><input type="text" class="form-input" id="ef-srno"></div>
+                        <div class="md:col-span-3"><label class="form-group-label">Location</label><input type="text" class="form-input" id="ef-location"></div>
+                    </div>
+                </div>
+
+                <!-- Primary Element & Other Links -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div class="form-section m-0">
+                        <div class="section-title"><i class="ph-fill ph-atom"></i> Primary Element</div>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div><label class="form-group-label">Data Sheet</label><input type="text" class="form-input" id="ef-pe_datasheet"></div>
+                            <div><label class="form-group-label">Calculation</label><input type="text" class="form-input" id="ef-pe_calc"></div>
+                            <div><label class="form-group-label">Drawing</label><input type="text" class="form-input" id="ef-pe_drawing"></div>
+                            <div><label class="form-group-label">Cal. Report</label><input type="text" class="form-input" id="ef-pe_calreport"></div>
+                            <div><label class="form-group-label">Insp. Report</label><input type="text" class="form-input" id="ef-pe_inspreport"></div>
+                        </div>
+                    </div>
+                    <div class="form-section m-0">
+                        <div class="section-title"><i class="ph-fill ph-link"></i> Other Links</div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div><label class="form-group-label">Logic</label><input type="text" class="form-input" id="ef-logic"></div>
+                            <div><label class="form-group-label">Loop Sheet</label><input type="text" class="form-input" id="ef-loop_sheet"></div>
+                            <div><label class="form-group-label">Helping Hand</label><input type="text" class="form-input" id="ef-helping"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Element & Damping -->
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div class="form-section m-0">
+                        <div class="section-title"><i class="ph-fill ph-stack"></i> Secondary Element</div>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div><label class="form-group-label">Calculations</label><input type="text" class="form-input" id="ef-se_calc"></div>
+                            <div><label class="form-group-label">Drawing</label><input type="text" class="form-input" id="ef-se_drawing"></div>
+                            <div><label class="form-group-label">Insp. Report</label><input type="text" class="form-input" id="ef-se_inspreport"></div>
+                            <div><label class="form-group-label">Data Sheet</label><input type="text" class="form-input" id="ef-se_datasheet"></div>
+                            <div><label class="form-group-label">Accessory</label><input type="text" class="form-input" id="ef-se_accessory"></div>
+                        </div>
+                    </div>
+                    <div class="form-section m-0">
+                        <div class="section-title"><i class="ph-fill ph-gauge"></i> Damping</div>
+                        <div class="grid grid-cols-5 gap-4">
+                            <div><label class="form-group-label">TX</label><input type="text" class="form-input" id="ef-damp_tx"></div>
+                            <div><label class="form-group-label">DCS</label><input type="text" class="form-input" id="ef-damp_dcs"></div>
+                            <div><label class="form-group-label">AFRSet</label><input type="text" class="form-input" id="ef-afrset"></div>
+                            <div><label class="form-group-label">Air Lock</label><input type="text" class="form-input" id="ef-airlock"></div>
+                            <div><label class="form-group-label">Other</label><input type="text" class="form-input" id="ef-damp_other"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Comment -->
+                <div class="form-section">
+                    <div><label class="form-group-label">Special Comment</label>
+                        <textarea class="form-input" id="ef-comment" style="height: 5rem; padding-top: 0.5rem; resize: vertical;"></textarea>
+                    </div>
+                </div>
+
+                <!-- Additional Settings -->
+                <div class="form-section">
+                    <div class="section-title"><i class="ph-fill ph-gear"></i> Additional Settings</div>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div><label class="form-group-label">Bypass Module</label>
+                            <select class="form-input" id="ef-bypass"><option>YES</option><option selected>NO</option></select>
+                        </div>
+                        <div><label class="form-group-label">Ref. No</label><input type="text" class="form-input" id="ef-ref_no"></div>
+                        <div><label class="form-group-label">Meas. Tech</label><input type="text" class="form-input" id="ef-meas_tech"></div>
+                        <div><label class="form-group-label">Ana. Working</label><input type="text" class="form-input" id="ef-ana_working"></div>
+                        <div><label class="form-group-label">CPCB</label>
+                            <select class="form-input" id="ef-cpcb"><option selected>NO</option><option>YES</option></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save / Cancel -->
+                <div class="action-toolbar">
+                    <button class="action-button btn-save" onclick="saveRecord()"><i class="ph-bold ph-floppy-disk"></i> Save</button>
+                    <button class="action-button btn-cancel" onclick="window.location.href='/src/pages/boiler_inst_data.html'"><i class="ph-bold ph-x"></i> Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function saveRecord() {
+            alert('Record saved successfully!');
+            window.location.href = '/src/pages/boiler_inst_data.html';
+        }
+    </script>
+</body>
+
+</html>

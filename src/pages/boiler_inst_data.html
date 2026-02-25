@@ -77,41 +77,124 @@
             background: linear-gradient(90deg, var(--app-border, #2c3235), transparent);
         }
 
+        /* --- Action Toolbar --- */
+        .action-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            padding: 0.625rem 1rem;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.5) 100%);
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 1.75rem;
+            background: var(--app-border, #2c3235);
+            margin: 0 0.25rem;
+        }
+
         .action-button {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            height: 2.75rem;
-            padding: 0 1.25rem;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.5rem;
+            gap: 0.375rem;
+            height: 2.25rem;
+            padding: 0 0.875rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.375rem;
             color: var(--app-text, #e6edf3);
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             font-weight: 700;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .action-button i {
+            font-size: 0.9375rem;
+            opacity: 0.8;
         }
 
         .action-button:hover {
-            background: rgba(87, 148, 242, 0.1);
-            border-color: rgba(87, 148, 242, 0.4);
-            color: #5794f2;
+            background: rgba(87, 148, 242, 0.12);
+            border-color: rgba(87, 148, 242, 0.35);
+            color: #73b0ff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px -2px rgba(87, 148, 242, 0.2);
         }
 
-        .action-button.primary {
-            background: linear-gradient(135deg, #5794f2 0%, #3b82f6 100%);
+        .action-button:hover i {
+            opacity: 1;
+        }
+
+        .action-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .action-button.btn-add {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.4);
+        }
+        .action-button.btn-add:hover {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.5);
+            color: #ffffff;
+        }
+
+        .action-button.btn-edit {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 2px 8px -2px rgba(245, 158, 11, 0.4);
+        }
+        .action-button.btn-edit:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.5);
+            color: #ffffff;
+        }
+
+        .action-button.btn-delete {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 2px 8px -2px rgba(239, 68, 68, 0.4);
+        }
+        .action-button.btn-delete:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            box-shadow: 0 4px 12px -2px rgba(239, 68, 68, 0.5);
+            color: #ffffff;
+        }
+
+        .action-button.btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
             border: none;
             color: #fff;
-            box-shadow: 0 4px 12px -4px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 2px 8px -2px rgba(59, 130, 246, 0.4);
         }
-
-        .action-button.primary:hover {
-            box-shadow: 0 6px 16px -4px rgba(59, 130, 246, 0.6);
-            transform: translateY(-1px);
+        .action-button.btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            box-shadow: 0 4px 12px -2px rgba(59, 130, 246, 0.5);
+            color: #ffffff;
         }
 
         /* Light Theme Overrides */
+        html[data-theme-mode="light"] .action-toolbar {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-color: #d6deea;
+        }
+
+        html[data-theme-mode="light"] .toolbar-divider {
+            background: #cbd5e1;
+        }
+
         html[data-theme-mode="light"] .form-section {
             background: #ffffff;
             border-color: #d6deea;
@@ -139,26 +222,36 @@
 
         html[data-theme-mode="light"] .action-button {
             background: #ffffff;
-            border-color: #cbd5e1;
-            color: #475569;
+            border-color: #d1d5db;
+            color: #374151;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         html[data-theme-mode="light"] .action-button:hover {
-            background: #f0f6ff;
-            border-color: #5794f2;
+            background: #eff6ff;
+            border-color: #93c5fd;
             color: #2563eb;
         }
 
-        html[data-theme-mode="light"] .action-button.primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        html[data-theme-mode="light"] .action-button.btn-add {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             color: #ffffff;
             border: none;
         }
-
-        html[data-theme-mode="light"] .action-button.primary:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        html[data-theme-mode="light"] .action-button.btn-edit {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
             color: #ffffff;
-            box-shadow: 0 6px 16px -4px rgba(37, 99, 235, 0.4);
+            border: none;
+        }
+        html[data-theme-mode="light"] .action-button.btn-delete {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: #ffffff;
+            border: none;
+        }
+        html[data-theme-mode="light"] .action-button.btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: #ffffff;
+            border: none;
         }
     </style>
 </head>
@@ -187,7 +280,20 @@
         </script>
 
         <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
-            <div class="max-w-6xl mx-auto space-y-4">
+            <div class="max-w-8xl mx-auto space-y-4">
+
+                <!-- Action Toolbar -->
+                <div class="action-toolbar">
+                    <button class="action-button"><i class="ph-bold ph-clock-counter-clockwise"></i> Job History</button>
+                    <button class="action-button"><i class="ph-bold ph-list-dashes"></i> JS Detail</button>
+                    <span class="toolbar-divider"></span>
+                    <button class="action-button btn-add" onclick="window.location.href='/src/pages/boiler_inst_add.html'"><i class="ph-bold ph-plus"></i> Add</button>
+                    <button class="action-button btn-edit" onclick="showEditForm()"><i class="ph-bold ph-pencil-simple"></i> Edit</button>
+                    <button class="action-button btn-delete"><i class="ph-bold ph-trash"></i> Delete</button>
+                    <span class="toolbar-divider"></span>
+                    <button class="action-button" onclick="window.location.href='/src/pages/boiler_loop_data.html'"><i class="ph-bold ph-arrows-clockwise"></i> Loop Data</button>
+                    <button class="action-button" onclick="window.location.href='/src/pages/boiler_search_tag.html'"><i class="ph-bold ph-magnifying-glass"></i> Search Tag</button>
+                </div>
 
                 <!-- Search & Filters -->
                 <div
@@ -225,184 +331,248 @@
                                 class="ph-bold ph-caret-down absolute right-3.5 top-1/2 -translate-y-1/2 color-secondary pointer-events-none"></i>
                         </div>
                     </div>
-                    <button class="action-button primary px-6" onclick="triggerSearch()">
+                    <button class="action-button btn-primary px-6" onclick="triggerSearch()">
                         <i class="ph-bold ph-magnifying-glass"></i> Search
                     </button>
-
-                    <div class="w-full sm:w-px sm:h-11 bg-dark-border mx-2"></div>
-
-                    <button class="action-button"><i class="ph-bold ph-clock-counter-clockwise"></i> Job
-                        History</button>
-                    <button class="action-button"><i class="ph-bold ph-list-dashes"></i> JB Detail</button>
-                    <button class="action-button"><i class="ph-bold ph-arrows-clockwise"></i> Loop Data</button>
                 </div>
 
                 <!-- Main Form Area -->
-                <div class="form-section">
-                    <div class="section-title"><i class="ph-fill ph-tag"></i> General Information</div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="md:col-span-1">
-                            <label class="form-group-label">Tag No</label>
-                            <input type="text" class="form-input" id="f-tag_no" value="">
+                <div id="view-mode-form" clas="space-y-6">
+                    <div class="form-section">
+                        <div class="section-title"><i class="ph-fill ph-tag"></i> General Information</div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="md:col-span-1">
+                                <label class="form-group-label">Tag No</label>
+                                <input type="text" class="form-input" id="f-tag_no" value="" readonly>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="form-group-label">Description</label>
+                                <input type="text" class="form-input" id="f-description" value="" readonly>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label class="form-group-label">Host</label>
+                                <input type="text" class="form-input" id="f-host" value="" readonly>
+                            </div>
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="form-group-label">Description</label>
-                            <input type="text" class="form-input" id="f-description" value="">
+                    </div>
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-cpu"></i> Controller & IO Module</div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div><label class="form-group-label">Controller Type</label><input type="text" class="form-input" id="f-ctrl_type" value="" readonly></div>
+                                <div><label class="form-group-label">Controller No</label><input type="text" class="form-input" id="f-ctrl_no" value="" readonly></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div><label class="form-group-label">IO Type</label><input type="text" class="form-input" id="f-io_type" value="" readonly></div>
+                                <div><label class="form-group-label">SW ID</label><input type="text" class="form-input" id="f-sw_id" value="" readonly></div>
+                                <div><label class="form-group-label">Location</label><input type="text" class="form-input" id="f-io_loc" value="" readonly></div>
+                            </div>
                         </div>
-                        <div class="md:col-span-1">
-                            <label class="form-group-label">Host</label>
-                            <input type="text" class="form-input" id="f-host" value="">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-sliders-horizontal"></i> Calibration & Range</div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div><label class="form-group-label">Channel</label><input type="text" class="form-input" id="f-channel" value="" readonly></div>
+                                <div><label class="form-group-label">ESD Sheet</label><input type="text" class="form-input" id="f-esd" value="" readonly></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-group-label">Eng Range</label><input type="text" class="form-input" id="f-eng_range" value="" readonly></div>
+                                <div><label class="form-group-label">Cal Range</label><input type="text" class="form-input" id="f-cal_range" value="" readonly></div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-warning-circle"></i> Trip Settings</div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div><label class="form-group-label">Trip H/HH</label><input type="text" class="form-input" id="f-trip_h" value="" readonly></div>
+                                <div><label class="form-group-label">Function</label><input type="text" class="form-input" id="f-func_h" value="" readonly></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-group-label">Trip L/LL</label><input type="text" class="form-input" id="f-trip_l" value="" readonly></div>
+                                <div><label class="form-group-label">Function</label><input type="text" class="form-input" id="f-func_l" value="" readonly></div>
+                            </div>
+                        </div>
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-wrench"></i> Specifications</div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div><label class="form-group-label">Loop Function</label><input type="text" class="form-input" id="f-loop_func" value="" readonly></div>
+                                <div><label class="form-group-label">Inst Type</label><input type="text" class="form-input" id="f-inst_type" value="" readonly></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-group-label">Make</label><input type="text" class="form-input" id="f-make" value="" readonly></div>
+                                <div><label class="form-group-label">Model</label><input type="text" class="form-input" id="f-model" value="" readonly></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="section-title"><i class="ph-fill ph-files"></i> Additional Details</div>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                            <div><label class="form-group-label">Logic</label><input type="text" class="form-input" id="f-logic" value="" readonly></div>
+                            <div><label class="form-group-label">Accessory</label><input type="text" class="form-input" id="f-accessory" value="" readonly></div>
+                            <div><label class="form-group-label">Loop Sheet</label><input type="text" class="form-input" id="f-loop_sheet" value="" readonly></div>
+                            <div><label class="form-group-label">Spec</label><input type="text" class="form-input" id="f-spec" value="" readonly></div>
+                            <div><label class="form-group-label">Helping Hand</label><input type="text" class="form-input" id="f-helping" value="" readonly></div>
+                        </div>
+                        <div>
+                            <label class="form-group-label">Special Comment</label>
+                            <textarea class="form-input" id="f-comment" style="height: 5rem; padding-top: 0.5rem; resize: vertical;" readonly></textarea>
+                        </div>
+                    </div>
+                    <!-- Footer Actions -->
+                    <div class="action-toolbar">
+                        <button class="action-button"><i class="ph-bold ph-clock-counter-clockwise"></i> Job History</button>
+                        <button class="action-button"><i class="ph-bold ph-list-dashes"></i> JS Detail</button>
+                        <span class="toolbar-divider"></span>
+                        <button class="action-button btn-add" onclick="window.location.href='/src/pages/boiler_inst_add.html'"><i class="ph-bold ph-plus"></i> Add</button>
+                        <button class="action-button btn-edit" onclick="showEditForm()"><i class="ph-bold ph-pencil-simple"></i> Edit</button>
+                        <button class="action-button btn-delete"><i class="ph-bold ph-trash"></i> Delete</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <!-- Controller & IO -->
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-cpu"></i> Controller & IO Module</div>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="form-group-label">Controller Type</label>
-                                <input type="text" class="form-input" id="f-ctrl_type" value="">
+                <!-- ========== ADD/EDIT FORM (hidden by default) ========== -->
+                <div id="edit-mode-form" class="hidden">
+                    <div class="form-section" style="border-color: #059669;">
+                        <div class="section-title" style="color: #10b981;"><i class="ph-fill ph-note-pencil"></i> <span id="edit-form-title">Add New Instrument</span></div>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div><label class="form-group-label">Area</label>
+                                <select class="form-input" id="ef-area"><option>ALL</option><option>ASH</option><option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option><option>BOP</option><option>COMMON</option><option>CPSU/EMS</option><option>CPSU/GI</option><option>CPSU-U1</option><option>CRUSHINGS</option><option>NA STN</option><option>TG-1</option><option>TG-2</option></select>
                             </div>
-                            <div>
-                                <label class="form-group-label">Controller No</label>
-                                <input type="text" class="form-input" id="f-ctrl_no" value="">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div>
-                                <label class="form-group-label">IO Type</label>
-                                <input type="text" class="form-input" id="f-io_type" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">SW ID</label>
-                                <input type="text" class="form-input" id="f-sw_id" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">Location</label>
-                                <input type="text" class="form-input" id="f-io_loc" value="">
+                            <div><label class="form-group-label">Tag No</label><input type="text" class="form-input" id="ef-tag_no"></div>
+                            <div class="md:col-span-2"><label class="form-group-label">Description</label><input type="text" class="form-input" id="ef-description"></div>
+                            <div><label class="form-group-label">Host</label>
+                                <select class="form-input" id="ef-host"><option></option><option>DCS</option><option>PLC</option><option>ESD</option><option>LOCAL</option></select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Channel & Range -->
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-sliders-horizontal"></i> Calibration & Range
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="form-group-label">Channel</label>
-                                <input type="text" class="form-input" id="f-channel" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">ESD Sheet</label>
-                                <input type="text" class="form-input" id="f-esd" value="">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-cpu"></i> Controller</div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-group-label">Type</label><input type="text" class="form-input" id="ef-ctrl_type"></div>
+                                <div><label class="form-group-label">No</label><input type="text" class="form-input" id="ef-ctrl_no"></div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="form-group-label">Eng Range</label>
-                                <input type="text" class="form-input" id="f-eng_range" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">Cal Range</label>
-                                <input type="text" class="form-input" id="f-cal_range" value="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <!-- Trip High/Low -->
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-warning-circle"></i> Trip Settings</div>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="form-group-label">Trip H/HH</label>
-                                <input type="text" class="form-input" id="f-trip_h" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">Function</label>
-                                <input type="text" class="form-input" id="f-func_h" value="">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="form-group-label">Trip L/LL</label>
-                                <input type="text" class="form-input" id="f-trip_l" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">Function</label>
-                                <input type="text" class="form-input" id="f-func_l" value="">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-cpu"></i> IO Module</div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div><label class="form-group-label">Type</label><input type="text" class="form-input" id="ef-io_type"></div>
+                                <div><label class="form-group-label">SW ID</label><input type="text" class="form-input" id="ef-sw_id"></div>
+                                <div><label class="form-group-label">Location</label><input type="text" class="form-input" id="ef-io_loc"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Instrument Specs -->
-                    <div class="form-section m-0">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+                        <div class="form-section m-0">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-group-label">CH</label><input type="text" class="form-input" id="ef-channel"></div>
+                                <div><label class="form-group-label">ESD Sheet</label><input type="text" class="form-input" id="ef-esd"></div>
+                            </div>
+                        </div>
+                        <div class="form-section m-0">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-group-label">Eng Range</label><input type="text" class="form-input" id="ef-eng_range"></div>
+                                <div><label class="form-group-label">Cal Range</label><input type="text" class="form-input" id="ef-cal_range"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div><label class="form-group-label">Trip H/HH</label><input type="text" class="form-input" id="ef-trip_h"></div>
+                            <div><label class="form-group-label">Function</label><input type="text" class="form-input" id="ef-func_h"></div>
+                            <div><label class="form-group-label">Trip L/LL</label><input type="text" class="form-input" id="ef-trip_l"></div>
+                            <div><label class="form-group-label">Function</label><input type="text" class="form-input" id="ef-func_l"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
                         <div class="section-title"><i class="ph-fill ph-wrench"></i> Specifications</div>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="form-group-label">Loop Function</label>
-                                <input type="text" class="form-input" id="f-loop_func" value="">
+                        <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
+                            <div class="md:col-span-2"><label class="form-group-label">Loop Function</label><input type="text" class="form-input" id="ef-loop_func"></div>
+                            <div><label class="form-group-label">Inst Type</label>
+                                <select class="form-input" id="ef-inst_type"><option></option><option>ANALYZER</option><option>CV</option><option>GUAGE</option><option>PRIMARY ELEMENT</option><option>RADIO</option><option>SCANNER</option><option>RDV</option><option>RTI METER</option><option>TGMSO</option><option>SWITCH</option><option>TRANSMITTER</option><option>RTD PT100</option><option>CONTROL VALVE</option><option>ENVRON MONITORING</option><option>MACHINE MONITORING</option><option>UPS SYSTEM</option><option>RADAR</option><option>PH SENSOR</option><option>O2 SENSOR</option><option>LI</option><option>MPA</option><option>MAGNETIC</option></select>
                             </div>
-                            <div>
-                                <label class="form-group-label">Inst Type</label>
-                                <input type="text" class="form-input" id="f-inst_type" value="">
-                            </div>
+                            <div><label class="form-group-label">Make</label><input type="text" class="form-input" id="ef-make"></div>
+                            <div><label class="form-group-label">Model</label><input type="text" class="form-input" id="ef-model"></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="form-group-label">Make</label>
-                                <input type="text" class="form-input" id="f-make" value="">
-                            </div>
-                            <div>
-                                <label class="form-group-label">Model</label>
-                                <input type="text" class="form-input" id="f-model" value="">
-                            </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div><label class="form-group-label">SRNO</label><input type="text" class="form-input" id="ef-srno"></div>
+                            <div class="md:col-span-3"><label class="form-group-label">Location</label><input type="text" class="form-input" id="ef-location"></div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Documentation & Comments -->
-                <div class="form-section">
-                    <div class="section-title"><i class="ph-fill ph-files"></i> Additional Details</div>
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-                        <div>
-                            <label class="form-group-label">Logic</label>
-                            <input type="text" class="form-input" id="f-logic" value="">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-atom"></i> Primary Element</div>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                <div><label class="form-group-label">Data Sheet</label><input type="text" class="form-input" id="ef-pe_datasheet"></div>
+                                <div><label class="form-group-label">Calculation</label><input type="text" class="form-input" id="ef-pe_calc"></div>
+                                <div><label class="form-group-label">Drawing</label><input type="text" class="form-input" id="ef-pe_drawing"></div>
+                                <div><label class="form-group-label">Cal. Report</label><input type="text" class="form-input" id="ef-pe_calreport"></div>
+                                <div><label class="form-group-label">Insp. Report</label><input type="text" class="form-input" id="ef-pe_inspreport"></div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="form-group-label">Accessory</label>
-                            <input type="text" class="form-input" id="f-accessory" value="">
-                        </div>
-                        <div>
-                            <label class="form-group-label">Loop Sheet</label>
-                            <input type="text" class="form-input" id="f-loop_sheet" value="">
-                        </div>
-                        <div>
-                            <label class="form-group-label">Spec</label>
-                            <input type="text" class="form-input" id="f-spec" value="">
-                        </div>
-                        <div>
-                            <label class="form-group-label">Helping Hand</label>
-                            <input type="text" class="form-input" id="f-helping" value="">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-link"></i> Other Links</div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div><label class="form-group-label">Logic</label><input type="text" class="form-input" id="ef-logic"></div>
+                                <div><label class="form-group-label">Loop Sheet</label><input type="text" class="form-input" id="ef-loop_sheet"></div>
+                                <div><label class="form-group-label">Helping Hand</label><input type="text" class="form-input" id="ef-helping"></div>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <label class="form-group-label">Special Comment</label>
-                        <textarea class="form-input" id="f-comment"
-                            style="height: 5rem; padding-top: 0.5rem; resize: vertical;"></textarea>
-                    </div>
-                </div>
 
-                <!-- Footer Actions -->
-                <div class="flex justify-end gap-3 pb-8">
-                    <button class="action-button" onclick="clearForm()"><i class="ph-bold ph-eraser"></i> Clear</button>
-                    <button class="action-button"><i class="ph-bold ph-printer"></i> Print Record</button>
-                    <button class="action-button primary px-8"><i class="ph-bold ph-floppy-disk"></i> Save
-                        Record</button>
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-stack"></i> Secondary Element</div>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                <div><label class="form-group-label">Calculations</label><input type="text" class="form-input" id="ef-se_calc"></div>
+                                <div><label class="form-group-label">Drawing</label><input type="text" class="form-input" id="ef-se_drawing"></div>
+                                <div><label class="form-group-label">Insp. Report</label><input type="text" class="form-input" id="ef-se_inspreport"></div>
+                                <div><label class="form-group-label">Data Sheet</label><input type="text" class="form-input" id="ef-se_datasheet"></div>
+                                <div><label class="form-group-label">Accessory</label><input type="text" class="form-input" id="ef-se_accessory"></div>
+                            </div>
+                        </div>
+                        <div class="form-section m-0">
+                            <div class="section-title"><i class="ph-fill ph-gauge"></i> Damping</div>
+                            <div class="grid grid-cols-5 gap-4">
+                                <div><label class="form-group-label">TX</label><input type="text" class="form-input" id="ef-damp_tx"></div>
+                                <div><label class="form-group-label">DCS</label><input type="text" class="form-input" id="ef-damp_dcs"></div>
+                                <div><label class="form-group-label">AFRSet</label><input type="text" class="form-input" id="ef-afrset"></div>
+                                <div><label class="form-group-label">Air Lock</label><input type="text" class="form-input" id="ef-airlock"></div>
+                                <div><label class="form-group-label">Other</label><input type="text" class="form-input" id="ef-damp_other"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div><label class="form-group-label">Special Comment</label>
+                            <textarea class="form-input" id="ef-comment" style="height: 5rem; padding-top: 0.5rem; resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title"><i class="ph-fill ph-gear"></i> Additional Settings</div>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div><label class="form-group-label">Bypass Module</label>
+                                <select class="form-input" id="ef-bypass"><option>YES</option><option selected>NO</option></select>
+                            </div>
+                            <div><label class="form-group-label">Ref. No</label><input type="text" class="form-input" id="ef-ref_no"></div>
+                            <div><label class="form-group-label">Meas. Tech</label><input type="text" class="form-input" id="ef-meas_tech"></div>
+                            <div><label class="form-group-label">Ana. Working</label><input type="text" class="form-input" id="ef-ana_working"></div>
+                            <div><label class="form-group-label">CPCB</label>
+                                <select class="form-input" id="ef-cpcb"><option selected>NO</option><option>YES</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save / Cancel -->
+                    <div class="action-toolbar">
+                        <button class="action-button btn-add" onclick="saveForm()"><i class="ph-bold ph-floppy-disk"></i> Save</button>
+                        <button class="action-button btn-delete" onclick="cancelForm()"><i class="ph-bold ph-x"></i> Cancel</button>
+                    </div>
                 </div>
 
             </div>
@@ -525,11 +695,73 @@
             });
         }
 
-        // Initialize empty state (or load a default tag)
+        // Initialize: check URL params or load default
         window.addEventListener('DOMContentLoaded', () => {
-            loadTagData("ZSH177906"); // Load the one from user's screenshot initially
-            searchInput.value = "ZSH177906";
+            const urlParams = new URLSearchParams(window.location.search);
+            const tagFromUrl = urlParams.get('tag');
+            if (tagFromUrl) {
+                loadTagData(tagFromUrl);
+                searchInput.value = tagFromUrl;
+            } else {
+                loadTagData("ZSH177906");
+                searchInput.value = "ZSH177906";
+            }
         });
+
+        // --- Add / Edit Mode Toggle ---
+        function showAddForm() {
+            document.getElementById('view-mode-form').classList.add('hidden');
+            document.getElementById('edit-mode-form').classList.remove('hidden');
+            document.getElementById('edit-form-title').textContent = 'Add New Instrument';
+            // Clear all edit form fields
+            document.querySelectorAll('#edit-mode-form input, #edit-mode-form textarea').forEach(el => el.value = '');
+            document.querySelectorAll('#edit-mode-form select').forEach(el => el.selectedIndex = 0);
+            // Scroll to top
+            document.querySelector('.flex-1.overflow-y-auto').scrollTop = 0;
+        }
+
+        function showEditForm() {
+            document.getElementById('view-mode-form').classList.add('hidden');
+            document.getElementById('edit-mode-form').classList.remove('hidden');
+            document.getElementById('edit-form-title').textContent = 'Edit Instrument';
+            // Copy view-mode values to edit form
+            const fieldMap = {
+                'tag_no':'ef-tag_no','description':'ef-description',
+                'ctrl_type':'ef-ctrl_type','ctrl_no':'ef-ctrl_no',
+                'io_type':'ef-io_type','sw_id':'ef-sw_id','io_loc':'ef-io_loc',
+                'channel':'ef-channel','esd':'ef-esd',
+                'eng_range':'ef-eng_range','cal_range':'ef-cal_range',
+                'trip_h':'ef-trip_h','func_h':'ef-func_h',
+                'trip_l':'ef-trip_l','func_l':'ef-func_l',
+                'loop_func':'ef-loop_func','make':'ef-make','model':'ef-model',
+                'logic':'ef-logic','loop_sheet':'ef-loop_sheet',
+                'helping':'ef-helping','comment':'ef-comment'
+            };
+            Object.entries(fieldMap).forEach(([src, dest]) => {
+                const srcEl = document.getElementById('f-' + src);
+                const destEl = document.getElementById(dest);
+                if (srcEl && destEl) destEl.value = srcEl.value;
+            });
+            // Handle dropdowns
+            const hostVal = document.getElementById('f-host')?.value || '';
+            const hostSel = document.getElementById('ef-host');
+            if (hostSel) { for (let o of hostSel.options) { if (o.value === hostVal) { o.selected = true; break; } } }
+            const instVal = document.getElementById('f-inst_type')?.value || '';
+            const instSel = document.getElementById('ef-inst_type');
+            if (instSel) { for (let o of instSel.options) { if (o.value === instVal) { o.selected = true; break; } } }
+            document.querySelector('.flex-1.overflow-y-auto').scrollTop = 0;
+        }
+
+        function saveForm() {
+            alert('Record saved successfully!');
+            cancelForm();
+        }
+
+        function cancelForm() {
+            document.getElementById('edit-mode-form').classList.add('hidden');
+            document.getElementById('view-mode-form').classList.remove('hidden');
+            document.querySelector('.flex-1.overflow-y-auto').scrollTop = 0;
+        }
     </script>
 </body>
 

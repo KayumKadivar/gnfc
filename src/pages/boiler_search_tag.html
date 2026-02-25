@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Tag | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <link rel="stylesheet" href="/src/css/table-style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
+    <style>
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--app-panel, #ffffff);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .search-bar label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--app-text, #000);
+            white-space: nowrap;
+        }
+        .search-bar input {
+            flex: 1;
+            max-width: 320px;
+            height: 2.25rem;
+            background: var(--app-panel-alt, #f9fafb);
+            border: 1px solid var(--app-border, #d1d5db);
+            border-radius: 0.375rem;
+            padding: 0 0.75rem;
+            color: var(--app-text, #000);
+            font-size: 0.875rem;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+        .search-btn {
+            height: 2.25rem;
+            padding: 0 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid var(--app-border, #d1d5db);
+            transition: all 0.15s;
+            background: var(--app-panel-alt, #f3f4f6);
+            color: var(--app-text, #000);
+        }
+        .search-btn:hover {
+            background: var(--app-border, #e5e7eb);
+        }
+        .search-btn.ok {
+            background: #2563eb;
+            color: #fff;
+            border-color: #1d4ed8;
+        }
+        .search-btn.ok:hover { background: #1d4ed8; }
+        .search-btn.cancel {
+            background: #dc2626;
+            color: #fff;
+            border-color: #b91c1c;
+        }
+        .search-btn.cancel:hover { background: #b91c1c; }
+
+        .gnfc-tr.selected-row {
+            background-color: #dbeafe !important;
+        }
+        .gnfc-td .history-link {
+            color: var(--typo-blue, #2563eb);
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .gnfc-td .history-link:hover { color: #1d4ed8; }
+
+        .result-count {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--app-muted, #6b7280);
+            padding: 0.5rem 0.75rem;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "Search Tag / Instdb",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
+                    { label: "Search Tag" }
+                ],
+                backLink: "/src/pages/boiler_inst_data.html"
+            });
+        </script>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+            <div class="max-w-8xl mx-auto">
+
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <label>Search :</label>
+                    <input type="text" id="search-input" placeholder="Enter tag name..." autofocus>
+                    <button class="search-btn ok" onclick="performSearch()"><i class="ph-bold ph-magnifying-glass"></i> OK</button>
+                    <button class="search-btn cancel" onclick="window.location.href='/src/pages/boiler_inst_data.html'"><i class="ph-bold ph-x"></i> Cancel</button>
+                </div>
+
+                <!-- Results Table using gnfc reusable classes -->
+                <div class="gnfc-table-container rounded-lg border border-dark-border">
+                    <div id="result-count" class="result-count"></div>
+                    <div style="max-height: calc(100vh - 240px); overflow-y: auto;">
+                        <table class="gnfc-table" id="results-table">
+                            <thead class="gnfc-thead" style="position: sticky; top: 0; z-index: 2;">
+                                <tr>
+                                    <th class="gnfc-th" style="width: 5%;">Sr</th>
+                                    <th class="gnfc-th" style="width: 15%;">Tag</th>
+                                    <th class="gnfc-th" style="width: 35%;">Description</th>
+                                    <th class="gnfc-th" style="width: 15%;">Inst Type</th>
+                                    <th class="gnfc-th" style="width: 20%;">Function</th>
+                                    <th class="gnfc-th" style="width: 10%;">History</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gnfc-tbody" id="results-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const tagDatabase = [
+            { tag: "ZSH177906", description: "NG BURNER 4 BLOCK VALVE OPEN", inst_type: "SWITCH", func: "", history: "" },
+            { tag: "10-PT-101A", description: "MAIN STEAM HEADER PRESSURE", inst_type: "TRANSMITTER", func: "PRESSURE INDICATION", history: "3 jobs" },
+            { tag: "XLGDFGV1D", description: "FUEL GAS CV", inst_type: "CONTROL VALVE", func: "VALVE POSITION", history: "1 job" },
+            { tag: "ZT1777385", description: "COMPRESSOR BEARING TEMP", inst_type: "RTD PT100", func: "TEMPERATURE INDICATION", history: "2 jobs" },
+            { tag: "XLGDFSAF1M", description: "SAFETY AIR FAN 1 MOTOR", inst_type: "SWITCH", func: "MOTOR STATUS", history: "" },
+            { tag: "XLGDFSAF2ARTS", description: "SAFETY AIR FAN 2 AUTO/RTS", inst_type: "SWITCH", func: "AUTO REMOTE", history: "" },
+            { tag: "XLGDFSAF2B", description: "SAFETY AIR FAN 2 BREAKER", inst_type: "SWITCH", func: "BREAKER STATUS", history: "" },
+            { tag: "XLGDFSAF2M", description: "SAFETY AIR FAN 2 MOTOR", inst_type: "SWITCH", func: "MOTOR STATUS", history: "" },
+            { tag: "XLGFDBFVD", description: "FUEL OIL BFV D", inst_type: "CV", func: "VALVE CONTROL", history: "1 job" },
+            { tag: "XLGFDBFVE", description: "FUEL OIL BFV E", inst_type: "CV", func: "VALVE CONTROL", history: "" },
+            { tag: "XLGFDBFVF", description: "FUEL OIL BFV F", inst_type: "CV", func: "VALVE CONTROL", history: "" },
+            { tag: "XLGDFGV1E", description: "FUEL GAS CV 1E", inst_type: "CONTROL VALVE", func: "VALVE POSITION", history: "" },
+            { tag: "XLGDFGV1F", description: "FUEL GAS CV 1F", inst_type: "CONTROL VALVE", func: "VALVE POSITION", history: "" },
+            { tag: "XLGDFGV2D", description: "FUEL GAS CV 2D", inst_type: "CONTROL VALVE", func: "GAS FLOW CONTROL", history: "2 jobs" },
+            { tag: "XLGDFGV2E", description: "FUEL GAS CV 2E", inst_type: "CONTROL VALVE", func: "GAS FLOW CONTROL", history: "" },
+            { tag: "XLGDFGV2F", description: "FUEL GAS CV 2F", inst_type: "CONTROL VALVE", func: "GAS FLOW CONTROL", history: "" },
+            { tag: "XV177707", description: "MAIN STEAM XV", inst_type: "CV", func: "STEAM ISOLATION", history: "4 jobs" },
+            { tag: "XV177901", description: "NG HEADER ISOLATION VALVE", inst_type: "CV", func: "GAS ISOLATION", history: "" },
+            { tag: "XV177902", description: "NG BURNER 1 ISOLATION", inst_type: "CV", func: "BURNER ISOLATION", history: "" },
+            { tag: "XV177903", description: "NG BURNER 2 ISOLATION", inst_type: "CV", func: "BURNER ISOLATION", history: "" },
+            { tag: "XV177904", description: "NG BURNER 3 ISOLATION", inst_type: "CV", func: "BURNER ISOLATION", history: "" },
+            { tag: "XV177905", description: "NG BURNER 4 ISOLATION", inst_type: "CV", func: "BURNER ISOLATION", history: "" },
+            { tag: "XV177906", description: "NG BURNER 5 ISOLATION", inst_type: "CV", func: "BURNER ISOLATION", history: "" },
+            { tag: "XV177907", description: "NG BURNER 6 ISOLATION", inst_type: "CV", func: "BURNER ISOLATION", history: "" },
+            { tag: "ZSL191801", description: "FD FAN DAMPER LOW", inst_type: "SWITCH", func: "DAMPER POSITION", history: "" },
+            { tag: "ZT177707A", description: "MAIN STEAM TEMP A", inst_type: "RTD PT100", func: "TEMPERATURE", history: "1 job" },
+            { tag: "ZT177707B", description: "MAIN STEAM TEMP B", inst_type: "RTD PT100", func: "TEMPERATURE", history: "" },
+            { tag: "ZT1777137", description: "SH OUTLET TEMP 137", inst_type: "TRANSMITTER", func: "TEMPERATURE", history: "" },
+            { tag: "ZT1777146", description: "SH OUTLET TEMP 146", inst_type: "TRANSMITTER", func: "TEMPERATURE", history: "" },
+            { tag: "ZT1777216", description: "RH INLET TEMP 216", inst_type: "TRANSMITTER", func: "TEMPERATURE", history: "1 job" },
+            { tag: "ZT1777268", description: "RH OUTLET TEMP 268", inst_type: "TRANSMITTER", func: "TEMPERATURE", history: "" },
+            { tag: "ZT1777356", description: "ECONOMISER OUTLET TEMP", inst_type: "RTD PT100", func: "TEMPERATURE", history: "" },
+            { tag: "ZT1777366", description: "APH GAS INLET TEMP", inst_type: "RTD PT100", func: "TEMPERATURE", history: "" },
+            { tag: "ZT1777393", description: "APH GAS OUTLET TEMP", inst_type: "RTD PT100", func: "TEMPERATURE", history: "2 jobs" },
+            { tag: "ZT177903A", description: "BURNER ZONE TEMP A", inst_type: "RTD PT100", func: "TEMPERATURE", history: "" },
+            { tag: "ZT177903B", description: "BURNER ZONE TEMP B", inst_type: "RTD PT100", func: "TEMPERATURE", history: "" },
+            { tag: "ZT184203A", description: "DRUM WATER LEVEL A", inst_type: "TRANSMITTER", func: "LEVEL INDICATION", history: "3 jobs" },
+            { tag: "ZT184203B", description: "DRUM WATER LEVEL B", inst_type: "TRANSMITTER", func: "LEVEL INDICATION", history: "" },
+            { tag: "ZT184203C", description: "DRUM WATER LEVEL C", inst_type: "TRANSMITTER", func: "LEVEL INDICATION", history: "" },
+            { tag: "ZT191105", description: "FD FAN BEARING TEMP", inst_type: "RTD PT100", func: "TEMPERATURE", history: "" },
+            { tag: "ZT191107", description: "ID FAN BEARING TEMP", inst_type: "RTD PT100", func: "TEMPERATURE", history: "1 job" },
+        ];
+
+        const searchInput = document.getElementById('search-input');
+        const resultsBody = document.getElementById('results-body');
+        const resultCount = document.getElementById('result-count');
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        function renderTable(data) {
+            if (data.length === 0) {
+                resultCount.textContent = 'No results found';
+                resultsBody.innerHTML = '<tr class="gnfc-tr"><td class="gnfc-td" colspan="6" style="text-align:center; padding:2rem; font-style:italic; color:var(--app-muted,#6b7280);">No tags found</td></tr>';
+                return;
+            }
+
+            resultCount.textContent = `Showing ${data.length} record(s)`;
+            resultsBody.innerHTML = data.map((r, i) => `
+                <tr class="gnfc-tr" style="cursor:pointer;" onclick="selectTag('${r.tag}', this)">
+                    <td class="gnfc-td text-center" style="font-size:13px; font-weight:600;">${i + 1}</td>
+                    <td class="gnfc-td" style="font-size:13px; font-weight:800; color:var(--typo-blue, #1d4ed8);">${r.tag}</td>
+                    <td class="gnfc-td" style="font-size:13px; font-weight:600;">${r.description}</td>
+                    <td class="gnfc-td text-center" style="font-size:13px; font-weight:600;">${r.inst_type}</td>
+                    <td class="gnfc-td" style="font-size:13px; font-weight:600;">${r.func || '—'}</td>
+                    <td class="gnfc-td text-center">${r.history ? '<span class="history-link">' + r.history + '</span>' : '—'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function performSearch() {
+            const query = searchInput.value.trim().toLowerCase();
+            if (!query) {
+                renderTable(tagDatabase);
+                return;
+            }
+            const results = tagDatabase.filter(t =>
+                t.tag.toLowerCase().includes(query) ||
+                t.description.toLowerCase().includes(query) ||
+                t.inst_type.toLowerCase().includes(query)
+            );
+            renderTable(results);
+        }
+
+        function selectTag(tagNo, row) {
+            // Highlight selected row
+            document.querySelectorAll('.gnfc-tr.selected-row').forEach(r => r.classList.remove('selected-row'));
+            row.classList.add('selected-row');
+            // Navigate back with selected tag
+            window.location.href = '/src/pages/boiler_inst_data.html?tag=' + encodeURIComponent(tagNo);
+        }
+
+        // Show all data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTable(tagDatabase);
+        });
+    </script>
+</body>
+
+</html>
