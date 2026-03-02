@@ -405,21 +405,19 @@
 
     const grid = document.getElementById('plant-grid');
 
-    function renderPlantCards() {
+    // Build the grid ONCE on page load
+    function buildPlantGrid() {
       let gridContent = '';
       units.forEach((code, i) => {
         const href = `/src/pages/shift_logbook.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
-
         gridContent += `
-          <a href="${href}"
+          <a href="${href}" data-plant="${code}"
              class="plant-card rounded-lg px-4 py-3 group flex items-center justify-between gap-2"
              style="animation: fadeInUp 0.4s cubic-bezier(0.4,0,0.2,1) ${i * 0.03}s both;">
-
             <div class="min-w-0">
               <p class="plant-card-subtitle mb-0.5">Unit Code</p>
               <h3 class="plant-card-title truncate">${code}</h3>
             </div>
-
             <div class="plant-card-action shrink-0">
               <i class="ph-bold ph-caret-right font-15px"></i>
             </div>
@@ -429,9 +427,23 @@
       grid.innerHTML = gridContent;
     }
 
+    // Only update hrefs silently — no DOM rebuild, no flash
+    function renderPlantCards() {
+      const cards = grid.querySelectorAll('a[data-plant]');
+      if (cards.length === 0) {
+        buildPlantGrid();
+        return;
+      }
+      cards.forEach((card) => {
+        const code = card.getAttribute('data-plant');
+        card.href = `/src/pages/shift_logbook.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
+      });
+    }
+
     const persistedView = (window.ElogbookStore && typeof window.ElogbookStore.getOfficerSelectedView === "function")
       ? window.ElogbookStore.getOfficerSelectedView()
       : "today";
+    buildPlantGrid();
     setSelectedView(persistedView, false);
   </script>
 
