@@ -117,7 +117,7 @@
                 <input type="password" id="password" name="password" placeholder="••••••••"
                   class="w-full pl-10 pr-10 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
 
-                <button type="button" onclick="togglePassword('password')"
+                <button type="button" id="togglePasswordBtn"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
                   <i class="ph-bold ph-eye" id="password-icon"></i>
                 </button>
@@ -137,14 +137,6 @@
                   class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
               </div>
             </div>
-
-            <!-- <div id="sign-in-row" class="pt-2">
-              <button type="submit" id="submitBtn"
-                class="w-full relative overflow-hidden bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2 group">
-                <span>Sign In</span>
-                <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
-              </button>
-            </div> -->
           </form>
         </div>
       </div>
@@ -154,52 +146,91 @@
   </main>
 
   <script>
-    function togglePassword(inputId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(`${inputId}-icon`);
-      if (!input || !icon) return;
+    // --- Utility Functions ---
+    const UIHelpers = {
+      toggleVisibility: (inputEl, iconEl) => {
+        if (!inputEl || !iconEl) return;
+        const isPassword = inputEl.type === 'password';
+        inputEl.type = isPassword ? 'text' : 'password';
+        iconEl.classList.toggle('ph-eye', !isPassword);
+        iconEl.classList.toggle('ph-eye-slash', isPassword);
+      }
+    };
 
-      const isPassword = input.type === 'password';
-      input.type = isPassword ? 'text' : 'password';
-      icon.classList.toggle('ph-eye', !isPassword);
-      icon.classList.toggle('ph-eye-slash', isPassword);
-    }
-
-    function selectRole(button, shouldRedirect) {
-      const buttons = document.querySelectorAll('.role-btn');
-      const signInRow = document.getElementById('sign-in-row');
-
-      buttons.forEach((btn) => {
-        btn.classList.remove('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
-        btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
-      });
-
-      button.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
-      button.classList.add('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
-
-      localStorage.setItem('userRole', button.dataset.role || '');
-      localStorage.setItem('currentUserName', button.dataset.userName || 'Admin User');
-
-      if (signInRow) signInRow.classList.add('hidden');
-      if (shouldRedirect) {
-        const loginSessionId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-        localStorage.setItem('gnfc_login_session_id', loginSessionId);
-        window.location.href = '/src/pages/dashboard.html?fromLogin=1';
+    // --- Object-Oriented Managers ---
+    class PasswordToggleManager {
+      constructor() {
+        this.toggleBtn = document.getElementById('togglePasswordBtn');
+        this.input = document.getElementById('password');
+        this.icon = document.getElementById('password-icon');
+        
+        if (this.toggleBtn) {
+          this.initEvents();
+        }
+      }
+      
+      initEvents() {
+        this.toggleBtn.addEventListener('click', () => {
+          UIHelpers.toggleVisibility(this.input, this.icon);
+        });
       }
     }
 
+    class RoleManager {
+      constructor() {
+        this.buttons = document.querySelectorAll('.role-btn');
+        this.signInRow = document.getElementById('sign-in-row');
+        this.storageRoleKey = 'userRole';
+        this.storageNameKey = 'currentUserName';
+        
+        this.initEvents();
+        this.initInitialState();
+      }
+
+      initEvents() {
+        this.buttons.forEach((button) => {
+          button.addEventListener('click', () => this.selectRole(button, true));
+        });
+      }
+
+      initInitialState() {
+        const currentRole = localStorage.getItem(this.storageRoleKey);
+        if (currentRole) {
+          const currentButton = document.querySelector(`.role-btn[data-role="${currentRole}"]`);
+          if (currentButton) this.selectRole(currentButton, false);
+        }
+      }
+
+      selectRole(button, shouldRedirect) {
+        // Reset all buttons visually
+        this.buttons.forEach((btn) => {
+          btn.classList.remove('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
+          btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-600');
+        });
+
+        // Highlight selected button
+        button.classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-600');
+        button.classList.add('border-teal-600', 'bg-teal-600', 'text-white', 'hover:text-white');
+
+        // Update local storage configuration
+        localStorage.setItem(this.storageRoleKey, button.dataset.role || '');
+        localStorage.setItem(this.storageNameKey, button.dataset.userName || 'Admin User');
+
+        if (this.signInRow) this.signInRow.classList.add('hidden');
+        
+        // Execute redirection with session assignment if actively clicked
+        if (shouldRedirect) {
+          const loginSessionId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+          localStorage.setItem('gnfc_login_session_id', loginSessionId);
+          window.location.href = '/src/pages/dashboard.html?fromLogin=1';
+        }
+      }
+    }
+
+    // --- Application Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
-      const buttons = document.querySelectorAll('.role-btn');
-      const currentRole = localStorage.getItem('userRole');
-
-      buttons.forEach((button) => {
-        button.addEventListener('click', () => selectRole(button, true));
-      });
-
-      if (currentRole) {
-        const currentButton = document.querySelector(`.role-btn[data-role="${currentRole}"]`);
-        if (currentButton) selectRole(currentButton, false);
-      }
+      new PasswordToggleManager();
+      new RoleManager();
     });
   </script>
 </body>
