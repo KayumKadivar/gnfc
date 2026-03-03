@@ -526,9 +526,336 @@
     </div>
   </div>
 
-  <script src="/src/js/system_job_history.js"></script>
+  <!-- Inline Functional Logic -->
+  <script>
+    /* -------------------------------------------------------------------------- */
+    /*                                  Constants                                 */
+    /* -------------------------------------------------------------------------- */
+    const JOB_TYPES = ["PM", "DOCUMENTATION", "HOUSE KEEPING", "ABNORMALITY", "MODIFICATION", "ISO14001", "FIELD JOB", "REVAMP", "DEFECT MAINTENANCE", "CONFIGURATION", "SPARE REPAIR", "SCRAP", "MATL RETURN", "RANGE CHANGE", "CARD FAILURE", "INST FAILURE", "INSPECTION", "CASH PURCHASE", "PROCESS REQMT", "N.A."];
+    const INST_TYPES = ["ANALYZER", "C/V", "TX", "SWITCH", "PRIMARY ELEMENT", "SCANNER", "PCV", "ROTAMETER", "ENVIRON MONITORING", "MACHINE MONITORING", "PA SYSTEM", "PC", "N.A."];
+    const INITIAL_JOB_DATA = [
+      { sr: 1, system: "MAX DCS", hwType: "IO MODULES", category: "HARDWARE PROBLEM", date: "2025-12-19", desc: "AUX: C2PCI RJMH A2B card was failed.\nNew card arranged from store.\nIts jumpers and address settings done.\nReplaced card.\nWorking ok.\nRemoved card kept with tag.\nSame checked with M(MND),ID(TRC),IE(ARP).", tech: "PYS", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 2, system: "MAX DCS", hwType: "IO MODULES", category: "HARDWARE PROBLEM", date: "2025-12-16", desc: "All input of 2CJH01RLM4 were indicating faulty values.\nDetail checked found card in fault, Analog Input card removed, clean and fixed back.\nValue indicating normal.", tech: "V+M", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 3, system: "MAX DCS", hwType: "STATIONS", category: "HARDWARE PROBLEM", date: "2025-12-16", desc: "Operator station HMI display replaced with spare one.", tech: "V+M", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 4, system: "MAX DCS", hwType: "STATIONS", category: "HARDWARE PROBLEM", date: "2025-12-15", desc: "Engineering station HMI does not power on so replaced with spare one.\nDefective HMI kept at CPU room with tag.", tech: "V+M", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 5, system: "ESD", hwType: "CONTROL MODULES", category: "MAJOR UPGRADE", date: "2025-10-02", desc: "Cable laying job taken...\nLoop simulation taken with electrical.", tech: "BSU", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 6, system: "ESD", hwType: "IO MODULES", category: "HARDWARE PROBLEM", date: "2025-08-29", desc: "TK fan and mass flow indication to DCS related logics.\nVarious exercises done.", tech: "PYS", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" }
+    ];
+
+    /* -------------------------------------------------------------------------- */
+    /*                               Global State                                 */
+    /* -------------------------------------------------------------------------- */
+    let jobData = [...INITIAL_JOB_DATA];
+    let dataTable = null;
+    let currentJobId = null;
+    let currentAttachmentSlot = null;
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 Utilities                                  */
+    /* -------------------------------------------------------------------------- */
+    const DateUtils = {
+      formatDisplay: (iso) => iso ? new Date(iso).toLocaleDateString("en-GB") : "",
+      formatInput: (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
+      getFilters: (year) => ({
+        default: { start: new Date(new Date().setFullYear(new Date().getFullYear() - 1)), end: new Date() },
+        prev: { start: new Date(year - 1, 0, 1), end: new Date(year - 1, 11, 31) },
+        this: { start: new Date(year, 0, 1), end: new Date(year, 11, 31) },
+        next: { start: new Date(year + 1, 0, 1), end: new Date(year + 1, 11, 31) },
+      }),
+    };
+
+    const FileUtils = {
+      formatSize: (bytes) => {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024, sizes = ["Bytes", "KB", "MB", "GB"], i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      },
+    };
+
+    /* -------------------------------------------------------------------------- */
+    /*                               Core Functions                               */
+    /* -------------------------------------------------------------------------- */
+    function init() {
+      loadExportedData();
+      populateDropdowns();
+      renderTable();
+      bindGlobalEvents();
+    }
+
+    function loadExportedData() {
+      try {
+        const exported = JSON.parse(localStorage.getItem("gnfc_job_history") || "[]");
+        const exportedMapped = exported.map((r) => ({
+          sr: 0, area: r.area || "", loop: r.loop || "", tag: r.tag || r.instTag || "",
+          instType: r.instType || "", jobType: r.jobType || "", date: r.date || "",
+          desc: r.desc || "", tech: r.tech || "", eng: r.eng || "", attach: false,
+          remark: `<span class="font-12px px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">${r.type === "system" ? "System" : "General"} </span>`,
+          isExported: true,
+        }));
+        jobData = [...jobData, ...exportedMapped].map((job, idx) => ({ ...job, sr: idx + 1 }));
+      } catch (e) { console.error("Failed to load localStorage Data", e); }
+    }
+
+    function bindGlobalEvents() {
+      document.addEventListener("click", (e) => {
+        if (e.target.id === "job-detail-overlay") closeJobDetailModal();
+        if (e.target.id === "attachment-modal") closeAttachmentModal();
+      });
+    }
+
+    window.populateDropdowns = function() {
+      const populate = (id, opts, addAll = false) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = addAll ? '<option value="">ALL</option>' : "";
+        opts.forEach((opt) => el.insertAdjacentHTML("beforeend", `<option value="${opt}">${opt}</option>`));
+      };
+      const uniqueTags = [...new Set(jobData.map((item) => item.tag).filter(Boolean))];
+      populate("tagSelect", uniqueTags, true);
+      populate("filter-jobtype", JOB_TYPES, true);
+      populate("filter-insttype", INST_TYPES, true);
+    }
+
+    window.setDateFilter = function(type) {
+      const filters = DateUtils.getFilters(new Date().getFullYear());
+      const { start, end } = filters[type];
+      document.getElementById("filter-start-date").value = DateUtils.formatInput(start);
+      document.getElementById("filter-end-date").value = DateUtils.formatInput(end);
+      ["default", "prev", "this", "next"].forEach((btnType) => {
+        const btn = document.getElementById(`filter-btn-${btnType}`);
+        if (btn) {
+          const isActive = btnType === type;
+          btn.className = `font-12px px-2 py-1 rounded-sm transition-colors ${isActive ? "bg-blue-500/10 border border-gnfc-blue color-blue" : "bg-dark-bg border border-dark-border hover:border-gnfc-blue color-secondary"}`;
+        }
+      });
+    }
+
+    window.renderTable = function() {
+      const tableElement = document.querySelector(".gnfc-table");
+      if (!tableElement) return;
+      if (dataTable) dataTable.destroy();
+      const tbody = document.getElementById("jobTableBody");
+      const recordCount = document.getElementById("recordCount");
+      if (recordCount) recordCount.innerText = `${jobData.length} Records Found`;
+
+      tbody.innerHTML = jobData.map((item, index) => {
+        const formattedDesc = (item.desc || "").replace(/\\n/g, "<br>").replace(/\n/g, "<br>");
+        const attachIcon = item.attach
+          ? '<i class="ph-bold ph-paperclip text-blue-600 cursor-pointer" onclick="event.stopPropagation();"></i>'
+          : '<span class="opacity-30">-</span>';
+        
+        // Alternating color class (zebra striping)
+        const rowBgClass = index % 2 !== 0 ? "bg-gray-100/5" : "";
+        
+        return `
+          <tr class="gnfc-tr group align-top cursor-pointer transition-colors ${rowBgClass} hover:bg-gray-100/10" onclick="openJobDetailModal(${item.sr})">
+            <td class="gnfc-td text-center text-blue-600 fw-bold border-r border-gray-300 sticky left-0 z-10 bg-dark-bg group-hover:bg-dark-panel shadow-[1px_0_0_0_#e5e7eb]">${item.sr}</td>
+            <td class="gnfc-td text-center font-13px color-primary border-r border-gray-300">${item.system}</td>
+            <td class="gnfc-td border-r border-gray-300">
+              <div class="font-13px color-primary">${item.hwType}</div>
+              <div class="border-b border-gray-300 mt-1"></div>
+              <div class="font-13px color-primary mt-1">${item.category}</div>
+            </td>
+            <td class="gnfc-td whitespace-nowrap border-r border-gray-300 font-13px">${DateUtils.formatDisplay(item.date)}</td>
+            <td class="gnfc-td color-primary leading-relaxed font-13px border-r border-gray-300">${formattedDesc}</td>
+            <td class="gnfc-td border-r border-gray-300">
+              <div class="font-13px color-primary">${item.tech}</div>
+              <div class="border-b border-gray-300 mt-1"></div>
+              <div class="font-13px color-primary fw-bold mt-1">${item.eng}</div>
+            </td>
+            <td class="gnfc-td text-center border-r border-gray-300 font-13px">${attachIcon}</td>
+            <td class="gnfc-td border-r border-gray-300">
+              <div class="font-13px color-primary">${item.remark || ""}</div>
+              <div class="border-b border-gray-300 mt-1 mb-1"></div>
+              <div class="font-13px color-primary">${item.execRemark || ""}</div>
+            </td>
+            <td class="gnfc-td border-r border-gray-300 text-center font-13px">${item.status || ""}</td>
+          </tr>`;
+      }).join("");
+
+      if (jobData.length > 0 && typeof simpleDatatables !== "undefined") {
+        dataTable = new simpleDatatables.DataTable(tableElement, {
+          perPage: 10, perPageSelect: [10, 25, 50, 100], searchable: false, fixedHeight: false,
+          labels: { placeholder: "Search...", perPage: "{select} entries per page", noRows: "No entries found", info: "Showing {start} to {end} of {rows} entries" },
+        });
+      }
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                               Modal Functions                              */
+    /* -------------------------------------------------------------------------- */
+    function toggleModal(isOpen) {
+      const overlay = document.getElementById("job-detail-overlay");
+      overlay?.classList.toggle("is-open", isOpen);
+      overlay?.setAttribute("aria-hidden", (!isOpen).toString());
+    }
+
+    function toggleAttachmentsMode(isEdit) {
+      ["1", "2"].forEach((slot) => {
+        document.getElementById(`attach-card-${slot}`)?.classList.toggle("hidden", !isEdit);
+        document.getElementById(`attach-msg-${slot}`)?.classList.toggle("hidden", isEdit);
+      });
+    }
+
+    window.openAddJobModal = function() {
+      currentJobId = null;
+      setModalValues({
+        "modal-system": "", "modal-category": "", "modal-hwtype": "", "modal-description": "",
+        "modal-date": DateUtils.formatInput(new Date()), "modal-tech": "", "modal-eng": "",
+        "modal-status": "", "modal-eng-remark": "", "modal-exec-remark": ""
+      });
+      document.getElementById("display-attach-1").textContent = "-";
+      document.getElementById("display-attach-2").textContent = "-";
+      document.querySelector(".gnfc-modal-title").textContent = "Add New Job";
+      document.getElementById("modal-delete-btn").style.display = "none";
+      document.getElementById("modal-save-btn").textContent = "Add Job";
+      toggleAttachmentsMode(false);
+      toggleModal(true);
+    }
+
+    window.openJobDetailModal = function(srNumber) {
+      const job = jobData.find((j) => String(j.sr) === String(srNumber));
+      if (!job) return;
+      currentJobId = srNumber;
+      setModalValues({
+        "modal-system": job.system || "", "modal-category": job.category || "", "modal-hwtype": job.hwType || "",
+        "modal-description": job.desc || "", "modal-date": job.date || "", "modal-tech": job.tech || "",
+        "modal-eng": job.eng || "", "modal-status": job.status || "", "modal-eng-remark": job.remark || "",
+        "modal-exec-remark": job.execRemark || ""
+      });
+      document.getElementById("display-attach-1").textContent = job.attach ? "Report.pdf" : "-";
+      document.getElementById("display-attach-2").textContent = "-";
+      document.querySelector(".gnfc-modal-title").textContent = "Job History Detail";
+      document.getElementById("modal-delete-btn").style.display = "block";
+      document.getElementById("modal-save-btn").textContent = "Save Changes";
+      toggleAttachmentsMode(true);
+      toggleModal(true);
+    }
+
+    window.closeJobDetailModal = function() {
+      toggleModal(false);
+      currentJobId = null;
+    }
+
+    function setModalValues(values) {
+      Object.entries(values).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      });
+    }
+
+    function getModalValues() {
+      return {
+        system: document.getElementById("modal-system")?.value || "",
+        category: document.getElementById("modal-category")?.value || "",
+        hwType: document.getElementById("modal-hwtype")?.value || "",
+        desc: document.getElementById("modal-description")?.value || "",
+        date: document.getElementById("modal-date")?.value || "",
+        tech: document.getElementById("modal-tech")?.value || "",
+        eng: document.getElementById("modal-eng")?.value || "",
+        status: document.getElementById("modal-status")?.value || "",
+        remark: document.getElementById("modal-eng-remark")?.value || "",
+        execRemark: document.getElementById("modal-exec-remark")?.value || "",
+      };
+    }
+
+    window.saveJobDetails = function() {
+      const formValues = getModalValues();
+      const isAttached = document.getElementById("display-attach-1")?.textContent !== "-";
+      if (currentJobId !== null) {
+        jobData = jobData.map((j) => j.sr === currentJobId ? { ...j, ...formValues, attach: isAttached } : j);
+        showNotification("Updated!", "Job details have been updated.");
+      } else {
+        const newSr = jobData.reduce((max, j) => Math.max(max, j.sr), 0) + 1;
+        jobData.push({ sr: newSr, ...formValues, attach: isAttached });
+        showNotification("Added!", "New job has been added.");
+      }
+      toggleModal(false);
+      renderTable();
+    }
+
+    window.deleteJob = async function() {
+      if (!window.Swal) return;
+      const result = await Swal.fire({
+        title: "Are you sure?", text: "Do you want to delete this job entry?", icon: "warning",
+        width: 400, padding: "1em", showCancelButton: true, confirmButtonColor: "#d33", cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!", customClass: { title: "font-18px", htmlContainer: "font-14px", popup: "font-12px" },
+      });
+      if (result.isConfirmed) {
+        jobData = jobData.filter((j) => j.sr !== currentJobId);
+        toggleModal(false);
+        renderTable();
+        showNotification("Deleted!", "The job entry has been deleted.", "success", 400);
+      }
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 Attachments                                */
+    /* -------------------------------------------------------------------------- */
+    window.openAttachmentModal = function(slot) {
+      currentAttachmentSlot = slot;
+      clearFileSelection();
+      const modal = document.getElementById("attachment-modal");
+      modal?.classList.add("is-open");
+      modal?.setAttribute("aria-hidden", "false");
+    }
+
+    window.closeAttachmentModal = function() {
+      const modal = document.getElementById("attachment-modal");
+      modal?.classList.remove("is-open");
+      modal?.setAttribute("aria-hidden", "true");
+      currentAttachmentSlot = null;
+    }
+
+    window.handleFileSelect = function(input) {
+      if (input.files?.[0]) {
+        const file = input.files[0];
+        document.getElementById("upload-zone")?.classList.add("hidden");
+        const preview = document.getElementById("file-preview");
+        preview?.classList.remove("hidden");
+        preview?.classList.add("flex");
+        document.getElementById("preview-filename").textContent = file.name;
+        document.getElementById("preview-filesize").textContent = FileUtils.formatSize(file.size);
+      }
+    }
+
+    window.clearFileSelection = function() {
+      const input = document.getElementById("upload-file-input");
+      if (input) input.value = "";
+      document.getElementById("upload-zone")?.classList.remove("hidden");
+      const preview = document.getElementById("file-preview");
+      preview?.classList.add("hidden");
+      preview?.classList.remove("flex");
+    }
+
+    window.saveAttachment = function() {
+      const input = document.getElementById("upload-file-input");
+      if (input?.files?.length > 0 && currentAttachmentSlot) {
+        const displayEl = document.getElementById(`display-attach-${currentAttachmentSlot}`);
+        if (displayEl) {
+          displayEl.textContent = input.files[0].name;
+          displayEl.classList.add("text-blue-600", "fw-bold");
+        }
+      }
+      closeAttachmentModal();
+    }
+
+    function showNotification(title, text, icon = "success", width = 300) {
+      if (!window.Swal) return;
+      Swal.fire({
+        icon, title, text, timer: 1500, showConfirmButton: false, width, padding: "1em",
+        customClass: { popup: "font-12px" },
+      });
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                    Init                                    */
+    /* -------------------------------------------------------------------------- */
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
   <script src="/src/js/emg_call_modal.js"></script>
   <script src="/src/js/pagination.js"></script>
+
 </body>
 
 </html>
