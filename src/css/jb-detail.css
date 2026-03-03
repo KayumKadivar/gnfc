@@ -1,5 +1,5 @@
 /* ==========================================================================
-   JB Detail Page — Global Styles
+   JObDetail Page — Global Styles
    Theme-aware via --app-* CSS variables (set by ThemeManager)
    ========================================================================== */
 
@@ -509,7 +509,7 @@ html[data-theme-mode="light"] .jbd-table tbody tr:hover .jbd-tbl-input:not(:focu
     padding: 8px 0;
 }
 
-/* ── JB Index group row ────────────────────────────────────────────────── */
+/* ── JObIndex group row ────────────────────────────────────────────────── */
 .jbd-group-row td {
     background: rgba(37, 99, 235, 0.07) !important;
     font-weight: 800;
@@ -536,6 +536,36 @@ html[data-theme-mode="light"] .jbd-group-row td {
     color: #60a5fa !important;
     text-decoration: underline;
 }
+
+/* ── JObIndex: clickable edit cells ───────────────────────────────────── */
+.jbd-idx-cell-loc,
+.jbd-idx-cell-cable,
+.jbd-idx-cell-cab {
+    transition: background 0.15s, color 0.15s;
+    user-select: none;
+}
+
+/* Location → blue tint */
+.jbd-idx-cell-loc:hover {
+    background: rgba(87, 148, 242, 0.1) !important;
+    color: #73b0ff;
+}
+
+/* Cable Type → orange tint */
+.jbd-idx-cell-cable:hover {
+    background: rgba(251, 146, 60, 0.1) !important;
+    color: #fb923c;
+}
+
+/* Cabinet → green tint */
+.jbd-idx-cell-cab:hover {
+    background: rgba(52, 211, 153, 0.1) !important;
+    color: #34d399;
+}
+
+html[data-theme-mode="light"] .jbd-idx-cell-loc:hover  { background: #eff6ff !important; color: #2563eb; }
+html[data-theme-mode="light"] .jbd-idx-cell-cable:hover { background: #fff7ed !important; color: #c2410c; }
+html[data-theme-mode="light"] .jbd-idx-cell-cab:hover   { background: #f0fdf4 !important; color: #059669; }
 
 /* ── SweetAlert2 z-index override ─────────────────────────────────────── */
 .swal2-container { z-index: 99999 !important; }
