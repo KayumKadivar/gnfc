@@ -1,38 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" data-theme-mode="dark">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JObDetail | GNFC</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
     <link rel="stylesheet" href="/src/css/typography.css">
-    <!-- Removed jb-detail.css -->
     <link rel="stylesheet" href="/src/css/table-style.css">
-    <link rel="stylesheet" href="/src/css/theme-aware.css">
-    <link rel="stylesheet" href="/src/css/global-layout.css">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
+    <link rel="stylesheet" href="/src/css/jb-detail.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/src/js/theme-manager.js"></script>
-    <style>
-        /* Essential Scrollbar setup */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--app-border, #2C3235); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        
-        /* Utility overrides to match GNFC strict colors */
-        .color-primary { color: var(--app-text, #e6edf3); }
-        .color-secondary { color: #9aa7b5; }
-        .color-blue { color: #5794f2; }
-        .color-orange { color: #fb923c; }
-        .bg-app-card { background: var(--app-bg, #111217); border: 1px solid var(--app-border, #2c3235); }
-    </style>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
 </head>
-<body class="bg-[var(--app-body-bg,#0a0b0d)] text-[var(--app-text,#e6edf3)] min-h-screen flex flex-col font-ios m-0 antialiased selection:bg-[#2563eb]/30 selection:text-white">
 
-    <!-- HEADER -->
-    <div id="header-placeholder">
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
         <script src="/src/js/header.js"></script>
         <script>
             renderHeader({
@@ -40,172 +34,244 @@
                 breadcrumbs: [
                     { label: "Plant", href: "/src/pages/plant_status.html" },
                     { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
-                    { label: "Instrument Data", href: "/src/pages/boiler_inst_data.html" },
+                    { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
                     { label: "JObDetail" }
                 ],
                 backLink: "/src/pages/boiler_inst_data.html"
             });
         </script>
-    </div>
 
-    <!-- MAIN APP CONTENT -->
-    <main class="flex-1 overflow-hidden flex flex-col p-3 lg:p-4 pb-[80px]">
-        <div class="h-full max-w-[1920px] mx-auto w-full flex flex-col">
-            
-            <div class="flex-1 flex flex-col gap-4 relative">
-                
-                <!-- TOOLBAR CARD -->
-                <div class="bg-app-card rounded-lg shadow-sm flex flex-col overflow-hidden">
-                    <div class="flex flex-wrap items-center justify-between gap-4 py-3 px-4 bg-app-card border-b border-[var(--app-border,#2c3235)]">
-                        <div class="flex flex-wrap items-center gap-5">
-                            <!-- Left Toolbar -->
-                            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[rgba(56,189,248,0.08)] border border-[rgba(56,189,248,0.2)] text-[#38bdf8] font-bold text-[13px] tracking-wide shadow-sm">
-                                <i class="ph-fill ph-check-circle text-base"></i>
-                                JB VIEW MODE
-                            </div>
-                            
-                            <!-- Search Tag -->
-                            <div class="flex flex-col gap-1">
-                                <label class="text-[10px] font-extrabold uppercase tracking-widest text-[#9aa7b5]">Search Tag</label>
-                                <div class="flex items-center gap-1.5">
-                                    <div class="relative w-[130px]">
-                                        <i class="ph-bold ph-tag absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9aa7b5] text-[13px]"></i>
-                                        <input type="text" id="jb-tag-input" class="w-full h-[34px] bg-[var(--app-bg,#111217)] border border-[var(--app-border,#2c3235)] rounded px-2.5 pl-7 text-[13px] font-medium text-[var(--app-text,#e6edf3)] focus:border-[#5794f2] focus:ring-2 focus:ring-[#5794f2]/15 outline-none transition-all placeholder:text-[#9aa7b5]/60" placeholder="e.g 1LT302">
-                                    </div>
-                                    <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#2563eb] text-white hover:bg-[#1d4ed8] border border-transparent" onclick="app.findJob()">
-                                        <i class="ph-bold ph-magnifying-glass"></i> Go
-                                    </button>
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+            <div class="max-w-8xl mx-auto space-y-3">
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- TOOLBAR CARD                                          -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="jbd-card">
+                    <div class="jbd-toolbar">
+
+                        <!-- TAG Search Group -->
+                        <div class="jbd-filter-group">
+                            <label class="jbd-filter-label">Tag</label>
+                            <div class="jbd-filter-row">
+                                <input type="text" id="jb-tag-input" class="jbd-input" style="width:9rem;" placeholder="Tag No…">
+                                <div class="jbd-select-wrap" style="width:9rem;">
+                                    <select id="jb-tag-select" class="jbd-input jbd-select" style="width:100%;">
+                                        <option>L_110VDCBF</option>
+                                        <option>ZSH177906</option>
+                                        <option>10-PT-101A</option>
+                                    </select>
+                                    <i class="ph-bold ph-caret-down jbd-caret"></i>
                                 </div>
-                            </div>
-
-                            <div class="w-px h-8 bg-[var(--app-border,#2c3235)] mx-1 hidden sm:block"></div>
-
-                            <!-- JObFind Group -->
-                            <div class="flex flex-col gap-1">
-                                <label class="text-[10px] font-extrabold uppercase tracking-widest text-[#9aa7b5]">FIND JOB</label>
-                                <div class="flex items-center gap-1.5">
-                                    <input type="text" id="jb-find-input" class="w-32 h-[34px] bg-[var(--app-bg,#111217)] border border-[var(--app-border,#2c3235)] rounded px-2.5 text-[13px] font-medium text-[var(--app-text,#e6edf3)] focus:border-[#5794f2] focus:ring-2 focus:ring-[#5794f2]/15 outline-none transition-all placeholder:text-[#9aa7b5]/60" placeholder="Search…">
-                                    <div class="relative w-32">
-                                        <select id="jb-select" class="w-full h-[34px] bg-[var(--app-bg,#111217)] border border-[var(--app-border,#2c3235)] rounded pl-2.5 pr-8 text-[13px] font-medium text-[var(--app-text,#e6edf3)] focus:border-[#5794f2] focus:ring-2 focus:ring-[#5794f2]/15 outline-none transition-all appearance-none cursor-pointer">
-                                            <option>ACJB-1</option>
-                                            <option selected>ACJB-2</option>
-                                            <option>ACJB-3</option>
-                                            <option>ACJB-4</option>
-                                            <option>ACJB-5</option>
-                                            <option>ACJB-6</option>
-                                            <option>ACJB-7</option>
-                                            <option>ACJB-8</option>
-                                            <option>ACJB-9</option>
-                                            <option>AUB-1</option>
-                                        </select>
-                                        <i class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9aa7b5] pointer-events-none text-xs"></i>
-                                    </div>
-                                    <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#2563eb] text-white hover:bg-[#1d4ed8] border border-transparent" onclick="app.findJob()">
-                                        <i class="ph-bold ph-check-square"></i> Select
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- DB Actions -->
-                            <div class="flex items-center gap-2">
-                                <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openInsBl()">
-                                    <i class="ph-bold ph-arrows-clockwise"></i> Update From InsBl
-                                </button>
-                                <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openJobIndex()">
-                                    <i class="ph-bold ph-list-numbers"></i> JObIndex
+                                <button class="jbd-btn jbd-btn-blue" onclick="filterByTag()">
+                                    <i class="ph-bold ph-magnifying-glass"></i> Go
                                 </button>
                             </div>
                         </div>
 
+                        <div class="jbd-divider"></div>
+
+                        <!-- JObFind Group -->
+                        <div class="jbd-filter-group">
+                            <label class="jbd-filter-label">FIND JOB</label>
+                            <div class="jbd-filter-row">
+                                <input type="text" id="jb-find-input" class="jbd-input" style="width:8rem;" placeholder="Search…">
+                                <div class="jbd-select-wrap" style="width:8rem;">
+                                    <select id="jb-select" class="jbd-input jbd-select" style="width:100%;">
+                                        <option>ACJB-1</option>
+                                        <option selected>ACJB-2</option>
+                                        <option>ACJB-3</option>
+                                        <option>ACJB-4</option>
+                                        <option>ACJB-5</option>
+                                        <option>ACJB-6</option>
+                                        <option>ACJB-7</option>
+                                        <option>ACJB-8</option>
+                                        <option>ACJB-9</option>
+                                        <option>AUB-1</option>
+                                        <option>AUB-11</option>
+                                        <option>AUB-2</option>
+                                        <option>AUB-3</option>
+                                        <option>AUB-4</option>
+                                        <option>AUB-5</option>
+                                        <option>AUB-6</option>
+                                        <option>AUB-7</option>
+                                        <option>EJB-11</option>
+                                        <option>EJB-4</option>
+                                        <option>EJB-5</option>
+                                        <option>EJB-6B</option>
+                                        <option>EJB-7</option>
+                                        <option>KSB TB-3</option>
+                                        <option>KSB TB-4</option>
+                                        <option>RJB-01</option>
+                                        <option>RJB-02</option>
+                                        <option>RJB-03</option>
+                                        <option>RJB-04</option>
+                                        <option>TEST</option>
+                                        <option>TJB-01</option>
+                                    </select>
+                                    <i class="ph-bold ph-caret-down jbd-caret"></i>
+                                </div>
+                                <button class="jbd-btn jbd-btn-blue" onclick="jbFind()">
+                                    <i class="ph-bold ph-magnifying-glass"></i> Go
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="jbd-divider"></div>
+
+                        <!-- Secondary Actions -->
+                        <div class="jbd-toolbar-actions">
+                            <button class="jbd-btn jbd-btn-ghost" onclick="updateFromInsBl()">
+                                <i class="ph-bold ph-arrows-clockwise"></i> Update From InsBl
+                            </button>
+                            <button class="jbd-btn jbd-btn-ghost" onclick="openJBIndex()">
+                                <i class="ph-bold ph-list-numbers"></i> JObIndex
+                            </button>
+                        </div>
+
                         <!-- Right-side Actions -->
-                        <div class="flex items-center gap-2 ml-auto">
-                            <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openReport()">
+                        <div class="jbd-toolbar-actions jbd-toolbar-end">
+                            <button class="jbd-btn jbd-btn-ghost" onclick="generateReport()">
                                 <i class="ph-bold ph-file-text"></i> Report
                             </button>
-                            <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#dc2626] text-white hover:bg-[#b91c1c] border border-transparent">
+                            <button class="jbd-btn jbd-btn-red">
                                 <i class="ph-bold ph-trash"></i> Delete JB
                             </button>
-                            <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#16a34a] text-white hover:bg-[#15803d] border border-transparent" onclick="app.modals.openAddJob()">
+                            <button class="jbd-btn jbd-btn-green" onclick="openAddJBModal()">
                                 <i class="ph-bold ph-plus"></i> Add
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- ALERT BANNER -->
-                <div id="alert-banner" class="flex items-center gap-2 px-4 py-3 rounded-lg bg-[rgba(245,158,11,0.07)] border border-[rgba(245,158,11,0.2)] text-[#fbbf24] text-[13px] font-semibold">
-                    <i class="ph-bold ph-warning-circle text-base"></i>
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- ALERT BANNER — shown when no data                     -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div id="alert-banner" class="jbd-alert">
+                    <i class="ph-bold ph-warning-circle"></i>
                     No record found. Select a JOband press <strong>Go</strong>.
                 </div>
 
-                <!-- CONTROL COPY INFO CARD -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- CONTROL COPY CARD                                     -->
+                <!-- ══════════════════════════════════════════════════════ -->
                 <div id="control-copy-section" class="hidden">
-                    <div class="bg-app-card rounded-lg flex flex-col overflow-hidden relative shadow-md">
-                        <div class="flex items-center justify-between px-4 py-2 border-b border-[var(--app-border,#2c3235)] bg-gradient-to-r from-blue-600/10 to-transparent">
-                            <div class="flex items-center gap-2">
-                                <span class="flex items-center justify-center w-6 h-6 rounded-md bg-blue-500/10 text-blue-500">
-                                    <i class="ph-bold ph-info"></i>
+                    <div class="jbd-card">
+                        <div class="jbd-card-header">
+                            <div class="jbd-card-header-left">
+                                <span class="jbd-badge jbd-badge-success" id="cc-status-badge">
+                                    <i class="ph-fill ph-seal-check"></i> Control Copy
                                 </span>
-                                <span class="text-[#9aa7b5] text-xs">—</span>
-                                <span class="text-xs font-bold text-[#5794f2]">
-                                    JObNO :&nbsp;<span id="cc-jb-no" class="font-extrabold">ACJB-2</span>
+                                <span class="color-secondary font-12px">—</span>
+                                <span class="font-12px fw-bold color-blue">
+                                    JObNO :&nbsp;<span id="cc-jb-no" class="fw-extrabold">ACJB-2</span>
                                 </span>
                             </div>
-                            <button class="inline-flex items-center justify-center gap-1.5 px-2.5 h-7 rounded text-[11px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openControlCopy()">
-                                <i class="ph-bold ph-seal-check text-[#34d399]"></i> Mark As Control Copy
+                            <button class="jbd-btn jbd-btn-ghost" style="height:1.75rem; font-size:0.6875rem; padding:0 0.625rem;" onclick="markAsControlCopy()">
+                                <i class="ph-bold ph-check-square-offset"></i> Mark As Control Copy
                             </button>
                         </div>
-                        <div class="p-3">
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
-                                <!-- Info Items -->
-                                <script>
-                                    const fields = ['location', 'cableNo', 'cableType', 'cabinet', 'docNo', 'drawingNo', 'drawingName', 'excl'];
-                                    const labels = ['Location', 'Cable No', 'Cable Type', 'Cabinet', 'Document No', 'Drawing No', 'Drawing Name', 'Excl'];
-                                    const ids = ['cc-location-val', 'cc-cable-no', 'cc-cable-type', 'cc-cabinet', 'cc-doc-no', 'cc-drawing-no', 'cc-drawing-name', 'cc-excl'];
-                                    fields.forEach((f, i) => {
-                                        document.write(`
-                                            <div class="bg-[rgba(255,255,255,0.02)] border border-[var(--app-border,#2c3235)] rounded-md p-2 flex flex-col gap-1 cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.04)] hover:border-blue-500/30 group" onclick="app.modals.openEditField('${f}')">
-                                                <div class="text-[10px] font-extrabold uppercase tracking-wider text-[#9aa7b5]">${labels[i]}</div>
-                                                <div class="flex justify-between items-center h-[18px]">
-                                                    <span id="${ids[i]}" class="text-[13px] font-bold text-[var(--app-text,#e6edf3)] truncate">—</span>
-                                                    <i class="ph-bold ph-pencil-simple text-[11px] text-[#9aa7b5] opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                                                </div>
-                                            </div>
-                                        `);
-                                    });
-                                </script>
+                        <div class="jbd-card-body">
+                            <div class="jbd-info-grid">
+
+                                <div class="jbd-info-item" id="cc-location" onclick="openEditLocationModal()">
+                                    <div class="jbd-info-item-label">Location</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-location-val">MTR FLOOR</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('cableNo')">
+                                    <div class="jbd-info-item-label">Cable No</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-cable-no">ACJB2-CCAbl</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('cableType')">
+                                    <div class="jbd-info-item-label">Cable Type</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-cable-type">SIGNAL 12 PAIR</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('cabinet')">
+                                    <div class="jbd-info-item-label">Cabinet</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-cabinet">C C Ab1</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('docNo')">
+                                    <div class="jbd-info-item-label">Document No</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-doc-no">—</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('drawingNo')">
+                                    <div class="jbd-info-item-label">Drawing No</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-drawing-no">—</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('drawingName')">
+                                    <div class="jbd-info-item-label">Drawing Name</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-drawing-name">—</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div class="jbd-info-item" onclick="openEditFieldModal('excl')">
+                                    <div class="jbd-info-item-label">Excl</div>
+                                    <div class="jbd-info-item-value">
+                                        <span id="cc-excl">—</span>
+                                        <i class="ph-bold ph-pencil-simple jbd-edit-icon"></i>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- CHANNEL RECORDS TABLE CARD -->
-                <div id="channel-table-section" class="hidden h-full flex flex-col">
-                    <div class="bg-app-card rounded-lg flex flex-col overflow-hidden h-full">
-                        <div class="flex items-center justify-between px-4 py-2 bg-[var(--app-border,#2c3235)]/30 border-b border-[var(--app-border,#2c3235)] shrink-0">
-                            <div class="flex items-center gap-2">
-                                <i class="ph-fill ph-table text-[#fb923c] text-[15px]"></i>
-                                <span class="font-extrabold tracking-wide text-[13px]">Channel Records</span>
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- CHANNEL RECORDS TABLE CARD                           -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div id="channel-table-section" class="hidden">
+                    <div class="jbd-card">
+                        <div class="jbd-card-header">
+                            <div class="jbd-card-header-left">
+                                <i class="ph-fill ph-table color-orange" style="font-size:0.9375rem;"></i>
+                                <span class="jbd-card-header-title">Channel Records</span>
                             </div>
-                            <span id="ch-record-count" class="bg-blue-600/10 text-blue-500 text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full border border-blue-500/20">0 Channels</span>
+                            <span id="ch-record-count" class="jbd-badge-count">0 Channels</span>
                         </div>
 
-                        <div class="overflow-y-auto flex-1">
-                            <table class="w-full border-collapse" id="ch-table">
-                                <thead class="sticky top-0 z-10 bg-[var(--app-bg,#111217)] text-xs text-[#9aa7b5] uppercase tracking-wider font-extrabold shadow-sm border-b border-[var(--app-border,#2c3235)]">
+                        <div class="overflow-auto" style="max-height: 56vh;">
+                            <table class="jbd-table" id="ch-table">
+                                <thead>
                                     <tr>
-                                        <th class="w-10 text-center py-2 border-r border-[var(--app-border,#2c3235)]" rowspan="2">Ch</th>
-                                        <th class="w-28 text-left px-2 py-2 border-r border-[var(--app-border,#2c3235)] hover:bg-white/5 cursor-pointer transition-colors" rowspan="2">Tag Number</th>
-                                        <th class="min-w-[200px] text-left px-2 py-2 border-r border-[var(--app-border,#2c3235)]" rowspan="2">Location / Description / Function</th>
-                                        <th class="w-16 text-center py-2 border-r border-[var(--app-border,#2c3235)]" rowspan="2">JOB TERM</th>
-                                        <th class="text-center py-1 border-b border-[var(--app-border,#2c3235)]" colspan="2">Cabinet Term Strip</th>
+                                        <th style="width:38px;" rowspan="2">Ch</th>
+                                        <th style="width:110px;" rowspan="2" class="jbd-clickable-th">Tag Number</th>
+                                        <th style="min-width:200px;" rowspan="2">Location / Description / Function</th>
+                                        <th style="width:58px;" rowspan="2">JOB TERM</th>
+                                        <th colspan="2" style="width:140px;">Cabinet Term Strip</th>
                                     </tr>
                                     <tr>
-                                        <th class="w-16 text-center py-1 border-r border-[var(--app-border,#2c3235)] text-[10px]">Terminal</th>
-                                        <th class="w-16 text-center py-1 text-[10px]">Strip</th>
+                                        <th style="width:70px;">Terminal</th>
+                                        <th style="width:70px;">Strip</th>
                                     </tr>
                                 </thead>
-                                <tbody id="ch-table-body" class="bg-[var(--app-bg,#111217)]">
+                                <tbody id="ch-table-body">
                                     <!-- Populated by JS -->
                                 </tbody>
                             </table>
@@ -213,12 +279,14 @@
                     </div>
                 </div>
 
-                <!-- FOOTER ACTIONS -->
-                <div class="fixed bottom-0 left-0 lg:left-64 xl:left-[280px] right-0 h-[60px] bg-[#111217]/90 backdrop-blur-md border-t border-[var(--app-border,#2c3235)] flex items-center justify-end px-4 gap-3 z-40 transition-all duration-300">
-                    <button class="inline-flex items-center justify-center gap-1.5 px-4 h-9 rounded text-sm font-bold transition-all shadow-sm cursor-pointer bg-[#2563eb] text-white hover:bg-[#1d4ed8] border border-transparent" onclick="app.modals.openReport()">
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- FOOTER ACTIONS                                        -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="jbd-footer-bar">
+                    <button class="jbd-btn jbd-btn-blue" onclick="generateReport()">
                         <i class="ph-bold ph-file-text"></i> Report
                     </button>
-                    <button class="inline-flex items-center justify-center gap-1.5 px-4 h-9 rounded text-sm font-bold transition-all shadow-sm cursor-pointer bg-[#16a34a] text-white hover:bg-[#15803d] border border-transparent" onclick="app.modals.openAddJob()">
+                    <button class="jbd-btn jbd-btn-green">
                         <i class="ph-bold ph-plus"></i> Add
                     </button>
                 </div>
@@ -228,7 +296,7 @@
     </main>
 
     <!-- ══════════════════════════════════════════════════════════════════ -->
-    <!-- MODALS -->
+    <!-- MODALS                                                            -->
     <!-- ══════════════════════════════════════════════════════════════════ -->
 
     <!-- Generic Edit Field Modal -->
@@ -239,7 +307,7 @@
                     <h3 class="gnfc-modal-title" id="ef-title"><i class="ph-bold ph-map-pin mr-1" id="ef-icon"></i> Edit Location</h3>
                     <p id="ef-subtitle" class="gnfc-modal-subtitle">JObNO : ACJB-2</p>
                 </div>
-                <button onclick="app.modals._close('modal-edit-field')" class="gnfc-modal-close">
+                <button onclick="closeEditFieldModal()" class="gnfc-modal-close">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
@@ -257,10 +325,10 @@
                 </p>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.saveEditField()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button type="button" onclick="updateField()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-check mr-1"></i> Update
                 </button>
-                <button type="button" onclick="app.modals._close('modal-edit-field')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                <button type="button" onclick="closeEditFieldModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Cancel
                 </button>
             </div>
@@ -275,7 +343,7 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-grid-four mr-1"></i> Junction Box Schedule</h3>
                     <p class="gnfc-modal-subtitle">Generate channel report</p>
                 </div>
-                <button onclick="app.modals._close('modal-jb-schedule')" class="gnfc-modal-close">
+                <button onclick="closeJBScheduleModal()" class="gnfc-modal-close">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
@@ -308,10 +376,10 @@
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.runReport()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button type="button" onclick="runJBScheduleReport()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-play mr-1"></i> Go
                 </button>
-                <button type="button" onclick="app.modals._close('modal-jb-schedule')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                <button type="button" onclick="closeJBScheduleModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Cancel
                 </button>
             </div>
@@ -326,27 +394,27 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-list-numbers mr-1"></i> JObIndex</h3>
                     <p class="gnfc-modal-subtitle">BOILER — Click <span style="color:#5794f2;">Location</span>, <span style="color:#fb923c;">Cable Type</span> or <span style="color:#34d399;">Cabinet</span> cells to edit</p>
                 </div>
-                <button onclick="app.modals._close('modal-jb-index')" class="gnfc-modal-close">
+                <button onclick="closeJBIndexModal()" class="gnfc-modal-close">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
             <div class="gnfc-modal-body" style="padding: 0; max-height: 70vh; overflow: auto;">
-                <table class="w-full border-collapse" id="jb-index-table" style="font-size:0.8125rem;">
-                    <thead class="bg-[#111217] text-[#9aa7b5] border-b border-[#2c3235] uppercase text-xs">
+                <table class="jbd-table" id="jb-index-table" style="font-size:0.8125rem;">
+                    <thead>
                         <tr>
-                            <th class="w-12 py-2 border-r border-[#2c3235] font-extrabold text-center">Sr</th>
-                            <th class="w-[110px] py-2 border-r border-[#2c3235] font-extrabold text-left pl-2">JObNo</th>
-                            <th class="min-w-[280px] py-2 border-r border-[#2c3235] font-extrabold text-left pl-3">Location</th>
-                            <th class="w-[160px] py-2 border-r border-[#2c3235] font-extrabold text-center">Cable Type</th>
-                            <th class="w-[110px] py-2 border-r border-[#2c3235] font-extrabold text-center">Cabinet</th>
-                            <th class="w-[100px] py-2 font-extrabold text-center">Print</th>
+                            <th style="width:48px;">Sr</th>
+                            <th style="width:110px;">JObNo</th>
+                            <th style="min-width:280px; text-align:left; padding-left:12px;">Location</th>
+                            <th style="width:160px;">Cable Type</th>
+                            <th style="width:110px;">Cabinet</th>
+                            <th style="width:100px;">Print</th>
                         </tr>
                     </thead>
-                    <tbody id="jb-index-body" class="bg-[#111217]"></tbody>
+                    <tbody id="jb-index-body"></tbody>
                 </table>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals._close('modal-jb-index')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                <button type="button" onclick="closeJBIndexModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Close
                 </button>
             </div>
@@ -361,7 +429,7 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-map-pin mr-1"></i> Edit Location</h3>
                     <p class="gnfc-modal-subtitle">JObNO : <span id="idx-loc-jbno">—</span></p>
                 </div>
-                <button onclick="app.modals._close('modal-idx-location')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+                <button onclick="closeIdxLocationModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
             <div class="gnfc-modal-body">
                 <div class="mb-3">
@@ -370,10 +438,10 @@
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.saveIdxField('modal-idx-location', 'idx-loc-input', 'loc', 'Location')" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button type="button" onclick="saveIdxLocation()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-check mr-1"></i> Update
                 </button>
-                <button type="button" onclick="app.modals._close('modal-idx-location')" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+                <button type="button" onclick="closeIdxLocationModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
             </div>
         </div>
     </div>
@@ -386,7 +454,7 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-plugs mr-1"></i> Edit Cable Type</h3>
                     <p class="gnfc-modal-subtitle">JObNO : <span id="idx-cable-jbno">—</span></p>
                 </div>
-                <button onclick="app.modals._close('modal-idx-cable')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+                <button onclick="closeIdxCableModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
             <div class="gnfc-modal-body">
                 <div class="mb-3">
@@ -401,10 +469,10 @@
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.saveIdxField('modal-idx-cable', 'idx-cable-select', 'cable', 'Cable Type')" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button type="button" onclick="saveIdxCable()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-check mr-1"></i> Update
                 </button>
-                <button type="button" onclick="app.modals._close('modal-idx-cable')" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+                <button type="button" onclick="closeIdxCableModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
             </div>
         </div>
     </div>
@@ -417,7 +485,7 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-archive mr-1"></i> Edit Cabinet</h3>
                     <p class="gnfc-modal-subtitle">JObNO : <span id="idx-cab-jbno">—</span></p>
                 </div>
-                <button onclick="app.modals._close('modal-idx-cabinet')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+                <button onclick="closeIdxCabinetModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
             <div class="gnfc-modal-body">
                 <div class="mb-3">
@@ -426,13 +494,592 @@
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.saveIdxField('modal-idx-cabinet', 'idx-cab-input', 'cab', 'Cabinet')" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button type="button" onclick="saveIdxCabinet()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-check mr-1"></i> Update
                 </button>
-                <button type="button" onclick="app.modals._close('modal-idx-cabinet')" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+                <button type="button" onclick="closeIdxCabinetModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
             </div>
         </div>
     </div>
+
+    <!-- Edit Tag Modal -->
+    <div id="modal-edit-tag" class="gnfc-modal-overlay" style="z-index: 10010;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 440px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-tag mr-1"></i> Edit Tag</h3>
+                    <p id="et-subtitle" class="gnfc-modal-subtitle">JObNO : ACJB-2</p>
+                </div>
+                <button onclick="closeEditTagModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Inst Type</label>
+                    <div class="flex gap-2">
+                        <select id="et-inst-type" class="gnfc-modal-input flex-1">
+                            <option value="AI">AI - Analog Input</option>
+                            <option value="AO">AO - Analog Output</option>
+                            <option value="DI">DI - Digital Input</option>
+                            <option value="DO">DO - Digital Output</option>
+                            <option value="RTD">RTD</option>
+                            <option value="TC">TC - Thermocouple</option>
+                        </select>
+                        <button onclick="filterTagsByType()" class="gnfc-modal-btn gnfc-modal-btn-primary" style="height:2.25rem; padding:0 0.75rem;">
+                            <i class="ph-bold ph-magnifying-glass"></i> Go
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Tag Filter</label>
+                    <input type="text" id="et-tag-filter" class="gnfc-modal-input" placeholder="Search tag...">
+                </div>
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Tag</label>
+                    <select id="et-tag-select" class="gnfc-modal-input">
+                        <option>1LT302</option>
+                        <option>1LT301</option>
+                        <option>1FT301</option>
+                        <option>1PT706</option>
+                        <option>1PT78B</option>
+                        <option>1TT101</option>
+                        <option>1TT102</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2 mb-2">
+                    <input type="checkbox" id="et-update-revision" class="w-4 h-4 rounded border-gray-400 cursor-pointer">
+                    <label for="et-update-revision" class="font-12px fw-bold color-primary cursor-pointer">Update Revision</label>
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="updateTag()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Update
+                </button>
+                <button type="button" onclick="closeEditTagModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!-- JAVASCRIPT                                                        -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <script>
+        // ========================
+        //  MOCK JObDATA
+        // ========================
+        const JB_DATABASE = {
+            'ACJB-2': {
+                location: 'MTR FLOOR', cableNo: 'ACJB2-CCAbl', cableType: 'SIGNAL 12 PAIR', cabinet: 'C C Ab1', docNo: '', drawingNo: '', drawingName: '', excl: '',
+                channels: [
+                    { ch: 1, rows: [
+                        { tag: '1LT302', func: 'HEATER FLOOR', jbTerm: 1, cabTerm: '', cabStrip: 'B3' },
+                        { tag: '', func: 'HPH-1 LEVEL', jbTerm: 2, cabTerm: '1AITB-2', cabStrip: 'B4' },
+                        { tag: '', func: 'CLOSE LOOP', jbTerm: 3, cabTerm: '', cabStrip: '' }
+                    ]},
+                    { ch: 2, rows: [
+                        { tag: '1LT301', func: 'HEATER FLOOR', jbTerm: 4, cabTerm: '', cabStrip: 'A2' },
+                        { tag: '', func: 'HPH-1 LEVEL', jbTerm: 5, cabTerm: '1AITB-2', cabStrip: 'A4' },
+                        { tag: '', func: 'CLOSE LOOP', jbTerm: 6, cabTerm: '', cabStrip: '' }
+                    ]},
+                    { ch: 3, rows: [
+                        { tag: '1FT301', func: 'HEATER FLOOR', jbTerm: 7, cabTerm: '', cabStrip: '' },
+                        { tag: '', func: 'BFW FLOW', jbTerm: 8, cabTerm: '1AITB-2', cabStrip: 'F2' },
+                        { tag: '', func: 'OPEN LOOP', jbTerm: 9, cabTerm: '', cabStrip: '' }
+                    ]},
+                    { ch: 4, rows: [
+                        { tag: '1PT706', func: 'HEATER FLOOR', jbTerm: 10, cabTerm: '', cabStrip: 'A2' },
+                        { tag: '', func: '26/15 ATA STEAM PRESS', jbTerm: 11, cabTerm: '1AITB-2', cabStrip: 'B0' },
+                        { tag: '', func: 'CLOSE LOOP', jbTerm: 12, cabTerm: '', cabStrip: '' }
+                    ]},
+                    { ch: 5, rows: [
+                        { tag: '1FT301', func: 'DEAERATOR FLOOR', jbTerm: 13, cabTerm: '', cabStrip: 'B5' },
+                        { tag: '', func: 'DM MAKE UP FLOW', jbTerm: 14, cabTerm: '1AITB-2', cabStrip: 'B6' },
+                        { tag: '', func: 'OPEN LOOP', jbTerm: 15, cabTerm: '', cabStrip: '' }
+                    ]},
+                    { ch: 6, rows: [
+                        { tag: '1PT78B', func: 'HEATER FLOOR', jbTerm: 16, cabTerm: '', cabStrip: 'B7' },
+                        { tag: '', func: 'INST AIR PRESS', jbTerm: 17, cabTerm: '1AITB-3', cabStrip: 'B3' },
+                        { tag: '', func: 'CLOSE LOOP', jbTerm: 18, cabTerm: '', cabStrip: '' }
+                    ]}
+                ]
+            },
+            'ACJB-1': {
+                location: 'GROUND FLOOR', cableNo: 'ACJB1-CCAb1', cableType: 'SIGNAL 12 PAIR', cabinet: 'C C Ab1', docNo: '', drawingNo: '', drawingName: '', excl: '',
+                channels: [
+                    { ch: 1, rows: [
+                        { tag: '1TT101', func: 'GROUND FLOOR', jbTerm: 1, cabTerm: '', cabStrip: 'A1' },
+                        { tag: '', func: 'FURNACE TEMP', jbTerm: 2, cabTerm: '1AITB-1', cabStrip: 'A2' },
+                        { tag: '', func: 'CLOSE LOOP', jbTerm: 3, cabTerm: '', cabStrip: '' }
+                    ]},
+                    { ch: 2, rows: [
+                        { tag: '1TT102', func: 'GROUND FLOOR', jbTerm: 4, cabTerm: '', cabStrip: 'A3' },
+                        { tag: '', func: 'SH OUTLET TEMP', jbTerm: 5, cabTerm: '1AITB-1', cabStrip: 'A4' },
+                        { tag: '', func: 'CLOSE LOOP', jbTerm: 6, cabTerm: '', cabStrip: '' }
+                    ]}
+                ]
+            }
+        };
+
+        let currentJB = null;
+
+        function filterByTag() {
+            // Mock: no data for tag search
+        }
+
+        function jbFind() {
+            const jbName = document.getElementById('jb-select').value;
+            // Fallback to ACJB-2 data if not found so data is always shown
+            const data = JB_DATABASE[jbName] || JB_DATABASE['ACJB-2'];
+
+            currentJB = jbName;
+
+            // Hide alert, show sections
+            document.getElementById('alert-banner').style.display = 'none';
+            document.getElementById('control-copy-section').classList.remove('hidden');
+            document.getElementById('channel-table-section').classList.remove('hidden');
+
+            // Populate Control Copy
+            document.getElementById('cc-jb-no').textContent = jbName;
+            document.getElementById('cc-location-val').textContent = data.location || '—';
+            document.getElementById('cc-cable-no').textContent = data.cableNo || '—';
+            document.getElementById('cc-cable-type').textContent = data.cableType || '—';
+            document.getElementById('cc-cabinet').textContent = data.cabinet || '—';
+            document.getElementById('cc-doc-no').textContent = data.docNo || '—';
+            document.getElementById('cc-drawing-no').textContent = data.drawingNo || '—';
+            document.getElementById('cc-drawing-name').textContent = data.drawingName || '—';
+            document.getElementById('cc-excl').textContent = data.excl || '—';
+
+            // Build channel table
+            const tbody = document.getElementById('ch-table-body');
+            let html = '';
+
+            data.channels.forEach((ch, ci) => {
+                ch.rows.forEach((row, ri) => {
+                    html += `<tr>`;
+                    if (ri === 0) {
+                        html += `<td rowspan="${ch.rows.length}" class="jbd-ch-num">${ch.ch}</td>`;
+                        html += `<td rowspan="${ch.rows.length}" style="vertical-align:top; padding-top:0.375rem;">`;
+                        html += `<input type="text" class="jbd-tbl-input" value="${row.tag || ''}" data-ch="${ci}" data-row="${ri}" data-field="tag">`;
+                        html += `</td>`;
+                    }
+                    html += `<td><input type="text" class="jbd-tbl-input" value="${row.func || ''}" data-ch="${ci}" data-row="${ri}" data-field="func"></td>`;
+                    html += `<td><input type="text" class="jbd-tbl-input jbd-tbl-input-sm" value="${row.jbTerm || ''}" data-ch="${ci}" data-row="${ri}" data-field="jbTerm"></td>`;
+                    html += `<td><input type="text" class="jbd-tbl-input" value="${row.cabTerm || ''}" data-ch="${ci}" data-row="${ri}" data-field="cabTerm"></td>`;
+                    html += `<td><input type="text" class="jbd-tbl-input jbd-tbl-input-sm" value="${row.cabStrip || ''}" data-ch="${ci}" data-row="${ri}" data-field="cabStrip"></td>`;
+                    html += `</tr>`;
+                });
+            });
+
+            tbody.innerHTML = html;
+            document.getElementById('ch-record-count').textContent = data.channels.length + ' Channels';
+        }
+
+        // ── Control Copy Action ──────────────────────────────────────────────
+        function markAsControlCopy() {
+            document.getElementById('cc-modal-jb-no').textContent = currentJB;
+            const modal = document.getElementById('modal-control-copy');
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function closeControlCopyModal() {
+            document.getElementById('modal-control-copy').classList.remove('is-open');
+        }
+
+        function confirmControlCopy() {
+            closeControlCopyModal();
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: `${currentJB} marked as Control Copy.`,
+                confirmButtonColor: '#2563eb',
+                timer: 1800,
+                timerProgressBar: true
+            });
+        }
+
+        // ========================
+        //  GENERIC EDIT FIELD MODAL
+        // ========================
+        let editingField = null;
+        const FIELD_MAP = {
+            location:    { label: 'Location',     icon: 'ph-map-pin',      dbKey: 'location',    displayId: 'cc-location-val' },
+            cableNo:     { label: 'Cable No',     icon: 'ph-cable-car',    dbKey: 'cableNo',     displayId: 'cc-cable-no' },
+            cableType:   { label: 'Cable Type',   icon: 'ph-plugs',        dbKey: 'cableType',   displayId: 'cc-cable-type' },
+            cabinet:     { label: 'Cabinet',      icon: 'ph-archive',      dbKey: 'cabinet',     displayId: 'cc-cabinet' },
+            docNo:       { label: 'Document No',  icon: 'ph-file-text',    dbKey: 'docNo',       displayId: 'cc-doc-no' },
+            drawingNo:   { label: 'Drawing No',   icon: 'ph-blueprint',    dbKey: 'drawingNo',   displayId: 'cc-drawing-no' },
+            drawingName: { label: 'Drawing Name', icon: 'ph-pencil-ruler', dbKey: 'drawingName', displayId: 'cc-drawing-name' },
+            excl:        { label: 'Excl',          icon: 'ph-shield-check', dbKey: 'excl',        displayId: 'cc-excl' }
+        };
+
+        function openEditFieldModal(field) {
+            if (!currentJB) return;
+            const cfg = FIELD_MAP[field];
+            if (!cfg) return;
+            editingField = field;
+
+            document.getElementById('ef-title').innerHTML = '<i class="ph-bold ' + cfg.icon + ' mr-1"></i> Edit ' + cfg.label;
+            document.getElementById('ef-subtitle').textContent = 'JObNO : ' + currentJB;
+            document.getElementById('ef-label').textContent = cfg.label;
+            document.getElementById('ef-input').placeholder = 'Enter ' + cfg.label.toLowerCase() + '...';
+
+            const data = JB_DATABASE[currentJB];
+            document.getElementById('ef-input').value = data ? (data[cfg.dbKey] || '') : '';
+
+            const modal = document.getElementById('modal-edit-field');
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function openEditLocationModal() { openEditFieldModal('location'); }
+
+        function closeEditFieldModal() {
+            document.getElementById('modal-edit-field').classList.remove('is-open');
+        }
+
+        function updateField() {
+            if (!editingField) return;
+            const cfg = FIELD_MAP[editingField];
+            const newVal = document.getElementById('ef-input').value.trim();
+            if (currentJB && JB_DATABASE[currentJB]) {
+                JB_DATABASE[currentJB][cfg.dbKey] = newVal;
+                document.getElementById(cfg.displayId).textContent = newVal || '—';
+            }
+            closeEditFieldModal();
+            Swal.fire({
+                icon: 'success', title: 'Updated!',
+                text: cfg.label + ' updated to "' + newVal + '"',
+                confirmButtonColor: '#2563eb', timer: 2000, timerProgressBar: true
+            });
+        }
+
+        // ========================
+        //  EDIT TAG MODAL
+        // ========================
+        let editingTagCh = null;
+        let editingTagRow = null;
+
+        function openEditTagModal(ch, rowIdx) {
+            if (!currentJB) return;
+            editingTagCh = ch;
+            editingTagRow = rowIdx;
+
+            document.getElementById('et-subtitle').textContent = 'JObNO : ' + currentJB;
+
+            const data = JB_DATABASE[currentJB];
+            if (data) {
+                const channel = data.channels.find(c => c.ch === ch);
+                if (channel && channel.rows[rowIdx]) {
+                    const currentTag = channel.rows[rowIdx].tag;
+                    const sel = document.getElementById('et-tag-select');
+                    for (let o of sel.options) { o.selected = (o.value === currentTag); }
+                }
+            }
+
+            document.getElementById('et-update-revision').checked = false;
+            const modal = document.getElementById('modal-edit-tag');
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function closeEditTagModal() {
+            document.getElementById('modal-edit-tag').classList.remove('is-open');
+        }
+
+        function filterTagsByType() {
+            Swal.fire({ icon: 'info', title: 'Filtered', text: 'Tags filtered by ' + document.getElementById('et-inst-type').value, confirmButtonColor: '#2563eb', timer: 1500, timerProgressBar: true });
+        }
+
+        function updateTag() {
+            const newTag = document.getElementById('et-tag-select').value;
+            if (currentJB && JB_DATABASE[currentJB] && editingTagCh !== null) {
+                const channel = JB_DATABASE[currentJB].channels.find(c => c.ch === editingTagCh);
+                if (channel && channel.rows[editingTagRow]) {
+                    channel.rows[editingTagRow].tag = newTag;
+                }
+            }
+            closeEditTagModal();
+            jbFind();
+            Swal.fire({
+                icon: 'success', title: 'Tag Updated!',
+                text: 'Tag set to "' + newTag + '"',
+                confirmButtonColor: '#2563eb', timer: 2000, timerProgressBar: true
+            });
+        }
+
+        // ========================
+        //  JObSCHEDULE REPORT MODAL
+        // ========================
+        function generateReport() {
+            const modal = document.getElementById('modal-jb-schedule');
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function closeJBScheduleModal() {
+            document.getElementById('modal-jb-schedule').classList.remove('is-open');
+        }
+
+        function runJBScheduleReport() {
+            const chFrom = document.getElementById('jbs-ch-from').value;
+            const chTo = document.getElementById('jbs-ch-to').value;
+            const reportType = document.getElementById('jbs-report-type').value;
+            closeJBScheduleModal();
+            Swal.fire({
+                icon: 'success', title: 'Report Generated',
+                text: `Channel ${chFrom} to ${chTo} — ${reportType}`,
+                confirmButtonColor: '#2563eb', timer: 2500, timerProgressBar: true
+            });
+        }
+
+        // ========================
+        //  UPDATE FROM INSBL MODAL
+        // ========================
+        function updateFromInsBl() {
+            // Populate JB NO in modal
+            const jbLabel = currentJB || '—';
+            document.getElementById('insbl-jb-no').textContent = jbLabel;
+            document.getElementById('insbl-all-jb').checked = false;
+            const modal = document.getElementById('modal-insbl-update');
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function closeInsBlModal() {
+            document.getElementById('modal-insbl-update').classList.remove('is-open');
+        }
+
+        function runInsBlUpdate() {
+            const allJOb= document.getElementById('insbl-all-jb').checked;
+            closeInsBlModal();
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: allJOb? 'All JBs updated from InsBl database.' : `JOb${currentJOb|| ''} updated from InsBl database.`,
+                confirmButtonColor: '#2563eb',
+                timer: 2500,
+                timerProgressBar: true
+            });
+        }
+
+        const JB_INDEX_DATA = [
+            { group: 'SIGNAL 12 PAIR', items: [
+                { jb: 'TEST',    loc: 'BOOYWO',                              cable: 'SIGNAL 12 PAIR', cab: 'test' },
+                { jb: 'AUB-7',  loc: 'NEAR CW PUMP',                        cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'AUB-6',  loc: 'HTR FLOOR, NORTH SIDE WALL',         cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'AUB-5',  loc: 'GND FLOOR, NEAR BFP 2',              cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'AUB-4',  loc: 'GND FLOOR, NEAR BFP1',               cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'AUB-3',  loc: 'GND FLOOR, NEAR HOTWELL',            cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'AUB-2',  loc: 'GND FLOOR, NORTH SIDE WALL',         cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'AUB-11', loc: 'TG FLOOR, NEAR NORTH SIDE WALL',     cable: 'SIGNAL 12 PAIR', cab: 'C.U01' },
+                { jb: 'AUB-1',  loc: 'TG FLOOR, NORTH SIDE WALL',          cable: 'SIGNAL 12 PAIR', cab: 'C.U02' },
+                { jb: 'ACJB-8', loc: 'DEAERATOR FLOOR, IN FRONT OF DEAERATOR', cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-7', loc: 'GND FLOOR, NEAR BFW PUMP',           cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-6', loc: 'TG FLOOR, NORTH SIDE WALL',          cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-5', loc: 'GND FLOOR, NEAR CW SUMP, EAST SIDE', cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-4', loc: 'GND FLOOR, NORTH SIDE WALL',         cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-3', loc: 'HTR FLOOR',                          cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-2', loc: 'HTR FLOOR',                          cable: 'SIGNAL 12 PAIR', cab: 'CCA01' },
+                { jb: 'ACJB-1', loc: 'GND FLOOR, NEAR BFP, NORTH SIDE',    cable: 'SIGNAL 12 PAIR', cab: 'CCA01' }
+            ]},
+            { group: 'RTD 8 TRIAD', items: [
+                { jb: 'TJB-01',  loc: 'TG FLOOR, NORTH SIDE WALL',    cable: 'RTD 8 TRIAD', cab: 'CCA01' },
+                { jb: 'RJB-04',  loc: 'INSIDE BFP LOCAL PANEL',       cable: 'RTD 8 TRIAD', cab: 'CCA01' },
+                { jb: 'RJB-03',  loc: 'INSIDE BFP LOCAL PANEL',       cable: 'RTD 8 TRIAD', cab: 'CCA01' },
+                { jb: 'RJB-02',  loc: 'HTR FLOOR, SOUTH SIDE',        cable: 'RTD 8 TRIAD', cab: 'CCA01' },
+                { jb: 'RJB-01',  loc: 'EJECTOR FLOOR, EAST SIDE',     cable: 'RTD 8 TRIAD', cab: 'CCA01' },
+                { jb: 'KSB TB-4', loc: 'INSIDE BFP LOCAL PANEL',      cable: 'RTD 8 TRIAD', cab: 'C.U03' },
+                { jb: 'KSB TB-3', loc: 'INSIDE BFP LOCAL PANEL',      cable: 'RTD 8 TRIAD', cab: 'C.U03' }
+            ]},
+            { group: 'DIGITAL 6 PAIR', items: [
+                { jb: 'EJB-7',  loc: 'HTR FLOOR, NORTH SIDE WALL', cable: 'DIGITAL 6 PAIR', cab: 'C.U02' },
+                { jb: 'EJB-6B', loc: 'HTR FLOOR, NORTH SIDE WALL', cable: 'DIGITAL 6 PAIR', cab: 'C.U03' },
+                { jb: 'EJB-4',  loc: 'GND FLOOR, NEAR CED BOILER', cable: 'DIGITAL 6 PAIR', cab: 'C.U02' }
+            ]}
+        ];
+
+        // Tracks which item is being edited in the JB Index
+        let _idxEditJB = null;
+        let _idxEditItem = null;
+
+        function openJBIndex() {
+            const tbody = document.getElementById('jb-index-body');
+            let html = '';
+            let sr = 0;
+
+            JB_INDEX_DATA.forEach((group, gi) => {
+                html += `<tr class="jbd-group-row"><td colspan="6">${group.group}</td></tr>`;
+                group.items.forEach((item, ii) => {
+                    sr++;
+                    html += `<tr style="height:auto;">
+                        <td class="text-center fw-bold" style="padding:3px 4px; font-size:0.8125rem;">${sr}</td>
+                        <td class="fw-bold color-blue" style="padding:3px 6px; font-size:0.8125rem;">${item.jb}</td>
+                        <td style="padding:3px 8px; cursor:pointer;" class="jbd-idx-cell-loc" onclick="openIdxLocationModal(${gi},${ii})">
+                            <span style="display:flex; align-items:center; gap:5px;">
+                                <i class="ph-bold ph-caret-right" style="font-size:0.625rem; color:#9aa7b5;"></i>
+                                <span style="color:var(--app-text,#e6edf3);">${item.loc}</span>
+                                <i class="ph-bold ph-pencil-simple" style="font-size:0.6rem; opacity:0.4; margin-left:auto;"></i>
+                            </span>
+                        </td>
+                        <td style="padding:3px 6px; text-align:center; cursor:pointer;" class="jbd-idx-cell-cable" onclick="openIdxCableModal(${gi},${ii})">
+                            <span style="display:inline-flex; align-items:center; gap:4px;">
+                                <i class="ph-bold ph-caret-right" style="font-size:0.625rem; color:#9aa7b5;"></i>
+                                <span>${item.cable}</span>
+                                <i class="ph-bold ph-pencil-simple" style="font-size:0.6rem; opacity:0.4;"></i>
+                            </span>
+                        </td>
+                        <td style="padding:3px 6px; text-align:center; cursor:pointer;" class="jbd-idx-cell-cab" onclick="openIdxCabinetModal(${gi},${ii})">
+                            <span style="display:inline-flex; align-items:center; gap:4px;">
+                                <i class="ph-bold ph-caret-right" style="font-size:0.625rem; color:#9aa7b5;"></i>
+                                <span>${item.cab}</span>
+                                <i class="ph-bold ph-pencil-simple" style="font-size:0.6rem; opacity:0.4;"></i>
+                            </span>
+                        </td>
+                        <td style="padding:3px 4px; text-align:center;">
+                            <button class="jbd-btn jbd-btn-blue" style="height:1.625rem; font-size:0.6875rem; padding:0 0.625rem; gap:3px;" onclick="previewJBSchedule('${item.jb}')">
+                                <i class="ph-bold ph-printer"></i> Preview
+                            </button>
+                        </td>
+                    </tr>`;
+                });
+            });
+
+            tbody.innerHTML = html;
+            const modal = document.getElementById('modal-jb-index');
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function closeJBIndexModal() {
+            document.getElementById('modal-jb-index').classList.remove('is-open');
+        }
+
+        // ── JB Index: Edit Location ──────────────────────────────────────
+        function openIdxLocationModal(gi, ii) {
+            _idxEditJB = JB_INDEX_DATA[gi].items[ii].jb;
+            _idxEditItem = JB_INDEX_DATA[gi].items[ii];
+            document.getElementById('idx-loc-jbno').textContent  = _idxEditJB;
+            document.getElementById('idx-loc-input').value        = _idxEditItem.loc;
+            requestAnimationFrame(() => document.getElementById('modal-idx-location').classList.add('is-open'));
+        }
+        function closeIdxLocationModal() {
+            document.getElementById('modal-idx-location').classList.remove('is-open');
+        }
+        function saveIdxLocation() {
+            const val = document.getElementById('idx-loc-input').value.trim();
+            if (_idxEditItem) _idxEditItem.loc = val || _idxEditItem.loc;
+            closeIdxLocationModal();
+            openJBIndex();
+            Swal.fire({ icon:'success', title:'Location Updated', text:`Location for ${_idxEditJB} updated.`, confirmButtonColor:'#2563eb', timer:1800, timerProgressBar:true });
+        }
+
+        // ── JB Index: Edit Cable Type ────────────────────────────────────
+        function openIdxCableModal(gi, ii) {
+            _idxEditJB  = JB_INDEX_DATA[gi].items[ii].jb;
+            _idxEditItem = JB_INDEX_DATA[gi].items[ii];
+            document.getElementById('idx-cable-jbno').textContent = _idxEditJB;
+            const sel = document.getElementById('idx-cable-select');
+            for (let o of sel.options) { o.selected = (o.value === _idxEditItem.cable); }
+            requestAnimationFrame(() => document.getElementById('modal-idx-cable').classList.add('is-open'));
+        }
+        function closeIdxCableModal() {
+            document.getElementById('modal-idx-cable').classList.remove('is-open');
+        }
+        function saveIdxCable() {
+            const val = document.getElementById('idx-cable-select').value;
+            if (_idxEditItem) _idxEditItem.cable = val;
+            closeIdxCableModal();
+            openJBIndex();
+            Swal.fire({ icon:'success', title:'Cable Type Updated', text:`Cable Type for ${_idxEditJB} set to "${val}".`, confirmButtonColor:'#2563eb', timer:1800, timerProgressBar:true });
+        }
+
+        // ── JB Index: Edit Cabinet ───────────────────────────────────────
+        function openIdxCabinetModal(gi, ii) {
+            _idxEditJB  = JB_INDEX_DATA[gi].items[ii].jb;
+            _idxEditItem = JB_INDEX_DATA[gi].items[ii];
+            document.getElementById('idx-cab-jbno').textContent = _idxEditJB;
+            document.getElementById('idx-cab-input').value      = _idxEditItem.cab;
+            requestAnimationFrame(() => document.getElementById('modal-idx-cabinet').classList.add('is-open'));
+        }
+        function closeIdxCabinetModal() {
+            document.getElementById('modal-idx-cabinet').classList.remove('is-open');
+        }
+        function saveIdxCabinet() {
+            const val = document.getElementById('idx-cab-input').value.trim();
+            if (_idxEditItem) _idxEditItem.cab = val || _idxEditItem.cab;
+            closeIdxCabinetModal();
+            openJBIndex();
+            Swal.fire({ icon:'success', title:'Cabinet Updated', text:`Cabinet for ${_idxEditJB} set to "${val}".`, confirmButtonColor:'#2563eb', timer:1800, timerProgressBar:true });
+        }
+
+        // ── JObIndex: Preview → opens JObSchedule modal for that JOb─────
+        function previewJBSchedule(jbName) {
+            // Select the JObin the dropdown so context is preserved
+            const sel = document.getElementById('jb-select');
+            for (let o of sel.options) {
+                if (o.value === jbName) { o.selected = true; break; }
+            }
+            jbFind();           // load the JObdata
+            generateReport();   // open Junction Box Schedule modal (JObIndex stays open)
+        }
+
+        function previewJB(jbName) {
+            closeJBIndexModal();
+            const sel = document.getElementById('jb-select');
+            for (let o of sel.options) {
+                if (o.value === jbName) { o.selected = true; break; }
+            }
+            jbFind();
+        }
+
+        // ── Add JObModal ───────────────────────────────────────────────────
+        function openAddJBModal() {
+            // Reset fields
+            document.getElementById('add-jb-no').value = '';
+            document.getElementById('add-jb-type').selectedIndex = 0;
+            document.getElementById('add-jb-node').value = '';
+            document.getElementById('add-jb-cable').value = '';
+            document.getElementById('add-jb-cabinet').value = '';
+            document.getElementById('add-jb-loc').value = '';
+            
+            requestAnimationFrame(() => document.getElementById('modal-add-jb').classList.add('is-open'));
+        }
+        function closeAddJBModal() {
+            document.getElementById('modal-add-jb').classList.remove('is-open');
+        }
+        function submitAddJB() {
+            const jbNo = document.getElementById('add-jb-no').value.trim();
+            if (!jbNo) {
+                Swal.fire({ icon:'error', title:'Error', text:'New JObNO is required', confirmButtonColor:'#2563eb' });
+                return;
+            }
+            closeAddJBModal();
+            Swal.fire({
+                icon: 'success',
+                title: 'JObAdded',
+                text: `${jbNo} has been created successfully.`,
+                confirmButtonColor: '#2563eb',
+                timer: 1800,
+                timerProgressBar: true
+            });
+        }
+
+  
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tagFromUrl = urlParams.get('tag');
+            if (tagFromUrl) {
+                document.getElementById('jb-tag-input').value = tagFromUrl;
+            }
+
+            // If selected JObhas no data, auto-select the first that does
+            const sel = document.getElementById('jb-select');
+            if (!JB_DATABASE[sel.value]) {
+                for (let o of sel.options) {
+                    if (JB_DATABASE[o.value]) { o.selected = true; break; }
+                }
+            }
+            jbFind();
+        });
+    </script>
 
     <!-- Control Copy Confirmation Modal -->
     <div id="modal-control-copy" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
@@ -442,7 +1089,7 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-seal-check mr-1"></i> Mark As Control Copy</h3>
                     <p class="gnfc-modal-subtitle">JObDetail</p>
                 </div>
-                <button onclick="app.modals._close('modal-control-copy')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+                <button onclick="closeControlCopyModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
             <div class="gnfc-modal-body">
                 <div style="font-size:0.8125rem; font-weight:600; color:var(--app-text,#e6edf3); margin-bottom:1.25rem;">
@@ -455,10 +1102,10 @@
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button onclick="app.modals.confirmControlCopy()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button onclick="confirmControlCopy()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-check mr-1"></i> Go
                 </button>
-                <button onclick="app.modals._close('modal-control-copy')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                <button onclick="closeControlCopyModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Cancel
                 </button>
             </div>
@@ -473,17 +1120,19 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-database mr-1"></i> JBDB Update</h3>
                     <p class="gnfc-modal-subtitle">Sync description &amp; function from InsBl</p>
                 </div>
-                <button onclick="app.modals._close('modal-insbl-update')" class="gnfc-modal-close">
+                <button onclick="closeInsBlModal()" class="gnfc-modal-close">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
             <div class="gnfc-modal-body">
+                <!-- JObNO row -->
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:1rem; padding:0.5rem 0.625rem; border-radius:5px; background:var(--app-bg,#111217); border:1px solid var(--app-border,#2c3235);">
                     <i class="ph-fill ph-plugs-connected" style="color:#5794f2; font-size:1rem;"></i>
                     <span class="font-12px fw-bold color-secondary">JObNO :</span>
                     <span class="font-13px fw-bold color-blue" id="insbl-jb-no">—</span>
                 </div>
 
+                <!-- Info block -->
                 <div style="padding:0.75rem 0.875rem; border-radius:5px; background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.2); margin-bottom:1rem;">
                     <p style="font-size:0.75rem; font-weight:700; color:#fbbf24; line-height:1.6; margin:0;">
                         <i class="ph-bold ph-info mr-1"></i>
@@ -495,22 +1144,22 @@
                     </p>
                 </div>
 
+                <!-- Update For All JObcheckbox -->
                 <div style="display:flex; align-items:center; gap:8px;">
                     <input type="checkbox" id="insbl-all-jb" class="w-4 h-4 rounded cursor-pointer" style="accent-color:#2563eb;">
                     <label for="insbl-all-jb" class="font-12px fw-bold color-primary cursor-pointer">Update For All JB</label>
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.runInsBl()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button type="button" onclick="runInsBlUpdate()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-arrows-clockwise mr-1"></i> Update
                 </button>
-                <button type="button" onclick="app.modals._close('modal-insbl-update')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                <button type="button" onclick="closeInsBlModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Cancel
                 </button>
             </div>
         </div>
     </div>
-
     <!-- Add JObModal -->
     <div id="modal-add-jb" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 560px; padding: 0;">
@@ -519,58 +1168,63 @@
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-plus-circle mr-1"></i> Add New JB</h3>
                     <p class="gnfc-modal-subtitle">JObDetail</p>
                 </div>
-                <button onclick="app.modals._close('modal-add-jb')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+                <button onclick="closeAddJBModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
             <div class="gnfc-modal-body">
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 1rem;">
                     
+                    <!-- Row 1 -->
                     <div style="display:flex; flex-direction:column; gap:4px;">
                         <label class="gnfc-modal-label">New JObNO</label>
                         <input type="text" id="add-jb-no" class="gnfc-modal-input" placeholder="e.g. ACJB-3">
                     </div>
                     <div style="display:flex; flex-direction:column; gap:4px;">
                         <label class="gnfc-modal-label">Cable Type</label>
-                        <select id="add-jb-type" class="gnfc-modal-input">
-                            <option>SIGNAL 12 PAIR</option>
-                            <option>RTD 8 TRIAD</option>
-                            <option>DIGITAL 6 PAIR</option>
-                            <option>THERMOCOUPLE 6 PAIR</option>
-                            <option>COAXIAL</option>
-                        </select>
+                        <div class="jbd-select-wrap" style="width:100%;">
+                            <select id="add-jb-type" class="gnfc-modal-input jbd-select" style="width:100%;">
+                                <option>Select Type</option>
+                                <option>SIGNAL 12 PAIR</option>
+                                <option>RTD 8 TRIAD</option>
+                                <option>DIGITAL 6 PAIR</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down jbd-caret" style="right:12px;"></i>
+                        </div>
                     </div>
 
+                    <!-- Row 2 -->
                     <div style="display:flex; flex-direction:column; gap:4px;">
-                        <label class="gnfc-modal-label">Number of Node (Loop Data)</label>
-                        <input type="number" id="add-jb-node" class="gnfc-modal-input" placeholder="Select node count...">
+                        <label class="gnfc-modal-label">Number of Node</label>
+                        <input type="text" id="add-jb-node" class="gnfc-modal-input" placeholder="0">
                     </div>
                     <div style="display:flex; flex-direction:column; gap:4px;">
                         <label class="gnfc-modal-label">Cable Number</label>
-                        <input type="text" id="add-jb-cable" class="gnfc-modal-input" placeholder="e.g. ACJB2-CCAbl">
+                        <input type="text" id="add-jb-cable" class="gnfc-modal-input" placeholder="">
                     </div>
 
+                    <!-- Row 3 -->
                     <div style="display:flex; flex-direction:column; gap:4px;">
                         <label class="gnfc-modal-label">Cabinet Number</label>
-                        <input type="text" id="add-jb-cabinet" class="gnfc-modal-input" placeholder="e.g. C C Ab1">
+                        <input type="text" id="add-jb-cabinet" class="gnfc-modal-input" placeholder="">
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:4px;">
+                    <div></div> <!-- spacer -->
+
+                    <!-- Row 4 -->
+                    <div style="grid-column: 1 / -1; display:flex; flex-direction:column; gap:4px;">
                         <label class="gnfc-modal-label">Location</label>
-                        <input type="text" id="add-jb-loc" class="gnfc-modal-input" placeholder="e.g. MTR FLOOR">
+                        <input type="text" id="add-jb-loc" class="gnfc-modal-input" placeholder="">
                     </div>
                 </div>
             </div>
             <div class="gnfc-modal-footer">
-                <button type="button" onclick="app.modals.submitAddJob()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                <button onclick="submitAddJB()" class="gnfc-modal-btn gnfc-modal-btn-primary">
                     <i class="ph-bold ph-check mr-1"></i> Submit
                 </button>
-                <button type="button" onclick="app.modals._close('modal-add-jb')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                <button onclick="closeAddJBModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Cancel
                 </button>
             </div>
         </div>
     </div>
-    
-    <!-- JS IMPORTS -->
-    <script src="/src/js/boiler_job_mock_data.js"></script>
-    <script src="/src/js/boiler_job_detail.js"></script>
+
 </body>
 </html>
