@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" data-theme-mode="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JObDetail | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <!-- Removed jb-detail.css -->
+    <link rel="stylesheet" href="/src/css/table-style.css">
+    <link rel="stylesheet" href="/src/css/theme-aware.css">
+    <link rel="stylesheet" href="/src/css/global-layout.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/src/js/theme-manager.js"></script>
+    <style>
+        /* Essential Scrollbar setup */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--app-border, #2C3235); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        /* Utility overrides to match GNFC strict colors */
+        .color-primary { color: var(--app-text, #e6edf3); }
+        .color-secondary { color: #9aa7b5; }
+        .color-blue { color: #5794f2; }
+        .color-orange { color: #fb923c; }
+        .bg-app-card { background: var(--app-bg, #111217); border: 1px solid var(--app-border, #2c3235); }
+    </style>
+</head>
+<body class="bg-[var(--app-body-bg,#0a0b0d)] text-[var(--app-text,#e6edf3)] min-h-screen flex flex-col font-ios m-0 antialiased selection:bg-[#2563eb]/30 selection:text-white">
+
+    <!-- HEADER -->
+    <div id="header-placeholder">
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "JObDetail",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "Instrument Data", href: "/src/pages/boiler_inst_data.html" },
+                    { label: "JObDetail" }
+                ],
+                backLink: "/src/pages/boiler_inst_data.html"
+            });
+        </script>
+    </div>
+
+    <!-- MAIN APP CONTENT -->
+    <main class="flex-1 overflow-hidden flex flex-col p-3 lg:p-4 pb-[80px]">
+        <div class="h-full max-w-[1920px] mx-auto w-full flex flex-col">
+            
+            <div class="flex-1 flex flex-col gap-4 relative">
+                
+                <!-- TOOLBAR CARD -->
+                <div class="bg-app-card rounded-lg shadow-sm flex flex-col overflow-hidden">
+                    <div class="flex flex-wrap items-center justify-between gap-4 py-3 px-4 bg-app-card border-b border-[var(--app-border,#2c3235)]">
+                        <div class="flex flex-wrap items-center gap-5">
+                            <!-- Left Toolbar -->
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[rgba(56,189,248,0.08)] border border-[rgba(56,189,248,0.2)] text-[#38bdf8] font-bold text-[13px] tracking-wide shadow-sm">
+                                <i class="ph-fill ph-check-circle text-base"></i>
+                                JB VIEW MODE
+                            </div>
+                            
+                            <!-- Search Tag -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] font-extrabold uppercase tracking-widest text-[#9aa7b5]">Search Tag</label>
+                                <div class="flex items-center gap-1.5">
+                                    <div class="relative w-[130px]">
+                                        <i class="ph-bold ph-tag absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9aa7b5] text-[13px]"></i>
+                                        <input type="text" id="jb-tag-input" class="w-full h-[34px] bg-[var(--app-bg,#111217)] border border-[var(--app-border,#2c3235)] rounded px-2.5 pl-7 text-[13px] font-medium text-[var(--app-text,#e6edf3)] focus:border-[#5794f2] focus:ring-2 focus:ring-[#5794f2]/15 outline-none transition-all placeholder:text-[#9aa7b5]/60" placeholder="e.g 1LT302">
+                                    </div>
+                                    <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#2563eb] text-white hover:bg-[#1d4ed8] border border-transparent" onclick="app.findJob()">
+                                        <i class="ph-bold ph-magnifying-glass"></i> Go
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="w-px h-8 bg-[var(--app-border,#2c3235)] mx-1 hidden sm:block"></div>
+
+                            <!-- JObFind Group -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] font-extrabold uppercase tracking-widest text-[#9aa7b5]">FIND JOB</label>
+                                <div class="flex items-center gap-1.5">
+                                    <input type="text" id="jb-find-input" class="w-32 h-[34px] bg-[var(--app-bg,#111217)] border border-[var(--app-border,#2c3235)] rounded px-2.5 text-[13px] font-medium text-[var(--app-text,#e6edf3)] focus:border-[#5794f2] focus:ring-2 focus:ring-[#5794f2]/15 outline-none transition-all placeholder:text-[#9aa7b5]/60" placeholder="Search…">
+                                    <div class="relative w-32">
+                                        <select id="jb-select" class="w-full h-[34px] bg-[var(--app-bg,#111217)] border border-[var(--app-border,#2c3235)] rounded pl-2.5 pr-8 text-[13px] font-medium text-[var(--app-text,#e6edf3)] focus:border-[#5794f2] focus:ring-2 focus:ring-[#5794f2]/15 outline-none transition-all appearance-none cursor-pointer">
+                                            <option>ACJB-1</option>
+                                            <option selected>ACJB-2</option>
+                                            <option>ACJB-3</option>
+                                            <option>ACJB-4</option>
+                                            <option>ACJB-5</option>
+                                            <option>ACJB-6</option>
+                                            <option>ACJB-7</option>
+                                            <option>ACJB-8</option>
+                                            <option>ACJB-9</option>
+                                            <option>AUB-1</option>
+                                        </select>
+                                        <i class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9aa7b5] pointer-events-none text-xs"></i>
+                                    </div>
+                                    <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#2563eb] text-white hover:bg-[#1d4ed8] border border-transparent" onclick="app.findJob()">
+                                        <i class="ph-bold ph-check-square"></i> Select
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- DB Actions -->
+                            <div class="flex items-center gap-2">
+                                <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openInsBl()">
+                                    <i class="ph-bold ph-arrows-clockwise"></i> Update From InsBl
+                                </button>
+                                <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openJobIndex()">
+                                    <i class="ph-bold ph-list-numbers"></i> JObIndex
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right-side Actions -->
+                        <div class="flex items-center gap-2 ml-auto">
+                            <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openReport()">
+                                <i class="ph-bold ph-file-text"></i> Report
+                            </button>
+                            <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#dc2626] text-white hover:bg-[#b91c1c] border border-transparent">
+                                <i class="ph-bold ph-trash"></i> Delete JB
+                            </button>
+                            <button class="inline-flex items-center justify-center gap-1.5 px-3 h-[34px] rounded text-[13px] font-bold transition-all shadow-sm cursor-pointer bg-[#16a34a] text-white hover:bg-[#15803d] border border-transparent" onclick="app.modals.openAddJob()">
+                                <i class="ph-bold ph-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ALERT BANNER -->
+                <div id="alert-banner" class="flex items-center gap-2 px-4 py-3 rounded-lg bg-[rgba(245,158,11,0.07)] border border-[rgba(245,158,11,0.2)] text-[#fbbf24] text-[13px] font-semibold">
+                    <i class="ph-bold ph-warning-circle text-base"></i>
+                    No record found. Select a JOband press <strong>Go</strong>.
+                </div>
+
+                <!-- CONTROL COPY INFO CARD -->
+                <div id="control-copy-section" class="hidden">
+                    <div class="bg-app-card rounded-lg flex flex-col overflow-hidden relative shadow-md">
+                        <div class="flex items-center justify-between px-4 py-2 border-b border-[var(--app-border,#2c3235)] bg-gradient-to-r from-blue-600/10 to-transparent">
+                            <div class="flex items-center gap-2">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-md bg-blue-500/10 text-blue-500">
+                                    <i class="ph-bold ph-info"></i>
+                                </span>
+                                <span class="text-[#9aa7b5] text-xs">—</span>
+                                <span class="text-xs font-bold text-[#5794f2]">
+                                    JObNO :&nbsp;<span id="cc-jb-no" class="font-extrabold">ACJB-2</span>
+                                </span>
+                            </div>
+                            <button class="inline-flex items-center justify-center gap-1.5 px-2.5 h-7 rounded text-[11px] font-bold transition-all shadow-sm cursor-pointer bg-transparent text-[#9aa7b5] border border-transparent hover:bg-white/5 hover:text-white" onclick="app.modals.openControlCopy()">
+                                <i class="ph-bold ph-seal-check text-[#34d399]"></i> Mark As Control Copy
+                            </button>
+                        </div>
+                        <div class="p-3">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                                <!-- Info Items -->
+                                <script>
+                                    const fields = ['location', 'cableNo', 'cableType', 'cabinet', 'docNo', 'drawingNo', 'drawingName', 'excl'];
+                                    const labels = ['Location', 'Cable No', 'Cable Type', 'Cabinet', 'Document No', 'Drawing No', 'Drawing Name', 'Excl'];
+                                    const ids = ['cc-location-val', 'cc-cable-no', 'cc-cable-type', 'cc-cabinet', 'cc-doc-no', 'cc-drawing-no', 'cc-drawing-name', 'cc-excl'];
+                                    fields.forEach((f, i) => {
+                                        document.write(`
+                                            <div class="bg-[rgba(255,255,255,0.02)] border border-[var(--app-border,#2c3235)] rounded-md p-2 flex flex-col gap-1 cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.04)] hover:border-blue-500/30 group" onclick="app.modals.openEditField('${f}')">
+                                                <div class="text-[10px] font-extrabold uppercase tracking-wider text-[#9aa7b5]">${labels[i]}</div>
+                                                <div class="flex justify-between items-center h-[18px]">
+                                                    <span id="${ids[i]}" class="text-[13px] font-bold text-[var(--app-text,#e6edf3)] truncate">—</span>
+                                                    <i class="ph-bold ph-pencil-simple text-[11px] text-[#9aa7b5] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                                </div>
+                                            </div>
+                                        `);
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHANNEL RECORDS TABLE CARD -->
+                <div id="channel-table-section" class="hidden h-full flex flex-col">
+                    <div class="bg-app-card rounded-lg flex flex-col overflow-hidden h-full">
+                        <div class="flex items-center justify-between px-4 py-2 bg-[var(--app-border,#2c3235)]/30 border-b border-[var(--app-border,#2c3235)] shrink-0">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-table text-[#fb923c] text-[15px]"></i>
+                                <span class="font-extrabold tracking-wide text-[13px]">Channel Records</span>
+                            </div>
+                            <span id="ch-record-count" class="bg-blue-600/10 text-blue-500 text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full border border-blue-500/20">0 Channels</span>
+                        </div>
+
+                        <div class="overflow-y-auto flex-1">
+                            <table class="w-full border-collapse" id="ch-table">
+                                <thead class="sticky top-0 z-10 bg-[var(--app-bg,#111217)] text-xs text-[#9aa7b5] uppercase tracking-wider font-extrabold shadow-sm border-b border-[var(--app-border,#2c3235)]">
+                                    <tr>
+                                        <th class="w-10 text-center py-2 border-r border-[var(--app-border,#2c3235)]" rowspan="2">Ch</th>
+                                        <th class="w-28 text-left px-2 py-2 border-r border-[var(--app-border,#2c3235)] hover:bg-white/5 cursor-pointer transition-colors" rowspan="2">Tag Number</th>
+                                        <th class="min-w-[200px] text-left px-2 py-2 border-r border-[var(--app-border,#2c3235)]" rowspan="2">Location / Description / Function</th>
+                                        <th class="w-16 text-center py-2 border-r border-[var(--app-border,#2c3235)]" rowspan="2">JOB TERM</th>
+                                        <th class="text-center py-1 border-b border-[var(--app-border,#2c3235)]" colspan="2">Cabinet Term Strip</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="w-16 text-center py-1 border-r border-[var(--app-border,#2c3235)] text-[10px]">Terminal</th>
+                                        <th class="w-16 text-center py-1 text-[10px]">Strip</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ch-table-body" class="bg-[var(--app-bg,#111217)]">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER ACTIONS -->
+                <div class="fixed bottom-0 left-0 lg:left-64 xl:left-[280px] right-0 h-[60px] bg-[#111217]/90 backdrop-blur-md border-t border-[var(--app-border,#2c3235)] flex items-center justify-end px-4 gap-3 z-40 transition-all duration-300">
+                    <button class="inline-flex items-center justify-center gap-1.5 px-4 h-9 rounded text-sm font-bold transition-all shadow-sm cursor-pointer bg-[#2563eb] text-white hover:bg-[#1d4ed8] border border-transparent" onclick="app.modals.openReport()">
+                        <i class="ph-bold ph-file-text"></i> Report
+                    </button>
+                    <button class="inline-flex items-center justify-center gap-1.5 px-4 h-9 rounded text-sm font-bold transition-all shadow-sm cursor-pointer bg-[#16a34a] text-white hover:bg-[#15803d] border border-transparent" onclick="app.modals.openAddJob()">
+                        <i class="ph-bold ph-plus"></i> Add
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!-- MODALS -->
+    <!-- ══════════════════════════════════════════════════════════════════ -->
+
+    <!-- Generic Edit Field Modal -->
+    <div id="modal-edit-field" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 420px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title" id="ef-title"><i class="ph-bold ph-map-pin mr-1" id="ef-icon"></i> Edit Location</h3>
+                    <p id="ef-subtitle" class="gnfc-modal-subtitle">JObNO : ACJB-2</p>
+                </div>
+                <button onclick="app.modals._close('modal-edit-field')" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div class="mb-3">
+                    <label class="gnfc-modal-label" id="ef-label">Location</label>
+                    <input type="text" id="ef-input" class="gnfc-modal-input" placeholder="Enter value...">
+                </div>
+                <div class="flex items-center gap-2 mb-2">
+                    <input type="checkbox" id="ef-all-jb" class="w-4 h-4 rounded border-gray-400 cursor-pointer">
+                    <label for="ef-all-jb" class="font-12px fw-bold color-primary cursor-pointer">Update For All JB</label>
+                </div>
+                <p style="color:#ef4444; font-size:0.75rem; font-weight:600; line-height:1.4;">
+                    <i class="ph-bold ph-warning mr-1"></i>Note: Old values of all JBs will be replaced if selected All JB.
+                </p>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.saveEditField()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Update
+                </button>
+                <button type="button" onclick="app.modals._close('modal-edit-field')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Junction Box Schedule Modal -->
+    <div id="modal-jb-schedule" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 520px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-grid-four mr-1"></i> Junction Box Schedule</h3>
+                    <p class="gnfc-modal-subtitle">Generate channel report</p>
+                </div>
+                <button onclick="app.modals._close('modal-jb-schedule')" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div class="grid grid-cols-2 gap-4 mb-5">
+                    <div>
+                        <label class="gnfc-modal-label">Ch No From :</label>
+                        <select id="jbs-ch-from" class="gnfc-modal-input">
+                            <option value="1" selected>1</option><option value="2">2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                            <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="gnfc-modal-label">Ch No To :</label>
+                        <select id="jbs-ch-to" class="gnfc-modal-input">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                            <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                            <option value="10">10</option><option value="11">11</option><option value="12" selected>12</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label class="gnfc-modal-label">Select In Report :</label>
+                    <select id="jbs-report-type" class="gnfc-modal-input">
+                        <option>DESCRIPTION</option><option>TAG NO</option><option>LOOP NO</option><option>ALL</option>
+                    </select>
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.runReport()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-play mr-1"></i> Go
+                </button>
+                <button type="button" onclick="app.modals._close('modal-jb-schedule')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JObIndex Modal -->
+    <div id="modal-jb-index" class="gnfc-modal-overlay" style="z-index: 1005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide" style="max-width: 1100px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-list-numbers mr-1"></i> JObIndex</h3>
+                    <p class="gnfc-modal-subtitle">BOILER — Click <span style="color:#5794f2;">Location</span>, <span style="color:#fb923c;">Cable Type</span> or <span style="color:#34d399;">Cabinet</span> cells to edit</p>
+                </div>
+                <button onclick="app.modals._close('modal-jb-index')" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body" style="padding: 0; max-height: 70vh; overflow: auto;">
+                <table class="w-full border-collapse" id="jb-index-table" style="font-size:0.8125rem;">
+                    <thead class="bg-[#111217] text-[#9aa7b5] border-b border-[#2c3235] uppercase text-xs">
+                        <tr>
+                            <th class="w-12 py-2 border-r border-[#2c3235] font-extrabold text-center">Sr</th>
+                            <th class="w-[110px] py-2 border-r border-[#2c3235] font-extrabold text-left pl-2">JObNo</th>
+                            <th class="min-w-[280px] py-2 border-r border-[#2c3235] font-extrabold text-left pl-3">Location</th>
+                            <th class="w-[160px] py-2 border-r border-[#2c3235] font-extrabold text-center">Cable Type</th>
+                            <th class="w-[110px] py-2 border-r border-[#2c3235] font-extrabold text-center">Cabinet</th>
+                            <th class="w-[100px] py-2 font-extrabold text-center">Print</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jb-index-body" class="bg-[#111217]"></tbody>
+                </table>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals._close('modal-jb-index')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JObIndex — Edit Location Modal -->
+    <div id="modal-idx-location" class="gnfc-modal-overlay" style="z-index: 1010;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 400px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-map-pin mr-1"></i> Edit Location</h3>
+                    <p class="gnfc-modal-subtitle">JObNO : <span id="idx-loc-jbno">—</span></p>
+                </div>
+                <button onclick="app.modals._close('modal-idx-location')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Location</label>
+                    <input type="text" id="idx-loc-input" class="gnfc-modal-input" placeholder="Enter location...">
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.saveIdxField('modal-idx-location', 'idx-loc-input', 'loc', 'Location')" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Update
+                </button>
+                <button type="button" onclick="app.modals._close('modal-idx-location')" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JObIndex — Edit Cable Type Modal -->
+    <div id="modal-idx-cable" class="gnfc-modal-overlay" style="z-index: 10010;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 400px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-plugs mr-1"></i> Edit Cable Type</h3>
+                    <p class="gnfc-modal-subtitle">JObNO : <span id="idx-cable-jbno">—</span></p>
+                </div>
+                <button onclick="app.modals._close('modal-idx-cable')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Cable Type</label>
+                    <select id="idx-cable-select" class="gnfc-modal-input">
+                        <option>SIGNAL 12 PAIR</option>
+                        <option>RTD 8 TRIAD</option>
+                        <option>DIGITAL 6 PAIR</option>
+                        <option>THERMOCOUPLE 6 PAIR</option>
+                        <option>COAXIAL</option>
+                    </select>
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.saveIdxField('modal-idx-cable', 'idx-cable-select', 'cable', 'Cable Type')" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Update
+                </button>
+                <button type="button" onclick="app.modals._close('modal-idx-cable')" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JObIndex — Edit Cabinet Modal -->
+    <div id="modal-idx-cabinet" class="gnfc-modal-overlay" style="z-index: 10010;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 400px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-archive mr-1"></i> Edit Cabinet</h3>
+                    <p class="gnfc-modal-subtitle">JObNO : <span id="idx-cab-jbno">—</span></p>
+                </div>
+                <button onclick="app.modals._close('modal-idx-cabinet')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Cabinet No</label>
+                    <input type="text" id="idx-cab-input" class="gnfc-modal-input" placeholder="Enter cabinet no...">
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.saveIdxField('modal-idx-cabinet', 'idx-cab-input', 'cab', 'Cabinet')" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Update
+                </button>
+                <button type="button" onclick="app.modals._close('modal-idx-cabinet')" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Copy Confirmation Modal -->
+    <div id="modal-control-copy" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 440px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-seal-check mr-1"></i> Mark As Control Copy</h3>
+                    <p class="gnfc-modal-subtitle">JObDetail</p>
+                </div>
+                <button onclick="app.modals._close('modal-control-copy')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div style="font-size:0.8125rem; font-weight:600; color:var(--app-text,#e6edf3); margin-bottom:1.25rem;">
+                    Please check data validity for the JObbefore marking it as a Control Copy.
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:0.5rem 0.625rem; border-radius:5px; background:var(--app-bg,#111217); border:1px solid var(--app-border,#2c3235);">
+                    <i class="ph-fill ph-plugs-connected" style="color:#5794f2; font-size:1rem;"></i>
+                    <span class="font-12px fw-bold color-secondary">JObNO :</span>
+                    <span class="font-13px fw-extrabold" style="color:#ef4444;" id="cc-modal-jb-no">—</span>
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button onclick="app.modals.confirmControlCopy()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Go
+                </button>
+                <button onclick="app.modals._close('modal-control-copy')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JBDB Update Modal -->
+    <div id="modal-insbl-update" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 440px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-database mr-1"></i> JBDB Update</h3>
+                    <p class="gnfc-modal-subtitle">Sync description &amp; function from InsBl</p>
+                </div>
+                <button onclick="app.modals._close('modal-insbl-update')" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:1rem; padding:0.5rem 0.625rem; border-radius:5px; background:var(--app-bg,#111217); border:1px solid var(--app-border,#2c3235);">
+                    <i class="ph-fill ph-plugs-connected" style="color:#5794f2; font-size:1rem;"></i>
+                    <span class="font-12px fw-bold color-secondary">JObNO :</span>
+                    <span class="font-13px fw-bold color-blue" id="insbl-jb-no">—</span>
+                </div>
+
+                <div style="padding:0.75rem 0.875rem; border-radius:5px; background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.2); margin-bottom:1rem;">
+                    <p style="font-size:0.75rem; font-weight:700; color:#fbbf24; line-height:1.6; margin:0;">
+                        <i class="ph-bold ph-info mr-1"></i>
+                        This tool will update <strong>description</strong> and <strong>function</strong> from InsBl.
+                    </p>
+                    <p style="font-size:0.75rem; font-weight:600; color:#f87171; line-height:1.6; margin:0.375rem 0 0;">
+                        <i class="ph-bold ph-warning mr-1"></i>
+                        This will take several seconds. Please wait after executing command!
+                    </p>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <input type="checkbox" id="insbl-all-jb" class="w-4 h-4 rounded cursor-pointer" style="accent-color:#2563eb;">
+                    <label for="insbl-all-jb" class="font-12px fw-bold color-primary cursor-pointer">Update For All JB</label>
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.runInsBl()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-arrows-clockwise mr-1"></i> Update
+                </button>
+                <button type="button" onclick="app.modals._close('modal-insbl-update')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add JObModal -->
+    <div id="modal-add-jb" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 560px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-plus-circle mr-1"></i> Add New JB</h3>
+                    <p class="gnfc-modal-subtitle">JObDetail</p>
+                </div>
+                <button onclick="app.modals._close('modal-add-jb')" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 1rem;">
+                    
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">New JObNO</label>
+                        <input type="text" id="add-jb-no" class="gnfc-modal-input" placeholder="e.g. ACJB-3">
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Cable Type</label>
+                        <select id="add-jb-type" class="gnfc-modal-input">
+                            <option>SIGNAL 12 PAIR</option>
+                            <option>RTD 8 TRIAD</option>
+                            <option>DIGITAL 6 PAIR</option>
+                            <option>THERMOCOUPLE 6 PAIR</option>
+                            <option>COAXIAL</option>
+                        </select>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Number of Node (Loop Data)</label>
+                        <input type="number" id="add-jb-node" class="gnfc-modal-input" placeholder="Select node count...">
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Cable Number</label>
+                        <input type="text" id="add-jb-cable" class="gnfc-modal-input" placeholder="e.g. ACJB2-CCAbl">
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Cabinet Number</label>
+                        <input type="text" id="add-jb-cabinet" class="gnfc-modal-input" placeholder="e.g. C C Ab1">
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Location</label>
+                        <input type="text" id="add-jb-loc" class="gnfc-modal-input" placeholder="e.g. MTR FLOOR">
+                    </div>
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="app.modals.submitAddJob()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> Submit
+                </button>
+                <button type="button" onclick="app.modals._close('modal-add-jb')" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS IMPORTS -->
+    <script src="/src/js/boiler_job_mock_data.js"></script>
+    <script src="/src/js/boiler_job_detail.js"></script>
+</body>
+</html>
