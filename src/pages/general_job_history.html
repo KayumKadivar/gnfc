@@ -118,31 +118,31 @@
   <script src="/src/js/sidebar.js"></script>
   <script src="/src/js/header.js"></script>
   <div id="sidebar-container"></div>
-  <script>try { renderSidebar('technician_logbook'); } catch (e) { }</script>
+  <script>try { renderSidebar('plants'); } catch (e) { }</script>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
     <div id="header-container"></div>
     <script>
       renderHeader({
-        title: "Acetic Acid Logbook",
-        breadcrumbs: [
-          { label: "Technician Log", href: "technician_logbook.html" },
-          { label: "Plant Detail", href: "plant_detail.html" },
-          { label: "Job History" }
-        ],
-        backLink: "plant_detail.html"
-      });
+                title: "Loop Data",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "General Job History" }
+                ],
+                backLink: "/src/pages/boiler_inst_data.html"
+            });
     </script>
 
     <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
 
       <!-- Top Navigation Bar -->
-      <div id="plant-nav-container"></div>
-      <script src="/src/js/plant_nav.js"></script>
-      <script>
+      <!-- <div id="plant-nav-container"></div> -->
+      <!-- <script src="/src/js/plant_nav.js"></script> -->
+      <!-- <script>
         renderPlantNav('job_history');
-      </script>
+      </script> -->
 
       <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm my-4">
         <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
