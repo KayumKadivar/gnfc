@@ -1,0 +1,541 @@
+/* ==========================================================================
+   JB Detail Page — Global Styles
+   Theme-aware via --app-* CSS variables (set by ThemeManager)
+   ========================================================================== */
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar          { width: 6px; height: 6px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--app-border, #2C3235); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ── Toolbar Filters ───────────────────────────────────────────────────── */
+.jbd-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.jbd-filter-label {
+    font-size: 0.625rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--app-muted, #9aa7b5);
+    display: block;
+}
+
+html[data-theme-mode="light"] .jbd-filter-label {
+    color: #64748b;
+}
+
+.jbd-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.jbd-input {
+    height: 2.125rem;
+    background: var(--app-bg, #111217);
+    border: 1px solid var(--app-border, #2c3235);
+    border-radius: 4px;
+    padding: 0 0.625rem;
+    color: var(--app-text, #e6edf3);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.jbd-input:focus {
+    border-color: #5794f2;
+    box-shadow: 0 0 0 2px rgba(87, 148, 242, 0.15);
+}
+
+.jbd-input.jbd-select {
+    appearance: none;
+    padding-right: 2rem;
+    cursor: pointer;
+}
+
+html[data-theme-mode="light"] .jbd-input {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+html[data-theme-mode="light"] .jbd-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+
+.jbd-select-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.jbd-select-wrap .jbd-caret {
+    position: absolute;
+    right: 8px;
+    font-size: 0.65rem;
+    color: var(--app-muted, #9aa7b5);
+    pointer-events: none;
+}
+
+/* ── Toolbar Divider ───────────────────────────────────────────────────── */
+.jbd-divider {
+    display: none;
+    width: 1px;
+    align-self: stretch;
+    background: var(--app-border, #2c3235);
+    margin: 0 4px;
+}
+
+@media (min-width: 1280px) {
+    .jbd-divider { display: block; }
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.jbd-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 2.125rem;
+    padding: 0 0.875rem;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s, transform 0.1s;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+    line-height: 1;
+}
+
+.jbd-btn:active { transform: translateY(1px); }
+
+.jbd-btn i { font-size: 0.9375rem; flex-shrink: 0; }
+
+/* Blue — primary action */
+.jbd-btn-blue {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+    box-shadow: 0 1px 6px -1px rgba(37, 99, 235, 0.4);
+}
+.jbd-btn-blue:hover { background: #1d4ed8; border-color: #1d4ed8; }
+
+/* Green — add/positive */
+.jbd-btn-green {
+    background: linear-gradient(135deg, #059669, #10b981);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 1px 6px -1px rgba(16, 185, 129, 0.4);
+}
+.jbd-btn-green:hover { background: linear-gradient(135deg, #047857, #059669); }
+
+/* Red — destructive */
+.jbd-btn-red {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 1px 6px -1px rgba(239, 68, 68, 0.4);
+}
+.jbd-btn-red:hover { background: linear-gradient(135deg, #b91c1c, #dc2626); }
+
+/* Ghost — secondary */
+.jbd-btn-ghost {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--app-border, #2c3235);
+    color: var(--app-text, #e6edf3);
+}
+.jbd-btn-ghost:hover {
+    background: rgba(87, 148, 242, 0.1);
+    border-color: rgba(87, 148, 242, 0.4);
+    color: #73b0ff;
+}
+
+html[data-theme-mode="light"] .jbd-btn-ghost {
+    background: #fff;
+    border-color: #d1d5db;
+    color: #374151;
+}
+html[data-theme-mode="light"] .jbd-btn-ghost:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #2563eb;
+}
+
+/* ── Alert Banner ──────────────────────────────────────────────────────── */
+.jbd-alert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0.625rem 1rem;
+    border-radius: 6px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.22);
+    color: #f87171;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+html[data-theme-mode="light"] .jbd-alert {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+/* ── Card: Control Copy ────────────────────────────────────────────────── */
+.jbd-card {
+    background: var(--app-panel, #181b1f);
+    border: 1px solid var(--app-border, #2c3235);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme-mode="light"] .jbd-card {
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+}
+
+.jbd-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    background: var(--app-panel-alt, #22252b);
+    border-bottom: 1px solid var(--app-border, #2c3235);
+}
+
+.jbd-card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.jbd-card-header-title {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--app-text, #e6edf3);
+}
+
+.jbd-card-body {
+    padding: 1rem;
+}
+
+/* ── Info Grid (Control Copy fields) ──────────────────────────────────── */
+.jbd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 0.75rem 1rem;
+}
+
+.jbd-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--app-bg, #111217);
+    border: 1px solid var(--app-border, #2c3235);
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+}
+
+.jbd-info-item:hover {
+    border-color: rgba(87, 148, 242, 0.5);
+    background: rgba(87, 148, 242, 0.05);
+}
+
+html[data-theme-mode="light"] .jbd-info-item {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+html[data-theme-mode="light"] .jbd-info-item:hover {
+    border-color: #93c5fd;
+    background: #eff6ff;
+}
+
+.jbd-info-item-label {
+    font-size: 0.5625rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--app-muted, #9aa7b5);
+}
+
+html[data-theme-mode="light"] .jbd-info-item-label {
+    color: #64748b;
+}
+
+.jbd-info-item-value {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--app-text, #e6edf3);
+}
+
+.jbd-info-item-value .jbd-edit-icon {
+    font-size: 0.625rem;
+    opacity: 0;
+    color: var(--app-muted, #9aa7b5);
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+}
+
+.jbd-info-item:hover .jbd-edit-icon {
+    opacity: 1;
+}
+
+html[data-theme-mode="light"] .jbd-info-item-value {
+    color: #1e293b;
+}
+
+/* ── Badge / pill ──────────────────────────────────────────────────────── */
+.jbd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    border: 1px solid;
+}
+
+.jbd-badge-success {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.1);
+    border-color: rgba(52, 211, 153, 0.25);
+}
+
+html[data-theme-mode="light"] .jbd-badge-success {
+    color: #059669;
+    background: rgba(5, 150, 105, 0.08);
+    border-color: rgba(5, 150, 105, 0.2);
+}
+
+.jbd-badge-count {
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--app-muted, #9aa7b5);
+    background: var(--app-bg, #111217);
+    border: 1px solid var(--app-border, #2c3235);
+}
+
+html[data-theme-mode="light"] .jbd-badge-count {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+/* ── Channel Table ─────────────────────────────────────────────────────── */
+.jbd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    table-layout: auto;
+}
+
+.jbd-table th {
+    background: var(--app-panel-alt, #22252b);
+    color: var(--app-muted, #9aa7b5);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.625rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--app-border, #2c3235);
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    white-space: nowrap;
+}
+
+/* Sticky row 1 */
+.jbd-table thead tr:first-child th {
+    top: 0;
+    height: 30px;
+}
+
+/* Sticky row 2 (sub-headers) */
+.jbd-table thead tr:nth-child(2) th {
+    top: 30px;
+    height: 30px;
+}
+
+/* Row-span headers span both rows */
+.jbd-table th[rowspan="2"] {
+    top: 0;
+    height: 60px;
+}
+
+.jbd-table td {
+    padding: 0 0.25rem;
+    border: 1px solid var(--app-border, #2c3235);
+    color: var(--app-text, #e6edf3);
+    vertical-align: middle;
+    height: 34px;
+}
+
+.jbd-table tbody tr:hover {
+    background: rgba(87, 148, 242, 0.08);
+}
+
+/* Alternate row tint */
+.jbd-table tbody tr:nth-child(3n+1) {
+    background: rgba(255, 255, 255, 0.012);
+}
+.jbd-table tbody tr:nth-child(3n+1):hover {
+    background: rgba(87, 148, 242, 0.08);
+}
+
+html[data-theme-mode="light"] .jbd-table th {
+    background: #eef1f6;
+    color: #475569;
+    border-color: #d1dae6;
+}
+
+html[data-theme-mode="light"] .jbd-table td {
+    border-color: #e2e8f0;
+    color: #334155;
+}
+
+html[data-theme-mode="light"] .jbd-table tbody tr:hover {
+    background: #dbeafe;
+}
+
+html[data-theme-mode="light"] .jbd-table tbody tr:nth-child(3n+1) {
+    background: rgba(0, 0, 0, 0.01);
+}
+
+/* Channel number cell */
+.jbd-ch-num {
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: #5794f2;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+html[data-theme-mode="light"] .jbd-ch-num {
+    color: #2563eb;
+}
+
+/* ── Table Inputs ──────────────────────────────────────────────────────── */
+.jbd-tbl-input {
+    width: 100%;
+    height: 1.5rem;
+    padding: 0 0.375rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--app-text, #e6edf3);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.jbd-tbl-input:focus {
+    background: rgba(87, 148, 242, 0.08);
+    border-color: #5794f2;
+}
+
+.jbd-table tbody tr:hover .jbd-tbl-input:not(:focus) {
+    border-color: rgba(87, 148, 242, 0.25);
+}
+
+.jbd-tbl-input-sm {
+    width: 52px;
+    text-align: center;
+}
+
+html[data-theme-mode="light"] .jbd-tbl-input {
+    color: #1e293b;
+}
+
+html[data-theme-mode="light"] .jbd-tbl-input:focus {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+html[data-theme-mode="light"] .jbd-table tbody tr:hover .jbd-tbl-input:not(:focus) {
+    border-color: #94a3b8;
+}
+
+/* ── Toolbar Section ───────────────────────────────────────────────────── */
+.jbd-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px 16px;
+    padding: 0.875rem 1rem;
+}
+
+.jbd-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.jbd-toolbar-end {
+    margin-left: auto;
+}
+
+/* ── Footer Actions Bar ────────────────────────────────────────────────── */
+.jbd-footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+/* ── JB Index group row ────────────────────────────────────────────────── */
+.jbd-group-row td {
+    background: rgba(37, 99, 235, 0.07) !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #60a5fa;
+    font-size: 0.6875rem;
+    padding: 5px 10px;
+    border-bottom: 2px solid rgba(37, 99, 235, 0.2);
+}
+
+html[data-theme-mode="light"] .jbd-group-row td {
+    background: #eff6ff !important;
+    color: #2563eb;
+    border-bottom-color: rgba(37, 99, 235, 0.15);
+}
+
+/* ── Clickable headers in table (e.g. Tag No clickable) ───────────────── */
+.jbd-clickable-th {
+    cursor: pointer;
+    transition: color 0.15s;
+}
+.jbd-clickable-th:hover {
+    color: #60a5fa !important;
+    text-decoration: underline;
+}
+
+/* ── SweetAlert2 z-index override ─────────────────────────────────────── */
+.swal2-container { z-index: 99999 !important; }

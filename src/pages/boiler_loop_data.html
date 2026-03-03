@@ -13,149 +13,174 @@
     <script src="/src/js/tailwind_config.js"></script>
     <script>window.activePage = 'plants';</script>
     <style>
-        .loop-section {
-            background: var(--app-panel, #ffffff);
-            border: 1px solid var(--app-border, #d1d5db);
+        .loop-card {
+            background: var(--app-panel, rgba(15, 23, 42, 0.4));
+            border: 1px solid var(--app-border, #2c3235);
             border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1.25rem;
         }
-        .loop-section-header {
-            background: var(--app-panel-alt, #f1f5f9);
-            border-bottom: 1px solid var(--app-border, #d1d5db);
-            padding: 0.5rem 0.75rem;
-            font-size: 0.8125rem;
+
+        .loop-card-header {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--app-border, #2c3235);
+            font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--app-text, #1e293b);
+            letter-spacing: 0.1em;
+            color: var(--app-text, #e6edf3);
+            text-align: center;
         }
-        .loop-row {
-            display: flex;
-            border-bottom: 1px solid var(--app-border, #e5e7eb);
-        }
-        .loop-row:last-child { border-bottom: none; }
-        .loop-label {
-            width: 180px;
-            min-width: 180px;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.8125rem;
+
+        .loop-card-label {
+            background: rgba(15, 23, 42, 0.6);
+            width: 160px;
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
             font-weight: 800;
-            color: var(--app-text, #374151);
-            background: var(--app-panel-alt, #fefce8);
-            border-right: 1px solid var(--app-border, #d1d5db);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--app-text, #e6edf3);
             display: flex;
             align-items: center;
+            border-right: 1px solid var(--app-border, #2c3235);
         }
+
+        .loop-input {
+            width: 100%;
+            height: 2.25rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--app-border, #2c3235);
+            border-radius: 0.375rem;
+            padding: 0 0.875rem;
+            color: var(--app-text, #e6edf3);
+            font-size: 0.875rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .loop-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
         .loop-value {
             flex: 1;
-            padding: 0.5rem 0.75rem;
+            padding: 0.75rem 1rem;
             font-size: 0.875rem;
             font-weight: 600;
-            color: var(--app-text, #1e293b);
+            color: var(--app-text, #e6edf3);
         }
+
         .loop-value input, .loop-value textarea {
             width: 100%;
             background: transparent;
             border: none;
             outline: none;
-            color: var(--app-text, #1e293b);
+            color: var(--app-text, #e6edf3);
             font-size: 0.875rem;
             font-weight: 600;
         }
+
         .loop-value textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px;
         }
+
         .loop-split {
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
-        .loop-split > div {
-            border-right: 1px solid var(--app-border, #d1d5db);
-        }
-        .loop-split > div:last-child { border-right: none; }
 
-        .find-bar {
+        .loop-split > div {
+            border-right: 1px solid var(--app-border, #2c3235);
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.625rem 0.75rem;
-            background: var(--app-panel, #ffffff);
-            border: 1px solid var(--app-border, #d1d5db);
-            border-radius: 0.5rem;
-            margin-bottom: 0.75rem;
+            flex-direction: column;
         }
-        .find-bar label {
-            font-size: 0.8125rem;
-            font-weight: 800;
-            color: var(--app-text, #1e293b);
-            white-space: nowrap;
-            text-transform: uppercase;
+
+        .loop-split > div:last-child { 
+            border-right: none; 
         }
-        .find-bar input {
-            width: 180px;
-            height: 2rem;
-            background: var(--app-panel-alt, #f9fafb);
-            border: 1px solid var(--app-border, #d1d5db);
-            border-radius: 0.25rem;
-            padding: 0 0.5rem;
-            color: var(--app-text, #1e293b);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            outline: none;
-        }
-        .find-bar input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59,130,246,0.12);
-        }
-        .find-bar select {
-            height: 2rem;
-            background: var(--app-panel-alt, #f9fafb);
-            border: 1px solid var(--app-border, #d1d5db);
-            border-radius: 0.25rem;
-            padding: 0 0.5rem;
-            color: var(--app-text, #1e293b);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            outline: none;
-        }
-        .find-btn {
-            height: 2rem;
-            padding: 0 0.75rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            border: 1px solid var(--app-border, #d1d5db);
-            background: var(--app-panel-alt, #f3f4f6);
-            color: var(--app-text, #374151);
-            transition: all 0.15s;
-        }
-        .find-btn:hover { background: var(--app-border, #e5e7eb); }
-        .find-btn.primary {
+
+        .btn-primary {
             background: #2563eb;
             color: #fff;
-            border-color: #1d4ed8;
-        }
-        .find-btn.primary:hover { background: #1d4ed8; }
-
-        .add-btn {
+            border: none;
+            border-radius: 0.375rem;
+            height: 2.25rem;
+            padding: 0 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
-            height: 1.75rem;
-            padding: 0 0.75rem;
-            background: var(--app-panel-alt, #f3f4f6);
-            border: 1px solid var(--app-border, #d1d5db);
-            border-radius: 0.25rem;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-outline {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--app-border, #2c3235);
+            color: var(--app-text, #e6edf3);
+            border-radius: 0.375rem;
+            height: 2.25rem;
+            padding: 0 1rem;
             font-size: 0.75rem;
             font-weight: 700;
-            color: var(--app-text, #374151);
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
         }
-        .add-btn:hover { background: var(--app-border, #e5e7eb); }
+
+        .btn-outline:hover {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        /* Light Theme Overrides */
+        html[data-theme-mode="light"] .loop-card {
+            background: #ffffff;
+            border-color: #d6deea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        html[data-theme-mode="light"] .loop-card-header,
+        html[data-theme-mode="light"] .loop-card-label {
+            background: #f8fafc;
+            border-color: #d6deea;
+            color: #475569;
+        }
+        html[data-theme-mode="light"] .loop-split > div {
+            border-color: #d6deea;
+        }
+        html[data-theme-mode="light"] .loop-input {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: #1e293b;
+        }
+        html[data-theme-mode="light"] .loop-value,
+        html[data-theme-mode="light"] .loop-value input,
+        html[data-theme-mode="light"] .loop-value textarea {
+            color: #1e293b;
+        }
+        html[data-theme-mode="light"] .btn-outline {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            color: #334155;
+        }
+        html[data-theme-mode="light"] .btn-outline:hover {
+            background: #f1f5f9;
+        }
     </style>
 </head>
 
@@ -187,12 +212,14 @@
             <div class="max-w-6xl mx-auto">
 
                 <!-- Find Loop Bar -->
-                <div class="find-bar">
-                    <label>Find Loop</label>
-                    <input type="text" id="find-loop-input" placeholder="Enter loop..." value="">
-                    <button class="find-btn primary" onclick="findLoop()"><i class="ph-bold ph-magnifying-glass"></i></button>
-                    <label style="margin-left:0.5rem;">Area :</label>
-                    <select id="area-select">
+                <div class="loop-card p-4 flex flex-wrap items-center gap-4">
+                    <label class="font-bold text-xs uppercase tracking-widest text-[#e6edf3]" style="color: var(--app-text, #e6edf3);">FIND LOOP</label>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="find-loop-input" class="loop-input w-56" placeholder="Enter loop..." value="">
+                        <button class="btn-primary" onclick="findLoop()"><i class="ph-bold ph-magnifying-glass"></i></button>
+                    </div>
+                    <label class="font-bold text-xs uppercase tracking-widest text-[#e6edf3] ml-4" style="color: var(--app-text, #e6edf3);">AREA :</label>
+                    <select id="area-select" class="loop-input w-40">
                         <option selected>ALL</option>
                         <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option><option>BOILER-4</option>
                         <option>BOP</option><option>COMMON</option><option>TG-1</option><option>TG-2</option>
@@ -200,72 +227,70 @@
                 </div>
 
                 <!-- Loop Name & Service -->
-                <div class="loop-section">
-                    <div class="loop-row">
-                        <div class="loop-label">LOOP NAME :</div>
+                <div class="loop-card flex flex-col">
+                    <div class="flex border-b" style="border-color: var(--app-border, #2c3235);">
+                        <div class="loop-card-label border-r" style="border-color: var(--app-border, #2c3235);">LOOP NAME :</div>
                         <div class="loop-value"><input type="text" id="loop-name" readonly></div>
                     </div>
-                    <div class="loop-row">
-                        <div class="loop-label">SERVICE :</div>
+                    <div class="flex">
+                        <div class="loop-card-label border-r" style="border-color: var(--app-border, #2c3235);">SERVICE :</div>
                         <div class="loop-value"><input type="text" id="loop-service" readonly></div>
                     </div>
                 </div>
 
                 <!-- Loop Schematic & Special Document -->
-                <div class="loop-section">
+                <div class="loop-card">
                     <div class="loop-split">
                         <div>
-                            <div class="loop-section-header" style="text-align:center;">LOOP SCHEMATIC</div>
-                            <div style="padding: 0.75rem; min-height: 60px;">
-                                <span id="loop-schematic" style="font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);"></span>
+                            <div class="loop-card-header">LOOP SCHEMATIC</div>
+                            <div class="flex-1 flex items-center justify-center p-4">
+                                <span id="loop-schematic" class="text-sm font-semibold" style="color: var(--app-text, #e6edf3);"></span>
                             </div>
                         </div>
                         <div>
-                            <div class="loop-section-header" style="text-align:center;">SPECIAL DOCUMENT</div>
-                            <div style="padding: 0.75rem; min-height: 60px;">
-                                <span id="loop-special-doc" style="font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);"></span>
+                            <div class="loop-card-header">SPECIAL DOCUMENT</div>
+                            <div class="flex-1 flex items-center justify-center p-4">
+                                <span id="loop-special-doc" class="text-sm font-semibold" style="color: var(--app-text, #e6edf3);"></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Helpful Hints & Special Instructions -->
-                <div class="loop-section">
+                <div class="loop-card">
                     <div class="loop-split">
                         <div>
-                            <div class="loop-section-header" style="text-align:center;">HELPFUL HINTS</div>
-                            <div style="padding: 0.75rem; min-height: 80px;">
-                                <textarea id="loop-hints" style="width:100%; border:none; outline:none; background:transparent; resize:vertical; min-height:60px; font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);" readonly></textarea>
+                            <div class="loop-card-header">HELPFUL HINTS</div>
+                            <div class="flex-1 p-4">
+                                <textarea id="loop-hints" class="w-full h-full bg-transparent border-none outline-none resize-y min-h-20 text-sm font-semibold" style="color: var(--app-text, #e6edf3);" readonly></textarea>
                             </div>
                         </div>
                         <div>
-                            <div class="loop-section-header" style="text-align:center;">SPECIAL INSTRUCTIONS</div>
-                            <div style="padding: 0.75rem; min-height: 80px;">
-                                <textarea id="loop-instructions" style="width:100%; border:none; outline:none; background:transparent; resize:vertical; min-height:60px; font-size:0.875rem; font-weight:600; color:var(--app-text,#1e293b);" readonly></textarea>
+                            <div class="loop-card-header">SPECIAL INSTRUCTIONS</div>
+                            <div class="flex-1 p-4">
+                                <textarea id="loop-instructions" class="w-full h-full bg-transparent border-none outline-none resize-y min-h-20 text-sm font-semibold" style="color: var(--app-text, #e6edf3);" readonly></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Loop Components Table -->
-                <div class="gnfc-table-container rounded-lg border border-dark-border">
-                    <div style="overflow-x:auto;">
-                        <table class="gnfc-table" id="components-table">
-                            <thead class="gnfc-thead">
-                                <tr>
-                                    <th class="gnfc-th" colspan="5" style="text-align:center; letter-spacing:0.15em;">LOOP COMPONENTS</th>
-                                </tr>
-                                <tr>
-                                    <th class="gnfc-th" style="width:5%;">Sr</th>
-                                    <th class="gnfc-th" style="width:20%;">Tag No</th>
-                                    <th class="gnfc-th" style="width:35%;">Description</th>
-                                    <th class="gnfc-th" style="width:20%;">Inst Type</th>
-                                    <th class="gnfc-th" style="width:20%;">Make / Model</th>
+                <div class="loop-card flex flex-col">
+                    <div class="loop-card-header">LOOP COMPONENTS</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse" id="components-table">
+                            <thead>
+                                <tr class="border-b" style="border-color: var(--app-border, #2c3235); background: rgba(15, 23, 42, 0.2);">
+                                    <th class="p-4 text-xs font-bold uppercase tracking-widest text-center w-[5%]" style="color: var(--app-text, #e6edf3);">SR</th>
+                                    <th class="p-4 text-xs font-bold uppercase tracking-widest text-center w-[20%]" style="color: var(--app-text, #e6edf3);">TAG NO</th>
+                                    <th class="p-4 text-xs font-bold uppercase tracking-widest text-center w-[35%]" style="color: var(--app-text, #e6edf3);">DESCRIPTION</th>
+                                    <th class="p-4 text-xs font-bold uppercase tracking-widest text-center w-[20%]" style="color: var(--app-text, #e6edf3);">INST TYPE</th>
+                                    <th class="p-4 text-xs font-bold uppercase tracking-widest text-center w-[20%]" style="color: var(--app-text, #e6edf3);">MAKE / MODEL</th>
                                 </tr>
                             </thead>
-                            <tbody class="gnfc-tbody" id="components-body">
-                                <tr class="gnfc-tr">
-                                    <td class="gnfc-td" colspan="5" style="text-align:center; padding:1.5rem; font-style:italic; color:var(--app-muted,#6b7280);">Search for a loop to view components</td>
+                            <tbody id="components-body">
+                                <tr>
+                                    <td colspan="5" class="p-6 text-center italic text-sm text-gray-500">Search for a loop to view components</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -273,8 +298,8 @@
                 </div>
 
                 <!-- Add button -->
-                <div style="text-align:center; margin-top:0.75rem;">
-                    <button class="add-btn" onclick="alert('Add component feature coming soon')"><i class="ph-bold ph-plus"></i> Add</button>
+                <div class="text-center mt-4">
+                    <button class="btn-outline" onclick="alert('Add component feature coming soon')"><i class="ph-bold ph-plus"></i> Add</button>
                 </div>
 
             </div>
@@ -359,16 +384,16 @@
 
             const tbody = document.getElementById('components-body');
             if (data.components.length === 0) {
-                tbody.innerHTML = '<tr class="gnfc-tr"><td class="gnfc-td" colspan="5" style="text-align:center; padding:1.5rem; font-style:italic; color:var(--app-muted,#6b7280);">No components found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center italic text-sm text-gray-500">No components found</td></tr>';
                 return;
             }
             tbody.innerHTML = data.components.map((c, i) => `
-                <tr class="gnfc-tr" style="cursor:pointer;" onclick="window.location.href='/src/pages/boiler_inst_data.html?tag=${encodeURIComponent(c.tag)}'">
-                    <td class="gnfc-td text-center" style="font-size:13px; font-weight:600;">${i + 1}</td>
-                    <td class="gnfc-td" style="font-size:13px; font-weight:800; color:var(--typo-blue, #1d4ed8);">${c.tag}</td>
-                    <td class="gnfc-td" style="font-size:13px; font-weight:600;">${c.desc}</td>
-                    <td class="gnfc-td text-center" style="font-size:13px; font-weight:600;">${c.type}</td>
-                    <td class="gnfc-td" style="font-size:13px; font-weight:600;">${c.make}</td>
+                <tr class="border-b hover:bg-[rgba(15,23,42,0.3)] transition-colors cursor-pointer" style="border-color: var(--app-border, #2c3235);" onclick="window.location.href='/src/pages/boiler_inst_data.html?tag=${encodeURIComponent(c.tag)}'">
+                    <td class="p-4 text-center text-sm font-semibold" style="color: var(--app-text, #e6edf3);">${i + 1}</td>
+                    <td class="p-4 text-center text-sm font-bold text-blue-500">${c.tag}</td>
+                    <td class="p-4 text-center text-sm font-semibold" style="color: var(--app-text, #e6edf3);">${c.desc}</td>
+                    <td class="p-4 text-center text-sm font-semibold" style="color: var(--app-text, #e6edf3);">${c.type}</td>
+                    <td class="p-4 text-center text-sm font-semibold" style="color: var(--app-text, #e6edf3);">${c.make}</td>
                 </tr>
             `).join('');
         }
