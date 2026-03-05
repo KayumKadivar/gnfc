@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNFC | PM Master</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
+    <link rel="stylesheet" href="/src/css/table-style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
+    <style>
+        /* Standard scrollbar for the project */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111217;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2C3235;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* Remove default arrow for standard selects */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <script src="/src/js/header.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <div id="header-container"></div>
+        <script>
+            renderHeader({
+                title: "PM Master",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler Dashboard", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "PM Master" }
+                ],
+                backLink: "/src/pages/boiler_dashboard.html"
+            });
+        </script>
+
+        <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+            <div class="mx-auto space-y-4">
+                
+                <!-- Navigation Sections -->
+                <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+                    <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
+                        <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                            <i class="ph-bold ph-navigation-arrow"></i> PM Reports & Status
+                        </h3>
+                    </div>
+                    <div class="p-4 flex flex-wrap gap-2">
+                        <button onclick="openPMReportModal()" class="nav-btn-standard bg-dark-bg border border-dark-border hover:border-gnfc-blue font-12px px-3 py-1.5 rounded-sm transition-colors">ALL</button>
+                        <button onclick="openPMPendingModal()" class="nav-btn-standard bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM PENDING REPORT</button>
+                        <button onclick="openPMMonthlyStatusModal()" class="nav-btn-standard bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM MONTHLY STATUS</button>
+                        <button onclick="openPMOverdueModal()" class="nav-btn-standard bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM OVER DUE REPORT</button>
+                        <button onclick="openPMFromLogModal()" class="nav-btn-standard bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM FROM LOG</button>
+                    </div>
+                </div>
+
+                <!-- Detail Categories -->
+                <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+                    <div class="bg-dark-header px-4 py-2 border-b border-dark-border">
+                        <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                            <i class="ph-bold ph-list-bullets"></i> PM Details Categories
+                        </h3>
+                    </div>
+                    <div class="p-4 flex flex-wrap gap-2">
+                        <button class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM Detail (T/X)</button>
+                        <button class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM Detail (C/V)</button>
+                        <button class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM Detail (SW)</button>
+                        <button class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM Detail (AT)</button>
+                        <button class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM Detail (Other)</button>
+                        <button class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM Detail (VIB)</button>
+                    </div>
+                </div>
+
+                <!-- Search & Form Card -->
+                <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+                    <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
+                        <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                            <i class="ph-bold ph-magnifying-glass"></i> Tag Information
+                        </h3>
+                    </div>
+
+                    <div class="p-4 space-y-6">
+                        <!-- Identity/Search Section -->
+                        <div class="flex flex-col md:flex-row items-center gap-4 bg-dark-bg p-3 border border-dark-border rounded-sm">
+                            <div class="flex-1 flex items-center gap-3">
+                                <label class="font-12px fw-bold color-label text-upper shrink-0">Search For PM Detail :</label>
+                                <div class="relative flex-1 max-w-xs">
+                                    <input type="text" placeholder="Enter Tag No..." class="w-full bg-dark-panel border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary placeholder:opacity-30">
+                                </div>
+                                <button class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-9 text-white rounded-sm shadow-md transition-all px-6 font-13px text-upper ls-wide">
+                                    GO
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Form Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">Tag No</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">Criticality</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">Inst Type</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">Mode</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">PM Month</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">PM Date</label>
+                                <input type="date" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">Tech Name</label>
+                                <input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="font-12px fw-bold color-label text-upper">Status</label>
+                                <div class="relative">
+                                    <select class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                                        <option>Pending</option>
+                                        <option>Completed</option>
+                                    </select>
+                                    <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1 col-span-full">
+                                <label class="font-12px fw-bold color-label text-upper">Caution / Special Instructions</label>
+                                <textarea rows="3" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div class="flex justify-center pt-4 border-t border-dark-border/20">
+                            <button class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-10 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-10">
+                                <i class="ph-bold ph-floppy-disk"></i> Update PM Status
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- PM Report Modal -->
+    <div id="pm-report-modal" class="gnfc-modal-overlay" aria-hidden="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title">Instrument Data - PM Report</h3>
+                </div>
+                <button onclick="closePMReportModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="gnfc-modal-body p-0">
+                <div class="bg-dark-panel p-4 flex flex-col gap-4">
+                    <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th">PM MONTH</th>
+                                    <th class="gnfc-th">TAG_NO</th>
+                                    <th class="gnfc-th">Type Of Inst</th>
+                                    <th class="gnfc-th">CRITICALITY</th>
+                                    <th class="gnfc-th">MODE</th>
+                                    <th class="gnfc-th">PM DATE</th>
+                                    <th class="gnfc-th">Tech</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gnfc-tbody">
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td text-center font-13px">OCT-25</td>
+                                    <td class="gnfc-td text-center font-13px">101-FI-001</td>
+                                    <td class="gnfc-td text-center font-13px">TX</td>
+                                    <td class="gnfc-td text-center font-13px">HIGH</td>
+                                    <td class="gnfc-td text-center font-13px">RUNNING</td>
+                                    <td class="gnfc-td text-center font-13px">2025-10-15</td>
+                                    <td class="gnfc-td text-center font-13px">PYS</td>
+                                </tr>
+                                <tr class="gnfc-tr bg-dark-panel-alt/30">
+                                    <td class="gnfc-td text-center font-13px">OCT-25</td>
+                                    <td class="gnfc-td text-center font-13px">101-PI-022</td>
+                                    <td class="gnfc-td text-center font-13px">TX</td>
+                                    <td class="gnfc-td text-center font-13px">LOW</td>
+                                    <td class="gnfc-td text-center font-13px">RUNNING</td>
+                                    <td class="gnfc-td text-center font-13px">2025-10-16</td>
+                                    <td class="gnfc-td text-center font-13px">BSU</td>
+                                </tr>
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td text-center font-13px">NOV-25</td>
+                                    <td class="gnfc-td text-center font-13px">102-LV-101</td>
+                                    <td class="gnfc-td text-center font-13px">C/V</td>
+                                    <td class="gnfc-td text-center font-13px">HIGH</td>
+                                    <td class="gnfc-td text-center font-13px">STANDBY</td>
+                                    <td class="gnfc-td text-center font-13px">2025-11-02</td>
+                                    <td class="gnfc-td text-center font-13px">V+M</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gnfc-modal-footer">
+                <button onclick="closePMReportModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PM Pending Report Modal -->
+    <div id="pm-pending-modal" class="gnfc-modal-overlay" aria-hidden="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title">Instrument Data - PM Pending Report</h3>
+                </div>
+                <button onclick="closePMPendingModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="gnfc-modal-body p-0">
+                <div class="bg-dark-panel p-4 flex flex-col gap-6">
+                    <!-- Filters Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center max-w-2xl mx-auto w-full">
+                        <div class="flex items-center gap-4">
+                            <label class="font-13px fw-bold color-label text-upper whitespace-nowrap">PM PENDING REPORT</label>
+                            <div class="relative flex-1">
+                                <select id="pending-month-select" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                                    <option value="ALL">ALL</option>
+                                    <option value="JAN">January</option>
+                                    <option value="FEB">February</option>
+                                    <option value="MAR">March</option>
+                                    <option value="APR">April</option>
+                                    <option value="MAY">May</option>
+                                    <option value="JUN">Jun</option>
+                                    <option value="JUL">July</option>
+                                    <option value="AUG">August</option>
+                                    <option value="SEP">September</option>
+                                    <option value="OCT">Ocober</option>
+                                    <option value="NOV">November</option>
+                                    <option value="DEC">December</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <label class="font-13px fw-bold color-label text-upper whitespace-nowrap">Inst Type</label>
+                            <div class="relative flex-1">
+                                <select id="pending-type-select" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                                    <option value="ALL">ALL</option>
+                                    <option value="C/V">C/V</option>
+                                    <option value="TX">TX</option>
+                                    <option value="ANALYZER">ANALYZER</option>
+                                    <option value="SWITCH">SWITCH</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Table -->
+                    <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th">TAG_NO</th>
+                                    <th class="gnfc-th">Type Of Inst</th>
+                                    <th class="gnfc-th">CRITICALITY</th>
+                                    <th class="gnfc-th">MODE</th>
+                                    <th class="gnfc-th">PM MONTH</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-report-tbody" class="gnfc-tbody">
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td text-center font-13px">101-FI-005</td>
+                                    <td class="gnfc-td text-center font-13px">TX</td>
+                                    <td class="gnfc-td text-center font-13px">HIGH</td>
+                                    <td class="gnfc-td text-center font-13px">RUNNING</td>
+                                    <td class="gnfc-td text-center font-13px">OCT-25</td>
+                                </tr>
+                                <tr class="gnfc-tr bg-dark-panel-alt/30">
+                                    <td class="gnfc-td text-center font-13px">102-PV-202</td>
+                                    <td class="gnfc-td text-center font-13px">C/V</td>
+                                    <td class="gnfc-td text-center font-13px">MEDIUM</td>
+                                    <td class="gnfc-td text-center font-13px">STANDBY</td>
+                                    <td class="gnfc-td text-center font-13px">NOV-25</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gnfc-modal-footer">
+                <button onclick="closePMPendingModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PM Monthly Status Modal -->
+    <div id="pm-monthly-status-modal" class="gnfc-modal-overlay" aria-hidden="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title">Instrument Data - PM Monthly Status</h3>
+                </div>
+                <button onclick="closePMMonthlyStatusModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="gnfc-modal-body p-0">
+                <div class="bg-dark-panel p-4 flex flex-col gap-6">
+                    <!-- Filter & Title Section Combined Inline -->
+                    <div class="flex items-center justify-between gap-4 border-b border-dark-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <label class="font-13px fw-bold color-label text-upper whitespace-nowrap">Select Month :</label>
+                            <div class="relative w-48">
+                                <select id="monthly-status-select" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-1.5 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                                    <option value="ALL">ALL</option>
+                                    <option value="JAN">January</option>
+                                    <option value="FEB">February</option>
+                                    <option value="MAR">March</option>
+                                    <option value="APR">April</option>
+                                    <option value="MAY">May</option>
+                                    <option value="JUN">Jun</option>
+                                    <option value="JUL">July</option>
+                                    <option value="AUG">August</option>
+                                    <option value="SEP">September</option>
+                                    <option value="OCT">Ocober</option>
+                                    <option value="NOV">November</option>
+                                    <option value="DEC">December</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-dark-header border border-dark-border px-8 py-2">
+                            <h4 id="monthly-report-title" class="font-14px fw-bold color-blue text-upper tracking-widest">PM Report</h4>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Report Table -->
+                    <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th">TAG_NO</th>
+                                    <th class="gnfc-th">Type Of Inst</th>
+                                    <th class="gnfc-th">PM DATE</th>
+                                    <th class="gnfc-th">TECH</th>
+                                    <th class="gnfc-th">CRITICALITY</th>
+                                    <th class="gnfc-th">MODE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthly-status-tbody" class="gnfc-tbody">
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td text-center font-13px">101-FI-001</td>
+                                    <td class="gnfc-td text-center font-13px">TX</td>
+                                    <td class="gnfc-td text-center font-13px">2025-10-15</td>
+                                    <td class="gnfc-td text-center font-13px">PYS</td>
+                                    <td class="gnfc-td text-center font-13px">HIGH</td>
+                                    <td class="gnfc-td text-center font-13px">RUNNING</td>
+                                </tr>
+                                <tr class="gnfc-tr bg-dark-panel-alt/30">
+                                    <td class="gnfc-td text-center font-13px">101-PI-022</td>
+                                    <td class="gnfc-td text-center font-13px">TX</td>
+                                    <td class="gnfc-td text-center font-13px">2025-10-16</td>
+                                    <td class="gnfc-td text-center font-13px">BSU</td>
+                                    <td class="gnfc-td text-center font-13px">LOW</td>
+                                    <td class="gnfc-td text-center font-13px">RUNNING</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gnfc-modal-footer">
+                <button onclick="closePMMonthlyStatusModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PM Overdue Report Modal -->
+    <div id="pm-overdue-modal" class="gnfc-modal-overlay" aria-hidden="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title">Instrument Data - PM Overdue Report</h3>
+                </div>
+                <button onclick="closePMOverdueModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="gnfc-modal-body p-0">
+                <div class="bg-dark-panel p-4 flex flex-col gap-6">
+                
+                    <!-- Overdue Report Table -->
+                    <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th">Type Of Inst</th>
+                                    <th class="gnfc-th">TAG_NO</th>
+                                    <th class="gnfc-th">PM DATE</th>
+                                    <th class="gnfc-th">TECHNICIAN</th>
+                                    <th class="gnfc-th">CRITICALITY</th>
+                                    <th class="gnfc-th">PM MONTH</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gnfc-tbody">
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td text-center font-13px">C/V</td>
+                                    <td class="gnfc-td text-center font-13px">103-LV-901</td>
+                                    <td class="gnfc-td text-center font-13px">2025-01-10</td>
+                                    <td class="gnfc-td text-center font-13px">VNP</td>
+                                    <td class="gnfc-td text-center font-13px">MEDIUM</td>
+                                    <td class="gnfc-td text-center font-13px">JAN-25</td>
+                                </tr>
+                                <tr class="gnfc-tr bg-dark-panel-alt/30">
+                                    <td class="gnfc-td text-center font-13px">TX</td>
+                                    <td class="gnfc-td text-center font-13px">101-FT-101</td>
+                                    <td class="gnfc-td text-center font-13px">2025-01-12</td>
+                                    <td class="gnfc-td text-center font-13px">RSM</td>
+                                    <td class="gnfc-td text-center font-13px">HIGH</td>
+                                    <td class="gnfc-td text-center font-13px">JAN-25</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gnfc-modal-footer">
+                <button onclick="closePMOverdueModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PM Report FROM LogBook Modal -->
+    <div id="pm-from-log-modal" class="gnfc-modal-overlay" aria-hidden="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title">Instrument Data - PM Report FROM LogBook</h3>
+                </div>
+                <button onclick="closePMFromLogModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="gnfc-modal-body p-0">
+                <div class="bg-dark-panel p-4 flex flex-col gap-6">
+                    <div class="bg-dark-header border border-dark-border p-2">
+                        <h4 class="text-center font-14px fw-bold color-primary text-upper tracking-widest">PM Report FROM LogBook</h4>
+                    </div>
+
+                    <!-- LogBook Report Table -->
+                    <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th">Type Of Inst</th>
+                                    <th class="gnfc-th">DATE</th>
+                                    <th class="gnfc-th">TAG NO.</th>
+                                    <th class="gnfc-th">DESCRIPTION</th>
+                                    <th class="gnfc-th">JOB STATUS</th>
+                                    <th class="gnfc-th">TECH NAME</th>
+                                    <th class="gnfc-th">ENG</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gnfc-tbody">
+                                <tr class="gnfc-tr">
+                                    <td class="gnfc-td text-center font-12px color-red fw-bold">N.A.</td>
+                                    <td class="gnfc-td text-center font-12px whitespace-nowrap">04/03/2026</td>
+                                    <td class="gnfc-td text-center font-12px">NOTAG</td>
+                                    <td class="gnfc-td font-11px text-primary">Boiler CPP CPSU system round taken found OK. All visible and UV flame scanner checked found OK.</td>
+                                    <td class="gnfc-td text-center font-12px color-blue">OVER</td>
+                                    <td class="gnfc-td text-center font-12px">JMD</td>
+                                    <td class="gnfc-td text-center font-12px">ARP</td>
+                                </tr>
+                                <tr class="gnfc-tr bg-dark-panel-alt/30">
+                                    <td class="gnfc-td text-center font-12px color-red fw-bold">C/V</td>
+                                    <td class="gnfc-td text-center font-12px whitespace-nowrap">03/03/2026</td>
+                                    <td class="gnfc-td text-center font-12px">NOTAG</td>
+                                    <td class="gnfc-td font-11px text-primary">All control valve inspection done for gland/flange/air leakage.</td>
+                                    <td class="gnfc-td text-center font-12px color-blue">OVER</td>
+                                    <td class="gnfc-td text-center font-12px">PRP</td>
+                                    <td class="gnfc-td text-center font-12px">ARP</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gnfc-modal-footer">
+                <button onclick="closePMFromLogModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filtering logic for Monthly Status
+        function filterMonthlyTable() {
+            const monthVal = document.getElementById('monthly-status-select').value;
+            const titleElem = document.getElementById('monthly-report-title');
+            const tbody = document.getElementById('monthly-status-tbody');
+            const rows = tbody.querySelectorAll('.gnfc-tr:not(.no-data-row)');
+            let visibleCount = 0;
+
+            // Update heading
+            if (monthVal === 'ALL') {
+                titleElem.innerText = 'PM Report';
+            } else {
+                const monthText = document.querySelector(`#monthly-status-select option[value="${monthVal}"]`).text;
+                titleElem.innerText = `PM Report Of ${monthVal}`;
+            }
+
+            rows.forEach(row => {
+                const dateCell = row.cells[2].innerText.trim();
+                // Simple logic: check if the date string contains something that resembles the selected value for demo
+                // In real app this would filter by actual date month
+                const monthMatch = (monthVal === 'ALL' || dateCell.includes('-10-') && monthVal === 'OCT');
+
+                if (monthMatch) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Handle No Data message
+            let noDataRow = tbody.querySelector('.no-data-row');
+            if (visibleCount === 0) {
+                if (!noDataRow) {
+                    noDataRow = document.createElement('tr');
+                    noDataRow.className = 'gnfc-tr no-data-row';
+                    noDataRow.innerHTML = `
+                        <td colspan="6" class="gnfc-td text-center py-8">
+                            <div class="flex justify-center items-center gap-2 color-secondary">
+                                <i class="ph-bold ph-magnifying-glass font-24px"></i>
+                                <span class="font-13px fw-bold uppercase ls-wide">No data available for selected month</span>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(noDataRow);
+                } else {
+                    noDataRow.style.display = '';
+                }
+            } else if (noDataRow) {
+                noDataRow.style.display = 'none';
+            }
+        }
+
+        document.getElementById('monthly-status-select')?.addEventListener('change', filterMonthlyTable);
+
+        // Filtering logic for Pending Report
+        function filterPendingTable() {
+            const monthVal = document.getElementById('pending-month-select').value;
+            const typeVal = document.getElementById('pending-type-select').value;
+            const tbody = document.getElementById('pending-report-tbody');
+            const rows = tbody.querySelectorAll('.gnfc-tr:not(.no-data-row)');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const typeCell = row.cells[1].innerText.trim();
+                const monthCell = row.cells[4].innerText.trim();
+                
+                const typeMatch = (typeVal === 'ALL' || typeCell === typeVal);
+                const monthMatch = (monthVal === 'ALL' || monthCell.startsWith(monthVal));
+
+                if (typeMatch && monthMatch) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Handle No Data message
+            let noDataRow = tbody.querySelector('.no-data-row');
+            if (visibleCount === 0) {
+                if (!noDataRow) {
+                    noDataRow = document.createElement('tr');
+                    noDataRow.className = 'gnfc-tr no-data-row';
+                    noDataRow.innerHTML = `
+                        <td colspan="5" class="gnfc-td text-center py-8">
+                            <div class="flex justify-center items-center gap-2 color-secondary">
+                                <i class="ph-bold ph-magnifying-glass font-24px"></i>
+                                <span class="font-13px fw-bold uppercase ls-wide">No data available for selected filters</span>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(noDataRow);
+                } else {
+                    noDataRow.style.display = '';
+                }
+            } else if (noDataRow) {
+                noDataRow.style.display = 'none';
+            }
+        }
+
+        document.getElementById('pending-month-select')?.addEventListener('change', filterPendingTable);
+        document.getElementById('pending-type-select')?.addEventListener('change', filterPendingTable);
+
+        // Modal logic
+        window.openPMReportModal = function() {
+            const modal = document.getElementById("pm-report-modal");
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        window.closePMReportModal = function() {
+            const modal = document.getElementById("pm-report-modal");
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        window.openPMPendingModal = function() {
+            const modal = document.getElementById("pm-pending-modal");
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        window.closePMPendingModal = function() {
+            const modal = document.getElementById("pm-pending-modal");
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        window.openPMMonthlyStatusModal = function() {
+            const modal = document.getElementById("pm-monthly-status-modal");
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        window.closePMMonthlyStatusModal = function() {
+            const modal = document.getElementById("pm-monthly-status-modal");
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        window.openPMOverdueModal = function() {
+            const modal = document.getElementById("pm-overdue-modal");
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        window.closePMOverdueModal = function() {
+            const modal = document.getElementById("pm-overdue-modal");
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        window.openPMFromLogModal = function() {
+            const modal = document.getElementById("pm-from-log-modal");
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        window.closePMFromLogModal = function() {
+            const modal = document.getElementById("pm-from-log-modal");
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        // Close modals on overlay click
+        document.addEventListener("click", (e) => {
+            if (e.target.id === "pm-report-modal") closePMReportModal();
+            if (e.target.id === "pm-pending-modal") closePMPendingModal();
+            if (e.target.id === "pm-monthly-status-modal") closePMMonthlyStatusModal();
+            if (e.target.id === "pm-overdue-modal") closePMOverdueModal();
+            if (e.target.id === "pm-from-log-modal") closePMFromLogModal();
+        });
+
+        // Tab switching logic for categories
+        document.querySelectorAll('.detail-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.detail-tab').forEach(b => {
+                    b.classList.remove('active', 'bg-blue-500/10', 'border-gnfc-blue', 'color-blue');
+                    b.classList.add('bg-dark-bg', 'border-dark-border', 'color-secondary');
+                });
+                btn.classList.add('active', 'bg-blue-500/10', 'border-gnfc-blue', 'color-blue');
+                btn.classList.remove('bg-dark-bg', 'border-dark-border', 'color-secondary');
+            });
+        });
+
+        // Button group switching logic for navigation
+        document.querySelectorAll('.nav-btn-standard').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalTriggers = ['ALL', 'PM PENDING REPORT', 'PM MONTHLY STATUS', 'PM OVER DUE REPORT', 'PM FROM LOG'];
+                const btnText = btn.innerText.trim();
+                
+                if (!modalTriggers.includes(btnText)) {
+                    document.querySelectorAll('.nav-btn-standard').forEach(b => {
+                        b.classList.remove('active', 'bg-blue-500/10', 'border-gnfc-blue', 'color-blue');
+                        b.classList.add('bg-dark-bg', 'border-dark-border', 'color-secondary');
+                    });
+                    btn.classList.add('active', 'bg-blue-500/10', 'border-gnfc-blue', 'color-blue');
+                    btn.classList.remove('bg-dark-bg', 'border-dark-border', 'color-secondary');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

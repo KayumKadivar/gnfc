@@ -177,12 +177,12 @@
 
 /* --- Secondary Text (Readable, not muted) --- */
 .color-secondary {
-  color: var(--typo-secondary, #d1d5db) !important;
+  color: var(--typo-primary, #d1d5db) !important;
 }
 
 /* --- Label / Caption (Still clearly visible) --- */
 .color-label {
-  color: var(--typo-label, #ffffff) !important;
+  color: var(--typo-primary, #ffffff) !important;
 }
 
 /* --- Disabled / Hint (Lightest allowed) --- */
