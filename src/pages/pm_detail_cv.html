@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Control Valve PM Detail</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'plants';</script>
+  <style>
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #111217; }
+    ::-webkit-scrollbar-thumb { background: #2C3235; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #444; }
+    select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none; }
+    .date-green { color: #27c561; font-weight: 600;}
+    .date-red { color: #ef4444; font-weight: 600;}
+    .form-label { font-size: 13px; font-weight: 600; color: #94a3b8; padding: 8px 12px; border: 1px solid #334155; background: #0f172a; }
+    .form-value { font-size: 13px; color: #f8fafc; padding: 8px 12px; border: 1px solid #334155; background: #1e293b; }
+  </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('plants');</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="header-container"></div>
+    <script>
+      renderHeader({
+        title: "Control Valve PM Detail",
+        breadcrumbs: [
+          { label: "Plant", href: "/src/pages/plant_status.html" },
+          { label: "Boiler Dashboard", href: "/src/pages/boiler_dashboard.html" },
+          { label: "PM Master", href: "/src/pages/pm_master.html" },
+          { label: "PM Detail (C/V)" }
+        ],
+        backLink: "/src/pages/pm_master.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+      <div class="mx-auto space-y-4">
+
+        <!-- Header Banner -->
+        <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+          <div class="bg-dark-header px-4 py-2 border-b border-dark-border">
+            <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+              <i class="ph-bold ph-gauge"></i> Control Valve PM Detail Form
+            </h3>
+          </div>
+
+          <!-- Selection Controls -->
+          <div class="p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+              <div class="space-y-1">
+                <label class="font-12px fw-bold color-label text-upper">Select Tag To view PM Detail</label>
+                <div class="relative">
+                  <select id="view-tag-select" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                    <option value="">All</option>
+                    <option value="BDV_1406">BDV_1406</option>
+                    <option value="CV_1401">CV_1401</option>
+                    <option value="CV_1402">CV_1402</option>
+                    <option value="CV_3433">CV_3433</option>
+                    <option value="HCV_3464">HCV_3464</option>
+                    <option value="PCV_3465">PCV_3465</option>
+                    <option value="SDV_1412">SDV_1412</option>
+                    <option value="XV_3447">XV_3447</option>
+                    <option value="XV_3449">XV_3449</option>
+                  </select>
+                  <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="font-12px fw-bold color-label text-upper">Select Tag To Add to PM detail</label>
+                <div class="relative">
+                  <select id="add-tag-select" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                    <option value="">Select</option>
+                    <option value="BDV_1406">BDV_1406</option>
+                    <option value="CV_1401">CV_1401</option>
+                    <option value="CV_1402">CV_1402</option>
+                    <option value="CV_3433">CV_3433</option>
+                    <option value="HCV_3464">HCV_3464</option>
+                    <option value="PCV_3465">PCV_3465</option>
+                    <option value="SDV_1412">SDV_1412</option>
+                    <option value="XV_3447">XV_3447</option>
+                    <option value="XV_3449">XV_3449</option>
+                  </select>
+                  <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                <button id="btn-pending-filter" onclick="togglePendingFilter()" class="bg-orange-500 hover:bg-orange-600 fw-bold h-9 text-white rounded-sm shadow-md transition-all px-4 font-12px text-upper ls-wide flex items-center gap-2 whitespace-nowrap">
+                  <i class="ph-bold ph-clock-countdown"></i> Pending for Eng Sign
+                  <span class="bg-white text-orange-600 fw-bold px-2 py-0.5 rounded text-xs">Go</span>
+                </button>
+                <button onclick="openReportModal()" class="bg-dark-bg border border-dark-border hover:border-gnfc-blue h-9 rounded-sm px-4 color-secondary transition-colors font-12px text-upper flex items-center gap-1 whitespace-nowrap">
+                  <i class="ph-bold ph-file-text"></i> Reports
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PM Details Tag Table -->
+        <div id="pm-details-section" class="bg-dark-panel border border-dark-border rounded-md shadow-sm">
+          <div class="bg-dark-header px-4 py-2 border-b border-dark-border">
+            <h3 id="pm-details-title" class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+              <i class="ph-bold ph-table"></i> PM Details Tag :
+            </h3>
+          </div>
+
+          <div class="p-4">
+            <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+              <table class="gnfc-table">
+                <thead class="gnfc-thead">
+                  <tr>
+                    <th class="gnfc-th w-12">Sr</th>
+                    <th class="gnfc-th">Tagno</th>
+                    <th class="gnfc-th">Date</th>
+                    <th class="gnfc-th">Tech Name</th>
+                    <th class="gnfc-th">Checked by</th>
+                    <th class="gnfc-th">Date</th>
+                    <th class="gnfc-th w-28">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="pm-details-tbody" class="gnfc-tbody">
+                  <!-- Data rendered by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Legend -->
+            <div class="mt-3 flex gap-4 text-xs">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span> <span class="color-secondary">Checked by Engineer</span></span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span> <span class="color-secondary">Not checked by Engineer</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Control Valve PM Form Modal -->
+  <div id="pm-form-modal" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">Control Valve PM Form</h3>
+        </div>
+        <button onclick="closePMFormModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <div class="gnfc-modal-body p-0">
+        <div class="bg-dark-panel p-4 flex flex-col gap-4">
+
+          <!-- Section: Tag Information -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-identification-card"></i> Tag Information
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label w-1/3">Tag_no</td>
+                    <td class="gnfc-td font-13px color-primary">LIH_3447A</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Make</td>
+                    <td class="gnfc-td font-13px color-primary">MAGNETROL</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Location</td>
+                    <td class="gnfc-td font-13px color-primary">0-400 MMWC</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">JOB MODE</td>
+                    <td class="gnfc-td font-13px color-primary">NORMAL</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section: Checklist -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border flex justify-between items-center">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-check-square"></i> Inspection Checklist
+              </h4>
+              <span class="font-11px color-secondary italic">Select check box if Answer is Yes otherwise keep blank.</span>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <thead class="gnfc-thead">
+                  <tr>
+                    <th class="gnfc-th">Parameter</th>
+                    <th class="gnfc-th w-28 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Actuator leakage is there ?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Corrosion is there?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Duebushing leakage is there?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Stem Greasing Ok ?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Vent tube checked ?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Bonnet gland leakage is there?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Bonnet Corrosion is there?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Bonnet leakage is there?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Steam cleaning Greasing done?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Body flange leakage is there?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Body leakage is there?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Body corrosion is there?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Insulation required?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Positioner guages working?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Air leakage is there?</td><td class="gnfc-td font-13px text-center"><span class="text-red-400 fw-bold">NO</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">General condition ok?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Cable gland ok?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Mounting ok?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Feedback lever condition ok?</td><td class="gnfc-td font-13px text-center"><span class="text-green-400 fw-bold">YES</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section: Calibration Grid -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-chart-line-up"></i> Calibration Data
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <thead class="gnfc-thead">
+                  <tr>
+                    <th class="gnfc-th">% Before</th>
+                    <th class="gnfc-th text-center">Value</th>
+                    <th class="gnfc-th">% After</th>
+                    <th class="gnfc-th text-center">Value</th>
+                  </tr>
+                </thead>
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">0% Before</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">0% After</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">25% Before</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">25% After</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">50% Before</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">50% After</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">75% Before</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">75% After</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">100% Before</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">100% After</td>
+                    <td class="gnfc-td font-13px text-center color-primary"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section: Technician Remarks -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-wrench"></i> Technician Details
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label w-1/3">Tech Remark</td>
+                    <td class="gnfc-td font-13px color-primary">As smart Tx so only mounting ZERO checked found OK.</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Tech Name</td>
+                    <td class="gnfc-td font-13px color-primary">BPB</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section: Engineer Sign-off -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-seal-check"></i> Engineer Sign-off
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label w-1/3">Job Date</td>
+                    <td class="gnfc-td font-13px color-primary">19/02/2004</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Checked By Eng</td>
+                    <td class="gnfc-td font-13px color-primary">SHC</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Date</td>
+                    <td class="gnfc-td font-13px color-primary">19/02/2004</td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Eng Remark</td>
+                    <td class="gnfc-td font-13px color-primary"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="gnfc-modal-footer">
+        <button class="gnfc-modal-btn gnfc-modal-btn-primary">
+          <i class="ph-bold ph-floppy-disk"></i> Save
+        </button>
+        <button onclick="closePMFormModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add PM Detail Modal (Editable Form) -->
+  <div id="add-pm-modal" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">Control Valve PM Form</h3>
+          <p class="font-12px color-secondary mt-0.5" id="add-pm-subtitle"></p>
+        </div>
+        <button onclick="closeAddPMModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <div class="gnfc-modal-body p-0">
+        <div class="bg-dark-panel p-4 flex flex-col gap-4">
+
+          <!-- Special Instruction -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-info"></i> Special Instruction
+              </h4>
+            </div>
+            <div class="p-3">
+              <input type="text" id="add-special-inst" placeholder="Enter special instruction..." class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+            </div>
+          </div>
+
+          <!-- Tag Information -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-identification-card"></i> Tag Information
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label w-1/3">Tag_no</td>
+                    <td class="gnfc-td font-13px"><span id="add-tag-name" class="color-primary fw-bold"></span></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Make</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Cal Range</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Engineering Range</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Location</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Job Mode</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Inspection Checklist (Editable) -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border flex justify-between items-center">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-check-square"></i> Inspection Checklist
+              </h4>
+              <!-- <span class="font-11px color-secondary italic">Select check box if Answer is Yes otherwise keep blank.</span> -->
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <thead class="gnfc-thead">
+                  <tr>
+                    <th class="gnfc-th">Parameter</th>
+                    <th class="gnfc-th w-20 text-center">Yes</th>
+                  </tr>
+                </thead>
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Actuator leakage is there ?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Corrosion is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Duebushing leakage is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Stem Greasing Ok ?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Vent tube checked ?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Bonnet gland leakage is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Bonnet Corrosion is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Bonnet leakage is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Steam cleaning Greasing done?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Body flange leakage is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Body leakage is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Body corrosion is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Insulation required?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Positioner guages working?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Air leakage is there?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">General condition ok?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Cable gland ok?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Mounting ok?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                  <tr class="gnfc-tr"><td class="gnfc-td font-13px">Feedback lever condition ok?</td><td class="gnfc-td text-center"><input type="checkbox" class="w-4 h-4 accent-blue-500 cursor-pointer"></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Calibration Data (Editable) -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-chart-line-up"></i> Calibration Data
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <thead class="gnfc-thead">
+                  <tr>
+                    <th class="gnfc-th">% Before</th>
+                    <th class="gnfc-th text-center">Value</th>
+                    <th class="gnfc-th">% After</th>
+                    <th class="gnfc-th text-center">Value</th>
+                  </tr>
+                </thead>
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">0% Before</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">0% After</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">25% Before</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">25% After</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">50% Before</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">50% After</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">75% Before</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">75% After</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">100% Before</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                    <td class="gnfc-td font-13px fw-bold color-label">100% After</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Technician Details (Editable) -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-wrench"></i> Technician Details
+              </h4>
+            </div>
+            <div class="gnfc-table-container">
+              <table class="gnfc-table">
+                <tbody class="gnfc-tbody">
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label w-1/3">Tech Remark</td>
+                    <td class="gnfc-td"><input type="text" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Tech Name</td>
+                    <td class="gnfc-td"><input type="text" id="add-tech-name" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary"></td>
+                  </tr>
+                  <tr class="gnfc-tr">
+                    <td class="gnfc-td font-13px fw-bold color-label">Job Date</td>
+                    <td class="gnfc-td"><input type="text" id="add-job-date" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-2 py-1 focus:border-gnfc-blue outline-none color-primary" readonly></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="gnfc-modal-footer">
+        <button class="gnfc-modal-btn gnfc-modal-btn-primary">
+          <i class="ph-bold ph-floppy-disk"></i> Save
+        </button>
+        <button onclick="closeAddPMModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control Valve PM Report Modal -->
+  <div id="report-modal" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--wide">
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">Control Valve PM Report</h3>
+        </div>
+        <button onclick="closeReportModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <div class="gnfc-modal-body p-0">
+        <div class="bg-dark-panel p-4 flex flex-col gap-4">
+
+          <!-- Remark Report Button -->
+          <div class="flex justify-center">
+            <button onclick="generateRemarkReport()" class="bg-dark-bg border border-dark-border hover:border-gnfc-blue rounded-sm px-5 py-2 color-secondary transition-colors font-12px text-upper flex items-center gap-2">
+              <i class="ph-bold ph-note-pencil"></i> Remark Report
+            </button>
+          </div>
+
+          <hr class="border-dark-border">
+
+          <!-- Report by Yes/No Filter -->
+          <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden">
+            <div class="bg-dark-header px-4 py-1.5 border-b border-dark-border">
+              <h4 class="font-12px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+                <i class="ph-bold ph-funnel"></i> Report by Yes/No
+              </h4>
+            </div>
+            <div class="p-4 flex items-center gap-4 flex-wrap">
+              <label class="font-13px fw-bold color-label whitespace-nowrap">Report by Yes/No</label>
+              <div class="relative flex-1 min-w-[250px]">
+                <select id="report-param-select" class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                  <option value="">-- Select Parameter --</option>
+                  <option value="Actuator leakage is there ?">Actuator leakage is there ?</option>
+                  <option value="Corrosion is there?">Corrosion is there?</option>
+                  <option value="Duebushing leakage is there?">Duebushing leakage is there?</option>
+                  <option value="Stem Greasing Ok ?">Stem Greasing Ok ?</option>
+                  <option value="Vent tube checked ?">Vent tube checked ?</option>
+                  <option value="Bonnet gland leakage is there?">Bonnet gland leakage is there?</option>
+                  <option value="Bonnet Corrosion is there?">Bonnet Corrosion is there?</option>
+                  <option value="Bonnet leakage is there?">Bonnet leakage is there?</option>
+                  <option value="Steam cleaning Greasing done?">Steam cleaning Greasing done?</option>
+                  <option value="Body flange leakage is there?">Body flange leakage is there?</option>
+                  <option value="Body leakage is there?">Body leakage is there?</option>
+                  <option value="Body corrosion is there?">Body corrosion is there?</option>
+                  <option value="Insulation required?">Insulation required?</option>
+                  <option value="Positioner guages working?">Positioner guages working?</option>
+                  <option value="Air leakage is there?">Air leakage is there?</option>
+                  <option value="General condition ok?">General condition ok?</option>
+                  <option value="Cable gland ok?">Cable gland ok?</option>
+                  <option value="Mounting ok?">Mounting ok?</option>
+                  <option value="Feedback lever condition ok?">Feedback lever condition ok?</option>
+                </select>
+                <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+              </div>
+              <div class="flex items-center gap-4">
+                <label class="flex items-center gap-1.5 cursor-pointer font-13px color-primary">
+                  <input type="radio" name="report-yesno" value="yes" class="w-4 h-4 accent-blue-500"> Yes
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer font-13px color-primary">
+                  <input type="radio" name="report-yesno" value="no" class="w-4 h-4 accent-blue-500"> No
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Report Title -->
+          <div id="report-title-bar" class="text-center font-13px fw-bold color-primary py-2" style="display:none;"></div>
+
+          <!-- Report Table -->
+          <div id="report-table-container" style="display:none;">
+            <div class="gnfc-table-container overflow-x-auto border border-dark-border">
+              <table class="gnfc-table">
+                <thead class="gnfc-thead">
+                  <tr>
+                    <th class="gnfc-th w-10">Sr</th>
+                    <th class="gnfc-th">Tagno</th>
+                    <th class="gnfc-th">Date</th>
+                    <th class="gnfc-th">Tech Name</th>
+                    <th class="gnfc-th">Checked by</th>
+                    <th class="gnfc-th">Date</th>
+                    <th class="gnfc-th">Tech Remark</th>
+                    <th class="gnfc-th">Eng Remark</th>
+                  </tr>
+                </thead>
+                <tbody id="report-tbody" class="gnfc-tbody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="gnfc-modal-footer">
+        <button onclick="closeReportModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // PM tag data store
+    const pmTagData = {
+      'BDV_1406': [
+        { date: '10/01/2005', tech: 'PBS', checked: true, checkedBy: 'SHC', checkedDate: '10/01/2005' },
+      ],
+      'CV_1401': [
+        { date: '19/02/2004', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '19/02/2004' },
+        { date: '17/08/2004', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '17/08/2004' },
+        { date: '16/02/2005', tech: 'PBS', checked: false, checkedBy: '', checkedDate: '' },
+      ],
+      'CV_1402': [
+        { date: '20/02/2004', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '20/02/2004' },
+        { date: '18/08/2004', tech: 'BPB', checked: false, checkedBy: '', checkedDate: '' },
+      ],
+      'CV_3433': [
+        { date: '01/01/2005', tech: 'PBS', checked: true, checkedBy: 'SHC', checkedDate: '01/01/2005' },
+        { date: '05/02/2005', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '05/02/2005' },
+      ],
+      'HCV_3464': [
+        { date: '08/01/2005', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '08/01/2005' },
+      ],
+      'PCV_3465': [
+        { date: '10/01/2005', tech: 'BPB', checked: false, checkedBy: '', checkedDate: '' },
+      ],
+      'SDV_1412': [
+        { date: '08/02/2005', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '08/02/2005' },
+      ],
+      'XV_3447': [
+        { date: '22/03/2004', tech: 'BPB', checked: true, checkedBy: 'SHC', checkedDate: '22/03/2004' },
+        { date: '15/03/2005', tech: 'PBS', checked: false, checkedBy: '', checkedDate: '' },
+      ],
+      'XV_3449': [
+        { date: '24/03/2004', tech: 'PBS', checked: true, checkedBy: 'SHC', checkedDate: '24/03/2004' },
+        { date: '12/09/2004', tech: 'PBS', checked: true, checkedBy: 'SHC', checkedDate: '12/09/2004' },
+      ],
+    };
+
+    // Action buttons HTML helper
+    function actionBtns(tag, idx) {
+      return `<div class="flex justify-center gap-1">
+        <button onclick="openPMFormModal('${tag}', ${idx})" class="p-1 hover:bg-blue-500/20 rounded transition-colors text-blue-400" title="View Data"><i class="ph-bold ph-eye text-sm"></i></button>
+        <button onclick="editRecord('${tag}', ${idx})" class="p-1 hover:bg-green-500/20 rounded transition-colors text-green-400" title="Edit Data"><i class="ph-bold ph-pencil-simple text-sm"></i></button>
+        <button onclick="deleteRecord('${tag}', ${idx})" class="p-1 hover:bg-red-500/20 rounded transition-colors text-red-400" title="Delete"><i class="ph-bold ph-x text-sm"></i></button>
+      </div>`;
+    }
+
+    // Edit record to show editable form
+    window.editRecord = function(tag, idx) {
+      const entry = pmTagData[tag]?.[idx];
+      if (!entry) return;
+      
+      const elTagName = document.getElementById('add-tag-name');
+      if(elTagName) elTagName.textContent = tag;
+      
+      const elSubtitle = document.getElementById('add-pm-subtitle');
+      if(elSubtitle) elSubtitle.textContent = 'Editing PM detail for: ' + tag;
+      
+      const elJobDate = document.getElementById('add-job-date');
+      if(elJobDate) elJobDate.value = entry.date || '';
+      
+      const modal = document.getElementById('add-pm-modal');
+      if(!modal) return;
+      
+      // Attempt to clear or populate other fields (mocking edit state)
+      modal.querySelectorAll('input[type="text"]:not([readonly]):not(#add-job-date)').forEach(inp => inp.value = '');
+      modal.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      const specialInst = document.getElementById('add-special-inst');
+      if (specialInst) specialInst.value = '';
+      
+      // Populate tech name if available
+      const techName = document.getElementById('add-tech-name');
+      if(techName && entry.tech) techName.value = entry.tech;
+      
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+
+    // Delete record with SweetAlert confirmation
+    window.deleteRecord = function(tag, idx) {
+      const entry = pmTagData[tag]?.[idx];
+      if (!entry) return;
+
+      Swal.fire({
+        title: 'Delete Record?',
+        html: `<p style="font-size:14px;">Are you sure you want to permanently delete this PM record?</p>
+               <div style="margin-top:10px;padding:10px;background:#f8d7da;border-radius:6px;font-size:13px; display: flex; flex-direction: row; justify-content: space-between;">
+                 <div> <strong>Tag:</strong> ${tag}</div>
+                 <div> <strong>Date:</strong> ${entry.date}</div>
+                 <div> <strong>Tech:</strong> ${entry.tech}</div>
+               </div>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<i class="ph-bold ph-trash"></i> Yes, Delete',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Remove record from data store
+          pmTagData[tag].splice(idx, 1);
+          if (pmTagData[tag].length === 0) delete pmTagData[tag];
+
+          // Update pending count
+          updatePendingCount();
+
+          // Re-render table
+          if (showPendingOnly) {
+            renderWithFilters();
+          } else {
+            renderTagData(document.getElementById('view-tag-select')?.value || '');
+          }
+
+          Swal.fire({
+            title: 'Deleted!',
+            text: `PM record for ${tag} (${entry.date}) has been deleted.`,
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }
+      });
+    };
+
+    // Render table rows for a specific tag
+    function renderTagData(tagName) {
+      const tbody = document.getElementById('pm-details-tbody');
+      const titleEl = document.getElementById('pm-details-title');
+
+      if (tagName) {
+        titleEl.innerHTML = '<i class="ph-bold ph-table"></i> PM Details Tag : ' + tagName;
+      } else {
+        titleEl.innerHTML = '<i class="ph-bold ph-table"></i> PM Details Tag :';
+      }
+
+      // Get data for selected tag or show all
+      let rows = [];
+      if (tagName) {
+        const entries = pmTagData[tagName] || [];
+        entries.forEach((e, i) => {
+          rows.push({ sr: i + 1, tag: tagName, origIdx: i, ...e });
+        });
+      } else {
+        let sr = 1;
+        for (const [tag, entries] of Object.entries(pmTagData)) {
+          entries.forEach((e, i) => {
+            rows.push({ sr: sr++, tag, origIdx: i, ...e });
+          });
+        }
+      }
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr class="gnfc-tr"><td colspan="7" class="gnfc-td text-center py-6"><div class="flex justify-center items-center gap-2 color-secondary"><i class="ph-bold ph-magnifying-glass font-24px"></i><span class="font-13px">No PM data found for this tag.</span></div></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => `
+        <tr class="gnfc-tr">
+          <td class="gnfc-td text-center font-15px">${r.sr}</td>
+          <td class="gnfc-td text-center font-15px fw-bold">${r.tag}</td>
+          <td class="gnfc-td text-center font-15px ${r.checked ? 'date-green' : 'date-red'}">${r.date}</td>
+          <td class="gnfc-td text-center font-15px">${r.tech}</td>
+          <td class="gnfc-td text-center font-15px">${r.checkedBy || ''}</td>
+          <td class="gnfc-td text-center font-15px ${r.checked ? 'date-green' : ''}">${r.checkedDate || ''}</td>
+          <td class="gnfc-td text-center">${actionBtns(r.tag, r.origIdx)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Pending filter state
+    let showPendingOnly = false;
+
+    function updatePendingCount() {
+      let count = 0;
+      for (const entries of Object.values(pmTagData)) {
+        count += entries.filter(e => !e.checked).length;
+      }
+      const el = document.getElementById('pending-count');
+      if (el) el.textContent = count;
+    }
+
+    // Render with pending filter
+    function renderWithFilters() {
+      const tagName = document.getElementById('view-tag-select')?.value || '';
+      const tbody = document.getElementById('pm-details-tbody');
+      const titleEl = document.getElementById('pm-details-title');
+
+      if (showPendingOnly) {
+        titleEl.innerHTML = '<i class="ph-bold ph-table"></i> PM Details Tag : <span class="text-orange-400">Pending for Eng Sign</span>';
+      } else if (tagName) {
+        titleEl.innerHTML = '<i class="ph-bold ph-table"></i> PM Details Tag : ' + tagName;
+      } else {
+        titleEl.innerHTML = '<i class="ph-bold ph-table"></i> PM Details Tag :';
+      }
+
+      let rows = [];
+      let sr = 1;
+      if (tagName && !showPendingOnly) {
+        const entries = pmTagData[tagName] || [];
+        entries.forEach((e, i) => {
+          rows.push({ sr: i + 1, tag: tagName, origIdx: i, ...e });
+        });
+      } else {
+        for (const [tag, entries] of Object.entries(pmTagData)) {
+          entries.forEach((e, i) => {
+            if (showPendingOnly && e.checked) return;
+            rows.push({ sr: sr++, tag, origIdx: i, ...e });
+          });
+        }
+      }
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr class="gnfc-tr"><td colspan="7" class="gnfc-td text-center py-6"><div class="flex justify-center items-center gap-2 color-secondary"><i class="ph-bold ph-check-circle font-24px text-green-400"></i><span class="font-13px">No pending items found.</span></div></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => `
+        <tr class="gnfc-tr">
+          <td class="gnfc-td text-center font-13px">${r.sr}</td>
+          <td class="gnfc-td text-center font-13px fw-bold">${r.tag}</td>
+          <td class="gnfc-td text-center font-13px ${r.checked ? 'date-green' : 'date-red'}">${r.date}</td>
+          <td class="gnfc-td text-center font-13px">${r.tech}</td>
+          <td class="gnfc-td text-center font-13px">${r.checkedBy || ''}</td>
+          <td class="gnfc-td text-center font-13px ${r.checked ? 'date-green' : ''}">${r.checkedDate || ''}</td>
+          <td class="gnfc-td text-center">${actionBtns(r.tag, r.origIdx)}</td>
+        </tr>
+      `).join('');
+    }
+
+    window.togglePendingFilter = function() {
+      showPendingOnly = !showPendingOnly;
+      const btn = document.getElementById('btn-pending-filter');
+      if (showPendingOnly) {
+        btn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+        btn.classList.add('bg-green-600', 'hover:bg-green-700');
+        btn.querySelector('i').className = 'ph-bold ph-funnel';
+        // Reset tag dropdown
+        document.getElementById('view-tag-select').value = '';
+      } else {
+        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        btn.classList.add('bg-orange-500', 'hover:bg-orange-600');
+        btn.querySelector('i').className = 'ph-bold ph-clock-countdown';
+      }
+      renderWithFilters();
+    };
+
+    // Initial render – show all
+    updatePendingCount();
+    renderTagData('');
+
+    // Tag selection filter
+    document.getElementById('view-tag-select')?.addEventListener('change', function() {
+      if (showPendingOnly) {
+        showPendingOnly = false;
+        const btn = document.getElementById('btn-pending-filter');
+        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        btn.classList.add('bg-orange-500', 'hover:bg-orange-600');
+        btn.querySelector('i').className = 'ph-bold ph-clock-countdown';
+      }
+      renderTagData(this.value);
+    });
+
+    // PM Form Modal open/close
+    window.openPMFormModal = function(tag, idx) {
+      if(tag) {
+         // Populate the tag name in the readonly modal
+         const viewTags = document.querySelectorAll('#pm-form-modal .gnfc-td.font-13px.color-primary');
+         if(viewTags.length > 0) {
+           viewTags[0].textContent = tag;
+         }
+      }
+      const modal = document.getElementById('pm-form-modal');
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+
+    window.closePMFormModal = function() {
+      const modal = document.getElementById('pm-form-modal');
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    };
+
+    // Add PM modal – open on tag selection
+    document.getElementById('add-tag-select')?.addEventListener('change', function() {
+      const tag = this.value;
+      if (!tag) return;
+      // Set tag name
+      document.getElementById('add-tag-name').textContent = tag;
+      document.getElementById('add-pm-subtitle').textContent = 'Adding PM detail for: ' + tag;
+      // Set today's date
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      document.getElementById('add-job-date').value = dd + '/' + mm + '/' + yyyy;
+      // Clear other fields
+      const modal = document.getElementById('add-pm-modal');
+      modal.querySelectorAll('input[type="text"]:not([readonly]):not(#add-job-date)').forEach(inp => inp.value = '');
+      modal.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.getElementById('add-special-inst').value = '';
+      // Open modal
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      // Reset dropdown
+      this.value = '';
+    });
+
+    window.closeAddPMModal = function() {
+      const modal = document.getElementById('add-pm-modal');
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    };
+
+    // Close modal on overlay click
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'pm-form-modal') closePMFormModal();
+      if (e.target.id === 'add-pm-modal') closeAddPMModal();
+      if (e.target.id === 'report-modal') closeReportModal();
+    });
+
+    // ---- Report Modal ----
+    window.openReportModal = function() {
+      const modal = document.getElementById('report-modal');
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      // Reset state
+      document.getElementById('report-param-select').value = '';
+      document.querySelectorAll('input[name="report-yesno"]').forEach(r => r.checked = false);
+      document.getElementById('report-title-bar').style.display = 'none';
+      document.getElementById('report-table-container').style.display = 'none';
+    };
+
+    window.closeReportModal = function() {
+      const modal = document.getElementById('report-modal');
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    };
+
+    // Sample checklist data per tag (maps to the checklist items)
+    const checklistData = {
+      'BDV_1406': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: '', engRemark: '' },
+      'CV_1401': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': false, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: 'Actuator checked, positioner calibrated OK.', engRemark: '' },
+      'CV_1402': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': false, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: 'Valve travel checked found OK.', engRemark: '' },
+      'CV_3433': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: '', engRemark: '' },
+      'HCV_3464': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: '', engRemark: '' },
+      'PCV_3465': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': false, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: '', engRemark: '' },
+      'SDV_1412': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: '', engRemark: '' },
+      'XV_3447': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': true, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: 'Solenoid valve checked found OK.', engRemark: '' },
+      'XV_3449': { 'Range Checked By HHT?': true, 'Mounting Zero Checked Before Calibration?': true, 'Glanding / Cable Support OK?': false, 'Tag Stamping OK?': true, 'Canopy required?': false, 'Manifold Condition OK?': true, 'Any Leakage At Drain Valve/Plug/Tubing ?': false, 'Tapping Flushed?': true, 'Monsoon Protection OK?': true, techRemark: 'Limit switch checked found OK.', engRemark: '' },
+    };
+
+    function generateYesNoReport() {
+      const param = document.getElementById('report-param-select').value;
+      const yesNoEl = document.querySelector('input[name="report-yesno"]:checked');
+      if (!param || !yesNoEl) return;
+
+      const filterYes = yesNoEl.value === 'yes';
+      const titleBar = document.getElementById('report-title-bar');
+      const tableContainer = document.getElementById('report-table-container');
+      const tbody = document.getElementById('report-tbody');
+
+      titleBar.textContent = param + ' / ' + (filterYes ? 'YES' : 'NO');
+      titleBar.style.display = 'block';
+      tableContainer.style.display = 'block';
+
+      let rows = [];
+      let sr = 1;
+      for (const [tag, cl] of Object.entries(checklistData)) {
+        const val = cl[param];
+        if ((filterYes && val) || (!filterYes && !val)) {
+          const entries = pmTagData[tag] || [];
+          const first = entries[0] || {};
+          rows.push({
+            sr: sr++, tag,
+            date: first.date || '',
+            tech: first.tech || '',
+            checkedBy: first.checkedBy || '',
+            checkedDate: first.checkedDate || '',
+            techRemark: cl.techRemark || '',
+            engRemark: cl.engRemark || '',
+            checked: first.checked || false
+          });
+        }
+      }
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr class="gnfc-tr"><td colspan="8" class="gnfc-td text-center py-6 color-secondary font-13px">No records found for this filter.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => `
+        <tr class="gnfc-tr">
+          <td class="gnfc-td text-center font-13px">${r.sr}</td>
+          <td class="gnfc-td text-center font-13px fw-bold">${r.tag}</td>
+          <td class="gnfc-td text-center font-13px ${r.checked ? 'date-green' : 'date-red'}">${r.date}</td>
+          <td class="gnfc-td text-center font-13px">${r.tech}</td>
+          <td class="gnfc-td text-center font-13px">${r.checkedBy}</td>
+          <td class="gnfc-td text-center font-13px ${r.checked ? 'date-green' : ''}">${r.checkedDate}</td>
+          <td class="gnfc-td font-13px">${r.techRemark}</td>
+          <td class="gnfc-td font-13px">${r.engRemark}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Auto-generate report on parameter or radio change
+    document.getElementById('report-param-select')?.addEventListener('change', generateYesNoReport);
+    document.querySelectorAll('input[name="report-yesno"]').forEach(r => r.addEventListener('change', generateYesNoReport));
+
+    // Remark Report – shows all tags that have tech/eng remarks
+    window.generateRemarkReport = function() {
+      const titleBar = document.getElementById('report-title-bar');
+      const tableContainer = document.getElementById('report-table-container');
+      const tbody = document.getElementById('report-tbody');
+
+      // Reset filters
+      document.getElementById('report-param-select').value = '';
+      document.querySelectorAll('input[name="report-yesno"]').forEach(r => r.checked = false);
+
+      titleBar.textContent = 'Remark Report – All Tags with Remarks';
+      titleBar.style.display = 'block';
+      tableContainer.style.display = 'block';
+
+      let rows = [];
+      let sr = 1;
+      for (const [tag, cl] of Object.entries(checklistData)) {
+        if (cl.techRemark || cl.engRemark) {
+          const entries = pmTagData[tag] || [];
+          const first = entries[0] || {};
+          rows.push({
+            sr: sr++, tag,
+            date: first.date || '',
+            tech: first.tech || '',
+            checkedBy: first.checkedBy || '',
+            checkedDate: first.checkedDate || '',
+            techRemark: cl.techRemark || '',
+            engRemark: cl.engRemark || '',
+            checked: first.checked || false
+          });
+        }
+      }
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr class="gnfc-tr"><td colspan="8" class="gnfc-td text-center py-6 color-secondary font-13px">No tags with remarks found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => `
+        <tr class="gnfc-tr">
+          <td class="gnfc-td text-center font-13px">${r.sr}</td>
+          <td class="gnfc-td text-center font-13px fw-bold">${r.tag}</td>
+          <td class="gnfc-td text-center font-13px ${r.checked ? 'date-green' : 'date-red'}">${r.date}</td>
+          <td class="gnfc-td text-center font-13px">${r.tech}</td>
+          <td class="gnfc-td text-center font-13px">${r.checkedBy}</td>
+          <td class="gnfc-td text-center font-13px ${r.checked ? 'date-green' : ''}">${r.checkedDate}</td>
+          <td class="gnfc-td font-13px">${r.techRemark}</td>
+          <td class="gnfc-td font-13px">${r.engRemark}</td>
+        </tr>
+      `).join('');
+    };
+  </script>
+</body>
+
+</html>
