@@ -54,9 +54,9 @@
                         <div class="jbd-filter-group">
                             <label class="jbd-filter-label">Tag</label>
                             <div class="jbd-filter-row">
-                                <input type="text" id="jb-tag-input" class="jbd-input" style="width:9rem;" placeholder="Tag No…">
-                                <div class="jbd-select-wrap" style="width:9rem;">
-                                    <select id="jb-tag-select" class="jbd-input jbd-select" style="width:100%;">
+                                <input type="text" id="jb-tag-input" class="jbd-input w-36" placeholder="Tag No…">
+                                <div class="jbd-select-wrap w-36">
+                                    <select id="jb-tag-select" class="jbd-input jbd-select w-full">
                                         <option>L_110VDCBF</option>
                                         <option>ZSH177906</option>
                                         <option>10-PT-101A</option>
@@ -75,9 +75,9 @@
                         <div class="jbd-filter-group">
                             <label class="jbd-filter-label">FIND JOB</label>
                             <div class="jbd-filter-row">
-                                <input type="text" id="jb-find-input" class="jbd-input" style="width:8rem;" placeholder="Search…">
-                                <div class="jbd-select-wrap" style="width:8rem;">
-                                    <select id="jb-select" class="jbd-input jbd-select" style="width:100%;">
+                                <input type="text" id="jb-find-input" class="jbd-input w-32" placeholder="Search…">
+                                <div class="jbd-select-wrap w-32">
+                                    <select id="jb-select" class="jbd-input jbd-select w-full">
                                         <option>ACJB-1</option>
                                         <option selected>ACJB-2</option>
                                         <option>ACJB-3</option>
@@ -163,11 +163,11 @@
                                     <i class="ph-fill ph-seal-check"></i> Control Copy
                                 </span>
                                 <span class="color-secondary font-12px">—</span>
-                                <span class="font-12px fw-bold color-blue">
-                                    JObNO :&nbsp;<span id="cc-jb-no" class="fw-extrabold">ACJB-2</span>
+                                <span class="text-[12px] font-bold text-[#5794f2]">
+                                    JObNO :&nbsp;<span id="cc-jb-no" class="font-extrabold">ACJB-2</span>
                                 </span>
                             </div>
-                            <button class="jbd-btn jbd-btn-ghost" style="height:1.75rem; font-size:0.6875rem; padding:0 0.625rem;" onclick="markAsControlCopy()">
+                            <button class="jbd-btn jbd-btn-ghost h-7 text-[11px] px-2.5" onclick="markAsControlCopy()">
                                 <i class="ph-bold ph-check-square-offset"></i> Mark As Control Copy
                             </button>
                         </div>
@@ -250,25 +250,25 @@
                     <div class="jbd-card">
                         <div class="jbd-card-header">
                             <div class="jbd-card-header-left">
-                                <i class="ph-fill ph-table color-orange" style="font-size:0.9375rem;"></i>
+                                <i class="ph-fill ph-table text-[#fb923c] text-[15px]"></i>
                                 <span class="jbd-card-header-title">Channel Records</span>
                             </div>
                             <span id="ch-record-count" class="jbd-badge-count">0 Channels</span>
                         </div>
 
-                        <div class="overflow-auto" style="max-height: 56vh;">
+                        <div class="overflow-auto max-h-[56vh]">
                             <table class="jbd-table" id="ch-table">
                                 <thead>
                                     <tr>
-                                        <th style="width:38px;" rowspan="2">Ch</th>
-                                        <th style="width:110px;" rowspan="2" class="jbd-clickable-th">Tag Number</th>
-                                        <th style="min-width:200px;" rowspan="2">Location / Description / Function</th>
-                                        <th style="width:80px;" rowspan="2">JOB TERM</th>
-                                        <th colspan="2" style="width:180px;">Cabinet Term Strip</th>
+                                        <th class="w-[38px]" rowspan="2">Ch</th>
+                                        <th class="w-[110px]" rowspan="2" class="jbd-clickable-th">Tag Number</th>
+                                        <th class="min-w-[200px]" rowspan="2">Location / Description / Function</th>
+                                        <th class="w-[80px]" rowspan="2">JOB TERM</th>
+                                        <th colspan="2" class="w-[180px]">Cabinet Term Strip</th>
                                     </tr>
                                     <tr>
-                                        <th style="width:70px;">Terminal</th>
-                                        <th style="width:70px;">Strip</th>
+                                        <th class="w-[70px]">Terminal</th>
+                                        <th class="w-[70px]">Strip</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ch-table-body">
@@ -300,8 +300,8 @@
     <!-- ══════════════════════════════════════════════════════════════════ -->
 
     <!-- Generic Edit Field Modal -->
-    <div id="modal-edit-field" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
-        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 420px; padding: 0;">
+    <div id="modal-edit-field" class="gnfc-modal-overlay z-[10005]" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow max-w-[420px] p-0">
             <div class="gnfc-modal-header">
                 <div>
                     <h3 class="gnfc-modal-title" id="ef-title"><i class="ph-bold ph-map-pin mr-1" id="ef-icon"></i> Edit Location</h3>
@@ -318,9 +318,9 @@
                 </div>
                 <div class="flex items-center gap-2 mb-2">
                     <input type="checkbox" id="ef-all-jb" class="w-4 h-4 rounded border-gray-400 cursor-pointer">
-                    <label for="ef-all-jb" class="font-12px fw-bold color-primary cursor-pointer">Update For All JB</label>
+                    <label for="ef-all-jb" class="text-[12px] font-bold text-[#e6edf3] cursor-pointer">Update For All JB</label>
                 </div>
-                <p style="color:#ef4444; font-size:0.75rem; font-weight:600; line-height:1.4;">
+                <p class="text-[#ef4444] text-[12px] font-semibold leading-relaxed">
                     <i class="ph-bold ph-warning mr-1"></i>Note: Old values of all JBs will be replaced if selected All JB.
                 </p>
             </div>
@@ -336,8 +336,8 @@
     </div>
 
     <!-- Junction Box Schedule Modal -->
-    <div id="modal-jb-schedule" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
-        <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 520px; padding: 0;">
+    <div id="modal-jb-schedule" class="gnfc-modal-overlay z-[10005]" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--narrow max-w-[520px] p-0">
             <div class="gnfc-modal-header">
                 <div>
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-grid-four mr-1"></i> Junction Box Schedule</h3>
@@ -387,27 +387,27 @@
     </div>
 
     <!-- JObIndex Modal -->
-    <div id="modal-jb-index" class="gnfc-modal-overlay" style="z-index: 1005;" role="dialog" aria-modal="true">
-        <div class="gnfc-modal-shell gnfc-modal-shell--wide" style="max-width: 1100px; padding: 0;">
+    <div id="modal-jb-index" class="gnfc-modal-overlay z-[1005]" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide max-w-[1100px] p-0">
             <div class="gnfc-modal-header">
                 <div>
                     <h3 class="gnfc-modal-title"><i class="ph-bold ph-list-numbers mr-1"></i> JObIndex</h3>
-                    <p class="gnfc-modal-subtitle">BOILER — Click <span style="color:#5794f2;">Location</span>, <span style="color:#fb923c;">Cable Type</span> or <span style="color:#34d399;">Cabinet</span> cells to edit</p>
+                    <p class="gnfc-modal-subtitle">BOILER — Click <span class="text-[#5794f2]">Location</span>, <span class="text-[#fb923c]">Cable Type</span> or <span class="text-[#34d399]">Cabinet</span> cells to edit</p>
                 </div>
                 <button onclick="closeJBIndexModal()" class="gnfc-modal-close">
                     <i class="ph-bold ph-x text-lg"></i>
                 </button>
             </div>
-            <div class="gnfc-modal-body" style="padding: 0; max-height: 70vh; overflow: auto;">
-                <table class="jbd-table" id="jb-index-table" style="font-size:0.8125rem;">
+            <div class="gnfc-modal-body p-0 max-h-[70vh] overflow-auto">
+                <table class="jbd-table text-[13px]" id="jb-index-table">
                     <thead>
                         <tr>
-                            <th style="width:48px;">Sr</th>
-                            <th style="width:110px;">JObNo</th>
-                            <th style="min-width:280px; text-align:left; padding-left:12px;">Location</th>
-                            <th style="width:160px;">Cable Type</th>
-                            <th style="width:110px;">Cabinet</th>
-                            <th style="width:100px;">Print</th>
+                            <th class="w-[48px]">Sr</th>
+                            <th class="w-[110px]">JObNo</th>
+                            <th class="min-w-[280px] text-left pl-3">Location</th>
+                            <th class="w-[160px]">Cable Type</th>
+                            <th class="w-[110px]">Cabinet</th>
+                            <th class="w-[100px]">Print</th>
                         </tr>
                     </thead>
                     <tbody id="jb-index-body"></tbody>
@@ -557,6 +557,34 @@
                 </button>
                 <button type="button" onclick="closeEditTagModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
                     Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Image Modal -->
+    <div id="modal-report-image" class="gnfc-modal-overlay" style="z-index: 10015;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell gnfc-modal-shell--wide" style="max-width: 1200px; padding: 0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-file-image mr-1"></i> Report Preview</h3>
+                    <p class="gnfc-modal-subtitle" id="report-image-subtitle">Junction Box Schedule</p>
+                </div>
+                <button onclick="closeReportImageModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body p-0 jbd-report-modal-body flex justify-center items-start overflow-auto" style="min-height: 500px; max-height: 85vh;">
+                <div id="report-diagram-container" class="w-full">
+                    <!-- Dynamic Diagram Injected Here -->
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="printReportImage()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-printer mr-1"></i> Print
+                </button>
+                <button type="button" onclick="closeReportImageModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Close
                 </button>
             </div>
         </div>
@@ -864,15 +892,184 @@
         }
 
         function runJBScheduleReport() {
-            const chFrom = document.getElementById('jbs-ch-from').value;
-            const chTo = document.getElementById('jbs-ch-to').value;
+            const chFrom = parseInt(document.getElementById('jbs-ch-from').value, 10);
+            const chTo = parseInt(document.getElementById('jbs-ch-to').value, 10);
             const reportType = document.getElementById('jbs-report-type').value;
+
             closeJBScheduleModal();
-            Swal.fire({
-                icon: 'success', title: 'Report Generated',
-                text: `Channel ${chFrom} to ${chTo} — ${reportType}`,
-                confirmButtonColor: '#2563eb', timer: 2500, timerProgressBar: true
+
+            const jbNo = currentJB || (document.getElementById('cc-jb-no')?.textContent || '—');
+            openReportImageModal({ jbNo, chFrom, chTo, reportType });
+        }
+
+        function openReportImageModal({ jbNo, chFrom, chTo, reportType }) {
+            const subtitle = `Junction Box Schedule — Ch ${chFrom} to ${chTo} — ${reportType}`;
+            const subtitleEl = document.getElementById('report-image-subtitle');
+            if (subtitleEl) subtitleEl.textContent = subtitle || 'Report Preview';
+
+            const container = document.getElementById('report-diagram-container');
+            if (!container) return;
+
+            const jbData = (jbNo && JB_DATABASE[jbNo]) ? JB_DATABASE[jbNo] : (JB_DATABASE[currentJB] || null);
+            const location = jbData?.location || '—';
+            const cableNo = jbData?.cableNo || '—';
+            const cableType = jbData?.cableType || '—';
+            const cabinet = jbData?.cabinet || '—';
+
+            const channels = Array.isArray(jbData?.channels) ? jbData.channels : [];
+            const inRange = channels.filter(c => (c?.ch ?? 0) >= chFrom && (c?.ch ?? 0) <= chTo);
+
+            const today = new Date();
+            const dateText = String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear();
+
+            const rows = inRange.map((ch) => {
+                const r0 = (ch.rows || [])[0] || {};
+                const r1 = (ch.rows || [])[1] || {};
+                const r2 = (ch.rows || [])[2] || {};
+
+                const jbTerms = (ch.rows || []).map(r => r?.jbTerm).filter(v => v !== undefined && v !== null && String(v).trim() !== '');
+                const cabTerms = (ch.rows || []).map(r => r?.cabTerm).filter(v => v && String(v).trim() !== '');
+                const cabStrips = (ch.rows || []).map(r => r?.cabStrip).filter(v => v && String(v).trim() !== '');
+
+                const uniq = (arr) => Array.from(new Set(arr.map(v => String(v).trim()).filter(Boolean)));
+
+                return {
+                    ch: ch.ch ?? '',
+                    tag: (r0.tag || 'SPARE'),
+                    description: (r1.func || r0.func || '—'),
+                    functionText: (r2.func || '—'),
+                    jbTerms: uniq(jbTerms),
+                    cabTerms: uniq(cabTerms),
+                    cabStrips: uniq(cabStrips),
+                };
             });
+
+            const buildTermStack = (terms) => {
+                if (!terms || !terms.length) return `<div class="jbd-jbs-termstack"><div class="jbd-jbs-termbox">—</div></div>`;
+                return `
+                    <div class="jbd-jbs-termstack">
+                        ${terms.map(t => `<div class="jbd-jbs-termbox">${t}</div>`).join('')}
+                    </div>
+                `;
+            };
+
+            const buildCabStack = (terms, strips) => {
+                const t = (terms && terms.length) ? terms : ['—'];
+                const s = (strips && strips.length) ? strips : ['—'];
+                const lines = Math.max(t.length, s.length, 2);
+                const termLines = Array.from({ length: lines }, (_, i) => t[i] ?? '');
+                const stripLines = Array.from({ length: lines }, (_, i) => s[i] ?? '');
+
+                return `
+                    <div class="jbd-jbs-cabstack">
+                        <div class="jbd-jbs-cabcol">
+                            ${termLines.map(v => `<div class="jbd-jbs-cabline">${v || '&nbsp;'}</div>`).join('')}
+                        </div>
+                        <div class="jbd-jbs-cabbracket" aria-hidden="true"></div>
+                        <div class="jbd-jbs-cabcol">
+                            ${stripLines.map(v => `<div class="jbd-jbs-cabline">${v || '&nbsp;'}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            };
+
+            const buildSignalCell = () => {
+                // Small “circle + line” like the legacy drawing
+                return `
+                    <svg class="jbd-jbs-signal-svg" viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="16" cy="14" r="6" fill="none" stroke="var(--jbd-ink)" stroke-width="2"/>
+                        <line x1="22" y1="14" x2="64" y2="14" stroke="var(--jbd-ink)" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="64" y1="6" x2="64" y2="22" stroke="var(--jbd-ink)" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="64" y1="14" x2="104" y2="14" stroke="var(--jbd-ink)" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                `;
+            };
+
+            container.innerHTML = `
+                <div class="jbd-jbs-sheet" role="document" aria-label="Junction Box Schedule">
+                    <div class="jbd-jbs-titlebox">JUNCTION BOX SCHEDULE</div>
+
+                    <div class="jbd-jbs-headgrid">
+                        <div class="jbd-jbs-headleft">
+                            <div class="jbd-jbs-jbname">${jbNo || '—'}</div>
+                            <div class="jbd-jbs-locline"><span class="k">LOC :</span> <span class="v">${location}</span></div>
+                        </div>
+                        <div class="jbd-jbs-headright">
+                            <div class="jbd-jbs-headrow"><span class="k">CABINET :</span> <span class="v">${cabinet}</span></div>
+                            <div class="jbd-jbs-headrow"><span class="k">ENCL :</span> <span class="v">—</span></div>
+                            <div class="jbd-jbs-headrow"><span class="k">DATE :</span> <span class="v">${dateText}</span></div>
+                        </div>
+                    </div>
+
+                    <table class="jbd-jbs-table" aria-label="Junction Box Schedule Table">
+                        <thead>
+                            <tr>
+                                <th class="c-ch">CH</th>
+                                <th class="c-tag">TAG NO</th>
+                                <th class="c-desc">DESCRIPTION</th>
+                                <th class="c-func">FUNCTION</th>
+                                <th class="c-sig">SIGNAL CABLE</th>
+                                <th class="c-jbterm">JB TERM.</th>
+                                <th class="c-pair">${cableType || 'SIGNAL 12 PAIR'}</th>
+                                <th class="c-cabterm">CAB TERM.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${
+                                rows.length
+                                    ? rows.map(r => `
+                                        <tr>
+                                            <td class="c-ch">${r.ch}</td>
+                                            <td class="c-tag">${String(r.tag || '').replaceAll('<','&lt;')}</td>
+                                            <td class="c-desc">${String(r.description || '').replaceAll('<','&lt;')}</td>
+                                            <td class="c-func">${String(r.functionText || '').replaceAll('<','&lt;')}</td>
+                                            <td class="c-sig">${buildSignalCell()}</td>
+                                            <td class="c-jbterm">${buildTermStack(r.jbTerms)}</td>
+                                            <td class="c-pair">
+                                                <div class="jbd-jbs-pairbox">
+                                                    <div class="jbd-jbs-paircable">${cableNo}</div>
+                                                    <div class="jbd-jbs-pairjb">${jbNo}-${cabinet}</div>
+                                                </div>
+                                            </td>
+                                            <td class="c-cabterm">${buildCabStack(r.cabTerms, r.cabStrips)}</td>
+                                        </tr>
+                                    `).join('')
+                                    : `<tr><td colspan="8" class="jbd-jbs-empty">No data in selected channel range.</td></tr>`
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="jbd-jbs-footerblock" aria-label="Drawing footer">
+                        <div class="jbd-jbs-footergrid">
+                            <div class="jbd-jbs-footcell">
+                                <div class="jbd-jbs-footrow"><span class="k">Doc. No.</span><span class="v">—</span></div>
+                                <div class="jbd-jbs-footrow"><span class="k">Drg. No.</span><span class="v">—</span></div>
+                            </div>
+                            <div class="jbd-jbs-footcell">
+                                <div class="jbd-jbs-footrow"><span class="k">Drg. Name</span><span class="v">BOILER</span></div>
+                            </div>
+                            <div class="jbd-jbs-footcell">
+                                <div class="jbd-jbs-footrow"><span class="k">Rev</span><span class="v">0</span></div>
+                            </div>
+                            <div class="jbd-jbs-footcell">
+                                <div class="jbd-jbs-footrow"><span class="k">Prepd By</span><span class="v">—</span></div>
+                                <div class="jbd-jbs-footrow"><span class="k">Checked By</span><span class="v">M(AMD)</span></div>
+                                <div class="jbd-jbs-footrow"><span class="k">Date</span><span class="v">${dateText}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-report-image')?.classList.add('is-open');
+        }
+
+        function closeReportImageModal() {
+            document.getElementById('modal-report-image').classList.remove('is-open');
+        }
+
+        function printReportImage() {
+            window.print();
         }
 
         // ========================

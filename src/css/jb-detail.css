@@ -569,3 +569,280 @@ html[data-theme-mode="light"] .jbd-idx-cell-cab:hover   { background: #f0fdf4 !i
 
 /* ── SweetAlert2 z-index override ─────────────────────────────────────── */
 .swal2-container { z-index: 99999 !important; }
+
+/* ── Report Preview (Theme-aware diagram) ─────────────────────────────── */
+.jbd-report-modal-body {
+    background: var(--app-bg, #f1f5f9);
+    padding-bottom: 22px;
+}
+
+/* Legacy-like sheet (matches the old IE screenshot) */
+.jbd-jbs-sheet {
+    width: min(1180px, 100%);
+    /* margin: 10px; */
+    padding: 12px;
+    background: var(--jbd-paper);
+    border: 1px solid var(--jbd-ink);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.18);
+    font-family: "Times New Roman", Times, serif;
+}
+
+.jbd-jbs-titlebox {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 8px 6px;
+    border: 1px solid var(--jbd-ink);
+    margin-bottom: 8px;
+    color: var(--jbd-ink);
+}
+
+.jbd-jbs-headgrid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.jbd-jbs-headleft,
+.jbd-jbs-headright {
+    border: 1px solid var(--jbd-ink);
+    padding: 8px 10px;
+    color: var(--jbd-ink);
+}
+
+.jbd-jbs-jbname {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.jbd-jbs-locline {
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.jbd-jbs-headrow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+}
+.jbd-jbs-headrow:last-child { border-bottom: none; }
+
+.jbd-jbs-headgrid .k {
+    font-weight: 800;
+}
+.jbd-jbs-headgrid .v {
+    font-weight: 800;
+}
+
+.jbd-jbs-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--jbd-ink);
+}
+
+.jbd-jbs-table th,
+.jbd-jbs-table td {
+    border: 1px solid var(--jbd-ink);
+    padding: 6px 6px;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.jbd-jbs-table th {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-align: center;
+}
+
+.jbd-jbs-table .c-ch { width: 46px; text-align: center; font-weight: 800; }
+.jbd-jbs-table .c-tag { width: 140px; text-align: center; font-weight: 800; }
+.jbd-jbs-table .c-desc { width: 260px; }
+.jbd-jbs-table .c-func { width: 140px; text-align: center; }
+.jbd-jbs-table .c-sig { width: 140px; text-align: center; }
+.jbd-jbs-table .c-jbterm { width: 110px; text-align: center; }
+.jbd-jbs-table .c-pair { width: 170px; text-align: center; font-weight: 800; }
+.jbd-jbs-table .c-cabterm { width: 160px; text-align: center; }
+
+.jbd-jbs-signal-svg {
+    width: 120px;
+    height: 28px;
+    display: inline-block;
+}
+
+.jbd-jbs-termstack {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+}
+
+.jbd-jbs-termbox {
+    min-width: 46px;
+    padding: 2px 6px;
+    border: 1px solid var(--jbd-ink);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.jbd-jbs-pairbox {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+}
+
+.jbd-jbs-paircable {
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.jbd-jbs-pairjb {
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.jbd-jbs-cabstack {
+    display: grid;
+    grid-template-columns: 1fr 18px 1fr;
+    gap: 6px;
+    align-items: center;
+    justify-items: center;
+}
+
+.jbd-jbs-cabcol {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.jbd-jbs-cabline {
+    min-width: 54px;
+    padding: 2px 6px;
+    border: 1px solid var(--jbd-ink);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.jbd-jbs-cabbracket {
+    width: 18px;
+    height: 100%;
+    position: relative;
+}
+.jbd-jbs-cabbracket::before,
+.jbd-jbs-cabbracket::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--jbd-ink);
+    border-right: none;
+    border-top: none;
+}
+.jbd-jbs-cabbracket::before {
+    top: 8px;
+    transform: translateX(-50%) rotate(45deg);
+}
+.jbd-jbs-cabbracket::after {
+    bottom: 8px;
+    transform: translateX(-50%) rotate(-135deg);
+}
+
+.jbd-jbs-empty {
+    text-align: center;
+    padding: 12px;
+    font-weight: 800;
+}
+
+/* Bottom title-block/footer (drawing style) */
+.jbd-jbs-footerblock {
+    margin-top: 10px;
+}
+
+.jbd-jbs-footergrid {
+    display: grid;
+    grid-template-columns: 1.2fr 1.4fr 0.6fr 1.6fr;
+    gap: 0;
+    border: 1px solid var(--jbd-ink);
+}
+
+.jbd-jbs-footcell {
+    border-right: 1px solid var(--jbd-ink);
+    padding: 6px 8px;
+    min-height: 54px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.jbd-jbs-footcell:last-child { border-right: none; }
+
+.jbd-jbs-footrow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+}
+.jbd-jbs-footrow:last-child { border-bottom: none; }
+
+.jbd-jbs-footrow .k { font-weight: 800; }
+.jbd-jbs-footrow .v { font-weight: 800; }
+
+/* Theme tokens (light/dark) */
+:root {
+    /* Fallbacks (in case data-theme-mode is missing) */
+    --jbd-paper: #ffffff;
+    --jbd-ink: #111111;
+}
+
+html[data-theme-mode="light"] {
+    --jbd-paper: #ffffff;
+    --jbd-ink: #111111;
+}
+
+html[data-theme-mode="dark"] {
+    /* Keep the sheet print-like even in dark mode */
+    --jbd-paper: #ffffff;
+    --jbd-ink: #111111;
+}
+
+/* Force readable ink regardless of app theme overrides */
+.jbd-jbs-sheet {
+    color: var(--jbd-ink) !important;
+}
+
+.jbd-jbs-sheet * {
+    color: inherit;
+}
+
+.jbd-jbs-table th,
+.jbd-jbs-table td,
+.jbd-jbs-titlebox,
+.jbd-jbs-headleft,
+.jbd-jbs-headright,
+.jbd-jbs-footergrid,
+.jbd-jbs-footcell {
+    border-color: var(--jbd-ink) !important;
+}
+
+/* SVG should follow ink color too */
+.jbd-jbs-sheet svg,
+.jbd-jbs-sheet svg * {
+    stroke: var(--jbd-ink);
+}
