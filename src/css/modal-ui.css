@@ -342,7 +342,6 @@ html[data-theme-mode="light"] {
   color: var(--gnfc-modal-input-placeholder);
 }
 
-<<<<<<< HEAD
 /* Remove native browser arrow from <select> using gnfc-modal-input */
 select.gnfc-modal-input {
   -webkit-appearance: none;
@@ -351,8 +350,6 @@ select.gnfc-modal-input {
   padding-right: 1.75rem; /* room for the custom caret icon */
 }
 
-=======
->>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
 /* ── Scrollbar inside modal body ─────────────────────────── */
 .gnfc-modal-body::-webkit-scrollbar {
   width: 6px;
