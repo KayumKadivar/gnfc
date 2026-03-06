@@ -2,214 +2,501 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GNFC | Login</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'gradient': 'gradient-shift 8s ease infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-                            '50%': { transform: 'translateY(-10px) rotate(2deg)' },
-                        },
-                        'gradient-shift': {
-                            '0%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                            '100%': { backgroundPosition: '0% 50%' },
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Instrument Department</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            outfit: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            gnfc: {
+              navy: '#003366',
+              teal: '#008080',
+              cyan: '#00eeee',
             }
+          }
         }
-    </script>
+      }
+    }
+  </script>
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .main-canvas {
+      background: radial-gradient(circle at top right, #f0fdfa, transparent),
+        radial-gradient(circle at bottom left, #eff6ff, transparent),
+        #f8fafc;
+    }
+
+  </style>
 </head>
 
-<body class="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-sky-50 to-teal-50 font-sans text-slate-800">
+<body class="h-screen main-canvas font-sans text-slate-900 flex flex-col overflow-hidden">
 
-    <div class="absolute w-72 h-72 bg-teal-500/20 rounded-full blur-3xl -top-24 -right-24 animate-float pointer-events-none"></div>
-    <div class="absolute w-48 h-48 bg-cyan-500/15 rounded-full blur-3xl -bottom-12 -left-12 animate-float pointer-events-none"
-        style="animation-delay: 2s;"></div>
-    <div class="absolute w-36 h-36 bg-blue-500/10 rounded-full blur-3xl top-1/2 left-1/5 animate-float pointer-events-none"
-        style="animation-delay: 4s;"></div>
+  <!-- Fixed Branding Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-[1400px] mx-auto px-6 h-24 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <img src="/src/assets/images/gnfc-full-logo.png"
+          onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="h-16 w-auto object-contain"
+          alt="GNFC Logo">
+        <div class="h-12 w-px bg-slate-200"></div>
+        <div>
+          <h1 class="font-outfit font-black text-gnfc-navy text-2xl tracking-tight uppercase leading-none">Gujarat
+            Narmada Valley Fertilizers & Chemicals Limited</h1>
+          <p class="text-lg font-bold text-teal-600 mt-1">Instrument Department</p>
+        </div>
+      </div>
+      <a href="/login.html"
+        class="flex items-center gap-2 px-6 py-3 bg-gnfc-navy text-white rounded-full font-bold uppercase tracking-widest shadow-lg hover:bg-slate-800 transition-all">
+        <i class="ph-bold ph-sign-in"></i>
+        <span>Login</span>
+      </a>
+    </div>
 
-    <main class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10">
-        <div class="w-full max-w-md">
+    <!-- Teal Welcome Bar -->
+    <div class="bg-teal-700 py-2">
+      <div class="max-w-[1400px] mx-auto px-6">
+        <p class="text-[11px] font-bold text-teal-50 uppercase tracking-[0.3em] text-center lg:text-right italic">
+          Welcome to the web world of Instrument department !
+        </p>
+      </div>
+    </div>
+  </header>
 
-            <div class="bg-white/95 backdrop-blur-xl border border-black/5 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-black/5">
+  <div class="flex-1 flex max-w-[1400px] mx-auto w-full p-6 gap-6 h-full overflow-hidden">
 
-                <div class="">
-                  <img src="/src/assets/images/gnfc-full-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-logo.png';" class="w-32 h-32 mx-auto object-contain" alt="GNFC Logo">
-                </div>
+    <!-- Precise Sidebar -->
+    <!-- Precise Sidebar (Fixed Position) -->
+    <aside class="w-64 flex flex-col gap-2 shrink-0 py-6">
+      <div class="glass p-4 rounded-2xl flex flex-col gap-1 shadow-md ">
+        <a href="/login.html"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-teal-700 font-bold text-[18px] uppercase tracking-widest bg-white shadow-sm hover:translate-x-1 transition-all">
+          <i class="ph-bold ph-arrow-square-out text-lg"></i>
+          <span>IIMS</span>
+        </a>
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+          <i class="ph-bold ph-lightning text-lg"></i>
+          <span>UTILITY</span>
+        </a>
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+          <i class="ph-bold ph-clipboard-text text-lg"></i>
+          <span>OPR. JOB REG</span>
+        </a>
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+          <i class="ph-bold ph-files text-lg"></i>
+          <span>ENG. DOC</span>
+        </a>
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+          <i class="ph-bold ph-question text-lg"></i>
+          <span>HELP</span>
+        </a>
+        <a href="javascript:void(0)" id="openAdminBtn"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-bold text-[18px] uppercase tracking-widest hover:text-teal-600 hover:bg-white hover:translate-x-1 transition-all">
+          <i class="ph-bold ph-user-gear text-lg"></i>
+          <span>ADMIN</span>
+        </a>
+      </div>
+    </aside>
 
-                <div class="px-8 py-8 bg-white">
-                    <p id="login-subtitle" class="text-slate-500 text-sm mb-8 leading-relaxed">
-                        Welcome back. Please enter your credentials to access the system.
-                    </p>
+    <!-- Scrollable Content Area -->
+    <main class="flex-1 glass rounded-3xl p-12 overflow-y-auto border border-white/60 shadow-xl my-6">
 
-                    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+      <div class="max-w-4xl space-y-12">
 
-                        <div class="space-y-1.5">
-                            <label for="ec-no" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                                EC Number
-                            </label>
-                            <div class="relative group">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
-                                    <i class="ph-bold ph-user text-lg"></i>
-                                </span>
-                                <input type="text" id="ec-no" name="ec-no" placeholder="e.g. 123456" required
-                                    class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
-                            </div>
-                        </div>
+        <div class="space-y-6">
+          <h2 class="text-4xl font-outfit font-black text-gnfc-navy tracking-tight">
+            Integrated Instrument Management System (IIMS)
+          </h2>
+          <p class="text-lg text-slate-600 leading-relaxed">
+            IIMS is a comprehensive in-house developed digital platform designed to support and streamline
+            all activities of Instrumentation professionals at GNFC. Built through continuous improvement
+            and innovation, it integrates departmental operations into one secure, efficient, and user-friendly
+            system.
+          </p>
+        </div>
 
-                        <div class="space-y-1.5">
-                            <label for="password" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                                Password
-                            </label>
-                            <div class="relative group">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
-                                    <i class="ph-bold ph-lock-key text-lg"></i>
-                                </span>
-                                <input type="password" id="password" name="password" placeholder="••••••••" required
-                                    class="w-full pl-10 pr-10 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
-                                
-                                <button type="button" onclick="togglePassword('password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
-                                    <i class="ph-bold ph-eye" id="password-icon"></i>
-                                </button>
-                            </div>
-                        </div>
+        <div class="bg-teal-50/50 p-8 rounded-2xl border border-teal-100">
+          <h3 class="text-teal-800 font-extrabold uppercase tracking-widest text-sm mb-4 flex items-center gap-2">
+            <i class="ph-bold ph-target text-lg"></i>
+            <span>Our Mission</span>
+          </h3>
+          <p class="text-teal-900 leading-relaxed font-semibold text-lg">
+            To achieve 100% computerization of Instrumentation work practices on a single, secure, DBMS-
+            based platform that is easy to navigate, customized to our requirements, platform-independent,
+            and fully reliable in terms of data integrity and security.
+          </p>
+        </div>
 
-                        <div id="email-row" class="space-y-1.5 hidden">
-                            <label for="email-password" class="block text-slate-700 text-xs font-bold uppercase tracking-wide">
-                                Email Password
-                            </label>
-                            <div class="relative group">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 group-focus-within:text-teal-500 transition-colors">
-                                    <i class="ph-bold ph-envelope-simple text-lg"></i>
-                                </span>
-                                <input type="password" id="email-password" name="email-password" placeholder="Email Password"
-                                    class="w-full pl-10 pr-4 py-3 text-sm rounded-lg bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 focus:outline-none transition-all">
-                            </div>
-                        </div>
+        <div class="space-y-8">
+          <h3 class="text-slate-800 font-black uppercase tracking-widest text-sm mb-6 flex items-center gap-2">
+            <span class="w-8 h-px bg-slate-300"></span>
+            <span>Main Sections</span>
+          </h3>
 
-                        <div class="pt-2">
-                            <button type="submit" id="submitBtn"
-                                class="w-full relative overflow-hidden bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2 group">
-                                <span>Sign In</span>
-                                <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                            </button>
-                            
-                            <button type="button" id="view-btn"
-                                class="hidden mt-3 w-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg border border-slate-200 transition-all">
-                                View As Guest
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- <div class="bg-slate-50/80 border-t border-slate-200 px-8 py-4 flex items-center justify-between">
-                    <a href="index.html" class="text-slate-500 hover:text-teal-600 font-medium text-xs flex items-center gap-1.5 transition-colors group">
-                        <i class="ph-bold ph-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-                        Back to Home
-                    </a>
-                    <div id="section-chip" class="bg-white px-3 py-1 rounded-full border border-slate-200 text-[10px] font-bold uppercase tracking-wide text-slate-500 shadow-sm">
-                        SECTION: IIMS
-                    </div> -->
-                </div>
+          <div class="grid gap-8">
+            <!-- IIMS Section -->
+            <div class="group">
+              <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                <i class="ph-bold ph-cpu text-xl"></i>
+                <span>IIMS Section</span>
+              </h4>
+              <p
+                class="text-slate-600 leading-relaxed pl-7 border-l-2 border-teal-100 group-hover:border-teal-400 transition-colors">
+                The operational core of the department, covering Online Job Register, E-Log Book, engineering
+                documentation, maintenance records and history, electronic lab, control valve services,
+                procurement, preventive maintenance, communication archiving, advanced search, reporting,
+                and automated reminders.
+              </p>
             </div>
 
-            <!-- <div class="mt-8 text-center space-y-2">
-                <p class="text-slate-400 text-xs flex items-center justify-center gap-1.5">
-                    <i class="ph-fill ph-lock-key text-slate-400"></i>
-                    Secure SSL Connection
-                </p>
-                <p class="text-slate-400/60 text-[10px]">
-                    &copy; 2026 GNFC Instrument Dept. All rights reserved.
-                </p>
-            </div> -->
+            <!-- Utility Section -->
+            <div class="group">
+              <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                <i class="ph-bold ph-wrench text-xl"></i>
+                <span>Utility Section</span>
+              </h4>
+              <p
+                class="text-slate-600 leading-relaxed pl-7 border-l-2 border-teal-100 group-hover:border-teal-400 transition-colors">
+                A centralized reference hub providing personnel information, engineering standards, technical
+                literature, ISO/CPCB/SAP references, plant and product details, communication formats, and
+                industry contact database.
+              </p>
+            </div>
+
+            <!-- Help Section -->
+            <div class="group">
+              <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                <i class="ph-bold ph-question text-xl"></i>
+                <span>Help Section</span>
+              </h4>
+              <p
+                class="text-slate-600 leading-relaxed pl-7 border-l-2 border-teal-100 group-hover:border-teal-400 transition-colors">
+                Comprehensive user guidance to ensure maximum and effective utilization of every module.
+              </p>
+            </div>
+          </div>
         </div>
+
+        <div class="py-8 border-y border-slate-100">
+          <p class="text-center text-gnfc-navy font-bold text-xl tracking-wide italic">
+            One Platform. Complete Control. Total Digital Integration.
+          </p>
+        </div>
+
+        <div class="pt-8 pb-12 flex flex-col items-center lg:items-start">
+          <p class="text-2xl font-outfit font-bold text-slate-800 italic mb-6">Enjoy your stay!</p>
+          <div class="text-center lg:text-left">
+            <p class="text-xl font-black text-gnfc-navy tracking-tight">P A Mankad</p>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-teal-600">Instrument Department</p>
+          </div>
+        </div>
+
+      </div>
+
     </main>
+  </div>
 
-    <script>
-        // URL Parameter Logic
-        const params = new URLSearchParams(window.location.search);
-        const section = (params.get('section') || 'iims').toLowerCase();
+  <!-- ═══════ ADMIN PORTAL MODAL ═══════ -->
+  <div id="adminPortalModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4"
+    style="background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);">
+    <div id="adminModalCard"
+      class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-slate-200"
+      style="animation: adminModalIn 0.25s ease-out forwards;">
 
-        const config = {
-            iims: { title: 'IIMS Login', subtitle: 'Secure access to instrumentation workflows.', chip: 'IIMS', showEmail: true, showView: false },
-            utility: { title: 'Utility Login', subtitle: 'Access standards and contact directory.', chip: 'UTILITY', showEmail: false, showView: true },
-            oprjob: { title: 'OPRJOB Login', subtitle: 'Manage operation job logs and shifts.', chip: 'OPRJOB', showEmail: false, showView: false },
-            'eng-doc': { title: 'Engineering Docs', subtitle: 'Retrieve technical drawings and manuals.', chip: 'ENG_DOC', showEmail: false, showView: false },
-            help: { title: 'Help Login', subtitle: 'Support guides and procedures.', chip: 'HELP', showEmail: false, showView: false }
-        };
+      <!-- Header -->
+      <div class="p-5 border-b border-slate-100 flex items-center gap-4">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-teal-50">
+          <i class="ph-bold ph-shield-check text-xl text-teal-600"></i>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-[17px] font-bold text-slate-900">Admin Portal</h2>
+          <p class="text-[13px] text-slate-500 mt-0.5">Enter password to access administrator dashboard</p>
+        </div>
+        <button class="close-admin-btn w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors shrink-0">
+          <i class="ph ph-x text-slate-400 text-lg"></i>
+        </button>
+      </div>
 
-        const current = config[section] || config.iims;
-        
-        // Update UI Text
-        document.getElementById('login-title').textContent = current.title;
-        document.getElementById('login-subtitle').textContent = current.subtitle;
-        document.getElementById('section-chip').textContent = `SECTION: ${current.chip}`;
+      <!-- Body -->
+      <div class="p-5">
+        <form id="adminPortalForm" autocomplete="off">
+          <label class="block text-[12px] font-bold uppercase tracking-widest text-slate-400 mb-2">Password</label>
+          <div class="relative">
+            <input id="adminPortalPassword" type="password"
+              class="w-full h-12 pl-11 pr-12 bg-slate-50 border border-slate-200 rounded-xl text-[15px] text-slate-900 outline-none transition-all focus:border-teal-400 focus:ring-[3px] focus:ring-teal-100 focus:bg-white"
+              placeholder="Enter admin password...">
+            <i
+              class="ph ph-lock-key absolute left-3.5 top-1/2 -translate-y-1/2 text-lg text-slate-400 pointer-events-none"></i>
+            <button type="button" id="toggleAdminPwBtn"
+              class="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors">
+              <i id="adminPwToggleIcon" class="ph ph-eye text-slate-400 text-lg"></i>
+            </button>
+          </div>
 
-        // Toggle Fields
-        if (!current.showEmail) document.getElementById('email-row').classList.add('hidden');
-        else document.getElementById('email-row').classList.remove('hidden');
+          <div class="flex gap-3 mt-5">
+            <button type="submit"
+              class="flex-1 h-11 rounded-xl text-[14px] font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-[0.98]"
+              style="background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%); box-shadow: 0 4px 15px -4px rgba(20,184,166,0.4);">
+              <i class="ph ph-sign-in text-base"></i> Login
+            </button>
+            <button type="button"
+              class="close-admin-btn h-11 px-5 rounded-xl text-[14px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-slate-700 transition-all">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
 
-        if (current.showView) {
-            const viewBtn = document.getElementById('view-btn');
-            viewBtn.classList.remove('hidden');
-            viewBtn.onclick = () => window.location.href = '/src/pages/dashboard.html'; // Mock action
+      <!-- Footer -->
+      <div class="px-5 py-3 border-t border-slate-100 flex items-center justify-center gap-2 bg-slate-50/50">
+        <i class="ph-fill ph-lock text-[13px] text-teal-500"></i>
+        <span class="text-[12px] text-slate-400">Authorized access only</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes adminModalIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+
+  <!-- Admin scripts replaced by modular OOP implementation below -->
+
+  <!-- ═══════ WELCOME ANNOUNCEMENT MODAL ═══════ -->
+  <div id="welcomeAnnouncementModal" class="fixed inset-0 z-[300] hidden items-center justify-center p-4"
+    style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200"
+      style="animation: adminModalIn 0.3s ease-out forwards;">
+      <!-- Header -->
+      <div class="p-6 border-b border-slate-100 flex items-center gap-4 bg-teal-50/50">
+        <div
+          class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-teal-100 shadow-sm border border-teal-200/50">
+          <i class="ph-fill ph-sparkle text-2xl text-teal-600"></i>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-[19px] font-black text-slate-900 tracking-tight">System Update</h2>
+          <p class="text-[14px] text-teal-700 font-semibold mt-0.5">Boiler Plant Sections Added</p>
+        </div>
+        <button class="close-welcome-btn w-9 h-9 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors shrink-0">
+          <i class="ph ph-x text-slate-500 text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 space-y-4">
+        <p class="text-[15px] text-slate-600 leading-relaxed">
+          Hello! Today we have implemented the newly created <strong class="text-slate-900 font-bold">Boiler Plant</strong> sections under the <strong class="text-slate-900 font-bold">Plants</strong> tab.
+        </p>
+        <p class="text-[15px] text-slate-600 leading-relaxed">
+          The new Boiler Dashboard now includes dedicated modules for <strong class="text-slate-900 font-semibold">Instrument Data</strong>, <strong class="text-slate-900 font-semibold">Loop Data</strong>, <strong class="text-slate-900 font-semibold">PM Master</strong>, as well as comprehensive <strong class="text-slate-900 font-semibold">General Job History</strong> and <strong class="text-slate-900 font-semibold">System Job History</strong>.
+        </p>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+          <h3 class="text-[13px] font-bold uppercase tracking-widest text-slate-500 mb-3 flex items-center gap-2">
+            <i class="ph-fill ph-info text-teal-500 text-lg"></i> How to review:
+          </h3>
+          <ul class="text-[14px] text-slate-700 space-y-3 ml-1">
+            <li class="flex gap-2.5 items-start">
+              <i class="ph-bold ph-check text-teal-500 mt-1 shrink-0"></i>
+              <span>Login to IIMS, open the left sidebar and navigate to <strong>Plants &rarr; Boiler Plant</strong>.</span>
+            </li>
+            <li class="flex gap-2.5 items-start">
+              <i class="ph-bold ph-check text-teal-500 mt-1 shrink-0"></i>
+              <span class="leading-relaxed">Explore the updated dark-themed dashboards for System and General Job Histories.</span>
+            </li>
+            <li class="flex gap-2.5 items-start">
+              <i class="ph-bold ph-check text-teal-500 mt-1 shrink-0"></i>
+              <span>Check out the fully functional and responsive <strong>PM Master</strong> and detail pages with view, edit, and delete actions!</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+        <button class="close-welcome-btn px-6 py-2.5 rounded-xl text-[14px] font-bold text-white transition-all hover:brightness-110 active:scale-[0.98]"
+          style="background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%); box-shadow: 0 4px 15px -4px rgba(20,184,166,0.4);">
+          Got it, let's explore
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  
+
+    // --- Utility Functions ---
+    // Perfect for stateless, simple operations reused anywhere
+    const UIHelpers = {
+      showModal: (el) => {
+        if (!el) return;
+        el.classList.remove('hidden');
+        el.style.display = 'flex';
+      },
+      hideModal: (el) => {
+        if (!el) return;
+        el.style.display = 'none';
+        el.classList.add('hidden');
+      }
+    };
+
+    // --- Object-Oriented Managers ---
+    // Perfect for mapping stateful logic and handling complex UI components
+    
+    class AdminPortalManager {
+      constructor() {
+        this.modal = document.getElementById('adminPortalModal');
+        this.form = document.getElementById('adminPortalForm');
+        this.pwdInput = document.getElementById('adminPortalPassword');
+        this.toggleIcon = document.getElementById('adminPwToggleIcon');
+        this.openBtn = document.getElementById('openAdminBtn');
+        this.closeBtns = this.modal ? this.modal.querySelectorAll('.close-admin-btn') : [];
+        this.toggleBtn = document.getElementById('toggleAdminPwBtn');
+
+        if (this.modal) {
+          this.initEvents();
         }
+      }
 
-        // Feature: Toggle Password Visibility
-        function togglePassword(fieldId) {
-            const input = document.getElementById(fieldId);
-            const icon = document.getElementById(fieldId + '-icon');
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove('ph-eye');
-                icon.classList.add('ph-eye-slash');
-            } else {
-                input.type = "password";
-                icon.classList.remove('ph-eye-slash');
-                icon.classList.add('ph-eye');
-            }
-        }
-
-        // Feature: Simulate Login Loading
-        function handleLogin(e) {
+      initEvents() {
+        if (this.openBtn) {
+          this.openBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const originalContent = btn.innerHTML;
-            
-            // Loading State
-            btn.disabled = true;
-            btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-lg"></i><span>Verifying...</span>`;
-            
-            // Simulate API delay
-            setTimeout(() => {
-                btn.innerHTML = `<i class="ph-bold ph-check text-lg"></i><span>Success</span>`;
-                btn.classList.remove('from-teal-600', 'to-cyan-600');
-                btn.classList.add('from-emerald-500', 'to-green-600');
-                
-                setTimeout(() => {
-                    window.location.href = '/src/pages/dashboard.html';
-                }, 500);
-            }, 1000);
+            this.open();
+          });
         }
-    </script>
+
+        this.closeBtns.forEach(btn => {
+          btn.addEventListener('click', () => this.close());
+        });
+
+        if (this.toggleBtn) {
+          this.toggleBtn.addEventListener('click', () => this.togglePassword());
+        }
+
+        if (this.form) {
+          this.form.addEventListener('submit', (e) => this.submitForm(e));
+        }
+
+        // Keep close functionality bound to overlay and escape key
+        this.modal.addEventListener('click', (e) => {
+          if (e.target === this.modal) this.close();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !this.modal.classList.contains('hidden')) {
+            this.close();
+          }
+        });
+      }
+
+      open() {
+        UIHelpers.showModal(this.modal);
+        // Delay to allow visibility transition before focus
+        setTimeout(() => {
+          if (this.pwdInput) {
+            this.pwdInput.value = '';
+            this.pwdInput.focus();
+          }
+        }, 100);
+      }
+
+      close() {
+        UIHelpers.hideModal(this.modal);
+      }
+
+      togglePassword() {
+        if (!this.pwdInput || !this.toggleIcon) return;
+        const isPassword = this.pwdInput.type === 'password';
+        
+        // Changing state via properties
+        this.pwdInput.type = isPassword ? 'text' : 'password';
+        this.toggleIcon.className = isPassword
+          ? 'ph ph-eye text-slate-400 text-lg'
+          : 'ph ph-eye-slash text-slate-400 text-lg';
+      }
+
+      submitForm(e) {
+        e.preventDefault();
+        const pw = (this.pwdInput?.value || '').trim();
+        if (!pw) {
+          this.pwdInput?.focus();
+          return;
+        }
+        this.close();
+        window.location.href = '/src/pages/admin_dashbaord.html';
+      }
+    }
+
+    class WelcomeAnnouncementManager {
+      constructor() {
+        this.modal = document.getElementById('welcomeAnnouncementModal');
+        this.storageKey = 'gnfc_admin_update_seen';
+        this.closeBtns = this.modal ? this.modal.querySelectorAll('.close-welcome-btn') : [];
+
+        if (this.modal) {
+          this.initEvents();
+          this.checkAndShow();
+        }
+      }
+
+      initEvents() {
+        this.closeBtns.forEach(btn => {
+          btn.addEventListener('click', () => this.close());
+        });
+      }
+
+      checkAndShow() {
+        if (!sessionStorage.getItem(this.storageKey)) {
+          setTimeout(() => this.open(), 600);
+        }
+      }
+
+      open() {
+        UIHelpers.showModal(this.modal);
+      }
+
+      close() {
+        UIHelpers.hideModal(this.modal);
+        sessionStorage.setItem(this.storageKey, 'true');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      new AdminPortalManager();
+      new WelcomeAnnouncementManager();
+    });
+  </script>
+
 </body>
+
 </html>

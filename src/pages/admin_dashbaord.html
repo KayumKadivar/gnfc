@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | Admin Dashboard</title>
+  <meta name="description"
+    content="GNFC IIMS Administrator Dashboard — manage privileges, users, plants, and system settings.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+
+  <!-- Theme & Typography -->
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/admin.css">
+  <script src="/src/js/theme_manager.js"></script>
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--app-bg, #111217);
+      color: var(--typo-primary, #ffffff);
+      min-height: 100vh;
+    }
+
+    /* Custom scroll for content */
+    .admin-content-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .admin-content-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .admin-content-scroll::-webkit-scrollbar-thumb {
+      background: var(--app-border, #23272e);
+      border-radius: 3px;
+    }
+
+    .admin-content-scroll::-webkit-scrollbar-thumb:hover {
+      background: #3a3f48;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Layout: Sidebar + Main -->
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-[320px] shrink-0 h-full overflow-y-auto">
+      <div id="adminSidebarContainer" class="h-full"></div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+
+      <!-- Header -->
+      <header
+        class="h-14 bg-[var(--app-panel)] border-b border-[var(--app-border)] flex items-center justify-between px-5 shrink-0">
+        <div class="flex items-center gap-3">
+          <i class="ph ph-gear-six font-20px color-blue"></i>
+          <h1 class="font-16px fw-bold color-primary tracking-wide">Administrator</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Font Size Controls -->
+          <div class="flex items-center bg-[var(--app-bg)] border border-[var(--app-border)] rounded-md p-0.5">
+            <button onclick="ThemeManager.decreaseFontSize()"
+              class="w-9 h-9 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
+              title="Decrease Size">
+              <i class="ph-bold ph-text-aa font-12px"></i>
+            </button>
+            <div class="w-px h-4 bg-[var(--app-border)]"></div>
+            <button onclick="ThemeManager.increaseFontSize()"
+              class="w-9 h-9 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
+              title="Increase Size">
+              <i class="ph-bold ph-text-aa font-16px"></i>
+            </button>
+          </div>
+          <!-- Theme Toggle -->
+          <button id="themeToggleBtn"
+            class="w-10 h-10 flex items-center justify-center bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] color-label rounded-md transition-colors"
+            title="Toggle Theme">
+            <i id="themeToggleIcon" class="ph ph-moon font-16px"></i>
+          </button>
+          <!-- Back -->
+          <button onclick="window.location.href='/src/pages/dashboard.html'"
+            class="flex items-center gap-1.5 h-10 px-4 bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] font-15px fw-bold color-primary rounded-md transition-all">
+            <i class="ph-bold ph-arrow-u-up-left"></i>
+            <span>Back</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="flex-1 overflow-auto admin-content-scroll p-4 sm:p-5">
+        <section id="adminContent" class="space-y-3 max-w-8xl"></section>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Modal Root (shared by all views) -->
+  <div id="adminModalRoot" class="fixed inset-0 z-50 hidden"></div>
+
+  <!-- ═══════════ Scripts ═══════════ -->
+  <!-- Core modules (order matters: data → utils → router → sidebar) -->
+  <script src="/src/js/admin/admin_data.js"></script>
+  <script src="/src/js/admin/admin_utils.js"></script>
+  <script src="/src/js/admin/admin_router.js"></script>
+  <script src="/src/js/admin_sidebar.js"></script>
+
+  <!-- View modules (each self-registers with AdminRouter) -->
+  <script src="/src/js/admin/views/privilege_view.js"></script>
+  <script src="/src/js/admin/views/default_privilege_view.js"></script>
+  <script src="/src/js/admin/views/user_privilege_view.js"></script>
+  <script src="/src/js/admin/views/plants_view.js"></script>
+  <script src="/src/js/admin/views/modules_view.js"></script>
+  <script src="/src/js/admin/views/user_info_view.js"></script>
+  <script src="/src/js/admin/views/user_plants_view.js"></script>
+  <script src="/src/js/admin/views/user_email_view.js"></script>
+  <script src="/src/js/admin/views/change_password_view.js"></script>
+  <script src="/src/js/admin/views/reset_password_view.js"></script>
+  <script src="/src/js/admin/views/admin_member_view.js"></script>
+  <script src="/src/js/admin/views/mail_schedule_view.js"></script>
+  <script src="/src/js/admin/views/login_info_view.js"></script>
+  <script src="/src/js/admin/views/ex_dms_view.js"></script>
+  <script src="/src/js/admin/views/update_popup_view.js"></script>
+  <script src="/src/js/admin/views/whats_new_view.js"></script>
+  <script src="/src/js/admin/views/admin_dashboard_view.js"></script>
+
+  <!-- Initialization -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize theme
+      if (typeof ThemeManager !== 'undefined' && ThemeManager.init) {
+        ThemeManager.init();
+      }
+
+      // Hydrate stored data
+      const storedPopup = AdminUtils.getStoredValue(AdminData.STORAGE_KEYS.LOGIN_POPUP, 'no');
+      AdminData.adminLoginPopupSelection = storedPopup === 'yes' ? 'yes' : 'no';
+
+      AdminData.whatsNewContent = AdminUtils.getStoredValue(
+        AdminData.STORAGE_KEYS.WHATS_NEW,
+        AdminData.DEFAULT_WHATS_NEW_TEXT
+      );
+
+      AdminData.mailScheduleRows = AdminUtils.getStoredJsonValue(
+        AdminData.STORAGE_KEYS.MAIL_SCHEDULE,
+        AdminData.DEFAULT_MAIL_SCHEDULE_ROWS
+      );
+
+      // Init sidebar & load first view
+      if (typeof initAdminSidebar === 'function') {
+        initAdminSidebar();
+      }
+      window.renderAdminContent('dashboard');
+
+      // Theme toggle
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const themeToggleIcon = document.getElementById('themeToggleIcon');
+
+      function updateThemeIcon() {
+        if (!themeToggleIcon) return;
+        const settings = ThemeManager.getSettings();
+        themeToggleIcon.className = settings.mode === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+      }
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          const settings = ThemeManager.getSettings();
+          ThemeManager.setMode(settings.mode === 'dark' ? 'light' : 'dark');
+          updateThemeIcon();
+        });
+      }
+      updateThemeIcon();
+      window.addEventListener('themeChanged', () => updateThemeIcon());
+    });
+  </script>
+</body>
+
+</html>

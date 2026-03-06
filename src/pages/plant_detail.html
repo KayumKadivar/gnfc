@@ -1,186 +1,56 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plant Detail | GNFC</title>
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
   <style>
-    .modal {
-      display: none;
+    .plant-detail-readable .gnfc-modal-title {
+      font-size: clamp(16px, calc(14px + 0.2vw), 18px);
+      line-height: 1.35;
     }
 
-    .modal.is-open {
-      display: block;
+    .plant-detail-readable .gnfc-modal-subtitle,
+    .plant-detail-readable .gnfc-modal-label {
+      font-size: clamp(12px, calc(10px + 0.14vw), 14px);
+      line-height: 1.4;
     }
 
-    .modal__overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
+    .plant-detail-readable .gnfc-modal-input,
+    .plant-detail-readable .gnfc-modal-btn {
+      font-size: clamp(14px, calc(12px + 0.16vw), 16px);
     }
 
-    .modal__container {
-      background-color: var(--app-panel, #ffffff);
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 6px;
-      overflow-y: auto;
-      box-sizing: border-box;
-      border: 1px solid var(--app-border, #e5e7eb);
-      color: var(--app-text, #111827);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    html.dark .modal__container {
-      background-color: #111217;
-      border-color: #2c3235;
-      color: #ffffff;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-    }
-
-    @keyframes mmfadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes mmfadeOut {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
-    @keyframes mmslideIn {
-      from {
-        transform: translateY(15%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes mmslideOut {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-10%);
-      }
-    }
-
-    .micromodal-slide {
-      display: none;
-    }
-
-    .micromodal-slide.is-open {
-      display: block;
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__overlay {
-      animation: mmfadeIn .3s cubic-bezier(0.0, 0.0, 0.2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="false"] .modal__container {
-      animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__overlay {
-      animation: mmfadeOut .3s cubic-bezier(0.0, 0.0, 0.2, 1);
-    }
-
-    .micromodal-slide[aria-hidden="true"] .modal__container {
-      animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
-    }
-
-    .micromodal-slide .modal__container,
-    .micromodal-slide .modal__overlay {
-      will-change: transform;
-    }
-
-    html[data-theme-mode="light"] .theme-contrast-lock,
-    html[data-theme-mode="light"] .theme-contrast-lock * {
-      color: #000000 !important;
-    }
-
-    html[data-theme-mode="dark"] .theme-contrast-lock,
-    html[data-theme-mode="dark"] .theme-contrast-lock * {
-      color: #ffffff;
+    .plant-detail-readable #plant-table thead th,
+    .plant-detail-readable #plant-table tbody td {
+      line-height: 1.5;
     }
 
     #plant-table tbody tr {
       transition: background-color .18s ease;
     }
 
-    .elog-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 120;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      backdrop-filter: blur(3px);
-    }
-
-    .elog-overlay.is-open {
-      display: flex;
-    }
-
-    .elog-modal-panel {
-      width: min(980px, 96vw);
-      max-height: 92vh;
-      overflow: auto;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-      color: #111827;
-    }
-
-    html.dark .elog-modal-panel {
-      background: #111217;
-      border-color: #2c3235;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-      color: #ffffff;
-    }
-
     .elog-chip {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 10px;
+      font-size: clamp(12px, calc(10px + 0.2vw), 14px);
       font-weight: 700;
       background: #f3f4f6;
       border: 1px solid #e5e7eb;
       color: #374151;
       border-radius: 4px;
-      padding: 0.2rem 0.5rem;
+      padding: 0.3rem 0.55rem;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
@@ -190,12 +60,21 @@
       border-color: #2c3235;
       color: #9ca3af;
     }
+
+    .edit-context-strip .gnfc-modal-label {
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+
+    .edit-context-strip .context-value {
+      min-width: 0;
+    }
   </style>
   <script src="/src/js/tailwind_config.js"></script>
 </head>
 
 <body
-  class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
+  class="plant-detail-readable bg-dark-bg color-primary font-sans h-screen flex overflow-hidden selection:bg-gnfc-blue selection:text-white">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -223,569 +102,666 @@
       });
     </script>
 
-   
+
     <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
       <!-- Top Navigation Bar -->
       <div id="plant-nav-container"></div>
       <script src="/src/js/plant_nav.js"></script>
-    <script> try { renderPlantNav('logs'); } catch(e){} </script>
+      <script> try { renderPlantNav('logs'); } catch (e) { } </script>
 
 
-    <!-- Unified Action Toolbar -->
-    <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4">
+      <!-- Unified Action Toolbar -->
+      <div class="p-4 bg-dark-panel border-b border-dark-border space-y-4 my-4 rounded-md shadow-sm">
 
-      <div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+        <div class="flex flex-wrap justify-between gap-4">
 
-        <!-- Left: Period Selector & Plant Info -->
-        <div class="flex items-center gap-4 w-full xl:w-auto">
-          <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border overflow-x-auto max-w-full">
-            <button id="btn-tomorrow" onclick="switchView(this, 'tomorrow')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Tomorrow</button>
-            <button id="btn-today" onclick="switchView(this, 'today')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-gnfc-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
-            <button id="btn-prev" onclick="switchView(this, 'prev')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">PrevDay</button>
-            <div class="w-px bg-dark-border mx-1 my-1"></div>
-            <button id="btn-weekly" onclick="switchView(this, 'weekly')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Weekly</button>
-            <button id="btn-monthly" onclick="switchView(this, 'monthly')"
-              class="tab-btn px-3 py-1 text-[11px] font-bold text-dark-muted hover:text-white rounded-[2px] transition-all">Monthly</button>
-          </div>
-        </div>
-
-        <!-- Right: Actions & Tools -->
-        <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
-
-          <!-- Quick Actions Group -->
-          <div class="flex items-center gap-1">
-            <button onclick="AddLogModal.open()"
-              class="flex items-center gap-2 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-sm shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
-              <i class="ph-bold ph-plus"></i> Add Direct Job
-            </button>
-
-            <div class="relative group">
-              <!-- <button
-                    class="flex items-center gap-2 px-3 py-1.5 bg-gnfc-blue/10 hover:bg-gnfc-blue/20 text-gnfc-blue border border-gnfc-blue/30 text-xs font-bold rounded-sm transition-colors">
-                    <i class="ph-bold ph-user-plus"></i> Assign
-                    <i class="ph-bold ph-caret-down text-[10px]"></i>
-                  </button> -->
-              <!-- Dropdown for Assign -->
-              <div
-                class="absolute right-0 top-full mt-1 w-40 bg-dark-panel border border-dark-border shadow-xl rounded-sm p-1 hidden group-hover:block z-20">
-                <button id="assign-today-btn" onclick="openJobModal('assign', 'today')"
-                  class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
-                  Assign Today
-                </button>
-                <button id="assign-tomorrow-btn" onclick="openJobModal('assign', 'tomorrow')"
-                  class="w-full text-left px-3 py-2 text-xs font-medium text-dark-text hover:bg-white/5 hover:text-white rounded-sm">
-                  Assign Tomorrow
-                </button>
-              </div>
+          <!-- Left: Period Selector & Plant Info -->
+          <div class="flex items-center gap-4 w-full xl:w-auto">
+            <div class="flex bg-dark-bg p-0.5 rounded-sm border border-dark-border overflow-x-auto max-w-full">
+              <button id="btn-tomorrow" onclick="switchView(this, 'tomorrow')"
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Tomorrow</button>
+              <button id="btn-today" onclick="switchView(this, 'today')"
+                class="tab-btn px-3 py-1 font-14px fw-bold color-orange bg-dark-panel shadow-sm rounded-[2px] transition-all">Today</button>
+              <button id="btn-prev" onclick="switchView(this, 'prev')"
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">PrevDay</button>
+              <div class="w-px bg-dark-border mx-1 my-1"></div>
+              <button id="btn-weekly" onclick="switchView(this, 'weekly')"
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Weekly</button>
+              <button id="btn-monthly" onclick="switchView(this, 'monthly')"
+                class="tab-btn px-3 py-1 font-14px fw-bold color-secondary hover-color-white rounded-[2px] transition-all">Monthly</button>
             </div>
           </div>
 
-          <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+          <!-- Right: Actions & Tools -->
+          <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
 
-          <!-- Tools Group -->
+            <button onclick="AddLogModal.open()"
+              class=" items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              <i class="ph-bold ph-plus"></i> Add Job
+            </button>
+
+            <button onclick="window.location.href='/src/pages/assigntoday.html'"
+              class=" items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              Assign Today
+            </button>
+
+            <button onclick="window.location.href='/src/pages/assigntomorrow.html'"
+              class=" items-center gap-2 px-4 py-1.5 bg-gnfc-blue hover:bg-gnfc-blue/80 text-white font-14px fw-bold rounded-md shadow-lg shadow-emerald-900/20 transition-all hover:scale-105 active:scale-95">
+              Assign Tomorrow
+            </button>
+
+            <script>
+              // Hide assigned job cards for Technician role
+              (function () {
+                const role = localStorage.getItem('userRole') || 'technician';
+                if (role === 'technician') {
+                  const section = document.getElementById('assigned-jobs-section');
+                  if (section) section.style.display = 'none';
+                }
+              })();
+            </script>
+
+            <div class="h-6 w-px bg-dark-border mx-1 hidden sm:block"></div>
+
+            <!-- Tools Group -->
+            <div class="flex items-center gap-2">
+              <button id="toggle-pending-btn" onclick="togglePendingMode()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover-color-orange font-14px fw-bold rounded-sm transition-colors"
+                title="Show Pending Logs">
+                <i class="ph-bold ph-clock"></i> Pending
+              </button>
+
+              <!-- <button id="job-reminder-btn" onclick="openReminderModal()"
+                class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border color-secondary hover:text-purple-400 font-14px fw-bold rounded-sm transition-colors"
+                title="Job Planner / Reminders">
+                <i class="ph-bold ph-calendar-check"></i> Planner
+              </button> -->
+
+              <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
+                class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 font-14px fw-bold rounded-sm transition-colors animate-pulse">
+                <i class="ph-bold ph-warning"></i> Acknowledge
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters Drawer (Collapsible) -->
+      <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
+        <div class="flex flex-col md:flex-row items-center gap-4 font-14px">
           <div class="flex items-center gap-2">
-            <button id="toggle-pending-btn" onclick="togglePendingMode()"
-              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-gnfc-orange text-xs font-bold rounded-sm transition-colors"
-              title="Show Pending Logs">
-              <i class="ph-bold ph-clock"></i> Pending
-            </button>
-
-            <button id="job-reminder-btn" onclick="openReminderModal()"
-              class="flex items-center gap-2 px-3 py-1.5 bg-dark-bg hover:bg-dark-header border border-dark-border text-dark-muted hover:text-purple-400 text-xs font-bold rounded-sm transition-colors"
-              title="Job Planner / Reminders">
-              <i class="ph-bold ph-calendar-check"></i> Planner
-            </button>
-
-            <button id="acknowledge-btn" onclick="openAckModal()" style="display:none;"
-              class="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 text-xs font-bold rounded-sm transition-colors animate-pulse">
-              <i class="ph-bold ph-warning"></i> Acknowledge
-            </button>
+            <span class="color-secondary typo-mono text-upper">Range:</span>
+            <input type="date" id="start-date" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
+            <span class="color-secondary">-</span>
+            <input type="date" id="end-date" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
           </div>
 
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters Drawer (Collapsible) -->
-    <div id="job-filter-bar" class="hidden bg-dark-header border-b border-dark-border p-3 transition-all">
-      <div class="flex flex-col md:flex-row items-center gap-4 text-xs">
-        <div class="flex items-center gap-2">
-          <span class="text-dark-muted font-mono uppercase">Range:</span>
-          <input type="date" id="start-date" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-          <span class="text-dark-muted">-</span>
-          <input type="date" id="end-date" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue">
-        </div>
-
-        <div class="flex items-center gap-2 flex-1">
-          <span class="text-dark-muted font-mono uppercase">Type:</span>
-          <select id="job-type-select" onchange="applyFilters()"
-            class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
-            <option value="">All Jobs</option>
-          </select>
-        </div>
-
-        <button onclick="toggleJobFilter()" class="text-dark-muted hover:text-white"><i
-            class="ph-bold ph-x"></i></button>
-      </div>
-    </div>
-
-    <div id="dynamic-view-container"
-      class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-sm flex flex-col">
-      <div
-        class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel">
-        <div class="flex items-center gap-2">
-          <i class="ph-fill ph-table text-blue-600 dark:text-gnfc-blue"></i>
-          <span id="view-title" class="text-sm font-bold text-slate-800 dark:text-white">Today Log Book</span>
-          <span id="record-count"
-            class="ml-2 text-[10px] bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:text-dark-muted font-mono">0
-            Records</span>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div class="relative">
-            <i
-              class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 dark:text-dark-muted text-xs"></i>
-            <input type="text" id="table-search" placeholder="Search logs..."
-              onkeyup="plantLogTable.setSearch(this.value)"
-              class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-white text-xs rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+          <div class="flex items-center gap-2 flex-1">
+            <span class="color-secondary typo-mono text-upper">Type:</span>
+            <select id="job-type-select" onchange="applyFilters()"
+              class="bg-dark-bg border border-dark-border text-white rounded-sm px-2 py-1 outline-none focus:border-gnfc-blue min-w-[150px]">
+              <option value="">All Jobs</option>
+            </select>
           </div>
-          <span id="view-date" class="text-xs font-mono text-blue-600 dark:text-gnfc-orange">--.--.----</span>
+
+          <button onclick="toggleJobFilter()" class="color-secondary hover-color-white"><i
+              class="ph-bold ph-x"></i></button>
         </div>
       </div>
 
-      <div class="overflow-x-auto flex-1">
-        <table id="plant-table" class="w-full text-left border-collapse">
-          <thead>
-            <tr
-              class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-12 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('sr')">Sr <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-20 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('area')">Area <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th
-                class="border-r border-b px-3 py-2 w-40 border-dark-border cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('tag')">Loop / Tag <i class="ph-fill ph-caret-up-down text-[8px] ml-1"></i>
-              </th>
-              <th
-                class="border-r border-b px-3 py-2 min-w-[200px] border-dark-border font-black cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('jobType')">Job Type <i
-                  class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-16 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('tech')">Tech</th>
-              <th rowspan="2" class="border-r border-dark-border p-2 min-w-[300px] hover:bg-white/5 transition-colors">
-                Description
-              </th>
-              <th rowspan="2"
-                class="border-r border-dark-border p-2 w-24 cursor-pointer hover:bg-white/5 transition-colors"
-                onclick="plantLogTable.sort('engineer')">Tech/Eng</th>
-              <th rowspan="2" class="border-r border-dark-border p-2 w-28 relative group/th">
-                <div
-                  class="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-1 rounded"
-                  onclick="plantLogTable.sort('status')">
-                  <span>Status</span>
-                </div>
-                <button onclick="toggleStatusFilter(event)"
-                  class="absolute top-5 right-6 text-slate-400 hover:text-blue-500 dark:text-dark-muted dark:hover:text-white focus:outline-none p-1 rounded hover:bg-white/5">
-                  <i class="ph-bold ph-funnel text-xs"></i>
-                </button>
-                <div id="status-filter-dropdown"
-                  class="hidden absolute top-14 right-0 w-28 bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border shadow-xl rounded-sm z-50 flex flex-col py-1">
-                </div>
-              </th>
-              <th rowspan="2" class="p-2 min-w-[120px] hover:bg-white/5 transition-colors">Remarks</th>
-            </tr>
-            <tr
-              class="bg-slate-100 dark:bg-dark-header text-[10px] font-bold text-slate-500 dark:text-dark-muted uppercase tracking-widest text-center border-b border-slate-200 dark:border-dark-border">
-              <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Tag Detail</th>
-              <th class="border-r border-dark-border p-2 hover:bg-white/5 transition-colors">Instrument Detail</th>
-            </tr>
-          </thead>
-          <tbody id="plantTableBody" class="text-xs font-mono"></tbody>
-        </table>
-      </div>
+      <div id="dynamic-view-container"
+        class="bg-white dark:bg-dark-panel border border-slate-200 dark:border-dark-border rounded-md flex flex-col shadow-md">
+        <div
+          class="px-4 py-2 border-b border-slate-200 dark:border-dark-border flex justify-between items-center bg-slate-50 dark:bg-dark-panel rounded-t-md">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-table text-blue-600 dark:color-blue"></i>
+            <span id="view-title" class="font-15px fw-bold text-slate-800 dark:color-primary">Today Log Book</span>
+            <span id="record-count"
+              class="ml-2 font-13px bg-slate-200 dark:bg-dark-bg border border-slate-300 dark:border-dark-border px-2 py-0.5 rounded text-slate-600 dark:color-secondary typo-mono">0
+              Records</span>
+          </div>
 
-      <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel"></div>
-    </div>
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <i class="ph ph-magnifying-glass absolute left-2 top-1/2 -translate-y-1/2 color-secondary font-14px"></i>
+              <input type="text" id="table-search" placeholder="Search logs..."
+                onkeyup="plantLogTable.setSearch(this.value)"
+                class="bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border color-primary font-14px rounded-sm pl-7 pr-3 py-1 focus:border-blue-500 dark:focus:border-gnfc-blue focus:outline-none w-48 transition-colors">
+            </div>
+            <span id="view-date" class="font-14px typo-mono color-blue dark:color-orange">--.--.----</span>
+          </div>
+        </div>
+
+        <div class="gnfc-table-container flex-1">
+          <table id="plant-table" class="gnfc-table table-fixed min-w-[1280px]">
+            <thead class="gnfc-thead font-16px">
+              <tr>
+                <th rowspan="2" class="gnfc-th w-[40px] cursor-pointer" onclick="plantLogTable.sort('sr')">Sr <i
+                    class="ph-fill ph-caret-up-down text-[8px] ml-1"></i></th>
+                <th rowspan="2" class="gnfc-th w-[80px]">Area</th>
+                <th class="gnfc-th w-[100px] border-b border-gray-400">Loop No</th>
+                <th class="gnfc-th w-[230px] border-b border-gray-400">Job</th>
+                <th rowspan="2" class="gnfc-th w-[60px] cursor-pointer" onclick="plantLogTable.sort('tech')">Tech</th>
+                <th rowspan="2" class="gnfc-th w-[280px]">Description</th>
+                <th class="gnfc-th w-[80px] cursor-pointer" onclick="plantLogTable.sort('engineer')">Tech</th>
+                <th rowspan="2" class="gnfc-th w-[100px]">Status</th>
+                <th rowspan="2" class="gnfc-th w-[70px] hidden" id="priority-column-header">Prio</th>
+                <th rowspan="2" class="gnfc-th w-[150px]">Remarks</th>
+                <th rowspan="2" class="gnfc-th w-[48px]" title="Add To History" id="add-column-header">Add</th>
+              </tr>
+              <tr>
+                <th class="gnfc-th border-b border-gray-400">Tag No</th>
+                <th class="gnfc-th border-b border-gray-400">Type of Job</th>
+                <th class="gnfc-th border-b border-gray-400">ENG</th>
+              </tr>
+            </thead>
+            <tbody id="plantTableBody" class="gnfc-tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="plant-table-pagination" class="px-4 pb-4 bg-white dark:bg-dark-panel rounded-b-md"></div>
+      </div>
     </div>
   </main>
 
-  <div id="job-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="elog-modal-panel">
-      <div class="flex items-center justify-between px-4 py-3 border-b border-dark-border bg-dark-panel">
-        <h3 id="job-modal-title" class="text-sm font-bold text-gnfc-blue">Assign Job</h3>
-        <button onclick="closeJobModal()" class="text-dark-muted hover:text-white"><i
-            class="ph-bold ph-x text-lg"></i></button>
+  <div id="job-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell">
+      <div class="gnfc-modal-header">
+        <h3 id="job-modal-title" class="gnfc-modal-title">Assign Job</h3>
+        <button onclick="closeJobModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
       </div>
-      <form id="job-modal-form" class="p-4 space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Date (Server)</label>
-            <input id="job-date" type="text" readonly
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
+      <form id="job-modal-form">
+        <div class="gnfc-modal-body gnfc-modal-body--tight" style="overflow-y:auto;">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="gnfc-modal-label">Date (Server)</label>
+              <input id="job-date" type="text" readonly class="gnfc-modal-input">
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Technician</label>
+              <select id="job-tech" class="gnfc-modal-input"></select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Or Enter Tech</label>
+              <input id="job-tech-custom" type="text" placeholder="Optional" class="gnfc-modal-input">
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Loop</label>
+              <select id="job-loop" onchange="filterTagsForLoop()" class="gnfc-modal-input"></select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Tag</label>
+              <select id="job-tag" class="gnfc-modal-input"></select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Area</label>
+              <select id="job-area" class="gnfc-modal-input"></select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Type Of Job</label>
+              <select id="job-type" class="gnfc-modal-input"></select>
+            </div>
+            <div>
+              <label class="gnfc-modal-label">Type Of Inst</label>
+              <select id="job-inst" class="gnfc-modal-input"></select>
+            </div>
+            <div class="md:col-span-3">
+              <label class="gnfc-modal-label">Description</label>
+              <textarea id="job-desc" rows="3" class="gnfc-modal-input" placeholder="Enter job description"></textarea>
+            </div>
           </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Technician</label>
-            <select id="job-tech"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Or Enter Tech</label>
-            <input id="job-tech-custom" type="text" placeholder="Optional"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Loop</label>
-            <select id="job-loop" onchange="filterTagsForLoop()"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Tag</label>
-            <select id="job-tag"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Area</label>
-            <select id="job-area"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type Of Job</label>
-            <select id="job-type"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Type Of Inst</label>
-            <select id="job-inst"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"></select>
-          </div>
-          <div class="md:col-span-3">
-            <label class="block text-[10px] font-bold text-dark-muted uppercase mb-1">Description</label>
-            <textarea id="job-desc" rows="3"
-              class="w-full bg-dark-bg border border-dark-border rounded-sm px-2 py-1.5 text-xs"
-              placeholder="Enter job description"></textarea>
+
+          <div id="job-modal-ojr" class="border border-dark-border rounded-sm overflow-hidden mt-4">
+            <div class="px-3 py-2 border-b border-dark-border bg-dark-panel font-13px fw-bold color-blue text-upper">
+              Operation Job Register / Weekly Pending</div>
+            <div class="max-h-32 overflow-auto divide-y divide-dark-border" id="ojr-pending-list"></div>
           </div>
         </div>
 
-        <div id="job-modal-ojr" class="border border-dark-border rounded-sm overflow-hidden">
-          <div
-            class="px-3 py-2 border-b border-dark-border bg-dark-panel text-[10px] font-bold text-gnfc-blue uppercase">
-            Operation Job Register / Weekly Pending</div>
-          <div class="max-h-32 overflow-auto divide-y divide-dark-border" id="ojr-pending-list"></div>
-        </div>
-
-        <div class="flex justify-end gap-2">
+        <div class="gnfc-modal-footer">
           <button type="button" onclick="closeJobModal()"
-            class="px-3 py-1.5 border border-dark-border rounded-sm text-xs font-bold text-dark-muted hover:text-white">Cancel</button>
-          <button type="submit"
-            class="px-4 py-1.5 bg-blue-600 hover:bg-gnfc-blue rounded-sm text-xs font-bold">Save</button>
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div id="edit-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div
-      class="elog-modal-panel max-w-3xl w-full mx-4 shadow-2xl shadow-black/50 overflow-hidden transform transition-all scale-100 rounded-md border border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-bg">
+  <div id="edit-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell">
 
       <!-- Header -->
-      <div
-        class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21]">
+      <div class="gnfc-modal-header">
         <div>
-          <h3 class="text-sm font-bold text-gray-900 dark:text-white tracking-wide">Edit Assigned Job</h3>
-          <p class="text-[10px] text-gray-500 dark:text-dark-muted mt-0.5 font-mono opacity-80">JOB ID: <span
-              id="edit-job-id-display" class="text-blue-600 dark:text-gnfc-blue">--</span></p>
+          <h3 class="gnfc-modal-title">Edit Assigned Job</h3>
+          <p class="gnfc-modal-subtitle">JOB ID: <span id="edit-job-id-display" style="color:#3b82f6;">--</span></p>
         </div>
-        <button onclick="closeEditModal()"
-          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white transition-colors p-1 hover:bg-gray-100 dark:hover:bg-white/5 rounded-sm">
+        <button onclick="closeEditModal()" class="gnfc-modal-close">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
 
-      <form id="edit-modal-form" class="flex flex-col h-full bg-gray-50 dark:bg-dark-bg">
+      <form id="edit-modal-form" class="flex flex-col h-full">
         <input id="edit-job-id" type="hidden">
 
         <!-- Scrollable Content -->
-        <div class="p-6 space-y-6 overflow-y-auto max-h-[70vh]">
-
-          <!-- Top Context Strip -->
-          <div
-            class="grid grid-cols-3 gap-px bg-gray-200 dark:bg-dark-border border border-gray-200 dark:border-dark-border rounded-sm overflow-hidden text-xs shadow-sm">
-            <div class="bg-gray-100 dark:bg-[#22252b] p-3">
-              <label
-                class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider mb-1">Date</label>
-              <input id="edit-job-date" type="text" readonly
-                class="w-full bg-transparent border-none p-0 text-gray-900 dark:text-white font-mono focus:ring-0 cursor-default placeholder-gray-400 dark:placeholder-dark-muted/30">
-            </div>
-            <div class="bg-gray-100 dark:bg-[#22252b] p-3 border-l border-gray-200 dark:border-dark-border">
-              <label
-                class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider mb-1">Assigned
-                To</label>
-              <input id="edit-job-assigned-to" type="text" readonly
-                class="w-full bg-transparent border-none p-0 text-blue-600 dark:text-gnfc-blue font-bold focus:ring-0 cursor-default">
-            </div>
-            <div class="bg-gray-100 dark:bg-[#22252b] p-3 border-l border-gray-200 dark:border-dark-border">
-              <label
-                class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase tracking-wider mb-1">Assigned
-                By</label>
-              <input id="edit-job-by" type="text" readonly
-                class="w-full bg-transparent border-none p-0 text-gray-900 dark:text-white focus:ring-0 cursor-default">
-            </div>
-          </div>
-
-          <!-- Job Details Card -->
+        <div class="gnfc-modal-body" style="max-height:70vh;">
           <div class="space-y-2">
-            <h4
-              class="text-[10px] font-bold text-blue-600 dark:text-gnfc-blue uppercase tracking-widest flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-gnfc-blue"></span> Job Context
-            </h4>
+
+            <!-- Top Context Strip -->
             <div
-              class="bg-white dark:bg-[#1e2126] border border-gray-200 dark:border-dark-border rounded-sm p-4 space-y-4 shadow-sm">
-              <!-- Summary -->
-              <div>
-                <label class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1.5">Job
-                  Summary</label>
-                <textarea id="edit-job-summary" rows="1" readonly
-                  class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-3 py-2 text-xs text-gray-700 dark:text-white/90 resize-none focus:outline-none font-medium"></textarea>
+              class="edit-context-strip grid grid-cols-1 md:grid-cols-3 gap-px bg-dark-border border border-dark-border rounded-sm overflow-hidden font-14px shadow-sm">
+              <div class="bg-[#22252b] p-3 flex items-center gap-2">
+                <label for="edit-job-date" class="gnfc-modal-label">Date</label>
+                <input id="edit-job-date" type="text" readonly
+                  class="context-value w-full bg-transparent border-none p-0 color-primary typo-mono fw-medium focus:ring-0 cursor-default">
               </div>
+              <div
+                class="bg-[#22252b] p-3 border-t md:border-t-0 md:border-l border-dark-border flex items-center gap-2">
+                <label for="edit-job-assigned-to" class="gnfc-modal-label">Assigned To</label>
+                <input id="edit-job-assigned-to" type="text" readonly
+                  class="context-value w-full bg-transparent border-none p-0 color-blue fw-bold focus:ring-0 cursor-default">
+              </div>
+              <div
+                class="bg-[#22252b] p-3 border-t md:border-t-0 md:border-l border-dark-border flex items-center gap-2">
+                <label for="edit-job-by" class="gnfc-modal-label">Assigned By</label>
+                <input id="edit-job-by" type="text" readonly
+                  class="context-value w-full bg-transparent border-none p-0 color-primary fw-medium focus:ring-0 cursor-default">
+              </div>
+            </div>
 
-              <!-- Detail Grid -->
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Job Details Card -->
+            <div class="space-y-2">
+              <h4 class="font-13px fw-bold color-blue text-upper ls-widest flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-gnfc-blue"></span> Job Context
+              </h4>
+              <div class="bg-[#1e2126] border border-dark-border rounded-sm shadow-sm p-4">
                 <div>
-                  <label
-                    class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Date</label>
-                  <input id="edit-job-detail-date" type="text" readonly
-                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-500 dark:text-dark-muted">
+                  <label class="gnfc-modal-label">Job Summary</label>
+                  <textarea id="edit-job-summary" rows="1" readonly
+                    class="gnfc-modal-input resize-none fw-medium"></textarea>
                 </div>
-                <div class="md:col-span-2">
-                  <label class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Loop /
-                    Tag</label>
-                  <input id="edit-job-loop-tag" type="text" readonly
-                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-blue-600 dark:text-gnfc-blue font-mono font-medium">
-                </div>
-                <div>
-                  <label
-                    class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Type</label>
-                  <input id="edit-job-type" type="text" readonly
-                    class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white">
-                  <input id="edit-job-inst" type="hidden">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <label class="gnfc-modal-label">Date</label>
+                    <input id="edit-job-detail-date" type="text" readonly class="gnfc-modal-input"
+                      style="color:#94a3b8;">
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="gnfc-modal-label">Loop / Tag</label>
+                    <input id="edit-job-loop-tag" type="text" readonly class="gnfc-modal-input"
+                      style="color:#3b82f6;font-family:monospace;font-weight:500;">
+                  </div>
+                  <div>
+                    <label class="gnfc-modal-label">Type</label>
+                    <input id="edit-job-type" type="text" readonly class="gnfc-modal-input">
+                    <input id="edit-job-inst" type="hidden">
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Execution / Update Section -->
-          <div class="space-y-3">
-            <h4
-              class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Execution Update
-            </h4>
+            <!-- Execution / Update Section -->
+            <div class="space-y-2">
+              <h4 class="font-13px fw-bold color-green text-upper ls-widest flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Execution Update
+              </h4>
 
-            <div class="space-y-4">
-              <div>
-                <label class="block text-[10px] font-bold text-gray-900 dark:text-white uppercase mb-1.5">Description /
-                  Remarks <span class="text-red-500 dark:text-red-400">*</span></label>
-                <textarea id="edit-job-desc" rows="4"
-                  class="w-full bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-dark-border rounded-sm px-3 py-2 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue focus:ring-1 focus:ring-blue-500/50 dark:focus:ring-gnfc-blue/50 outline-none placeholder-gray-400 dark:placeholder-dark-muted/40 transition-all font-mono leading-relaxed"
-                  placeholder="Enter detailed job description..."></textarea>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Status -->
+              <div class="space-y-4">
                 <div>
-                  <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1.5">Current
-                    Status</label>
-                  <div class="relative">
-                    <select id="edit-job-status"
-                      class="w-full bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-dark-border rounded-sm pl-3 pr-8 py-2 text-xs font-bold text-gray-900 dark:text-white appearance-none focus:border-blue-500 dark:focus:border-gnfc-blue outline-none cursor-pointer hover:border-gray-300 dark:hover:border-white/20 transition-colors h-9">
-                      <option value="IN PROGRESS" class="text-amber-600 dark:text-amber-400">IN PROGRESS</option>
-                      <option value="✓ OVER" class="text-emerald-600 dark:text-emerald-400">✓ OVER</option>
-                      <option value="HOLD" class="text-red-600 dark:text-red-400">HOLD</option>
-                    </select>
-                    <i
-                      class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-dark-muted pointer-events-none"></i>
-                  </div>
+                  <label class="gnfc-modal-label">Description / Remarks <span style="color:#f87171;">*</span></label>
+                  <textarea id="edit-job-desc" rows="6" class="gnfc-modal-input typo-mono leading-relaxed"
+                    style="font-size:0.875rem;" placeholder="Enter detailed job description..."></textarea>
                 </div>
 
-                <!-- Extra Hours -->
-                <div>
-                  <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1.5">Extra
-                    Duty (Hrs)</label>
-                  <input id="edit-job-extra-hours" type="number" min="0" step="1"
-                    class="w-full bg-white dark:bg-[#1a1d21] border border-gray-200 dark:border-dark-border rounded-sm px-3 py-2 text-xs text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue outline-none h-9 font-mono">
-                </div>
-              </div>
-
-              <!-- Accordion / Secondary Fields -->
-              <div class="pt-4 border-t border-gray-200 dark:border-dark-border/50">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <div>
-                    <label
-                      class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Technician</label>
+                    <label class="gnfc-modal-label">Current Status</label>
                     <div class="relative">
-                      <select id="edit-job-tech"
-                        class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue outline-none appearance-none"></select>
+                      <select id="edit-job-status" class="gnfc-modal-input"
+                        style="padding-left:0.75rem;padding-right:2rem;height:2.25rem;font-weight:700;appearance:none;cursor:pointer;">
+                        <option value="IN PROGRESS">IN PROGRESS</option>
+                        <option value="✓ OVER">✓ OVER</option>
+                        <option value="HOLD">HOLD</option>
+                      </select>
                       <i
-                        class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-dark-muted text-[10px] pointer-events-none"></i>
+                        class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-secondary pointer-events-none"></i>
                     </div>
                   </div>
                   <div>
-                    <label
-                      class="block text-[9px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Engineer</label>
-                    <div class="relative">
-                      <select id="edit-job-engineer"
-                        class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-gnfc-blue outline-none appearance-none"></select>
-                      <i
-                        class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-dark-muted text-[10px] pointer-events-none"></i>
-                    </div>
-                  </div>
-                  <div class="hidden">
-                    <select id="edit-job-area"></select>
+                    <label class="gnfc-modal-label">Extra Duty (Hrs)</label>
+                    <input id="edit-job-extra-hours" type="number" min="0" step="1" class="gnfc-modal-input"
+                      style="height:2.25rem;font-family:monospace;">
                   </div>
                 </div>
-              </div>
 
-              <!-- Emergency Toggle -->
-              <div class="pt-2 flex justify-end">
-                <label class="flex items-center gap-3 cursor-pointer group select-none">
-                  <span
-                    class="text-xs font-bold text-gray-500 dark:text-dark-muted group-hover:text-orange-500 dark:group-hover:text-gnfc-orange transition-colors">Emergency
-                    Call</span>
-                  <div class="relative">
-                    <input id="edit-job-emergency" type="checkbox" class="sr-only peer">
-                    <div
-                      class="w-9 h-5 bg-gray-300 dark:bg-dark-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500 dark:peer-checked:bg-gnfc-orange/90 transition-colors">
+                <div class="pt-4 border-t border-dark-border/50">
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="gnfc-modal-label">Technician</label>
+                      <div class="relative">
+                        <select id="edit-job-tech" class="gnfc-modal-input" style="appearance:none;"></select>
+                        <i
+                          class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 color-secondary font-13px pointer-events-none"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="gnfc-modal-label">Engineer</label>
+                      <div class="relative">
+                        <select id="edit-job-engineer" class="gnfc-modal-input" style="appearance:none;"></select>
+                        <i
+                          class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 color-secondary font-13px pointer-events-none"></i>
+                      </div>
+                    </div>
+                    <div class="hidden">
+                      <select id="edit-job-area"></select>
                     </div>
                   </div>
-                </label>
-              </div>
+                </div>
 
+                <!-- Emergency Toggle -->
+                <div class="pt-2 flex justify-end">
+                  <label class="flex items-center gap-3 cursor-pointer group select-none">
+                    <span class="font-14px fw-bold color-secondary group-hover-color-orange transition-colors">Emergency
+                      Call</span>
+                    <div class="relative">
+                      <input id="edit-job-emergency" type="checkbox" class="sr-only peer">
+                      <div
+                        class="w-9 h-5 bg-dark-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gnfc-orange/90 transition-colors">
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+              </div>
             </div>
-          </div>
 
-          <div id="edit-warning"
-            class="hidden p-3 bg-amber-50 border border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/30 rounded-sm flex items-start gap-2">
-            <i class="ph-bold ph-warning text-amber-600 dark:text-amber-500 mt-0.5"></i>
-            <p class="text-xs text-amber-700 dark:text-amber-200" id="edit-warning-text"></p>
-          </div>
+            <div id="edit-warning"
+              class="hidden p-3 bg-amber-500/10 border border-amber-500/30 rounded-sm flex items-start gap-2">
+              <i class="ph-bold ph-warning text-amber-500 mt-0.5"></i>
+              <p class="font-14px text-amber-200" id="edit-warning-text"></p>
+            </div>
 
+          </div>
         </div>
 
         <!-- Footer -->
-        <div
-          class="px-5 py-4 border-t border-gray-200 dark:border-dark-border bg-white dark:bg-[#1a1d21] flex justify-end gap-3 rounded-b-md">
+        <div class="gnfc-modal-footer">
           <button type="button" onclick="closeEditModal()"
-            class="px-4 py-2 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Cancel</button>
-          <button type="submit"
-            class="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-lg shadow-blue-900/20 transition-all transform active:scale-[0.98]">Save
-            Changes</button>
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div id="remark-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="elog-modal-panel">
-      <div
-        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-panel">
-        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">Remarks</h3>
-        <button onclick="closeRemarkModal()"
-          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white"><i
-            class="ph-bold ph-x text-lg"></i></button>
+  <div id="remark-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium" style="max-width: 800px;">
+
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Remark</h3>
+        <button onclick="closeRemarkModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
       </div>
-      <form id="remark-modal-form" class="p-4 space-y-3">
+
+      <form id="remark-modal-form">
         <input id="remark-job-id" type="hidden">
-        <div id="remark-history"
-          class="max-h-40 overflow-auto border border-gray-200 dark:border-dark-border rounded-sm divide-y divide-gray-100 dark:divide-dark-border">
+
+        <div class="gnfc-modal-body p-4">
+
+          <!-- Remark By Strip -->
+          <div
+            class="border-b border-dark-border py-2 bg-gray-50 dark:bg-dark-header flex items-center justify-between">
+            <span class="font-14px fw-bold color-primary">Remark By: <span id="remark-by-display">ENGINEER</span></span>
+          </div>
+
+          <!-- Content -->
+          <div class="pt-4">
+            <div>
+              <label class="gnfc-modal-label mb-2 block font-bold color-primary">New Remark</label>
+              <textarea id="remark-text" rows="4"
+                class="w-full bg-transparent border border-dark-border rounded-sm p-3 font-14px resize-none focus:border-blue-500 outline-none transition-colors h-32"
+                placeholder="Enter remark..."></textarea>
+            </div>
+
+            <!-- Options -->
+            <div>
+              <label
+                class="inline-flex items-center gap-2 font-14px fw-medium color-primary cursor-pointer select-none">
+                <input id="remark-status-over" type="checkbox"
+                  class="accent-blue-600 h-4 w-4 rounded-sm border-gray-300">
+                Mark the job status as "OVER"
+              </label>
+
+              <div class="block">
+                <label
+                  class="inline-flex items-center gap-2 font-14px fw-medium color-primary cursor-pointer select-none">
+                  <input id="remark-ack-tech" type="checkbox"
+                    class="accent-blue-600 h-4 w-4 rounded-sm border-gray-300">
+                  Remark Acknowledgement By Technician
+                </label>
+              </div>
+
+              <div class="hidden">
+                <input id="remark-ack-eng" type="checkbox">
+                <select id="remark-type">
+                  <option value="engineer">eng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">Remark
-              Type</label>
-            <select id="remark-type"
-              class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white">
-              <option value="engineer">Engineer</option>
-              <option value="executive">Executive</option>
+
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closeRemarkModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="priority-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--small" style="max-width: 300px;">
+
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Job Priority</h3>
+        <button onclick="closePriorityModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+      </div>
+
+      <form id="priority-modal-form">
+        <input id="priority-job-id" type="hidden">
+        <input id="priority-value" type="hidden" value="0">
+        <div class="gnfc-modal-body p-4">
+          <label class="gnfc-modal-label mb-3 block">Select Priority (0-25)</label>
+          <div id="priority-grid"
+            class="grid grid-cols-5 md:grid-cols-7 gap-2 max-h-[300px] overflow-y-auto p-1 custom-scroll">
+            <!-- Buttons generated by JS -->
+          </div>
+        </div>
+        <div class="gnfc-modal-footer">
+          <button type="button" onclick="closePriorityModal()"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button type="submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Set Priority</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="ack-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Pending Remark Acknowledgement</h3>
+        <button onclick="closeAckModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+      </div>
+      <div class="gnfc-modal-body gnfc-modal-body--tight">
+        <div id="ack-list"
+          class="max-h-64 overflow-auto border border-dark-border rounded-sm divide-y divide-dark-border">
+        </div>
+      </div>
+      <div class="gnfc-modal-footer">
+        <button type="button" onclick="closeAckModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+        <button type="button" onclick="acknowledgeSelectedRemarks()"
+          class="gnfc-modal-btn gnfc-modal-btn-primary">Acknowledge Selected</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reminder-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Job Planner / ISO14001 Due Jobs</h3>
+        <button onclick="closeReminderModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
+      </div>
+      <div id="reminder-list" class="gnfc-modal-body gnfc-modal-body--tight" style="overflow-y:auto;"></div>
+      <div class="gnfc-modal-footer">
+        <button type="button" onclick="closeReminderModal()"
+          class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/src/js/pagination.js"></script>
+  <script src="/src/js/plant_log_core.js"></script>
+
+  <!-- Add To History — Type Selection Modal (Fig 5.32.1) -->
+  <div id="history-type-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--narrow">
+      <div class="gnfc-modal-header" style="justify-content:center;text-align:center;display:block;">
+        <h3 class="gnfc-modal-title">METHANOL-1</h3>
+        <p class="gnfc-modal-subtitle">Add To History</p>
+      </div>
+      <div class="gnfc-modal-body gnfc-modal-body--tight" style="text-align:center;">
+        <p class="font-14px fw-bold color-secondary text-upper ls-wide mb-4">Select History Type</p>
+        <div class="flex items-center justify-center gap-3">
+          <button onclick="selectHistoryType('system')" class="gnfc-modal-btn gnfc-modal-btn-primary">System
+            History</button>
+          <button onclick="selectHistoryType('general')" class="gnfc-modal-btn gnfc-modal-btn-success">General
+            History</button>
+        </div>
+      </div>
+      <div class="gnfc-modal-footer" style="justify-content:center;">
+        <button onclick="closeHistoryTypeModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- General History Form Modal (Fig 5.33) -->
+  <div id="general-history-modal" class="gnfc-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="gnfc-modal-shell">
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">Add To History</h3>
+          <span class="gnfc-modal-subtitle">METHANOL-1</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="history-type-badge"
+            class="font-13px px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">General
+            History</span>
+          <button onclick="closeGeneralHistoryModal()" class="gnfc-modal-close">
+            <i class="ph-bold ph-x text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="gnfc-modal-body gnfc-modal-body--tight" style="overflow-y:auto;max-height:70vh;">
+        <p class="font-14px fw-bold color-green mb-4">New Record</p>
+
+        <!-- Row 1: Date/Loop, InstTag, Type of Job, Type of Inst -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Date</label>
+            <input type="date" id="hist-date" class="gnfc-modal-input">
+            <label class="gnfc-modal-label" style="margin-top:0.25rem;">Loop Name</label>
+            <input type="text" id="hist-loop" readonly class="gnfc-modal-input" style="color:#94a3b8;">
+          </div>
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">InstTag</label>
+            <select id="hist-insttag" class="gnfc-modal-input">
+              <option>DCS</option>
+              <option>TRANSMITTER</option>
+              <option>CONTROL VALVE</option>
+              <option>SWITCH</option>
+              <option>ANALYZER</option>
+              <option>OTHERS</option>
             </select>
           </div>
-          <label class="flex items-center gap-2 text-xs mt-5 text-gray-700 dark:text-gray-300">
-            <input id="remark-ack-tech" type="checkbox" class="accent-gnfc-blue">
-            Ack by Technician
-          </label>
-          <label class="flex items-center gap-2 text-xs mt-5 text-gray-700 dark:text-gray-300">
-            <input id="remark-ack-eng" type="checkbox" class="accent-gnfc-blue">
-            Ack by Engineer
-          </label>
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Type of Job</label>
+            <select id="hist-jobtype" class="gnfc-modal-input">
+              <option>PROCESS REQMT</option>
+              <option>CMS JOB</option>
+              <option>PM JOB</option>
+              <option>BREAKDOWN</option>
+              <option>N.A.</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Type of Inst</label>
+            <input type="text" id="hist-insttype" readonly class="gnfc-modal-input" style="color:#94a3b8;">
+          </div>
         </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 dark:text-dark-muted uppercase mb-1">New
-            Remark</label>
-          <textarea id="remark-text" rows="3"
-            class="w-full bg-gray-50 dark:bg-dark-bg border border-gray-200 dark:border-dark-border rounded-sm px-2 py-1.5 text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-dark-muted/50"
-            placeholder="Remarks are append-only"></textarea>
+
+        <!-- Job Description -->
+        <div class="space-y-1 mt-4">
+          <label class="gnfc-modal-label" style="color:#f87171;">Job Description</label>
+          <textarea id="hist-desc" rows="4" class="gnfc-modal-input typo-mono leading-relaxed"></textarea>
         </div>
-        <div class="flex justify-end gap-2">
-          <button type="button" onclick="closeRemarkModal()"
-            class="px-3 py-1.5 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Close</button>
-          <button type="submit"
-            class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-sm">Append
-            Remark</button>
+
+        <!-- Row 2: Job Status, Tech Name, Eng, Area -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Job Status</label>
+            <select id="hist-status" class="gnfc-modal-input">
+              <option>OVER</option>
+              <option>IN PROGRESS</option>
+              <option>U/P</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Tech Name</label>
+            <select id="hist-tech" class="gnfc-modal-input">
+              <option>BPB</option>
+              <option>PBS</option>
+              <option>NRK</option>
+              <option>SHC</option>
+              <option>NHP</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Eng</label>
+            <select id="hist-eng" class="gnfc-modal-input">
+              <option>SHC</option>
+              <option>MAJ</option>
+              <option>CKV</option>
+              <option>MDM</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Area</label>
+            <select id="hist-area" class="gnfc-modal-input">
+              <option>METH</option>
+              <option>FA</option>
+              <option>AA</option>
+              <option>DCS</option>
+              <option>UTIL</option>
+            </select>
+          </div>
         </div>
-      </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="gnfc-modal-footer">
+        <button onclick="closeGeneralHistoryModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button onclick="addToHistory()" class="gnfc-modal-btn gnfc-modal-btn-primary">Add</button>
+      </div>
     </div>
   </div>
-
-  <div id="ack-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="elog-modal-panel">
-      <div
-        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-panel">
-        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">Pending Remark Acknowledgement</h3>
-        <button onclick="closeAckModal()"
-          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white"><i
-            class="ph-bold ph-x text-lg"></i></button>
-      </div>
-      <div class="p-4 space-y-3">
-        <div id="ack-list"
-          class="max-h-64 overflow-auto border border-gray-200 dark:border-dark-border rounded-sm divide-y divide-gray-100 dark:divide-dark-border">
-        </div>
-        <div class="flex justify-end gap-2">
-          <button type="button" onclick="closeAckModal()"
-            class="px-3 py-1.5 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Close</button>
-          <button type="button" onclick="acknowledgeSelectedRemarks()"
-            class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-sm text-xs font-bold shadow-sm">Acknowledge
-            Selected</button>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <div id="reminder-modal" class="elog-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="elog-modal-panel">
-      <div
-        class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-dark-border bg-white dark:bg-dark-panel">
-        <h3 class="text-sm font-bold text-blue-600 dark:text-gnfc-blue">Job Planner / ISO14001 Due Jobs</h3>
-        <button onclick="closeReminderModal()"
-          class="text-gray-400 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white"><i
-            class="ph-bold ph-x text-lg"></i></button>
-      </div>
-      <div id="reminder-list" class="p-4 space-y-2"></div>
-      <div class="px-4 pb-4 flex justify-end">
-        <button type="button" onclick="closeReminderModal()"
-          class="px-3 py-1.5 border border-gray-200 dark:border-dark-border rounded-sm text-xs font-bold text-gray-500 dark:text-dark-muted hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Close</button>
-      </div>
-    </div>
-  </div>
 
-  <script src="/src/js/plant_log_core.js"></script>
   <script src="/src/js/emg_call_modal.js"></script>
   <script src="/src/js/elogbook_store.js"></script>
   <script src="/src/js/elogbook_plant_flow.js"></script>

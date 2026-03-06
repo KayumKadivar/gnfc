@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail Schedule | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <link rel="stylesheet" href="/src/css/table-style.css">
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
+    <link rel="stylesheet" href="/src/css/jb-detail.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>window.activePage = 'plants';</script>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>renderSidebar('plants');</script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script src="/src/js/header.js"></script>
+        <script>
+            renderHeader({
+                title: "Mail Schedule",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "Mail Schedule" }
+                ],
+                backLink: "/src/pages/boiler_dashboard.html"
+            });
+        </script>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+            <div class="max-w-8xl mx-auto space-y-3">
+
+                <!-- TOOLBAR -->
+                <div class="jbd-card">
+                    <div class="jbd-toolbar">
+                        <div class="jbd-toolbar-actions jbd-toolbar-end" style="margin-left:auto;">
+                            <button class="jbd-btn jbd-btn-green" onclick="openAddModal()">
+                                <i class="ph-bold ph-plus"></i> Add New
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCHEDULE LIST TABLE -->
+                <div class="jbd-card" style="overflow:hidden;">
+                    <div class="jbd-card-header" style="padding: 0.875rem 1.25rem;">
+                        <div class="jbd-card-header-left">
+                            <i class="ph-fill ph-envelope color-blue" style="font-size:1.0625rem;"></i>
+                            <span class="jbd-card-header-title" style="font-size:0.875rem;">Mail Schedule List</span>
+                        </div>
+                        <span id="record-count" class="jbd-badge-count"></span>
+                    </div>
+
+                    <div class="overflow-auto" style="max-height: 68vh;">
+                        <table id="schedule-table" style="width:100%; border-collapse:collapse; table-layout:auto;">
+                            <thead>
+                                <tr style="position:sticky; top:0; z-index:2; background:var(--app-header, #181b1f);">
+                                    <th style="padding:10px 14px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:center; width:44px; white-space:nowrap;">#</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:left; min-width:160px; white-space:nowrap;">To (Plant / Role)</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:left; min-width:120px; white-space:nowrap;">Sender</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:center; min-width:110px; white-space:nowrap;">Frequency</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:center; width:110px; white-space:nowrap;">On (D/M/Y)</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:left; min-width:200px; white-space:nowrap;">Subject</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:left; min-width:220px; white-space:nowrap;">Message</th>
+                                    <th style="padding:10px 16px; font-size:0.6875rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--app-muted,#9aa7b5); border-bottom:2px solid var(--app-border,#2c3235); text-align:center; width:90px; white-space:nowrap;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="empty-state" class="jbd-alert" style="display:none; margin:1.5rem; border-radius:0.5rem;">
+                        <i class="ph-bold ph-envelope-simple-open" style="font-size:1.125rem;"></i>
+                        No mail schedules found. Click <strong>Add New</strong> to create one.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- ADD / EDIT MODAL                                  -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div id="modal-schedule" class="gnfc-modal-overlay" style="z-index:10005;" role="dialog" aria-modal="true">
+        <div class="gnfc-modal-shell" style="max-width:640px; padding:0;">
+            <div class="gnfc-modal-header">
+                <div>
+                    <h3 class="gnfc-modal-title" id="modal-title">
+                        <i class="ph-bold ph-plus-circle mr-1"></i> Add New Schedule
+                    </h3>
+                    <p class="gnfc-modal-subtitle">Mail Schedule — BOILER</p>
+                </div>
+                <button onclick="closeModal()" class="gnfc-modal-close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="gnfc-modal-body">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.875rem 1.25rem;">
+
+                    <!-- To -->
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">To (Plant)</label>
+                        <div class="jbd-select-wrap">
+                            <select id="f-plant" class="gnfc-modal-input jbd-select" style="width:100%;">
+                                <option value="">Select Plant</option>
+                                <option>Boiler</option>
+                                <option>Ammonia</option>
+                                <option>Urea</option>
+                                <option>HRD</option>
+                                <option>All</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down jbd-caret" style="right:10px;"></i>
+                        </div>
+                    </div>
+
+                    <!-- To Role -->
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">To (Role)</label>
+                        <div class="jbd-select-wrap">
+                            <select id="f-to-all" class="gnfc-modal-input jbd-select" style="width:100%;">
+                                <option>All</option>
+                                <option>Shift Incharge</option>
+                                <option>Engineer</option>
+                                <option>Manager</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down jbd-caret" style="right:10px;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Sender -->
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Sender</label>
+                        <input type="text" id="f-sender" class="gnfc-modal-input" placeholder="Sender name or email">
+                    </div>
+
+                    <!-- Frequency -->
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Frequency</label>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" id="f-days-check" class="w-4 h-4 cursor-pointer" style="accent-color:#2563eb;" onchange="toggleDaysInput()">
+                            <label for="f-days-check" class="font-12px fw-bold color-primary cursor-pointer">Days</label>
+                            <input type="number" id="f-days-val" class="gnfc-modal-input" style="width:5rem;" placeholder="0" min="0" disabled>
+                        </div>
+                        <span class="font-12px color-secondary" style="margin-top:2px;">(If Days selected, D:M:Y will be ignored)</span>
+                    </div>
+
+                    <!-- ON D / M / Y -->
+                    <div style="grid-column:1/-1; display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">ON (Day / Month / Year)</label>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span class="font-12px fw-bold color-secondary">D</span>
+                            <div class="jbd-select-wrap" style="width:4.5rem;">
+                                <select id="f-day" class="gnfc-modal-input jbd-select" style="width:100%; padding-right:1.5rem;">
+                                    <option value="">—</option>
+                                    <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+                                    <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+                                    <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
+                                    <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+                                    <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
+                                    <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+                                    <option>31</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down jbd-caret"></i>
+                            </div>
+                            <span class="font-12px fw-bold color-secondary">M</span>
+                            <div class="jbd-select-wrap" style="width:4.5rem;">
+                                <select id="f-month" class="gnfc-modal-input jbd-select" style="width:100%; padding-right:1.5rem;">
+                                    <option value="">—</option>
+                                    <option>1</option><option>2</option><option>3</option><option>4</option>
+                                    <option>5</option><option>6</option><option>7</option><option>8</option>
+                                    <option>9</option><option>10</option><option>11</option><option>12</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down jbd-caret"></i>
+                            </div>
+                            <span class="font-12px fw-bold color-secondary">Y</span>
+                            <div class="jbd-select-wrap" style="width:5.5rem;">
+                                <select id="f-year" class="gnfc-modal-input jbd-select" style="width:100%; padding-right:1.5rem;">
+                                    <option value="">—</option>
+                                    <option>2025</option><option>2026</option><option>2027</option>
+                                    <option>2028</option><option>2029</option><option>2030</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down jbd-caret"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subject -->
+                    <div style="grid-column:1/-1; display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Subject</label>
+                        <input type="text" id="f-subject" class="gnfc-modal-input" placeholder="Email subject...">
+                    </div>
+
+                    <!-- Message -->
+                    <div style="grid-column:1/-1; display:flex; flex-direction:column; gap:4px;">
+                        <label class="gnfc-modal-label">Message</label>
+                        <textarea id="f-message" class="gnfc-modal-input" rows="4"
+                            style="resize:vertical; height:6rem; padding-top:0.5rem;"
+                            placeholder="Type your message here..."></textarea>
+                    </div>
+
+                </div>
+            </div>
+            <div class="gnfc-modal-footer">
+                <button type="button" onclick="submitForm()" class="gnfc-modal-btn gnfc-modal-btn-primary">
+                    <i class="ph-bold ph-check mr-1"></i> <span id="submit-btn-label">Add</span>
+                </button>
+                <button type="button" onclick="closeModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let schedules = [
+            { id: 1, plant: 'Boiler', toAll: 'All', sender: 'Admin', freqDays: false, daysVal: '', day: '1', month: '1', year: '2026', subject: 'Boiler Daily Report', message: 'Please find attached the daily boiler performance report.' },
+            { id: 2, plant: 'All', toAll: 'Manager', sender: 'Shift Incharge', freqDays: true, daysVal: '7', day: '', month: '', year: '', subject: 'Weekly Summary', message: 'Weekly maintenance summary is attached.' }
+        ];
+        let nextId = 3;
+        let editingId = null;
+
+        // ─── RENDER TABLE ────────────────────────────────────────
+        function renderTable() {
+            const tbody = document.getElementById('schedule-body');
+            const empty = document.getElementById('empty-state');
+            document.getElementById('record-count').textContent = schedules.length + ' Records';
+
+            if (schedules.length === 0) {
+                tbody.innerHTML = '';
+                empty.style.display = 'flex';
+                return;
+            }
+            empty.style.display = 'none';
+
+            const ROW_BASE = 'border-bottom:1px solid var(--app-border,#2c3235); transition:background .12s;';
+            const CELL     = 'padding:13px 16px; font-size:0.8125rem; vertical-align:middle;';
+            const CELL_C   = 'padding:13px 14px; font-size:0.8125rem; vertical-align:middle; text-align:center;';
+
+            tbody.innerHTML = schedules.map((s, i) => {
+                const stripe = i % 2 === 0
+                    ? 'background:var(--app-panel,rgba(30,36,50,.45));'
+                    : 'background:transparent;';
+                const freqPill = s.freqDays
+                    ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:#818cf8;font-size:0.7rem;font-weight:700;white-space:nowrap;"><i class="ph-bold ph-clock" style="font-size:.75rem;"></i>${s.daysVal} Days</span>`
+                    : `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#34d399;font-size:0.7rem;font-weight:700;white-space:nowrap;"><i class="ph-bold ph-calendar-dots" style="font-size:.75rem;"></i>D:M:Y</span>`;
+                const onVal = s.freqDays ? '—' : `${s.day||'—'}/${s.month||'—'}/${s.year||'—'}`;
+
+                return `<tr style="${ROW_BASE}${stripe}"
+                    onmouseover="this.style.background='rgba(87,148,242,0.06)'"
+                    onmouseout="this.style.background='${stripe.replace('background:','').replace(';','')}'">
+                    <td style="${CELL_C} font-weight:700; color:var(--app-muted,#9aa7b5); width:44px;">${i + 1}</td>
+                    <td style="${CELL}">
+                        <div style="font-weight:700; color:#5794f2; font-size:0.8125rem; line-height:1.3;">${s.plant}</div>
+                        <div style="font-size:0.7rem; color:var(--app-muted,#9aa7b5); margin-top:2px;">${s.toAll}</div>
+                    </td>
+                    <td style="${CELL}">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <span style="width:28px;height:28px;border-radius:50%;background:rgba(87,148,242,0.12);border:1px solid rgba(87,148,242,0.25);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="ph-bold ph-user" style="font-size:0.8125rem;color:#5794f2;"></i>
+                            </span>
+                            <span style="font-weight:600; font-size:0.8125rem;">${s.sender}</span>
+                        </div>
+                    </td>
+                    <td style="${CELL_C}">${freqPill}</td>
+                    <td style="${CELL_C} font-size:0.8rem; font-weight:600; color:var(--app-text,#e6edf3);">${onVal}</td>
+                    <td style="${CELL}">
+                        <div style="font-weight:600; font-size:0.8125rem; color:var(--app-text,#e6edf3);">${s.subject}</div>
+                    </td>
+                    <td style="${CELL} max-width:220px;">
+                        <div style="font-size:0.75rem; color:var(--app-muted,#9aa7b5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${s.message.replace(/"/g,'&quot;')}">${s.message}</div>
+                    </td>
+                    <td style="${CELL_C} white-space:nowrap;">
+                        <button onclick="openEditModal(${s.id})" title="Edit"
+                            style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;border-radius:6px;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;margin-right:5px;"
+                            onmouseover="this.style.background='rgba(245,158,11,0.28)';this.style.transform='translateY(-1px)'"
+                            onmouseout="this.style.background='rgba(245,158,11,0.12)';this.style.transform='translateY(0)'">
+                            <i class="ph-bold ph-pencil-simple" style="font-size:0.875rem;"></i>
+                        </button>
+                        <button onclick="deleteRow(${s.id})" title="Delete"
+                            style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#ef4444;border-radius:6px;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;"
+                            onmouseover="this.style.background='rgba(239,68,68,0.28)';this.style.transform='translateY(-1px)'"
+                            onmouseout="this.style.background='rgba(239,68,68,0.12)';this.style.transform='translateY(0)'">
+                            <i class="ph-bold ph-trash" style="font-size:0.875rem;"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // ─── MODAL OPEN/CLOSE ────────────────────────────────────
+        function openAddModal() {
+            editingId = null;
+            clearForm();
+            document.getElementById('modal-title').innerHTML = '<i class="ph-bold ph-plus-circle mr-1"></i> Add New Schedule';
+            document.getElementById('submit-btn-label').textContent = 'Add';
+            requestAnimationFrame(() => document.getElementById('modal-schedule').classList.add('is-open'));
+        }
+
+        function openEditModal(id) {
+            const s = schedules.find(x => x.id === id);
+            if (!s) return;
+            editingId = id;
+            document.getElementById('f-plant').value = s.plant;
+            document.getElementById('f-to-all').value = s.toAll;
+            document.getElementById('f-sender').value = s.sender;
+            document.getElementById('f-days-check').checked = s.freqDays;
+            document.getElementById('f-days-val').value = s.daysVal;
+            document.getElementById('f-days-val').disabled = !s.freqDays;
+            document.getElementById('f-day').value = s.day;
+            document.getElementById('f-month').value = s.month;
+            document.getElementById('f-year').value = s.year;
+            document.getElementById('f-subject').value = s.subject;
+            document.getElementById('f-message').value = s.message;
+            document.getElementById('modal-title').innerHTML = '<i class="ph-bold ph-pencil-simple mr-1"></i> Edit Schedule';
+            document.getElementById('submit-btn-label').textContent = 'Update';
+            requestAnimationFrame(() => document.getElementById('modal-schedule').classList.add('is-open'));
+        }
+
+        function closeModal() {
+            document.getElementById('modal-schedule').classList.remove('is-open');
+            editingId = null;
+        }
+
+        // ─── FORM HELPERS ────────────────────────────────────────
+        function toggleDaysInput() {
+            document.getElementById('f-days-val').disabled = !document.getElementById('f-days-check').checked;
+        }
+
+        function clearForm() {
+            ['f-plant','f-sender','f-days-val','f-day','f-month','f-year','f-subject','f-message'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                if (id === 'f-days-val') el.disabled = true;
+            });
+            document.getElementById('f-to-all').selectedIndex = 0;
+            document.getElementById('f-days-check').checked = false;
+        }
+
+        // ─── SUBMIT ──────────────────────────────────────────────
+        function submitForm() {
+            const plant   = document.getElementById('f-plant').value;
+            const toAll   = document.getElementById('f-to-all').value;
+            const sender  = document.getElementById('f-sender').value.trim();
+            const freqDays= document.getElementById('f-days-check').checked;
+            const daysVal = document.getElementById('f-days-val').value.trim();
+            const day     = document.getElementById('f-day').value;
+            const month   = document.getElementById('f-month').value;
+            const year    = document.getElementById('f-year').value;
+            const subject = document.getElementById('f-subject').value.trim();
+            const message = document.getElementById('f-message').value.trim();
+
+            if (!plant || !sender || !subject) {
+                Swal.fire({ icon:'error', title:'Validation', text:'Plant, Sender and Subject are required.', confirmButtonColor:'#2563eb' });
+                return;
+            }
+
+            if (editingId !== null) {
+                const idx = schedules.findIndex(x => x.id === editingId);
+                if (idx > -1) schedules[idx] = { id: editingId, plant, toAll, sender, freqDays, daysVal, day, month, year, subject, message };
+            } else {
+                schedules.push({ id: nextId++, plant, toAll, sender, freqDays, daysVal, day, month, year, subject, message });
+            }
+
+            closeModal();
+            renderTable();
+            Swal.fire({
+                icon: 'success',
+                title: editingId !== null ? 'Updated!' : 'Added!',
+                text: editingId !== null ? 'Schedule updated successfully.' : 'New mail schedule created.',
+                confirmButtonColor: '#2563eb', timer: 1800, timerProgressBar: true
+            });
+        }
+
+        // ─── DELETE ──────────────────────────────────────────────
+        function deleteRow(id) {
+            Swal.fire({
+                title: 'Delete Schedule?',
+                text: 'This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#475569',
+                confirmButtonText: 'Yes, Delete'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    schedules = schedules.filter(x => x.id !== id);
+                    renderTable();
+                    Swal.fire({ icon:'success', title:'Deleted!', text:'Schedule removed.', confirmButtonColor:'#2563eb', timer:1500, timerProgressBar:true });
+                }
+            });
+        }
+
+        // Close on backdrop click
+        document.getElementById('modal-schedule').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        window.addEventListener('DOMContentLoaded', renderTable);
+    </script>
+
+</body>
+</html>

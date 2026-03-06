@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme-mode="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Name Wise Report | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <style>
+    /* MicroModal base */
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal.is-open .gnfc-modal-overlay {
+      display: flex;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body class="bg-white text-black h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+
+  <div id="sidebar-container"></div>
+  <script>
+    try {
+      renderSidebar('technician_logbook');
+    } catch (e) {
+      // noop
+    }
+  </script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <div id="header-container"></div>
+    <script>
+      renderHeader({
+        title: "Name Wise Report",
+        breadcrumbs: [
+          { label: "Technician Log", href: "technician_logbook.html" },
+          { label: "Plant Detail", href: "plant_detail.html" },
+          { label: "Name Wise Report" }
+        ],
+        backLink: "plant_detail.html"
+      });
+    </script>
+
+    <div class="p-4 overflow-y-auto flex-1">
+      <!-- Top Navigation Bar -->
+      <div id="plant-nav-container"></div>
+      <script src="/src/js/plant_nav.js"></script>
+      <script>
+        renderPlantNav('namewise_report');
+      </script>
+
+      <div class="w-full">
+        <!-- Filter Bar -->
+        <div class="bg-white border border-gray-300 rounded-sm p-4 shadow-sm flex gap-5 flex-wrap items-end my-4">
+
+          <!-- Start Date -->
+          <div class="flex flex-col gap-1.5">
+            <label class="font-10px fw-bold text-upper ls-wider text-gray-600">Start Date</label>
+            <input type="date" id="startDateFilter"
+              class="bg-white border border-gray-300 text-black font-12px rounded-sm px-3 py-1.5 min-w-[150px] outline-none">
+          </div>
+
+          <!-- End Date -->
+          <div class="flex flex-col gap-1.5">
+            <label class="font-10px fw-bold text-upper ls-wider text-gray-600">End Date</label>
+            <input type="date" id="endDateFilter"
+              class="bg-white border border-gray-300 text-black font-12px rounded-sm px-3 py-1.5 min-w-[150px] outline-none">
+          </div>
+
+          <!-- Select Name -->
+          <div class="flex flex-col gap-1.5">
+            <label class="font-10px fw-bold text-upper ls-wider text-gray-600">Select Name</label>
+            <select id="nameFilter"
+              class="bg-white border border-gray-300 text-black font-12px rounded-sm px-3 py-1.5 min-w-[180px] outline-none">
+              <option value="">All Technicians</option>
+              <option value="PBS">PBS</option>
+              <option value="NRK">NRK</option>
+              <option value="MJ">MJ</option>
+              <option value="MR">MR</option>
+              <option value="R.R.">R.R.</option>
+              <option value="SHC">SHC</option>
+            </select>
+          </div>
+
+          <!-- Spacer -->
+          <div class="flex-1"></div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-end gap-2">
+            <button onclick="resetFilters()"
+              class="px-3 py-1.5 bg-transparent border border-gray-300 text-black font-11px fw-bold rounded-sm hover:bg-gray-100 transition-all">
+              <i class="ph-bold ph-x mr-1"></i>RESET
+            </button>
+            <button onclick="generateReport()"
+              class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-11px fw-bold rounded-sm transition-all shadow-sm">
+              <i class="ph-bold ph-sparkle mr-1"></i>GENERATE
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Results Section -->
+      <div id="reportResults" class="gnfc-table-container mt-6" style="display:none;">
+        <div class="gnfc-table-header">
+          <div class="flex items-center gap-2">
+            <i class="ph-fill ph-user-list text-blue-600 font-16px"></i>
+            <h3 class="fw-bold font-13px text-black" id="reportTitle">Name Wise Report</h3>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="recordCount"
+              class="font-10px bg-gray-50 border border-gray-300 px-2 py-0.5 rounded-sm text-gray-600">0 Records</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto overflow-y-auto flex-1 custom-scrollbar">
+          <table class="gnfc-table min-w-[1200px]">
+            <thead class="gnfc-thead">
+              <tr>
+                <th class="gnfc-th w-10">Sr</th>
+                <th class="gnfc-th min-w-[150px]">Assign Job<br><span class="text-[9px] opacity-70">Assign To</span></th>
+                <th class="gnfc-th w-24">Date</th>
+                <th class="gnfc-th w-14">Tech</th>
+                <th class="gnfc-th min-w-[100px]">TagNo</th>
+                <th class="gnfc-th min-w-[120px]">Type of Job</th>
+                <th class="gnfc-th min-w-[300px]">Description</th>
+                <th class="gnfc-th min-w-[150px]">Remarks</th>
+                <th class="gnfc-th w-14">OT Hr</th>
+              </tr>
+            </thead>
+            <tbody id="reportTableBody" class="gnfc-tbody">
+              <!-- Report data will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function () {
+      // Set default dates (last 30 days)
+      const today = new Date();
+      const lastMonth = new Date(today);
+      lastMonth.setDate(lastMonth.getDate() - 30);
+
+      document.getElementById('endDateFilter').valueAsDate = today;
+      document.getElementById('startDateFilter').valueAsDate = lastMonth;
+
+      // Select first technician by default
+      document.getElementById('nameFilter').value = 'PBS';
+
+      // Auto-populate table on page load
+      generateReport();
+    });
+
+    function resetFilters() {
+      const today = new Date();
+      const lastMonth = new Date(today);
+      lastMonth.setDate(lastMonth.getDate() - 30);
+
+      document.getElementById('nameFilter').value = '';
+      document.getElementById('startDateFilter').valueAsDate = lastMonth;
+      document.getElementById('endDateFilter').valueAsDate = today;
+      document.getElementById('reportResults').style.display = 'none';
+    }
+
+    function generateReport() {
+      const selectedName = document.getElementById('nameFilter').value;
+      const startDate = document.getElementById('startDateFilter').value;
+      const endDate = document.getElementById('endDateFilter').value;
+
+      document.getElementById('reportResults').style.display = 'flex';
+
+      // Update report title
+      const formattedStart = new Date(startDate).toLocaleDateString('en-GB');
+      const formattedEnd = new Date(endDate).toLocaleDateString('en-GB');
+      const nameLabel = selectedName || 'All Technicians';
+      document.getElementById('reportTitle').textContent = `Name Wise Report: ${nameLabel} (${formattedStart} – ${formattedEnd})`;
+
+      // Sample data
+      const sampleData = [
+        {
+          sr: 1, assignJob: '', assignTo: '',
+          date: '01/02/2005', tech: 'PBS', tagNo: 'IIMS',
+          typeOfJob: 'N.A.',
+          desc: 'Job status report generated as discussed with SM(TMV).',
+          remarks: '', otHour: 0
+        },
+        {
+          sr: 2, assignJob: 'Exceed PC\nnetwork is to be\nremoved.',
+          assignTo: '(By:SHC :\n01/02/2005)',
+          date: '01/02/2005', tech: 'PBS', tagNo: 'NOTAG',
+          typeOfJob: 'N.A.',
+          desc: 'Windows 98 reloaded. Exceed reloaded. All programs, applications except exceed are removed. It is now under observation.',
+          remarks: '', otHour: 0
+        },
+        {
+          sr: 3, assignJob: '', assignTo: 'PBS',
+          date: '22/01/2005', tech: 'PBS', tagNo: 'DCS',
+          typeOfJob: 'N.A.',
+          desc: 'During house-keeping of AWS101 it is observed that vmcore file observed in /opt/crash/AWS101. After referring edoc and comparing with that of meth2 this big size file is removed as it gets generated due to some software problem. Also AW is working ok so it is deleted other wise this file is to be sent to foxboro for analysis. The vmcore file was generated on 11 aug 04.',
+          remarks: '', otHour: 0
+        },
+        {
+          sr: 4,
+          assignJob: 'O/P lim is to be\nprovided.(By:SHC :\n22/01/2005)',
+          assignTo: 'PBS',
+          date: '22/01/2005', tech: 'PBS', tagNo: 'LV_1413',
+          typeOfJob: 'DEFECT\nMAINTENANCE',
+          desc: 'It is to be done on monday after discussing with SM(SD) as per SIE(MTP).',
+          remarks: '', otHour: 0
+        },
+        {
+          sr: 5, assignJob: '', assignTo: 'PBS',
+          date: '20/01/2005', tech: 'PBS', tagNo: 'DCS',
+          typeOfJob: 'N.A.',
+          desc: 'Various reports, find, filehistory, remarks history exported and verified with SM office for archival purpose.',
+          remarks: '', otHour: 0
+        },
+      ];
+
+      const tbody = document.getElementById('reportTableBody');
+      tbody.innerHTML = sampleData.map((row, idx) => `
+        <tr class="gnfc-tr">
+          <td class="gnfc-td text-center font-bold">${row.sr}</td>
+          <td class="gnfc-td">
+            <div class="font-bold leading-tight whitespace-pre-line text-black">${row.assignJob || '-'}</div>
+            ${row.assignTo ? `<div class="text-[10px] text-orange-600 mt-1 font-bold">${row.assignTo}</div>` : ''}
+          </td>
+          <td class="gnfc-td text-center">${row.date}</td>
+          <td class="gnfc-td text-center font-bold">${row.tech}</td>
+          <td class="gnfc-td font-bold text-blue-700">${row.tagNo}</td>
+          <td class="gnfc-td text-[10px] whitespace-pre-line">${row.typeOfJob}</td>
+          <td class="gnfc-td">${row.desc}</td>
+          <td class="gnfc-td text-[10px]">${row.remarks || '-'}</td>
+          <td class="gnfc-td text-center">${row.otHour}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('recordCount').textContent = `${sampleData.length} Records`;
+
+      // Scroll to results
+      document.getElementById('reportResults').scrollIntoView({ behavior: 'smooth' });
+    }
+
+  </script>
+  <script src="/src/js/emg_call_modal.js"></script>
+  <script src="/src/js/pagination.js"></script>
+</body>
+
+</html>

@@ -1,176 +1,267 @@
-const EmgCallModal = {
-    isOpen: false,
-    data: [
-        { date: '17/09/2025', tech: 'NRL', tag: 'CX701', type: 'ABNORMALITY', desc: 'At 02:44 AM, CX701 tripped on LS9105AL, LS9105BL, and LS9105CL due to a low-level trip in D713 (Seal Oil Drum). Following the trip, the physical condition of LTB105 and LS9105 was inspected and found normal, with no abnormalities observed. Attempts were made to restore the oil level in D713, but the level did not rise. LV9105 was responding to control room (C/R) signals. Leak checks were performed, and the valve\'s physical condition was found satisfactory. The process team then attempted to fill the oil level using the bypass of LV9105, which resulted in the level of D713 rising. This created suspicion of a control valve (C/V) malfunction. The valve was removed from the line, and a water test was performed, which is found completely ok holding while valve close and water passing while valve open. To rule out process-side issues, the upstream (U/S) and downstream (D/S) lines were inspected. After starting the oil pump and opening the U/S isolation valve, no oil was observed at the open flange until approximately 50% valve opening. At this point, minor oil flow was detected, and upon subsequent closure of the isolation valve, full oil flow was established. The C/V was dismantled from the bonnet for detailed inspection. The plug, seat, and cage were found in good condition, and valve operation was confirmed satisfactory. The valve was reassembled with a new bonnet gasket, reinstalled, and the positioner was mounted. Stroke calibration was completed, and the valve was taken in line. No leakage was observed. The activity was carried out in coordination with Mr. PSG.', otHour: 0 },
-        { date: '14/09/2025', tech: 'NRL', tag: 'MV1', type: 'ABNORMALITY', desc: 'process reported that valve getting open and close several times checked in detail and found it got open at 1st time --> 12:09:07 2nd time --> 12:09:17 3rd time --> 12:15:24 and 4th time --> 12:15:30 .Leakages are checked no leakages are found after that SOV forced from its bottom key and then relay is replaced(P0034 relay no. R0004). Connections are checked at marshalling and SOV no any abnormality is found. After relay replacement SOV key is normalized and taken in line. Jobs done with Mr.PSG,SIE(NKP), and IE(MAJ). Observation during abnormality is found.', otHour: 0 },
-        { date: '11/10/2024', tech: 'NRL', tag: 'FT0210CD', type: 'DEFECT MAINTENANCE', desc: 'Process reported that its reading decreased to 22M3/Hr from 36M3/Hr, so checked at field and found on Tx. display reading showing 36M3/Hr and matching with other Tx. reading. Connected HART and showing 12mA which was same as all Tx. so on doubt base DCS channel simulation done and DCS channel found Ok. After ON/OFF Tx. it was giving 1.79mA in loop, so power module of Tx. changed but no improvement found. After that its 4-20mA cum sensor module changed and now in DCS showing Ok. Display module is also changed as it became black.', otHour: 0 },
-        { date: '08/01/2024', tech: 'NRL', tag: 'C1001A', type: 'PROCESS REQMT', desc: 'Its loading unloading valve tubing connections are done. for simulation its logic was bypassed. simulation taken found Ok. logic taken in line.', otHour: 0 }
-    ],
-    filteredData: [],
+/**
+ * EmgCallModal - Emergency Call Report Management
+ * A modular component for viewing and filtering emergency call logs.
+ */
+const EmgCallModal = (function() {
+    // --- Configuration & Constants ---
+    const CONFIG = {
+        MODAL_ID: 'modal-emg-call',
+        TRUNCATE_LIMIT: 20,
+        TYPE_COLORS: {
+            'ABNORMALITY': 'bg-red-500/10 text-red-400 border-red-500/30',
+            'MAINTENANCE': 'bg-blue-500/10 text-blue-500 border-red-500/30', // Fallback maintenance
+            'DEFAULT': 'bg-amber-500/10 text-amber-500 border-amber-500/30'
+        },
+        STYLESHEET_ID: 'gnfc-modal-ui-style',
+        STYLESHEET_PATH: '/src/css/modal-ui.css'
+    };
 
-    init() {
-        this.filteredData = [...this.data];
-        this.ensureModalStructure();
-        try {
-            MicroModal.init({
-                onShow: modal => console.info(`${modal.id} is shown`),
-                onClose: modal => console.info(`${modal.id} is hidden`),
-                openTrigger: 'data-micromodal-trigger',
-                closeTrigger: 'data-micromodal-close',
-                disableScroll: true,
-                disableFocus: false,
-                awaitOpenAnimation: true,
-                awaitCloseAnimation: true,
-                debugMode: false
-            });
-        } catch (e) {
-            console.error("MicroModal init failed", e);
+    // --- Utilities ---
+    const Utils = {
+        /**
+         * Truncate text to a specific number of words.
+         */
+        truncateWords(text, limit) {
+            if (!text) return '';
+            const words = text.trim().split(/\s+/);
+            if (words.length <= limit) return text;
+            return words.slice(0, limit).join(' ') + '...';
+        },
+
+        /**
+         * Escape HTML to prevent XSS.
+         */
+        escapeHtml(value) {
+            if (value === null || value === undefined) return '';
+            return String(value).replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
+        },
+
+        /**
+         * Parse DD/MM/YYYY to YYYY-MM-DD for date comparison.
+         */
+        parseDate(value) {
+            if (!value) return '';
+            const parts = String(value).split('/');
+            if (parts.length !== 3) return '';
+            const [day, month, year] = parts;
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         }
-    },
+    };
 
-    ensureModalStructure() {
-        if (document.getElementById('modal-emg-call')) return;
+    // --- State ---
+    let state = {
+        isOpen: false,
+        data: [
+            { date: '17/09/2025', tech: 'NRL', tag: 'CX701', type: 'ABNORMALITY', desc: 'At 02:44 AM, CX701 tripped on LS9105AL, LS9105BL, and LS9105CL due to a low-level trip in D713 (Seal Oil Drum). Following the trip, the physical condition of LTB105 and LS9105 was inspected and found normal, with no abnormalities observed. Attempts were made to restore the oil level in D713, but the level did not rise. LV9105 was responding to control room (C/R) signals. Leak', otHour: 0 },
+            { date: '14/09/2025', tech: 'NRL', tag: 'MV1', type: 'ABNORMALITY', desc: 'process reported that valve getting open and close several times checked in detail and found it got open at 1st time --> 12:09:07 2nd time --> 12:09:17 3rd time --> 12:15:24 and 4th time --> 12:15:30 .Leakages are checked no leakages are found after that SOV forced from its bottom key and then relay is replaced(P0034 relay no. R0004). Connections are checked at marshalling and SOV no any abnormality is found. After relay replacement SOV key is normalized and taken in line. Jobs done with Mr.PSG,SIE(NKP), and IE(MAJ). Observation during abnormality is found.', otHour: 0 },
+            { date: '11/10/2024', tech: 'NRL', tag: 'FT0210CD', type: 'DEFECT MAINTENANCE', desc: 'Process reported that its reading decreased to 22M3/Hr from 36M3/Hr, so checked at field and found on Tx. display reading showing 36M3/Hr and matching with other Tx. reading. Connected HART and showing 12mA which was same as all Tx. so on doubt base DCS channel simulation done and DCS channel found Ok. After ON/OFF Tx. it was giving 1.79mA in loop, so power module of Tx. changed but no improvement found. After that its 4-20mA cum sensor module changed and now in DCS showing Ok. Display module is also changed as it became black.', otHour: 0 },
+            { date: '08/01/2024', tech: 'NRL', tag: 'C1001A', type: 'PROCESS REQMT', desc: 'Its loading unloading valve tubing connections are done. for simulation its logic was bypassed. simulation taken found Ok. logic taken in line.', otHour: 0 }
+        ],
+        filteredData: []
+    };
 
-        const modalHtml = `
-            <div class="modal micromodal-slide" id="modal-emg-call" aria-hidden="true">
-                <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-                    <div class="modal__container bg-dark-panel border border-dark-border shadow-2xl w-full max-w-6xl overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="modal-emg-title">
-                        
-                        <!-- Header -->
-                        <div class="bg-dark-header p-3 border-b border-dark-border flex justify-between items-center shrink-0">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-gnfc-red/20 flex items-center justify-center text-gnfc-red">
-                                    <i class="ph-fill ph-siren text-xl animate-pulse"></i>
-                                </div>
-                                <div class="flex flex-col">
-                                    <h2 id="modal-emg-title" class="text-sm font-bold text-dark-text uppercase tracking-widest leading-none">Emergency Call Report</h2>
-                                </div>
+    // --- Template ---
+    const getModalTemplate = () => `
+        <div class="modal micromodal-slide" id="${CONFIG.MODAL_ID}" aria-hidden="true">
+            <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                <div class="modal__container gnfc-modal-shell gnfc-modal-shell--2xl" role="dialog" aria-modal="true" aria-labelledby="modal-emg-title">
+                    <div class="gnfc-modal-header">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-sm bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500">
+                                <i class="ph-fill ph-siren text-lg"></i>
                             </div>
-                            <button class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full text-dark-muted hover:text-dark-text transition-all focus:outline-none" aria-label="Close modal" data-micromodal-close>
-                                <i class="ph-bold ph-x text-lg pointer-events-none"></i>
-                            </button>
+                            <div>
+                                <h2 id="modal-emg-title" class="gnfc-modal-title">Emergency Call Report</h2>
+                                <p class="gnfc-modal-subtitle font-14px">Emergency call logs with overtime summary</p>
+                            </div>
                         </div>
+                        <button class="gnfc-modal-close" aria-label="Close modal" data-micromodal-close>
+                            <i class="ph-bold ph-x text-lg pointer-events-none"></i>
+                        </button>
+                    </div>
 
-                        <div class="flex-1 flex flex-col overflow-hidden">
-                            
-                            <div class="p-3 border-b border-dark-border shrink-0">
-                                <div class="flex items-end gap-6 max-w-4xl">
-                                    <div class="flex-1 grid grid-cols-2 gap-4">
-                                        <div class="space-y-1.5">
-                                            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-widest">Start Date</label>
-                                            <input type="date" id="emg-start-date" 
-                                                class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
-                                        </div>
-                                        <div class="space-y-1.5">
-                                            <label class="text-[10px] font-bold text-gnfc-blue uppercase tracking-widest">End Date</label>
-                                            <input type="date" id="emg-end-date" 
-                                                class="w-full bg-dark-panel border border-dark-border text-dark-text text-xs rounded-sm px-3 py-2 focus:border-gnfc-blue focus:ring-1 focus:ring-gnfc-blue outline-none transition-all">
-                                        </div>
-                                    </div>
-                                    <button onclick="EmgCallModal.applyFilters()"
-                                        class="h-9 px-8 bg-blue-600 hover:bg-gnfc-blue text-xs font-bold rounded-sm shadow-lg shadow-blue-500/10 transition-all flex items-center gap-2 uppercase tracking-wider active:scale-95"> GO </button>
-                                </div>
-                            </div>
-
-                            <!-- Table Area -->
-                            <div class="flex-1 overflow-auto">
-                                <table class="w-full text-left border-collapse min-w-[900px]">
-                                    <thead class="sticky top-0 z-10">
-                                        <tr class="bg-dark-header text-[10px] font-bold text-dark-muted uppercase tracking-widest border-b border-dark-border shadow-sm">
-                                            <th class="px-4 py-4 w-28 text-center border-r border-dark-border">Date</th>
-                                            <th class="px-4 py-4 w-20 text-center border-r border-dark-border">Tech</th>
-                                            <th class="px-4 py-4 w-32 border-r border-dark-border">Tag No</th>
-                                            <th class="px-4 py-4 w-40 border-r border-dark-border">Type of Job</th>
-                                            <th class="px-6 py-4 border-r border-dark-border">Description</th>
-                                            <th class="px-4 py-4 w-20 text-center">OT Hr</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="emg-table-body" class="text-xs font-mono"></tbody>
-                                </table>
+                    <div class="gnfc-modal-body gnfc-modal-body--tight flex flex-col gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                            ${renderFilterInput('Start Date', 'emg-start-date', 'date')}
+                            ${renderFilterInput('End Date', 'emg-end-date', 'date')}
+                            ${renderFilterInput('Search', 'emg-search', 'text', 'Search tag, tech, type, or description')}
+                            <div class="flex items-end">
+                                <button type="button" onclick="EmgCallModal.applyFilters()" class="gnfc-modal-btn gnfc-modal-btn-primary w-full">Apply</button>
                             </div>
                         </div>
 
-                        <!-- Footer -->
-                        <div class="bg-dark-header p-3 border-t border-dark-border flex justify-between items-center text-[10px] shrink-0">
-                            <div class="flex items-center gap-4 text-dark-muted">
-                                <span>Showing <span id="emg-record-count" class="text-dark-text font-bold">0</span> entries</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-dark-muted uppercase tracking-wider font-bold">Total Overtime:</span>
-                                <span id="emg-total-hours" class="bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/30 px-4 py-1.5 rounded-sm font-bold text-xs ring-1 ring-gnfc-orange/20">0.0</span>
-                            </div>
+                        <div class="border border-dark-border rounded-sm overflow-auto">
+                            <table class="w-full text-left border-collapse min-w-[960px]">
+                                <thead class="sticky top-0 z-10">
+                                    <tr class="font-11px fw-bold text-upper ls-wider bg-dark-header color-label border-b border-dark-border">
+                                        <th class="px-3 py-2 w-28 text-center border-r border-dark-border font-14px">Date</th>
+                                        <th class="px-3 py-2 w-20 text-center border-r border-dark-border font-14px">Tech</th>
+                                        <th class="px-3 py-2 w-32 text-center border-r border-dark-border font-14px">Tag No</th>
+                                        <th class="px-3 py-2 w-44 border-r border-dark-border font-14px">Type of Job</th>
+                                        <th class="px-4 py-2 border-r border-dark-border font-14px">Description</th>
+                                        <th class="px-3 py-2 w-20 text-center font-14px">OT Hr</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emg-table-body" class="font-13px color-primary bg-dark-panel"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="gnfc-modal-footer gnfc-modal-footer--space-between">
+                        <div class="font-12px color-secondary">
+                            Showing <span id="emg-record-count" class="fw-bold color-primary">0</span> entries
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-11px text-upper ls-wide color-secondary fw-bold">Total OT Hours</span>
+                            <span id="emg-total-hours" class="px-2.5 py-1 rounded-sm border border-blue-500/30 bg-blue-500/10 text-blue-500 font-12px fw-bold">0.0</span>
+                            <button type="button" class="gnfc-modal-btn gnfc-modal-btn-secondary" data-micromodal-close>Close</button>
                         </div>
                     </div>
                 </div>
             </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-    },
+        </div>
+    `;
 
-    open() {
-        this.init();
-        try {
-            MicroModal.show('modal-emg-call');
-            this.updateTable();
-        } catch (e) {
-            console.error("MicroModal show failed, falling back", e);
-            // Simple fallback if MicroModal fails
-            document.getElementById('modal-emg-call').classList.add('is-open');
-        }
-    },
+    const renderFilterInput = (label, id, type, placeholder = '') => `
+        <div>
+            <label class="gnfc-modal-label text-upper ls-wide">${label}</label>
+            <input
+                id="${id}"
+                type="${type}"
+                class="gnfc-modal-input"
+                ${placeholder ? `placeholder="${placeholder}"` : ''}
+                ${type === 'text' ? 'oninput="EmgCallModal.applyFilters()"' : 'onchange="EmgCallModal.applyFilters()"'}
+            >
+        </div>
+    `;
 
-    close() {
-        try {
-            MicroModal.close('modal-emg-call');
-        } catch (e) {
-            document.getElementById('modal-emg-call').classList.remove('is-open');
-        }
-    },
+    // --- Private Methods ---
+    const ensureStyles = () => {
+        if (document.getElementById(CONFIG.STYLESHEET_ID)) return;
+        const link = document.createElement('link');
+        link.id = CONFIG.STYLESHEET_ID;
+        link.rel = 'stylesheet';
+        link.href = CONFIG.STYLESHEET_PATH;
+        document.head.appendChild(link);
+    };
 
-    render() {
-        // Initial structure check
-        this.ensureModalStructure();
-    },
+    const ensureModal = () => {
+        if (document.getElementById(CONFIG.MODAL_ID)) return;
+        document.body.insertAdjacentHTML('beforeend', getModalTemplate());
+    };
 
+    const getStatusClass = (type) => {
+        if (type.includes('ABNORMALITY')) return CONFIG.TYPE_COLORS['ABNORMALITY'];
+        if (type.includes('MAINTENANCE')) return CONFIG.TYPE_COLORS['MAINTENANCE'];
+        return CONFIG.TYPE_COLORS['DEFAULT'];
+    };
 
-    updateTable() {
-        const tbody = document.getElementById('emg-table-body');
-        const countEl = document.getElementById('emg-record-count');
-        const totalHourEl = document.getElementById('emg-total-hours');
+    // --- Public API ---
+    return {
+        init() {
+            state.filteredData = [...state.data];
+            ensureStyles();
+            ensureModal();
+            try {
+                MicroModal.init({
+                    awaitOpenAnimation: true,
+                    awaitCloseAnimation: true,
+                    disableScroll: true
+                });
+            } catch (e) {
+                console.error("MicroModal init failed", e);
+            }
+        },
 
-        if (!tbody) return;
+        open() {
+            this.init();
+            try {
+                MicroModal.show(CONFIG.MODAL_ID);
+            } catch (e) {
+                document.getElementById(CONFIG.MODAL_ID).classList.add('is-open');
+            }
+            this.applyFilters();
+        },
 
-        tbody.innerHTML = '';
-        let totalHours = 0;
+        close() {
+            try {
+                MicroModal.close(CONFIG.MODAL_ID);
+            } catch (e) {
+                document.getElementById(CONFIG.MODAL_ID).classList.remove('is-open');
+            }
+        },
 
-        if (this.filteredData.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-20 text-center text-dark-muted italic text-sm">No emergency calls found for the selected range.</td></tr>`;
-        } else {
-            this.filteredData.forEach(item => {
-                totalHours += item.otHour || 0;
-                const row = `
-                    <tr class="hover:bg-black/5 dark:hover:bg-white/5 transition-colors border-b border-dark-border group align-top">
-                        <td class="px-4 py-4 text-center border-r border-dark-border text-dark-muted whitespace-nowrap">${item.date}</td>
-                        <td class="px-4 py-4 text-center border-r border-dark-border font-bold text-dark-text">${item.tech}</td>
-                        <td class="px-4 py-4 border-r border-dark-border font-bold text-gnfc-blue">${item.tag}</td>
-                        <td class="px-4 py-4 border-r border-dark-border">
-                            <span class="inline-block px-2 py-0.5 rounded-sm bg-gnfc-orange/10 text-gnfc-orange border border-gnfc-orange/20 text-[10px] font-bold">
-                                ${item.type}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 border-r border-dark-border text-dark-text leading-relaxed text-[11px] font-sans">
-                            <div class="max-h-32 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-dark-border">
-                                ${item.desc}
-                            </div>
-                        </td>
-                        <td class="px-4 py-4 text-center font-bold text-dark-text">${item.otHour.toFixed(1)}</td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
+        applyFilters() {
+            const startDate = document.getElementById('emg-start-date')?.value || '';
+            const endDate = document.getElementById('emg-end-date')?.value || '';
+            const search = (document.getElementById('emg-search')?.value || '').trim().toLowerCase();
+
+            state.filteredData = state.data.filter(item => {
+                const dateVal = Utils.parseDate(item.date);
+                if (startDate && dateVal < startDate) return false;
+                if (endDate && dateVal > endDate) return false;
+
+                if (search) {
+                    const haystack = `${item.tech} ${item.tag} ${item.type} ${item.desc}`.toLowerCase();
+                    if (!haystack.includes(search)) return false;
+                }
+                return true;
             });
-        }
 
-        if (countEl) countEl.innerText = this.filteredData.length;
-        if (totalHourEl) totalHourEl.innerText = totalHours.toFixed(1);
-    }
-};
+            this.updateTable();
+        },
+
+        updateTable() {
+            const elements = {
+                tbody: document.getElementById('emg-table-body'),
+                count: document.getElementById('emg-record-count'),
+                total: document.getElementById('emg-total-hours')
+            };
+
+            if (!elements.tbody) return;
+
+            elements.tbody.innerHTML = '';
+            let totalHours = 0;
+
+            if (state.filteredData.length === 0) {
+                elements.tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center color-secondary italic">No records matching your search.</td></tr>`;
+            } else {
+                state.filteredData.forEach(item => {
+                    totalHours += (item.otHour || 0);
+                    elements.tbody.innerHTML += this.renderRow(item);
+                });
+            }
+
+            if (elements.count) elements.count.innerText = state.filteredData.length;
+            if (elements.total) elements.total.innerText = totalHours.toFixed(1);
+        },
+
+        renderRow(item) {
+            const statusClass = getStatusClass(item.type);
+            const truncatedDesc = Utils.truncateWords(item.desc, CONFIG.TRUNCATE_LIMIT);
+
+            return `
+                <tr class="hover:bg-dark-bg/70 transition-colors border-b border-dark-border align-top font-14px">
+                    <td class="px-3 py-3 text-center border-r border-dark-border color-secondary typo-mono">${Utils.escapeHtml(item.date)}</td>
+                    <td class="px-3 py-3 text-center border-r border-dark-border fw-bold color-primary">${Utils.escapeHtml(item.tech)}</td>
+                    <td class="px-3 py-3 border-r border-dark-border text-center fw-bold color-blue typo-mono">${Utils.escapeHtml(item.tag)}</td>
+                    <td class="px-3 py-3 border-r border-dark-border">
+                        <span class="inline-block px-2 py-0.5 rounded-sm border ${statusClass} text-[9px] font-bold uppercase tracking-wide">
+                            ${Utils.escapeHtml(item.type)}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 border-r border-dark-border color-primary leading-relaxed font-15px">
+                        ${Utils.escapeHtml(truncatedDesc)}
+                    </td>
+                    <td class="px-3 py-3 text-center fw-bold color-primary">${(item.otHour || 0).toFixed(1)}</td>
+                </tr>
+            `;
+        }
+    };
+})();

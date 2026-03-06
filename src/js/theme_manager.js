@@ -1,11 +1,10 @@
 const ThemeManager = {
     storageKey: 'gnfc_theme_settings',
+    legacyDefaultFontSize: 20,
 
     defaults: {
         fontSize: 16,
-        mode: 'dark',
-        bgColor: '#111217',
-        panelColor: '#181b1f',
+        mode: 'light',
     },
 
     modes: {
@@ -36,8 +35,51 @@ const ThemeManager = {
         },
     },
 
+    initialized: false,
+    systemListenerBound: false,
+    storageListenerBound: false,
+
     init() {
+        if (this.initialized) {
+            this.applySettings();
+            return;
+        }
+
+        this.initialized = true;
+        this.setupSystemListener();
+        this.setupStorageListener();
         this.applySettings();
+    },
+
+    setupSystemListener() {
+        if (this.systemListenerBound || !window.matchMedia) return;
+
+        this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleSystemThemeChange = () => {
+            const settings = this.getSettings();
+            if (settings.mode === 'system') {
+                this.applySettings(); // Re-apply to pick up new system preference
+            }
+        };
+
+        if (typeof this.mediaQuery.addEventListener === 'function') {
+            this.mediaQuery.addEventListener('change', handleSystemThemeChange);
+        } else if (typeof this.mediaQuery.addListener === 'function') {
+            this.mediaQuery.addListener(handleSystemThemeChange);
+        }
+
+        this.systemListenerBound = true;
+    },
+
+    setupStorageListener() {
+        if (this.storageListenerBound) return;
+
+        window.addEventListener('storage', (event) => {
+            if (event.key && event.key !== this.storageKey) return;
+            this.applySettings();
+        });
+
+        this.storageListenerBound = true;
     },
 
     getSettings() {
@@ -51,16 +93,38 @@ const ThemeManager = {
         }
 
         const merged = { ...this.defaults, ...parsed };
-        if (merged.mode !== 'dark' && merged.mode !== 'light') {
-            merged.mode = this.inferModeFromLegacySettings(merged);
+        const hasStoredFontSize = Object.prototype.hasOwnProperty.call(parsed, 'fontSize');
+
+        // Migrate old default (20px) to new default (16px) so the base UI scale stays normal.
+        if (hasStoredFontSize && Number.parseInt(parsed.fontSize, 10) === this.legacyDefaultFontSize) {
+            merged.fontSize = this.defaults.fontSize;
         }
 
-        const palette = this.getPalette(merged.mode);
+        if (merged.mode !== 'dark' && merged.mode !== 'light' && merged.mode !== 'system') {
+            if (this.isValidHex(merged.bgColor)) {
+                merged.mode = this.inferModeFromLegacySettings(merged);
+            } else {
+                merged.mode = this.defaults.mode;
+            }
+        }
+
+        const effectiveMode = this.resolveMode(merged.mode);
+        const palette = this.getPalette(effectiveMode);
+
         merged.fontSize = this.sanitizeFontSize(merged.fontSize);
+        // Only use custom colors if they are valid, else use palette
         merged.bgColor = this.isValidHex(merged.bgColor) ? merged.bgColor : palette.bg;
         merged.panelColor = this.isValidHex(merged.panelColor) ? merged.panelColor : palette.panel;
 
         return merged;
+    },
+
+    resolveMode(mode) {
+        if (mode === 'dark') return 'dark';
+        if (mode === 'system') {
+            return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        }
+        return 'light';
     },
 
     saveSettings(settings) {
@@ -70,24 +134,31 @@ const ThemeManager = {
     },
 
     setMode(mode) {
-        const palette = this.getPalette(mode);
-        if (!palette) return;
-
-        const next = this.getSettings();
+        // mode can be 'light', 'dark', or 'system'
+        const next = this.getSettings(); // Get current settings including custom fonts
         next.mode = mode;
+
+        const effectiveMode = this.resolveMode(mode);
+        const palette = this.getPalette(effectiveMode);
         next.bgColor = palette.bg;
         next.panelColor = palette.panel;
+
         this.saveSettings(next);
     },
 
     normalizeSettings(settings = {}) {
-        const mode = settings.mode === 'light' ? 'light' : settings.mode === 'dark' ? 'dark' : this.defaults.mode;
-        const palette = this.getPalette(mode);
+        let mode = settings.mode;
+        if (mode !== 'light' && mode !== 'dark' && mode !== 'system') {
+            mode = this.defaults.mode;
+        }
+
+        const effectiveMode = this.resolveMode(mode);
+        const palette = this.getPalette(effectiveMode);
 
         return {
             ...this.defaults,
             ...settings,
-            mode,
+            mode, // Store 'system' if that's what it is
             fontSize: this.sanitizeFontSize(settings.fontSize),
             bgColor: this.isValidHex(settings.bgColor) ? settings.bgColor : palette.bg,
             panelColor: this.isValidHex(settings.panelColor) ? settings.panelColor : palette.panel,
@@ -96,24 +167,49 @@ const ThemeManager = {
 
     applySettings() {
         const settings = this.getSettings();
-        const palette = this.getPalette(settings.mode);
-        const fontScale = settings.fontSize / this.defaults.fontSize;
+        const effectiveMode = this.resolveMode(settings.mode);
+        const palette = this.getPalette(effectiveMode);
 
-        document.documentElement.classList.toggle('dark', settings.mode === 'dark');
-        document.documentElement.setAttribute('data-theme-mode', settings.mode);
-        document.documentElement.style.colorScheme = settings.mode;
-        document.documentElement.style.fontSize = `${settings.fontSize}px`;
+
+        const isDefaultSize = settings.fontSize === this.defaults.fontSize;
+
+        // Apply class to html
+        document.documentElement.classList.toggle('dark', effectiveMode === 'dark');
+        document.documentElement.setAttribute('data-theme-mode', effectiveMode);
+        document.documentElement.style.colorScheme = effectiveMode;
+
+        if (isDefaultSize) {
+            document.documentElement.style.removeProperty('font-size');
+        } else {
+            document.documentElement.style.fontSize = `${settings.fontSize}px`;
+        }
+
+        const fontScale = settings.fontSize / 16;
 
         this.injectColorOverrides({
-            mode: settings.mode,
+            mode: effectiveMode,
             bgColor: settings.bgColor,
             panelColor: settings.panelColor,
             palette,
             fontScale,
         });
+
+        // Dispatch a custom event
+        window.dispatchEvent(new CustomEvent('themeChanged', {
+            detail: { mode: settings.mode, effectiveMode: effectiveMode }
+        }));
     },
 
     injectColorOverrides(theme) {
+        // Load typography.css once
+        if (!document.getElementById('typography-css')) {
+            const link = document.createElement('link');
+            link.id = 'typography-css';
+            link.rel = 'stylesheet';
+            link.href = '/src/css/typography.css';
+            document.head.appendChild(link);
+        }
+
         let styleTag = document.getElementById('theme-overrides');
         if (!styleTag) {
             styleTag = document.createElement('style');
@@ -121,9 +217,47 @@ const ThemeManager = {
             document.head.appendChild(styleTag);
         }
 
+        // Convert arbitrary Tailwind text-[Npx] classes to REM based on 16px base
+        // This ensures they scale with the root font-size
         const pxScaleRules = [8, 9, 10, 11, 12, 13, 14, 15, 16]
-            .map((size) => `[class~="text-[${size}px]"] { font-size: calc(${size}px * var(--app-font-scale)) !important; }`)
+            .map((size) => {
+                const rem = size / 16;
+                return `[class~="text-[${size}px]"] { font-size: ${rem}rem !important; }`;
+            })
             .join('\n');
+
+        // Typography color vars based on theme mode
+        const isDark = theme.mode === 'dark';
+        const typoVars = isDark ? `
+                --typo-primary: #ffffff;
+                --typo-secondary: #d1d5db;
+                --typo-label: #9ca3af;
+                --typo-hint: #6b7280;
+                --typo-blue: #5794F2;
+                --typo-orange: #FF9900;
+                --typo-green: #73BF69;
+                --typo-red: #F2495C;
+                --typo-purple: #B794F4;
+                --typo-teal: #14b8a6;
+                --typo-cyan: #06b6d4;
+                --typo-amber: #f59e0b;
+        ` : `
+                --typo-primary: #111827;
+                --typo-secondary: #374151;
+                --typo-label: #4b5563;
+                --typo-hint: #6b7280;
+                --typo-blue: #2563eb;
+                --typo-orange: #d97706;
+                --typo-green: #059669;
+                --typo-red: #dc2626;
+                --typo-purple: #7c3aed;
+                --typo-teal: #0d9488;
+                --typo-cyan: #0891b2;
+                --typo-amber: #d97706;
+        `;
+
+        // Boost muted color for better readability
+        const boostedMuted = isDark ? '#d1d5db' : '#374151';
 
         styleTag.textContent = `
             :root {
@@ -133,16 +267,29 @@ const ThemeManager = {
                 --app-border: ${theme.palette.border};
                 --app-text: ${theme.palette.text};
                 --app-text-strong: ${theme.palette.textStrong};
-                --app-muted: ${theme.palette.muted};
+                --app-muted: ${boostedMuted};
                 --app-sidebar: ${theme.palette.sidebar};
                 --app-sidebar-border: ${theme.palette.sidebarBorder};
                 --app-font-scale: ${theme.fontScale};
+                ${typoVars}
             }
 
             body {
                 background-color: var(--app-bg) !important;
                 color: var(--app-text);
             }
+
+            /* --- Tailwind Font Size Overrides for Accessibility (Converted to REM) --- */
+            /* Using REM allows these to scale if the user/system changes the root font size */
+            /* Base assumption: 1rem = 16px (browser default) */
+            
+            .text-xs  { font-size: 0.875rem !important; }  /* 14px */
+            .text-sm  { font-size: 0.9375rem !important; } /* 15px */
+            .text-base { font-size: 1rem !important; }     /* 16px */
+            
+            [class~="text-[9px]"]  { font-size: 0.75rem !important; }   /* 12px */
+            [class~="text-[10px]"] { font-size: 0.8125rem !important; } /* 13px */
+            [class~="text-[11px]"] { font-size: 0.875rem !important; }  /* 14px */
 
             ${pxScaleRules}
 
@@ -203,12 +350,7 @@ const ThemeManager = {
             }
 
             html[data-theme-mode="light"] .text-white {
-                color: var(--app-text-strong;
-            }
-            html[data-theme-mode="light"] .text-white,
-            html[data-theme-mode="light"] .text-white,
-            html[data-theme-mode="light"] .text-white {
-                color: var(--app-muted);
+                color: white;
             }
 
             html[data-theme-mode="dark"] .bg-slate-50,
@@ -265,7 +407,7 @@ const ThemeManager = {
     sanitizeFontSize(size) {
         const numeric = Number.parseInt(size, 10);
         if (!Number.isFinite(numeric)) return this.defaults.fontSize;
-        return Math.min(24, Math.max(12, numeric));
+        return Math.min(28, Math.max(12, numeric));
     },
 
     isValidHex(value) {
@@ -296,7 +438,7 @@ const ThemeManager = {
     },
     increaseFontSize() {
         const current = this.getSettings();
-        const newSize = Math.min(28, current.fontSize + 1); // Max 24px
+        const newSize = Math.min(28, current.fontSize + 1); // Max 28px
         if (newSize !== current.fontSize) {
             this.saveSettings({ ...current, fontSize: newSize });
         }

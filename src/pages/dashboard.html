@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard | GNFC</title>
+  <title>Dashboard | GNFC E-Logbook</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>window.activePage = 'dashboard';</script>
-  <script src="config.js"></script>
+  <link rel="stylesheet" href="/src/css/dashboard.css">
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/elogbook_store.js"></script>
+  <script src="/src/js/notification_manager.js"></script>
+  <script src="/src/js/calibration_store.js"></script>
+  <script src="/src/js/modals/calibration_due_modal.js?v=20260223c"></script>
   <div id="sidebar-container"></div>
   <script>renderSidebar('dashboard');</script>
 
@@ -25,7 +32,7 @@
     <script src="/src/js/header.js"></script>
     <script>
       renderHeader({
-        title: "Plant Status Overview",
+        title: "Dashboard",
         breadcrumbs: [
           { label: "Dashboard" }
         ],
@@ -33,63 +40,144 @@
       });
     </script>
 
-    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+    <!-- ═══════ SCROLLABLE CONTENT ═══════ -->
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg dashboard-scroll space-y-5">
 
-      <div class="bg-dark-panel border border-dark-border rounded-sm mb-4 shadow-sm">
-        <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border bg-dark-panel">
-          <h3
-            class="font-medium text-gnfc-blue flex items-center gap-2 text-sm cursor-pointer hover:text-white transition">
-            Plant Status
-          </h3>
-          <span
-            class="text-[10px] bg-gnfc-green/10 text-gnfc-green px-2 py-0.5 rounded uppercase font-bold border border-gnfc-green/20">14
-            Active</span>
+      <!-- ─── Top Bar: Welcome + Clock ─── -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="font-18px fw-bold tracking-tight">Good <span id="greeting-time">Morning</span>, Admin
+          </h2>
+          <p class="font-14px color-label mt-0.5">Plant operations overview for today</p>
         </div>
-
-        <div id="units-grid" class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 bg-dark-panel border border-dark-border rounded-md px-3 py-2 shadow-sm">
+            <i class="ph ph-calendar-blank color-blue"></i>
+            <span id="live-date" class="font-14px font-mono fw-bold color-primary">--</span>
+          </div>
+          <div class="flex items-center gap-2 bg-dark-panel border border-dark-border rounded-md px-3 py-2 shadow-sm">
+            <i class="ph ph-clock color-orange"></i>
+            <span id="live-clock" class="font-14px font-mono fw-bold color-primary tabular-nums">--:--:--</span>
+          </div>
         </div>
       </div>
+
+      <!-- ─── STATUS & ALERTS PANEL ─── -->
+      <div id="dashboard-notifications-panel" class="mb-6 hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-14px fw-black color-primary uppercase tracking-widest ls-wider flex items-center gap-2">
+            <i class="ph-bold ph-bell-ringing color-red"></i>
+            Active Alerts & Notications
+          </h2>
+          <button onclick="NotificationManager.clearAll()"
+            class="font-10px fw-extrabold color-label hover-color-primary uppercase tracking-widest transition-colors">Clear
+            All</button>
+        </div>
+
+        <div id="dashboard-notifications-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Notifications injected here -->
+        </div>
+      </div>
+
+      <!-- ─── KPI STAT CARDS ─── -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+
+        <!-- Calibration Due (New) -->
+        <div id="kpi-card-cal"
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 transition-all cursor-pointer shadow-sm group hidden"
+          style="--kpi-color: #F2495C" onclick="window.CalibrationModal && CalibrationModal.show('manual')">
+          <div class="flex items-center justify-between mb-3">
+            <div
+              class="w-9 h-9 rounded-lg bg-gnfc-red/10 flex items-center justify-center group-hover:bg-gnfc-red/20 transition-colors">
+              <i class="ph-fill ph-warning-diamond text-lg color-red"></i>
+            </div>
+            <span class="font-13px fw-bold color-red animate-pulse">ACTION</span>
+          </div>
+          <div class="typo-kpi counter-value" id="kpi-cal-count">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">Calibration Due</p>
+        </div>
+
+        <!-- Today Total Jobs -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-blue/40 transition-all cursor-default shadow-sm"
+          style="--kpi-color: #5794F2">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-blue/10 flex items-center justify-center">
+              <i class="ph-fill ph-briefcase text-lg color-blue"></i>
+            </div>
+            <span class="font-13px fw-bold color-label text-upper ls-wider">Today</span>
+          </div>
+          <div class="typo-kpi counter-value" id="kpi-total">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">Today Total Jobs</p>
+        </div>
+
+        <!-- Completed Jobs -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-green/40 transition-all cursor-default shadow-sm"
+          style="--kpi-color: #73BF69">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-green/10 flex items-center justify-center">
+              <i class="ph-fill ph-check-circle text-lg color-green"></i>
+            </div>
+            <i class="ph-fill ph-checks color-green font-14px"></i>
+          </div>
+          <div class="typo-kpi counter-value" id="kpi-completed">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">Completed Jobs</p>
+        </div>
+
+        <!-- ISO Jobs -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-orange/40 transition-all cursor-default shadow-sm"
+          style="--kpi-color: #FF9900">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-orange/10 flex items-center justify-center">
+              <i class="ph-fill ph-certificate text-lg color-orange"></i>
+            </div>
+            <span class="font-13px fw-bold color-orange bg-gnfc-orange/10 px-1.5 py-0.5 rounded-sm">ISO</span>
+          </div>
+          <div class="typo-kpi counter-value" id="kpi-iso">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">ISO Jobs</p>
+        </div>
+
+        <!-- All Pending Jobs -->
+        <div
+          class="kpi-card bg-dark-panel border border-dark-border rounded-md p-4 hover:border-gnfc-red/40 transition-all cursor-default shadow-sm"
+          style="--kpi-color: #F2495C">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-9 h-9 rounded-lg bg-gnfc-red/10 flex items-center justify-center">
+              <i class="ph-fill ph-warning-circle text-lg color-red"></i>
+            </div>
+            <i class="ph-fill ph-arrow-down color-red font-14px"></i>
+          </div>
+          <div class="typo-kpi counter-value" id="kpi-pending">0</div>
+          <p class="font-13px color-label fw-bold mt-1 text-upper ls-wide">All Pending Jobs</p>
+        </div>
+      </div>
+
+      <!-- ─── NOTICEBOARD SECTION ─── -->
+      <div class="mt-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-14px fw-black color-primary uppercase tracking-widest ls-wider flex items-center gap-2">
+            <i class="ph-bold ph-megaphone color-blue"></i>
+            Important Announcements
+          </h2>
+          <button
+            class="bg-gnfc-blue/10 hover:bg-gnfc-blue/20 color-blue px-3 py-1.5 rounded-md font-11px fw-bold transition-all flex items-center gap-2">
+            <i class="ph-bold ph-plus"></i>
+            Post Notice
+          </button>
+        </div>
+        <div id="noticeboard-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Notices injected here -->
+        </div>
+      </div>
+
+
     </div>
   </main>
 
-  <script>
-    const units = [
-      { name: "M1 Unit", status: "Operational", color: "#73BF69" },
-      { name: "M2 Unit", status: "Maintenance", color: "#FF9900" },
-      { name: "AA Section", status: "Operational", color: "#73BF69" },
-      { name: "FA Section", status: "Operational", color: "#73BF69" },
-      { name: "BOILER", status: "Critical", color: "#F2495C" },
-      { name: "AMM", status: "Operational", color: "#73BF69" },
-      { name: "UREA", status: "Operational", color: "#73BF69" },
-      { name: "NPP", status: "Offline", color: "#8e8e9e" },
-      { name: "DM Plant", status: "Operational", color: "#73BF69" },
-      { name: "BAGG", status: "Operational", color: "#73BF69" },
-      { name: "INST WS", status: "Active", color: "#5794F2" },
-      { name: "CMS", status: "Operational", color: "#73BF69" }
-    ];
-
-    const grid = document.getElementById('units-grid');
-    units.forEach(u => {
-      // Card BG is same as Panel BG (#181b1f) but has hover effect (#22252b)
-      const cardHTML = `
-            <div class="bg-dark-panel border border-dark-border hover:border-gnfc-blue hover:bg-dark-header rounded-sm p-3 relative group cursor-pointer transition-all duration-200 h-24 flex flex-col justify-between shadow-sm">
-                <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-sm" style="background-color: ${u.color}"></div>
-                
-                <div class="flex justify-between items-start pl-3">
-                    <h4 class="font-bold  text-sm tracking-tight">${u.name}</h4>
-                    <i class="ph-fill ph-circle text-[8px] animate-pulse" style="color: ${u.color}"></i>
-                </div>
-                
-                <div class="pl-3 flex items-end justify-between border-t border-white/5 pt-2 mt-1">
-                    <span class="text-xs font-mono font-medium" style="color: ${u.color}">${u.status}</span>
-                    <span class="text-[10px] text-[#8e8e9e] group-hover:text-[#5794F2] flex items-center gap-1">
-                        View <i class="ph-bold ph-caret-right"></i>
-                    </span>
-                </div>
-            </div>`;
-      grid.innerHTML += cardHTML;
-    });
-  </script>
+  <!-- ═══════ DASHBOARD LOGIC ═══════ -->
+  <script src="/src/js/dashboard.js"></script>
 </body>
 
 </html>

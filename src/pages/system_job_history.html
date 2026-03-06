@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNFC | System Job History</title>
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+  <style>
+    .datatable-input {
+      background-color: var(--app-bg);
+      border: 1px solid var(--app-border);
+      color: var(--typo-primary);
+    }
+
+    .datatable-selector {
+      background-color: var(--app-bg);
+      border: 1px solid var(--app-border);
+      color: var(--typo-primary);
+    }
+
+    .datatable-pagination a {
+      color: var(--typo-primary);
+    }
+
+    .datatable-pagination .datatable-active a,
+    .datatable-pagination .datatable-active a:focus,
+    .datatable-pagination .datatable-active a:hover {
+      background-color: var(--app-bg);
+      color: var(--typo-orange);
+    }
+  </style>
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111217;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2C3235;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+
+    /* Remove default arrow */
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: none;
+    }
+
+
+    /* Table Fixes */
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    /* Input autofill fix for dark mode */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+      -webkit-text-fill-color: #f1f5f9;
+      -webkit-box-shadow: 0 0 0px 1000px #0f172a inset;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* MicroModal base */
+    .modal {
+      display: none;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal.is-open .gnfc-modal-overlay {
+      display: flex;
+    }
+  </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <script src="/src/js/header.js"></script>
+  <div id="sidebar-container"></div>
+  <script>try { renderSidebar('plants'); } catch (e) { }</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <div id="header-container"></div>
+    <script>
+      renderHeader({
+                title: "System Job History",
+                breadcrumbs: [
+                    { label: "Plant", href: "/src/pages/plant_status.html" },
+                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+                    { label: "System Job History" }
+                ],
+                backLink: "/src/pages/boiler_dashboard.html"
+            });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+      <div class="bg-dark-panel border border-dark-border rounded-md shadow-sm my-4">
+        <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center">
+          <h3 class="font-13px fw-bold color-blue uppercase text-upper ls-widest flex items-center gap-2">
+            <i class="ph-bold ph-sliders-horizontal"></i> Search Criteria
+          </h3>
+
+          <div class="flex gap-2">
+            <div>
+              <button
+                class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-8 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-6"
+                onclick="openAddJobModal()">
+                Add Job
+              </button>
+            </div>
+            <button id="filter-btn-default" onclick="setDateFilter('default')"
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Default
+              Date</button>
+            <button id="filter-btn-prev" onclick="setDateFilter('prev')"
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Prev
+              Year</button>
+            <button id="filter-btn-this" onclick="setDateFilter('this')"
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">This
+              Year</button>
+            <button id="filter-btn-next" onclick="setDateFilter('next')"
+              class="font-12px bg-dark-bg border border-dark-border hover:border-gnfc-blue px-2 py-1 rounded-sm color-secondary transition-colors">Next
+              Year</button>
+          </div>
+        </div>
+
+        <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+          <div class="space-y-1">
+            <label class="font-12px fw-bold color-label text-upper">System</label>
+            <div class="relative">
+              <select
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
+                <option>All</option>
+                <option>Max Dsc</option>
+                <option>Mil Dsc</option>
+                <option>Dsc</option>
+                <option>Esd</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-12px fw-bold color-label text-upper">Category</label>
+            <div class="relative">
+              <select id="tagSelect"
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
+                <option value="">ALL</option>
+                <option>Hardware Failure</option>
+                <option>Software Problem</option>
+                <option>Maintenance</option>
+                <option>Major Upgrade</option>
+                <option>Modification</option>
+                <option>System Backup</option>
+                <option>Continuons Cost of Ownership</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-12px fw-bold color-label text-upper">HW Type</label>
+            <div class="relative">
+              <select id="filter-jobtype"
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
+                <option value="">ALL</option>
+                <option>Satations</option>
+                <option>Control modules</option>
+                <option>IO modules</option>
+                <option>COM modules</option>
+                <option>CRT modules</option>
+                <option>Power Supply</option>
+                <option>Peripherals</option>
+                <option>Cables/Connectors</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-12px fw-bold color-label text-upper">Instrument Type</label>
+            <div class="relative">
+              <select id="filter-insttype"
+                class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none cursor-pointer color-primary">
+                <option value="">ALL</option>
+              </select>
+              <i
+                class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-12px fw-bold color-label text-upper">Start Date</label>
+            <input type="date" id="filter-start-date" value="2025-02-09"
+              class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+          </div>
+
+          <div class="space-y-1">
+            <label class="font-12px fw-bold color-label text-upper">End Date</label>
+            <input type="date" id="filter-end-date" value="2026-02-09"
+              class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
+          </div>
+
+          <div class="flex items-end gap-2">
+            <div class="space-y-1 flex-1">
+              <label class="font-12px fw-bold color-label text-upper">Filter Options</label>
+              <div class="flex gap-2">
+                <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
+                  <input type="checkbox" class="accent-gnfc-blue">
+                  <span class="font-13px color-primary">Remark</span>
+                </div>
+                <div class="flex items-center gap-1 bg-dark-bg px-2 py-1.5 border border-dark-border rounded-sm w-full">
+                  <input type="checkbox" class="accent-gnfc-blue">
+                  <span class="font-13px color-primary">Attach</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-end gap-2">
+            <button
+              class="flex-1 bg-gnfc-blue hover:bg-blue-600 fw-bold h-8 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide"
+              onclick="renderTable()">
+              <i class="ph-bold ph-lightning"></i> Apply
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="bg-dark-panel border border-dark-border rounded-sm shadow-sm flex flex-col flex-1 overflow-hidden">
+        <div class="bg-dark-header px-4 py-2 border-b border-dark-border flex justify-between items-center shrink-0">
+          <h3 class="font-13px fw-bold text-upper ls-wider flex items-center gap-2">
+            <i class="ph-fill ph-table color-orange"></i> Job Records
+          </h3>
+          <span class="font-12px bg-dark-bg border border-dark-border px-2 py-0.5 rounded color-label "
+            id="recordCount">0 Records Found</span>
+        </div>
+
+        <div class="gnfc-table-container overflow-auto flex-1 relative">
+          <table class="gnfc-table">
+            <thead class="gnfc-thead z-10">
+              <tr>
+                <th rowspan="2" class="gnfc-th w-12 sticky left-0 z-20 shadow-[1px_0_0_0_#e5e7eb]">Sr</th>
+                <th rowspan="2" class="gnfc-th w-24 border-r border-gray-300">System</th>
+                <th class="gnfc-th min-w-[120px] border-b border-gray-300 border-r border-gray-300">HW Type</th>
+                <th rowspan="2" class="gnfc-th w-28 border-r border-gray-300">Date</th>
+                <th rowspan="2" class="gnfc-th min-w-[400px] text-left border-r border-gray-300">Description</th>
+                <th class="gnfc-th w-20 border-b border-gray-300 border-r border-gray-300">Tech</th>
+                <th rowspan="2" class="gnfc-th w-12 border-r border-gray-300">Attach</th>
+                <th rowspan="1" class="gnfc-th min-w-[200px] border-b border-gray-300 border-r border-gray-300">EngRemark</th>
+                <th rowspan="2" class="gnfc-th w-16">Status</th>
+              </tr>
+              <tr>
+                <th class="gnfc-th border-r border-gray-300 px-3 py-1">Category</th>
+                <th class="gnfc-th border-r border-gray-300 px-2 py-1">Eng</th>
+                <th class="gnfc-th border-r border-gray-300 px-2 py-1">ExecRemark</th>
+              </tr>
+            </thead>
+            <tbody id="jobTableBody" class="gnfc-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="job-detail-overlay" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell">
+      <div class="gnfc-modal-header">
+        <h3 class="gnfc-modal-title">Job History Detail</h3>
+        <button onclick="closeJobDetailModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <div class="gnfc-modal-body" style="overflow-y:auto;">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="gnfc-modal-label">System</label>
+            <select id="modal-system" class="gnfc-modal-input">
+              <option value="">ALL</option>
+              <option>MAX DCS</option>
+              <option>MIL DCS</option>
+              <option>DSC</option>
+              <option>ESD</option>
+            </select>
+          </div>
+          <div>
+            <label class="gnfc-modal-label">Category</label>
+            <select id="modal-category" class="gnfc-modal-input">
+              <option value="">ALL</option>
+              <option>HARDWARE PROBLEM</option>
+              <option>SOFTWARE PROBLEM</option>
+              <option>MAINTENANCE</option>
+              <option>MAJOR UPGRADE</option>
+              <option>MODIFICATION</option>
+              <option>SYSTEM BACKUP</option>
+              <option>CONTINUOUS COST OF OWNERSHIP</option>
+            </select>
+          </div>
+          <div>
+            <label class="gnfc-modal-label">HW Type</label>
+            <select id="modal-hwtype" class="gnfc-modal-input">
+              <option value="">ALL</option>
+              <option>STATIONS</option>
+              <option>CONTROL MODULES</option>
+              <option>IO MODULES</option>
+              <option>COM MODULES</option>
+              <option>CRT MODULES</option>
+              <option>POWER SUPPLY</option>
+              <option>PERIPHERALS</option>
+              <option>CABLES/CONNECTORS</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="gnfc-modal-label">Job Description</label>
+          <textarea id="modal-description" rows="5" class="gnfc-modal-input leading-relaxed"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          <div>
+            <label class="gnfc-modal-label">Date</label>
+            <input type="date" id="modal-date" class="gnfc-modal-input">
+          </div>
+          <div>
+            <label class="gnfc-modal-label">Tech</label>
+            <select id="modal-tech" class="gnfc-modal-input">
+              <option value=""></option>
+              <option>BSU</option>
+              <option>PYS</option>
+              <option>V+M</option>
+            </select>
+          </div>
+          <div>
+            <label class="gnfc-modal-label">Eng</label>
+            <input type="text" id="modal-eng" class="gnfc-modal-input">
+          </div>
+          <div>
+            <label class="gnfc-modal-label">Status</label>
+            <select id="modal-status" class="gnfc-modal-input">
+              <option value=""></option>
+              <option>Completed</option>
+              <option>Pending</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="gnfc-modal-label mb-1">Attachments</label>
+          <div class="grid grid-cols-2 gap-3">
+            <!-- Attach 1 -->
+            <div>
+              <div id="attach-card-1" onclick="openAttachmentModal(1)"
+                class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                  <div
+                    class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                    <i class="ph-fill ph-file-text text-lg"></i>
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 1</span>
+                    <span id="display-attach-1" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
+                  </div>
+                </div>
+                <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+              </div>
+              <div id="attach-msg-1"
+                class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
+                <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 1</span>
+                <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
+              </div>
+            </div>
+
+            <!-- Attach 2 -->
+            <div>
+              <div id="attach-card-2" onclick="openAttachmentModal(2)"
+                class="bg-dark-bg border border-dark-border rounded-sm p-2 flex items-center justify-between cursor-pointer hover:border-gnfc-blue group transition-colors">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                  <div
+                    class="bg-blue-500/10 p-1.5 rounded-sm text-blue-500 group-hover:text-blue-400 group-hover:bg-blue-500/20 transition-colors">
+                    <i class="ph-fill ph-file-text text-lg"></i>
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-11px color-label leading-none mb-0.5 uppercase tracking-wide">Attach 2</span>
+                    <span id="display-attach-2" class="font-12px color-primary fw-bold leading-tight truncate">-</span>
+                  </div>
+                </div>
+                <i class="ph-bold ph-upload-simple text-gray-500 group-hover:text-gnfc-blue transition-colors"></i>
+              </div>
+              <div id="attach-msg-2"
+                class="hidden h-[54px] flex-col items-center justify-center bg-dark-bg border border-dashed border-dark-border rounded-sm px-4 py-2 font-10px font-semibold">
+                <span class="font-11px color-label mb-0.5 uppercase tracking-wide">Attach 2</span>
+                <span class="font-11px color-secondary italic">Can be attached in edit mode</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label class="gnfc-modal-label">Engineer's Remark</label>
+            <textarea id="modal-eng-remark" rows="3" class="gnfc-modal-input"></textarea>
+          </div>
+          <div>
+            <label class="gnfc-modal-label">Executive Remark</label>
+            <textarea id="modal-exec-remark" rows="3" class="gnfc-modal-input"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="gnfc-modal-footer gnfc-modal-footer--space-between">
+        <button id="modal-delete-btn" onclick="deleteJob()" class="gnfc-modal-btn gnfc-modal-btn-danger">Delete
+          Entry</button>
+        <div class="flex gap-3 ml-auto">
+          <button onclick="closeJobDetailModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+          <button id="modal-save-btn" onclick="saveJobDetails()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save
+            Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attachment Upload Modal -->
+  <div id="attachment-modal" class="gnfc-modal-overlay" aria-hidden="true" style="z-index: 140;">
+    <div class="gnfc-modal-shell gnfc-modal-shell--narrow">
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">Upload Attachment</h3>
+          <p class="gnfc-modal-subtitle font-12px">Add supporting documents</p>
+        </div>
+        <button onclick="closeAttachmentModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="gnfc-modal-body">
+        <!-- Upload Zone -->
+        <div class="relative group">
+          <input type="file" id="upload-file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            onchange="handleFileSelect(this)">
+          <div id="upload-zone"
+            class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50/50 group-hover:border-blue-400 transition-all duration-200">
+            <div
+              class="bg-white p-2 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform duration-200">
+              <i class="ph-duotone ph-cloud-arrow-up text-xl text-blue-500"></i>
+            </div>
+            <p class="font-12px font-semibold text-gray-700 mb-1">Click to upload or drag and drop</p>
+            <p class="font-11px">Upload pdf file (max. 10MB)</p>
+          </div>
+        </div>
+
+        <!-- Selected File Display (Hidden initially) -->
+        <div id="file-preview"
+          class="hidden bg-blue-50 border border-blue-100 rounded-lg p-3 items-center justify-between">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="bg-white p-2 rounded text-blue-600">
+              <i class="ph-fill ph-file-text text-xl"></i>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span id="preview-filename" class="font-12px font-semibold text-gray-800 truncate">filename.pdf</span>
+              <span id="preview-filesize" class="font-11px text-gray-500">0 KB</span>
+            </div>
+          </div>
+          <button onclick="clearFileSelection()" class="text-gray-400 hover:text-red-500 transition-colors p-1">
+            <i class="ph-bold ph-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="gnfc-modal-footer">
+        <button onclick="closeAttachmentModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button onclick="saveAttachment()" class="gnfc-modal-btn gnfc-modal-btn-primary">Save File</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inline Functional Logic -->
+  <script>
+    /* -------------------------------------------------------------------------- */
+    /*                                  Constants                                 */
+    /* -------------------------------------------------------------------------- */
+    const JOB_TYPES = ["PM", "DOCUMENTATION", "HOUSE KEEPING", "ABNORMALITY", "MODIFICATION", "ISO14001", "FIELD JOB", "REVAMP", "DEFECT MAINTENANCE", "CONFIGURATION", "SPARE REPAIR", "SCRAP", "MATL RETURN", "RANGE CHANGE", "CARD FAILURE", "INST FAILURE", "INSPECTION", "CASH PURCHASE", "PROCESS REQMT", "N.A."];
+    const INST_TYPES = ["ANALYZER", "C/V", "TX", "SWITCH", "PRIMARY ELEMENT", "SCANNER", "PCV", "ROTAMETER", "ENVIRON MONITORING", "MACHINE MONITORING", "PA SYSTEM", "PC", "N.A."];
+    const INITIAL_JOB_DATA = [
+      { sr: 1, system: "MAX DCS", hwType: "IO MODULES", category: "HARDWARE PROBLEM", date: "2025-12-19", desc: "AUX: C2PCI RJMH A2B card was failed.\nNew card arranged from store.\nIts jumpers and address settings done.\nReplaced card.\nWorking ok.\nRemoved card kept with tag.\nSame checked with M(MND),ID(TRC),IE(ARP).", tech: "PYS", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 2, system: "MAX DCS", hwType: "IO MODULES", category: "HARDWARE PROBLEM", date: "2025-12-16", desc: "All input of 2CJH01RLM4 were indicating faulty values.\nDetail checked found card in fault, Analog Input card removed, clean and fixed back.\nValue indicating normal.", tech: "V+M", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 3, system: "MAX DCS", hwType: "STATIONS", category: "HARDWARE PROBLEM", date: "2025-12-16", desc: "Operator station HMI display replaced with spare one.", tech: "V+M", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 4, system: "MAX DCS", hwType: "STATIONS", category: "HARDWARE PROBLEM", date: "2025-12-15", desc: "Engineering station HMI does not power on so replaced with spare one.\nDefective HMI kept at CPU room with tag.", tech: "V+M", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 5, system: "ESD", hwType: "CONTROL MODULES", category: "MAJOR UPGRADE", date: "2025-10-02", desc: "Cable laying job taken...\nLoop simulation taken with electrical.", tech: "BSU", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" },
+      { sr: 6, system: "ESD", hwType: "IO MODULES", category: "HARDWARE PROBLEM", date: "2025-08-29", desc: "TK fan and mass flow indication to DCS related logics.\nVarious exercises done.", tech: "PYS", eng: "PMP", attach: false, remark: "", execRemark: "", status: "" }
+    ];
+
+    /* -------------------------------------------------------------------------- */
+    /*                               Global State                                 */
+    /* -------------------------------------------------------------------------- */
+    let jobData = [...INITIAL_JOB_DATA];
+    let dataTable = null;
+    let currentJobId = null;
+    let currentAttachmentSlot = null;
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 Utilities                                  */
+    /* -------------------------------------------------------------------------- */
+    const DateUtils = {
+      formatDisplay: (iso) => iso ? new Date(iso).toLocaleDateString("en-GB") : "",
+      formatInput: (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
+      getFilters: (year) => ({
+        default: { start: new Date(new Date().setFullYear(new Date().getFullYear() - 1)), end: new Date() },
+        prev: { start: new Date(year - 1, 0, 1), end: new Date(year - 1, 11, 31) },
+        this: { start: new Date(year, 0, 1), end: new Date(year, 11, 31) },
+        next: { start: new Date(year + 1, 0, 1), end: new Date(year + 1, 11, 31) },
+      }),
+    };
+
+    const FileUtils = {
+      formatSize: (bytes) => {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024, sizes = ["Bytes", "KB", "MB", "GB"], i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      },
+    };
+
+    /* -------------------------------------------------------------------------- */
+    /*                               Core Functions                               */
+    /* -------------------------------------------------------------------------- */
+    function init() {
+      loadExportedData();
+      populateDropdowns();
+      renderTable();
+      bindGlobalEvents();
+    }
+
+    function loadExportedData() {
+      try {
+        const exported = JSON.parse(localStorage.getItem("gnfc_job_history") || "[]");
+        const exportedMapped = exported.map((r) => ({
+          sr: 0, area: r.area || "", loop: r.loop || "", tag: r.tag || r.instTag || "",
+          instType: r.instType || "", jobType: r.jobType || "", date: r.date || "",
+          desc: r.desc || "", tech: r.tech || "", eng: r.eng || "", attach: false,
+          remark: `<span class="font-12px px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-sm fw-bold">${r.type === "system" ? "System" : "General"} </span>`,
+          isExported: true,
+        }));
+        jobData = [...jobData, ...exportedMapped].map((job, idx) => ({ ...job, sr: idx + 1 }));
+      } catch (e) { console.error("Failed to load localStorage Data", e); }
+    }
+
+    function bindGlobalEvents() {
+      document.addEventListener("click", (e) => {
+        if (e.target.id === "job-detail-overlay") closeJobDetailModal();
+        if (e.target.id === "attachment-modal") closeAttachmentModal();
+      });
+    }
+
+    window.populateDropdowns = function() {
+      const populate = (id, opts, addAll = false) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = addAll ? '<option value="">ALL</option>' : "";
+        opts.forEach((opt) => el.insertAdjacentHTML("beforeend", `<option value="${opt}">${opt}</option>`));
+      };
+      const uniqueTags = [...new Set(jobData.map((item) => item.tag).filter(Boolean))];
+      populate("tagSelect", uniqueTags, true);
+      populate("filter-jobtype", JOB_TYPES, true);
+      populate("filter-insttype", INST_TYPES, true);
+    }
+
+    window.setDateFilter = function(type) {
+      const filters = DateUtils.getFilters(new Date().getFullYear());
+      const { start, end } = filters[type];
+      document.getElementById("filter-start-date").value = DateUtils.formatInput(start);
+      document.getElementById("filter-end-date").value = DateUtils.formatInput(end);
+      ["default", "prev", "this", "next"].forEach((btnType) => {
+        const btn = document.getElementById(`filter-btn-${btnType}`);
+        if (btn) {
+          const isActive = btnType === type;
+          btn.className = `font-12px px-2 py-1 rounded-sm transition-colors ${isActive ? "bg-blue-500/10 border border-gnfc-blue color-blue" : "bg-dark-bg border border-dark-border hover:border-gnfc-blue color-secondary"}`;
+        }
+      });
+    }
+
+    window.renderTable = function() {
+      const tableElement = document.querySelector(".gnfc-table");
+      if (!tableElement) return;
+      if (dataTable) dataTable.destroy();
+      const tbody = document.getElementById("jobTableBody");
+      const recordCount = document.getElementById("recordCount");
+      if (recordCount) recordCount.innerText = `${jobData.length} Records Found`;
+
+      tbody.innerHTML = jobData.map((item, index) => {
+        const formattedDesc = (item.desc || "").replace(/\\n/g, "<br>").replace(/\n/g, "<br>");
+        const attachIcon = item.attach
+          ? '<i class="ph-bold ph-paperclip text-blue-600 cursor-pointer" onclick="event.stopPropagation();"></i>'
+          : '<span class="opacity-30">-</span>';
+        
+        // Alternating color class (zebra striping)
+        const rowBgClass = index % 2 !== 0 ? "bg-gray-100/5" : "";
+        
+        return `
+          <tr class="gnfc-tr group align-top cursor-pointer transition-colors ${rowBgClass} hover:bg-gray-100/10" onclick="openJobDetailModal(${item.sr})">
+            <td class="gnfc-td text-center text-blue-600 fw-bold border-r border-gray-300 sticky left-0 z-10 bg-dark-bg group-hover:bg-dark-panel shadow-[1px_0_0_0_#e5e7eb]">${item.sr}</td>
+            <td class="gnfc-td text-center font-15px color-primary border-r border-gray-300">${item.system}</td>
+            <td class="gnfc-td border-r border-gray-300">
+              <div class="font-13px color-primary">${item.hwType}</div>
+              <div class="border-b border-gray-300 mt-1"></div>
+              <div class="font-13px color-primary mt-1">${item.category}</div>
+            </td>
+            <td class="gnfc-td whitespace-nowrap border-r border-gray-300 font-13px">${DateUtils.formatDisplay(item.date)}</td>
+            <td class="gnfc-td color-primary leading-relaxed font-13px border-r border-gray-300">${formattedDesc}</td>
+            <td class="gnfc-td border-r border-gray-300">
+              <div class="font-13px color-primary">${item.tech}</div>
+              <div class="border-b border-gray-300 mt-1"></div>
+              <div class="font-13px color-primary fw-bold mt-1">${item.eng}</div>
+            </td>
+            <td class="gnfc-td text-center border-r border-gray-300 font-13px">${attachIcon}</td>
+            <td class="gnfc-td border-r border-gray-300">
+              <div class="font-13px color-primary">${item.remark || ""}</div>
+              <div class="border-b border-gray-300 mt-1 mb-1"></div>
+              <div class="font-13px color-primary">${item.execRemark || ""}</div>
+            </td>
+            <td class="gnfc-td border-r border-gray-300 text-center font-13px">${item.status || ""}</td>
+          </tr>`;
+      }).join("");
+
+      if (jobData.length > 0 && typeof simpleDatatables !== "undefined") {
+        dataTable = new simpleDatatables.DataTable(tableElement, {
+          perPage: 10, perPageSelect: [10, 25, 50, 100], searchable: false, fixedHeight: false,
+          labels: { placeholder: "Search...", perPage: "{select} entries per page", noRows: "No entries found", info: "Showing {start} to {end} of {rows} entries" },
+        });
+      }
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                               Modal Functions                              */
+    /* -------------------------------------------------------------------------- */
+    function toggleModal(isOpen) {
+      const overlay = document.getElementById("job-detail-overlay");
+      overlay?.classList.toggle("is-open", isOpen);
+      overlay?.setAttribute("aria-hidden", (!isOpen).toString());
+    }
+
+    function toggleAttachmentsMode(isEdit) {
+      ["1", "2"].forEach((slot) => {
+        document.getElementById(`attach-card-${slot}`)?.classList.toggle("hidden", !isEdit);
+        document.getElementById(`attach-msg-${slot}`)?.classList.toggle("hidden", isEdit);
+      });
+    }
+
+    window.openAddJobModal = function() {
+      currentJobId = null;
+      setModalValues({
+        "modal-system": "", "modal-category": "", "modal-hwtype": "", "modal-description": "",
+        "modal-date": DateUtils.formatInput(new Date()), "modal-tech": "", "modal-eng": "",
+        "modal-status": "", "modal-eng-remark": "", "modal-exec-remark": ""
+      });
+      document.getElementById("display-attach-1").textContent = "-";
+      document.getElementById("display-attach-2").textContent = "-";
+      document.querySelector(".gnfc-modal-title").textContent = "Add New Job";
+      document.getElementById("modal-delete-btn").style.display = "none";
+      document.getElementById("modal-save-btn").textContent = "Add Job";
+      toggleAttachmentsMode(false);
+      toggleModal(true);
+    }
+
+    window.openJobDetailModal = function(srNumber) {
+      const job = jobData.find((j) => String(j.sr) === String(srNumber));
+      if (!job) return;
+      currentJobId = srNumber;
+      setModalValues({
+        "modal-system": job.system || "", "modal-category": job.category || "", "modal-hwtype": job.hwType || "",
+        "modal-description": job.desc || "", "modal-date": job.date || "", "modal-tech": job.tech || "",
+        "modal-eng": job.eng || "", "modal-status": job.status || "", "modal-eng-remark": job.remark || "",
+        "modal-exec-remark": job.execRemark || ""
+      });
+      document.getElementById("display-attach-1").textContent = job.attach ? "Report.pdf" : "-";
+      document.getElementById("display-attach-2").textContent = "-";
+      document.querySelector(".gnfc-modal-title").textContent = "Job History Detail";
+      document.getElementById("modal-delete-btn").style.display = "block";
+      document.getElementById("modal-save-btn").textContent = "Save Changes";
+      toggleAttachmentsMode(true);
+      toggleModal(true);
+    }
+
+    window.closeJobDetailModal = function() {
+      toggleModal(false);
+      currentJobId = null;
+    }
+
+    function setModalValues(values) {
+      Object.entries(values).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      });
+    }
+
+    function getModalValues() {
+      return {
+        system: document.getElementById("modal-system")?.value || "",
+        category: document.getElementById("modal-category")?.value || "",
+        hwType: document.getElementById("modal-hwtype")?.value || "",
+        desc: document.getElementById("modal-description")?.value || "",
+        date: document.getElementById("modal-date")?.value || "",
+        tech: document.getElementById("modal-tech")?.value || "",
+        eng: document.getElementById("modal-eng")?.value || "",
+        status: document.getElementById("modal-status")?.value || "",
+        remark: document.getElementById("modal-eng-remark")?.value || "",
+        execRemark: document.getElementById("modal-exec-remark")?.value || "",
+      };
+    }
+
+    window.saveJobDetails = function() {
+      const formValues = getModalValues();
+      const isAttached = document.getElementById("display-attach-1")?.textContent !== "-";
+      if (currentJobId !== null) {
+        jobData = jobData.map((j) => j.sr === currentJobId ? { ...j, ...formValues, attach: isAttached } : j);
+        showNotification("Updated!", "Job details have been updated.");
+      } else {
+        const newSr = jobData.reduce((max, j) => Math.max(max, j.sr), 0) + 1;
+        jobData.push({ sr: newSr, ...formValues, attach: isAttached });
+        showNotification("Added!", "New job has been added.");
+      }
+      toggleModal(false);
+      renderTable();
+    }
+
+    window.deleteJob = async function() {
+      if (!window.Swal) return;
+      const result = await Swal.fire({
+        title: "Are you sure?", text: "Do you want to delete this job entry?", icon: "warning",
+        width: 400, padding: "1em", showCancelButton: true, confirmButtonColor: "#d33", cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!", customClass: { title: "font-18px", htmlContainer: "font-14px", popup: "font-12px" },
+      });
+      if (result.isConfirmed) {
+        jobData = jobData.filter((j) => j.sr !== currentJobId);
+        toggleModal(false);
+        renderTable();
+        showNotification("Deleted!", "The job entry has been deleted.", "success", 400);
+      }
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 Attachments                                */
+    /* -------------------------------------------------------------------------- */
+    window.openAttachmentModal = function(slot) {
+      currentAttachmentSlot = slot;
+      clearFileSelection();
+      const modal = document.getElementById("attachment-modal");
+      modal?.classList.add("is-open");
+      modal?.setAttribute("aria-hidden", "false");
+    }
+
+    window.closeAttachmentModal = function() {
+      const modal = document.getElementById("attachment-modal");
+      modal?.classList.remove("is-open");
+      modal?.setAttribute("aria-hidden", "true");
+      currentAttachmentSlot = null;
+    }
+
+    window.handleFileSelect = function(input) {
+      if (input.files?.[0]) {
+        const file = input.files[0];
+        document.getElementById("upload-zone")?.classList.add("hidden");
+        const preview = document.getElementById("file-preview");
+        preview?.classList.remove("hidden");
+        preview?.classList.add("flex");
+        document.getElementById("preview-filename").textContent = file.name;
+        document.getElementById("preview-filesize").textContent = FileUtils.formatSize(file.size);
+      }
+    }
+
+    window.clearFileSelection = function() {
+      const input = document.getElementById("upload-file-input");
+      if (input) input.value = "";
+      document.getElementById("upload-zone")?.classList.remove("hidden");
+      const preview = document.getElementById("file-preview");
+      preview?.classList.add("hidden");
+      preview?.classList.remove("flex");
+    }
+
+    window.saveAttachment = function() {
+      const input = document.getElementById("upload-file-input");
+      if (input?.files?.length > 0 && currentAttachmentSlot) {
+        const displayEl = document.getElementById(`display-attach-${currentAttachmentSlot}`);
+        if (displayEl) {
+          displayEl.textContent = input.files[0].name;
+          displayEl.classList.add("text-blue-600", "fw-bold");
+        }
+      }
+      closeAttachmentModal();
+    }
+
+    function showNotification(title, text, icon = "success", width = 300) {
+      if (!window.Swal) return;
+      Swal.fire({
+        icon, title, text, timer: 1500, showConfirmButton: false, width, padding: "1em",
+        customClass: { popup: "font-12px" },
+      });
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                    Init                                    */
+    /* -------------------------------------------------------------------------- */
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+  <script src="/src/js/emg_call_modal.js"></script>
+  <script src="/src/js/pagination.js"></script>
+
+</body>
+
+</html>

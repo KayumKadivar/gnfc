@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Log Report | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css">
+    <link rel="stylesheet" href="/src/css/typography.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <link rel="stylesheet" href="/src/css/modal-ui.css">
+    <link rel="stylesheet" href="/src/css/table-style.css">
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--app-bg, #111217);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--app-border, #2c3235);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--app-muted, #8e8e9e);
+        }
+
+        /* MicroModal base */
+        .modal {
+            display: none;
+        }
+
+        .modal.is-open {
+            display: block;
+        }
+
+        .modal.is-open .gnfc-modal-overlay {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden">
+
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <script src="/src/js/header.js"></script>
+
+    <div id="sidebar-container"></div>
+    <script>
+        try {
+            renderSidebar('technician_logbook');
+        } catch (e) {
+            // noop
+        }
+    </script>
+
+    <main class="theme-contrast-lock flex-1 flex flex-col h-screen overflow-hidden">
+
+        <div id="header-container"></div>
+        <script>
+            renderHeader({
+                title: "Acetic Acid Logbook",
+                breadcrumbs: [
+                    { label: "Technician Log", href: "technician_logbook.html" },
+                    { label: "Plant Detail", href: "plant_detail.html" },
+                    { label: "Pending Log" }
+                ],
+                backLink: "plant_detail.html"
+            });
+        </script>
+
+        <div class="p-4 bg-dark-bg overflow-y-auto flex-1">
+            <!-- Top Navigation Bar -->
+            <div id="plant-nav-container"></div>
+            <script src="/src/js/plant_nav.js"></script>
+            <script>
+                renderPlantNav('pending_log');
+            </script>
+
+            <div class="w-full">
+                <!-- Pending Log Report -->
+                <div class="border border-dark-border rounded-sm shadow-lg my-4">
+
+                    <!-- Header with title and Delete All -->
+                    <div class="bg-dark-header border-b border-dark-border px-4 py-3 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="ph-fill ph-hourglass-medium color-orange"></i>
+                            <h3 class="fw-bold font-14px">Pending Log Report</h3>
+                            <span id="pendingCount"
+                                class="text-[10px] bg-dark-bg border border-dark-border px-2 py-0.5 rounded color-label typo-mono ml-2">0
+                                Pending</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="deleteAllPending()"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white font-12px fw-bold rounded-sm transition-all shadow-lg shadow-red-500/20">
+                                <i class="ph-bold ph-trash"></i>Delete All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alert banner (shown when pending > 50) -->
+                    <div id="alertBanner"
+                        class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-2 flex items-center gap-2 text-amber-400 text-xs">
+                        <i class="ph-bold ph-warning text-sm"></i>
+                        <span id="alertMessage"></span>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="gnfc-table-container overflow-x-auto">
+                        <table class="gnfc-table">
+                            <thead class="gnfc-thead">
+                                <tr>
+                                    <th class="gnfc-th w-10">Sr</th>
+                                    <th class="gnfc-th min-w-[80px]">TagNo</th>
+                                    <th class="gnfc-th min-w-[180px]">Job</th>
+                                    <th class="gnfc-th w-14">Tech</th>
+                                    <th class="gnfc-th min-w-[250px]">Description</th>
+                                    <th class="gnfc-th w-20">Tech<br>Status</th>
+                                    <th class="gnfc-th min-w-[120px]">Remarks</th>
+                                    <th class="gnfc-th w-14">Del</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody" class="gnfc-tbody">
+                                <!-- Pending log data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Sample pending log data
+        let pendingData = [
+            {
+                sr: 1, tagNo: 'HV_1402',
+                job: 'C/V to be calibrated after installation of positioner. (By:SHC : 20/01/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 2, tagNo: 'C_3401R',
+                job: 'SOUTHSIDE CYLINDER SUCTION PRESSURE INDICATION IS FAULTY. (By:SHC : 20/01/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 3, tagNo: 'NOTAG',
+                job: 'INSTRUMENT INSTALLATION HOOK UP TO BE PREPARED for MBU. (By:SHC : 03/02/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 4, tagNo: 'NOTAG',
+                job: 'Field round to be taken. (By:SHC : 10/02/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 5, tagNo: 'PT_2103',
+                job: 'Pressure transmitter calibration required due to deviation observed. (By:RKP : 15/02/2005)',
+                tech: 'RKS', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 6, tagNo: 'LT_1102',
+                job: 'Level transmitter showing fluctuating reading, check wiring and recalibrate. (By:SHC : 16/02/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 7, tagNo: 'TT_4501',
+                job: 'Temperature transmitter loop checking required from field to DCS. (By:KDP : 18/02/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 8, tagNo: 'FV_3201',
+                job: 'Flow control valve not responding properly, check positioner and actuator. (By:RKP : 19/02/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 9, tagNo: 'PI_1204',
+                job: 'Pressure indicator glass damaged, replacement required. (By:SHC : 21/02/2005)',
+                tech: 'RKS', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 10, tagNo: 'LIC_2301',
+                job: 'Level indicator controller calibration to be carried out. (By:KDP : 22/02/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 11, tagNo: 'PSV_1401',
+                job: 'Pressure safety valve functional test required. (By:SHC : 23/02/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 12, tagNo: 'AIT_3302',
+                job: 'Analyzer transmitter signal not coming in DCS, check signal cable. (By:RKP : 24/02/2005)',
+                tech: 'RKS', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 13, tagNo: 'FIT_4102',
+                job: 'Flow transmitter zero shifting observed, recalibration required. (By:KDP : 25/02/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 14, tagNo: 'XV_5201',
+                job: 'On/off valve limit switch malfunction, check and repair. (By:SHC : 26/02/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 15, tagNo: 'TT_6101',
+                job: 'Temperature reading mismatch between field and DCS. (By:RKP : 27/02/2005)',
+                tech: 'RKS', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 16, tagNo: 'LT_7102',
+                job: 'Level transmitter installation pending at tank area. (By:KDP : 28/02/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 17, tagNo: 'PT_8103',
+                job: 'Impulse line suspected blockage, flushing required. (By:SHC : 01/03/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 18, tagNo: 'FV_9101',
+                job: 'Flow valve air leakage observed from actuator. (By:RKP : 02/03/2005)',
+                tech: 'RKS', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 19, tagNo: 'AIT_1011',
+                job: 'Analyzer calibration overdue, calibration to be performed urgently. (By:KDP : 03/03/2005)',
+                tech: 'NHP', desc: '', techStatus: '', remarks: ''
+            },
+            {
+                sr: 20, tagNo: 'PI_1112',
+                job: 'Pressure gauge needle stuck, replacement required. (By:SHC : 04/03/2005)',
+                tech: 'BPB', desc: '', techStatus: '', remarks: ''
+            }
+        ];
+
+
+        function renderTable() {
+            const tbody = document.getElementById('pendingTableBody');
+            if (pendingData.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="p-8 text-center color-label">
+              <i class="ph-bold ph-check-circle text-3xl color-green mb-2 block"></i>
+              <span class="fw-bold font-15px">No pending jobs</span>
+              <p class="font-15px mt-1">All assigned jobs have been completed by technicians.</p>
+            </td>
+          </tr>
+        `;
+            } else {
+                tbody.innerHTML = pendingData.map((row, idx) => `
+          <tr class="gnfc-tr ${idx % 2 === 0 ? 'bg-gray-50' : ''}" id="row-${idx}">
+            <td class="gnfc-td text-center fw-bold text-black font-15px">${row.sr}</td>
+            <td class="gnfc-td color-orange fw-bold font-15px">${row.tagNo}</td>
+            <td class="gnfc-td leading-relaxed text-black font-15px">${row.job}</td>
+            <td class="gnfc-td text-center fw-semibold text-black font-15px">${row.tech}</td>
+            <td class="gnfc-td leading-relaxed text-black font-15px">${row.desc || '-'}</td>
+            <td class="gnfc-td text-center text-black font-15px">${row.techStatus || '-'}</td>
+            <td class="gnfc-td text-black font-15px">${row.remarks || '-'}</td>
+            <td class="gnfc-td text-center">
+              <button onclick="deletePending(${idx})" class="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-1 rounded transition-all" title="Delete this pending job">
+                <i class="ph-fill ph-trash font-16px"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+            }
+
+            document.getElementById('pendingCount').textContent = `${pendingData.length} Pending`;
+
+            // Show alert banner if pending > 50
+            const alertBanner = document.getElementById('alertBanner');
+            const alertMessage = document.getElementById('alertMessage');
+            if (pendingData.length > 150) {
+                alertBanner.classList.remove('hidden');
+                alertMessage.textContent = `Critical: ${pendingData.length} pending jobs! Pending log report will open automatically every time an engineer opens any logbook report.`;
+            } else if (pendingData.length > 50) {
+                alertBanner.classList.remove('hidden');
+                alertMessage.textContent = `Warning: ${pendingData.length} pending jobs! An alert will popup every time an engineer opens the logbook report.`;
+            } else {
+                alertBanner.classList.add('hidden');
+            }
+        }
+
+        function deletePending(index) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to delete this pending job?",
+                icon: "warning",
+                width: 400,
+                padding: "1em",
+                customClass: {
+                    title: "font-18px",
+                    htmlContainer: "font-14px",
+                    popup: "font-12px"
+                },
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const row = document.getElementById(`row-${index}`);
+                    if (row) {
+                        row.style.transition = 'all 0.3s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(20px)';
+                        setTimeout(() => {
+                            pendingData.splice(index, 1);
+                            // Re-number sr values
+                            pendingData.forEach((item, i) => item.sr = i + 1);
+                            renderTable();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "The job has been deleted.",
+                                icon: "success",
+                                width: 400,
+                                padding: "1em",
+                                customClass: {
+                                    title: "text-lg",
+                                    htmlContainer: "text-sm",
+                                    popup: "text-xs"
+                                }
+                            });
+                        }, 300);
+                    }
+                }
+            });
+        }
+
+        function deleteAllPending() {
+            if (pendingData.length === 0) return;
+
+            Swal.fire({
+                title: "Are you sure?",
+                html: `You are about to delete all <b>${pendingData.length}</b> pending jobs.<br>This action cannot be undone.`,
+                icon: "warning",
+                width: 400,
+                padding: "1em",
+                customClass: {
+                    title: "font-18px",
+                    htmlContainer: "font-14px",
+                    popup: "font-12px"
+                },
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete all!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Animate all rows out
+                    const rows = document.querySelectorAll('#pendingTableBody tr');
+                    rows.forEach((row, i) => {
+                        row.style.transition = `all 0.3s ease ${i * 0.05}s`;
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(20px)';
+                    });
+
+                    setTimeout(() => {
+                        pendingData = [];
+                        renderTable();
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "All pending jobs have been deleted.",
+                            icon: "success",
+                            width: 400,
+                            padding: "1em",
+                            customClass: {
+                                title: "font-18px",
+                                htmlContainer: "font-14px",
+                                popup: "font-12px"
+                            }
+                        });
+                    }, rows.length * 50 + 300);
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            renderTable();
+        });
+    </script>
+    <script src="/src/js/emg_call_modal.js"></script>
+
+    <script src="/src/js/pagination.js"></script>
+</body>
+
+</html>

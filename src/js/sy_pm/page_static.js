@@ -36,9 +36,9 @@ function showToast(message, tone = "info") {
 
   const root = getToastRoot();
   const toast = document.createElement("div");
-  
-  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 font-medium text-sm border backdrop-blur-md";
-  
+
+  let baseClasses = "pointer-events-auto min-w-[300px] max-w-md px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 opacity-100 fw-medium font-14px border backdrop-blur-md";
+
   if (tone === "error") {
     baseClasses += " bg-rose-950/90 text-rose-100 border-rose-800 shadow-rose-900/20";
   } else if (tone === "warn") {
@@ -46,16 +46,16 @@ function showToast(message, tone = "info") {
   } else if (tone === "success") {
     baseClasses += " bg-emerald-950/90 text-emerald-100 border-emerald-800 shadow-emerald-900/20";
   } else {
-    baseClasses += " bg-dark-panel/95 text-white border-dark-border shadow-black/50";
+    baseClasses += " bg-dark-panel/95 color-primary border-dark-border shadow-black/50";
   }
 
   toast.className = baseClasses + " translate-y-4 opacity-0";
-  
+
   let icon = "";
-  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle text-lg shrink-0"></i>';
-  else if (tone === "warn") icon = '<i class="ph-bold ph-warning text-lg shrink-0"></i>';
-  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle text-lg shrink-0"></i>';
-  else icon = '<i class="ph-bold ph-info text-lg shrink-0 text-gnfc-orange"></i>';
+  if (tone === "error") icon = '<i class="ph-bold ph-warning-circle font-18px shrink-0"></i>';
+  else if (tone === "warn") icon = '<i class="ph-bold ph-warning font-18px shrink-0"></i>';
+  else if (tone === "success") icon = '<i class="ph-bold ph-check-circle font-18px shrink-0"></i>';
+  else icon = '<i class="ph-bold ph-info font-18px shrink-0 color-orange"></i>';
 
   toast.innerHTML = `${icon}<span>${text}</span>`;
   root.appendChild(toast);
@@ -83,6 +83,7 @@ function openModal(target) {
   const modal = typeof target === "string" ? document.getElementById(target) : target;
   if (!modal) return;
   modal.classList.remove("hidden");
+  modal.classList.remove("pointer-events-none");
   requestAnimationFrame(() => {
     modal.classList.add("opacity-100");
   });
@@ -93,6 +94,7 @@ function closeModal(target) {
   const modal = typeof target === "string" ? document.getElementById(target) : target;
   if (!modal) return;
   modal.classList.remove("opacity-100");
+  modal.classList.add("pointer-events-none");
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
 }
@@ -128,9 +130,9 @@ function bindModalDismiss(modalId) {
   modal.dataset.bound = "true";
 }
 
-function confirmAction(message) {
-  return window.confirm(String(message || "Are you sure?"));
-}
+// function confirmAction(message) {
+//   return window.confirm(String(message || "Are you sure?"));
+// }
 
 function formatDateTime(dateValue) {
   const date = new Date(dateValue);
@@ -210,9 +212,9 @@ function renderHeader() {
 }
 
 function renderContext() {
-  const heading = document.getElementById("sy-context-heading");
-  const chipSystem = document.getElementById("sy-chip-system");
-  const chipFrequency = document.getElementById("sy-chip-frequency");
+  const heading = document.getElementById("static-context-heading");
+  const chipSystem = document.getElementById("static-chip-system");
+  const chipFrequency = document.getElementById("static-chip-frequency");
 
   if (heading) heading.textContent = buildContextHeading(state.context);
   if (chipSystem) chipSystem.textContent = state.context.systemCode;
@@ -220,62 +222,56 @@ function renderContext() {
 }
 
 function renderInstruction() {
-  const instructionText = document.getElementById("instruction-preview");
-  const instructionStamp = document.getElementById("instruction-updated-at");
+  const instructionText = document.getElementById("instruction-text"); // In modal
+  const instructionStamp = document.getElementById("instruction-updated"); // In modal
 
+  // Also update global instruction text if strictly displayed outside modal?
+  // Currently we only have instruction text inside the modal in the new design
+  
   if (instructionText) {
-    instructionText.textContent = state.instruction?.text || "No instruction found.";
+    instructionText.value = state.instruction?.text || ""; // Changed to value for textarea
   }
 
   if (instructionStamp) {
-    instructionStamp.textContent = `Updated: ${formatDateTime(state.instruction?.updatedAt || new Date())}`;
+    instructionStamp.textContent = `Last updated: ${formatDateTime(state.instruction?.updatedAt || new Date())}`;
   }
 }
 
 function renderRows() {
-  const tbody = document.getElementById("static-table-body");
-  const empty = document.getElementById("static-empty");
-  const count = document.getElementById("static-record-count");
+  const tbody = document.getElementById("static-list-body");
+  const emptyState = document.getElementById("static-empty-state");
+  const countSpan = document.getElementById("static-record-count");
 
   if (!tbody) return;
 
   tbody.innerHTML = "";
   state.rows = listStaticRows(state.context);
 
-  if (count) {
-    count.textContent = `${state.rows.length} records`;
+  if (countSpan) {
+    countSpan.textContent = `${state.rows.length} records`;
   }
 
   if (!state.rows.length) {
-    if (empty) {
-      empty.innerHTML = renderEmptyState(
-        "No static records",
-        "Add static rows before generating or filling reports.",
-        "Add Row"
-      );
-      empty.classList.remove("hidden");
-    }
+    if (emptyState) emptyState.classList.remove("hidden");
     return;
   }
 
-  if (empty) {
-    empty.classList.add("hidden");
-  }
+  if (emptyState) emptyState.classList.add("hidden");
 
   state.rows.forEach((row, index) => {
     const tr = document.createElement("tr");
     tr.className = "hover:bg-dark-header/50 transition-colors group";
     tr.innerHTML = `
-      <td class="px-4 py-3 text-center font-mono  text-[10px] border-r border-dark-border/10">${index + 1}</td>
-      <td class="px-4 py-3 font-medium text-dark-text text-[13px]">${row.item}</td>
-      <td class="px-4 py-3  text-xs leading-relaxed">${row.action || "-"}</td>
-      <td class="px-4 py-3 text-dark-text font-mono text-[11px] bg-dark-bg/30">${row.referenceValue || "-"}</td>
-      <td class="px-4 py-3 text-center space-x-2 flex ">
-        <button class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-[10px] font-bold rounded-md  hover:text-white hover:bg-dark-header border border-transparent hover:border-dark-border transition-all active:scale-95" data-action="edit" data-id="${row.id}">
-          <i class="ph-bold ph-pencil-simple text-sm"></i>
+      <td class="px-6 py-4 text-center typo-mono font-10px color-label border-r border-dark-border/10 w-16">${index + 1}</td>
+      <td class="px-6 py-4 font-14px fw-medium color-primary border-r border-dark-border/10">${row.item}</td>
+      <td class="px-6 py-4 font-12px color-label leading-relaxed border-r border-dark-border/10">${row.action || "-"}</td>
+      <td class="px-6 py-4 color-primary typo-mono font-10px bg-dark-bg/30 border-r border-dark-border/10">${row.referenceValue || "-"}</td>
+      <td class="px-6 py-4 text-right space-x-2">
+        <button class="inline-flex items-center justify-center p-2 rounded-lg hover:bg-white/10 color-label hover:color-primary transition-colors" data-action="edit" data-id="${row.id}">
+          <i class="ph-bold ph-pencil-simple font-16px"></i>
         </button>
-        <button class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-[10px] font-bold rounded-md bg-rose-900/20 text-rose-400 border border-rose-900/30 hover:bg-rose-900/40 hover:text-rose-200 transition-all active:scale-95" data-action="delete" data-id="${row.id}">
-          <i class="ph-bold ph-trash text-sm"></i>
+        <button class="inline-flex items-center justify-center p-2 rounded-lg hover:bg-rose-500/10 text-rose-500 transition-colors" data-action="delete" data-id="${row.id}">
+           <i class="ph-bold ph-trash font-16px"></i>
         </button>
       </td>
     `;
@@ -285,23 +281,23 @@ function renderRows() {
 
 function openRowModal(mode, row = null) {
   state.editMode = mode;
-  const title = document.getElementById("static-row-modal-title");
-  const idInput = document.getElementById("static-row-id");
-  const itemInput = document.getElementById("static-item");
-  const actionInput = document.getElementById("static-action");
-  const referenceInput = document.getElementById("static-reference");
+  const title = document.getElementById("modal-title");
+  const idInput = document.getElementById("item-id");
+  const itemInput = document.getElementById("item-name");
+  const actionInput = document.getElementById("item-action");
+  const referenceInput = document.getElementById("item-reference");
 
-  if (title) title.textContent = mode === "edit" ? "Edit Static Record" : "Add Static Record";
+  if (title) title.textContent = mode === "edit" ? "Edit Static Item" : "Add Static Item";
   if (idInput) idInput.value = row?.id || "";
   if (itemInput) itemInput.value = row?.item || "";
   if (actionInput) actionInput.value = row?.action || "";
   if (referenceInput) referenceInput.value = row?.referenceValue || "";
 
-  openModal("static-row-modal");
+  openModal("item-modal");
 }
 
 function openInstructionModal() {
-  const textArea = document.getElementById("instruction-input");
+  const textArea = document.getElementById("instruction-text");
   if (textArea) {
     textArea.value = state.instruction?.text || "";
   }
@@ -309,40 +305,40 @@ function openInstructionModal() {
 }
 
 function handleRowSubmit(event) {
-  event.preventDefault();
+  event.preventDefault(); // Just in case, though we bind click mostly for modals
 
-  const id = String(document.getElementById("static-row-id")?.value || "").trim();
-  const item = String(document.getElementById("static-item")?.value || "").trim();
-  const action = String(document.getElementById("static-action")?.value || "").trim();
-  const referenceValue = String(document.getElementById("static-reference")?.value || "").trim();
+  const id = String(document.getElementById("item-id")?.value || "").trim();
+  const item = String(document.getElementById("item-name")?.value || "").trim();
+  const action = String(document.getElementById("item-action")?.value || "").trim();
+  const referenceValue = String(document.getElementById("item-reference")?.value || "").trim();
 
   if (!item) {
-    showToast("Item is mandatory.", "error");
+    showToast("Item name is mandatory.", "error");
     return;
   }
 
   try {
     if (state.editMode === "edit" && id) {
       updateStaticRow(state.context, id, { item, action, referenceValue });
-      showToast("Static record updated.", "info");
+      showToast("Item updated successfully.", "info");
     } else {
       createStaticRow(state.context, { item, action, referenceValue });
-      showToast("Static record added.", "success");
+      showToast("Item added successfully.", "success");
     }
 
-    closeModal("static-row-modal");
+    closeModal("item-modal");
     renderRows();
   } catch (error) {
-    showToast(error.message || "Unable to save record.", "error");
+    showToast(error.message || "Unable to save item.", "error");
   }
 }
 
 function handleInstructionSave(event) {
-  event.preventDefault();
+  event.preventDefault(); // Just in case
 
-  const nextText = String(document.getElementById("instruction-input")?.value || "").trim();
+  const nextText = String(document.getElementById("instruction-text")?.value || "").trim();
   if (!nextText) {
-    showToast("Instruction text is required.", "error");
+    showToast("Instruction text cannot be empty.", "error");
     return;
   }
 
@@ -376,40 +372,64 @@ function handleTableActions(event) {
   }
 
   if (action === "delete") {
-    if (!confirmAction("Delete this static record?")) return;
-
-    try {
-      deleteStaticRow(state.context, rowId);
-      renderRows();
-      showToast("Static record deleted.", "warn");
-    } catch (error) {
-      showToast(error.message || "Unable to delete static record.", "error");
-    }
+    Swal.fire({
+      title: "Delete item?",
+      text: "This item will be removed from future reports.",
+      icon: "warning",
+      width: 400,
+      padding: "1em",
+      customClass: {
+        title: "text-lg",
+        htmlContainer: "text-sm",
+        popup: "text-xs"
+      },
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          deleteStaticRow(state.context, rowId);
+          renderRows();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Item has been deleted.",
+            icon: "success",
+            width: 400,
+            padding: "1em",
+            customClass: {
+              title: "text-lg",
+              htmlContainer: "text-sm",
+              popup: "text-xs"
+            }
+          });
+        } catch (error) {
+          showToast(error.message || "Unable to delete item.", "error");
+        }
+      }
+    });
   }
 }
 
 function bindEvents() {
-  const addBtn = document.getElementById("btn-add-record");
-  const editInstructionBtn = document.getElementById("btn-edit-instruction");
-  const gotoReportBtn = document.getElementById("btn-go-report");
-  const rowForm = document.getElementById("static-row-form");
-  const instructionForm = document.getElementById("instruction-form");
-  const tableBody = document.getElementById("static-table-body");
+  const addBtn = document.getElementById("btn-add-item");
+  const instructionBtn = document.getElementById("btn-instruction");
+  
+  const saveItemBtn = document.getElementById("btn-save-item");
+  const saveInstructionBtn = document.getElementById("btn-save-instruction");
+  
+  const tableBody = document.getElementById("static-list-body");
 
   if (addBtn) addBtn.addEventListener("click", () => openRowModal("create"));
-  if (editInstructionBtn) editInstructionBtn.addEventListener("click", openInstructionModal);
+  if (instructionBtn) instructionBtn.addEventListener("click", openInstructionModal);
 
-  if (gotoReportBtn) {
-    gotoReportBtn.addEventListener("click", () => {
-      window.location.href = buildRouteWithContext(SY_PM_ROUTES.reports, state.context);
-    });
-  }
-
-  if (rowForm) rowForm.addEventListener("submit", handleRowSubmit);
-  if (instructionForm) instructionForm.addEventListener("submit", handleInstructionSave);
+  if (saveItemBtn) saveItemBtn.addEventListener("click", handleRowSubmit);
+  if (saveInstructionBtn) saveInstructionBtn.addEventListener("click", handleInstructionSave);
+  
   if (tableBody) tableBody.addEventListener("click", handleTableActions);
 
-  bindModalDismiss("static-row-modal");
+  bindModalDismiss("item-modal");
   bindModalDismiss("instruction-modal");
 }
 

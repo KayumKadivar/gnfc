@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plant Sections | GNFC</title>
+  <title>Technician's Logbook | GNFC</title>
 
   <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -15,9 +16,210 @@
     window.activePage = 'technician_logbook';
   </script>
 
+  <style>
+    /* ===== GLASS CARD - Theme Aware ===== */
+    .glass-card {
+      background: var(--app-panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    html[data-theme-mode="dark"] .glass-card {
+      background: rgba(24, 27, 31, 0.6);
+    }
+
+    html[data-theme-mode="light"] .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    /* ===== GRADIENT BORDER ===== */
+    .gradient-border {
+      position: relative;
+    }
+
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(87, 148, 242, 0.3), rgba(20, 184, 166, 0.3), rgba(115, 191, 105, 0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    html[data-theme-mode="light"] .gradient-border::before {
+      background: linear-gradient(135deg, rgba(87, 148, 242, 0.2), rgba(20, 184, 166, 0.2), rgba(115, 191, 105, 0.2));
+    }
+
+    /* ===== PLANT CARD ===== */
+    .plant-card {
+      background: rgba(15, 23, 42, 0.26);
+      border: 2px solid #475569;
+      /* Slate-600 */
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .plant-card:hover {
+      transform: translateY(-2px);
+      border-color: #5794F2;
+      box-shadow: 0 8px 18px rgba(2, 6, 23, 0.2);
+    }
+
+    .plant-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+      color: var(--app-text, #e6edf3);
+    }
+
+    .plant-card-subtitle {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--app-muted, #9aa7b5);
+    }
+
+    .plant-card-action {
+      color: var(--app-muted, #9aa7b5);
+      transition: color 0.2s ease;
+    }
+
+    .plant-card:hover .plant-card-action {
+      color: #5794F2;
+    }
+
+    /* Light mode */
+    html[data-theme-mode="light"] .plant-card {
+      background: #ffffff !important;
+      border: 2px solid #cbd5e1 !important;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+    }
+
+    html[data-theme-mode="light"] .plant-card:hover {
+      border: 2px solid #5794F2 !important;
+    }
+
+    html[data-theme-mode="light"] .plant-card-subtitle {
+      color: #64748b;
+    }
+
+    /* ===== QUICK ACCESS CARD ===== */
+    .qa-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .qa-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .qa-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .qa-card:hover::before {
+      opacity: 1;
+    }
+
+    html[data-theme-mode="light"] .qa-card {
+      background: #ffffff !important;
+      border-color: var(--app-border) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    html[data-theme-mode="light"] .qa-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: var(--app-border);
+      border-radius: 4px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: var(--app-muted);
+    }
+
+    /* ===== SECTION LABEL UNDERLINE ===== */
+    .section-label {
+      position: relative;
+    }
+
+    .section-label::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #5794F2, #14b8a6);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .section-label:hover::after {
+      width: 100%;
+    }
+
+    /* ===== LIGHT THEME: Status chips & toolbar ===== */
+    html[data-theme-mode="light"] .glass-card .time-btn {
+      color: var(--app-muted);
+    }
+
+    html[data-theme-mode="light"] .glass-card .time-btn[aria-pressed="true"] {
+      color: #ffffff !important;
+    }
+
+    /* ===== LIGHT THEME: Footer ===== */
+    html[data-theme-mode="light"] footer {
+      background: rgba(255, 255, 255, 0.7) !important;
+      border-color: var(--app-border) !important;
+    }
+
+    /* ===== FADE IN ANIMATION ===== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+  </style>
 </head>
 
-<body class="bg-dark-bg text-dark-text font-sans h-screen flex overflow-hidden">
+<body class="bg-dark-bg color-primary font-sans h-screen flex overflow-hidden">
 
   <script src="/src/js/theme_manager.js"></script>
   <script src="/src/js/sidebar.js"></script>
@@ -33,114 +235,188 @@
       renderHeader({
         title: "Technician's Logbook",
         breadcrumbs: [
-          { label: "Technician's Logbook" } // Single level for main page
+          { label: "Technician's Logbook" }
         ],
-        // backLink not needed for top level or can point to home
         backLink: "/index.html"
       });
     </script>
 
+    <div class="flex-1 overflow-y-auto custom-scroll">
 
-    <div class="flex-1 overflow-y-auto p-4 bg-dark-bg">
+      <!-- Top Stats Bar + Time Range -->
+      <div class="px-4 pt-4 pb-2">
+        <div class="glass-card gradient-border rounded-xl p-4 animate-fade-in">
+          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 flex-wrap">
 
-      <div
-        class="flex items-center justify-between mb-6 bg-dark-panel p-2 border border-dark-border rounded-md shadow-sm">
+            <!-- Time Range Selector -->
+            <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gnfc-blue/15 flex items-center justify-center">
+                  <i class="ph-fill ph-calendar-blank color-blue font-15px"></i>
+                </div>
+                <span class="font-14px fw-bold text-upper ls-widest color-secondary">Time Range</span>
+              </div>
+              <div class="h-5 w-px bg-slate-600"></div>
+              <div class="flex bg-dark-bg/80 p-1 rounded-lg border border-slate-700 gap-x-1">
+                <button data-view="today"
+                  class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent"
+                  aria-pressed="true">
+                  Today
+                </button>
+                <button data-view="prev"
+                  class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-black"
+                  aria-pressed="false">
+                  Prev Day
+                </button>
+                <button data-view="weekly"
+                  class="time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent color-secondary hover-color-black"
+                  aria-pressed="false">
+                  Weekly
+                </button>
+              </div>
+            </div>
 
-        <div class="flex items-center gap-3 px-2">
-          <div class="flex items-center gap-2 text-gnfc-blue">
-            <i class="ph-fill ph-calendar-blank"></i>
-            <span class="text-xs font-bold uppercase tracking-wide">Time Range</span>
-          </div>
-          <div class="h-4 w-px bg-dark-border"></div>
+            <!-- Summary Stats -->
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2 bg-gnfc-blue/10 border border-gnfc-blue/20 rounded-lg px-3 py-1.5">
+                <i class="ph-bold ph-factory color-blue font-14px"></i>
+                <span class="font-13px fw-bold color-blue text-upper ls-wider">Total: <span
+                    id="total-count">17</span></span>
+              </div>
+            </div>
 
-          <div class="flex bg-dark-bg p-0.5 rounded-md border border-dark-border">
-            <button data-view="today"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent"
-              aria-pressed="true">
-              Today
-            </button>
-            <button data-view="prev"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
-              aria-pressed="false">
-              Prev Day
-            </button>
-            <button data-view="weekly"
-              class="time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent text-dark-muted hover:text-white"
-              aria-pressed="false">
-              Weekly
-            </button>
           </div>
         </div>
       </div>
 
+      <!-- Plant Units Grid -->
+      <div class="px-4 py-2">
+        <div class="glass-card rounded-xl overflow-hidden animate-fade-in shadow-md"
+          style="animation-delay: 0.1s;">
 
-      <div class="bg-dark-panel border border-dark-border rounded-sm">
+          <div class="flex items-center justify-between px-5 py-3 border-b border-slate-700">
+            <div class="flex items-center gap-3">
+              <div class="w-1 h-5 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-teal"></div>
+              <h3 class="fw-bold font-18px tracking-tight section-label cursor-default">Select Plant Unit</h3>
+            </div>
+          </div>
 
-        <div class="flex items-center justify-between px-4 py-2 border-b border-dark-border">
-          <h3 class="font-medium text-gnfc-blue text-sm">
-            Select Plant Unit
-          </h3>
+          <div id="plant-grid"
+            class="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+          </div>
+
         </div>
-
-        <div id="plant-grid" class="p-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
-        </div>
-
       </div>
 
-      <section class="mt-6 mb-4">
+      <!-- Officer Logbook Quick Access -->
+      <div class="px-4 pt-2 pb-6">
+        <div class="animate-fade-in" style="animation-delay: 0.2s;">
 
-        <div class="flex items-center gap-3 mb-4">
-          <div class="h-8 w-1 bg-gnfc-blue rounded-full"></div>
-          <h3 class="text-white font-bold text-sm tracking-wide">Officer Logbook Quick Access</h3>
-          <div class="h-px flex-1 bg-dark-border"></div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-1 h-6 rounded-full bg-gradient-to-b from-gnfc-blue to-gnfc-purple"></div>
+            <h3 class="fw-bold font-18px tracking-tight section-label cursor-default">Officer Logbook Quick Access</h3>
+            <div class="h-px flex-1 bg-gradient-to-r from-slate-600 to-transparent"></div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+            <button onclick="window.location.href='/src/pages/shift_logbook.html?view=today'"
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-blue p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-blue/5">
+              <div class="qa-card-top" style="--qa-color: #5794F2;">
+              </div>
+              <div class="flex items-start justify-between mb-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-gnfc-blue/10 border border-gnfc-blue/20 flex items-center justify-center group-hover:bg-gnfc-blue/20 group-hover:scale-110 transition-all duration-300">
+                  <i class="ph-fill ph-calendar-check color-blue text-lg"></i>
+                </div>
+                <!-- <i class="ph-bold ph-arrow-up-right text-dark-muted/30 group-hover:text-gnfc-blue/60 transition-colors font-15px"></i> -->
+                <i
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-blue transition-colors font-15px"></i>
+              </div>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-blue transition-colors">Today</h4>
+              <style>
+                .qa-card:nth-child(1)::before {
+                  background: linear-gradient(90deg, #5794F2, #14b8a6);
+                }
+              </style>
+            </button>
+
+            <button onclick="window.location.href='/src/pages/shift_logbook.html?view=prev'"
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-teal p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-teal/5">
+              <div class="flex items-start justify-between mb-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-gnfc-teal/10 border border-gnfc-teal/20 flex items-center justify-center group-hover:bg-gnfc-teal/20 group-hover:scale-110 transition-all duration-300">
+                  <i class="ph-fill ph-clock-counter-clockwise color-teal text-lg"></i>
+                </div>
+                <i
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-teal transition-colors font-15px"></i>
+              </div>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-teal transition-colors">Previous Day</h4>
+              <style>
+                .qa-card:nth-child(2)::before {
+                  background: linear-gradient(90deg, #14b8a6, #10b981);
+                }
+              </style>
+            </button>
+
+            <button onclick="window.location.href='/src/pages/shift_logbook.html?view=weekly'"
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-purple p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-purple/5">
+              <div class="flex items-start justify-between mb-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-gnfc-purple/10 border border-gnfc-purple/20 flex items-center justify-center group-hover:bg-gnfc-purple/20 group-hover:scale-110 transition-all duration-300">
+                  <i class="ph-fill ph-calendar-plus color-purple text-lg"></i>
+                </div>
+                <i
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-purple transition-colors font-15px"></i>
+              </div>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-purple transition-colors">Weekly</h4>
+              <style>
+                .qa-card:nth-child(3)::before {
+                  background: linear-gradient(90deg, #B794F4, #5794F2);
+                }
+              </style>
+            </button>
+
+            <button onclick="window.location.href='/src/pages/shift_logbook.html?view=monthly'"
+              class="qa-card glass-card border-2 border-slate-600 hover:border-gnfc-emerald p-5 rounded-xl group text-left hover:shadow-lg hover:shadow-gnfc-emerald/5">
+              <div class="flex items-start justify-between mb-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-gnfc-emerald/10 border border-gnfc-emerald/20 flex items-center justify-center group-hover:bg-gnfc-emerald/20 group-hover:scale-110 transition-all duration-300">
+                  <i class="ph-fill ph-calendar color-green text-lg"></i>
+                </div>
+                <i
+                  class="ph-bold ph-arrow-up-right color-secondary group-hover-color-green transition-colors font-15px"></i>
+              </div>
+              <p class="font-13px fw-bold color-secondary text-upper ls-widest mb-0.5">View Report</p>
+              <h4 class="font-15px fw-bold group-hover-color-green transition-colors">Monthly</h4>
+              <style>
+                .qa-card:nth-child(4)::before {
+                  background: linear-gradient(90deg, #10b981, #73BF69);
+                }
+              </style>
+            </button>
+
+          </div>
         </div>
+      </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=today'"
-            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
-            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-calendar-check text-4xl text-gnfc-blue"></i>
-            </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Today</h4>
-          </button>
-
-          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=prev'"
-            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
-            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-clock-counter-clockwise text-4xl text-gnfc-blue"></i>
-            </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Previous Day</h4>
-          </button>
-
-          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=weekly'"
-            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
-            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-calendar-plus text-4xl text-gnfc-blue"></i>
-            </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Weekly</h4>
-          </button>
-
-          <button onclick="window.location.href='/src/pages/shift_logbook.html?view=monthly'"
-            class="relative overflow-hidden bg-dark-panel border border-dark-border hover:border-gnfc-blue/50 p-4 rounded-md group text-left transition-all hover:shadow-lg hover:-translate-y-0.5">
-            <div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-              <i class="ph-fill ph-calendar text-4xl text-gnfc-blue"></i>
-            </div>
-            <p class="text-[10px] font-bold text-dark-muted uppercase tracking-wider mb-1">View Report</p>
-            <h4 class="text-sm font-bold text-white group-hover:text-gnfc-blue transition-colors">Monthly</h4>
-          </button>
-
-        </div>
-
-      </section>
     </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-700 py-2.5 px-4 bg-dark-panel/50 backdrop-blur-sm">
+      <div class="flex items-center justify-between">
+        <p class="font-13px color-secondary fw-medium">Instrument Department &bull; GNFC Ltd.</p>
+        <p class="font-13px text-dark-muted/40 typo-mono">&copy; 2026</p>
+      </div>
+    </footer>
 
   </main>
 
 
+  <!-- Time Range Logic -->
   <script>
     const timeButtons = document.querySelectorAll(".time-btn");
     let selectedView = "today";
@@ -152,14 +428,13 @@
         const btnView = btn.dataset.view || "";
         const isActive = btnView === selectedView;
 
-        // Reset classes
-        btn.className = "time-btn px-4 py-1.5 text-[11px] font-bold rounded-[4px] transition-all duration-200 border border-transparent";
+        btn.className = "time-btn px-4 py-1 font-14px fw-bold rounded-md transition-all duration-300 border border-transparent";
 
         if (isActive) {
-          btn.classList.add("bg-gnfc-blue", "text-white", "shadow-sm");
+          btn.classList.add("bg-gnfc-blue", "color-white", "shadow-md", "shadow-gnfc-blue/20");
           btn.setAttribute("aria-pressed", "true");
         } else {
-          btn.classList.add("text-dark-muted", "hover:text-white", "hover:bg-white/5");
+          btn.classList.add("color-secondary", "hover-color-black", "hover:bg-white/5");
           btn.setAttribute("aria-pressed", "false");
         }
       });
@@ -177,6 +452,7 @@
     });
   </script>
 
+  <!-- Plant Grid Logic -->
   <script>
     const units = [
       'AA', 'AAQM', 'AMM', 'ANIPF', 'ANITDI',
@@ -186,46 +462,48 @@
 
     const grid = document.getElementById('plant-grid');
 
-    function renderPlantCards() {
+    // Build the grid ONCE on page load
+    function buildPlantGrid() {
       let gridContent = '';
       units.forEach((code, i) => {
-        // Mock status logic for demo
-        const status = i % 4 === 0 ? 'Maintenance' : 'Operational';
-        const color = status === 'Operational' ? '#73BF69' : '#FF9900';
-        const unitNumber = (i + 1).toString().padStart(2, '0');
         const href = `/src/pages/plant_detail.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
-
-        // Refined Card Design (Dashboard-like)
         gridContent += `
-          <a href="${href}"
-             class="relative bg-dark-panel border border-dark-border hover:border-gnfc-blue
-                    rounded-sm p-4 h-24 flex flex-col justify-between
-                    group transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 overflow-hidden">
-              
-              <!-- Colored Left Border Strip -->
-              <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: ${color}"></div>
-
-              <div class="flex justify-between items-start pl-2">
-                  <span class="text-[10px] font-mono text-dark-muted font-bold tracking-wider">${unitNumber}</span>
-                  <div class="w-1.5 h-1.5 rounded-full" style="background-color: ${color}; box-shadow: 0 0 4px ${color}"></div>
-              </div>
-
-              <div class="pl-2 flex items-end justify-between">
-                  <h3 class="text-lg font-bold tracking-tight group-hover:text-gnfc-blue transition-colors">${code}</h3>
-                  <span class="text-[9px] uppercase font-bold text-dark-muted tracking-wider" style="color: ${color}">${status}</span>
-              </div>
+          <a href="${href}" data-plant="${code}"
+             class="plant-card rounded-lg px-4 py-3 group flex items-center justify-between gap-2"
+             style="animation: fadeInUp 0.4s cubic-bezier(0.4,0,0.2,1) ${i * 0.03}s both;">
+            <div class="min-w-0">
+              <p class="plant-card-subtitle mb-0.5">Unit Code</p>
+              <h3 class="plant-card-title truncate">${code}</h3>
+            </div>
+            <div class="plant-card-action shrink-0">
+              <i class="ph-bold ph-caret-right font-15px"></i>
+            </div>
           </a>
         `;
       });
       grid.innerHTML = gridContent;
+      document.getElementById('total-count').textContent = units.length;
+    }
+
+    // Only update hrefs silently — no DOM rebuild, no flash
+    function renderPlantCards() {
+      const cards = grid.querySelectorAll('a[data-plant]');
+      if (cards.length === 0) {
+        buildPlantGrid();
+        return;
+      }
+      cards.forEach((card) => {
+        const code = card.getAttribute('data-plant');
+        card.href = `/src/pages/plant_detail.html?plant=${encodeURIComponent(code)}&view=${encodeURIComponent(selectedView)}`;
+      });
     }
 
     const persistedView = (window.ElogbookStore && typeof window.ElogbookStore.getTechnicianSelectedView === "function")
       ? window.ElogbookStore.getTechnicianSelectedView()
       : "today";
+    buildPlantGrid();
     setSelectedView(persistedView, false);
   </script>
-
 
 </body>
 
