@@ -316,9 +316,15 @@
           <button class="action-button btn-add" onclick="window.location.href='/src/pages/boiler_inst_add.html'"><i
               class="ph-bold ph-plus"></i>
             Add</button>
+<<<<<<< HEAD
           <button class="action-button btn-edit" onclick="goToEditPage()"><i class="ph-bold ph-pencil-simple"></i>
             Edit</button>
           <button class="action-button btn-delete" onclick="deleteTag()"><i class="ph-bold ph-trash"></i> Delete</button>
+=======
+          <button class="action-button btn-edit" onclick="showEditForm()"><i class="ph-bold ph-pencil-simple"></i>
+            Edit</button>
+          <button class="action-button btn-delete"><i class="ph-bold ph-trash"></i> Delete</button>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
           <span class="toolbar-divider"></span>
           <button class="action-button" onclick="window.location.href='/src/pages/boiler_loop_data.html'"><i
               class="ph-bold ph-arrows-clockwise"></i> Loop Data</button>
@@ -366,6 +372,7 @@
           </button>
         </div>
 
+<<<<<<< HEAD
         <!-- Empty State (shown when no tag selected) -->
         <div id="inst-empty-state" class="flex flex-col items-center justify-center py-16 gap-4">
             <div style="width:64px;height:64px;border-radius:50%;background:rgba(87,148,242,0.1);border:1px solid rgba(87,148,242,0.2);display:flex;align-items:center;justify-content:center;">
@@ -379,6 +386,10 @@
 
         <!-- Main Form Area -->
         <div id="view-mode-form" class="space-y-6" style="display:none;">
+=======
+        <!-- Main Form Area -->
+        <div id="view-mode-form" clas="space-y-6">
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
           <div class="form-section theme-card-shadow">
             <div class="section-title"><i class="ph-fill ph-tag"></i> General Information</div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -746,6 +757,7 @@
   <script>
     // --- Mock Data Dictionary based on screenshots ---
     const tagsData = {
+<<<<<<< HEAD
       "ZSH177906":  { tag_no: "ZSH177906",  description: "NG BURNER 4 BLOCK VALVE OPEN",        host: "DCS",   ctrl_type: "DPU 4F",   ctrl_no: "GN01", io_type: "IQF304 (CH:16)", sw_id: "F2M5",  io_loc: "R3M5",  channel: "9",   esd: "ESD-04",   eng_range: "",               cal_range: "",      trip_h: "",        func_h: "",          trip_l: "",       func_l: "",          loop_func: "",               inst_type: "SWITCH",        make: "MAGO",       model: "LS06200",   logic: "",     accessory: "",          loop_sheet: "",        spec: "1001B",  helping: "",   comment: "" },
       "10-PT-101A": { tag_no: "10-PT-101A", description: "MAIN STEAM HEADER PRESSURE",          host: "DCS",   ctrl_type: "FCS01",    ctrl_no: "01",   io_type: "AAI141",        sw_id: "NODE1", io_loc: "SLOT1", channel: "CH1", esd: "ESD-101", eng_range: "0 - 160 KG/CM2",    cal_range: "4-20 mA",  trip_h: "115 / 120",  func_h: "ALARM / TRIP",  trip_l: "95 / 90", func_l: "ALARM / TRIP", loop_func: "PRESSURE INDICATION",  inst_type: "TRANSMITTER",   make: "YOKOGAWA",   model: "EJA530A",   logic: "2oo3", accessory: "MANIFOLD",      loop_sheet: "LS-10-101",  spec: "SP-001", helping: "NONE", comment: "Calibrated during 2024 turnaround. Replaced impulse tubing." },
       "XLGDFGV1D": { tag_no: "XLGDFGV1D",  description: "FUEL GAS CONTROL VALVE",              host: "PLC",   ctrl_type: "S7-400",   ctrl_no: "02",   io_type: "AI",            sw_id: "Rack2", io_loc: "Slot4", channel: "2",   esd: "",        eng_range: "0-100 %",          cal_range: "4-20 mA",  trip_h: "",           func_h: "",              trip_l: "",       func_l: "",          loop_func: "VALVE POSITION",      inst_type: "CONTROL VALVE",  make: "FISHER",     model: "DVC6200",   logic: "",     accessory: "POSITIONER",     loop_sheet: "LS-FG-101",  spec: "",       helping: "",   comment: "" },
@@ -755,6 +767,12 @@
       "ZT1777146": { tag_no: "ZT1777146",  description: "ECONOMISER OUTLET TEMP",              host: "DCS",   ctrl_type: "FCS03",    ctrl_no: "05",   io_type: "AAT141",        sw_id: "NODE4", io_loc: "SLOT1", channel: "CH2", esd: "",        eng_range: "0 - 500 °C",       cal_range: "4-20 mA",  trip_h: "380 / 400",  func_h: "ALARM / TRIP",  trip_l: "",       func_l: "",          loop_func: "ECONOMISER MONITORING",  inst_type: "TRANSMITTER",   make: "ENDRESS+HAUSER",model: "TMT182",    logic: "1oo2", accessory: "THERMOWELL",     loop_sheet: "LS-B1-ECO",  spec: "",       helping: "",   comment: "" },
       "ZSL191801": { tag_no: "ZSL191801",  description: "DRUM LEVEL LOW SWITCH",              host: "DCS",   ctrl_type: "FCS01",    ctrl_no: "02",   io_type: "IQF304",        sw_id: "NODE1", io_loc: "RACK2", channel: "CH6", esd: "ESD-DL",  eng_range: "LOW / NORMAL",     cal_range: "24VDC",    trip_h: "",           func_h: "",              trip_l: "LOW",    func_l: "ALARM + TRIP",  loop_func: "DRUM LEVEL PROTECTION", inst_type: "SWITCH ELEMENT",  make: "MAGO",       model: "LT-S200",   logic: "2oo3", accessory: "",              loop_sheet: "LS-B1-DRM",  spec: "SP-010", helping: "",   comment: "Trip setpoint revised 2024." },
       "ZT1777216": { tag_no: "ZT1777216",  description: "AIR PREHEATER OUTLET FLUE GAS TEMP", host: "DCS",   ctrl_type: "FCS02",    ctrl_no: "03",   io_type: "AAT141",        sw_id: "NODE2", io_loc: "SLOT4", channel: "CH5", esd: "",        eng_range: "0 - 600 °C",       cal_range: "4-20 mA",  trip_h: "450 / 480",  func_h: "ALARM / TRIP",  trip_l: "",       func_l: "",          loop_func: "FLUE GAS TEMP MONITORING",inst_type: "TRANSMITTER",   make: "ABB",        model: "TTF300",    logic: "1oo2", accessory: "EXTENSION TUBE",  loop_sheet: "LS-B1-APH",  spec: "",       helping: "",   comment: "" }
+=======
+      "ZSH177906": { tag_no: "ZSH177906", description: "NG BURNER 4 BLOCK VALVE OPEN", host: "DCS", ctrl_type: "DPU 4F", ctrl_no: "GN01", io_type: "IQF304 (CH:16)", sw_id: "F2M5", io_loc: "R3M5", channel: "9", esd: "ESD-04", eng_range: "", cal_range: "", trip_h: "", func_h: "", trip_l: "", func_l: "", loop_func: "", inst_type: "SWITCH", make: "MAGO", model: "LS06200", logic: "", accessory: "", loop_sheet: "", spec: "1001B", helping: "", comment: "" },
+      "10-PT-101A": { tag_no: "10-PT-101A", description: "MAIN STEAM HEADER PRESSURE", host: "DCS", ctrl_type: "FCS01", ctrl_no: "01", io_type: "AAI141", sw_id: "NODE1", io_loc: "SLOT1", channel: "CH1", esd: "ESD-101", eng_range: "0 - 160 KG/CM2", cal_range: "4 - 20 mA", trip_h: "115 / 120", func_h: "ALARM / TRIP", trip_l: "95 / 90", func_l: "ALARM / TRIP", loop_func: "PRESSURE INDICATION", inst_type: "TRANSMITTER", make: "YOKOGAWA", model: "EJA530A", logic: "2oo3", accessory: "MANIFOLD", loop_sheet: "LS-10-101", spec: "SP-001", helping: "NONE", comment: "Calibrated during 2024 turnaround. Replaced impulse tubing." },
+      "XLGDFGV1D": { tag_no: "XLGDFGV1D", description: "FUEL GAS CV", host: "PLC", ctrl_type: "S7-400", ctrl_no: "02", io_type: "AI", sw_id: "Rack2", io_loc: "Slot4", channel: "2", esd: "", eng_range: "0-100 %", cal_range: "4-20mA", trip_h: "", func_h: "", trip_l: "", func_l: "", loop_func: "VALVE POSITION", inst_type: "CONTROL VALVE", make: "FISHER", model: "DVC6200", logic: "", accessory: "POSITIONER", loop_sheet: "LS-FG-101", spec: "", helping: "", comment: "" },
+      "ZT1777385": { tag_no: "ZT1777385", description: "COMPRESSOR BEARING TEMP", host: "DCS", ctrl_type: "FCS02", ctrl_no: "04", io_type: "AAI141", sw_id: "NODE2", io_loc: "SLOT3", channel: "CH8", esd: "ESD-COMP", eng_range: "0 - 200 °C", cal_range: "4 - 20 mA", trip_h: "110 / 125", func_h: "ALARM / TRIP", trip_l: "", func_l: "", loop_func: "TEMPERATURE INDICATION", inst_type: "RTD PT100", make: "EMERSON", model: "3144P", logic: "1oo2", accessory: "THERMOWELL", loop_sheet: "LS-C1-008", spec: "", helping: "", comment: "High temp trip function enabled." }
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
     };
 
     const allTags = [
@@ -832,6 +850,7 @@
     });
 
     // --- Form Population Logic ---
+<<<<<<< HEAD
     function showForm()  { document.getElementById('view-mode-form').style.display = ''; document.getElementById('inst-empty-state').style.display = 'none'; }
     function hideForm()  { document.getElementById('view-mode-form').style.display = 'none'; document.getElementById('inst-empty-state').style.display = ''; }
 
@@ -839,10 +858,19 @@
       clearForm();
       const data = tagsData[tagId];
       if (data) {
+=======
+    function loadTagData(tagId) {
+      clearForm(); // Reset first
+
+      const data = tagsData[tagId];
+      if (data) {
+        // Populate fields if mock data exists
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
         Object.keys(data).forEach(key => {
           const el = document.getElementById(`f-${key}`);
           if (el) el.value = data[key];
         });
+<<<<<<< HEAD
         showForm();
       } else if (tagId && allTags.includes(tagId)) {
         // Tag exists in list but no detail data — show tag, blank rest
@@ -850,11 +878,17 @@
         showForm();
       } else {
         hideForm();
+=======
+      } else {
+        // Just set the tag if no mock data exists for demonstration
+        document.getElementById('f-tag_no').value = tagId;
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
       }
     }
 
     function triggerSearch() {
       const val = searchInput.value.trim();
+<<<<<<< HEAD
       if (!val) return;
       const matchedTag = allTags.find(t => t.toLowerCase() === val.toLowerCase());
       if (matchedTag) {
@@ -953,21 +987,44 @@
           });
         }
       });
+=======
+      if (val) {
+        loadTagData(val);
+        dropdownList.classList.add('hidden');
+      }
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
     }
 
     function clearForm() {
       const fields = ['tag_no', 'description', 'host', 'ctrl_type', 'ctrl_no', 'io_type', 'sw_id', 'io_loc', 'channel', 'esd', 'eng_range', 'cal_range', 'trip_h', 'func_h', 'trip_l', 'func_l', 'loop_func', 'inst_type', 'make', 'model', 'logic', 'accessory', 'loop_sheet', 'spec', 'helping', 'comment'];
+<<<<<<< HEAD
       fields.forEach(f => { const el = document.getElementById(`f-${f}`); if (el) el.value = ''; });
     }
 
     // Initialize: check URL params — do NOT auto-load any default
     window.addEventListener('DOMContentLoaded', () => {
       hideForm(); // Start with empty state
+=======
+      fields.forEach(f => {
+        const el = document.getElementById(`f-${f}`);
+        if (el) el.value = '';
+      });
+    }
+
+    // Initialize: check URL params or load default
+    window.addEventListener('DOMContentLoaded', () => {
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
       const urlParams = new URLSearchParams(window.location.search);
       const tagFromUrl = urlParams.get('tag');
       if (tagFromUrl) {
         loadTagData(tagFromUrl);
         searchInput.value = tagFromUrl;
+<<<<<<< HEAD
+=======
+      } else {
+        loadTagData("ZSH177906");
+        searchInput.value = "ZSH177906";
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
       }
     });
 
@@ -1063,13 +1120,21 @@
                         <td class="px-2 py-3 border-r border-gray-300 dark:border-dark-border leading-tight">${r.area}</td>
                         <td class="p-0 border-r border-gray-300 dark:border-dark-border align-top h-full">
                             <div class="h-full flex flex-col min-h-full">
+<<<<<<< HEAD
                                 <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[40px] flex items-center">${r.tag1}</div>
+=======
+                                <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[50%] flex items-center">${r.tag1}</div>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                                 <div class="px-2 py-1 flex-1 min-h-[50%] flex items-center">${r.tag2}</div>
                             </div>
                         </td>
                         <td class="p-0 border-r border-gray-300 dark:border-dark-border align-top h-full">
                             <div class="h-full flex flex-col min-h-full">
+<<<<<<< HEAD
                                 <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[40px] flex items-center">${r.type1}</div>
+=======
+                                <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[50%] flex items-center">${r.type1}</div>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                                 <div class="px-2 py-1 flex-1 min-h-[50%] flex items-center">${r.type2}</div>
                             </div>
                         </td>
@@ -1077,22 +1142,35 @@
                         <td class="px-2 py-3 border-r border-gray-300 dark:border-dark-border whitespace-pre-wrap leading-snug">${r.desc}</td>
                         <td class="p-0 border-r border-gray-300 dark:border-dark-border align-top h-full w-[60px]">
                             <div class="h-full flex flex-col min-h-full">
+<<<<<<< HEAD
                                 <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[40px] flex items-center justify-center">${r.tech.split(' / ')[0] || ''}</div>
+=======
+                                <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[50%] flex items-center justify-center">${r.tech.split(' / ')[0] || ''}</div>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                                 <div class="px-2 py-1 flex-1 min-h-[50%] flex items-center justify-center">${r.tech.split(' / ').slice(1).join(' / ') || ''}</div>
                             </div>
                         </td>
                         <td class="px-2 py-3 border-r border-gray-300 dark:border-dark-border text-center">${r.attach}</td>
                         <td class="p-0 border-r border-gray-300 dark:border-dark-border align-top h-full min-w-[300px]">
                             <div class="h-full flex flex-col min-h-full">
+<<<<<<< HEAD
                                 <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[40px] flex flex-col justify-center leading-snug break-words"><span>${r.engRef.split('\\n')[0] || ''}</span></div>
                                 <div class="px-2 py-1 flex-1 min-h-[50px] flex flex-col justify-center leading-snug break-words"><span>${r.engRef.split('\\n').slice(1).join('<br>') || r.execRef}</span></div>
+=======
+                                <div class="px-2 py-1 flex-1 border-b border-gray-300 dark:border-dark-border min-h-[50%] flex flex-col justify-center leading-snug break-words"><span>${r.engRef.split('\\n')[0] || ''}</span></div>
+                                <div class="px-2 py-1 flex-1 min-h-[50%] flex flex-col justify-center leading-snug break-words"><span>${r.engRef.split('\\n').slice(1).join('<br>') || r.execRef}</span></div>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                             </div>
                         </td>
                     </tr>
                 `).join('');
 
         wrapper.innerHTML = `
+<<<<<<< HEAD
                     <div class="gnfc-modal-shell gnfc-modal-shell--2xl" style="height: min(850px, 95vh); max-width: 98vw; width: 1440px; padding: 0;">
+=======
+                    <div class="gnfc-modal-shell gnfc-modal-shell--2xl" style="height: min(850px, 95vh); max-width: 98vw; width: 1400px; padding: 0;">
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                         
                         <!-- Header -->
                         <div class="gnfc-modal-header">

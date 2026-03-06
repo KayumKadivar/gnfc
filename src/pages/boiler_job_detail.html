@@ -263,8 +263,13 @@
                                         <th style="width:38px;" rowspan="2">Ch</th>
                                         <th style="width:110px;" rowspan="2" class="jbd-clickable-th">Tag Number</th>
                                         <th style="min-width:200px;" rowspan="2">Location / Description / Function</th>
+<<<<<<< HEAD
                                         <th style="width:80px;" rowspan="2">JOB TERM</th>
                                         <th colspan="2" style="width:180px;">Cabinet Term Strip</th>
+=======
+                                        <th style="width:58px;" rowspan="2">JOB TERM</th>
+                                        <th colspan="2" style="width:140px;">Cabinet Term Strip</th>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                                     </tr>
                                     <tr>
                                         <th style="width:70px;">Terminal</th>
@@ -335,7 +340,11 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- JObSchedule Modal -->
+=======
+    <!-- Junction Box Schedule Modal -->
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
     <div id="modal-jb-schedule" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 520px; padding: 0;">
             <div class="gnfc-modal-header">
@@ -386,6 +395,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Junction Box Schedule Report Modal (Print View) -->
     <div id="modal-jb-report" class="gnfc-modal-overlay" style="z-index: 10015;" role="dialog" aria-modal="true">
         <div class="gnfc-modal-shell gnfc-modal-shell--2xl" style="max-width: 1440px; padding: 0; background: #eaecf0;">
@@ -411,6 +421,8 @@
         </div>
     </div>
 
+=======
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
     <!-- JObIndex Modal -->
     <div id="modal-jb-index" class="gnfc-modal-overlay" style="z-index: 1005;" role="dialog" aria-modal="true">
         <div class="gnfc-modal-shell gnfc-modal-shell--wide" style="max-width: 1100px; padding: 0;">
@@ -543,6 +555,7 @@
                 <div class="mb-3">
                     <label class="gnfc-modal-label">Inst Type</label>
                     <div class="flex gap-2">
+<<<<<<< HEAD
                         <div style="flex:1;position:relative;">
                             <select id="et-inst-type" class="gnfc-modal-input" style="appearance:none;padding-right:2rem;cursor:pointer;">
                                 <option value="">— All Types —</option>
@@ -559,6 +572,16 @@
                             </select>
                             <i class="ph-bold ph-caret-down" style="position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--gnfc-modal-subtitle-color,#8e8e9e);pointer-events:none;"></i>
                         </div>
+=======
+                        <select id="et-inst-type" class="gnfc-modal-input flex-1">
+                            <option value="AI">AI - Analog Input</option>
+                            <option value="AO">AO - Analog Output</option>
+                            <option value="DI">DI - Digital Input</option>
+                            <option value="DO">DO - Digital Output</option>
+                            <option value="RTD">RTD</option>
+                            <option value="TC">TC - Thermocouple</option>
+                        </select>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                         <button onclick="filterTagsByType()" class="gnfc-modal-btn gnfc-modal-btn-primary" style="height:2.25rem; padding:0 0.75rem;">
                             <i class="ph-bold ph-magnifying-glass"></i> Go
                         </button>
@@ -566,10 +589,26 @@
                 </div>
                 <div class="mb-3">
                     <label class="gnfc-modal-label">Tag Filter</label>
+<<<<<<< HEAD
                     <div style="position:relative;">
                         <select id="et-tag-filter" class="gnfc-modal-input" style="appearance:none;padding-right:2rem;cursor:pointer;"></select>
                         <i class="ph-bold ph-caret-down" style="position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--gnfc-modal-subtitle-color,#8e8e9e);pointer-events:none;"></i>
                     </div>
+=======
+                    <input type="text" id="et-tag-filter" class="gnfc-modal-input" placeholder="Search tag...">
+                </div>
+                <div class="mb-3">
+                    <label class="gnfc-modal-label">Tag</label>
+                    <select id="et-tag-select" class="gnfc-modal-input">
+                        <option>1LT302</option>
+                        <option>1LT301</option>
+                        <option>1FT301</option>
+                        <option>1PT706</option>
+                        <option>1PT78B</option>
+                        <option>1TT101</option>
+                        <option>1TT102</option>
+                    </select>
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                 </div>
                 <div class="flex items-center gap-2 mb-2">
                     <input type="checkbox" id="et-update-revision" class="w-4 h-4 rounded border-gray-400 cursor-pointer">
@@ -687,6 +726,7 @@
                         html += `<td rowspan="${ch.rows.length}" class="jbd-ch-num">${ch.ch}</td>`;
                         html += `<td rowspan="${ch.rows.length}" style="vertical-align:top; padding-top:0.375rem;">`;
                         html += `<input type="text" class="jbd-tbl-input" value="${row.tag || ''}" data-ch="${ci}" data-row="${ri}" data-field="tag">`;
+<<<<<<< HEAD
                         html += `<div style="text-align:center;margin-top:2px;">
                             <button title="Edit Tag" onclick="openEditTagModal(${ch.ch}, 0)"
                                 style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:0.75rem;padding:0 4px;line-height:1;border-radius:3px;transition:color .15s,background .15s;"
@@ -695,6 +735,8 @@
                                 <i class="ph-bold ph-caret-right"></i>
                             </button>
                         </div>`;
+=======
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
                         html += `</td>`;
                     }
                     html += `<td><input type="text" class="jbd-tbl-input" value="${row.func || ''}" data-ch="${ci}" data-row="${ri}" data-field="func"></td>`;
@@ -801,6 +843,7 @@
             document.getElementById('et-subtitle').textContent = 'JObNO : ' + currentJB;
 
             const data = JB_DATABASE[currentJB];
+<<<<<<< HEAD
             // Determine current tag & pre-populate dropdown
             let currentTag = '';
             if (data) {
@@ -815,6 +858,17 @@
             const allTags = getAllTagsFlat();
             buildTagDropdown(allTags, currentTag || allTags[0]);
 
+=======
+            if (data) {
+                const channel = data.channels.find(c => c.ch === ch);
+                if (channel && channel.rows[rowIdx]) {
+                    const currentTag = channel.rows[rowIdx].tag;
+                    const sel = document.getElementById('et-tag-select');
+                    for (let o of sel.options) { o.selected = (o.value === currentTag); }
+                }
+            }
+
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
             document.getElementById('et-update-revision').checked = false;
             const modal = document.getElementById('modal-edit-tag');
             requestAnimationFrame(() => modal.classList.add('is-open'));
@@ -824,6 +878,7 @@
             document.getElementById('modal-edit-tag').classList.remove('is-open');
         }
 
+<<<<<<< HEAD
         // All tags master list grouped by inst type
         const ALL_TAGS = {
             'AI':  ['1LT302','1LT301','1FT301','1PT706','1PT78B','10-PT-101A','10-PT-101B','10-PT-101C'],
@@ -861,6 +916,14 @@
 
         function updateTag() {
             const newTag = document.getElementById('et-tag-filter').value;
+=======
+        function filterTagsByType() {
+            Swal.fire({ icon: 'info', title: 'Filtered', text: 'Tags filtered by ' + document.getElementById('et-inst-type').value, confirmButtonColor: '#2563eb', timer: 1500, timerProgressBar: true });
+        }
+
+        function updateTag() {
+            const newTag = document.getElementById('et-tag-select').value;
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
             if (currentJB && JB_DATABASE[currentJB] && editingTagCh !== null) {
                 const channel = JB_DATABASE[currentJB].channels.find(c => c.ch === editingTagCh);
                 if (channel && channel.rows[editingTagRow]) {
@@ -889,6 +952,7 @@
         }
 
         function runJBScheduleReport() {
+<<<<<<< HEAD
             const chFrom = parseInt(document.getElementById('jbs-ch-from').value, 10);
             const chTo = parseInt(document.getElementById('jbs-ch-to').value, 10);
             closeJBScheduleModal();
@@ -1046,6 +1110,17 @@
             printWin.document.close();
             printWin.focus();
             setTimeout(() => { printWin.print(); printWin.close(); }, 250);
+=======
+            const chFrom = document.getElementById('jbs-ch-from').value;
+            const chTo = document.getElementById('jbs-ch-to').value;
+            const reportType = document.getElementById('jbs-report-type').value;
+            closeJBScheduleModal();
+            Swal.fire({
+                icon: 'success', title: 'Report Generated',
+                text: `Channel ${chFrom} to ${chTo} — ${reportType}`,
+                confirmButtonColor: '#2563eb', timer: 2500, timerProgressBar: true
+            });
+>>>>>>> ce18fec7669f9c0016c3bc95ca7d2b7d3838384e
         }
 
         // ========================
