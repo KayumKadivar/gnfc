@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Explorer | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.activePage = 'plants';</script>
+
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('plants');</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      // Get title from URL para if exists
+      const urlParams = new URLSearchParams(window.location.search);
+      const docType = urlParams.get('type');
+      let pageTitle = "Document Explorer";
+      if (docType === 'eng') pageTitle = "Engineering Documentation";
+      if (docType === 'comm') pageTitle = "Communication And Other Records";
+
+      renderHeader({
+        title: pageTitle,
+        breadcrumbs: [
+          { label: "Plant", href: "/src/pages/plant_status.html" },
+          { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+          { label: "Documents", href: "/src/pages/boiler_doc_management.html" },
+          { label: "Explorer" }
+        ],
+        backLink: "/src/pages/boiler_doc_management.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+      <div class="mx-auto space-y-4 max-w-full">
+
+        <!-- Main Data Table Container -->
+        <div class="bg-dark-panel border border-dark-border rounded-lg shadow-lg flex flex-col h-[calc(100vh-170px)]">
+
+          <!-- Top Information/Breadcrumb Strip -->
+          <div class="px-5 py-3 border-b border-dark-border bg-dark-bg/60 shrink-0 rounded-t-xl">
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-2">
+                <i class="ph-fill ph-folder text-yellow-500 text-xl drop-shadow-sm"></i>
+                <h3 class="text-sm font-bold text-dark-text tracking-wide uppercase">BOILER_INST</h3>
+              </div>
+            </div>
+
+            <!-- Statistics Bar -->
+            <div
+              class="flex flex-wrap items-center mt-3 text-[0.7rem] font-medium text-dark-muted divide-x divide-dark-border">
+              <div class="pr-4 tracking-wide"><span class="font-bold text-dark-text">Total:</span> 12 (96760 Kb)</div>
+              <div class="px-4 tracking-wide"><span class="font-bold text-dark-text">Folders:</span> 12 (96760 Kb)</div>
+              <div class="pl-4 tracking-wide"><span class="font-bold text-dark-text">Files:</span> 0 (0 Kb)</div>
+            </div>
+          </div>
+
+          <!-- Toolbar Strip -->
+          <div class="px-5 py-2 border-b border-dark-border bg-dark-panel flex items-center gap-3 shrink-0">
+            <button id="btn-up-level" class="p-1.5 hover:bg-dark-border text-dark-muted rounded transition-colors"
+                title="Up One Level">
+              <i class="ph-bold ph-arrow-bend-left-up text-lg"></i>
+            </button>
+            <div class="w-px h-4 bg-dark-border mx-1"></div>
+            <button id="btn-new-folder" class="p-1.5 hover:bg-dark-border text-green-500 rounded transition-colors"
+              title="New Folder">
+              <i class="ph-fill ph-folder-plus text-lg"></i>
+            </button>
+            <!-- Paste Button (Hidden by default) -->
+            <button id="btn-paste" class="hidden items-center gap-2 px-3 py-1 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-sm hover:bg-blue-600/30 transition-all animate-pulse"
+              title="Paste Here">
+              <i class="ph-bold ph-clipboard-text text-sm"></i>
+              <span class="text-[0.65rem] font-bold uppercase tracking-wider">Paste Here</span>
+            </button>
+          </div>
+
+          <!-- Scrollable Table Body -->
+          <div class="flex-1 overflow-auto overflow-x-auto relative custom-scrollbar bg-dark-panel">
+            <table class="w-full text-left border-collapse min-w-[900px]">
+              <thead class="sticky top-0 bg-dark-bg/95 z-10 shadow-sm border-b border-dark-border/50">
+                <tr>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-10 border-r border-dark-border/50 text-center">
+                    <i class="ph-bold ph-file"></i>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-blue-400 w-[40%] border-r border-dark-border/50 cursor-pointer hover:bg-dark-border/30">
+                    <div class="flex items-center justify-between">Name <i class="ph-bold ph-caret-down"></i></div>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[15%] border-r border-dark-border/50">
+                    Type
+                  </th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[15%] border-r border-dark-border/50">
+                    Size
+                  </th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[15%] border-r border-dark-border/50 cursor-pointer hover:bg-dark-border/30">
+                    <div class="flex items-center justify-between">Last Modified</div>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[10%] text-center">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Row 1 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group" 
+                    data-has-subfolders="true" data-size="12148">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">APPROVAL</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">12148 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">27/06/2020</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-cut-row"
+                        title="Cut"><i class="ph-bold ph-scissors font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 2 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="8680">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">CORRESPONDANCE</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">8680 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">25/08/2021</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 3 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="6">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">FILE
+                      AND SOFT DOCUMENT INDEX</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">6 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">24/11/2006</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 4 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="3740">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">GAIL
+                      DCS AMC REPORT</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">3740 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">07/04/2016</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 5 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="44">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">HELPER
+                      OT STATEMENT</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">44 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">11/11/2005</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 6 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="56980">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">MAJOR
+                      REVAMP</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">56980 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">14/08/2017</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 7 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="7033">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">MDM</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">7033 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">15/07/2018</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 8 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="254">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">PAYMENT</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">254 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">14/06/2019</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 9 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="8040">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">REPORTS</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">8040 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">04/11/2024</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 10 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="422">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">SCOPE
+                      OF THE JOB</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">422 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">17/10/2015</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 11 (Has content) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="662">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">TOUR
+                      REPORT</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">662 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">12/06/2024</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-red-400 text-dark-muted transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 12 (Empty Folder - DELETABLE) -->
+                <tr class="hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group"
+                    data-has-subfolders="false" data-size="0">
+                  <td class="px-3 py-1.5 border-r border-dark-border/30 text-center">
+                    <i class="ph-fill ph-folder text-yellow-500 text-lg"></i>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span
+                      class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer">EMPTY_TEST_FOLDER</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">&lt;Folder&gt;</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-mono text-dark-text">0 Kb</span>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/30">
+                    <span class="text-[0.7rem] font-medium text-dark-muted">22/09/2025</span>
+                  </td>
+                  <td class="px-3 py-1.5 text-center">
+                    <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
+                          class="ph-bold ph-download-simple font-14px"></i></button>
+                      <button class="p-0.5 hover:text-red-400 text-dark-muted transition-colors btn-delete-row"
+                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Create New Folder Modal -->
+  <div id="create-folder-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div
+      class="bg-[#f0f0f0] border-2 border-white shadow-2xl rounded-sm w-full max-w-lg overflow-hidden font-sans text-gray-800">
+      <!-- Modal Header -->
+      <div class="bg-white px-4 py-2 border-b border-gray-300 flex justify-between items-center">
+        <h2 class="text-[#2d68c4] font-black text-sm uppercase tracking-widest">CREATE NEW FOLDER</h2>
+        <button onclick="hideCreateFolderModal()" class="text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="px-8 py-6 space-y-6">
+        <div class="space-y-2">
+          <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-widest">PARENT PATH :</label>
+          <div id="modal-parent-path"
+            class="text-[0.85rem] font-bold text-blue-600 bg-white border border-gray-200 px-4 py-2 rounded-sm shadow-inner truncate tracking-wide">
+            /ENGG_DOC/AA/</div>
+        </div>
+
+        <div
+          class="p-6 bg-gray-50/50 border border-gray-200 rounded-sm shadow-sm flex items-center justify-between gap-6">
+          <label class="shrink-0 text-[0.75rem] font-black text-gray-600 uppercase tracking-wider">ENTER FOLDER NAME
+            :</label>
+          <input type="text" id="new-folder-name"
+            class="flex-1 bg-white border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-gray-300"
+            placeholder="Folder Name" autofocus>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-[#f8fafc] px-4 py-4 border-t border-gray-300 flex justify-end gap-4">
+        <button onclick="hideCreateFolderModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button onclick="handleCreateFolder()" class="gnfc-modal-btn gnfc-modal-btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documentation Log Modal -->
+  <div id="doc-log-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-gray-800">
+    <div class="bg-white w-full max-w-5xl h-[85vh] rounded-sm shadow-2xl flex flex-col overflow-hidden border border-white">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+        <div>
+          <h2 class="text-xl font-black text-[#2d68c4] uppercase tracking-tighter leading-tight">Documentation Log</h2>
+          <p class="text-[0.65rem] text-dark-muted font-bold tracking-widest uppercase mt-0.5">History of actions for <span id="log-item-name" class="text-blue-600">ITEM_NAME</span></p>
+        </div>
+        <button onclick="hideDocLogModal()" class="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400 group">
+          <i class="ph-bold ph-x text-lg group-hover:text-red-500"></i>
+        </button>
+      </div>
+
+      <!-- Modal Filter Bar -->
+      <div class="px-6 py-3 border-b border-gray-100 flex items-center gap-6 bg-white shrink-0">
+        <div class="flex items-center gap-3">
+          <label class="text-[0.65rem] font-black uppercase tracking-wider text-gray-500">Find By Item :</label>
+          <input type="text" id="log-filter-item" placeholder="address"
+            class="h-7 px-3 bg-gray-50 border border-gray-200 rounded-sm text-xs font-medium focus:outline-none focus:ring-1 focus:ring-[#2d68c4] w-48 transition-all">
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-[0.65rem] font-black uppercase tracking-wider text-gray-500">Find By Action :</label>
+          <div class="relative group">
+            <select id="log-filter-action" 
+              class="appearance-none h-7 pl-3 pr-8 bg-gray-50 border border-gray-200 rounded-sm text-[0.7rem] font-bold uppercase tracking-wider text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#2d68c4] transition-all">
+              <option value="ALL">NO CHOICE</option>
+              <option value="Save File">Save File</option>
+              <option value="Rename File">Rename File</option>
+              <option value="Delete File">Delete File</option>
+              <option value="Rename Folder">Rename Folder</option>
+              <option value="Delete Folder">Delete Folder</option>
+              <option value="Create Folder">Create Folder</option>
+            </select>
+            <i class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 pointer-events-none transition-transform group-hover:text-blue-500"></i>
+          </div>
+          <button id="btn-apply-log-filter" class="h-7 px-4 bg-[#2d68c4] text-white text-[0.65rem] font-black uppercase tracking-widest rounded-sm hover:bg-[#1e4b8f] transition-all shadow-sm active:scale-95">Go</button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Table) -->
+      <div class="flex-1 overflow-auto bg-white custom-scrollbar">
+        <table class="w-full border-collapse">
+          <thead class="sticky top-0 z-10">
+            <tr class="bg-gray-50/80 backdrop-blur-md border-b border-gray-100 text-gray-800">
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-12 border-r border-gray-100">Rev</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-48 border-r border-gray-100">Item</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-40 border-r border-gray-100">Location</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-32 border-r border-gray-100">Action</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] border-r border-gray-100">Comment</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-24 border-r border-gray-100">Date</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-20 border-r border-gray-100">Time</th>
+              <th class="px-4 py-3 text-left text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4] w-24">By</th>
+            </tr>
+          </thead>
+          <tbody id="log-table-body" class="divide-y divide-gray-50 text-gray-700">
+            <!-- Mock Log Rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-gray-100 bg-gray-50/50 flex items-center justify-between shrink-0">
+        <p class="text-[0.6rem] font-bold text-gray-400 italic">Historical records are permanent and cannot be deleted.</p>
+        <button onclick="hideDocLogModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary h-8 px-6 text-[0.65rem] font-black uppercase tracking-widest">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Mock Data & Navigation Logic ---
+    let currentPath = ["BOILER_INST"];
+    let clipboard = null;
+
+    const mockData = {
+      "BOILER_INST": [
+        { name: "APPROVAL", type: "Folder", size: "12148", date: "27/06/2020", hasSub: true },
+        { name: "CORRESPONDANCE", type: "Folder", size: "8680", date: "25/08/2021", hasSub: false },
+        { name: "FILE AND SOFT DOCUMENT INDEX", type: "Folder", size: "6", date: "24/11/2006", hasSub: false },
+        { name: "GAIL DCS AMC REPORT", type: "Folder", size: "3740", date: "07/04/2016", hasSub: false },
+        { name: "HELPER OT STATEMENT", type: "Folder", size: "44", date: "11/11/2005", hasSub: false },
+        { name: "MAJOR REVAMP", type: "Folder", size: "56980", date: "14/08/2017", hasSub: false },
+        { name: "MDM", type: "Folder", size: "7033", date: "15/07/2018", hasSub: false },
+        { name: "PAYMENT", type: "Folder", size: "254", date: "14/06/2019", hasSub: false },
+        { name: "REPORTS", type: "Folder", size: "8040", date: "04/11/2024", hasSub: true },
+        { name: "SCOPE OF THE JOB", type: "Folder", size: "422", date: "17/10/2015", hasSub: false },
+        { name: "TOUR REPORT", type: "Folder", size: "662", date: "12/06/2024", hasSub: false },
+        { name: "EMPTY_TEST_FOLDER", type: "Folder", size: "0", date: "22/09/2025", hasSub: false }
+      ],
+      "APPROVAL": [
+        { name: "DRAFT_COMMUNICATION", type: "Folder", size: "1024", date: "12/01/2024", hasSub: true },
+        { name: "FINAL_SIGNED_DOCS", type: "Folder", size: "5120", date: "15/02/2024", hasSub: false },
+        { name: "Reference_Images.zip", type: "File", size: "4500", date: "20/02/2024", hasSub: false }
+      ],
+      "REPORTS": [
+        { name: "Daily_Status_March.pdf", type: "File", size: "120", date: "01/03/2026", hasSub: false },
+        { name: "Monthly_Safety_Audit.xlsx", type: "File", size: "850", date: "05/03/2026", hasSub: false },
+        { name: "Boiler_Efficiency_Chart.png", type: "File", size: "2100", date: "08/03/2026", hasSub: false }
+      ],
+      "DRAFT_COMMUNICATION": [
+        { name: "INTERNAL_MEMO_01.docx", type: "File", size: "45", date: "10/01/2024", hasSub: false },
+        { name: "VENDOR_FEEDBACK.txt", type: "File", size: "12", date: "11/01/2024", hasSub: false }
+      ]
+    };
+
+    const tableBody = document.querySelector('tbody');
+    const pathTitle = document.querySelector('h3.text-dark-text');
+    const modalParentPathDisplay = document.getElementById('modal-parent-path');
+    const btnUp = document.getElementById('btn-up-level');
+    const pasteBtn = document.getElementById('btn-paste');
+    const createModal = document.getElementById('create-folder-modal');
+    const folderInput = document.getElementById('new-folder-name');
+
+    function renderTable(items) {
+      // Clear with out animation
+      tableBody.style.opacity = '0';
+      
+      setTimeout(() => {
+        tableBody.innerHTML = '';
+        if (items.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="py-20 text-center text-dark-muted font-medium italic tracking-widest uppercase opacity-50">Folder is empty</td></tr>`;
+        } else {
+          items.forEach(item => {
+            const row = document.createElement('tr');
+            row.className = "hover:bg-dark-border/30 transition-colors duration-150 border-b border-dark-border/30 group";
+            row.setAttribute('data-has-subfolders', item.hasSub);
+            row.setAttribute('data-size', item.size);
+
+            const iconClass = item.type === "Folder" ? "ph-fill ph-folder text-yellow-500" : 
+                            item.name.endsWith('.pdf') ? "ph-fill ph-file-pdf text-red-500" :
+                            item.name.endsWith('.xlsx') ? "ph-fill ph-file-xls text-green-500" :
+                            "ph-fill ph-file-text text-blue-400";
+
+            row.innerHTML = `
+              <td class="px-3 py-1.5 border-r border-dark-border/30 text-center cursor-pointer btn-doc-log" title="View Log">
+                <i class="${iconClass} text-lg"></i>
+              </td>
+              <td class="px-3 py-1.5 border-r border-dark-border/30">
+                <span class="text-[0.8rem] font-semibold text-dark-text group-hover:text-blue-400 transition-colors uppercase tracking-wide cursor-pointer btn-open-folder">${item.name}</span>
+              </td>
+              <td class="px-3 py-1.5 border-r border-dark-border/30">
+                <span class="text-[0.7rem] font-medium text-dark-muted">&lt;${item.type}&gt;</span>
+              </td>
+              <td class="px-3 py-1.5 border-r border-dark-border/30">
+                <span class="text-[0.7rem] font-mono text-dark-text">${item.size} Kb</span>
+              </td>
+              <td class="px-3 py-1.5 border-r border-dark-border/30">
+                <span class="text-[0.7rem] font-medium text-dark-muted">${item.date}</span>
+              </td>
+              <td class="px-3 py-1.5 text-center">
+                <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-pencil-simple font-14px"></i></button>
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-download-simple font-14px"></i></button>
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-doc-log" title="Log"><i class="ph-bold ph-list-bullets font-14px"></i></button>
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-cut-row" title="Cut"><i class="ph-bold ph-scissors font-14px"></i></button>
+                  <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row" title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                </div>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+        tableBody.style.opacity = '1';
+        tableBody.style.transition = 'opacity 0.2s ease-in';
+      }, 50);
+
+      // Update Header Title & Navigation Button
+      const pathStr = currentPath.join(' / ');
+      pathTitle.innerText = currentPath[currentPath.length - 1];
+      modalParentPathDisplay.innerText = '/' + currentPath.join('/') + '/';
+      
+      btnUp.classList.toggle('text-blue-500', currentPath.length > 1);
+      btnUp.classList.toggle('text-dark-muted', currentPath.length === 1);
+    }
+
+    // Initialize
+    renderTable(mockData["BOILER_INST"]);
+
+    // Navigation Handlers
+    tableBody.addEventListener('click', (e) => {
+      const folderBtn = e.target.closest('.btn-open-folder');
+      if (folderBtn) {
+        const row = folderBtn.closest('tr');
+        const type = row.querySelector('td:nth-child(3) span').innerText;
+        const name = folderBtn.innerText;
+
+        if (type === "<Folder>") {
+          if (mockData[name]) {
+            currentPath.push(name);
+            renderTable(mockData[name]);
+          } else {
+            Swal.fire({
+              toast: true,
+              position: 'center',
+              icon: 'info',
+              title: 'Empty Folder',
+              text: `The folder "${name}" currently has no content.`,
+              showConfirmButton: false,
+              timer: 1500,
+              background: '#ffffff',
+              color: '#1a1a1a'
+            });
+          }
+        } else {
+            Swal.fire({
+              title: 'Opening File',
+              text: `Simulating download/view for "${name}"`,
+              icon: 'success',
+              confirmButtonText: 'OK',
+              background: '#ffffff',
+              color: '#1a1a1a'
+            });
+        }
+      }
+    });
+
+    btnUp.addEventListener('click', () => {
+      if (currentPath.length > 1) {
+        currentPath.pop();
+        const parentFolder = currentPath[currentPath.length - 1];
+        renderTable(mockData[parentFolder] || mockData["BOILER_INST"]);
+      }
+    });
+
+    // --- Original Logic Extensions ---
+
+    function showCreateFolderModal() {
+      createModal.classList.remove('hidden');
+      createModal.classList.add('flex');
+      folderInput.value = '';
+      folderInput.focus();
+    }
+
+    function hideCreateFolderModal() {
+      createModal.classList.add('hidden');
+      createModal.classList.remove('flex');
+    }
+
+    function handleCreateFolder() {
+      const name = folderInput.value.trim();
+      if (!name) return alert("Please enter a name.");
+      
+      const now = new Date();
+      const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+      
+      const currentFolder = currentPath[currentPath.length - 1];
+      if (!mockData[currentFolder]) mockData[currentFolder] = [];
+      
+      mockData[currentFolder].unshift({
+        name: name, type: "Folder", size: "0", date: dateStr, hasSub: false
+      });
+      
+      renderTable(mockData[currentFolder]);
+      hideCreateFolderModal();
+    }
+
+    // Cut & Paste Logic
+    tableBody.addEventListener('click', (e) => {
+      const cutBtn = e.target.closest('.btn-cut-row');
+      if (cutBtn) {
+        if (clipboard) clipboard.classList.remove('opacity-40', 'bg-blue-900/10');
+        clipboard = cutBtn.closest('tr');
+        clipboard.classList.add('opacity-40', 'bg-blue-900/10');
+        pasteBtn.classList.remove('hidden');
+        pasteBtn.classList.add('flex');
+        Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'Item cut', showConfirmButton: false, timer: 1500 });
+      }
+    });
+
+    pasteBtn.addEventListener('click', () => {
+      if (clipboard) {
+        const name = clipboard.querySelector('.btn-open-folder').innerText;
+        const type = clipboard.querySelector('td:nth-child(3) span').innerText.replace(/[<>]/g, '');
+        const size = clipboard.getAttribute('data-size');
+        const hasSub = clipboard.getAttribute('data-has-subfolders') === 'true';
+        
+        const currentFolder = currentPath[currentPath.length - 1];
+        mockData[currentFolder].unshift({ name, type, size, date: 'Moved Today', hasSub });
+        
+        renderTable(mockData[currentFolder]);
+        clipboard = null;
+        pasteBtn.classList.add('hidden');
+        
+        Swal.fire({ title: 'Moved!', icon: 'success', timer: 1500, showConfirmButton: false });
+      }
+    });
+
+    // Deletion Logic
+    tableBody.addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.btn-delete-row');
+      if (deleteBtn) {
+        const row = deleteBtn.closest('tr');
+        const name = row.querySelector('.btn-open-folder').innerText;
+        const hasSub = row.getAttribute('data-has-subfolders') === 'true';
+        const size = parseInt(row.getAttribute('data-size'));
+
+        if (hasSub) return Swal.fire({ title: 'Blocked', text: 'Folder has sub-folders', icon: 'error' });
+        if (size > 0) return Swal.fire({ title: 'Blocked', text: 'Folder is not empty', icon: 'info' });
+
+        Swal.fire({
+          title: 'Confirm Delete?',
+          text: `Delete "${name}"?`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete',
+          customClass: { confirmButton: 'gnfc-modal-btn gnfc-modal-btn-primary mx-2', cancelButton: 'gnfc-modal-btn gnfc-modal-btn-secondary mx-2' },
+          buttonsStyling: false
+        }).then(result => {
+          if (result.isConfirmed) {
+            const currentFolder = currentPath[currentPath.length - 1];
+            mockData[currentFolder] = mockData[currentFolder].filter(i => i.name !== name);
+            renderTable(mockData[currentFolder]);
+            Swal.fire({ title: 'Deleted', icon: 'success', timer: 1000, showConfirmButton: false });
+          }
+        });
+      }
+    });
+
+    // --- Documentation Log ---
+    const logModal = document.getElementById('doc-log-modal');
+    const logTableBody = document.getElementById('log-table-body');
+    const logItemName = document.getElementById('log-item-name');
+    const logFilterItem = document.getElementById('log-filter-item');
+    const logFilterAction = document.getElementById('log-filter-action');
+
+    const mockLogs = [
+      { rev: "0", item: "address", location: "BOILER/APPROVAL", action: "Create Folder", comment: "Initial creation", date: "10/01/2026", time: "10:30", by: "Admin" },
+      { rev: "1", item: "Daily_Status_March.pdf", location: "BOILER/REPORTS", action: "Save File", comment: "Monthly safety update", date: "05/03/2026", time: "14:15", by: "KAYUM" },
+      { rev: "0", item: "APPROVAL", location: "BOILER_INST", action: "Create Folder", comment: "Project root approval", date: "27/06/2020", time: "09:00", by: "SYSTEM" },
+      { rev: "2", item: "address", location: "BOILER/APPROVAL", action: "Rename Folder", comment: "Update naming convention", date: "12/01/2026", time: "11:20", by: "Admin" },
+      { rev: "1", item: "DRAFT_COMMUNICATION", location: "BOILER/APPROVAL/DRAFT", action: "Create Folder", comment: "Draft folder for vendor", date: "15/01/2026", time: "16:45", by: "MANAGER" },
+      { rev: "0", item: "REPORTS", location: "BOILER_INST", action: "Create Folder", comment: "Reports directory", date: "04/11/2024", time: "10:00", by: "SYSTEM" },
+      { rev: "1", item: "VENDOR_FEEDBACK.txt", location: "BOILER/DRAFT", action: "Save File", comment: "Feedback received", date: "11/01/2026", time: "17:00", by: "VENDOR" }
+    ];
+
+    function showDocLogModal(itemName) {
+      logItemName.innerText = itemName;
+      logFilterItem.value = itemName === "ALL" ? "" : itemName.toLowerCase();
+      logModal.classList.remove('hidden');
+      logModal.classList.add('flex');
+      renderLogTable();
+    }
+
+    function hideDocLogModal() {
+      logModal.classList.add('hidden');
+      logModal.classList.remove('flex');
+    }
+
+    function renderLogTable() {
+      const itemFilter = logFilterItem.value.toLowerCase();
+      const actionFilter = logFilterAction.value;
+
+      const filteredLogs = mockLogs.filter(log => {
+        const matchesItem = log.item.toLowerCase().includes(itemFilter) || log.location.toLowerCase().includes(itemFilter);
+        const matchesAction = actionFilter === "ALL" || log.action === actionFilter;
+        return matchesItem && matchesAction;
+      });
+
+      logTableBody.innerHTML = '';
+      if (filteredLogs.length === 0) {
+        logTableBody.innerHTML = `<tr><td colspan="8" class="py-12 text-center text-gray-300 font-bold uppercase tracking-widest text-[0.6rem]">No matching records found</td></tr>`;
+      } else {
+        filteredLogs.forEach(log => {
+          const row = document.createElement('tr');
+          row.className = "hover:bg-blue-50/30 transition-colors";
+          row.innerHTML = `
+            <td class="px-4 py-2.5 text-[0.7rem] font-bold text-gray-500 border-r border-gray-50 text-center">${log.rev}</td>
+            <td class="px-4 py-2.5 text-[0.7rem] font-black text-gray-700 border-r border-gray-50 uppercase tracking-tight">${log.item}</td>
+            <td class="px-4 py-2.5 text-[0.65rem] font-bold text-blue-500 border-r border-gray-50 uppercase tracking-tighter italic">${log.location}</td>
+            <td class="px-4 py-2.5 border-r border-gray-50">
+              <span class="px-2 py-0.5 rounded-full text-[0.6rem] font-black uppercase tracking-widest ${log.action.includes('Delete') ? 'bg-red-50 text-red-500' : 'bg-blue-50 text-[#2d68c4]'}">${log.action}</span>
+            </td>
+            <td class="px-4 py-2.5 text-[0.7rem] font-medium text-gray-600 border-r border-gray-50">${log.comment}</td>
+            <td class="px-4 py-2.5 text-[0.7rem] font-black text-gray-500 border-r border-gray-50">${log.date}</td>
+            <td class="px-4 py-2.5 text-[0.7rem] font-black text-gray-500 border-r border-gray-50">${log.time}</td>
+            <td class="px-4 py-2.5 text-[0.7rem] font-black text-[#2d68c4] uppercase tracking-wider italic">${log.by}</td>
+          `;
+          logTableBody.appendChild(row);
+        });
+      }
+    }
+
+    document.getElementById('btn-apply-log-filter').addEventListener('click', renderLogTable);
+    
+    tableBody.addEventListener('click', (e) => {
+      const logBtn = e.target.closest('.btn-doc-log');
+      if (logBtn) {
+        const name = logBtn.closest('tr').querySelector('.btn-open-folder').innerText;
+        showDocLogModal(name);
+      }
+    });
+
+    document.getElementById('btn-new-folder').addEventListener('click', showCreateFolderModal);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideCreateFolderModal();
+        hideDocLogModal();
+      }
+      if (e.key === 'Enter' && !createModal.classList.contains('hidden')) handleCreateFolder();
+    });
+  </script>
+  <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(44, 50, 53, 0.8);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(87, 148, 242, 0.5);
+    }
+  </style>
+</body>
+
+</html>

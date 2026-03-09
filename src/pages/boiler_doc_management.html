@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Management System | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'plants';</script>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('plants');</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Document Management System",
+        breadcrumbs: [
+          { label: "Plant", href: "/src/pages/plant_status.html" },
+          { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+          { label: "Documents" }
+        ],
+        backLink: "/src/pages/boiler_dashboard.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto g-dark-bg flex items-start justify-center p-10">
+      
+      <div class="w-full space-y-6">
+        
+        <!-- Header Section -->
+        <div class="bg-dark-panel border border-dark-border rounded-xl p-6 flex items-center gap-4">
+           <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shrink-0">
+             <i class="ph-fill ph-folder-open text-blue-500 text-2xl"></i>
+           </div>
+           <div>
+             <h2 class="text-lg font-black text-dark-text tracking-wide uppercase">Document Repository</h2>
+             <p class="text-sm text-dark-muted mt-1">Select a category below to browse through plant documents, manuals, and records.</p>
+           </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Category 1: Engineering Documentation -->
+          <a href="/src/pages/boiler_doc_explorer.html?type=eng" class="group bg-dark-panel border border-dark-border rounded-xl p-6 hover:border-blue-500/40 transition-colors flex flex-col justify-between min-h-[160px]">
+             <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 transition-colors">
+                  <i class="ph-duotone ph-blueprint text-blue-400 text-2xl"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <h3 class="text-sm sm:text-base font-bold text-dark-text uppercase tracking-widest group-hover:text-blue-400 transition-colors">Engineering Documentation</h3>
+                </div>
+             </div>
+             <div>
+                <p class="text-[0.8rem] sm:text-sm text-dark-muted leading-relaxed line-clamp-2">Access technical drawings, P&IDs, logic diagrams, and comprehensive operation manuals.</p>
+                <div class="mt-4 flex items-center text-[0.75rem] font-bold text-blue-400 uppercase tracking-widest gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity translate-y-1 group-hover:translate-y-0 duration-300">
+                  <span>View Documents</span>
+                  <i class="ph-bold ph-arrow-right"></i>
+                </div>
+             </div>
+          </a>
+          
+          <!-- Category 2: Communication and Records -->
+          <a href="/src/pages/boiler_doc_explorer.html?type=comm" class="group bg-dark-panel border border-dark-border rounded-xl p-6 hover:border-purple-500/40 transition-colors flex flex-col justify-between min-h-[160px]">
+             <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:bg-purple-500/20 transition-colors">
+                  <i class="ph-duotone ph-folders text-purple-400 text-2xl"></i>
+                </div>
+                <div class="flex-1 pt-1">
+                  <h3 class="text-sm sm:text-base font-bold text-dark-text uppercase tracking-widest group-hover:text-purple-400 transition-colors">Communication & Records</h3>
+                </div>
+             </div>
+             <div>
+                <p class="text-[0.8rem] sm:text-sm text-dark-muted leading-relaxed line-clamp-2">View internal memos, incident reports, communication logs, and historical records.</p>
+                <div class="mt-4 flex items-center text-[0.75rem] font-bold text-purple-400 uppercase tracking-widest gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity translate-y-1 group-hover:translate-y-0 duration-300">
+                  <span>View Records</span>
+                  <i class="ph-bold ph-arrow-right"></i>
+                </div>
+             </div>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
