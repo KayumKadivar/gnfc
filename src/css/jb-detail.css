@@ -3,13 +3,13 @@
    Theme-aware via --app-* CSS variables (set by ThemeManager)
    ========================================================================== */
 
-/* ── Scrollbar ─────────────────────────────────────────────────────────── */
+/* ── Scrollbar ─────────*/
 ::-webkit-scrollbar          { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track    { background: transparent; }
 ::-webkit-scrollbar-thumb    { background: var(--app-border, #2C3235); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-/* ── Toolbar Filters ───────────────────────────────────────────────────── */
+/* ── Toolbar Filters ───*/
 .jbd-filter-group {
     display: flex;
     flex-direction: column;
@@ -84,7 +84,7 @@ html[data-theme-mode="light"] .jbd-input:focus {
     pointer-events: none;
 }
 
-/* ── Toolbar Divider ───────────────────────────────────────────────────── */
+/* ── Toolbar Divider ───*/
 .jbd-divider {
     display: none;
     width: 1px;
@@ -97,7 +97,7 @@ html[data-theme-mode="light"] .jbd-input:focus {
     .jbd-divider { display: block; }
 }
 
-/* ── Buttons ───────────────────────────────────────────────────────────── */
+/* ── Buttons ───────────*/
 .jbd-btn {
     display: inline-flex;
     align-items: center;
@@ -170,7 +170,7 @@ html[data-theme-mode="light"] .jbd-btn-ghost:hover {
     color: #2563eb;
 }
 
-/* ── Alert Banner ──────────────────────────────────────────────────────── */
+/* ── Alert Banner ──────*/
 .jbd-alert {
     display: flex;
     align-items: center;
@@ -191,7 +191,7 @@ html[data-theme-mode="light"] .jbd-alert {
     color: #dc2626;
 }
 
-/* ── Card: Control Copy ────────────────────────────────────────────────── */
+/* ── Card: Control Copy */
 .jbd-card {
     background: var(--app-panel, #181b1f);
     border: 1px solid var(--app-border, #2c3235);
@@ -303,7 +303,7 @@ html[data-theme-mode="light"] .jbd-info-item-value {
     color: #1e293b;
 }
 
-/* ── Badge / pill ──────────────────────────────────────────────────────── */
+/* ── Badge / pill ──────*/
 .jbd-badge {
     display: inline-flex;
     align-items: center;
@@ -343,7 +343,7 @@ html[data-theme-mode="light"] .jbd-badge-count {
     color: #64748b;
 }
 
-/* ── Channel Table ─────────────────────────────────────────────────────── */
+/* ── Channel Table ─────*/
 .jbd-table {
     width: 100%;
     border-collapse: collapse;
@@ -388,11 +388,11 @@ html[data-theme-mode="light"] .jbd-badge-count {
 }
 
 .jbd-table td {
-    padding: 0 0.25rem;
+    /* padding: 0 0.25rem; */
     border: 1px solid var(--app-border, #2c3235);
     color: var(--app-text, #e6edf3);
     vertical-align: middle;
-    height: 34px;
+    /* height: 34px; */
 }
 
 .jbd-table tbody tr:hover {
@@ -439,7 +439,7 @@ html[data-theme-mode="light"] .jbd-ch-num {
     color: #2563eb;
 }
 
-/* ── Table Inputs ──────────────────────────────────────────────────────── */
+/* ── Table Inputs ──────*/
 .jbd-tbl-input {
     width: 100%;
     height: 1.5rem;
@@ -481,7 +481,7 @@ html[data-theme-mode="light"] .jbd-table tbody tr:hover .jbd-tbl-input:not(:focu
     border-color: #94a3b8;
 }
 
-/* ── Toolbar Section ───────────────────────────────────────────────────── */
+/* ── Toolbar Section ───*/
 .jbd-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -500,7 +500,7 @@ html[data-theme-mode="light"] .jbd-table tbody tr:hover .jbd-tbl-input:not(:focu
     margin-left: auto;
 }
 
-/* ── Footer Actions Bar ────────────────────────────────────────────────── */
+/* ── Footer Actions Bar */
 .jbd-footer-bar {
     display: flex;
     align-items: center;
@@ -509,7 +509,7 @@ html[data-theme-mode="light"] .jbd-table tbody tr:hover .jbd-tbl-input:not(:focu
     padding: 8px 0;
 }
 
-/* ── JObIndex group row ────────────────────────────────────────────────── */
+/* ── JObIndex group row */
 .jbd-group-row td {
     background: rgba(37, 99, 235, 0.07) !important;
     font-weight: 800;
@@ -519,6 +519,7 @@ html[data-theme-mode="light"] .jbd-table tbody tr:hover .jbd-tbl-input:not(:focu
     font-size: 0.6875rem;
     padding: 5px 10px;
     border-bottom: 2px solid rgba(37, 99, 235, 0.2);
+    border-top: 2px solid rgba(37, 99, 235, 0.2);
 }
 
 html[data-theme-mode="light"] .jbd-group-row td {

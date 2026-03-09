@@ -12,162 +12,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="/src/js/tailwind_config.js"></script>
     <script>window.activePage = 'plants';</script>
-    <style>
-        .form-section {
-            background: rgba(15, 23, 42, 0.3);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            margin-bottom: 1.25rem;
-            box-shadow: 0 1px 6px -2px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group-label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--app-muted, #9aa7b5);
-            margin-bottom: 0.375rem;
-        }
-
-        .form-input {
-            width: 100%;
-            height: 2.75rem;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.5rem;
-            padding: 0 0.875rem;
-            color: var(--app-text, #e6edf3);
-            font-size: 0.875rem;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus {
-            border-color: #5794f2;
-            box-shadow: 0 0 0 3px rgba(87, 148, 242, 0.15);
-            background: rgba(15, 23, 42, 0.8);
-        }
-
-        .section-title {
-            font-size: 0.8125rem;
-            font-weight: 800;
-            color: #5794f2;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, var(--app-border, #2c3235), transparent);
-        }
-
-        .action-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.375rem;
-            padding: 0.625rem 1rem;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.5) 100%);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-            height: 2.25rem;
-            padding: 0 0.875rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 0.375rem;
-            color: var(--app-text, #e6edf3);
-            font-size: 0.8125rem;
-            font-weight: 700;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .action-button:hover {
-            background: rgba(87, 148, 242, 0.12);
-            border-color: rgba(87, 148, 242, 0.35);
-            color: #73b0ff;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px -2px rgba(87, 148, 242, 0.2);
-        }
-
-        .action-button.btn-save {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            border: none;
-            color: #ffffff;
-            box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.4);
-            padding: 0 1.5rem;
-        }
-
-        .action-button.btn-save:hover {
-            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-            box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.5);
-            color: #ffffff;
-        }
-
-        .action-button.btn-cancel {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-            border: none;
-            color: #ffffff;
-            box-shadow: 0 2px 8px -2px rgba(239, 68, 68, 0.4);
-            padding: 0 1.5rem;
-        }
-
-        .action-button.btn-cancel:hover {
-            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-            box-shadow: 0 4px 12px -2px rgba(239, 68, 68, 0.5);
-            color: #ffffff;
-        }
-
-        /* Light Theme */
-        html[data-theme-mode="light"] .form-section {
-            background: #ffffff;
-            border-color: #d6deea;
-        }
-
-        html[data-theme-mode="light"] .form-group-label {
-            color: #64748b;
-        }
-
-        html[data-theme-mode="light"] .form-input {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            color: #1e293b;
-        }
-
-        html[data-theme-mode="light"] .form-input:focus {
-            background: #ffffff;
-        }
-
-        html[data-theme-mode="light"] .action-toolbar {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-color: #d6deea;
-        }
-
-        html[data-theme-mode="light"] .action-button {
-            background: #ffffff;
-            border-color: #d1d5db;
-            color: #374151;
-        }
-    </style>
-</head>
+    </head>
 
 <body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
 
@@ -197,13 +42,13 @@
             <div class="max-w-8xl mx-auto space-y-4">
 
                 <!-- General Information -->
-                <div class="form-section" style="border-left: 3px solid #10b981;">
-                    <div class="section-title" style="color: #10b981;"><i class="ph-fill ph-note-pencil"></i> Add New
+                <div class="bg-dark-panel border border-dark-border rounded-xl p-5 mb-5 shadow-sm" style="border-left: 3px solid #10b981;">
+                    <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent" style="color: #10b981;"><i class="ph-fill ph-note-pencil"></i> Add New
                         Instrument</div>
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div>
-                            <label class="form-group-label">Area</label>
-                            <select class="form-input" id="ef-area">
+                            <label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Area</label>
+                            <select class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-area">
                                 <option>ALL</option>
                                 <option>ASH</option>
                                 <option>BOILER-1</option>
@@ -221,13 +66,13 @@
                                 <option>TG-2</option>
                             </select>
                         </div>
-                        <div><label class="form-group-label">Tag No</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Tag No</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-tag_no"></div>
-                        <div class="md:col-span-2"><label class="form-group-label">Description</label><input type="text"
-                                class="form-input" id="ef-description"></div>
+                        <div class="md:col-span-2"><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Description</label><input type="text"
+                                class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-description"></div>
                         <div>
-                            <label class="form-group-label">Host</label>
-                            <select class="form-input" id="ef-host">
+                            <label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Host</label>
+                            <select class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-host">
                                 <option>DCS</option>
                                 <option>ESD</option>
                                 <option>N/A</option>
@@ -239,23 +84,23 @@
 
                 <!-- Controller & IO Module -->
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-cpu"></i> Controller</div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
+                        <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-cpu"></i> Controller</div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="form-group-label">Type</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Type</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-ctrl_type"></div>
-                            <div><label class="form-group-label">No</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">No</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-ctrl_no"></div>
                         </div>
                     </div>
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-cpu"></i> IO Module</div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
+                        <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-cpu"></i> IO Module</div>
                         <div class="grid grid-cols-3 gap-4">
-                            <div><label class="form-group-label">Type</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Type</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-io_type"></div>
-                            <div><label class="form-group-label">SW ID</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">SW ID</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-sw_id"></div>
-                            <div><label class="form-group-label">Location</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Location</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-io_loc"></div>
                         </div>
                     </div>
@@ -263,48 +108,48 @@
 
                 <!-- Channel, ESD, Range -->
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div class="form-section m-0">
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="form-group-label">CH</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">CH</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-channel"></div>
-                            <div><label class="form-group-label">ESD Sheet</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">ESD Sheet</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-esd"></div>
                         </div>
                     </div>
-                    <div class="form-section m-0">
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
                         <div class="grid grid-cols-2 gap-4">
-                            <div><label class="form-group-label">Eng Range</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Eng Range</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-eng_range"></div>
-                            <div><label class="form-group-label">Cal Range</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Cal Range</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-cal_range"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Trip Settings -->
-                <div class="form-section">
-                    <div class="section-title"><i class="ph-fill ph-warning-circle"></i> Trip Settings</div>
+                <div class="bg-dark-panel border border-dark-border rounded-xl p-5 mb-5 shadow-sm">
+                    <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-warning-circle"></i> Trip Settings</div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div><label class="form-group-label">Trip H/HH</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Trip H/HH</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-trip_h"></div>
-                        <div><label class="form-group-label">Function</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Function</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-func_h"></div>
-                        <div><label class="form-group-label">Trip L/LL</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Trip L/LL</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-trip_l"></div>
-                        <div><label class="form-group-label">Function</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Function</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-func_l"></div>
                     </div>
                 </div>
 
                 <!-- Specifications -->
-                <div class="form-section">
-                    <div class="section-title"><i class="ph-fill ph-wrench"></i> Specifications</div>
+                <div class="bg-dark-panel border border-dark-border rounded-xl p-5 mb-5 shadow-sm">
+                    <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-wrench"></i> Specifications</div>
                     <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
-                        <div class="md:col-span-2"><label class="form-group-label">Loop Function</label><input
-                                type="text" class="form-input" id="ef-loop_func"></div>
+                        <div class="md:col-span-2"><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Loop Function</label><input
+                                type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-loop_func"></div>
                         <div>
-                            <label class="form-group-label">Inst Type</label>
-                            <select class="form-input" id="ef-inst_type">
+                            <label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Inst Type</label>
+                            <select class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-inst_type">
                                 <option>ANALYZER</option>
                                 <option>C/V</option>
                                 <option>TX</option>
@@ -324,123 +169,123 @@
                                 <option>MAGNETIC</option>
                             </select>
                         </div>
-                        <div><label class="form-group-label">Make</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Make</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-make"></div>
-                        <div><label class="form-group-label">Model</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Model</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-model"></div>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div><label class="form-group-label">SRNO</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">SRNO</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-srno"></div>
-                        <div class="md:col-span-3"><label class="form-group-label">Location</label><input type="text"
-                                class="form-input" id="ef-location"></div>
+                        <div class="md:col-span-3"><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Location</label><input type="text"
+                                class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-location"></div>
                     </div>
                 </div>
 
                 <!-- Primary Element & Other Links -->
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-atom"></i> Primary Element</div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
+                        <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-atom"></i> Primary Element</div>
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            <div><label class="form-group-label">Data Sheet</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Data Sheet</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-pe_datasheet"></div>
-                            <div><label class="form-group-label">Calculation</label><input type="text"
-                                    class="form-input" id="ef-pe_calc"></div>
-                            <div><label class="form-group-label">Drawing</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Calculation</label><input type="text"
+                                    class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-pe_calc"></div>
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Drawing</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-pe_drawing"></div>
-                            <div><label class="form-group-label">Cal. Report</label><input type="text"
-                                    class="form-input" id="ef-pe_calreport"></div>
-                            <div><label class="form-group-label">Insp. Report</label><input type="text"
-                                    class="form-input" id="ef-pe_inspreport"></div>
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Cal. Report</label><input type="text"
+                                    class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-pe_calreport"></div>
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Insp. Report</label><input type="text"
+                                    class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-pe_inspreport"></div>
                         </div>
                     </div>
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-link"></i> Other Links</div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
+                        <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-link"></i> Other Links</div>
                         <div class="grid grid-cols-3 gap-4">
-                            <div><label class="form-group-label">Logic</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Logic</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-logic"></div>
-                            <div><label class="form-group-label">Loop Sheet</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Loop Sheet</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-loop_sheet"></div>
-                            <div><label class="form-group-label">Helping Hand</label><input type="text"
-                                    class="form-input" id="ef-helping"></div>
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Helping Hand</label><input type="text"
+                                    class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-helping"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Secondary Element & Damping -->
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-stack"></i> Secondary Element</div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
+                        <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-stack"></i> Secondary Element</div>
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            <div><label class="form-group-label">Calculations</label><input type="text"
-                                    class="form-input" id="ef-se_calc"></div>
-                            <div><label class="form-group-label">Drawing</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Calculations</label><input type="text"
+                                    class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-se_calc"></div>
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Drawing</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-se_drawing"></div>
-                            <div><label class="form-group-label">Insp. Report</label><input type="text"
-                                    class="form-input" id="ef-se_inspreport"></div>
-                            <div><label class="form-group-label">Data Sheet</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Insp. Report</label><input type="text"
+                                    class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-se_inspreport"></div>
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Data Sheet</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-se_datasheet"></div>
-                            <div><label class="form-group-label">Accessory</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Accessory</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-se_accessory"></div>
                         </div>
                     </div>
-                    <div class="form-section m-0">
-                        <div class="section-title"><i class="ph-fill ph-gauge"></i> Damping</div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-5 shadow-sm">
+                        <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-gauge"></i> Damping</div>
                         <div class="grid grid-cols-5 gap-4">
-                            <div><label class="form-group-label">TX</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">TX</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-damp_tx"></div>
-                            <div><label class="form-group-label">DCS</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">DCS</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-damp_dcs"></div>
-                            <div><label class="form-group-label">AFRSet</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">AFRSet</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-afrset"></div>
-                            <div><label class="form-group-label">Air Lock</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Air Lock</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-airlock"></div>
-                            <div><label class="form-group-label">Other</label><input type="text" class="form-input"
+                            <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Other</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                     id="ef-damp_other"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Special Comment -->
-                <div class="form-section">
-                    <div><label class="form-group-label">Special Comment</label>
-                        <textarea class="form-input" id="ef-comment"
+                <div class="bg-dark-panel border border-dark-border rounded-xl p-5 mb-5 shadow-sm">
+                    <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Special Comment</label>
+                        <textarea class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-comment"
                             style="height: 5rem; padding-top: 0.5rem; resize: vertical;"></textarea>
                     </div>
                 </div>
 
                 <!-- Additional Settings -->
-                <div class="form-section">
-                    <div class="section-title"><i class="ph-fill ph-gear"></i> Additional Settings</div>
+                <div class="bg-dark-panel border border-dark-border rounded-xl p-5 mb-5 shadow-sm">
+                    <div class="text-[0.8125rem] font-extrabold text-blue-500 uppercase tracking-[0.1em] mb-4 flex items-center gap-2 after:content-[''] after:flex-1 after:h-px after:bg-gradient-to-r after:from-dark-border after:to-transparent"><i class="ph-fill ph-gear"></i> Additional Settings</div>
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-                        <div><label class="form-group-label">Bypass Module</label>
-                            <select class="form-input" id="ef-bypass">
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Bypass Module</label>
+                            <select class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-bypass">
                                 <option>YES</option>
                                 <option selected>NO</option>
                             </select>
                         </div>
-                        <div><label class="form-group-label">Ref. No</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Ref. No</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-ref_no"></div>
-                        <div><label class="form-group-label">Meas. Tech</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Meas. Tech</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-meas_tech"></div>
-                        <div><label class="form-group-label">Ana. Working</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Ana. Working</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-ana_working"></div>
-                        <div><label class="form-group-label">CPCB</label>
-                            <select class="form-input" id="ef-cpcb">
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">CPCB</label>
+                            <select class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-cpcb">
                                 <option selected>NO</option>
                                 <option>YES</option>
                             </select>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div><label class="form-group-label">Card No</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Card No</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-card_no"></div>
-                        <div><label class="form-group-label">Card Loc</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Card Loc</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-card_loc"></div>
-                        <div><label class="form-group-label">Call Tag</label><input type="text" class="form-input"
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Call Tag</label><input type="text" class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel"
                                 id="ef-call_tag"></div>
-                        <div><label class="form-group-label">Logbook</label>
-                            <select class="form-input" id="ef-logbook">
+                        <div><label class="block text-[0.75rem] font-extrabold text-dark-muted uppercase tracking-[0.05em] mb-1.5">Logbook</label>
+                            <select class="w-full h-11 bg-dark-bg/50 border border-dark-border rounded-lg px-3.5 text-dark-text text-[0.875rem] font-semibold outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:bg-dark-panel" id="ef-logbook">
                                 <option selected>YES</option>
                                 <option>NO</option>
                             </select>
@@ -449,10 +294,10 @@
                 </div>
 
                 <!-- Save / Cancel -->
-                <div class="action-toolbar">
-                    <button class="action-button btn-save" onclick="saveRecord()"><i class="ph-bold ph-floppy-disk"></i>
+                <div class="flex items-center justify-center gap-1.5 py-2.5 px-4 bg-dark-panel border border-dark-border rounded-xl flex-wrap">
+                    <button class="inline-flex items-center gap-1.5 h-9 px-6 bg-gradient-to-br from-emerald-600 to-emerald-500 border-none rounded-md text-[0.8125rem] font-bold text-white shadow-[0_2px_8px_-2px_rgba(16,185,129,0.4)] transition-all duration-200 cursor-pointer whitespace-nowrap hover:from-emerald-500 hover:to-emerald-400 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_-2px_rgba(16,185,129,0.5)]" onclick="saveRecord()"><i class="ph-bold ph-floppy-disk"></i>
                         Save</button>
-                    <button class="action-button btn-cancel"
+                    <button class="inline-flex items-center gap-1.5 h-9 px-6 bg-gradient-to-br from-red-600 to-red-500 border-none rounded-md text-[0.8125rem] font-bold text-white shadow-[0_2px_8px_-2px_rgba(239,68,68,0.4)] transition-all duration-200 cursor-pointer whitespace-nowrap hover:from-red-500 hover:to-red-400 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_-2px_rgba(239,68,68,0.5)]"
                         onclick="window.location.href='/src/pages/boiler_inst_data.html'"><i class="ph-bold ph-x"></i>
                         Cancel</button>
                 </div>

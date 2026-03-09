@@ -2,827 +2,657 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loop Data | GNFC</title>
-    <link rel="stylesheet" href="/src/css/ios-fonts.css">
-    <link rel="stylesheet" href="/src/css/modal-ui.css">
-    <link rel="stylesheet" href="/src/css/typography.css">
-    <link rel="stylesheet" href="/src/css/table-style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/src/js/tailwind_config.js"></script>
-    <script>window.activePage = 'plants';</script>
-    <style>
-        .loop-card {
-            background: var(--app-panel, rgba(15, 23, 42, 0.4));
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            margin-bottom: 1.25rem;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loop Data | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'plants';</script>
 
-        .loop-card-header {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--app-border, #2c3235);
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--app-text, #e6edf3);
-            text-align: center;
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        .loop-card-label {
-            width: 160px;
-            padding: 0.75rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--app-text, #e6edf3);
-            display: flex;
-            align-items: center;
-            border-right: 1px solid var(--app-border, #2c3235);
-        }
-
-        .loop-input {
-            width: 100%;
-            height: 2.25rem;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.375rem;
-            padding: 0 0.875rem;
-            color: var(--app-text, #e6edf3);
-            font-size: 0.875rem;
-            font-weight: 500;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .loop-input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
-
-        .loop-value {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--app-text, #e6edf3);
-        }
-
-        /* --- Action Toolbar --- */
-        .action-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1rem;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.5) 100%);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.75rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.25rem;
-        }
-
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-            height: 2.25rem;
-            padding: 0 0.875rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 0.375rem;
-            color: var(--app-text, #e6edf3);
-            font-size: 0.8125rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .action-button:hover {
-            background: rgba(87, 148, 242, 0.12);
-            border-color: rgba(87, 148, 242, 0.35);
-            color: #73b0ff;
-        }
-
-        .action-button.btn-add-loop {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            border: none;
-            color: #fff;
-            box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.4);
-            padding: 0 1.25rem;
-        }
-
-        .action-button.btn-add-loop:hover {
-            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-            box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.5);
-            color: #fff;
-        }
-
-        .action-button.btn-save {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            border: none;
-            color: #fff;
-            box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.4);
-            padding: 0 1.5rem;
-        }
-
-        .action-button.btn-cancel {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-            border: none;
-            color: #fff;
-            box-shadow: 0 2px 8px -2px rgba(239, 68, 68, 0.4);
-            padding: 0 1.5rem;
-        }
-
-        .toolbar-divider {
-            width: 1px;
-            height: 1.5rem;
-            background: var(--app-border, #2c3235);
-            margin: 0 0.25rem;
-        }
-
-        /* --- Dropdown --- */
-        #loop-dropdown-list {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 0;
-            width: 100%;
-            background: var(--app-panel, #0f172a);
-            border: 1px solid var(--app-border, #2c3235);
-            border-radius: 0.5rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            max-height: 14rem;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .loop-dd-item {
-            padding: 0.625rem 1rem;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--app-text, #e6edf3);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            border-bottom: 1px solid var(--app-border, #2c3235);
-            transition: background 0.15s;
-        }
-
-        .loop-dd-item:last-child {
-            border-bottom: none;
-        }
-
-        .loop-dd-item:hover {
-            background: rgba(87, 148, 242, 0.1);
-        }
-
-        .loop-dd-item .item-id {
-            color: #5794f2;
-            font-size: 0.75rem;
-            font-weight: 800;
-        }
-
-        .loop-dd-item .item-name {
-            font-size: 0.8125rem;
-        }
-
-        /* Light Theme */
-        html[data-theme-mode="light"] .loop-card {
-            background: #fff;
-            border-color: #d6deea;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
-        }
-
-        html[data-theme-mode="light"] .loop-card-header,
-        html[data-theme-mode="light"] .loop-card-label {
-            background: #f8fafc;
-            border-color: #d6deea;
-            color: #475569;
-        }
-        html[data-theme-mode="light"] .loop-input {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            color: #1e293b;
-        }
-
-        html[data-theme-mode="light"] .loop-value {
-            color: #1e293b;
-        }
-
-        html[data-theme-mode="light"] .action-toolbar {
-            background: #f8fafc;
-            border-color: #d6deea;
-        }
-
-        html[data-theme-mode="light"] .action-button {
-            background: #fff;
-            border-color: #d1d5db;
-            color: #374151;
-        }
-
-        html[data-theme-mode="light"] #loop-dropdown-list {
-            background: #fff;
-            border-color: #d6deea;
-        }
-
-        html[data-theme-mode="light"] .loop-dd-item {
-            border-color: #e2e8f0;
-            color: #1e293b;
-        }
-    </style>
 </head>
 
 <body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
 
-    <script src="/src/js/theme_manager.js"></script>
-    <script src="/src/js/sidebar.js"></script>
-    <div id="sidebar-container"></div>
-    <script>renderSidebar('plants');</script>
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('plants');</script>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-        <div id="header-container"></div>
-        <script src="/src/js/header.js"></script>
-        <script>
-            renderHeader({
-                title: "Loop Data",
-                breadcrumbs: [
-                    { label: "Plant", href: "/src/pages/plant_status.html" },
-                    { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
-                    { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
-                    { label: "Loop Data" }
-                ],
-                backLink: "/src/pages/boiler_inst_data.html"
-            });
-        </script>
-
-        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
-            <div class="max-w-6xl mx-auto">
-
-                <!-- ========== VIEW MODE ========== -->
-                <div id="view-mode">
-
-                    <!-- Action Toolbar -->
-                    <div class="action-toolbar">
-                        <!-- Find Loop Dropdown -->
-                        <div class="relative flex-1 min-w-[260px]" id="loop-search-wrap">
-                            <label class="form-group-label mb-1"
-                                style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--app-muted,#9aa7b5);">Find
-                                Loop</label>
-                            <div class="relative flex items-center">
-                                <i class="ph-bold ph-magnifying-glass absolute left-3 color-secondary"
-                                    style="font-size:.9rem;pointer-events:none;"></i>
-                                <input type="text" id="loop-search-input" class="loop-input pl-9 pr-9 font-bold"
-                                    placeholder="Search loop ID or name..." autocomplete="off">
-                                <button id="loop-dd-btn"
-                                    class="absolute right-2 w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 color-secondary transition-colors">
-                                    <i class="ph-bold ph-caret-down" style="font-size:.875rem;"></i>
-                                </button>
-                            </div>
-                            <div id="loop-dropdown-list" class="hidden"></div>
-                        </div>
-
-                        <!-- Area Filter -->
-                        <div style="min-width:130px;">
-                            <label class="form-group-label mb-1"
-                                style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--app-muted,#9aa7b5);">Area</label>
-                            <div class="relative">
-                                <select id="view-area-select" class="loop-input pr-8 cursor-pointer"
-                                    style="appearance:none;" onchange="filterByArea()">
-                                    <option>ALL</option>
-                                    <option>BOILER-1</option>
-                                    <option>BOILER-2</option>
-                                    <option>BOILER-3</option>
-                                    <option>BOILER-4</option>
-                                    <option>BOP</option>
-                                    <option>COMMON</option>
-                                    <option>ASH</option>
-                                    <option>TG-1</option>
-                                    <option>TG-2</option>
-                                </select>
-                                <i class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 color-secondary pointer-events-none"
-                                    style="font-size:.8rem;"></i>
-                            </div>
-                        </div>
-
-                        <span class="toolbar-divider"></span>
-
-                        <!-- Add New Loop -->
-                        <div style="padding-top:1.25rem;">
-                            <button class="action-button btn-add-loop" onclick="showAddMode()">
-                                <i class="ph-bold ph-plus"></i> Add New Loop
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div id="loop-empty-state" class="loop-card flex flex-col items-center justify-center py-16 gap-4">
-                        <div
-                            style="width:64px;height:64px;border-radius:50%;background:rgba(87,148,242,0.1);border:1px solid rgba(87,148,242,0.2);display:flex;align-items:center;justify-content:center;">
-                            <i class="ph-bold ph-arrows-clockwise" style="font-size:1.75rem;color:#5794f2;"></i>
-                        </div>
-                        <div style="text-align:center;">
-                            <p
-                                style="font-size:0.9375rem;font-weight:700;color:var(--app-text,#e6edf3);margin-bottom:4px;">
-                                No Loop Selected</p>
-                            <p style="font-size:0.8125rem;color:var(--app-muted,#9aa7b5);">Search or select a Loop from
-                                the dropdown to view its data.</p>
-                        </div>
-                    </div>
-
-                    <!-- Loop Data (hidden until selected) -->
-                    <div id="loop-data-area" style="display:none;">
-
-                        <!-- Name & Service -->
-                        <div class="loop-card flex flex-col">
-                            <div class="flex border-b" style="border-color:var(--app-border,#2c3235);">
-                                <div class="loop-card-label">LOOP NAME :</div>
-                                <div class="loop-value flex items-center">
-                                    <span id="view-loop-name" class="font-bold" style="font-size:0.9375rem;"></span>
-                                </div>
-                            </div>
-                            <div class="flex">
-                                <div class="loop-card-label">SERVICE :</div>
-                                <div class="loop-value flex items-center">
-                                    <span id="view-loop-service" style="font-size:0.875rem;"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Schematic & Special Doc -->
-                        <div class="loop-card">
-                            <div class="grid grid-cols-1 md:grid-cols-2">
-                                <div class="border-b md:border-b-0 md:border-r"
-                                    style="border-color:var(--app-border,#2c3235);">
-                                    <div class="loop-card-header">LOOP SCHEMATIC</div>
-                                    <div class="flex items-center justify-center p-4 min-h-[3rem]">
-                                        <span id="view-loop-schematic" class="text-sm font-semibold">—</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="loop-card-header">SPECIAL DOCUMENT</div>
-                                    <div class="flex items-center justify-center p-4 min-h-[3rem]">
-                                        <span id="view-loop-special-doc" class="text-sm font-semibold">—</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Hints & Instructions -->
-                        <div class="loop-card">
-                            <div class="grid grid-cols-1 md:grid-cols-2">
-                                <div class="border-b md:border-b-0 md:border-r"
-                                    style="border-color:var(--app-border,#2c3235);">
-                                    <div class="loop-card-header">HELPFUL HINTS</div>
-                                    <div class="p-3">
-                                        <div id="view-loop-hints"
-                                            class="text-sm font-semibold whitespace-pre-wrap min-h-[4rem]"
-                                            style="color:var(--app-text,#e6edf3);"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="loop-card-header">SPECIAL INSTRUCTIONS</div>
-                                    <div class="p-3">
-                                        <div id="view-loop-instructions"
-                                            class="text-sm font-semibold whitespace-pre-wrap min-h-[4rem]"
-                                            style="color:var(--app-text,#e6edf3);"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Components Table -->
-                        <div class="loop-card">
-                            <div class="loop-card-header">LOOP COMPONENTS</div>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left border-collapse min-w-[600px]">
-                                    <thead>
-                                        <tr
-                                            style="background:rgba(15,23,42,0.5);border-bottom:1px solid var(--app-border,#2c3235);">
-                                            <th class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider w-[5%]"
-                                                style="color:var(--app-muted,#9aa7b5);border-right:1px solid var(--app-border,#2c3235);">
-                                                #</th>
-                                            <th class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider w-[18%]"
-                                                style="color:var(--app-muted,#9aa7b5);border-right:1px solid var(--app-border,#2c3235);">
-                                                Tag No</th>
-                                            <th class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider w-[37%]"
-                                                style="color:var(--app-muted,#9aa7b5);border-right:1px solid var(--app-border,#2c3235);">
-                                                Description</th>
-                                            <th class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider w-[20%]"
-                                                style="color:var(--app-muted,#9aa7b5);border-right:1px solid var(--app-border,#2c3235);">
-                                                Type</th>
-                                            <th class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider w-[20%]"
-                                                style="color:var(--app-muted,#9aa7b5);">Make / Model</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="components-body"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div><!-- /loop-data-area -->
-                </div><!-- /view-mode -->
-
-
-
-
-            </div>
-        </div>
-    </main>
-
-    <!-- ========== ADD NEW LOOP MODAL ========== -->
-    <div id="add-loop-modal" class="gnfc-modal-overlay" onclick="if(event.target===this)hideAddMode()">
-        <div class="gnfc-modal-shell gnfc-modal-shell--medium">
-
-            <!-- Header -->
-            <div class="gnfc-modal-header" style="display:flex;align-items:center;gap:0.75rem;padding:1rem 1.25rem;border-bottom:1px solid var(--gnfc-modal-shell-border);background:var(--gnfc-modal-header-bg);">
-                <div style="width:36px;height:36px;border-radius:0.5rem;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <i class="ph-fill ph-arrows-clockwise" style="font-size:1.1rem;color:#10b981;"></i>
-                </div>
-                <div style="flex:1;">
-                    <p style="font-size:0.9375rem;font-weight:800;color:var(--gnfc-modal-title-color,#5794f2);margin:0;">Add New Loop</p>
-                    <p style="font-size:0.75rem;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin:0;">Fill in the details below and save.</p>
-                </div>
-                <button onclick="hideAddMode()" style="width:32px;height:32px;border-radius:0.375rem;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gnfc-modal-close-color,#8e8e9e);transition:all 0.2s;" onmouseover="this.style.background='var(--gnfc-modal-close-hover-bg)';this.style.color='var(--gnfc-modal-close-hover-color)'" onmouseout="this.style.background='transparent';this.style.color='var(--gnfc-modal-close-color)'">
-                    <i class="ph-bold ph-x" style="font-size:1rem;"></i>
-                </button>
-            </div>
-
-            <!-- Body -->
-            <div class="gnfc-modal-body" style="overflow-y:auto;flex:1;background:var(--gnfc-modal-body-bg);">
-
-                <!-- Row 1: Loop ID, Area -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1.25rem 1.25rem 0;">
-                    <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Loop ID *</label>
-                        <input type="text" id="add-loop-id" class="loop-input" placeholder="e.g. LS-B1-012">
-                    </div>
-                    <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Area</label>
-                        <div style="position:relative;">
-                            <select id="add-area-select" class="loop-input" style="appearance:none;padding-right:2rem;cursor:pointer;">
-                                <option>BOILER-1</option><option>BOILER-2</option><option>BOILER-3</option>
-                                <option>BOILER-4</option><option>BOP</option><option>COMMON</option>
-                                <option>ASH</option><option>TG-1</option><option>TG-2</option>
-                            </select>
-                            <i class="ph-bold ph-caret-down" style="position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--gnfc-modal-subtitle-color,#8e8e9e);pointer-events:none;"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Row 2: Loop Name -->
-                <div style="padding:0.75rem 1.25rem 0;">
-                    <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Loop Name *</label>
-                    <input type="text" id="add-loop-name" class="loop-input" placeholder="e.g. MAIN STEAM PRESSURE LOOP">
-                </div>
-
-                <!-- Row 3: Service -->
-                <div style="padding:0.75rem 1.25rem 0;">
-                    <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Service</label>
-                    <input type="text" id="add-loop-service" class="loop-input" placeholder="e.g. STEAM HEADER PRESSURE MONITORING">
-                </div>
-
-                <!-- Row 4: Schematic & Doc -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:0.75rem 1.25rem 0;">
-                    <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Loop Schematic</label>
-                        <input type="text" id="add-loop-schematic" class="loop-input" placeholder="DWG-BLR-XXX-SCH">
-                    </div>
-                    <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Special Document</label>
-                        <input type="text" id="add-loop-special-doc" class="loop-input" placeholder="SP-DOC-XXX">
-                    </div>
-                </div>
-
-                <!-- Row 5: Hints & Instructions -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:0.75rem 1.25rem 1.25rem;">
-                    <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Helpful Hints</label>
-                        <textarea id="add-loop-hints" class="loop-input" style="height:7rem;padding-top:0.5rem;resize:vertical;" placeholder="Enter helpful hints for maintenance..."></textarea>
-                    </div>
-                    <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gnfc-modal-subtitle-color,#8e8e9e);margin-bottom:0.375rem;">Special Instructions</label>
-                        <textarea id="add-loop-instructions" class="loop-input" style="height:7rem;padding-top:0.5rem;resize:vertical;" placeholder="Enter special instructions..."></textarea>
-                    </div>
-                </div>
-
-            </div><!-- /modal-body -->
-
-            <!-- Footer -->
-            <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.75rem;padding:1rem 1.25rem;border-top:1px solid var(--gnfc-modal-shell-border);background:var(--gnfc-modal-footer-bg);">
-                <button onclick="hideAddMode()" style="display:inline-flex;align-items:center;gap:0.375rem;height:2.25rem;padding:0 1rem;background:var(--gnfc-modal-secondary-bg);border:1px solid var(--gnfc-modal-secondary-border);border-radius:0.375rem;color:var(--gnfc-modal-secondary-text);font-size:0.8125rem;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--gnfc-modal-secondary-hover-bg)';this.style.borderColor='var(--gnfc-modal-secondary-hover-border)';this.style.color='var(--gnfc-modal-secondary-hover-text)'" onmouseout="this.style.background='var(--gnfc-modal-secondary-bg)';this.style.borderColor='var(--gnfc-modal-secondary-border)';this.style.color='var(--gnfc-modal-secondary-text)'">
-                    <i class="ph-bold ph-x"></i> Cancel
-                </button>
-                <button onclick="saveLoop()" style="display:inline-flex;align-items:center;gap:0.375rem;height:2.25rem;padding:0 1.25rem;background:linear-gradient(135deg,#059669,#10b981);border:none;border-radius:0.375rem;color:#fff;font-size:0.8125rem;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px -2px rgba(16,185,129,0.4);" onmouseover="this.style.background='linear-gradient(135deg,#10b981,#34d399)'" onmouseout="this.style.background='linear-gradient(135deg,#059669,#10b981)'">
-                    <i class="ph-bold ph-floppy-disk"></i> Save Loop
-                </button>
-            </div>
-
-        </div>
-    </div><!-- /add-loop-modal -->
-
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
     <script>
-        // ── Loop Database ───────────────────────────────────────────────
-        const loopDatabase = {
-            "LS-10-101": {
-                name: "MAIN STEAM PRESSURE LOOP", area: "BOILER-1",
-                service: "STEAM HEADER PRESSURE MONITORING & CONTROL",
-                schematic: "DWG-BLR-101-SCH", specialDoc: "SP-DOC-101",
-                hints: "Check impulse tubing for blockage before calibration.\nEnsure manifold valve positions are correct.",
-                instructions: "Use 2oo3 voting for trip functions.\nCalibrate at 0%, 25%, 50%, 75%, 100% of range.",
-                components: [
-                    { tag: "10-PT-101A", desc: "MAIN STEAM HEADER PRESSURE TX-A", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
-                    { tag: "10-PT-101B", desc: "MAIN STEAM HEADER PRESSURE TX-B", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
-                    { tag: "10-PT-101C", desc: "MAIN STEAM HEADER PRESSURE TX-C", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
-                    { tag: "10-PI-101", desc: "MAIN STEAM PRESSURE INDICATOR", type: "GAUGE", make: "WIKA / 232.50" },
-                ]
-            },
-            "LS-FG-101": {
-                name: "FUEL GAS CONTROL LOOP", area: "BOILER-2",
-                service: "NATURAL GAS FLOW CONTROL TO BURNERS",
-                schematic: "DWG-BLR-FG-101", specialDoc: "",
-                hints: "Verify gas pressure upstream of CV before testing.\nCheck positioner feedback signal.",
-                instructions: "Stroke test CV quarterly.\nVerify tight shut-off during annual shutdown.",
-                components: [
-                    { tag: "XLGDFGV1D", desc: "FUEL GAS CV 1D", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
-                    { tag: "XLGDFGV1E", desc: "FUEL GAS CV 1E", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
-                    { tag: "XLGDFGV1F", desc: "FUEL GAS CV 1F", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
-                ]
-            },
-            "LS-C1-008": {
-                name: "COMPRESSOR BEARING TEMP LOOP", area: "COMMON",
-                service: "BEARING TEMPERATURE MONITORING",
-                schematic: "DWG-COMP-008", specialDoc: "SP-COMP-MAINT-008",
-                hints: "RTD wiring: 3-wire configuration.\nCheck for ambient temperature drift.",
-                instructions: "High alarm: 110°C, Trip: 125°C.\nVerify thermowell integrity annually.",
-                components: [
-                    { tag: "ZT1777385", desc: "COMPRESSOR BEARING TEMP", type: "RTD PT100", make: "EMERSON / 3144P" },
-                    { tag: "ZT1777393", desc: "COMPRESSOR BEARING TEMP BACKUP", type: "RTD PT100", make: "EMERSON / 3144P" },
-                ]
-            },
-            "LS-B1-007": {
-                name: "BOILER-1 FURNACE TEMPERATURE LOOP", area: "BOILER-1",
-                service: "FURNACE TEMPERATURE MONITORING & PROTECTION",
-                schematic: "DWG-B1-007-SCH", specialDoc: "SP-B1-007",
-                hints: "Thermocouple type K — compensating cable must be same type.\nCheck junction box for moisture ingress.",
-                instructions: "Trip setpoints: High 980°C Alarm, 1050°C Trip.\nLow setpoints: 500°C Alarm, 400°C Trip.",
-                components: [
-                    { tag: "ZT177707A", desc: "BOILER-1 FURNACE TEMP A", type: "TRANSMITTER", make: "YOKOGAWA / YTA510A" },
-                    { tag: "ZT177707B", desc: "BOILER-1 FURNACE TEMP B", type: "TRANSMITTER", make: "YOKOGAWA / YTA510A" },
-                    { tag: "ZT177707C", desc: "BOILER-1 FURNACE TEMP C", type: "TRANSMITTER", make: "YOKOGAWA / YTA510A" },
-                ]
-            },
-            "LS-B1-MSV": {
-                name: "BOILER-1 MAIN STEAM STOP VALVE LOOP", area: "BOILER-1",
-                service: "EMERGENCY SHUTDOWN OF MAIN STEAM",
-                schematic: "DWG-B1-MSV", specialDoc: "SP-ESD-MSV",
-                hints: "ESD function — always test in simulation mode first.\nSOV must be energised to open.",
-                instructions: "Valve must close within 2 seconds on ESD signal.\nFull stroke test required every 6 months.",
-                components: [
-                    { tag: "XV177901", desc: "BOILER-1 MAIN STEAM STOP VALVE", type: "C/V", make: "SEVERN GLOCON / G5-ESD" },
-                    { tag: "ZSH177906", desc: "NG BURNER 4 BLOCK VALVE OPEN", type: "SWITCH", make: "MAGO / LS06200" },
-                ]
-            },
-            "LS-B1-DRM": {
-                name: "BOILER-1 DRUM LEVEL PROTECTION LOOP", area: "BOILER-1",
-                service: "DRUM LEVEL LOW & HIGH PROTECTION",
-                schematic: "DWG-B1-DRM", specialDoc: "SP-B1-DRM",
-                hints: "Calibrate with drum at operating pressure and temperature.\nCompensate for density variation.",
-                instructions: "Low-Low trip: 2oo3 voting logic.\nTest function during planned shutdown only.",
-                components: [
-                    { tag: "ZSL191801", desc: "DRUM LEVEL LOW SWITCH", type: "SWITCH ELEMENT", make: "MAGO / LT-S200" },
-                    { tag: "ZSL191802", desc: "DRUM LEVEL LOW-LOW SWITCH", type: "SWITCH ELEMENT", make: "MAGO / LT-S200" },
-                    { tag: "ZSL191803", desc: "DRUM LEVEL LOW SWITCH-3", type: "SWITCH ELEMENT", make: "MAGO / LT-S200" },
-                ]
-            },
-            "LS-B1-ECO": {
-                name: "ECONOMISER OUTLET TEMPERATURE LOOP", area: "BOILER-2",
-                service: "ECONOMISER TUBE OVERHEATING PROTECTION",
-                schematic: "DWG-B2-ECO-SCH", specialDoc: "",
-                hints: "Ensure thermowell is fully seated and sealed.\nClean thermowell periodically to avoid fouling.",
-                instructions: "High alarm at 380°C, trip at 400°C.\nCheck calibration every 6 months.",
-                components: [
-                    { tag: "ZT1777146", desc: "ECONOMISER OUTLET TEMP TX-1", type: "TRANSMITTER", make: "ENDRESS+HAUSER / TMT182" },
-                    { tag: "ZT1777147", desc: "ECONOMISER OUTLET TEMP TX-2", type: "TRANSMITTER", make: "ENDRESS+HAUSER / TMT182" },
-                ]
-            },
-            "LS-B1-APH": {
-                name: "AIR PREHEATER FLUE GAS TEMP LOOP", area: "BOILER-4",
-                service: "FLUE GAS OUTLET TEMPERATURE MONITORING",
-                schematic: "DWG-B4-APH", specialDoc: "",
-                hints: "High readings may indicate APH baskets fouled — coordinate with maintenance.",
-                instructions: "High alarm 450°C, trip 480°C.\nCheck for gas bypass leakage if readings are erratic.",
-                components: [
-                    { tag: "ZT1777216", desc: "APH OUTLET FLUE GAS TEMP A", type: "TRANSMITTER", make: "ABB / TTF300" },
-                    { tag: "ZT1777217", desc: "APH OUTLET FLUE GAS TEMP B", type: "TRANSMITTER", make: "ABB / TTF300" },
-                ]
-            }
-        };
-
-        // All loop IDs for dropdown
-        let allLoopIds = Object.keys(loopDatabase);
-
-        // ── DOM refs ──────────────────────────────────────────────────
-        const searchInput = document.getElementById('loop-search-input');
-        const ddBtn = document.getElementById('loop-dd-btn');
-        const ddList = document.getElementById('loop-dropdown-list');
-        const emptyState = document.getElementById('loop-empty-state');
-        const dataArea = document.getElementById('loop-data-area');
-
-        // ── Helpers ───────────────────────────────────────────────────
-        function showData() { emptyState.style.display = 'none'; dataArea.style.display = ''; }
-        function hideData() { emptyState.style.display = ''; dataArea.style.display = 'none'; }
-
-        function renderDropdown(filter) {
-            const area = document.getElementById('view-area-select').value;
-            const f = (filter || '').trim().toLowerCase();
-
-            const filtered = allLoopIds.filter(id => {
-                const d = loopDatabase[id];
-                const areaOk = (area === 'ALL') || (d.area === area);
-                const textOk = !f || id.toLowerCase().includes(f) || d.name.toLowerCase().includes(f);
-                return areaOk && textOk;
-            });
-
-            if (filtered.length === 0) {
-                ddList.innerHTML = `<div class="loop-dd-item" style="cursor:default;color:var(--app-muted,#9aa7b5);font-style:italic;">No loops found</div>`;
-            } else {
-                ddList.innerHTML = filtered.map(id => {
-                    const d = loopDatabase[id];
-                    const hi = f ? id.replace(new RegExp(`(${f})`, 'gi'), '<span style="color:#5794f2;font-weight:900;">$1</span>') : id;
-                    return `<div class="loop-dd-item" data-id="${id}">
-                        <span class="item-id">${hi}</span>
-                        <span class="item-name">${d.name}</span>
-                    </div>`;
-                }).join('');
-
-                ddList.querySelectorAll('.loop-dd-item[data-id]').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const id = el.getAttribute('data-id');
-                        selectLoop(id);
-                    });
-                });
-            }
-        }
-
-        function openDropdown() {
-            renderDropdown(searchInput.value);
-            ddList.classList.remove('hidden');
-        }
-
-        function closeDropdown() {
-            ddList.classList.add('hidden');
-        }
-
-        function selectLoop(id) {
-            searchInput.value = id;
-            closeDropdown();
-            loadLoop(id, loopDatabase[id]);
-        }
-
-        function filterByArea() {
-            if (ddList.classList.contains('hidden')) return;
-            renderDropdown(searchInput.value);
-        }
-
-        // ── Event Listeners ───────────────────────────────────────────
-        searchInput.addEventListener('input', () => {
-            openDropdown();
-        });
-
-        searchInput.addEventListener('focus', () => {
-            openDropdown();
-        });
-
-        searchInput.addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                const id = allLoopIds.find(k => k.toLowerCase() === searchInput.value.trim().toLowerCase());
-                if (id) { selectLoop(id); }
-                else {
-                    closeDropdown();
-                    hideData();
-                    if (searchInput.value.trim()) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Loop Not Found',
-                            html: `<span style="font-size:.875rem;">No loop found for <strong>${searchInput.value.trim()}</strong>.</span>`,
-                            confirmButtonColor: '#2563eb'
-                        });
-                    }
-                }
-            }
-            if (e.key === 'Escape') closeDropdown();
-        });
-
-        ddBtn.addEventListener('click', e => {
-            e.stopPropagation();
-            if (ddList.classList.contains('hidden')) openDropdown();
-            else closeDropdown();
-        });
-
-        document.addEventListener('click', e => {
-            if (!document.getElementById('loop-search-wrap').contains(e.target)) closeDropdown();
-        });
-
-        // ── Load Loop ─────────────────────────────────────────────────
-        function loadLoop(id, data) {
-            document.getElementById('view-loop-name').textContent = data.name;
-            document.getElementById('view-loop-service').textContent = data.service;
-            document.getElementById('view-loop-schematic').textContent = data.schematic || '—';
-            document.getElementById('view-loop-special-doc').textContent = data.specialDoc || '—';
-            document.getElementById('view-loop-hints').textContent = data.hints || '';
-            document.getElementById('view-loop-instructions').textContent = data.instructions || '';
-
-            const tbody = document.getElementById('components-body');
-            if (!data.components || !data.components.length) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center italic text-sm" style="color:var(--app-muted,#9aa7b5);">No components found</td></tr>`;
-            } else {
-                tbody.innerHTML = data.components.map((c, i) => `
-                    <tr class="border-b" style="border-color:var(--app-border,#2c3235);">
-                        <td class="px-4 py-3 text-center text-sm font-bold border-r" style="color:var(--app-muted,#9aa7b5);border-color:var(--app-border,#2c3235);">${i + 1}</td>
-                        <td class="px-4 py-3 text-center text-sm font-bold border-r" style="color:#5794f2;border-color:var(--app-border,#2c3235);cursor:pointer;"
-                            onclick="window.location.href='/src/pages/boiler_inst_data.html?tag=${encodeURIComponent(c.tag)}'">${c.tag}</td>
-                        <td class="px-4 py-3 text-center text-sm font-semibold border-r" style="color:var(--app-text,#e6edf3);border-color:var(--app-border,#2c3235);">${c.desc}</td>
-                        <td class="px-4 py-3 text-center text-sm font-semibold border-r" style="color:var(--app-text,#e6edf3);border-color:var(--app-border,#2c3235);">${c.type}</td>
-                        <td class="px-4 py-3 text-center text-sm font-semibold"          style="color:var(--app-text,#e6edf3);">${c.make}</td>
-                    </tr>`).join('');
-            }
-            showData();
-        }
-
-        // ── Add / Edit Mode ───────────────────────────────────────────
-        function showAddMode() {
-            // Clear all inputs
-            ['add-loop-id', 'add-loop-name', 'add-loop-service', 'add-loop-schematic', 'add-loop-special-doc', 'add-loop-hints', 'add-loop-instructions'].forEach(id => {
-                document.getElementById(id).value = '';
-            });
-            document.getElementById('add-area-select').selectedIndex = 0;
-            // Open modal
-            document.getElementById('add-loop-modal').classList.add('is-open');
-            // Focus first field
-            setTimeout(() => document.getElementById('add-loop-id').focus(), 100);
-        }
-
-        function hideAddMode() {
-            document.getElementById('add-loop-modal').classList.remove('is-open');
-        }
-
-        function saveLoop() {
-            const loopId = document.getElementById('add-loop-id').value.trim();
-            const name = document.getElementById('add-loop-name').value.trim();
-            const service = document.getElementById('add-loop-service').value.trim();
-            const area = document.getElementById('add-area-select').value;
-            const sch = document.getElementById('add-loop-schematic').value.trim();
-            const doc = document.getElementById('add-loop-special-doc').value.trim();
-            const hints = document.getElementById('add-loop-hints').value.trim();
-            const inst = document.getElementById('add-loop-instructions').value.trim();
-
-            if (!loopId) {
-                Swal.fire({ icon: 'error', title: 'Required', text: 'Loop ID is required.', confirmButtonColor: '#2563eb' });
-                document.getElementById('add-loop-id').focus();
-                return;
-            }
-            if (!name) {
-                Swal.fire({ icon: 'error', title: 'Required', text: 'Loop Name is required.', confirmButtonColor: '#2563eb' });
-                document.getElementById('add-loop-name').focus();
-                return;
-            }
-
-            loopDatabase[loopId] = { name, area, service, schematic: sch, specialDoc: doc, hints, instructions: inst, components: [] };
-            allLoopIds = Object.keys(loopDatabase);
-
-            Swal.fire({
-                icon: 'success', title: 'Loop Saved!',
-                html: `Loop <strong>${loopId}</strong> — ${name} has been added.`,
-                confirmButtonColor: '#059669',
-                timer: 2500, timerProgressBar: true
-            }).then(() => {
-                hideAddMode();
-                searchInput.value = loopId;
-                loadLoop(loopId, loopDatabase[loopId]);
-            });
-        }
-
-        // ── Init ──────────────────────────────────────────────────────
-        window.addEventListener('DOMContentLoaded', () => {
-            hideData(); // blank state by default
-            const p = new URLSearchParams(window.location.search);
-            const loopId = p.get('loop');
-            if (loopId && loopDatabase[loopId]) {
-                searchInput.value = loopId;
-                loadLoop(loopId, loopDatabase[loopId]);
-            }
-        });
+      renderHeader({
+        title: "Loop Data",
+        breadcrumbs: [
+          { label: "Plant", href: "/src/pages/plant_status.html" },
+          { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+          { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
+          { label: "Loop Data" }
+        ],
+        backLink: "/src/pages/boiler_inst_data.html"
+      });
     </script>
+
+    <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+      <div class="max-w-6xl mx-auto">
+
+        <!-- ========== VIEW MODE ========== -->
+        <div id="view-mode">
+
+          <!-- Action Toolbar -->
+          <div
+            class="flex items-center gap-2 p-5 rounded-md flex-wrap mb-5 border border-dark-border bg-dark-panel shadow-md">
+            <!-- Find Loop Dropdown -->
+            <div class="relative flex-1 min-w-[260px]" id="loop-search-wrap">
+              <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1">Find
+                Loop</label>
+              <div class="relative flex items-center">
+                <i class="ph-bold ph-magnifying-glass absolute left-3 color-secondary"
+                  style="font-size:.9rem;pointer-events:none;"></i>
+                <input type="text" id="loop-search-input"
+                  class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)] pl-9 pr-9 font-bold"
+                  placeholder="Search loop ID or name..." autocomplete="off">
+                <button id="loop-dd-btn"
+                  class="absolute right-2 w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 color-secondary transition-colors">
+                  <i class="ph-bold ph-caret-down" style="font-size:.875rem;"></i>
+                </button>
+              </div>
+            <div id="loop-dropdown-list"
+                class="hidden absolute top-[calc(100%+4px)] left-0 w-full bg-dark-panel border border-dark-border rounded-lg shadow-xl max-h-56 overflow-y-auto z-50">
+              </div>
+            </div>
+
+            <!-- Area Filter -->
+            <div style="min-width:130px;">
+              <label
+                class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1">Area</label>
+              <div class="relative">
+                <select id="view-area-select"
+                  class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)] pr-8 cursor-pointer"
+                  style="appearance:none;" onchange="filterByArea()">
+                  <option>ALL</option>
+                  <option>BOILER-1</option>
+                  <option>BOILER-2</option>
+                  <option>BOILER-3</option>
+                  <option>BOILER-4</option>
+                  <option>BOP</option>
+                  <option>COMMON</option>
+                  <option>ASH</option>
+                  <option>TG-1</option>
+                  <option>TG-2</option>
+                </select>
+                <i class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 color-secondary pointer-events-none"
+                  style="font-size:.8rem;"></i>
+              </div>
+            </div>
+
+            <span class="w-[1px] h-12 bg-dark-border mx-1 block"></span>
+
+            <!-- Add New Loop -->
+            <div>
+              <button
+                class="inline-flex items-center gap-1.5 h-9 px-3.5 bg-white/5 border border-white/10 rounded-md text-[13px] font-bold cursor-pointer transition-all duration-200 whitespace-nowrap hover:bg-white/10 hover:border-blue-400/50 hover:text-blue-400 bg-gradient-to-br from-emerald-600 to-emerald-500 !border-0 text-white shadow-[0_2px_8px_-2px_rgba(16,185,129,0.4)] px-5 hover:!from-emerald-500 hover:!to-emerald-400 hover:shadow-[0_4px_12px_-2px_rgba(16,185,129,0.5)]"
+                onclick="showAddMode()">
+                <i class="ph-bold ph-plus"></i> Add New Loop
+              </button>
+            </div>
+          </div>
+          <div
+            class="bg-dark-panel border border-dark-border rounded-md p-5 overflow-hidden flex flex-col items-center justify-center shadow-md">
+            <div id="loop-empty-state" class="w-full flex flex-col items-center justify-center">
+              <div
+                class="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-5">
+                <i class="ph-bold ph-arrows-clockwise" style="font-size:1.75rem;color:#5794f2;"></i>
+              </div>
+              <div class="text-center">
+                <p class="text-[0.9375rem] font-bold text-dark-text mb-1">
+                  No Loop Selected</p>
+                <p class="text-[0.8125rem] text-dark-muted">Search or select a Loop from
+                  the dropdown to view its data.</p>
+              </div>
+            </div>
+
+            <div id="loop-data-area" style="display:none;" class="w-full">
+
+              <!-- Name & Service -->
+              <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden mb-3 flex flex-col">
+                <div class="flex border-b border-dark-border">
+                  <div class="w-[160px] py-3 px-4 text-xs font-extrabold uppercase tracking-widest text-dark-text flex items-center border-r border-dark-border bg-dark-bg/50">LOOP NAME :</div>
+                  <div class="flex-1 py-3 px-4 text-sm font-semibold text-dark-text flex items-center bg-dark-panel">
+                    <span id="view-loop-name" class="font-bold text-[15px] text-blue-500"></span>
+                  </div>
+                </div>
+                <div class="flex">
+                  <div class="w-[160px] py-3 px-4 text-xs font-extrabold uppercase tracking-widest text-dark-text flex items-center border-r border-dark-border bg-dark-bg/50"> SERVICE :</div>
+                  <div class="flex-1 py-3 px-4 text-sm font-semibold text-dark-text flex items-center bg-dark-panel">
+                    <span id="view-loop-service" class="text-[14px]"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Schematic & Special Doc -->
+              <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden mb-3 flex flex-col">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                  <div class="border-b md:border-b-0 md:border-r border-dark-border bg-dark-panel">
+                    <div
+                      class="py-3 px-4 border-b border-dark-border text-xs font-extrabold uppercase tracking-widest text-dark-text text-center bg-dark-bg/50">
+                      LOOP SCHEMATIC</div>
+                    <div class="flex items-center justify-center p-4 min-h-[3rem]">
+                      <span id="view-loop-schematic" class="text-sm font-semibold text-dark-text">—</span>
+                    </div>
+                  </div>
+                  <div class="bg-dark-panel">
+                    <div
+                      class="py-3 px-4 border-b border-dark-border text-xs font-extrabold uppercase tracking-widest text-dark-text text-center bg-dark-bg/50">
+                      SPECIAL DOCUMENT</div>
+                    <div class="flex items-center justify-center p-4 min-h-[3rem]">
+                      <span id="view-loop-special-doc" class="text-sm font-semibold text-dark-text">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hints & Instructions -->
+              <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden mb-5">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                  <div class="border-b md:border-b-0 md:border-r border-dark-border bg-dark-panel">
+                    <div
+                      class="py-3 px-4 border-b border-dark-border text-xs font-extrabold uppercase tracking-widest text-dark-text text-center bg-dark-bg/50">
+                      HELPFUL HINTS</div>
+                    <div class="p-3">
+                      <div id="view-loop-hints"
+                        class="text-sm font-semibold text-dark-text whitespace-pre-wrap min-h-[4rem]">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-dark-panel">
+                    <div
+                      class="py-3 px-4 border-b border-dark-border text-xs font-extrabold uppercase tracking-widest text-dark-text text-center bg-dark-bg/50">
+                      SPECIAL INSTRUCTIONS</div>
+                    <div class="p-3">
+                      <div id="view-loop-instructions"
+                        class="text-sm font-semibold text-dark-text whitespace-pre-wrap min-h-[4rem]">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Components Table -->
+              <div class="bg-dark-panel border border-dark-border rounded-md overflow-hidden mb-5">
+                <div
+                  class="py-3 px-4 border-b border-dark-border text-xs font-extrabold uppercase tracking-widest text-dark-text text-center bg-dark-bg/50">
+                  LOOP COMPONENTS</div>
+                <div class="overflow-x-auto bg-dark-panel">
+                  <table class="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                      <tr class="bg-dark-bg/50 border-b border-dark-border">
+                        <th
+                          class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider text-dark-muted border-r border-dark-border w-[5%]">
+                          #</th>
+                        <th
+                          class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider text-dark-muted border-r border-dark-border w-[18%]">
+                          Tag No</th>
+                        <th
+                          class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider text-dark-muted border-r border-dark-border w-[37%]">
+                          Description</th>
+                        <th
+                          class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider text-dark-muted border-r border-dark-border w-[20%]">
+                          Type</th>
+                        <th
+                          class="px-4 py-2.5 text-center text-xs font-bold uppercase tracking-wider text-dark-muted w-[20%]">
+                          Make / Model</th>
+                      </tr>
+                    </thead>
+                    <tbody id="components-body"></tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== ADD NEW LOOP MODAL ========== -->
+  <div id="add-loop-modal" class="gnfc-modal-overlay" onclick="if(event.target===this)hideAddMode()">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div
+          class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center shrink-0">
+          <i class="ph-fill ph-arrows-clockwise text-[1.1rem] text-emerald-500"></i>
+        </div>
+        <div class="flex-1">
+          <p class="gnfc-modal-title">Add New Loop</p>
+          <p class="gnfc-modal-subtitle">Fill in the details below and save.</p>
+        </div>
+        <button onclick="hideAddMode()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-base"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="gnfc-modal-body">
+
+        <!-- Row 1: Loop ID, Area -->
+        <div class="flex items-center gap-2 p-4">
+          <div>
+            <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Loop
+              ID *</label>
+            <input type="text" id="add-loop-id"
+              class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+              placeholder="e.g. LS-B1-012">
+          </div>
+          <div>
+            <label
+              class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Area</label>
+            <div style="position:relative;">
+              <select id="add-area-select"
+                class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+                style="appearance:none;padding-right:2rem;cursor:pointer;">
+                <option>BOILER-1</option>
+                <option>BOILER-2</option>
+                <option>BOILER-3</option>
+                <option>BOILER-4</option>
+                <option>BOP</option>
+                <option>COMMON</option>
+                <option>ASH</option>
+                <option>TG-1</option>
+                <option>TG-2</option>
+              </select>
+              <i class="ph-bold ph-caret-down"
+                style="position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--gnfc-modal-subtitle-color,#8e8e9e);pointer-events:none;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Loop Name -->
+        <div style="padding:0.75rem 1.25rem 0;">
+          <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Loop
+            Name *</label>
+          <input type="text" id="add-loop-name"
+            class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+            placeholder="e.g. MAIN STEAM PRESSURE LOOP">
+        </div>
+
+        <!-- Row 3: Service -->
+        <div style="padding:0.75rem 1.25rem 0;">
+          <label
+            class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Service</label>
+          <input type="text" id="add-loop-service"
+            class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+            placeholder="e.g. STEAM HEADER PRESSURE MONITORING">
+        </div>
+
+        <!-- Row 4: Schematic & Doc -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:0.75rem 1.25rem 0;">
+          <div>
+            <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Loop
+              Schematic</label>
+            <input type="text" id="add-loop-schematic"
+              class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+              placeholder="DWG-BLR-XXX-SCH">
+          </div>
+          <div>
+            <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Special
+              Document</label>
+            <input type="text" id="add-loop-special-doc"
+              class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+              placeholder="SP-DOC-XXX">
+          </div>
+        </div>
+
+        <!-- Row 5: Hints & Instructions -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:0.75rem 1.25rem 1.25rem;">
+          <div>
+            <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Helpful
+              Hints</label>
+            <textarea id="add-loop-hints"
+              class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+              style="height:7rem;padding-top:0.5rem;resize:vertical;"
+              placeholder="Enter helpful hints for maintenance..."></textarea>
+          </div>
+          <div>
+            <label class="block text-[0.7rem] font-extrabold uppercase tracking-[0.08em] text-dark-muted mb-1.5">Special
+              Instructions</label>
+            <textarea id="add-loop-instructions"
+              class="w-full h-9 bg-dark-bg/50 border border-dark-border rounded-md px-3.5 text-dark-text text-sm font-medium outline-none transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.1)]"
+              style="height:7rem;padding-top:0.5rem;resize:vertical;"
+              placeholder="Enter special instructions..."></textarea>
+          </div>
+        </div>
+
+      </div><!-- /modal-body -->
+
+      <!-- Footer -->
+      <div class="gnfc-modal-footer">
+        <button onclick="hideAddMode()"
+          class="gnfc-modal-btn gnfc-modal-btn-secondary hover:text-white hover:border-slate-500">
+          <i class="ph-bold ph-x"></i> Cancel
+        </button>
+        <button onclick="saveLoop()"
+          class="inline-flex items-center gap-1.5 h-9 px-5 bg-gradient-to-br from-emerald-600 to-emerald-500 border-none rounded-md text-[13px] font-bold text-white shadow-[0_2px_8px_-2px_rgba(16,185,129,0.4)] cursor-pointer transition-all duration-200 hover:from-emerald-500 hover:to-emerald-400">
+          <i class="ph-bold ph-floppy-disk"></i> Save Loop
+        </button>
+      </div>
+
+    </div>
+  </div><!-- /add-loop-modal -->
+
+  <script>
+    // ── Loop Database ───────────────────────────────────────────────
+    const loopDatabase = {
+      "LS-10-101": {
+        name: "MAIN STEAM PRESSURE LOOP", area: "BOILER-1",
+        service: "STEAM HEADER PRESSURE MONITORING & CONTROL",
+        schematic: "DWG-BLR-101-SCH", specialDoc: "SP-DOC-101",
+        hints: "Check impulse tubing for blockage before calibration.\nEnsure manifold valve positions are correct.",
+        instructions: "Use 2oo3 voting for trip functions.\nCalibrate at 0%, 25%, 50%, 75%, 100% of range.",
+        components: [
+          { tag: "10-PT-101A", desc: "MAIN STEAM HEADER PRESSURE TX-A", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
+          { tag: "10-PT-101B", desc: "MAIN STEAM HEADER PRESSURE TX-B", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
+          { tag: "10-PT-101C", desc: "MAIN STEAM HEADER PRESSURE TX-C", type: "TRANSMITTER", make: "YOKOGAWA / EJA530A" },
+          { tag: "10-PI-101", desc: "MAIN STEAM PRESSURE INDICATOR", type: "GAUGE", make: "WIKA / 232.50" },
+        ]
+      },
+      "LS-FG-101": {
+        name: "FUEL GAS CONTROL LOOP", area: "BOILER-2",
+        service: "NATURAL GAS FLOW CONTROL TO BURNERS",
+        schematic: "DWG-BLR-FG-101", specialDoc: "",
+        hints: "Verify gas pressure upstream of CV before testing.\nCheck positioner feedback signal.",
+        instructions: "Stroke test CV quarterly.\nVerify tight shut-off during annual shutdown.",
+        components: [
+          { tag: "XLGDFGV1D", desc: "FUEL GAS CV 1D", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
+          { tag: "XLGDFGV1E", desc: "FUEL GAS CV 1E", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
+          { tag: "XLGDFGV1F", desc: "FUEL GAS CV 1F", type: "CONTROL VALVE", make: "FISHER / DVC6200" },
+        ]
+      },
+      "LS-C1-008": {
+        name: "COMPRESSOR BEARING TEMP LOOP", area: "COMMON",
+        service: "BEARING TEMPERATURE MONITORING",
+        schematic: "DWG-COMP-008", specialDoc: "SP-COMP-MAINT-008",
+        hints: "RTD wiring: 3-wire configuration.\nCheck for ambient temperature drift.",
+        instructions: "High alarm: 110°C, Trip: 125°C.\nVerify thermowell integrity annually.",
+        components: [
+          { tag: "ZT1777385", desc: "COMPRESSOR BEARING TEMP", type: "RTD PT100", make: "EMERSON / 3144P" },
+          { tag: "ZT1777393", desc: "COMPRESSOR BEARING TEMP BACKUP", type: "RTD PT100", make: "EMERSON / 3144P" },
+        ]
+      },
+      "LS-B1-007": {
+        name: "BOILER-1 FURNACE TEMPERATURE LOOP", area: "BOILER-1",
+        service: "FURNACE TEMPERATURE MONITORING & PROTECTION",
+        schematic: "DWG-B1-007-SCH", specialDoc: "SP-B1-007",
+        hints: "Thermocouple type K — compensating cable must be same type.\nCheck junction box for moisture ingress.",
+        instructions: "Trip setpoints: High 980°C Alarm, 1050°C Trip.\nLow setpoints: 500°C Alarm, 400°C Trip.",
+        components: [
+          { tag: "ZT177707A", desc: "BOILER-1 FURNACE TEMP A", type: "TRANSMITTER", make: "YOKOGAWA / YTA510A" },
+          { tag: "ZT177707B", desc: "BOILER-1 FURNACE TEMP B", type: "TRANSMITTER", make: "YOKOGAWA / YTA510A" },
+          { tag: "ZT177707C", desc: "BOILER-1 FURNACE TEMP C", type: "TRANSMITTER", make: "YOKOGAWA / YTA510A" },
+        ]
+      },
+      "LS-B1-MSV": {
+        name: "BOILER-1 MAIN STEAM STOP VALVE LOOP", area: "BOILER-1",
+        service: "EMERGENCY SHUTDOWN OF MAIN STEAM",
+        schematic: "DWG-B1-MSV", specialDoc: "SP-ESD-MSV",
+        hints: "ESD function — always test in simulation mode first.\nSOV must be energised to open.",
+        instructions: "Valve must close within 2 seconds on ESD signal.\nFull stroke test required every 6 months.",
+        components: [
+          { tag: "XV177901", desc: "BOILER-1 MAIN STEAM STOP VALVE", type: "C/V", make: "SEVERN GLOCON / G5-ESD" },
+          { tag: "ZSH177906", desc: "NG BURNER 4 BLOCK VALVE OPEN", type: "SWITCH", make: "MAGO / LS06200" },
+        ]
+      },
+      "LS-B1-DRM": {
+        name: "BOILER-1 DRUM LEVEL PROTECTION LOOP", area: "BOILER-1",
+        service: "DRUM LEVEL LOW & HIGH PROTECTION",
+        schematic: "DWG-B1-DRM", specialDoc: "SP-B1-DRM",
+        hints: "Calibrate with drum at operating pressure and temperature.\nCompensate for density variation.",
+        instructions: "Low-Low trip: 2oo3 voting logic.\nTest function during planned shutdown only.",
+        components: [
+          { tag: "ZSL191801", desc: "DRUM LEVEL LOW SWITCH", type: "SWITCH ELEMENT", make: "MAGO / LT-S200" },
+          { tag: "ZSL191802", desc: "DRUM LEVEL LOW-LOW SWITCH", type: "SWITCH ELEMENT", make: "MAGO / LT-S200" },
+          { tag: "ZSL191803", desc: "DRUM LEVEL LOW SWITCH-3", type: "SWITCH ELEMENT", make: "MAGO / LT-S200" },
+        ]
+      },
+      "LS-B1-ECO": {
+        name: "ECONOMISER OUTLET TEMPERATURE LOOP", area: "BOILER-2",
+        service: "ECONOMISER TUBE OVERHEATING PROTECTION",
+        schematic: "DWG-B2-ECO-SCH", specialDoc: "",
+        hints: "Ensure thermowell is fully seated and sealed.\nClean thermowell periodically to avoid fouling.",
+        instructions: "High alarm at 380°C, trip at 400°C.\nCheck calibration every 6 months.",
+        components: [
+          { tag: "ZT1777146", desc: "ECONOMISER OUTLET TEMP TX-1", type: "TRANSMITTER", make: "ENDRESS+HAUSER / TMT182" },
+          { tag: "ZT1777147", desc: "ECONOMISER OUTLET TEMP TX-2", type: "TRANSMITTER", make: "ENDRESS+HAUSER / TMT182" },
+        ]
+      },
+      "LS-B1-APH": {
+        name: "AIR PREHEATER FLUE GAS TEMP LOOP", area: "BOILER-4",
+        service: "FLUE GAS OUTLET TEMPERATURE MONITORING",
+        schematic: "DWG-B4-APH", specialDoc: "",
+        hints: "High readings may indicate APH baskets fouled — coordinate with maintenance.",
+        instructions: "High alarm 450°C, trip 480°C.\nCheck for gas bypass leakage if readings are erratic.",
+        components: [
+          { tag: "ZT1777216", desc: "APH OUTLET FLUE GAS TEMP A", type: "TRANSMITTER", make: "ABB / TTF300" },
+          { tag: "ZT1777217", desc: "APH OUTLET FLUE GAS TEMP B", type: "TRANSMITTER", make: "ABB / TTF300" },
+        ]
+      }
+    };
+
+    // All loop IDs for dropdown
+    let allLoopIds = Object.keys(loopDatabase);
+
+    // ── DOM refs ──────────────────────────────────────────────────
+    const searchInput = document.getElementById('loop-search-input');
+    const ddBtn = document.getElementById('loop-dd-btn');
+    const ddList = document.getElementById('loop-dropdown-list');
+    const emptyState = document.getElementById('loop-empty-state');
+    const dataArea = document.getElementById('loop-data-area');
+
+    // ── Helpers ───────────────────────────────────────────────────
+    function showData() { emptyState.style.display = 'none'; dataArea.style.display = ''; }
+    function hideData() { emptyState.style.display = ''; dataArea.style.display = 'none'; }
+
+    function renderDropdown(filter, showAll = false) {
+      const area = document.getElementById('view-area-select').value;
+      const f = showAll ? '' : (filter || '').trim().toLowerCase();
+
+      const filtered = allLoopIds.filter(id => {
+        const d = loopDatabase[id];
+        const areaOk = (area === 'ALL') || (d.area === area);
+        const textOk = !f || id.toLowerCase().includes(f) || d.name.toLowerCase().includes(f);
+        return areaOk && textOk;
+      });
+
+      if (filtered.length === 0) {
+        ddList.innerHTML = `<div class="px-4 py-2.5 text-[13px] font-semibold text-dark-text cursor-pointer flex flex-col gap-[2px] border-b border-dark-border last:border-b-0 transition-colors duration-150 hover:bg-blue-500/10" style="cursor:default;color:var(--app-muted,#9aa7b5);font-style:italic;">No loops found</div>`;
+      } else {
+        ddList.innerHTML = filtered.map(id => {
+          const d = loopDatabase[id];
+          const hi = f ? id.replace(new RegExp(`(${f})`, 'gi'), '<span style="color:#5794f2;font-weight:900;">$1</span>') : id;
+          return `<div class="px-4 py-2.5 text-[13px] font-semibold text-dark-text cursor-pointer flex flex-col gap-[2px] border-b border-dark-border last:border-b-0 transition-colors duration-150 hover:bg-blue-500/10" data-id="${id}">
+                        <span class="text-blue-400 text-xs font-extrabold">${hi}</span>
+                        <span class="text-[13px]">${d.name}</span>
+                    </div>`;
+        }).join('');
+
+        ddList.querySelectorAll('div[data-id]').forEach(el => {
+          el.addEventListener('click', () => {
+            const id = el.getAttribute('data-id');
+            selectLoop(id);
+          });
+        });
+      }
+    }
+
+    function openDropdown(showAll = false) {
+      renderDropdown(searchInput.value, showAll);
+      ddList.classList.remove('hidden');
+    }
+
+    function closeDropdown() {
+      ddList.classList.add('hidden');
+    }
+
+    function selectLoop(id) {
+      searchInput.value = id;
+      closeDropdown();
+      loadLoop(id, loopDatabase[id]);
+    }
+
+    function filterByArea() {
+      if (ddList.classList.contains('hidden')) return;
+      renderDropdown(searchInput.value);
+    }
+
+    // ── Event Listeners ───────────────────────────────────────────
+    searchInput.addEventListener('input', () => {
+      openDropdown(false);
+    });
+
+    searchInput.addEventListener('focus', () => {
+      // If we already selected something, opening dropdown should show all
+      const isSelectedVal = allLoopIds.includes(searchInput.value);
+      openDropdown(isSelectedVal);
+    });
+
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const id = allLoopIds.find(k => k.toLowerCase() === searchInput.value.trim().toLowerCase());
+        if (id) { selectLoop(id); }
+        else {
+          closeDropdown();
+          hideData();
+          if (searchInput.value.trim()) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Loop Not Found',
+              html: `<span style="font-size:.875rem;">No loop found for <strong>${searchInput.value.trim()}</strong>.</span>`,
+              confirmButtonColor: '#2563eb'
+            });
+          }
+        }
+      }
+      if (e.key === 'Escape') closeDropdown();
+    });
+
+    ddBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (ddList.classList.contains('hidden')) {
+          const isSelectedVal = allLoopIds.includes(searchInput.value);
+          openDropdown(isSelectedVal);
+      } else {
+          closeDropdown();
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!document.getElementById('loop-search-wrap').contains(e.target)) closeDropdown();
+    });
+
+    // ── Load Loop ─────────────────────────────────────────────────
+    function loadLoop(id, data) {
+      document.getElementById('view-loop-name').textContent = data.name;
+      document.getElementById('view-loop-service').textContent = data.service;
+      document.getElementById('view-loop-schematic').textContent = data.schematic || '—';
+      document.getElementById('view-loop-special-doc').textContent = data.specialDoc || '—';
+      document.getElementById('view-loop-hints').textContent = data.hints || '';
+      document.getElementById('view-loop-instructions').textContent = data.instructions || '';
+
+      const tbody = document.getElementById('components-body');
+      if (!data.components || !data.components.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center italic text-sm text-dark-muted" >No components found</td></tr>`;
+      } else {
+        tbody.innerHTML = data.components.map((c, i) => `
+                    <tr class="border-b border-dark-border hover:bg-dark-bg/50 transition-colors">
+                        <td class="px-4 py-3 text-center text-sm font-bold border-r border-dark-border text-dark-muted">${i + 1}</td>
+                        <td class="px-4 py-3 text-center text-sm font-bold border-r border-dark-border text-blue-500 hover:text-blue-600 cursor-pointer"
+                            onclick="window.location.href='/src/pages/boiler_inst_data.html?tag=${encodeURIComponent(c.tag)}'">${c.tag}</td>
+                        <td class="px-4 py-3 text-center text-sm font-semibold border-r border-dark-border text-dark-text">${c.desc}</td>
+                        <td class="px-4 py-3 text-center text-sm font-semibold border-r border-dark-border text-dark-text">${c.type}</td>
+                        <td class="px-4 py-3 text-center text-sm font-semibold text-dark-text">${c.make}</td>
+                    </tr>`).join('');
+      }
+      showData();
+    }
+
+    // ── Add / Edit Mode ───────────────────────────────────────────
+    function showAddMode() {
+      ['add-loop-id', 'add-loop-name', 'add-loop-service', 'add-loop-schematic', 'add-loop-special-doc', 'add-loop-hints', 'add-loop-instructions'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('add-area-select').selectedIndex = 0;
+      // Open 
+      document.getElementById('add-loop-modal').classList.add('is-open');
+      // Focus first field
+      setTimeout(() => document.getElementById('add-loop-id').focus(), 100);
+    }
+
+    function hideAddMode() {
+      document.getElementById('add-loop-modal').classList.remove('is-open');
+    }
+
+    function saveLoop() {
+      const loopId = document.getElementById('add-loop-id').value.trim();
+      const name = document.getElementById('add-loop-name').value.trim();
+      const service = document.getElementById('add-loop-service').value.trim();
+      const area = document.getElementById('add-area-select').value;
+      const sch = document.getElementById('add-loop-schematic').value.trim();
+      const doc = document.getElementById('add-loop-special-doc').value.trim();
+      const hints = document.getElementById('add-loop-hints').value.trim();
+      const inst = document.getElementById('add-loop-instructions').value.trim();
+
+      if (!loopId) {
+        Swal.fire({ icon: 'error', title: 'Required', text: 'Loop ID is required.', confirmButtonColor: '#2563eb' });
+        document.getElementById('add-loop-id').focus();
+        return;
+      }
+      if (!name) {
+        Swal.fire({ icon: 'error', title: 'Required', text: 'Loop Name is required.', confirmButtonColor: '#2563eb' });
+        document.getElementById('add-loop-name').focus();
+        return;
+      }
+
+      loopDatabase[loopId] = { name, area, service, schematic: sch, specialDoc: doc, hints, instructions: inst, components: [] };
+      allLoopIds = Object.keys(loopDatabase);
+
+      Swal.fire({
+        icon: 'success', title: 'Loop Saved!',
+        html: `Loop <strong>${loopId}</strong> — ${name} has been added.`,
+        confirmButtonColor: '#059669',
+        timer: 2500, timerProgressBar: true
+      }).then(() => {
+        hideAddMode();
+        searchInput.value = loopId;
+        loadLoop(loopId, loopDatabase[loopId]);
+      });
+    }
+
+    // ── Init ──────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      hideData(); // blank state by default
+      const p = new URLSearchParams(window.location.search);
+      const loopId = p.get('loop');
+      if (loopId && loopDatabase[loopId]) {
+        searchInput.value = loopId;
+        loadLoop(loopId, loopDatabase[loopId]);
+      }
+    });
+  </script>
 </body>
 
 </html>

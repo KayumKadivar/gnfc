@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/src/css/table-style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/src/js/tailwind_config.js"></script>
   <script>window.activePage = 'plants';</script>
   <style>
@@ -118,7 +119,7 @@
             <button onclick="location.href='pm_detail_other.html'"
               class="detail-tab bg-dark-bg border border-dark-border hover:border-gnfc-blue px-3 py-1.5 rounded-sm color-secondary transition-colors font-12px">PM
               Detail (Other)</button>
-          
+
           </div>
         </div>
 
@@ -137,13 +138,30 @@
               <div class="flex-1 flex items-center gap-3">
                 <label class="font-12px fw-bold color-label text-upper shrink-0">Search For PM Detail :</label>
                 <div class="relative flex-1 max-w-xs">
-                  <input type="text" placeholder="Enter Tag No..."
+                  <input id="pm-search-input" type="text" placeholder="Enter Tag No..."
                     class="w-full bg-dark-panel border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary placeholder:opacity-30">
                 </div>
-                <button
+                <button type="button" onclick="searchPMTag()"
                   class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-9 text-white rounded-sm shadow-md transition-all px-6 font-13px text-upper ls-wide">
                   GO
                 </button>
+              </div>
+            </div>
+
+            <!-- Dropdown (required for Edit/Delete) -->
+            <div class="bg-dark-bg p-3 border border-dark-border rounded-sm">
+              <div class="flex flex-col md:flex-row items-center gap-3">
+                <label class="font-12px fw-bold color-label text-upper shrink-0">Tag For PM Detail :</label>
+                <div class="relative w-full md:w-72">
+                  <select id="pm-tag-select"
+                    class="w-full bg-dark-panel border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
+                    <option value="">-- Select Tag --</option>
+                  </select>
+                  <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+                </div>
+                <span class="font-12px fw-bold color-secondary text-upper ls-wide opacity-80">
+                  Select tag to Edit / Delete
+                </span>
               </div>
             </div>
 
@@ -151,50 +169,50 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">Tag No</label>
-                <input type="text"
+                <input id="pm-tag-no" type="text"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">Criticality</label>
-                <input type="text"
+                <input id="pm-criticality" type="text"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">Inst Type</label>
-                <input type="text"
+                <input id="pm-inst-type" type="text"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">Mode</label>
-                <input type="text"
+                <input id="pm-mode" type="text"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">PM Month</label>
-                <input type="text"
+                <input id="pm-month" type="text"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">PM Date</label>
-                <input type="date"
+                <input id="pm-date" type="date"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">Tech Name</label>
-                <input type="text"
+                <input id="pm-tech-name" type="text"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary">
               </div>
 
               <div class="space-y-1">
                 <label class="font-12px fw-bold color-label text-upper">Status</label>
                 <div class="relative">
-                  <select
+                  <select id="pm-status"
                     class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary cursor-pointer">
                     <option>Pending</option>
                     <option>Completed</option>
@@ -206,17 +224,32 @@
 
               <div class="space-y-1 col-span-full">
                 <label class="font-12px fw-bold color-label text-upper">Caution / Special Instructions</label>
-                <textarea rows="3"
+                <textarea id="pm-caution" rows="3"
                   class="w-full bg-dark-bg border border-dark-border font-13px rounded-sm px-3 py-2 focus:border-gnfc-blue outline-none color-primary resize-none"></textarea>
               </div>
             </div>
 
             <!-- Action Bar -->
-            <div class="flex justify-center pt-4 border-t border-dark-border/20">
-              <button
-                class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-10 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-10">
-                <i class="ph-bold ph-floppy-disk"></i> Update PM Status
+            <div class="flex justify-center pt-4 border-t border-dark-border/20 gap-4">
+              <button type="button" onclick="addPMStatus()"
+                class="bg-green-600 hover:bg-green-500 fw-bold h-10 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-8">
+                <i class="ph-bold ph-plus"></i> Add
               </button>
+              <button type="button" onclick="editPMStatus()"
+                class="bg-amber-600 hover:bg-amber-500 fw-bold h-10 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-8">
+                <i class="ph-bold ph-pencil-simple"></i> Edit
+              </button>
+              <button type="button" onclick="deletePMStatus()"
+                class="bg-red-600 hover:bg-red-500 fw-bold h-10 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-8">
+                <i class="ph-bold ph-trash"></i> Delete
+              </button>
+              <div class="flex flex-wrap items-center justify-center gap-2">
+                <button type="button" onclick="updatePMStatus()"
+                  class="bg-gnfc-blue hover:bg-blue-600 fw-bold h-10 text-white rounded-sm shadow-md transition-all flex items-center justify-center gap-2 font-13px text-upper ls-wide px-8">
+                  <i class="ph-bold ph-floppy-disk"></i> Update PM Status
+                </button>
+
+              </div>
             </div>
           </div>
         </div>
@@ -224,6 +257,88 @@
       </div>
     </div>
   </main>
+
+  <!-- Add/Edit Modal (PM Data) -->
+  <div id="pm-add-edit-modal" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--medium">
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title" id="pm-modal-title">PM FORM</h3>
+          <p class="gnfc-modal-subtitle" id="pm-modal-subtitle">Add or edit PM details</p>
+        </div>
+        <button type="button" onclick="closePMAddEditModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+      <div class="gnfc-modal-body">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">TAG_NO</label>
+            <input id="modal-pm-tag-no" type="text" class="gnfc-modal-input" placeholder="Enter Tag No">
+          </div>
+
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">CRITICALITY</label>
+            <input id="modal-pm-criticality" type="text" class="gnfc-modal-input" placeholder="Enter criticality">
+          </div>
+
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">INSTTYPE</label>
+            <div class="relative">
+              <select id="modal-pm-inst-type" class="gnfc-modal-input appearance-none">
+                <option value="ANALYZER">ANALYZER</option>
+                <option value="TX">TX</option>
+                <option value="C/V">C/V</option>
+                <option value="SWITCH">SWITCH</option>
+              </select>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">MODE</label>
+            <div class="relative">
+              <select id="modal-pm-mode" class="gnfc-modal-input appearance-none">
+                <option value="RUNNING">RUNNING</option>
+                <option value="STANDBY">S/D</option>
+              </select>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">PM_MONTH</label>
+            <div class="relative">
+              <select id="modal-pm-month" class="gnfc-modal-input appearance-none">
+                <option value="">Select Month</option>
+                <option value="Jan">Jan</option>
+                <option value="Feb">Feb</option>
+                <option value="Mar">Mar</option>
+                <option value="Apr">Apr</option>
+                <option value="May">May</option>
+                <option value="Jun">Jun</option>
+                <option value="Jul">Jul</option>
+                <option value="Aug">Aug</option>
+                <option value="Sep">Sep</option>
+                <option value="Oct">Oct</option>
+                <option value="Nov">Nov</option>
+                <option value="Dec">Dec</option>
+              </select>
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 color-label pointer-events-none font-13px"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gnfc-modal-footer">
+        <button type="button" onclick="savePMData()" class="gnfc-modal-btn gnfc-modal-btn-primary" id="modal-save-btn">
+          <i class="ph-bold ph-check mr-1"></i> Save
+        </button>
+        <button type="button" onclick="closePMAddEditModal()" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- PM Report Modal -->
   <div id="pm-report-modal" class="gnfc-modal-overlay" aria-hidden="true">
@@ -736,7 +851,268 @@
     </div>
   </div>
 
+  <!-- PM Status Update Modal -->
+  <div id="pm-update-status-modal" class="gnfc-modal-overlay" aria-hidden="true">
+    <div class="gnfc-modal-shell gnfc-modal-shell--small" style="max-width: 480px;">
+      <div class="gnfc-modal-header border-b border-dark-border/40 pb-2">
+        <div>
+          <h3 class="font-18px fw-bold text-red-600 text-upper tracking-widest">Update PM Status</h3>
+        </div>
+        <button onclick="closePMUpdateStatusModal()" class="gnfc-modal-close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <div class="gnfc-modal-body bg-dark-panel p-6 text-primary rounded-b-md">
+        <div class="space-y-6">
+          <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+            <label class="font-16px fw-bold color-primary shrink-0 w-20 sm:text-right">TagNo:</label>
+            <input id="status-update-tag-input" type="text" class="w-full sm:w-32 bg-dark-bg border border-dark-border px-2 py-1 outline-none text-sm color-primary rounded-sm focus:border-gnfc-blue">
+            <div class="relative w-full sm:w-36">
+              <select id="status-update-tag-select" class="w-full bg-dark-bg border border-dark-border px-2 py-1 outline-none text-sm color-primary appearance-none rounded-sm cursor-pointer focus:border-gnfc-blue" onchange="document.getElementById('status-update-tag-input').value = this.value">
+                <!-- Populated via JS -->
+              </select>
+              <i class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 color-label pointer-events-none text-xs"></i>
+            </div>
+          </div>
+          
+          <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+            <label class="font-16px fw-bold color-primary shrink-0 w-20 sm:text-right">Tech:</label>
+            <div class="relative w-full sm:w-32">
+              <select id="status-update-tech" class="w-full bg-dark-bg border border-dark-border px-2 py-1 outline-none text-sm color-primary appearance-none rounded-sm cursor-pointer focus:border-gnfc-blue">
+                <option value="Tech">Tech</option>
+                <option value="JMD">JMD</option>
+                <option value="PRP">PRP</option>
+                <option value="ARP">ARP</option>
+                <option value="BPB">BPB</option>
+              </select>
+              <i class="ph-bold ph-caret-down absolute right-2 top-1/2 -translate-y-1/2 color-label pointer-events-none text-xs"></i>
+            </div>
+            
+            <label class="font-16px fw-bold color-primary shrink-0 sm:ml-4">Date:</label>
+            <input id="status-update-date" type="date" class="w-full sm:w-auto flex-1 bg-dark-bg border border-dark-border px-2 py-1 outline-none text-sm color-primary rounded-sm focus:border-gnfc-blue">
+          </div>
+          
+          <div class="flex justify-center pt-2">
+            <button type="button" onclick="submitPMStatusUpdate()" class="bg-gray-300 hover:bg-gray-400 text-black fw-bold px-6 py-1.5 border border-gray-500 shadow-sm transition-colors text-sm rounded-sm">
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    
+    const PM_TAG_DB = [
+      { tagNo: 'LPT205', criticality: 'HQ', instType: 'TX', mode: 'RUNNING', pmMonth: 'Apr', pmDate: '2005-03-25', techName: 'BPB', status: 'Pending', caution: '' },
+      { tagNo: 'LV_1401', criticality: '—', instType: 'ANALYZER', mode: '—', pmMonth: 'Select Month', pmDate: '', techName: '', status: 'Pending', caution: '' },
+      { tagNo: 'FT_1401', criticality: '—', instType: 'TX', mode: 'OPEN LOOP', pmMonth: 'JAN', pmDate: '2005-02-08', techName: 'BPB', status: 'Completed', caution: '' },
+    ];
+
+    let _selectedTagNo = '';
+    let _pmImageModalMode = 'add'; // 'add' | 'edit'
+
+    function getSelectedTag() {
+      return PM_TAG_DB.find(t => t.tagNo === _selectedTagNo) || null;
+    }
+
+    function setSelectedTag(tagNo) {
+      _selectedTagNo = tagNo || '';
+      const tag = getSelectedTag();
+      if (tag) populatePMForm(tag);
+    }
+
+    function populateTagDropdown() {
+      const sel = document.getElementById('pm-tag-select');
+      if (!sel) return;
+      const current = sel.value;
+      sel.innerHTML = `<option value="">-- Select Tag --</option>` +
+        PM_TAG_DB.map(t => `<option value="${t.tagNo}">${t.tagNo}</option>`).join('');
+      sel.value = current && PM_TAG_DB.some(t => t.tagNo === current) ? current : '';
+    }
+
+    function populatePMForm(tag) {
+      document.getElementById('pm-tag-no').value = tag.tagNo || '';
+      document.getElementById('pm-criticality').value = tag.criticality || '';
+      document.getElementById('pm-inst-type').value = tag.instType || '';
+      document.getElementById('pm-mode').value = tag.mode || '';
+      document.getElementById('pm-month').value = tag.pmMonth || '';
+      document.getElementById('pm-date').value = tag.pmDate || '';
+      document.getElementById('pm-tech-name').value = tag.techName || '';
+      document.getElementById('pm-status').value = tag.status || 'Pending';
+      document.getElementById('pm-caution').value = tag.caution || '';
+    }
+
+    function clearPMForm() {
+      ['pm-tag-no', 'pm-criticality', 'pm-inst-type', 'pm-mode', 'pm-month', 'pm-date', 'pm-tech-name', 'pm-caution']
+        .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      const statusSel = document.getElementById('pm-status');
+      if (statusSel) statusSel.value = 'Pending';
+    }
+
+    window.searchPMTag = function () {
+      const q = (document.getElementById('pm-search-input')?.value || '').trim();
+      if (!q) return;
+      const match = PM_TAG_DB.find(t => t.tagNo.toLowerCase() === q.toLowerCase());
+      if (!match) {
+        Swal.fire({ icon: 'error', title: 'Not found', text: `Tag "${q}" not found.`, confirmButtonColor: '#2563eb' });
+        return;
+      }
+      document.getElementById('pm-tag-select').value = match.tagNo;
+      setSelectedTag(match.tagNo);
+    }
+
+    function requireSelectedTag(actionName) {
+      const sel = document.getElementById('pm-tag-select');
+      const tagNo = sel?.value || '';
+      if (!tagNo) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Select Tag',
+          text: `Please select a tag from the dropdown before ${actionName}.`,
+          confirmButtonColor: '#2563eb'
+        });
+        return null;
+      }
+      return tagNo;
+    }
+
+    function openPMAddEditModal(mode, data = null) {
+      _pmImageModalMode = mode;
+      const title = mode === 'edit' ? 'EDIT PM FORM' : 'ADD PM FORM';
+      const subtitle = mode === 'edit' ? `Editing Tag: ${data?.tagNo || _selectedTagNo}` : 'Enter new PM details';
+      
+      document.getElementById('pm-modal-title').textContent = title;
+      document.getElementById('pm-modal-subtitle').textContent = subtitle;
+      document.getElementById('modal-save-btn').innerHTML = `<i class="ph-bold ph-check mr-1"></i> ${mode === 'edit' ? 'Update' : 'Save'}`;
+
+      if (mode === 'edit' && data) {
+        if(document.getElementById('modal-pm-tag-no')) document.getElementById('modal-pm-tag-no').value = data.tagNo || '';
+        if(document.getElementById('modal-pm-criticality')) document.getElementById('modal-pm-criticality').value = data.criticality || '';
+        if(document.getElementById('modal-pm-inst-type')) document.getElementById('modal-pm-inst-type').value = data.instType || '';
+        if(document.getElementById('modal-pm-mode')) document.getElementById('modal-pm-mode').value = data.mode || '';
+        if(document.getElementById('modal-pm-month')) document.getElementById('modal-pm-month').value = data.pmMonth || '';
+        if(document.getElementById('modal-pm-date')) document.getElementById('modal-pm-date').value = data.pmDate || '';
+        if(document.getElementById('modal-pm-tech-name')) document.getElementById('modal-pm-tech-name').value = data.techName || '';
+        if(document.getElementById('modal-pm-status')) document.getElementById('modal-pm-status').value = data.status || 'Pending';
+        if(document.getElementById('modal-pm-caution')) document.getElementById('modal-pm-caution').value = data.caution || '';
+      } else {
+        ['modal-pm-tag-no', 'modal-pm-criticality', 'modal-pm-tech-name', 'modal-pm-caution', 'modal-pm-date'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        if(document.getElementById('modal-pm-inst-type')) document.getElementById('modal-pm-inst-type').value = 'ANALYZER';
+        if(document.getElementById('modal-pm-mode')) document.getElementById('modal-pm-mode').value = 'RUNNING';
+        if(document.getElementById('modal-pm-month')) document.getElementById('modal-pm-month').value = '';
+        if(document.getElementById('modal-pm-status')) document.getElementById('modal-pm-status').value = 'Pending';
+      }
+
+      const modal = document.getElementById('pm-add-edit-modal');
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    window.closePMAddEditModal = function () {
+      const modal = document.getElementById('pm-add-edit-modal');
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    window.savePMData = function () {
+      const data = {
+        tagNo: document.getElementById('modal-pm-tag-no')?.value || '',
+        criticality: document.getElementById('modal-pm-criticality')?.value || '',
+        instType: document.getElementById('modal-pm-inst-type')?.value || '',
+        mode: document.getElementById('modal-pm-mode')?.value || '',
+        pmMonth: document.getElementById('modal-pm-month')?.value || '',
+        pmDate: document.getElementById('modal-pm-date')?.value || '',
+        techName: document.getElementById('modal-pm-tech-name')?.value || '',
+        status: document.getElementById('modal-pm-status')?.value || 'Pending',
+        caution: document.getElementById('modal-pm-caution')?.value || '',
+      };
+
+      if (!data.tagNo) {
+        Swal.fire({ icon: 'error', title: 'Required', text: 'Please select or enter a Tag No.', confirmButtonColor: '#2563eb' });
+        return;
+      }
+
+      // Mock save logic
+      if (_pmImageModalMode === 'add') {
+        PM_TAG_DB.push(data);
+        populateTagDropdown();
+      } else {
+        const idx = PM_TAG_DB.findIndex(t => t.tagNo === data.tagNo);
+        if (idx >= 0) PM_TAG_DB[idx] = data;
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: _pmImageModalMode === 'edit' ? 'Updated' : 'Saved',
+        text: _pmImageModalMode === 'edit' ? 'PM details updated successfully (mock).' : 'New PM details saved successfully (mock).',
+        confirmButtonColor: '#2563eb',
+        timer: 1800,
+        timerProgressBar: true
+      });
+      
+      closePMAddEditModal();
+      if (data.tagNo === _selectedTagNo) populatePMForm(data);
+    }
+
+    window.updatePMStatus = function () {
+      const tagNo = requireSelectedTag('updating');
+      if (!tagNo) return;
+      openPMUpdateStatusModal();
+    }
+
+    window.editPMStatus = function () {
+      const tagNo = requireSelectedTag('editing');
+      if (!tagNo) return;
+      const tag = PM_TAG_DB.find(t => t.tagNo === tagNo);
+      openPMAddEditModal('edit', tag);
+    }
+
+    window.deletePMStatus = function () {
+      const tagNo = requireSelectedTag('deleting');
+      if (!tagNo) return;
+      setSelectedTag(tagNo);
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Delete Tag?',
+        text: `This will delete "${tagNo}".`,
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#334155'
+      }).then((res) => {
+        if (!res.isConfirmed) return;
+        const idx = PM_TAG_DB.findIndex(t => t.tagNo === tagNo);
+        if (idx >= 0) PM_TAG_DB.splice(idx, 1);
+        _selectedTagNo = '';
+        const sel = document.getElementById('pm-tag-select');
+        if (sel) sel.value = '';
+        clearPMForm();
+        populateTagDropdown();
+        Swal.fire({ icon: 'success', title: 'Deleted', text: 'Tag deleted successfully (mock).', confirmButtonColor: '#2563eb', timer: 1600, timerProgressBar: true });
+      });
+    }
+
+    window.addPMStatus = function () {
+      openPMAddEditModal('add');
+    }
+
+    // Dropdown → auto-populate form (no need to re-select again)
+    document.addEventListener('DOMContentLoaded', () => {
+      populateTagDropdown();
+      const sel = document.getElementById('pm-tag-select');
+      sel?.addEventListener('change', (e) => {
+        setSelectedTag(e.target.value);
+      });
+    });
+
     // Filtering logic for Monthly Status
     // Monthly Status Modal Logic
     function filterMonthlyTable() {
@@ -886,6 +1262,42 @@
       modal.setAttribute("aria-hidden", "true");
     }
 
+    window.openPMUpdateStatusModal = function() {
+      const modal = document.getElementById("pm-update-status-modal");
+      
+      const sel = document.getElementById("status-update-tag-select");
+      sel.innerHTML = `<option value="">--</option>` + PM_TAG_DB.map(t => `<option value="${t.tagNo}">${t.tagNo}</option>`).join('');
+      
+      const autoSel = document.getElementById('pm-tag-select')?.value;
+      if (autoSel) {
+          sel.value = autoSel;
+          document.getElementById('status-update-tag-input').value = autoSel;
+      } else {
+          sel.value = "";
+          document.getElementById('status-update-tag-input').value = "";
+      }
+      
+      document.getElementById("status-update-tech").value = "Tech";
+      document.getElementById("status-update-date").value = "";
+      
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    window.closePMUpdateStatusModal = function() {
+      const modal = document.getElementById("pm-update-status-modal");
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    window.submitPMStatusUpdate = function() {
+      const tag = document.getElementById('status-update-tag-input').value;
+      if(!tag) return Swal.fire({ icon: 'warning', title: 'Missing Data', text: 'Please enter a Tag No.', confirmButtonColor: '#2563eb' });
+      
+      Swal.fire({ icon: 'success', title: 'Updated', text: `PM Status updated successfully for ${tag}.`, confirmButtonColor: '#2563eb', timer: 1800, timerProgressBar: true });
+      closePMUpdateStatusModal();
+    }
+
     // Close modals on overlay click
     document.addEventListener("click", (e) => {
       if (e.target.id === "pm-report-modal") closePMReportModal();
@@ -893,6 +1305,8 @@
       if (e.target.id === "pm-monthly-status-modal") closePMMonthlyStatusModal();
       if (e.target.id === "pm-overdue-modal") closePMOverdueModal();
       if (e.target.id === "pm-from-log-modal") closePMFromLogModal();
+      if (e.target.id === "pm-add-edit-modal") closePMAddEditModal();
+      if (e.target.id === "pm-update-status-modal") closePMUpdateStatusModal();
     });
 
     // Tab switching logic for categories

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JObDetail | GNFC</title>
+    <title>Job Detail | GNFC</title>
     <link rel="stylesheet" href="/src/css/ios-fonts.css">
     <link rel="stylesheet" href="/src/css/typography.css">
     <link rel="stylesheet" href="/src/css/table-style.css">
@@ -30,12 +30,12 @@
         <script src="/src/js/header.js"></script>
         <script>
             renderHeader({
-                title: "JObDetail",
+                title: "Job Detail",
                 breadcrumbs: [
                     { label: "Plant", href: "/src/pages/plant_status.html" },
                     { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
                     { label: "Inst Data", href: "/src/pages/boiler_inst_data.html" },
-                    { label: "JObDetail" }
+                    { label: "Job Detail" }
                 ],
                 backLink: "/src/pages/boiler_inst_data.html"
             });
@@ -44,9 +44,7 @@
         <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
             <div class="max-w-8xl mx-auto space-y-3">
 
-                <!-- ══════════════════════════════════════════════════════ -->
-                <!-- TOOLBAR CARD                                          -->
-                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- TOOLBAR CARD -->
                 <div class="jbd-card">
                     <div class="jbd-toolbar">
 
@@ -125,7 +123,7 @@
                                 <i class="ph-bold ph-arrows-clockwise"></i> Update From InsBl
                             </button>
                             <button class="jbd-btn jbd-btn-ghost" onclick="openJBIndex()">
-                                <i class="ph-bold ph-list-numbers"></i> JObIndex
+                                <i class="ph-bold ph-list-numbers"></i> Job Index
                             </button>
                         </div>
 
@@ -144,17 +142,13 @@
                     </div>
                 </div>
 
-                <!-- ══════════════════════════════════════════════════════ -->
-                <!-- ALERT BANNER — shown when no data                     -->
-                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- ALERT BANNER — shown when no data -->
                 <div id="alert-banner" class="jbd-alert">
                     <i class="ph-bold ph-warning-circle"></i>
                     No record found. Select a JOband press <strong>Go</strong>.
                 </div>
 
-                <!-- ══════════════════════════════════════════════════════ -->
-                <!-- CONTROL COPY CARD                                     -->
-                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- CONTROL COPY CARD -->
                 <div id="control-copy-section" class="hidden">
                     <div class="jbd-card">
                         <div class="jbd-card-header">
@@ -243,9 +237,7 @@
                     </div>
                 </div>
 
-                <!-- ══════════════════════════════════════════════════════ -->
-                <!-- CHANNEL RECORDS TABLE CARD                           -->
-                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- CHANNEL RECORDS TABLE CARD -->
                 <div id="channel-table-section" class="hidden">
                     <div class="jbd-card">
                         <div class="jbd-card-header">
@@ -279,9 +271,7 @@
                     </div>
                 </div>
 
-                <!-- ══════════════════════════════════════════════════════ -->
-                <!-- FOOTER ACTIONS                                        -->
-                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- FOOTER ACTIONS  -->
                 <div class="jbd-footer-bar">
                     <button class="jbd-btn jbd-btn-blue" onclick="generateReport()">
                         <i class="ph-bold ph-file-text"></i> Report
@@ -295,9 +285,7 @@
         </div>
     </main>
 
-    <!-- ══════════════════════════════════════════════════════════════════ -->
-    <!-- MODALS                                                            -->
-    <!-- ══════════════════════════════════════════════════════════════════ -->
+    <!-- MODALS -->
 
     <!-- Generic Edit Field Modal -->
     <div id="modal-edit-field" class="gnfc-modal-overlay" style="z-index: 10005;" role="dialog" aria-modal="true">
@@ -340,7 +328,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 520px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-grid-four mr-1"></i> Junction Box Schedule</h3>
+                    <h3 class="gnfc-modal-title"> Junction Box Schedule</h3>
                     <p class="gnfc-modal-subtitle">Generate channel report</p>
                 </div>
                 <button onclick="closeJBScheduleModal()" class="gnfc-modal-close">
@@ -391,7 +379,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--wide" style="max-width: 1100px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-list-numbers mr-1"></i> JObIndex</h3>
+                    <h3 class="gnfc-modal-title">JOB Index</h3>
                     <p class="gnfc-modal-subtitle">BOILER — Click <span style="color:#5794f2;">Location</span>, <span style="color:#fb923c;">Cable Type</span> or <span style="color:#34d399;">Cabinet</span> cells to edit</p>
                 </div>
                 <button onclick="closeJBIndexModal()" class="gnfc-modal-close">
@@ -426,7 +414,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 400px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-map-pin mr-1"></i> Edit Location</h3>
+                    <h3 class="gnfc-modal-title"> Edit Location</h3>
                     <p class="gnfc-modal-subtitle">JObNO : <span id="idx-loc-jbno">—</span></p>
                 </div>
                 <button onclick="closeIdxLocationModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
@@ -451,7 +439,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 400px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-plugs mr-1"></i> Edit Cable Type</h3>
+                    <h3 class="gnfc-modal-title"> Edit Cable Type</h3>
                     <p class="gnfc-modal-subtitle">JObNO : <span id="idx-cable-jbno">—</span></p>
                 </div>
                 <button onclick="closeIdxCableModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
@@ -482,7 +470,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 400px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-archive mr-1"></i> Edit Cabinet</h3>
+                    <h3 class="gnfc-modal-title"> Edit Cabinet</h3>
                     <p class="gnfc-modal-subtitle">JObNO : <span id="idx-cab-jbno">—</span></p>
                 </div>
                 <button onclick="closeIdxCabinetModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
@@ -507,7 +495,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 440px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-tag mr-1"></i> Edit Tag</h3>
+                    <h3 class="gnfc-modal-title"> Edit Tag</h3>
                     <p id="et-subtitle" class="gnfc-modal-subtitle">JObNO : ACJB-2</p>
                 </div>
                 <button onclick="closeEditTagModal()" class="gnfc-modal-close">
@@ -563,13 +551,9 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════════════════ -->
-    <!-- JAVASCRIPT                                                        -->
-    <!-- ══════════════════════════════════════════════════════════════════ -->
+
     <script>
-        // ========================
         //  MOCK JObDATA
-        // ========================
         const JB_DATABASE = {
             'ACJB-2': {
                 location: 'MTR FLOOR', cableNo: 'ACJB2-CCAbl', cableType: 'SIGNAL 12 PAIR', cabinet: 'C C Ab1', docNo: '', drawingNo: '', drawingName: '', excl: '',
@@ -755,9 +739,7 @@
             });
         }
 
-        // ========================
         //  EDIT TAG MODAL
-        // ========================
         let editingTagCh = null;
         let editingTagRow = null;
 
@@ -808,9 +790,7 @@
             });
         }
 
-        // ========================
         //  JObSCHEDULE REPORT MODAL
-        // ========================
         function generateReport() {
             const modal = document.getElementById('modal-jb-schedule');
             requestAnimationFrame(() => modal.classList.add('is-open'));
@@ -832,9 +812,7 @@
             });
         }
 
-        // ========================
         //  UPDATE FROM INSBL MODAL
-        // ========================
         function updateFromInsBl() {
             // Populate JB NO in modal
             const jbLabel = currentJB || '—';
@@ -910,32 +888,32 @@
                 html += `<tr class="jbd-group-row"><td colspan="6">${group.group}</td></tr>`;
                 group.items.forEach((item, ii) => {
                     sr++;
-                    html += `<tr style="height:auto;">
-                        <td class="text-center fw-bold" style="padding:3px 4px; font-size:0.8125rem;">${sr}</td>
-                        <td class="fw-bold color-blue" style="padding:3px 6px; font-size:0.8125rem;">${item.jb}</td>
-                        <td style="padding:3px 8px; cursor:pointer;" class="jbd-idx-cell-loc" onclick="openIdxLocationModal(${gi},${ii})">
-                            <span style="display:flex; align-items:center; gap:5px;">
-                                <i class="ph-bold ph-caret-right" style="font-size:0.625rem; color:#9aa7b5;"></i>
-                                <span style="color:var(--app-text,#e6edf3);">${item.loc}</span>
-                                <i class="ph-bold ph-pencil-simple" style="font-size:0.6rem; opacity:0.4; margin-left:auto;"></i>
+                    html += `<tr class="h-auto">
+                        <td class="text-center fw-bold py-2 px-1 font-13px">${sr}</td>
+                        <td class="fw-bold color-blue py-2 px-[6px] font-13px">${item.jb}</td>
+                        <td class="jbd-idx-cell-loc py-2 px-2 cursor-pointer" onclick="openIdxLocationModal(${gi},${ii})">
+                            <span class="flex items-center gap-[5px]">
+                                <i class="ph-bold ph-caret-right font-13px text-[#9aa7b5]"></i>
+                                <span class="font-13px text-[var(--app-text,#e6edf3)]">${item.loc}</span>
+                                <i class="ph-bold ph-pencil-simple font-13px opacity-40 ml-auto"></i>
                             </span>
                         </td>
-                        <td style="padding:3px 6px; text-align:center; cursor:pointer;" class="jbd-idx-cell-cable" onclick="openIdxCableModal(${gi},${ii})">
-                            <span style="display:inline-flex; align-items:center; gap:4px;">
-                                <i class="ph-bold ph-caret-right" style="font-size:0.625rem; color:#9aa7b5;"></i>
-                                <span>${item.cable}</span>
-                                <i class="ph-bold ph-pencil-simple" style="font-size:0.6rem; opacity:0.4;"></i>
+                        <td class="jbd-idx-cell-cable py-2 px-[6px] text-center cursor-pointer" onclick="openIdxCableModal(${gi},${ii})">
+                            <span class="inline-flex items-center gap-1">
+                                <i class="ph-bold ph-caret-right font-13px text-[#9aa7b5]"></i>
+                                <span class="font-13px">${item.cable}</span>
+                                <i class="ph-bold ph-pencil-simple font-13px opacity-40"></i>
                             </span>
                         </td>
-                        <td style="padding:3px 6px; text-align:center; cursor:pointer;" class="jbd-idx-cell-cab" onclick="openIdxCabinetModal(${gi},${ii})">
-                            <span style="display:inline-flex; align-items:center; gap:4px;">
-                                <i class="ph-bold ph-caret-right" style="font-size:0.625rem; color:#9aa7b5;"></i>
-                                <span>${item.cab}</span>
-                                <i class="ph-bold ph-pencil-simple" style="font-size:0.6rem; opacity:0.4;"></i>
+                        <td class="jbd-idx-cell-cab py-2 px-[6px] text-center cursor-pointer" onclick="openIdxCabinetModal(${gi},${ii})">
+                            <span class="inline-flex items-center gap-1">
+                                <i class="ph-bold ph-caret-right font-13px text-[#9aa7b5]"></i>
+                                <span class="font-13px">${item.cab}</span>
+                                <i class="ph-bold ph-pencil-simple font-13px opacity-40"></i>
                             </span>
                         </td>
-                        <td style="padding:3px 4px; text-align:center;">
-                            <button class="jbd-btn jbd-btn-blue" style="height:1.625rem; font-size:0.6875rem; padding:0 0.625rem; gap:3px;" onclick="previewJBSchedule('${item.jb}')">
+                        <td class="py-2 px-1 text-center">
+                            <button class="jbd-btn jbd-btn-blue font-13px py-0 h-[26px] px-[10px] gap-[3px]" onclick="previewJBSchedule('${item.jb}')">
                                 <i class="ph-bold ph-printer"></i> Preview
                             </button>
                         </td>
@@ -1017,8 +995,8 @@
             for (let o of sel.options) {
                 if (o.value === jbName) { o.selected = true; break; }
             }
-            jbFind();           // load the JObdata
-            generateReport();   // open Junction Box Schedule modal (JObIndex stays open)
+            jbFind();          
+            generateReport();  
         }
 
         function previewJB(jbName) {
@@ -1030,7 +1008,7 @@
             jbFind();
         }
 
-        // ── Add JObModal ───────────────────────────────────────────────────
+        // ── Add JObModal 
         function openAddJBModal() {
             // Reset fields
             document.getElementById('add-jb-no').value = '';
@@ -1117,7 +1095,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 440px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-database mr-1"></i> JBDB Update</h3>
+                    <h3 class="gnfc-modal-title">JBDB Update</h3>
                     <p class="gnfc-modal-subtitle">Sync description &amp; function from InsBl</p>
                 </div>
                 <button onclick="closeInsBlModal()" class="gnfc-modal-close">
@@ -1165,7 +1143,7 @@
         <div class="gnfc-modal-shell gnfc-modal-shell--narrow" style="max-width: 560px; padding: 0;">
             <div class="gnfc-modal-header">
                 <div>
-                    <h3 class="gnfc-modal-title"><i class="ph-bold ph-plus-circle mr-1"></i> Add New JB</h3>
+                    <h3 class="gnfc-modal-title">Add New JB</h3>
                     <p class="gnfc-modal-subtitle">JObDetail</p>
                 </div>
                 <button onclick="closeAddJBModal()" class="gnfc-modal-close"><i class="ph-bold ph-x text-lg"></i></button>
@@ -1206,7 +1184,7 @@
                         <label class="gnfc-modal-label">Cabinet Number</label>
                         <input type="text" id="add-jb-cabinet" class="gnfc-modal-input" placeholder="">
                     </div>
-                    <div></div> <!-- spacer -->
+                    <div></div> 
 
                     <!-- Row 4 -->
                     <div style="grid-column: 1 / -1; display:flex; flex-direction:column; gap:4px;">
