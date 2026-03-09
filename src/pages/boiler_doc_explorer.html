@@ -71,15 +71,26 @@
           </div>
 
           <!-- Toolbar Strip -->
-          <div class="px-5 py-2 border-b border-dark-border bg-dark-panel flex items-center gap-3 shrink-0">
+          <div class="px-5 py-2 border-b border-dark-border bg-dark-panel flex items-center flex-wrap gap-2 shrink-0">
             <button id="btn-up-level" class="p-1.5 hover:bg-dark-border text-dark-muted rounded transition-colors"
                 title="Up One Level">
               <i class="ph-bold ph-arrow-bend-left-up text-lg"></i>
             </button>
             <div class="w-px h-4 bg-dark-border mx-1"></div>
-            <button id="btn-new-folder" class="p-1.5 hover:bg-dark-border text-green-500 rounded transition-colors"
+            <button id="btn-new-folder" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 text-green-300 rounded transition-colors"
               title="New Folder">
               <i class="ph-fill ph-folder-plus text-lg"></i>
+              <span class="text-[0.62rem] font-extrabold uppercase tracking-widest">New Folder</span>
+            </button>
+            <button id="btn-save-files" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-500/10 border border-blue-500/30 hover:bg-blue-500/20 text-blue-300 rounded transition-colors"
+              title="Save Files">
+              <i class="ph-bold ph-upload-simple text-lg"></i>
+              <span class="text-[0.62rem] font-extrabold uppercase tracking-widest">Upload</span>
+            </button>
+            <button id="btn-send-email" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-300 rounded transition-colors"
+              title="Send Mail">
+              <i class="ph-bold ph-envelope-simple text-lg"></i>
+              <span class="text-[0.62rem] font-extrabold uppercase tracking-widest">Send Mail</span>
             </button>
             <!-- Paste Button (Hidden by default) -->
             <button id="btn-paste" class="hidden items-center gap-2 px-3 py-1 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-sm hover:bg-blue-600/30 transition-all animate-pulse"
@@ -550,6 +561,118 @@
     </div>
   </div>
 
+  <!-- Save Files Modal -->
+  <div id="save-files-modal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-3xl rounded-sm shadow-2xl border border-white overflow-hidden text-gray-800">
+      <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+        <h2 class="text-sm font-black text-[#2d68c4] uppercase tracking-widest">Save Files To Server</h2>
+        <button id="btn-close-save-files-modal" class="text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+      <div class="px-5 py-4 space-y-4">
+        <div class="text-[0.75rem]">
+          <span class="font-black text-gray-500 uppercase tracking-wide">Current Path:</span>
+          <span id="save-files-current-path" class="font-bold text-blue-600 ml-1">/ENGG_DOC/BOILER_INST/</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 items-center">
+          <input id="save-files-input" type="file" multiple
+            class="block w-full text-[0.75rem] text-gray-600 file:mr-2 file:h-9 file:px-3 file:rounded-sm file:border file:border-gray-300 file:bg-gray-50 file:text-gray-700 file:text-[0.7rem] file:font-bold file:uppercase file:tracking-wider">
+          <span class="text-[0.65rem] font-bold text-gray-500 uppercase tracking-wider">Max 10 MB / Transfer</span>
+        </div>
+        <div id="save-files-queue" class="border border-gray-200 rounded-sm min-h-[120px] overflow-auto max-h-[300px]">
+          <div class="px-4 py-8 text-center text-[0.72rem] text-gray-400 italic">No files selected.</div>
+        </div>
+        <p id="save-files-rule-note" class="text-[0.68rem] font-bold text-gray-500 uppercase tracking-wider">
+          Engineering mode: comment compulsory for every file.
+        </p>
+      </div>
+      <div class="px-5 py-4 border-t border-gray-200 flex items-center justify-end gap-3 bg-gray-50">
+        <button id="btn-cancel-save-files" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button id="btn-save-files-submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Save Files</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Send Email Modal -->
+  <div id="send-email-modal" class="fixed inset-0 z-[95] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-2xl rounded-sm shadow-2xl border border-white overflow-hidden text-gray-800">
+      <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+        <h2 class="text-sm font-black text-[#2d68c4] uppercase tracking-widest">Send File Through Email</h2>
+        <button id="btn-close-email-modal" class="text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+      <div class="px-5 py-4 space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">To *</label>
+            <input id="email-to" type="text" placeholder="name@gnfc.in"
+              class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">File *</label>
+            <select id="email-file-select"
+              class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">Subject *</label>
+          <input id="email-subject" type="text" placeholder="Document Sharing"
+            class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">Message</label>
+          <textarea id="email-message" rows="4" placeholder="Write message..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-sm text-[0.8rem] font-medium focus:outline-none focus:ring-1 focus:ring-blue-500"></textarea>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <label class="inline-flex items-center gap-2 text-[0.7rem] font-bold text-gray-600 uppercase tracking-wider">
+            <input id="email-link-only" type="checkbox" class="accent-blue-500">
+            Send attachment as link only
+          </label>
+          <button id="btn-open-sent-items" class="h-8 px-3 rounded-sm border border-gray-300 text-[0.65rem] font-black uppercase tracking-widest text-gray-600 hover:text-blue-600 hover:border-blue-400 transition-colors">
+            Sent Items
+          </button>
+        </div>
+      </div>
+      <div class="px-5 py-4 border-t border-gray-200 flex items-center justify-end gap-3 bg-gray-50">
+        <button id="btn-cancel-email" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
+        <button id="btn-send-email-submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sent Items Modal -->
+  <div id="sent-items-modal" class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-4xl rounded-sm shadow-2xl border border-white overflow-hidden text-gray-800">
+      <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+        <h2 class="text-sm font-black text-[#2d68c4] uppercase tracking-widest">Sent Items</h2>
+        <button id="btn-close-sent-items" class="text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+      <div class="p-4 overflow-auto max-h-[70vh]">
+        <table class="w-full border-collapse min-w-[720px]">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200 text-[0.65rem] font-black uppercase tracking-widest text-[#2d68c4]">
+              <th class="px-3 py-2 text-left">To</th>
+              <th class="px-3 py-2 text-left">File</th>
+              <th class="px-3 py-2 text-left">Subject</th>
+              <th class="px-3 py-2 text-left">When</th>
+              <th class="px-3 py-2 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="sent-items-table-body"></tbody>
+        </table>
+      </div>
+      <div class="px-5 py-3 border-t border-gray-200 bg-gray-50 flex justify-end">
+        <button id="btn-close-sent-items-footer" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Documentation Log Modal -->
   <div id="doc-log-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-gray-800">
     <div class="bg-white w-full max-w-5xl h-[85vh] rounded-sm shadow-2xl flex flex-col overflow-hidden border border-white">
@@ -583,6 +706,7 @@
               <option value="Rename Folder">Rename Folder</option>
               <option value="Delete Folder">Delete Folder</option>
               <option value="Create Folder">Create Folder</option>
+              <option value="Send Email">Send Email</option>
             </select>
             <i class="ph-bold ph-caret-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 pointer-events-none transition-transform group-hover:text-blue-500"></i>
           </div>
@@ -662,6 +786,27 @@
     const pasteBtn = document.getElementById('btn-paste');
     const createModal = document.getElementById('create-folder-modal');
     const folderInput = document.getElementById('new-folder-name');
+    const btnSaveFiles = document.getElementById('btn-save-files');
+    const btnSendEmail = document.getElementById('btn-send-email');
+
+    const saveFilesModal = document.getElementById('save-files-modal');
+    const saveFilesPath = document.getElementById('save-files-current-path');
+    const saveFilesInput = document.getElementById('save-files-input');
+    const saveFilesQueue = document.getElementById('save-files-queue');
+    const saveFilesRuleNote = document.getElementById('save-files-rule-note');
+
+    const emailModal = document.getElementById('send-email-modal');
+    const emailToInput = document.getElementById('email-to');
+    const emailFileSelect = document.getElementById('email-file-select');
+    const emailSubjectInput = document.getElementById('email-subject');
+    const emailMessageInput = document.getElementById('email-message');
+    const emailLinkOnly = document.getElementById('email-link-only');
+
+    const sentItemsModal = document.getElementById('sent-items-modal');
+    const sentItemsTableBody = document.getElementById('sent-items-table-body');
+
+    let pendingSaveFiles = [];
+    let sentItems = [];
 
     function renderTable(items) {
       // Clear with out animation
@@ -703,6 +848,7 @@
                 <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                   <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-pencil-simple font-14px"></i></button>
                   <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-download-simple font-14px"></i></button>
+                  <button class="p-0.5 hover:text-amber-400 text-dark-muted transition-colors btn-email-row" title="Send Mail"><i class="ph-bold ph-envelope-simple font-14px"></i></button>
                   <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-doc-log" title="Log"><i class="ph-bold ph-list-bullets font-14px"></i></button>
                   <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-cut-row" title="Cut"><i class="ph-bold ph-scissors font-14px"></i></button>
                   <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row" title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
@@ -804,6 +950,313 @@
       
       renderTable(mockData[currentFolder]);
       hideCreateFolderModal();
+    }
+
+    function getCurrentFolderName() {
+      return currentPath[currentPath.length - 1];
+    }
+
+    function getCurrentPathLabel() {
+      return '/' + currentPath.join('/') + '/';
+    }
+
+    function getCurrentDate() {
+      const now = new Date();
+      return `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+    }
+
+    function getCurrentTime() {
+      const now = new Date();
+      return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    }
+
+    function getFileLocations(fileName) {
+      return Object.keys(mockData).filter(folderName => {
+        const items = mockData[folderName] || [];
+        return items.some(item => item.type === 'File' && item.name.toLowerCase() === fileName.toLowerCase());
+      });
+    }
+
+    function getFilesInCurrentFolder() {
+      const folder = getCurrentFolderName();
+      return (mockData[folder] || []).filter(item => item.type === 'File');
+    }
+
+    function showSaveFilesModal() {
+      pendingSaveFiles = [];
+      saveFilesInput.value = '';
+      saveFilesPath.innerText = getCurrentPathLabel();
+      saveFilesRuleNote.innerText = docType === 'eng'
+        ? 'Engineering mode: comment compulsory for every file.'
+        : 'Other documentation: comment optional, same file allowed in different folders.';
+      renderSaveFilesQueue();
+      saveFilesModal.classList.remove('hidden');
+      saveFilesModal.classList.add('flex');
+    }
+
+    function hideSaveFilesModal() {
+      saveFilesModal.classList.add('hidden');
+      saveFilesModal.classList.remove('flex');
+    }
+
+    function renderSaveFilesQueue() {
+      if (!pendingSaveFiles.length) {
+        saveFilesQueue.innerHTML = '<div class="px-4 py-8 text-center text-[0.72rem] text-gray-400 italic">No files selected.</div>';
+        return;
+      }
+
+      saveFilesQueue.innerHTML = `
+        <table class="w-full border-collapse">
+          <thead class="sticky top-0 bg-gray-50 z-10">
+            <tr class="text-[0.64rem] font-black uppercase tracking-widest text-[#2d68c4] border-b border-gray-200">
+              <th class="px-3 py-2 text-left">File</th>
+              <th class="px-3 py-2 text-left">Size</th>
+              <th class="px-3 py-2 text-left">${docType === 'eng' ? 'Comment *' : 'Comment (Optional)'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${pendingSaveFiles.map((item, index) => `
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-[0.75rem] font-semibold text-gray-700">${item.file.name}</td>
+                <td class="px-3 py-2 text-[0.72rem] font-mono text-gray-600">${item.sizeKb} Kb</td>
+                <td class="px-3 py-2">
+                  <input data-save-comment-index="${index}" type="text" value="${item.comment}"
+                    placeholder="${docType === 'eng' ? 'Comment required' : 'Comment'}"
+                    class="w-full h-8 px-2 border border-gray-300 rounded-sm text-[0.75rem] font-semibold focus:outline-none focus:ring-1 focus:ring-[#2d68c4]">
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    function handleSaveFilesSubmit() {
+      if (!pendingSaveFiles.length) {
+        Swal.fire({ icon: 'info', title: 'No Files', text: 'Please select files first.' });
+        return;
+      }
+
+      const totalBytes = pendingSaveFiles.reduce((sum, item) => sum + (item.file.size || 0), 0);
+      if (totalBytes > 10 * 1024 * 1024) {
+        Swal.fire({ icon: 'error', title: 'Limit Exceeded', text: 'Max 10 MB can be transferred at a time.' });
+        return;
+      }
+
+      const currentFolder = getCurrentFolderName();
+      if (!mockData[currentFolder]) mockData[currentFolder] = [];
+
+      const dateStr = getCurrentDate();
+      const timeStr = getCurrentTime();
+      const rejected = [];
+      let savedCount = 0;
+
+      pendingSaveFiles.forEach(item => {
+        const fileName = item.file.name.trim();
+        const comment = (item.comment || '').trim();
+        const sizeKb = Math.max(1, Math.ceil((item.file.size || 0) / 1024));
+
+        if (docType === 'eng' && !comment) {
+          rejected.push(`${fileName}: comment required`);
+          return;
+        }
+
+        const existingInCurrentFolder = mockData[currentFolder].find(row => row.type === 'File' && row.name.toLowerCase() === fileName.toLowerCase());
+        const fileLocations = getFileLocations(fileName);
+
+        if (docType === 'eng') {
+          const duplicateElsewhere = fileLocations.find(folderName => folderName !== currentFolder);
+          if (duplicateElsewhere) {
+            rejected.push(`${fileName}: already exists in ${duplicateElsewhere}`);
+            return;
+          }
+
+          if (existingInCurrentFolder) {
+            const nextRev = (Number(existingInCurrentFolder.rev) || 0) + 1;
+            existingInCurrentFolder.rev = nextRev;
+            existingInCurrentFolder.comments = Array.isArray(existingInCurrentFolder.comments) ? existingInCurrentFolder.comments : [];
+            existingInCurrentFolder.comments.push(comment);
+            existingInCurrentFolder.size = String(sizeKb);
+            existingInCurrentFolder.date = dateStr;
+            mockLogs.unshift({
+              rev: String(nextRev),
+              item: fileName,
+              location: getCurrentPathLabel(),
+              action: "Save File",
+              comment: comment,
+              date: dateStr,
+              time: timeStr,
+              by: "SYSTEM"
+            });
+          } else {
+            mockData[currentFolder].unshift({
+              name: fileName,
+              type: "File",
+              size: String(sizeKb),
+              date: dateStr,
+              hasSub: false,
+              rev: 0,
+              comments: [comment]
+            });
+            mockLogs.unshift({
+              rev: "0",
+              item: fileName,
+              location: getCurrentPathLabel(),
+              action: "Save File",
+              comment: comment,
+              date: dateStr,
+              time: timeStr,
+              by: "SYSTEM"
+            });
+          }
+
+          savedCount += 1;
+          return;
+        }
+
+        if (existingInCurrentFolder) {
+          rejected.push(`${fileName}: same file not allowed in same folder`);
+          return;
+        }
+
+        mockData[currentFolder].unshift({
+          name: fileName,
+          type: "File",
+          size: String(sizeKb),
+          date: dateStr,
+          hasSub: false
+        });
+        mockLogs.unshift({
+          rev: "-",
+          item: fileName,
+          location: getCurrentPathLabel(),
+          action: "Save File",
+          comment: comment || "Saved in other documentation",
+          date: dateStr,
+          time: timeStr,
+          by: "SYSTEM"
+        });
+        savedCount += 1;
+      });
+
+      pendingSaveFiles = [];
+      hideSaveFilesModal();
+      renderTable(mockData[currentFolder] || []);
+
+      if (savedCount > 0 && rejected.length === 0) {
+        Swal.fire({ icon: 'success', title: 'Saved', text: `${savedCount} file(s) saved successfully.` });
+      } else if (savedCount > 0) {
+        Swal.fire({ icon: 'warning', title: 'Partially Saved', text: `${savedCount} saved, ${rejected.length} rejected: ${rejected.join(' | ')}` });
+      } else {
+        Swal.fire({ icon: 'error', title: 'Save Failed', text: rejected.join(' | ') || 'No file saved.' });
+      }
+    }
+
+    function populateEmailFileSelect(selectedName = '') {
+      const files = getFilesInCurrentFolder();
+      if (!files.length) {
+        emailFileSelect.innerHTML = '<option value="">No files in current folder</option>';
+        return;
+      }
+
+      emailFileSelect.innerHTML = files.map(file => {
+        const isSelected = selectedName && file.name.toLowerCase() === selectedName.toLowerCase();
+        return `<option value="${file.name}" ${isSelected ? 'selected' : ''}>${file.name}</option>`;
+      }).join('');
+    }
+
+    function showEmailModal(selectedName = '') {
+      populateEmailFileSelect(selectedName);
+      emailModal.classList.remove('hidden');
+      emailModal.classList.add('flex');
+    }
+
+    function hideEmailModal() {
+      emailModal.classList.add('hidden');
+      emailModal.classList.remove('flex');
+    }
+
+    function renderSentItemsTable() {
+      if (!sentItems.length) {
+        sentItemsTableBody.innerHTML = '<tr><td colspan="5" class="px-3 py-8 text-center text-[0.72rem] text-gray-400 italic">No sent items.</td></tr>';
+        return;
+      }
+
+      sentItemsTableBody.innerHTML = sentItems.map(item => `
+        <tr class="border-b border-gray-100">
+          <td class="px-3 py-2 text-[0.75rem] font-semibold text-gray-700">${item.to}</td>
+          <td class="px-3 py-2 text-[0.72rem] text-gray-600">${item.file}</td>
+          <td class="px-3 py-2 text-[0.72rem] text-gray-600">${item.subject}</td>
+          <td class="px-3 py-2 text-[0.7rem] text-gray-500">${item.date} ${item.time}</td>
+          <td class="px-3 py-2 text-center">
+            <div class="flex justify-center gap-1">
+              <button class="h-6 px-2 text-[0.58rem] font-black uppercase tracking-widest rounded-sm border border-gray-300 text-gray-600 hover:text-blue-600 hover:border-blue-400 transition-colors btn-resend-item" data-sent-id="${item.id}">Resend</button>
+              <button class="h-6 px-2 text-[0.58rem] font-black uppercase tracking-widest rounded-sm border border-red-300 text-red-500 hover:text-red-600 transition-colors btn-delete-sent-item" data-sent-id="${item.id}">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function showSentItemsModal() {
+      renderSentItemsTable();
+      sentItemsModal.classList.remove('hidden');
+      sentItemsModal.classList.add('flex');
+    }
+
+    function hideSentItemsModal() {
+      sentItemsModal.classList.add('hidden');
+      sentItemsModal.classList.remove('flex');
+    }
+
+    function handleSendEmailSubmit() {
+      const to = emailToInput.value.trim();
+      const subject = emailSubjectInput.value.trim();
+      const message = emailMessageInput.value.trim();
+      const fileName = (emailFileSelect.value || '').trim();
+      const linkOnly = emailLinkOnly.checked;
+
+      if (!to || !subject || !fileName) {
+        Swal.fire({ icon: 'error', title: 'Missing Details', text: 'To, Subject and File are required.' });
+        return;
+      }
+
+      const fileItem = getFilesInCurrentFolder().find(file => file.name === fileName);
+      const fileSizeKb = fileItem ? parseInt(fileItem.size || '0', 10) : 0;
+
+      if (fileSizeKb > 10240 && !linkOnly) {
+        Swal.fire({ icon: 'info', title: 'Large File', text: 'For large files, enable "Send attachment as link only".' });
+        return;
+      }
+
+      const date = getCurrentDate();
+      const time = getCurrentTime();
+      sentItems.unshift({
+        id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        to,
+        file: fileName,
+        subject,
+        message,
+        linkOnly,
+        date,
+        time
+      });
+
+      mockLogs.unshift({
+        rev: "-",
+        item: fileName,
+        location: getCurrentPathLabel(),
+        action: "Send Email",
+        comment: `Sent to ${to}${linkOnly ? " (Link only)" : ""}`,
+        date,
+        time,
+        by: "SYSTEM"
+      });
+
+      emailSubjectInput.value = '';
+      emailMessageInput.value = '';
+      emailLinkOnly.checked = false;
+      hideEmailModal();
+      Swal.fire({ icon: 'success', title: 'Sent', text: 'Mail sent successfully. CC sent to sender email.' });
     }
 
     // Cut & Paste Logic
@@ -942,11 +1395,81 @@
       }
     });
 
+    saveFilesInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      pendingSaveFiles = files.map(file => ({
+        file,
+        sizeKb: Math.max(1, Math.ceil((file.size || 0) / 1024)),
+        comment: ''
+      }));
+      renderSaveFilesQueue();
+    });
+
+    saveFilesQueue.addEventListener('input', (e) => {
+      const commentInput = e.target.closest('[data-save-comment-index]');
+      if (!commentInput) return;
+      const index = Number(commentInput.dataset.saveCommentIndex);
+      if (Number.isNaN(index) || !pendingSaveFiles[index]) return;
+      pendingSaveFiles[index].comment = commentInput.value;
+    });
+
+    document.getElementById('btn-save-files-submit').addEventListener('click', handleSaveFilesSubmit);
+    document.getElementById('btn-cancel-save-files').addEventListener('click', hideSaveFilesModal);
+    document.getElementById('btn-close-save-files-modal').addEventListener('click', hideSaveFilesModal);
+
+    btnSaveFiles.addEventListener('click', showSaveFilesModal);
+    btnSendEmail.addEventListener('click', () => showEmailModal());
+    document.getElementById('btn-send-email-submit').addEventListener('click', handleSendEmailSubmit);
+    document.getElementById('btn-cancel-email').addEventListener('click', hideEmailModal);
+    document.getElementById('btn-close-email-modal').addEventListener('click', hideEmailModal);
+    document.getElementById('btn-open-sent-items').addEventListener('click', showSentItemsModal);
+    document.getElementById('btn-close-sent-items').addEventListener('click', hideSentItemsModal);
+    document.getElementById('btn-close-sent-items-footer').addEventListener('click', hideSentItemsModal);
+
+    sentItemsTableBody.addEventListener('click', (e) => {
+      const resendBtn = e.target.closest('.btn-resend-item');
+      if (resendBtn) {
+        const id = resendBtn.dataset.sentId;
+        const sent = sentItems.find(row => row.id === id);
+        if (!sent) return;
+        emailToInput.value = sent.to;
+        emailSubjectInput.value = sent.subject;
+        emailMessageInput.value = sent.message;
+        emailLinkOnly.checked = sent.linkOnly;
+        showEmailModal(sent.file);
+        hideSentItemsModal();
+        return;
+      }
+
+      const deleteBtn = e.target.closest('.btn-delete-sent-item');
+      if (deleteBtn) {
+        const id = deleteBtn.dataset.sentId;
+        sentItems = sentItems.filter(row => row.id !== id);
+        renderSentItemsTable();
+      }
+    });
+
+    tableBody.addEventListener('click', (e) => {
+      const mailBtn = e.target.closest('.btn-email-row');
+      if (!mailBtn) return;
+      const row = mailBtn.closest('tr');
+      const type = row.querySelector('td:nth-child(3) span').innerText;
+      const name = row.querySelector('.btn-open-folder').innerText;
+      if (type !== "<File>") {
+        Swal.fire({ icon: 'info', title: 'Select File', text: 'Email can be sent for files only.' });
+        return;
+      }
+      showEmailModal(name);
+    });
+
     document.getElementById('btn-new-folder').addEventListener('click', showCreateFolderModal);
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         hideCreateFolderModal();
         hideDocLogModal();
+        hideSaveFilesModal();
+        hideEmailModal();
+        hideSentItemsModal();
       }
       if (e.key === 'Enter' && !createModal.classList.contains('hidden')) handleCreateFolder();
     });
