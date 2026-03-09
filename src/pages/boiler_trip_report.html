@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alarm Trip Settings Report | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'plants';</script>
+</head>
+
+<body class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('plants');</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Alarm Trip Settings Report",
+        breadcrumbs: [
+          { label: "Plant", href: "/src/pages/plant_status.html" },
+          { label: "Boiler", href: "/src/pages/boiler_dashboard.html" },
+          { label: "Report" }
+        ],
+        backLink: "/src/pages/boiler_dashboard.html"
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark-bg">
+      <div class="mx-auto space-y-4">
+
+        <!-- Main Data Table Container -->
+        <div class="bg-dark-panel border border-dark-border rounded-lg shadow-lg flex flex-col h-[calc(100vh-170px)]">
+
+          <!-- Top Strip containing Title and Filter -->
+          <div
+            class="px-5 py-3 border-b border-dark-border bg-dark-bg/60 flex flex-wrap items-center justify-between gap-4 shrink-0 rounded-t-xl">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                <i class="ph-bold ph-list-dashes text-blue-400 font-16px"></i>
+              </div>
+              <h3 class="text-sm font-black text-dark-text tracking-wide uppercase">Trip Settings List</h3>
+            </div>
+
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+              <!-- Filter Section -->
+              <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <span
+                  class="text-[0.65rem] font-bold text-dark-muted uppercase tracking-widest hidden sm:inline-block">Filter
+                  By Area</span>
+                <div class="relative w-full sm:w-48">
+                  <select
+                    class="w-full h-9 bg-dark-bg border border-dark-border rounded-lg pl-3 pr-10 text-dark-text text-[0.8125rem] font-semibold outline-none cursor-pointer transition-all duration-200 focus:border-blue-500 focus:ring-[1px] focus:ring-blue-500/50 appearance-none hover:bg-dark-border/30">
+                    <option>ALL</option>
+                    <option>BOILER-1</option>
+                    <option>BOILER-2</option>
+                    <option>BOILER-3</option>
+                    <option>BOILER-4</option>
+                  </select>
+                  <i
+                    class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-dark-muted pointer-events-none"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scrollable Table Body -->
+          <div class="flex-1 overflow-auto overflow-x-auto relative custom-scrollbar bg-dark-panel">
+            <table class="w-full text-left border-collapse min-w-[1100px]">
+              <thead class="">
+                <tr class="bg-dark-bg/95">
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[10%] border border-dark-border/50">
+                    Tag No</th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[15%] border border-dark-border/50">
+                    Description</th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[12%] border border-dark-border/50">
+                    Alarm L/LL</th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[15%] border border-dark-border/50">
+                    Alarm H/HH</th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[15%] border border-dark-border/50">
+                    Location</th>
+                  <th
+                    class="px-3 py-2 text-[0.65rem] font-extrabold uppercase tracking-widest text-dark-muted w-[33%] border border-dark-border/50">
+                    Function</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Row 1 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1_88_01_02</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted leading-tight border-r border-dark-border/50">
+                    —
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    FROM ELECT</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    <span
+                      class="bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 text-red-400 font-semibold shadow-inner inline-block">TURBINE
+                      WILL TRIP</span>
+                  </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr
+                  class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 bg-white/1 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1_88_U_ELEC</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    CLASS A SBU FROM ELECT
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    FROM ELECT</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    <span
+                      class="bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 text-red-400 font-semibold shadow-inner inline-block">M/C
+                      WILL TRIP.</span>
+                  </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1APH_ACCHORN</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    AFH ACC HORN
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-1">
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-[0.6rem] font-bold text-dark-muted w-5">ON</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-blue-300 shadow-inner">2.0
+                          SEC</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="text-[0.6rem] font-bold text-dark-muted w-5">OFF</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">5.0
+                          MIN</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    FIRING FLOOR, SOUTH SIDE</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted leading-snug">
+                    HORN WILL OPERATE FOR 2.0 SEC THEN REMAIN OFF FOR 3.0 SEC. THIS SEQUENCE OPERATES FIVE TIMES AFTER
+                    EVERY 5.0 MIN.
+                  </td>
+                </tr>
+
+                <!-- Row 4 -->
+                <tr
+                  class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 bg-white/1 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1FT1601C</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    MS FLOW
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span
+                        class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text whitespace-nowrap shadow-inner">54.0
+                        T/HR</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    <span
+                      class="bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 text-red-400 font-semibold shadow-inner inline-block">
+                      AT LL FLOW, ALL MILLS WILL TRIP PROVIDED 3 OF 4 CBTV OR DBTV ARE NOT OPEN.
+                    </span>
+                  </td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1LT3_61</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    TURBINE LO TANK LEVEL
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-0.5">
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">L</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">65.0
+                          %</span>
+                      </div>
+                      <span class="text-[0.6rem] text-dark-muted tracking-wide">(570 MM FROM TOP)</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-0.5">
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">H</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">73.0
+                          %</span>
+                      </div>
+                      <span class="text-[0.6rem] text-dark-muted tracking-wide">(470 MM FROM TOP)</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    EJECTOR FLOOR.</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    <div class="flex flex-wrap gap-1.5 text-[0.65rem] font-bold text-red-500 tracking-widest">
+                      <span class="bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/20 shadow-sm">ALARM</span>
+                      <span class="bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/20 shadow-sm">ALARM</span>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 6 -->
+                <tr
+                  class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 bg-white/1 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1LV1303</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    DEAERATOR LEVEL
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-1">
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">L</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">-50
+                          MM</span>
+                        <span class="text-[0.6rem] text-dark-muted tracking-wide">(BELOW CL)</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">-350
+                          MM</span>
+                        <span class="text-[0.6rem] text-dark-muted tracking-wide">(BELOW CL)</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-0.5">
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">H</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">+500
+                          MM</span>
+                        <span class="text-[0.6rem] text-dark-muted tracking-wide">(ABOVE CL)</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    DEAERATOR FLOOR</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted leading-snug">
+                    AT NWL, BFP SHALL BE STARTED MANUALLY AND RECIRCULATION VALVES WILL BE CLOSED.<br>
+                    <span
+                      class="mt-1 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 text-red-400 font-semibold shadow-inner inline-block">AT
+                      LL LEVEL, BFP WILL TRIP.</span>
+                  </td>
+                </tr>
+
+                <!-- Row 7 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1BOILER1</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    BOILER 1 TRIPPED
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    (1) M/C WILL UNLOAD IF 2 OF 4 BOILER TRIP PROVIDED IT IS NOT OVERRIDE.<br>
+                    (2) M/C WILL TRIP IF 3 OF 4 BOILER WILL TRIP PROVIDED IT IS NOT OVERRIDE.
+                  </td>
+                </tr>
+
+                <!-- Row 8 -->
+                <tr
+                  class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 bg-white/1 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1BOILER2</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    BOILER 2 TRIPPED
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    (1) M/C WILL UNLOAD IF 2 OF 4 BOILER TRIP PROVIDED IT IS NOT OVERRIDE.<br>
+                    (2) M/C WILL TRIP IF 3 OF 4 BOILER WILL TRIP PROVIDED IT IS NOT OVERRIDE.
+                  </td>
+                </tr>
+
+                <!-- Row 9 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1BOILER3</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    BOILER 3 TRIPPED
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    (1) M/C WILL UNLOAD IF 2 OF 4 BOILER TRIP PROVIDED IT IS NOT OVERRIDE.<br>
+                    (2) M/C WILL TRIP IF 3 OF 4 BOILER WILL TRIP PROVIDED IT IS NOT OVERRIDE.
+                  </td>
+                </tr>
+
+                <!-- Row 10 -->
+                <tr
+                  class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 bg-white/1 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1BOILER4</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    BOILER 4 TRIPPED
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    (1) M/C WILL UNLOAD IF 2 OF 4 BOILER TRIP PROVIDED IT IS NOT OVERRIDE.<br>
+                    (2) M/C WILL TRIP IF 3 OF 4 BOILER WILL TRIP PROVIDED IT IS NOT OVERRIDE.
+                  </td>
+                </tr>
+
+                <!-- Row 11 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1LT1A</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    OVERHEAD LO TANK LEVEL
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-red-500/10 text-red-400 border border-red-500/20">HH</span>
+                      <span
+                        class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">90.0
+                        %</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    DEAERATOR FLOOR</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    AT HH LEVEL, TURBINE READY FOR START PERMIT WILL APPEAR.
+                  </td>
+                </tr>
+
+                <!-- Row 12 -->
+                <tr
+                  class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 bg-white/1 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1LT4_1B</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    HOTWELL LEVEL
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-1">
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">L</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">30.0
+                          %</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20">LL</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">10.0
+                          %</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex flex-col gap-1">
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">H</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">65.0
+                          %</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <span
+                          class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-red-500/10 text-red-400 border border-red-500/20">HH</span>
+                        <span
+                          class="px-1 py-px rounded text-[0.65rem] font-mono bg-dark-bg border border-dark-border text-dark-text shadow-inner">95.0
+                          %</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    GND FLOOR-NEAR CONDENSER.</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    2 OF 3 LOGIC WITH 1LT4_1A AND 1LT4_1C.<br>
+                    (1) AT H LEVEL STAND BY CEP WILL START.<br>
+                    <span
+                      class="bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 text-red-400 font-semibold shadow-inner inline-block mt-1">(2)
+                      AT HH LEVEL, M/C WILL TRIP AFTER 5.0 SEC.</span><br>
+                    <span
+                      class="bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 text-red-400 font-semibold shadow-inner inline-block mt-0.5">2
+                      OF 3 LOGIC WITH 1LT4_1A AND 1LT4_1C. AT LL LEVEL, RUNNING CEP WILL TRIP.</span>
+                  </td>
+                </tr>
+
+                <!-- Row 13 -->
+                <tr class="hover:bg-dark-bg/40 transition-colors duration-150 border-b border-dark-border/50 group">
+                  <td class="px-3 py-1.5 border-r border-dark-border/50 ">
+                    <div class="inline-flex items-center gap-1.5 justify-center">
+
+                      <span
+                        class="text-[0.75rem] font-bold text-dark-text tracking-wide group-hover:text-blue-400 transition-colors">1CV430</span>
+                    </div>
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    DM MAKE UP VLV
+                  </td>
+                  <td class="px-3 py-1.5 border-r border-dark-border/50">
+                    <div class="flex items-center gap-1.5">
+                      <span
+                        class="px-1.5 py-px rounded text-[0.6rem] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">L</span>
+                      <span class="text-[0.7rem] text-dark-muted">—</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-muted border-r border-dark-border/50">—
+                  </td>
+                  <td
+                    class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-tight border-r border-dark-border/50">
+                    DEA FLOOR</td>
+                  <td class="px-3 py-1.5 text-[0.75rem] font-medium text-dark-text leading-snug">
+                    AT L LEVEL OF DEA(1LT303), VALVE WILL OPEN 100% and AT NWL OF DEA(1LT303), VALVE WILL IN CONTROL
+                    MODE.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(44, 50, 53, 0.8);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(87, 148, 242, 0.5);
+    }
+  </style>
+</body>
+
+</html>
