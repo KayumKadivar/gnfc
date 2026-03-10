@@ -145,7 +145,7 @@ class SidebarManager {
             ${this.createLink("iso", "#", "ph-certificate", "ISO/OHSAS/CPCB")}
 
             <!-- Jobs & Utility -->
-            ${this.createLink("job_list", "#", "ph-list-bullets", "JOB LIST")}
+            ${this.createLink("job_list", "/src/pages/job_list.html", "ph-list-bullets", "JOB LIST")}
             ${this.createLink("utility", "#", "ph-lightning", "UTILITY")}
             ${this.createLink("cms", "#", "ph-monitor", "CMS")}
             ${this.createLink("inst_ws", "#", "ph-desktop", "INST WS")}

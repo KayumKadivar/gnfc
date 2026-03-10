@@ -101,7 +101,11 @@
           </div>
 
           <!-- Scrollable Table Body -->
-          <div class="flex-1 overflow-auto overflow-x-auto relative custom-scrollbar bg-dark-panel">
+          <div id="table-scroll-container" class="flex-1 overflow-auto overflow-x-auto relative bg-dark-panel transition-opacity duration-200
+            [&::-webkit-scrollbar]:w-[8px] [&::-webkit-scrollbar]:h-[8px]
+            [&::-webkit-scrollbar-track]:bg-dark-bg/50 [&::-webkit-scrollbar-track]:rounded-sm
+            [&::-webkit-scrollbar-thumb]:bg-dark-border/80 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-thumb]:border [&::-webkit-scrollbar-thumb]:border-white/5
+            [&::-webkit-scrollbar-thumb:hover]:bg-blue-500/50">
             <table class="w-full text-left border-collapse min-w-[900px]">
               <thead class="sticky top-0 bg-dark-bg/95 z-10 shadow-sm border-b border-dark-border/50">
                 <tr>
@@ -154,13 +158,13 @@
                   <td class="px-3 py-1.5 text-center">
                     <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                       <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
-                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                          class="ph-bold ph-pencil-simple text-[14px]"></i></button>
                       <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
-                          class="ph-bold ph-download-simple font-14px"></i></button>
+                          class="ph-bold ph-download-simple text-[14px]"></i></button>
                       <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-cut-row"
-                        title="Cut"><i class="ph-bold ph-scissors font-14px"></i></button>
+                        title="Cut"><i class="ph-bold ph-scissors text-[14px]"></i></button>
                       <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row"
-                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                        title="Delete"><i class="ph-bold ph-trash text-[14px]"></i></button>
                     </div>
                   </td>
                 </tr>
@@ -503,11 +507,11 @@
                   <td class="px-3 py-1.5 text-center">
                     <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                       <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
-                          class="ph-bold ph-pencil-simple font-14px"></i></button>
+                          class="ph-bold ph-pencil-simple text-[14px]"></i></button>
                       <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i
-                          class="ph-bold ph-download-simple font-14px"></i></button>
+                          class="ph-bold ph-download-simple text-[14px]"></i></button>
                       <button class="p-0.5 hover:text-red-400 text-dark-muted transition-colors btn-delete-row"
-                        title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
+                        title="Delete"><i class="ph-bold ph-trash text-[14px]"></i></button>
                     </div>
                   </td>
                 </tr>
@@ -715,7 +719,11 @@
       </div>
 
       <!-- Modal Body (Table) -->
-      <div class="flex-1 overflow-auto bg-white custom-scrollbar">
+      <div class="flex-1 overflow-auto bg-white
+        [&::-webkit-scrollbar]:w-[6px]
+        [&::-webkit-scrollbar-track]:bg-transparent
+        [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-sm
+        [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
         <table class="w-full border-collapse">
           <thead class="sticky top-0 z-10">
             <tr class="bg-gray-50/80 backdrop-blur-md border-b border-gray-100 text-gray-800">
@@ -780,6 +788,7 @@
     };
 
     const tableBody = document.querySelector('tbody');
+    const tableScrollContainer = document.getElementById('table-scroll-container');
     const pathTitle = document.querySelector('h3.text-dark-text');
     const modalParentPathDisplay = document.getElementById('modal-parent-path');
     const btnUp = document.getElementById('btn-up-level');
@@ -810,7 +819,7 @@
 
     function renderTable(items) {
       // Clear with out animation
-      tableBody.style.opacity = '0';
+      tableScrollContainer.classList.add('opacity-0');
       
       setTimeout(() => {
         tableBody.innerHTML = '';
@@ -846,10 +855,10 @@
               </td>
               <td class="px-3 py-1.5 text-center">
                 <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
-                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-pencil-simple font-14px"></i></button>
-                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-download-simple font-14px"></i></button>
-                  <button class="p-0.5 hover:text-amber-400 text-dark-muted transition-colors btn-email-row" title="Send Mail"><i class="ph-bold ph-envelope-simple font-14px"></i></button>
-                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-doc-log" title="Log"><i class="ph-bold ph-list-bullets font-14px"></i></button>
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-pencil-simple text-[14px]"></i></button>
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-download-simple text-[14px]"></i></button>
+                  <button class="p-0.5 hover:text-amber-400 text-dark-muted transition-colors btn-email-row" title="Send Mail"><i class="ph-bold ph-envelope-simple text-[14px]"></i></button>
+                  <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-doc-log" title="Log"><i class="ph-bold ph-list-bullets text-[14px]"></i></button>
                   <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-cut-row" title="Cut"><i class="ph-bold ph-scissors font-14px"></i></button>
                   <button class="p-0.5 text-red-500 hover:text-red-400 transition-colors btn-delete-row" title="Delete"><i class="ph-bold ph-trash font-14px"></i></button>
                 </div>
@@ -858,8 +867,7 @@
             tableBody.appendChild(row);
           });
         }
-        tableBody.style.opacity = '1';
-        tableBody.style.transition = 'opacity 0.2s ease-in';
+        tableScrollContainer.classList.remove('opacity-0');
       }, 50);
 
       // Update Header Title & Navigation Button
@@ -1474,27 +1482,6 @@
       if (e.key === 'Enter' && !createModal.classList.contains('hidden')) handleCreateFolder();
     });
   </script>
-  <style>
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.5);
-      border-radius: 4px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(44, 50, 53, 0.8);
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(87, 148, 242, 0.5);
-    }
-  </style>
 </body>
 
 </html>

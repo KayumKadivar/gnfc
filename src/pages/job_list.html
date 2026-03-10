@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job List | GNFC</title>
+    <link rel="stylesheet" href="/src/css/ios-fonts.css" />
+    <link rel="stylesheet" href="/src/css/typography.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="/src/js/tailwind_config.js"></script>
+    <script>
+      window.activePage = "job_list";
+    </script>
+  </head>
+
+  <body
+    class="bg-dark-bg color-primary h-screen flex overflow-hidden font-sans"
+  >
+    <script src="/src/js/theme_manager.js"></script>
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container"></div>
+    <script>
+      renderSidebar("job_list");
+    </script>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+      <div id="header-container"></div>
+      <script src="/src/js/header.js"></script>
+      <script>
+        renderHeader({
+          title: "JOB LIST",
+          breadcrumbs: [{ label: "JOB LIST" }],
+          backLink: "/src/pages/dashboard.html",
+        });
+      </script>
+
+      <div class="flex-1 overflow-y-auto bg-dark-bg p-4">
+        <section class="mx-auto">
+          <!-- Job Panel -->
+          <div
+            class="bg-dark-panel border border-dark-border rounded-lg overflow-hidden flex flex-col mb-6 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_2px_4px_-1px_rgba(0,0,0,0.06)] dark:shadow-none dark:hidden bg-white dark:hidden border-[#e2e8f0]"
+          >
+            <div
+              class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-[0.8rem] p-5"
+              id="job-grid"
+            >
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Filter Section -->
+          <div
+            class="p-6 bg-dark-panel border border-dark-border rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] dark:hidden bg-white dark:hidden border-[#e2e8f0]"
+          >
+            <!-- Row 1 Filter -->
+            <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 mb-6">
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="Current Joblist"
+                  checked
+                />
+                Current Joblist
+              </label>
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="S/D Joblist"
+                />
+                S/D Joblist
+              </label>
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="Revamp Joblist"
+                />
+                Revamp Joblist
+              </label>
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="Completed Joblist"
+                />
+                Completed Joblist
+              </label>
+            </div>
+
+            <div
+              class="w-full h-px bg-gray-200 dark:bg-gnfc-slate my-6 hidden sm:block opacity-50"
+            ></div>
+
+            <!-- Row 2 Filter -->
+            <div class="flex flex-wrap justify-center gap-x-12 gap-y-6">
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="Weekly Planner"
+                />
+                Weekly Planner
+              </label>
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="JOB Planner"
+                />
+                JOB Planner
+              </label>
+              <label
+                class="flex items-center gap-[0.6rem] cursor-pointer text-[0.95rem] font-semibold color-primary dark:hidden text-[#1e293b] hover:text-[#FF9900] dark:hidden hover:text-[#2563eb] transition-colors duration-200 py-2 px-1 relative group"
+              >
+                <input
+                  type="radio"
+                  name="jobFilter"
+                  class="appearance-none w-5 h-5 border-2 border-dark-muted dark:hidden border-[#94a3b8] rounded-full outline-none cursor-pointer transition-all duration-200 bg-transparent m-0 shrink-0 group-hover:border-[#FF9900]/50 dark:hidden group-hover:border-[#2563eb] checked:border-[#FF9900] dark:hidden checked:border-[#2563eb] checked:after:content-[''] checked:after:absolute checked:after:top-1/2 checked:after:left-[14px] checked:after:-translate-x-1/2 checked:after:-translate-y-1/2 checked:after:w-2 checked:after:h-2 checked:after:bg-[#FF9900] dark:hidden checked:after:bg-[#2563eb] checked:after:rounded-full checked:after:shadow-[0_0_8px_rgba(255,153,0,0.5)] dark:hidden checked:after:shadow-[0_0_8px_rgba(37,99,235,0.3)]"
+                  value="Objective"
+                />
+                Objective
+              </label>
+            </div>
+          </div>
+
+          <!-- Footer Text -->
+          <div
+            class="text-center mt-12 pb-8 color-hint dark:hidden text-[#64748b] flex flex-col gap-1"
+          >
+            <div class="text-[0.95rem] font-semibold tracking-wider uppercase">
+              Instrument Department
+            </div>
+            <div class="text-[0.85rem] font-medium">
+              Gujarat Narmada Valley Fertilizers Co. Ltd.
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const units = [
+        "AA",
+        "AAQM",
+        "AMM",
+        "ANIPF",
+        "ANITDI",
+        "ASGP",
+        "BAGG",
+        "BOILER",
+        "CMS",
+        "CPSU",
+        "DM",
+        "EA",
+        "FA",
+        "INSTWS",
+        "M1",
+        "M2",
+        "MINMAX",
+        "NPP",
+        "SPP",
+        "UREA",
+      ];
+
+      const jobGrid = document.getElementById("job-grid");
+
+      // Tailwind styling for Javascript injection
+      const cardClass =
+        "flex items-center justify-center min-h-[3.5rem] border border-dark-border rounded-lg py-2 px-4 bg-dark-panel dark:hidden bg-white dark:hidden border-[#cbd5e1] dark:hidden hover:border-[#3b82f6] dark:hidden hover:bg-[#eff6ff] dark:hidden shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:hidden hover:shadow-[0_4px_12px_rgba(59,130,246,0.15)] no-underline transition-all duration-200 ease-in-out cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[rgba(87,148,242,0.5)] hover:bg-[rgba(87,148,242,0.1)] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(87,148,242,0.15),inset_0_1px_0_rgba(255,255,255,0.1)] active:translate-y-0";
+      const nameClass =
+        "text-[1.05rem] font-bold color-primary dark:hidden text-[#334155] text-center tracking-wide";
+
+      if (jobGrid) {
+        jobGrid.innerHTML = units
+          .map((unit) => {
+            return `
+                    <div class="${cardClass}" onclick="handleUnitClick('${unit}')">
+                        <span class="${nameClass}">${unit}</span>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      function handleUnitClick(unit) {
+        // Get selected filter state
+        const selectedFilter =
+          document.querySelector('input[name="jobFilter"]:checked')?.value ||
+          "Unknown";
+        console.log(`Clicked Unit: ${unit}, Mode: ${selectedFilter}`);
+
+        // Navigate based on unit
+        window.location.href = `/src/pages/job_list_detail.html?plant=${encodeURIComponent(unit)}&mode=${encodeURIComponent(selectedFilter)}`;
+      }
+    </script>
+  </body>
+</html>
