@@ -23,8 +23,8 @@ const AdminRouter = (() => {
      * Called by sidebar clicks and internal navigation.
      */
     function renderAdminContent(viewKey) {
-        const content = document.getElementById('adminContent');
-        if (!content) return;
+        const $content = $('#adminContent');
+        if (!$content.length) return;
 
         // Close any open modals
         AdminUtils.closeModal();
@@ -38,7 +38,7 @@ const AdminRouter = (() => {
             html = renderComingSoon(viewKey || 'Administrator');
         }
 
-        content.innerHTML = html;
+        $content.html(html);
 
         if (view && typeof view.bind === 'function') {
             view.bind();

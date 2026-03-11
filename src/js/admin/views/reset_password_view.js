@@ -45,28 +45,28 @@ const ResetPasswordView = (() => {
   }
 
   function bind() {
-    const filterInput = document.getElementById('resetPasswordFilter');
-    const ecSelect = document.getElementById('resetPasswordSelect');
-    const resetBtn = document.getElementById('resetPasswordBtn');
-    if (!filterInput || !ecSelect || !resetBtn) return;
+    const $filterInput = $('#resetPasswordFilter');
+    const $ecSelect = $('#resetPasswordSelect');
+    const $resetBtn = $('#resetPasswordBtn');
+    if (!$filterInput.length || !$ecSelect.length || !$resetBtn.length) return;
 
     const applyFilter = () => {
-      const rows = AdminUtils.filterUserPlantsDirectoryRows(filterInput.value);
-      const preferred = String(ecSelect.value || '').trim();
+      const rows = AdminUtils.filterUserPlantsDirectoryRows($filterInput.val());
+      const preferred = String($ecSelect.val() || '').trim();
       const hasPreferred = rows.some(r => r.ec === preferred);
       const selectedEc = hasPreferred ? preferred : (rows[0]?.ec || '');
-      ecSelect.innerHTML = '<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc);
-      ecSelect.value = selectedEc;
+      $ecSelect.html('<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc));
+      $ecSelect.val(selectedEc);
     };
 
-    resetBtn.addEventListener('click', () => {
-      const ec = String(ecSelect.value || '').trim();
+    $resetBtn.on('click', () => {
+      const ec = String($ecSelect.val() || '').trim();
       if (!ec) return;
       AdminData.userPasswordByEc.set(ec, '123456');
     });
 
-    filterInput.addEventListener('input', applyFilter);
-    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); resetBtn.click(); } });
+    $filterInput.on('input', applyFilter);
+    $filterInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $resetBtn.trigger('click'); } });
     applyFilter();
   }
 

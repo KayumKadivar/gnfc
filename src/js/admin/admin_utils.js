@@ -140,18 +140,27 @@ const AdminUtils = (() => {
 
     /** Open the shared modal root */
     function openModal(html) {
-        const root = document.getElementById('adminModalRoot');
-        if (!root) return;
-        root.innerHTML = html;
-        root.classList.remove('hidden');
+        const $root = $('#adminModalRoot');
+        if (!$root.length) return $root;
+        $root
+            .html(html)
+            .removeClass('hidden')
+            .off('click.adminModal')
+            .on('click.adminModal', '[data-close-modal]', () => closeModal());
+        $(document)
+            .off('keydown.adminModal')
+            .on('keydown.adminModal', e => {
+                if (e.key === 'Escape') closeModal();
+            });
+        return $root;
     }
 
     /** Close the shared modal root */
     function closeModal() {
-        const root = document.getElementById('adminModalRoot');
-        if (!root) return;
-        root.classList.add('hidden');
-        root.innerHTML = '';
+        const $root = $('#adminModalRoot');
+        if (!$root.length) return;
+        $root.addClass('hidden').empty().off('click.adminModal');
+        $(document).off('keydown.adminModal');
     }
 
     /** Normalize module name */

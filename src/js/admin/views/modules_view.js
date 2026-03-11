@@ -56,16 +56,12 @@ const ModulesView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
 
-    root.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => AdminUtils.closeModal())
-    );
-
-    const deleteBtn = document.getElementById('modulesModalDeleteBtn');
-    if (deleteBtn) deleteBtn.addEventListener('click', () => deleteBtn.blur());
+    $('#modulesModalDeleteBtn').on('click', function () {
+      $(this).trigger('blur');
+    });
   }
 
   function render() {
@@ -102,23 +98,23 @@ const ModulesView = (() => {
   }
 
   function bind() {
-    const nameInput = document.getElementById('moduleMasterNameInput');
-    const addBtn = document.getElementById('moduleMasterAddBtn');
-    const viewBtn = document.getElementById('moduleMasterViewBtn');
-    if (!nameInput || !addBtn || !viewBtn) return;
+    const $nameInput = $('#moduleMasterNameInput');
+    const $addBtn = $('#moduleMasterAddBtn');
+    const $viewBtn = $('#moduleMasterViewBtn');
+    if (!$nameInput.length || !$addBtn.length || !$viewBtn.length) return;
 
-    const openFiltered = () => openModal(nameInput.value);
+    const openFiltered = () => openModal($nameInput.val());
 
-    addBtn.addEventListener('click', () => {
-      const moduleName = AdminUtils.normalizeModuleName(nameInput.value);
-      if (!moduleName) { nameInput.focus(); return; }
+    $addBtn.on('click', () => {
+      const moduleName = AdminUtils.normalizeModuleName($nameInput.val());
+      if (!moduleName) { $nameInput.trigger('focus'); return; }
       const exists = AdminData.moduleMasterRows.some(r => r.module.toLowerCase() === moduleName.toLowerCase());
       if (!exists) AdminData.moduleMasterRows.push({ module: moduleName });
-      nameInput.value = ''; nameInput.focus();
+      $nameInput.val('').trigger('focus');
     });
 
-    viewBtn.addEventListener('click', openFiltered);
-    nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFiltered(); } });
+    $viewBtn.on('click', openFiltered);
+    $nameInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFiltered(); } });
   }
 
   return { render, bind };

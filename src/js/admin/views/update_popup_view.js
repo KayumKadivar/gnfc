@@ -39,17 +39,17 @@ const UpdatePopupView = (() => {
   }
 
   function bind() {
-    const select = document.getElementById('newUpdatePopupSelect');
-    const okBtn = document.getElementById('newUpdatePopupOkBtn');
-    const savedText = document.getElementById('newUpdatePopupSavedText');
-    if (!select || !okBtn) return;
+    const $select = $('#newUpdatePopupSelect');
+    const $okBtn = $('#newUpdatePopupOkBtn');
+    const $savedText = $('#newUpdatePopupSavedText');
+    if (!$select.length || !$okBtn.length) return;
 
-    okBtn.addEventListener('click', () => {
-      AdminData.adminLoginPopupSelection = select.value === 'yes' ? 'yes' : 'no';
+    $okBtn.on('click', () => {
+      AdminData.adminLoginPopupSelection = $select.val() === 'yes' ? 'yes' : 'no';
       AdminUtils.setStoredValue(AdminData.STORAGE_KEYS.LOGIN_POPUP, AdminData.adminLoginPopupSelection);
-      if (savedText) {
-        savedText.classList.remove('opacity-0');
-        setTimeout(() => savedText.classList.add('opacity-0'), 1200);
+      if ($savedText.length) {
+        $savedText.removeClass('opacity-0');
+        setTimeout(() => $savedText.addClass('opacity-0'), 1200);
       }
     });
   }

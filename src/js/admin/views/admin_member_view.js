@@ -46,33 +46,33 @@ const AdminMemberView = (() => {
   }
 
   function bind() {
-    const filterInput = document.getElementById('adminMemberFilter');
-    const ecSelect = document.getElementById('adminMemberSelect');
-    const addBtn = document.getElementById('adminMemberAddBtn');
-    const removeBtn = document.getElementById('adminMemberRemoveBtn');
-    if (!filterInput || !ecSelect || !addBtn || !removeBtn) return;
+    const $filterInput = $('#adminMemberFilter');
+    const $ecSelect = $('#adminMemberSelect');
+    const $addBtn = $('#adminMemberAddBtn');
+    const $removeBtn = $('#adminMemberRemoveBtn');
+    if (!$filterInput.length || !$ecSelect.length || !$addBtn.length || !$removeBtn.length) return;
 
     const applyFilter = () => {
-      const rows = AdminUtils.filterUserPlantsDirectoryRows(filterInput.value);
-      const preferred = String(ecSelect.value || '').trim();
+      const rows = AdminUtils.filterUserPlantsDirectoryRows($filterInput.val());
+      const preferred = String($ecSelect.val() || '').trim();
       const hasPreferred = rows.some(r => r.ec === preferred);
       const selectedEc = hasPreferred ? preferred : (rows[0]?.ec || '');
-      ecSelect.innerHTML = '<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc);
-      ecSelect.value = selectedEc;
+      $ecSelect.html('<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc));
+      $ecSelect.val(selectedEc);
     };
 
-    addBtn.addEventListener('click', () => {
-      const ec = String(ecSelect.value || '').trim();
+    $addBtn.on('click', () => {
+      const ec = String($ecSelect.val() || '').trim();
       if (ec) AdminData.adminMemberEcSet.add(ec);
     });
 
-    removeBtn.addEventListener('click', () => {
-      const ec = String(ecSelect.value || '').trim();
+    $removeBtn.on('click', () => {
+      const ec = String($ecSelect.val() || '').trim();
       if (ec) AdminData.adminMemberEcSet.delete(ec);
     });
 
-    filterInput.addEventListener('input', applyFilter);
-    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); } });
+    $filterInput.on('input', applyFilter);
+    $filterInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $addBtn.trigger('click'); } });
     applyFilter();
   }
 

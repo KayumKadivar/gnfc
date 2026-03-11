@@ -76,23 +76,17 @@ const UserPrivilegeView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
 
-    root.querySelectorAll('[data-close-modal]').forEach(el => {
-      el.addEventListener('click', () => AdminUtils.closeModal());
-    });
-
-    const saveBtn = document.getElementById('userPrivilegeSaveBtn');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', () => {
-        const checked = new Set();
-        root.querySelectorAll('[data-plant-code]:checked').forEach(cb => checked.add(cb.dataset.plantCode));
-        AdminData.userPlantsPrivilegeByEc.set(user.ec, checked);
-        AdminUtils.closeModal();
+    $('#userPrivilegeSaveBtn').on('click', () => {
+      const checked = new Set();
+      $root.find('[data-plant-code]:checked').each(function () {
+        checked.add($(this).data('plantCode'));
       });
-    }
+      AdminData.userPlantsPrivilegeByEc.set(user.ec, checked);
+      AdminUtils.closeModal();
+    });
   }
 
   function render() {
@@ -140,30 +134,30 @@ const UserPrivilegeView = (() => {
   }
 
   function bind() {
-    const filterInput = document.getElementById('userPrivilegeFilter');
-    const ecSelect = document.getElementById('userPrivilegeSelect');
-    const goButton = document.getElementById('userPrivilegeGo');
-    if (!filterInput || !ecSelect || !goButton) return;
+    const $filterInput = $('#userPrivilegeFilter');
+    const $ecSelect = $('#userPrivilegeSelect');
+    const $goButton = $('#userPrivilegeGo');
+    if (!$filterInput.length || !$ecSelect.length || !$goButton.length) return;
 
     const applyFilter = () => {
-      const rows = filterRows(filterInput.value);
-      const preferredEc = String(ecSelect.value || '').trim();
+      const rows = filterRows($filterInput.val());
+      const preferredEc = String($ecSelect.val() || '').trim();
       const hasPreferred = rows.some(r => r.ec === preferredEc);
       const selectedEc = hasPreferred ? preferredEc : (rows[0]?.ec || '');
-      ecSelect.innerHTML = '<option value="">Select EC Number</option>' + buildSelectOptions(rows, selectedEc);
-      ecSelect.value = selectedEc;
+      $ecSelect.html('<option value="">Select EC Number</option>' + buildSelectOptions(rows, selectedEc));
+      $ecSelect.val(selectedEc);
     };
 
     const openSelected = () => {
-      const filteredRows = filterRows(filterInput.value);
-      const selectedUser = getUserByEc(ecSelect.value) || filteredRows[0] || null;
+      const filteredRows = filterRows($filterInput.val());
+      const selectedUser = getUserByEc($ecSelect.val()) || filteredRows[0] || null;
       if (!selectedUser) return;
       showUserPlantsPrivilege(selectedUser);
     };
 
-    goButton.addEventListener('click', openSelected);
-    filterInput.addEventListener('input', applyFilter);
-    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openSelected(); } });
+    $goButton.on('click', openSelected);
+    $filterInput.on('input', applyFilter);
+    $filterInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openSelected(); } });
     applyFilter();
   }
 

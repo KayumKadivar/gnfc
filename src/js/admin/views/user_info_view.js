@@ -20,8 +20,7 @@ const UserInfoView = (() => {
 
   function getSelectedUser(rows) {
     if (!rows?.length) return null;
-    const checked = document.querySelector('input[name="userInfoModalSelected"]:checked');
-    const ec = String(checked?.value || '').trim();
+    const ec = String($('input[name="userInfoModalSelected"]:checked').val() || '').trim();
     if (ec) { const r = rows.find(x => x.ec === ec); if (r) return r; }
     return rows[0] || null;
   }
@@ -64,29 +63,24 @@ const UserInfoView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
-
-    root.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => AdminUtils.closeModal())
-    );
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
 
     const goBack = () => openListModal(source.map(r => ({ ...r })));
 
-    document.getElementById('userInfoUpdateBackBtn')?.addEventListener('click', goBack);
-    document.getElementById('userInfoUpdateSaveBtn')?.addEventListener('click', () => {
-      const nameInput = document.getElementById('userInfoUpdateName');
-      const passInput = document.getElementById('userInfoUpdatePassword');
-      const groupSelect = document.getElementById('userInfoUpdateGroup');
-      const nextName = nameInput?.value.trim();
-      if (!nextName) { nameInput?.focus(); return; }
+    $('#userInfoUpdateBackBtn').on('click', goBack);
+    $('#userInfoUpdateSaveBtn').on('click', () => {
+      const $nameInput = $('#userInfoUpdateName');
+      const $passInput = $('#userInfoUpdatePassword');
+      const $groupSelect = $('#userInfoUpdateGroup');
+      const nextName = String($nameInput.val() || '').trim();
+      if (!nextName) { $nameInput.trigger('focus'); return; }
 
       const userRow = AdminData.userInfoRows.find(r => r.ec === user.ec);
       if (userRow) {
         userRow.userName = nextName;
-        userRow.password = passInput?.value || '';
-        userRow.group = groupSelect?.value || user.group;
+        userRow.password = String($passInput.val() || '');
+        userRow.group = String($groupSelect.val() || user.group);
         AdminUtils.upsertUserPrivilegeRowFromUserInfo(userRow);
       }
       goBack();
@@ -130,19 +124,15 @@ const UserInfoView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
-    root.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => AdminUtils.closeModal())
-    );
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
 
-    document.getElementById('userInfoModalUpdateBtn')?.addEventListener('click', () => {
+    $('#userInfoModalUpdateBtn').on('click', () => {
       const selected = getSelectedUser(rows);
       if (selected) openUpdateModal({ ...selected }, rows);
     });
 
-    document.getElementById('userInfoModalDeleteBtn')?.addEventListener('click', () => {
+    $('#userInfoModalDeleteBtn').on('click', () => {
       const selected = getSelectedUser(rows);
       if (!selected) return;
       const idx = AdminData.userInfoRows.findIndex(r => r.ec === selected.ec);
@@ -206,29 +196,31 @@ const UserInfoView = (() => {
   }
 
   function bind() {
-    const ecInput = document.getElementById('userInfoEc');
-    const nameInput = document.getElementById('userInfoName');
-    const passInput = document.getElementById('userInfoPassword');
-    const groupSelect = document.getElementById('userInfoGroup');
-    const addBtn = document.getElementById('userInfoAddBtn');
-    const viewBtn = document.getElementById('userInfoViewBtn');
-    if (!ecInput || !nameInput || !addBtn || !viewBtn) return;
+    const $ecInput = $('#userInfoEc');
+    const $nameInput = $('#userInfoName');
+    const $passInput = $('#userInfoPassword');
+    const $groupSelect = $('#userInfoGroup');
+    const $addBtn = $('#userInfoAddBtn');
+    const $viewBtn = $('#userInfoViewBtn');
+    if (!$ecInput.length || !$nameInput.length || !$addBtn.length || !$viewBtn.length) return;
 
-    addBtn.addEventListener('click', () => {
-      const ec = ecInput.value.trim();
-      const userName = nameInput.value.trim();
-      if (!ec || !userName) { ecInput.focus(); return; }
+    $addBtn.on('click', () => {
+      const ec = String($ecInput.val() || '').trim();
+      const userName = String($nameInput.val() || '').trim();
+      if (!ec || !userName) { $ecInput.trigger('focus'); return; }
       const exists = AdminData.userInfoRows.some(r => r.ec === ec);
       if (!exists) {
-        const newRow = { ec, userName, password: passInput?.value || '', group: groupSelect?.value || 'Tech' };
+        const newRow = { ec, userName, password: String($passInput.val() || ''), group: String($groupSelect.val() || 'Tech') };
         AdminData.userInfoRows.push(newRow);
         AdminUtils.upsertUserPrivilegeRowFromUserInfo(newRow);
       }
-      ecInput.value = ''; nameInput.value = ''; passInput.value = '';
-      ecInput.focus();
+      $ecInput.val('');
+      $nameInput.val('');
+      $passInput.val('');
+      $ecInput.trigger('focus');
     });
 
-    viewBtn.addEventListener('click', () => openListModal(AdminData.userInfoRows.map(r => ({ ...r }))));
+    $viewBtn.on('click', () => openListModal(AdminData.userInfoRows.map(r => ({ ...r }))));
   }
 
   return { render, bind };

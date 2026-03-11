@@ -47,22 +47,22 @@ const ExDmsView = (() => {
   }
 
   function bind() {
-    const userSelect = document.getElementById('exDmsUserSelect');
-    const createBtn = document.getElementById('exDmsCreateBtn');
-    const status = document.getElementById('exDmsStatus');
-    if (!userSelect || !createBtn) return;
+    const $userSelect = $('#exDmsUserSelect');
+    const $createBtn = $('#exDmsCreateBtn');
+    const $status = $('#exDmsStatus');
+    if (!$userSelect.length || !$createBtn.length) return;
 
-    userSelect.addEventListener('change', () => {
-      AdminData.exDmsSelectedUserEc = userSelect.value.trim();
+    $userSelect.on('change', () => {
+      AdminData.exDmsSelectedUserEc = String($userSelect.val() || '').trim();
     });
 
-    createBtn.addEventListener('click', () => {
-      AdminData.exDmsSelectedUserEc = userSelect.value.trim();
-      if (status) {
-        const opt = userSelect.options[userSelect.selectedIndex];
-        status.textContent = `Space created for ${opt ? opt.text : AdminData.exDmsSelectedUserEc}`;
-        status.classList.remove('opacity-0');
-        setTimeout(() => status.classList.add('opacity-0'), 1800);
+    $createBtn.on('click', () => {
+      AdminData.exDmsSelectedUserEc = String($userSelect.val() || '').trim();
+      if ($status.length) {
+        const selectedText = $userSelect.find('option:selected').text() || AdminData.exDmsSelectedUserEc;
+        $status.text(`Space created for ${selectedText}`);
+        $status.removeClass('opacity-0');
+        setTimeout(() => $status.addClass('opacity-0'), 1800);
       }
     });
   }

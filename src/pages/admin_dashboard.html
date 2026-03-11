@@ -20,6 +20,7 @@
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
   <!-- Theme & Typography -->
   <link rel="stylesheet" href="/src/css/typography.css">
@@ -84,13 +85,13 @@
         <div class="flex items-center gap-2">
           <!-- Font Size Controls -->
           <div class="flex items-center bg-[var(--app-bg)] border border-[var(--app-border)] rounded-md p-0.5">
-            <button onclick="ThemeManager.decreaseFontSize()"
+            <button id="adminFontDecreaseBtn"
               class="w-9 h-9 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
               title="Decrease Size">
               <i class="ph-bold ph-text-aa font-12px"></i>
             </button>
             <div class="w-px h-4 bg-[var(--app-border)]"></div>
-            <button onclick="ThemeManager.increaseFontSize()"
+            <button id="adminFontIncreaseBtn"
               class="w-9 h-9 flex items-center justify-center color-label hover:bg-[var(--app-border)] rounded-sm transition-colors"
               title="Increase Size">
               <i class="ph-bold ph-text-aa font-16px"></i>
@@ -103,7 +104,7 @@
             <i id="themeToggleIcon" class="ph ph-moon font-16px"></i>
           </button>
           <!-- Back -->
-          <button onclick="window.location.href='/src/pages/dashboard.html'"
+          <button id="adminBackBtn"
             class="flex items-center gap-1.5 h-10 px-4 bg-[var(--app-bg)] hover:bg-[var(--app-border)] border border-[var(--app-border)] font-15px fw-bold color-primary rounded-md transition-all">
             <i class="ph-bold ph-arrow-u-up-left"></i>
             <span>Back</span>
@@ -150,7 +151,7 @@
 
   <!-- Initialization -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    $(function () {
       // Initialize theme
       if (typeof ThemeManager !== 'undefined' && ThemeManager.init) {
         ThemeManager.init();
@@ -174,29 +175,36 @@
       if (typeof initAdminSidebar === 'function') {
         initAdminSidebar();
       }
-      window.renderAdminContent('dashboard');
+      
+      // Load initial dashboard content
+      if (typeof window.renderAdminContent === 'function') {
+        window.renderAdminContent('dashboard');
+      }
 
-      // Theme toggle
-      const themeToggleBtn = document.getElementById('themeToggleBtn');
-      const themeToggleIcon = document.getElementById('themeToggleIcon');
+      // Sidebar & Header Actions
+      const $themeToggleIcon = $('#themeToggleIcon');
 
       function updateThemeIcon() {
-        if (!themeToggleIcon) return;
+        if (!$themeToggleIcon.length) return;
         const settings = ThemeManager.getSettings();
-        themeToggleIcon.className = settings.mode === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+        $themeToggleIcon.attr('class', settings.mode === 'dark' ? 'ph ph-sun font-16px' : 'ph ph-moon font-16px');
       }
 
-      if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-          const settings = ThemeManager.getSettings();
-          ThemeManager.setMode(settings.mode === 'dark' ? 'light' : 'dark');
-          updateThemeIcon();
-        });
-      }
+      $('#adminFontDecreaseBtn').on('click', () => ThemeManager.decreaseFontSize());
+      $('#adminFontIncreaseBtn').on('click', () => ThemeManager.increaseFontSize());
+      $('#adminBackBtn').on('click', () => {
+        window.location.href = '/src/pages/dashboard.html';
+      });
+
+      $('#themeToggleBtn').on('click', () => {
+        const settings = ThemeManager.getSettings();
+        ThemeManager.setMode(settings.mode === 'dark' ? 'light' : 'dark');
+        updateThemeIcon();
+      });
+
+      // Listen for theme changes to update icon
       updateThemeIcon();
-      window.addEventListener('themeChanged', () => updateThemeIcon());
+      $(window).on('themeChanged.adminDashboard', updateThemeIcon);
     });
   </script>
-</body>
-
 </html>

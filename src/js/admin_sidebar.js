@@ -5,8 +5,8 @@
 function initAdminSidebar() {
   'use strict';
 
-  const container = document.getElementById('adminSidebarContainer');
-  if (!container) return;
+  const $container = $('#adminSidebarContainer');
+  if (!$container.length) return;
 
   const sections = [
     {
@@ -66,7 +66,7 @@ function initAdminSidebar() {
       </div>
     `).join('');
 
-    container.innerHTML = `
+    $container.html(`
       <div class="admin-sidebar">
         <div class="admin-sidebar-logo">
           <img src="/src/assets/images/gnfc-logo.png" onerror="this.onerror=null;this.src='/src/assets/images/gnfc-full-logo.png';" alt="GNFC">
@@ -80,24 +80,25 @@ function initAdminSidebar() {
           </a>
         </div>
       </div>
-    `;
+    `);
 
     // Bind navigation clicks
-    container.querySelectorAll('[data-nav-key]').forEach(link => {
-      link.addEventListener('click', (e) => {
+    $container
+      .off('click.adminSidebar')
+      .on('click.adminSidebar', '[data-nav-key]', function (e) {
         e.preventDefault();
-        const key = link.dataset.navKey;
+        const key = $(this).data('navKey');
         if (typeof window.renderAdminContent === 'function') {
           window.renderAdminContent(key);
         }
       });
-    });
   }
 
   // Set active state externally
   window.setAdminSidebarActive = function setAdminSidebarActive(key) {
-    container.querySelectorAll('.admin-sidebar-link').forEach(link => {
-      link.classList.toggle('active', link.dataset.navKey === key);
+    $container.find('.admin-sidebar-link').each(function () {
+      const $link = $(this);
+      $link.toggleClass('active', $link.data('navKey') === key);
     });
   };
 

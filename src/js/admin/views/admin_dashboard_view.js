@@ -189,7 +189,7 @@
                 </div>
                 <div class="admin-dash-action-grid">
                     ${section.items.map(item => `
-                        <div class="admin-dash-action-card" onclick="window.renderAdminContent('${item.key}')" style="--action-accent: ${item.color}">
+                        <div class="admin-dash-action-card" data-admin-view-target="${item.key}" style="--action-accent: ${item.color}">
                             <div class="admin-dash-action-icon" style="background: ${item.color}15; color: ${item.color}">
                                 <i class="ph ${item.icon}"></i>
                             </div>
@@ -209,7 +209,7 @@
             <div class="admin-dash-section-header">
                 <h3 class="admin-dash-section-title">Recent Login Activity</h3>
                 <div class="admin-dash-section-line"></div>
-                <button class="admin-dash-section-btn" onclick="window.renderAdminContent('login_info')">
+                <button class="admin-dash-section-btn" data-admin-view-target="login_info">
                     View All <i class="ph-bold ph-arrow-right font-11px"></i>
                 </button>
             </div>
@@ -248,27 +248,35 @@
     let clockInterval = null;
 
     function bind() {
+        const $content = $('#adminContent');
+
+        $content
+            .off('click.adminDashboardNav', '[data-admin-view-target]')
+            .on('click.adminDashboardNav', '[data-admin-view-target]', function () {
+                const target = $(this).data('adminViewTarget');
+                if (target) window.renderAdminContent(target);
+            });
+
         // Animate KPI counters
-        document.querySelectorAll('.admin-dash-kpi-value').forEach(el => {
-            const target = parseInt(el.textContent, 10);
+        $('.admin-dash-kpi-value').each(function () {
+            const $el = $(this);
+            const target = parseInt($el.text(), 10);
             if (isNaN(target) || target <= 0) return;
-            el.textContent = '0';
+            $el.text('0');
             let current = 0;
             const step = Math.max(1, Math.ceil(target / 15));
             const interval = setInterval(() => {
                 current += step;
                 if (current >= target) { current = target; clearInterval(interval); }
-                el.textContent = current;
+                $el.text(current);
             }, 50);
         });
 
         // Live clock
         if (clockInterval) clearInterval(clockInterval);
         clockInterval = setInterval(() => {
-            const dateEl = document.getElementById('adm-dash-date');
-            const clockEl = document.getElementById('adm-dash-clock');
-            if (dateEl) dateEl.textContent = formatDate();
-            if (clockEl) clockEl.textContent = formatTime();
+            $('#adm-dash-date').text(formatDate());
+            $('#adm-dash-clock').text(formatTime());
         }, 1000);
     }
 

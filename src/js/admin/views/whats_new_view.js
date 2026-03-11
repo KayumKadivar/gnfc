@@ -36,22 +36,22 @@ const WhatsNewView = (() => {
   }
 
   function bind() {
-    const textarea = document.getElementById('whatsNewTextarea');
-    const saveBtn = document.getElementById('whatsNewSaveBtn');
-    const savedText = document.getElementById('whatsNewSavedText');
-    if (!textarea || !saveBtn) return;
+    const $textarea = $('#whatsNewTextarea');
+    const $saveBtn = $('#whatsNewSaveBtn');
+    const $savedText = $('#whatsNewSavedText');
+    if (!$textarea.length || !$saveBtn.length) return;
 
     const save = () => {
-      AdminData.whatsNewContent = textarea.value || '';
+      AdminData.whatsNewContent = String($textarea.val() || '');
       AdminUtils.setStoredValue(AdminData.STORAGE_KEYS.WHATS_NEW, AdminData.whatsNewContent);
-      if (savedText) {
-        savedText.classList.remove('opacity-0');
-        setTimeout(() => savedText.classList.add('opacity-0'), 1200);
+      if ($savedText.length) {
+        $savedText.removeClass('opacity-0');
+        setTimeout(() => $savedText.addClass('opacity-0'), 1200);
       }
     };
 
-    saveBtn.addEventListener('click', save);
-    textarea.addEventListener('keydown', e => {
+    $saveBtn.on('click', save);
+    $textarea.on('keydown', e => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault(); save();
       }

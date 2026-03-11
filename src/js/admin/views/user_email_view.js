@@ -61,36 +61,36 @@ const UserEmailView = (() => {
   }
 
   function bind() {
-    const filterInput = document.getElementById('userEmailFilter');
-    const ecSelect = document.getElementById('userEmailSelect');
-    const emailInput = document.getElementById('userEmailInput');
-    const updateBtn = document.getElementById('userEmailUpdateBtn');
-    if (!filterInput || !ecSelect || !emailInput || !updateBtn) return;
+    const $filterInput = $('#userEmailFilter');
+    const $ecSelect = $('#userEmailSelect');
+    const $emailInput = $('#userEmailInput');
+    const $updateBtn = $('#userEmailUpdateBtn');
+    if (!$filterInput.length || !$ecSelect.length || !$emailInput.length || !$updateBtn.length) return;
 
     const syncEmail = () => {
-      const ec = String(ecSelect.value || '').trim();
-      emailInput.value = ec ? String(AdminData.userEmailByEc.get(ec) || '') : '';
+      const ec = String($ecSelect.val() || '').trim();
+      $emailInput.val(ec ? String(AdminData.userEmailByEc.get(ec) || '') : '');
     };
 
     const applyFilter = () => {
-      const rows = AdminUtils.filterUserPlantsDirectoryRows(filterInput.value);
-      const preferred = String(ecSelect.value || '').trim();
+      const rows = AdminUtils.filterUserPlantsDirectoryRows($filterInput.val());
+      const preferred = String($ecSelect.val() || '').trim();
       const hasPreferred = rows.some(r => r.ec === preferred);
       const selectedEc = hasPreferred ? preferred : (rows[0]?.ec || '');
-      ecSelect.innerHTML = '<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc);
-      ecSelect.value = selectedEc;
+      $ecSelect.html('<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc));
+      $ecSelect.val(selectedEc);
       syncEmail();
     };
 
-    updateBtn.addEventListener('click', () => {
-      const ec = String(ecSelect.value || '').trim();
+    $updateBtn.on('click', () => {
+      const ec = String($ecSelect.val() || '').trim();
       if (!ec) return;
-      AdminData.userEmailByEc.set(ec, emailInput.value.trim());
+      AdminData.userEmailByEc.set(ec, String($emailInput.val() || '').trim());
     });
 
-    ecSelect.addEventListener('change', syncEmail);
-    filterInput.addEventListener('input', applyFilter);
-    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); updateBtn.click(); } });
+    $ecSelect.on('change', syncEmail);
+    $filterInput.on('input', applyFilter);
+    $filterInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $updateBtn.trigger('click'); } });
     applyFilter();
   }
 

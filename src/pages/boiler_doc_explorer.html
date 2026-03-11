@@ -847,6 +847,94 @@
     </div>
   </div>
 
+  <!-- Rename Modal -->
+  <div id="rename-modal"
+    class="fixed inset-0 z-[120] hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4 text-gray-800">
+    <div
+      class="bg-[#fcfcfc] border-2 border-white shadow-2xl rounded-sm w-full max-w-lg overflow-hidden font-sans text-gray-800 transition-all transform scale-100">
+      <!-- Modal Header -->
+      <div class="bg-white px-4 py-2 border-b border-gray-300 flex justify-between items-center shadow-sm">
+        <h2 id="rename-modal-title" class="text-[#2d68c4] font-black text-sm uppercase tracking-widest">RENAME FOLDER</h2>
+        <button id="btn-close-rename-modal" class="text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4">
+        <div class="space-y-1">
+          <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-widest">Location :</label>
+          <div id="rename-location"
+            class="text-[0.72rem] font-bold text-blue-600 tracking-wide">
+            /ENGG_DOC/BOILER</div>
+        </div>
+
+        <div class="space-y-1">
+          <label id="rename-label-current" class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-widest">Folder Name :</label>
+          <div id="rename-current-name"
+            class="text-[0.8rem] font-black text-gray-700 tracking-tight uppercase">
+            ADDRESS</div>
+        </div>
+
+        <div class="p-3 bg-gray-50 border border-gray-200 rounded-sm shadow-sm flex items-center justify-between gap-4">
+          <label id="rename-label-new" class="shrink-0 text-[0.7rem] font-black text-gray-600 uppercase tracking-wider">Enter NewName :</label>
+          <div class="flex-1 flex flex-col gap-1">
+            <input type="text" id="rename-input"
+              class="w-full bg-white border border-gray-300 px-3 py-1.5 text-sm font-semibold text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-gray-300 rounded-sm"
+              placeholder="New Name" autofocus>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-[#f8fafc] px-4 py-4 border-t border-gray-300 flex justify-end gap-3 shadow-[inner_0_2px_4px_rgba(0,0,0,0.02)]">
+        <button id="btn-cancel-rename" class="gnfc-modal-btn gnfc-modal-btn-secondary h-8 px-6 text-[0.65rem] font-black uppercase tracking-widest rounded-sm border border-gray-300 bg-white hover:bg-gray-50 transition-colors text-gray-600">Cancel</button>
+        <button id="btn-rename-submit" class="gnfc-modal-btn gnfc-modal-btn-primary h-8 px-8 text-[0.65rem] font-black uppercase tracking-widest rounded-sm border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md active:translate-y-px">Rename</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Comment Modal (Fig 13.8) -->
+  <div id="file-comment-modal"
+    class="fixed inset-0 z-[130] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-gray-800">
+    <div
+      class="bg-[#f0f0f0] border-4 border-gray-300 shadow-2xl rounded-none w-full max-w-2xl overflow-hidden font-serif">
+      <!-- Modal Header -->
+      <div class="bg-[#2d68c4] px-4 py-1.5 flex justify-between items-center text-white">
+        <div class="flex items-center gap-2">
+           <i class="ph-bold ph-chat-text scale-90"></i>
+           <h2 class="text-[0.7rem] font-bold uppercase tracking-widest">Comment - GNFC Explorer</h2>
+        </div>
+        <button id="btn-close-comment-modal" class="hover:text-red-300 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4">
+        <div class="space-y-1">
+          <p class="text-[#000080] font-bold text-lg leading-tight">Document Name : <span id="comment-modal-name" class="font-normal text-black ml-2">Daily_Status_March.pdf</span></p>
+          <p class="text-[#000080] font-bold text-lg leading-tight">Revision : <span id="comment-modal-rev" class="text-red-700 font-bold ml-2">3</span></p>
+        </div>
+        
+        <hr class="border-gray-400">
+        
+        <div class="space-y-2">
+          <p class="text-[#000080] font-bold text-lg">Comment :</p>
+          <div class="border-2 border-gray-400 bg-white p-4 min-h-[180px] shadow-inner overflow-auto">
+            <p id="comment-modal-text" class="text-black text-lg whitespace-pre-wrap font-mono leading-relaxed">This file contains data sheet of TE42009 for the monthly boiler efficiency report.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 flex justify-center bg-[#f0f0f0] border-t border-gray-300">
+        <button id="btn-close-comment-footer" 
+          class="px-10 py-1.5 bg-[#2d68c4] text-white text-sm font-bold uppercase tracking-widest hover:bg-[#1e4b8f] transition-all border border-blue-900 shadow-md active:scale-95">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // --- Document Explorer OOP + Functional Approach ---
 
@@ -947,6 +1035,20 @@
         this.mockData[currentFolder].unshift({ name, type, size, date: 'Moved Today' });
       }
 
+      renameItem(oldName, newName) {
+        const currentFolder = this.getCurrentFolderName();
+        const items = this.mockData[currentFolder] || [];
+        const item = items.find(i => i.name === oldName);
+        if (item) {
+          item.name = newName;
+          // If it's a folder, we also need to move the data key
+          if (item.type === 'Folder' && this.mockData[oldName]) {
+            this.mockData[newName] = this.mockData[oldName];
+            delete this.mockData[oldName];
+          }
+        }
+      }
+
       addLog(logEntry) {
         this.mockLogs.unshift(logEntry);
       }
@@ -1003,6 +1105,22 @@
         this.revisionHistoryModal = document.getElementById('revision-history-modal');
         this.revisionModalBody = document.getElementById('revision-modal-body');
         this.revisionModalFilename = document.getElementById('revision-modal-filename');
+
+        // Rename Modal
+        this.renameModal = document.getElementById('rename-modal');
+        this.renameModalTitle = document.getElementById('rename-modal-title');
+        this.renameLocation = document.getElementById('rename-location');
+        this.renameCurrentName = document.getElementById('rename-current-name');
+        this.renameLabelCurrent = document.getElementById('rename-label-current');
+        this.renameLabelNew = document.getElementById('rename-label-new');
+        this.renameInput = document.getElementById('rename-input');
+        this.btnRenameSubmit = document.getElementById('btn-rename-submit');
+
+        // Comment Modal
+        this.commentModal = document.getElementById('file-comment-modal');
+        this.commentModalName = document.getElementById('comment-modal-name');
+        this.commentModalRev = document.getElementById('comment-modal-rev');
+        this.commentModalText = document.getElementById('comment-modal-text');
       }
 
       // Utils
@@ -1070,7 +1188,7 @@
                 </td>
                 <td class="px-3 py-1.5 text-center">
                   <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
-                    <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-pencil-simple text-[14px]"></i></button>
+                    <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-rename-row" title="Rename"><i class="ph-bold ph-pencil-simple text-[14px]"></i></button>
                     <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-download-simple text-[14px]"></i></button>
                     <button class="p-0.5 hover:text-amber-400 text-dark-muted transition-colors btn-email-row" title="Send Mail"><i class="ph-bold ph-envelope-simple text-[14px]"></i></button>
                     <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-doc-log" title="Log"><i class="ph-bold ph-list-bullets text-[14px]"></i></button>
@@ -1155,6 +1273,15 @@
         document.getElementById('btn-close-revision-modal').addEventListener('click', () => this.hideRevisionHistory());
         document.getElementById('btn-close-revision-modal-footer').addEventListener('click', () => this.hideRevisionHistory());
 
+        // Rename Modal
+        document.getElementById('btn-close-rename-modal').addEventListener('click', () => this.hideRenameModal());
+        document.getElementById('btn-cancel-rename').addEventListener('click', () => this.hideRenameModal());
+        this.btnRenameSubmit.addEventListener('click', () => this.handleRenameSubmit());
+
+        // Comment Modal
+        document.getElementById('btn-close-comment-modal').addEventListener('click', () => this.hideCommentModal());
+        document.getElementById('btn-close-comment-footer').addEventListener('click', () => this.hideCommentModal());
+
         // Global Esc & Enter
         window.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {
@@ -1174,6 +1301,7 @@
         const folderBtn = e.target.closest('.btn-open-folder');
         const cutBtn = e.target.closest('.btn-cut-row');
         const deleteBtn = e.target.closest('.btn-delete-row');
+        const renameBtn = e.target.closest('.btn-rename-row');
         const logBtn = e.target.closest('.btn-doc-log');
         const mailBtn = e.target.closest('.btn-email-row');
         const commentBtn = e.target.closest('.btn-view-comment');
@@ -1190,6 +1318,11 @@
           } else {
             Swal.fire({ title: 'Opening File', text: `Simulating download/view for "${name}"`, icon: 'success', confirmButtonText: 'OK', background: '#ffffff', color: '#1a1a1a' });
           }
+        } else if (renameBtn) {
+          const row = renameBtn.closest('tr');
+          const name = row.querySelector('.btn-open-folder').innerText;
+          const type = row.getAttribute('data-item-type');
+          this.showRenameModal(name, type);
         } else if (cutBtn) {
           if (this.storage.clipboard) this.storage.clipboard.classList.remove('opacity-40', 'bg-blue-900/10');
           this.storage.clipboard = cutBtn.closest('tr');
@@ -1228,32 +1361,60 @@
         if (fileItem && fileItem.comments && fileItem.comments.length > 0) {
            const latestComment = fileItem.comments[fileItem.comments.length - 1];
            const rev = fileItem.rev || 0;
-           Swal.fire({
-             html: `
-              <div class="text-left font-serif p-2" style="font-family: 'Times New Roman', Times, serif;">
-                <div class="mb-4">
-                  <p class="text-[#000080] font-bold text-lg">Document Name : <span class="font-normal inline-block ml-2">${name}</span></p>
-                  <p class="text-[#000080] font-bold text-lg">Revision : <span class="text-red-700 font-bold ml-2">${rev}</span></p>
-                </div>
-                <hr class="border-gray-400 mb-4">
-                <div class="mb-1">
-                  <p class="text-[#000080] font-bold text-lg">Comment :</p>
-                </div>
-                <div class="border-2 border-gray-400 bg-white p-2 min-h-[150px] overflow-y-auto shadow-inner">
-                  <p class="text-black text-lg whitespace-pre-wrap font-mono">${latestComment}</p>
-                </div>
-              </div>
-             `,
-             width: '700px',
-             confirmButtonText: 'CLOSE',
-             customClass: {
-               container: 'gnfc-swal-container',
-               popup: 'rounded-none border-4 border-gray-300 shadow-xl'
-             },
-             confirmButtonColor: '#2d68c4',
-             background: '#f0f0f0'
-           });
+           
+           this.commentModalName.innerText = name;
+           this.commentModalRev.innerText = rev;
+           this.commentModalText.innerText = latestComment;
+           
+           this.commentModal.classList.remove('hidden');
+           this.commentModal.classList.add('flex');
         }
+      }
+
+      hideCommentModal() {
+        this.commentModal.classList.add('hidden');
+        this.commentModal.classList.remove('flex');
+      }
+
+      showRenameModal(name, type) {
+        this.renameModalTitle.innerText = `RENAME ${type.toUpperCase()}`;
+        this.renameLocation.innerText = this.storage.getCurrentPathLabel();
+        this.renameCurrentName.innerText = name;
+        this.renameLabelCurrent.innerText = `${type} Name :`;
+        this.renameLabelNew.innerText = `Enter NewName :`;
+        this.renameInput.value = name;
+        this.renameInput.dataset.oldName = name;
+        
+        this.renameModal.classList.remove('hidden');
+        this.renameModal.classList.add('flex');
+        setTimeout(() => this.renameInput.select(), 100);
+      }
+
+      hideRenameModal() {
+        this.renameModal.classList.add('hidden');
+        this.renameModal.classList.remove('flex');
+      }
+
+      handleRenameSubmit() {
+        const oldName = this.renameInput.dataset.oldName;
+        const newName = this.renameInput.value.trim();
+        
+        if (!newName || newName === oldName) {
+          this.hideRenameModal();
+          return;
+        }
+
+        const currentFolder = this.storage.getCurrentFolderName();
+        const items = this.storage.mockData[currentFolder] || [];
+        if (items.some(i => i.name === newName)) {
+          Swal.fire({ icon: 'error', title: 'Rename Failed', text: 'An item with this name already exists in this folder.' });
+          return;
+        }
+
+        this.storage.renameItem(oldName, newName);
+        this.renderTable();
+        this.hideRenameModal();
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Renamed successfully', showConfirmButton: false, timer: 1500 });
       }
 
       showRevisionHistory(name) {

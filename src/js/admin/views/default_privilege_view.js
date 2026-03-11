@@ -76,8 +76,9 @@ const DefaultPrivilegeView = (() => {
   }
 
   function bind() {
-    const saveBtn = document.getElementById('defaultPrivilegeSaveBtn');
-    if (saveBtn) saveBtn.addEventListener('click', () => saveBtn.blur());
+    $('#defaultPrivilegeSaveBtn').on('click', function () {
+      $(this).trigger('blur');
+    });
   }
 
   return { render, bind };

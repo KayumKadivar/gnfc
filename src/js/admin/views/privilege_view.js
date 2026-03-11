@@ -5,8 +5,6 @@
 const PrivilegeView = (() => {
   'use strict';
 
-  let modalEscHandler = null;
-
   function render() {
     return `
       ${AdminUtils.renderTopBar('Master - Privilege', 'ph-shield-check', 'Manage role-based access control groups')}
@@ -104,47 +102,35 @@ const PrivilegeView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    bindModalClose();
-
-    const deleteBtn = document.getElementById('privilegeModalDeleteBtn');
-    if (deleteBtn) {
-      deleteBtn.addEventListener('click', () => deleteBtn.blur());
-    }
-  }
-
-  function bindModalClose() {
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
-    root.querySelectorAll('[data-close-modal]').forEach(el => {
-      el.addEventListener('click', () => AdminUtils.closeModal());
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
+    $('#privilegeModalDeleteBtn').on('click', function () {
+      $(this).trigger('blur');
     });
-    if (modalEscHandler) document.removeEventListener('keydown', modalEscHandler);
-    modalEscHandler = e => { if (e.key === 'Escape') AdminUtils.closeModal(); };
-    document.addEventListener('keydown', modalEscHandler);
   }
 
   function bind() {
-    const codeInput = document.getElementById('privilegeCodeInput');
-    const nameInput = document.getElementById('privilegeNameInput');
-    const addBtn = document.getElementById('privilegeAddBtn');
-    const viewBtn = document.getElementById('privilegeViewBtn');
-    if (!codeInput || !nameInput || !addBtn || !viewBtn) return;
+    const $codeInput = $('#privilegeCodeInput');
+    const $nameInput = $('#privilegeNameInput');
+    const $addBtn = $('#privilegeAddBtn');
+    const $viewBtn = $('#privilegeViewBtn');
+    if (!$codeInput.length || !$nameInput.length || !$addBtn.length || !$viewBtn.length) return;
 
-    addBtn.addEventListener('click', () => {
-      const code = codeInput.value.trim();
-      const name = nameInput.value.trim();
-      if (!code || !name) { codeInput.focus(); return; }
+    $addBtn.on('click', () => {
+      const code = String($codeInput.val() || '').trim();
+      const name = String($nameInput.val() || '').trim();
+      if (!code || !name) { $codeInput.trigger('focus'); return; }
       const exists = AdminData.privilegeMasterRows.some(r => r.code === code);
       if (!exists) AdminData.privilegeMasterRows.push({ code, name });
-      codeInput.value = ''; nameInput.value = '';
-      codeInput.focus();
+      $codeInput.val('');
+      $nameInput.val('');
+      $codeInput.trigger('focus');
     });
 
-    const openFilteredModal = () => openModal(codeInput.value, nameInput.value);
-    viewBtn.addEventListener('click', openFilteredModal);
-    codeInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFilteredModal(); } });
-    nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFilteredModal(); } });
+    const openFilteredModal = () => openModal($codeInput.val(), $nameInput.val());
+    $viewBtn.on('click', openFilteredModal);
+    $codeInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFilteredModal(); } });
+    $nameInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFilteredModal(); } });
   }
 
   return { render, bind };

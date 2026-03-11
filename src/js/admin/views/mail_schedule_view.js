@@ -142,20 +142,20 @@ const MailScheduleView = (() => {
   }
 
   function bindListView() {
-    const select = document.getElementById('mailScheduleSelect');
-    const editBtn = document.getElementById('mailScheduleEditBtn');
-    const addBtn = document.getElementById('mailScheduleAddBtn');
-    if (!select || !editBtn || !addBtn) return;
+    const $select = $('#mailScheduleSelect');
+    const $editBtn = $('#mailScheduleEditBtn');
+    const $addBtn = $('#mailScheduleAddBtn');
+    if (!$select.length || !$editBtn.length || !$addBtn.length) return;
 
-    addBtn.addEventListener('click', () => {
+    $addBtn.on('click', () => {
       AdminData.mailScheduleEditingId = '';
       AdminData.mailScheduleDraft = createEmptyDraft();
       AdminData.mailScheduleMode = 'form';
       window.renderAdminContent('mail_schedule');
     });
 
-    editBtn.addEventListener('click', () => {
-      const id = String(select.value || '').trim();
+    $editBtn.on('click', () => {
+      const id = String($select.val() || '').trim();
       if (!id) return;
       const row = AdminData.mailScheduleRows.find(r => r.id === id);
       if (!row) return;
@@ -168,34 +168,34 @@ const MailScheduleView = (() => {
 
   function bindFormView() {
     const els = {
-      toType: document.getElementById('mailScheduleToType'),
-      toAddr: document.getElementById('mailScheduleToAddress'),
-      sender: document.getElementById('mailScheduleSender'),
-      freq: document.getElementById('mailScheduleFrequency'),
-      day: document.getElementById('mailScheduleDay'),
-      month: document.getElementById('mailScheduleMonth'),
-      year: document.getElementById('mailScheduleYear'),
-      report: document.getElementById('mailScheduleReport'),
-      subject: document.getElementById('mailScheduleSubject'),
-      message: document.getElementById('mailScheduleMessage'),
-      save: document.getElementById('mailScheduleSaveBtn'),
-      back: document.getElementById('mailScheduleBackBtn'),
+      toType: $('#mailScheduleToType'),
+      toAddr: $('#mailScheduleToAddress'),
+      sender: $('#mailScheduleSender'),
+      freq: $('#mailScheduleFrequency'),
+      day: $('#mailScheduleDay'),
+      month: $('#mailScheduleMonth'),
+      year: $('#mailScheduleYear'),
+      report: $('#mailScheduleReport'),
+      subject: $('#mailScheduleSubject'),
+      message: $('#mailScheduleMessage'),
+      save: $('#mailScheduleSaveBtn'),
+      back: $('#mailScheduleBackBtn'),
     };
-    if (!els.save || !els.back) return;
+    if (!els.save.length || !els.back.length) return;
 
-    els.save.addEventListener('click', () => {
+    els.save.on('click', () => {
       const draft = {
         ...(AdminData.mailScheduleDraft || createEmptyDraft()),
-        toType: els.toType?.value || 'All',
-        toAddress: els.toAddr?.value.trim() || '',
-        sender: els.sender?.value || '',
-        frequencyDays: els.freq?.value.trim() || '0',
-        onDay: els.day?.value.trim() || '',
-        onMonth: els.month?.value.trim() || '',
-        onYear: els.year?.value.trim() || '',
-        report: els.report?.value.trim() || '',
-        subject: els.subject?.value.trim() || '',
-        message: els.message?.value.trim() || '',
+        toType: String(els.toType.val() || 'All'),
+        toAddress: String(els.toAddr.val() || '').trim(),
+        sender: String(els.sender.val() || ''),
+        frequencyDays: String(els.freq.val() || '0').trim() || '0',
+        onDay: String(els.day.val() || '').trim(),
+        onMonth: String(els.month.val() || '').trim(),
+        onYear: String(els.year.val() || '').trim(),
+        report: String(els.report.val() || '').trim(),
+        subject: String(els.subject.val() || '').trim(),
+        message: String(els.message.val() || '').trim(),
       };
       if (!draft.title) draft.title = draft.report ? `${draft.report.toUpperCase()} REPORT` : 'MAIL REPORT';
       draft.nextDue = calculateNextDue(draft);
@@ -214,7 +214,7 @@ const MailScheduleView = (() => {
       window.renderAdminContent('mail_schedule');
     });
 
-    els.back.addEventListener('click', () => {
+    els.back.on('click', () => {
       AdminData.mailScheduleMode = 'list';
       AdminData.mailScheduleEditingId = '';
       AdminData.mailScheduleDraft = null;

@@ -30,8 +30,7 @@ const PlantsView = (() => {
 
   function getSelectedPlant(rows) {
     if (!rows?.length) return null;
-    const checked = document.querySelector('input[name="plantModalSelected"]:checked');
-    const code = String(checked?.value || '').trim();
+    const code = String($('input[name="plantModalSelected"]:checked').val() || '').trim();
     if (code) { const r = rows.find(x => x.code === code); if (r) return r; }
     return rows[0] || null;
   }
@@ -66,25 +65,20 @@ const PlantsView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
 
-    root.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => AdminUtils.closeModal())
-    );
-
-    const backBtn = document.getElementById('plantUpdateBackBtn');
-    const saveBtn = document.getElementById('plantUpdateSaveBtn');
-    const nameInput = document.getElementById('plantUpdateName');
+    const $backBtn = $('#plantUpdateBackBtn');
+    const $saveBtn = $('#plantUpdateSaveBtn');
+    const $nameInput = $('#plantUpdateName');
 
     const goBack = () => openListModal(source.map(r => ({ ...r })), plant.code);
 
-    if (backBtn) backBtn.addEventListener('click', goBack);
-    if (saveBtn && nameInput) {
-      saveBtn.addEventListener('click', () => {
-        const nextName = nameInput.value.trim();
-        if (!nextName) { nameInput.focus(); return; }
+    $backBtn.on('click', goBack);
+    if ($saveBtn.length && $nameInput.length) {
+      $saveBtn.on('click', () => {
+        const nextName = String($nameInput.val() || '').trim();
+        if (!nextName) { $nameInput.trigger('focus'); return; }
         const plantRow = AdminData.plantMasterRows.find(r => r.code === plant.code);
         if (plantRow) plantRow.name = nextName;
         plant.name = nextName;
@@ -129,25 +123,22 @@ const PlantsView = (() => {
       </div>
     `;
 
-    AdminUtils.openModal(html);
-    const root = document.getElementById('adminModalRoot');
-    if (!root) return;
+    const $root = AdminUtils.openModal(html);
+    if (!$root.length) return;
 
-    root.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => AdminUtils.closeModal())
-    );
+    const $updateBtn = $('#plantsModalUpdateBtn');
+    const $deleteBtn = $('#plantsModalDeleteBtn');
 
-    const updateBtn = document.getElementById('plantsModalUpdateBtn');
-    const deleteBtn = document.getElementById('plantsModalDeleteBtn');
-
-    if (updateBtn) {
-      updateBtn.addEventListener('click', () => {
+    if ($updateBtn.length) {
+      $updateBtn.on('click', () => {
         const selected = getSelectedPlant(rows);
         if (selected) openUpdateModal({ ...selected }, rows);
       });
     }
 
-    if (deleteBtn) deleteBtn.addEventListener('click', () => deleteBtn.blur());
+    $deleteBtn.on('click', function () {
+      $(this).trigger('blur');
+    });
   }
 
   function render() {
@@ -190,26 +181,28 @@ const PlantsView = (() => {
   }
 
   function bind() {
-    const codeInput = document.getElementById('plantCodeInput');
-    const nameInput = document.getElementById('plantNameInput');
-    const addBtn = document.getElementById('plantsAddBtn');
-    const viewBtn = document.getElementById('plantsViewBtn');
-    if (!codeInput || !nameInput || !viewBtn) return;
+    const $codeInput = $('#plantCodeInput');
+    const $nameInput = $('#plantNameInput');
+    const $addBtn = $('#plantsAddBtn');
+    const $viewBtn = $('#plantsViewBtn');
+    if (!$codeInput.length || !$nameInput.length || !$viewBtn.length) return;
 
     const openFiltered = () => {
-      const rows = filterRows(codeInput.value, nameInput.value);
+      const rows = filterRows($codeInput.val(), $nameInput.val());
       openListModal(rows);
     };
 
-    if (addBtn) {
-      addBtn.addEventListener('click', () => {
-        codeInput.value = ''; nameInput.value = ''; codeInput.focus();
+    if ($addBtn.length) {
+      $addBtn.on('click', () => {
+        $codeInput.val('');
+        $nameInput.val('');
+        $codeInput.trigger('focus');
       });
     }
 
-    viewBtn.addEventListener('click', openFiltered);
-    codeInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFiltered(); } });
-    nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFiltered(); } });
+    $viewBtn.on('click', openFiltered);
+    $codeInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFiltered(); } });
+    $nameInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); openFiltered(); } });
   }
 
   return { render, bind };

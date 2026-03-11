@@ -93,35 +93,32 @@ const UserPlantsView = (() => {
     `;
 
     AdminUtils.openModal(html);
-    document.getElementById('adminModalRoot')?.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => AdminUtils.closeModal())
-    );
   }
 
   function bind() {
-    const filterInput = document.getElementById('userPlantsFilter');
-    const ecSelect = document.getElementById('userPlantsSelect');
-    const goBtn = document.getElementById('userPlantsGoBtn');
-    if (!filterInput || !ecSelect || !goBtn) return;
+    const $filterInput = $('#userPlantsFilter');
+    const $ecSelect = $('#userPlantsSelect');
+    const $goBtn = $('#userPlantsGoBtn');
+    if (!$filterInput.length || !$ecSelect.length || !$goBtn.length) return;
 
     const applyFilter = () => {
-      const rows = AdminUtils.filterUserPlantsDirectoryRows(filterInput.value);
-      const preferred = String(ecSelect.value || '').trim();
+      const rows = AdminUtils.filterUserPlantsDirectoryRows($filterInput.val());
+      const preferred = String($ecSelect.val() || '').trim();
       const hasPreferred = rows.some(r => r.ec === preferred);
       const selectedEc = hasPreferred ? preferred : (rows[0]?.ec || '');
-      ecSelect.innerHTML = '<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc);
-      ecSelect.value = selectedEc;
+      $ecSelect.html('<option value="">Select EC Number</option>' + AdminUtils.buildUserPlantsEcOptions(rows, selectedEc));
+      $ecSelect.val(selectedEc);
     };
 
     const goToUser = () => {
-      const rows = AdminUtils.filterUserPlantsDirectoryRows(filterInput.value);
-      const selectedUser = rows.find(r => r.ec === ecSelect.value) || rows[0] || null;
+      const rows = AdminUtils.filterUserPlantsDirectoryRows($filterInput.val());
+      const selectedUser = rows.find(r => r.ec === $ecSelect.val()) || rows[0] || null;
       if (selectedUser) showUserPlants(selectedUser);
     };
 
-    goBtn.addEventListener('click', goToUser);
-    filterInput.addEventListener('input', applyFilter);
-    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); goToUser(); } });
+    $goBtn.on('click', goToUser);
+    $filterInput.on('input', applyFilter);
+    $filterInput.on('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); goToUser(); } });
     applyFilter();
   }
 

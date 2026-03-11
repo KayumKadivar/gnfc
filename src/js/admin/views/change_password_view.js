@@ -52,24 +52,32 @@ const ChangePasswordView = (() => {
   }
 
   function bind() {
-    const oldPass = document.getElementById('adminOldPassword');
-    const newPass = document.getElementById('adminNewPassword');
-    const confirmPass = document.getElementById('adminConfirmPassword');
-    const submitBtn = document.getElementById('adminChangeSubmitBtn');
-    const resetBtn = document.getElementById('adminChangeResetBtn');
-    if (!oldPass || !newPass || !confirmPass || !submitBtn || !resetBtn) return;
+    const $oldPass = $('#adminOldPassword');
+    const $newPass = $('#adminNewPassword');
+    const $confirmPass = $('#adminConfirmPassword');
+    const $submitBtn = $('#adminChangeSubmitBtn');
+    const $resetBtn = $('#adminChangeResetBtn');
+    if (!$oldPass.length || !$newPass.length || !$confirmPass.length || !$submitBtn.length || !$resetBtn.length) return;
 
-    const clearForm = () => { oldPass.value = ''; newPass.value = ''; confirmPass.value = ''; oldPass.focus(); };
+    const clearForm = () => {
+      $oldPass.val('');
+      $newPass.val('');
+      $confirmPass.val('');
+      $oldPass.trigger('focus');
+    };
 
-    submitBtn.addEventListener('click', () => {
-      if (!oldPass.value || oldPass.value !== AdminData.adminCurrentPassword) { oldPass.focus(); return; }
-      if (!newPass.value) { newPass.focus(); return; }
-      if (newPass.value !== confirmPass.value) { confirmPass.focus(); return; }
-      AdminData.adminCurrentPassword = newPass.value;
+    $submitBtn.on('click', () => {
+      const oldValue = String($oldPass.val() || '');
+      const newValue = String($newPass.val() || '');
+      const confirmValue = String($confirmPass.val() || '');
+      if (!oldValue || oldValue !== AdminData.adminCurrentPassword) { $oldPass.trigger('focus'); return; }
+      if (!newValue) { $newPass.trigger('focus'); return; }
+      if (newValue !== confirmValue) { $confirmPass.trigger('focus'); return; }
+      AdminData.adminCurrentPassword = newValue;
       clearForm();
     });
 
-    resetBtn.addEventListener('click', clearForm);
+    $resetBtn.on('click', clearForm);
   }
 
   return { render, bind };
