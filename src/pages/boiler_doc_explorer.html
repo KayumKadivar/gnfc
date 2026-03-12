@@ -60,12 +60,13 @@
               </div>
             </div>
 
-            <!-- Statistics Bar -->
-            <div
-              class="flex flex-wrap items-center mt-3 text-[0.7rem] font-medium text-dark-muted divide-x divide-dark-border">
-              <div class="pr-4 tracking-wide"><span class="font-bold text-dark-text">Total:</span> 12 (96760 Kb)</div>
-              <div class="px-4 tracking-wide"><span class="font-bold text-dark-text">Folders:</span> 12 (96760 Kb)</div>
-              <div class="pl-4 tracking-wide"><span class="font-bold text-dark-text">Files:</span> 0 (0 Kb)</div>
+            <div class="flex flex-wrap items-center mt-3 text-[0.7rem] font-medium text-dark-muted divide-x divide-dark-border" id="explorer-statistics">
+              <div class="pr-4 tracking-wide"><span class="font-bold text-dark-text">Total:</span> <span id="stat-total-cnt">0</span> (<span id="stat-total-kb">0</span> Kb)</div>
+              <div class="px-4 tracking-wide"><span class="font-bold text-dark-text">Folders:</span> <span id="stat-folder-cnt">0</span> (<span id="stat-folder-kb">0</span> Kb)</div>
+              <div class="px-4 tracking-wide"><span class="font-bold text-dark-text">Files:</span> <span id="stat-file-cnt">0</span> (<span id="stat-file-kb">0</span> Kb)</div>
+              <div class="px-4 tracking-wide text-amber-600 cursor-pointer hover:underline" id="btn-view-email-history">
+                <span class="font-bold">Sent Mails:</span> <span id="stat-sent-cnt">0</span>
+              </div>
             </div>
           </div>
 
@@ -89,10 +90,11 @@
               <span class="font-14px font-extrabold uppercase tracking-widest">Upload</span>
             </button>
             <button id="btn-send-email"
-              class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-700 rounded transition-colors"
+              class="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-700 rounded transition-colors"
               title="Send Mail">
               <i class="ph-bold ph-envelope-simple text-lg"></i>
               <span class="font-14px font-extrabold uppercase tracking-widest">Send Mail</span>
+              <!-- <span id="sent-email-badge" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-white text-[0.6rem] font-bold px-1.5 py-0.5 rounded-full min-w-[16px] flex items-center justify-center shadow-sm" style="display: none;">0</span> -->
             </button>
             <!-- Paste Button (Hidden by default) -->
             <button id="btn-paste"
@@ -100,6 +102,14 @@
               title="Paste Here">
               <i class="ph-bold ph-clipboard-text text-lg"></i>
               <span class="font-14px font-extrabold uppercase tracking-widest">Paste Here</span>
+            </button>
+            <div class="flex-1"></div>
+            <button id="btn-recycle-bin"
+              class="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-600 rounded transition-colors"
+              title="Recycle Bin">
+              <i class="ph-bold ph-recycle text-lg"></i>
+              <span class="font-14px font-extrabold uppercase tracking-widest">Recycle Bin</span>
+              <span id="recycle-bin-count" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-[0.6rem] font-black rounded-full flex items-center justify-center shadow-md">0</span>
             </button>
           </div>
 
@@ -623,84 +633,163 @@
   </div>
 
   <!-- Send Email Modal -->
-  <div id="send-email-modal"
-    class="fixed inset-0 z-[95] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div class="bg-white w-full max-w-2xl rounded-sm shadow-2xl border border-white overflow-hidden text-gray-800">
-      <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-        <h2 class="text-sm font-black text-[#2d68c4] uppercase tracking-widest">Send File Through Email</h2>
-        <button id="btn-close-email-modal" class="text-gray-400 hover:text-red-500 transition-colors">
+  <div id="send-email-modal" class="gnfc-modal-overlay">
+    <div class="gnfc-modal-shell w-[700px] max-w-[96vw]">
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+            <i class="ph-bold ph-envelope-simple text-lg"></i>
+          </div>
+          <h3 class="gnfc-modal-title text-blue-700 font-black">SEND MAIL</h3>
+        </div>
+        <button id="btn-close-email-modal" class="gnfc-modal-close text-gray-400 hover:text-red-500 transition-colors">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
-      <div class="p-4 space-y-3">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">To *</label>
-            <input id="email-to" type="text" placeholder="name@gnfc.in"
-              class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+      
+      <!-- Body -->
+      <div class="gnfc-modal-body text-left">
+        <div class="p-4 space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-wider mb-1">To</label>
+              <input id="email-to" type="text" placeholder="name@gnfc.in"
+                class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </div>
+            <div>
+              <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-wider mb-1">File</label>
+              <select id="email-file-select"
+                class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+              </select>
+            </div>
           </div>
           <div>
-            <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">File *</label>
-            <select id="email-file-select"
+            <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-wider mb-1">Subject</label>
+            <input id="email-subject" type="text" placeholder="Document Sharing"
               class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
-            </select>
           </div>
-        </div>
-        <div>
-          <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">Subject *</label>
-          <input id="email-subject" type="text" placeholder="Document Sharing"
-            class="w-full h-9 px-3 border border-gray-300 rounded-sm text-[0.8rem] font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
-        </div>
-        <div>
-          <label class="block text-[0.68rem] font-black text-gray-500 uppercase tracking-wider mb-1">Message</label>
-          <textarea id="email-message" rows="4" placeholder="Write message..."
-            class="w-full px-3 py-2 border border-gray-300 rounded-sm text-[0.8rem] font-medium focus:outline-none focus:ring-1 focus:ring-blue-500"></textarea>
-        </div>
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <label class="inline-flex items-center gap-2 text-[0.7rem] font-bold text-gray-600 uppercase tracking-wider">
-            <input id="email-link-only" type="checkbox" class="accent-blue-500">
-            Send attachment as link only
-          </label>
-          <button id="btn-open-sent-items"
-            class="h-8 px-3 rounded-sm border border-gray-300 font-16px font-black uppercase tracking-widest text-gray-600 hover:text-blue-600 hover:border-blue-400 transition-colors">
-            Sent Items
-          </button>
+          
+          <div class="bg-blue-50/50 border border-blue-100 rounded-lg p-3 flex items-center gap-3">
+             <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-wider w-20 shrink-0">Attachment</label>
+             <label class="flex items-center gap-2 text-[0.75rem] font-bold text-gray-700 cursor-pointer">
+                <input id="email-link-only" type="checkbox" class="accent-blue-600 w-4 h-4 rounded-sm">
+                As a link only <span class="text-gray-400 font-medium italic">(If file size is greater than 1 MB)</span>
+             </label>
+          </div>
+
+          <div>
+            <label class="block text-[0.7rem] font-black text-gray-500 uppercase tracking-wider mb-1">Message</label>
+            <textarea id="email-message" rows="4" placeholder="Write message..."
+              class="w-full px-3 py-2 border border-gray-300 rounded-sm text-[0.8rem] font-medium focus:outline-none focus:ring-1 focus:ring-blue-500"></textarea>
+          </div>
         </div>
       </div>
-      <div class="p-4  border-t border-gray-200 flex items-center justify-end gap-3 bg-gray-50">
-        <button id="btn-cancel-email" class="gnfc-modal-btn gnfc-modal-btn-secondary">Cancel</button>
-        <button id="btn-send-email-submit" class="gnfc-modal-btn gnfc-modal-btn-primary">Send</button>
+
+      <!-- Footer -->
+      <div class="gnfc-modal-footer gnfc-modal-footer--space-between bg-gray-50">
+        <div class="flex gap-2">
+          <button id="btn-send-email-submit" class="gnfc-modal-btn gnfc-modal-btn-primary px-8">Send</button>
+          <button id="btn-open-sent-items" class="gnfc-modal-btn gnfc-modal-btn-secondary bg-white border-2 border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-400 px-6 font-bold shadow-sm">Sent Items</button>
+        </div>
+        <button id="btn-cancel-email" class="gnfc-modal-btn gnfc-modal-btn-secondary px-6">Cancel</button>
       </div>
     </div>
   </div>
 
   <!-- Sent Items Modal -->
-  <div id="sent-items-modal"
-    class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div class="bg-white w-full max-w-4xl rounded-sm shadow-2xl border border-white overflow-hidden text-gray-800">
-      <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-        <h2 class="text-sm font-black text-[#2d68c4] uppercase tracking-widest">Sent Items</h2>
-        <button id="btn-close-sent-items" class="text-gray-400 hover:text-red-500 transition-colors">
+  <div id="sent-items-modal" class="gnfc-modal-overlay">
+    <div class="gnfc-modal-shell w-[800px] max-w-[96vw]">
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+            <i class="ph-bold ph-paper-plane-tilt text-lg"></i>
+          </div>
+          <h3 class="gnfc-modal-title text-blue-700 font-black">SENT ITEMS (EMAIL)</h3>
+        </div>
+        <button id="btn-close-sent-items" class="gnfc-modal-close text-gray-400 hover:text-red-500 transition-colors">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
-      <div class="p-4 overflow-auto max-h-[70vh]">
-        <table class="w-full border-collapse min-w-[720px]">
-          <thead>
-            <tr
-              class="bg-gray-50 border-b border-gray-200 font-16px font-black uppercase tracking-widest text-[#2d68c4]">
-              <th class="px-3 py-2 text-left">To</th>
-              <th class="px-3 py-2 text-left">File</th>
-              <th class="px-3 py-2 text-left">Subject</th>
-              <th class="px-3 py-2 text-left">When</th>
-              <th class="px-3 py-2 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody id="sent-items-table-body"></tbody>
-        </table>
+
+      <!-- Body -->
+      <div class="gnfc-modal-body p-0">
+        <div class="max-h-[50vh] overflow-auto 
+          [&::-webkit-scrollbar]:w-[6px] 
+          [&::-webkit-scrollbar-track]:bg-transparent 
+          [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-sm
+          [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
+          <table class="w-full border-collapse">
+            <thead class="sticky top-0 z-10">
+              <tr class="bg-gray-50 border-b border-gray-200 font-16px font-black uppercase tracking-widest text-[#2d68c4] text-left">
+                <th class="px-4 py-3 w-40 border-r border-gray-200">To</th>
+                <th class="px-4 py-3 border-r border-gray-200">Subject</th>
+                <th class="px-4 py-3 w-16 text-center border-r border-gray-200" title="Attachment">Attach</th>
+                <th class="px-4 py-3 w-28 text-center border-r border-gray-200">Date/Time</th>
+                <th class="px-4 py-3 w-20 text-center border-r border-gray-200">By</th>
+                <th class="px-4 py-3 w-16 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="sent-items-table-body" class="divide-y divide-gray-100 bg-white">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="px-5 py-3 border-t border-gray-200 bg-gray-50 flex justify-end">
-        <button id="btn-close-sent-items-footer" class="gnfc-modal-btn gnfc-modal-btn-secondary">Close</button>
+      
+      <!-- Footer -->
+      <div class="gnfc-modal-footer justify-end bg-gray-50">
+        <button id="btn-close-sent-items-footer" class="gnfc-modal-btn gnfc-modal-btn-secondary px-6">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email History Modal (Lifetime log) -->
+  <div id="email-history-modal" class="gnfc-modal-overlay">
+    <div class="gnfc-modal-shell w-[900px] max-w-[96vw]">
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+            <i class="ph-bold ph-calendar text-lg"></i>
+          </div>
+          <h3 class="gnfc-modal-title text-amber-700 font-black tracking-tighter uppercase italic">LIFETIME EMAIL LOG</h3>
+        </div>
+        <button id="btn-close-email-history" class="gnfc-modal-close text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="gnfc-modal-body p-0">
+        <div class="max-h-[60vh] overflow-auto 
+          [&::-webkit-scrollbar]:w-[6px] 
+          [&::-webkit-scrollbar-track]:bg-transparent 
+          [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-sm
+          [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
+          <table class="w-full border-collapse">
+            <thead class="sticky top-0 z-10">
+              <tr class="bg-gray-50 border-b border-gray-200 font-16px font-black uppercase tracking-widest text-amber-700 text-left">
+                <th class="px-4 py-3 w-40 border-r border-gray-200">Recipient (To)</th>
+                <th class="px-4 py-3 border-r border-gray-200">File & Subject</th>
+                <th class="px-4 py-3 w-32 text-center border-r border-gray-200">Date/Time</th>
+                <th class="px-4 py-3 w-20 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody id="email-history-table-body" class="divide-y divide-gray-100 bg-white">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="gnfc-modal-footer justify-between bg-gray-50 items-center">
+        <div class="text-[0.65rem] text-dark-muted font-bold tracking-tight uppercase">
+          Note: This is a permanent log of all communications and cannot be modified.
+        </div>
+        <button id="btn-close-email-history-footer" class="gnfc-modal-btn gnfc-modal-btn-secondary px-6">Close History</button>
       </div>
     </div>
   </div>
@@ -935,6 +1024,134 @@
     </div>
   </div>
 
+    <!-- Delete File Modal -->
+  <div id="delete-file-modal" class="gnfc-modal-overlay">
+    <div class="gnfc-modal-shell w-[700px] max-w-[96vw]">
+      <!-- Header -->
+      <div class="gnfc-modal-header">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
+            <i class="ph-bold ph-trash text-lg"></i>
+          </div>
+          <h3 class="gnfc-modal-title text-red-500! font-black">DELETE FILE !!!</h3>
+        </div>
+        <button id="delete-modal-close" class="gnfc-modal-close text-gray-400 hover:text-red-500 transition-colors">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="gnfc-modal-body">
+        <div class="space-y-4">
+          <div class="bg-gray-50 border border-gray-100 rounded-lg p-4 space-y-3">
+            <p class="text-[0.8rem] font-bold text-gray-600 flex items-start gap-2">
+              <span class="w-20 shrink-0 text-gray-400 uppercase tracking-widest text-[0.65rem] mt-0.5">File Name :</span> 
+              <span id="delete-modal-path" class="text-blue-600 font-black break-all"></span>
+            </p>
+            <p class="text-[0.8rem] font-bold text-gray-600 flex items-center gap-2">
+              <span class="w-20 shrink-0 text-gray-400 uppercase tracking-widest text-[0.65rem]">Revision :</span> 
+              <span id="delete-modal-rev" class="text-gray-800 text-[0.85rem] bg-gray-200/50 px-2 py-0.5 rounded"></span>
+            </p>
+          </div>
+
+          <div class="bg-red-50 border border-red-100 rounded-lg p-4 space-y-2 mt-4">
+            <div class="flex items-center gap-2 text-red-600 font-bold text-[0.75rem] uppercase tracking-wider">
+                <i class="ph-fill ph-warning-circle text-lg"></i>
+                Alert
+            </div>
+            <p class="text-[0.75rem] text-red-700/80 leading-relaxed font-medium pl-6">
+              Revisions of the document will be deleted along with this delete !! Check and save revisions of the document. To view revision click <button id="delete-modal-view-history" class="text-blue-600 font-bold hover:underline">Here</button>
+            </p>
+          </div>
+
+          <div class="text-center pt-2">
+            <p class="text-[0.7rem] text-emerald-600 font-bold italic tracking-wide">
+              <i class="ph-bold ph-info mr-1"></i>You can still retrieve deleted documents from recycle bin ...
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="gnfc-modal-footer gnfc-modal-footer--space-between bg-gray-50">
+        <button id="delete-modal-confirm" class="gnfc-modal-btn gnfc-modal-btn-danger px-6 flex items-center gap-2">
+          <i class="ph-bold ph-trash"></i> DELETE
+        </button>
+        <button id="delete-modal-cancel" class="gnfc-modal-btn gnfc-modal-btn-secondary px-6">
+          CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Recycle Bin Modal -->
+  <div id="recycle-bin-modal" class="gnfc-modal-overlay">
+    <div class="gnfc-modal-shell gnfc-modal-shell--wide font-sans">
+      <!-- Modal Header -->
+      <div class="gnfc-modal-header">
+        <div class="flex items-center gap-3 w-full justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
+              <i class="ph-bold ph-recycle text-xl"></i>
+            </div>
+            <div>
+              <h2 class="gnfc-modal-title uppercase">Deleted Documents</h2>
+              <p id="recycle-bin-size" class="gnfc-modal-subtitle mt-0.5">Size: 0 KB</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-3 py-1 bg-gray-100 text-[0.65rem] font-black text-gray-600 rounded-full uppercase tracking-widest border border-gray-200">BOILER</span>
+            <button id="btn-close-recycle-bin" class="gnfc-modal-close">
+              <i class="ph-bold ph-x text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="gnfc-modal-body p-0">
+        <div class="max-h-[50vh] overflow-auto 
+          [&::-webkit-scrollbar]:w-[6px] 
+          [&::-webkit-scrollbar-track]:bg-transparent 
+          [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-sm
+          [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
+          <table class="w-full border-collapse">
+            <thead class="sticky top-0 z-10">
+              <tr class="bg-gray-50 border-b border-gray-200 font-16px font-black uppercase tracking-widest text-[#2d68c4]">
+                <th class="px-3 py-2.5 text-center w-12 border-r border-gray-200">Rev</th>
+                <th class="px-3 py-2.5 text-left border-r border-gray-200">Document</th>
+                <th class="px-3 py-2.5 text-left border-r border-gray-200">Comment</th>
+                <th class="px-3 py-2.5 text-center w-28 border-r border-gray-200">Date</th>
+                <th class="px-3 py-2.5 text-center w-16 border-r border-gray-200">Time</th>
+                <th class="px-3 py-2.5 text-center w-16 border-r border-gray-200">By</th>
+                <th class="px-3 py-2.5 text-center w-24">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recycle-bin-table-body" class="divide-y divide-gray-100 bg-white">
+              <!-- Rows injected dynamically -->
+              <tr><td colspan="7" class="px-4 py-12 text-center text-gray-400 italic font-medium">Recycle Bin is empty.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="gnfc-modal-footer gnfc-modal-footer--space-between">
+        <p class="text-[0.6rem] font-bold text-gray-400 hidden sm:block italic">Deleted files can be restored to their original location with all revisions.</p>
+        <div class="flex gap-3">
+          <button id="btn-empty-recycle-bin" class="gnfc-modal-btn gnfc-modal-btn-danger">
+            <i class="ph-bold ph-trash text-[14px]"></i>
+            Empty All
+          </button>
+          <button id="btn-close-recycle-bin-footer" class="gnfc-modal-btn gnfc-modal-btn-secondary">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  </div>
+
   <script>
     // --- Document Explorer OOP + Functional Approach ---
 
@@ -944,7 +1161,13 @@
         this.currentPath = ["BOILER_INST"];
         this.clipboard = null;
         this.pendingSaveFiles = [];
-        this.sentItems = [];
+        const savedSentItems = localStorage.getItem('gnfc_sent_items');
+        this.sentItems = savedSentItems ? JSON.parse(savedSentItems) : [];
+        const savedTotalSent = localStorage.getItem('gnfc_total_sent_count');
+        this.totalSentCount = savedTotalSent ? parseInt(savedTotalSent, 10) : 0;
+        const savedEmailHistory = localStorage.getItem('gnfc_email_history');
+        this.emailHistory = savedEmailHistory ? JSON.parse(savedEmailHistory) : [];
+        this.recycleBin = [];
 
         this.mockData = {
           "BOILER_INST": [
@@ -1052,6 +1275,57 @@
       addLog(logEntry) {
         this.mockLogs.unshift(logEntry);
       }
+
+      softDeleteItem(name) {
+        const currentFolder = this.getCurrentFolderName();
+        const items = this.mockData[currentFolder] || [];
+        const itemIndex = items.findIndex(i => i.name === name && i.type === 'File');
+        if (itemIndex === -1) return;
+        const item = items[itemIndex];
+        const now = new Date();
+        const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+        const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        this.recycleBin.unshift({
+          name: item.name,
+          rev: item.rev || 0,
+          comment: (item.comments && item.comments.length > 0) ? item.comments[item.comments.length - 1] : '-',
+          date: dateStr,
+          time: timeStr,
+          by: 'ADMIN',
+          size: item.size,
+          originFolder: currentFolder,
+          originPath: this.getCurrentPathLabel(),
+          fullItem: JSON.parse(JSON.stringify(item)) // deep copy to preserve history
+        });
+        items.splice(itemIndex, 1);
+      }
+
+      restoreItem(binIndex) {
+        if (binIndex < 0 || binIndex >= this.recycleBin.length) return;
+        const entry = this.recycleBin[binIndex];
+        const folder = entry.originFolder;
+        if (!this.mockData[folder]) this.mockData[folder] = [];
+        this.mockData[folder].unshift(entry.fullItem);
+        this.recycleBin.splice(binIndex, 1);
+      }
+
+      emptyBin() {
+        this.recycleBin = [];
+      }
+
+      saveSentItems() {
+        localStorage.setItem('gnfc_sent_items', JSON.stringify(this.sentItems));
+      }
+
+      incrementTotalSentCount() {
+        this.totalSentCount++;
+        localStorage.setItem('gnfc_total_sent_count', this.totalSentCount.toString());
+      }
+
+      logEmail(emailData) {
+        this.emailHistory.unshift(emailData);
+        localStorage.setItem('gnfc_email_history', JSON.stringify(this.emailHistory));
+      }
     }
 
     class UIController {
@@ -1060,6 +1334,18 @@
         this.cacheDOM();
         this.bindEvents();
         this.renderTable();
+        this.updateSentEmailBadge();
+      }
+
+      updateSentEmailBadge() {
+        if (!this.sentEmailBadge) return;
+        const count = this.storage.sentItems.length;
+        this.sentEmailBadge.innerText = count;
+        if (count > 0) {
+          this.sentEmailBadge.style.display = 'flex';
+        } else {
+          this.sentEmailBadge.style.display = 'none';
+        }
       }
 
       cacheDOM() {
@@ -1072,6 +1358,23 @@
         this.btnNewFolder = document.getElementById('btn-new-folder');
         this.btnSaveFiles = document.getElementById('btn-save-files');
         this.btnSendEmail = document.getElementById('btn-send-email');
+        this.sentEmailBadge = document.getElementById('sent-email-badge');
+        
+        // Statistics
+        this.statTotalCnt = document.getElementById('stat-total-cnt');
+        this.statTotalKb = document.getElementById('stat-total-kb');
+        this.statFolderCnt = document.getElementById('stat-folder-cnt');
+        this.statFolderKb = document.getElementById('stat-folder-kb');
+        this.statFileCnt = document.getElementById('stat-file-cnt');
+        this.statFileKb = document.getElementById('stat-file-kb');
+        this.statSentCnt = document.getElementById('stat-sent-cnt');
+        this.btnViewEmailHistory = document.getElementById('btn-view-email-history');
+
+        // Email History Modal
+        this.emailHistoryModal = document.getElementById('email-history-modal');
+        this.emailHistoryTableBody = document.getElementById('email-history-table-body');
+        this.btnCloseEmailHistory = document.getElementById('btn-close-email-history');
+        this.btnCloseEmailHistoryFooter = document.getElementById('btn-close-email-history-footer');
 
         // Modals
         this.createModal = document.getElementById('create-folder-modal');
@@ -1121,6 +1424,18 @@
         this.commentModalName = document.getElementById('comment-modal-name');
         this.commentModalRev = document.getElementById('comment-modal-rev');
         this.commentModalText = document.getElementById('comment-modal-text');
+
+        // Recycle Bin Modal
+        this.recycleBinModal = document.getElementById('recycle-bin-modal');
+        this.recycleBinTableBody = document.getElementById('recycle-bin-table-body');
+        this.recycleBinSize = document.getElementById('recycle-bin-size');
+        this.recycleBinCount = document.getElementById('recycle-bin-count');
+
+        // Delete File Modal
+        this.deleteFileModal = document.getElementById('delete-file-modal');
+        this.deleteModalPath = document.getElementById('delete-modal-path');
+        this.deleteModalRev = document.getElementById('delete-modal-rev');
+        this.itemToDelete = null;
       }
 
       // Utils
@@ -1140,7 +1455,22 @@
 
         this.tableScrollContainer.classList.add('opacity-0');
 
-        const hasFiles = items. some(item => item.type === 'File');
+        let folderCount = 0;
+        let folderKb = 0;
+        let fileCount = 0;
+        let fileKb = 0;
+
+        items.forEach(item => {
+          if (item.type === 'Folder') {
+            folderCount++;
+            folderKb += parseInt(item.size || '0', 10);
+          } else {
+            fileCount++;
+            fileKb += parseInt(item.size || '0', 10);
+          }
+        });
+
+        const hasFiles = items.some(item => item.type === 'File');
         if (hasFiles) {
           this.thRev.classList.remove('hidden');
         } else {
@@ -1189,7 +1519,7 @@
                 <td class="px-3 py-1.5 text-center">
                   <div class="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                     <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-rename-row" title="Rename"><i class="ph-bold ph-pencil-simple text-[14px]"></i></button>
-                    <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors"><i class="ph-bold ph-download-simple text-[14px]"></i></button>
+                    ${(item.type === 'File' && item.comments && item.comments.length > 0) ? `<button class="p-0.5 hover:text-green-500 text-green-600 transition-colors btn-view-comment" title="View Comment"><i class="ph-bold ph-chat-text text-[14px]"></i></button>` : ''}
                     <button class="p-0.5 hover:text-amber-400 text-dark-muted transition-colors btn-email-row" title="Send Mail"><i class="ph-bold ph-envelope-simple text-[14px]"></i></button>
                     <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-doc-log" title="Log"><i class="ph-bold ph-list-bullets text-[14px]"></i></button>
                     <button class="p-0.5 hover:text-blue-400 text-dark-muted transition-colors btn-cut-row" title="Cut"><i class="ph-bold ph-scissors font-14px "></i></button>
@@ -1201,6 +1531,19 @@
             });
           }
           this.tableScrollContainer.classList.remove('opacity-0');
+          
+          // Update Statistics UI
+          this.statFolderCnt.innerText = folderCount;
+          this.statFolderKb.innerText = folderKb.toLocaleString();
+          this.statFileCnt.innerText = fileCount;
+          this.statFileKb.innerText = fileKb.toLocaleString();
+          this.statTotalCnt.innerText = (folderCount + fileCount);
+          this.statTotalKb.innerText = (folderKb + fileKb).toLocaleString();
+          
+          if (this.statSentCnt) {
+            this.statSentCnt.innerText = this.storage.totalSentCount;
+          }
+          this.updateSentEmailBadge();
         }, 50);
 
         const currentPathLabel = this.storage.getCurrentPathLabel();
@@ -1227,6 +1570,9 @@
         this.btnNewFolder.addEventListener('click', () => this.showCreateFolderModal());
         this.btnSaveFiles.addEventListener('click', () => this.showSaveFilesModal());
         this.btnSendEmail.addEventListener('click', () => this.showEmailModal());
+        if (this.btnViewEmailHistory) {
+          this.btnViewEmailHistory.addEventListener('click', () => this.showEmailHistoryModal());
+        }
 
         // Create Folder Modal
         this.folderInput.addEventListener('input', () => {
@@ -1261,6 +1607,10 @@
         document.getElementById('btn-close-sent-items').addEventListener('click', () => this.hideSentItemsModal());
         document.getElementById('btn-close-sent-items-footer').addEventListener('click', () => this.hideSentItemsModal());
         this.sentItemsTableBody.addEventListener('click', (e) => this.handleSentItemsClick(e));
+        
+        // Email History Modal Events
+        this.btnCloseEmailHistory.addEventListener('click', () => this.hideEmailHistoryModal());
+        this.btnCloseEmailHistoryFooter.addEventListener('click', () => this.hideEmailHistoryModal());
 
         // Doc Log Modal
         document.getElementById('btn-apply-log-filter').addEventListener('click', () => this.renderLogTable());
@@ -1282,6 +1632,23 @@
         document.getElementById('btn-close-comment-modal').addEventListener('click', () => this.hideCommentModal());
         document.getElementById('btn-close-comment-footer').addEventListener('click', () => this.hideCommentModal());
 
+        // Recycle Bin
+        document.getElementById('btn-recycle-bin').addEventListener('click', () => this.showRecycleBinModal());
+        document.getElementById('btn-close-recycle-bin').addEventListener('click', () => this.hideRecycleBinModal());
+        document.getElementById('btn-close-recycle-bin-footer').addEventListener('click', () => this.hideRecycleBinModal());
+        document.getElementById('btn-empty-recycle-bin').addEventListener('click', () => this.handleEmptyBin());
+        this.recycleBinTableBody.addEventListener('click', (e) => this.handleRecycleBinClick(e));
+
+        // Delete File Modal
+        document.getElementById('delete-modal-close').addEventListener('click', () => this.hideDeleteFileModal());
+        document.getElementById('delete-modal-cancel').addEventListener('click', () => this.hideDeleteFileModal());
+        document.getElementById('delete-modal-confirm').addEventListener('click', () => this.confirmDeleteFile());
+        document.getElementById('delete-modal-view-history').addEventListener('click', () => {
+          if (this.itemToDelete) {
+             this.showRevisionHistory(this.itemToDelete.name);
+          }
+        });
+
         // Global Esc & Enter
         window.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {
@@ -1290,6 +1657,8 @@
             this.hideSaveFilesModal();
             this.hideEmailModal();
             this.hideSentItemsModal();
+            this.hideDeleteFileModal();
+            this.hideEmailHistoryModal();
           }
           if (e.key === 'Enter' && !this.createModal.classList.contains('hidden')) {
             this.handleCreateFolder();
@@ -1610,64 +1979,180 @@
             buttonsStyling: false
           }).then(result => {
             if (result.isConfirmed) {
-              this.storage.deleteItem(name);
+              this.storage.softDeleteItem(name);
+                 this.updateRecycleBinBadge();
               this.renderTable();
               Swal.fire({ title: 'Deleted', icon: 'success', timer: 1000, showConfirmButton: false });
             }
           });
         }
 
-        // Custom Delete Modal for Files (Fig 13.12)
+        // Custom Delete Modal for Files
         const fullPath = (this.storage.getCurrentPathLabel() + '/' + name).replace(/\/\//g, '/');
         const currentRev = fileItem ? (fileItem.rev || 0) : 0;
+        
+        this.itemToDelete = { name: name, type: itemType };
+        this.deleteModalPath.innerText = fullPath;
+        this.deleteModalRev.innerText = currentRev;
 
+        this.deleteFileModal.classList.remove('hidden');
+        this.deleteFileModal.classList.add('flex');
+      }
+
+      hideDeleteFileModal() {
+        this.deleteFileModal.classList.add('hidden');
+        this.deleteFileModal.classList.remove('flex');
+        this.itemToDelete = null;
+      }
+
+      confirmDeleteFile() {
+        if (!this.itemToDelete) return;
+
+        this.storage.softDeleteItem(this.itemToDelete.name);
+        this.updateRecycleBinBadge();
+        this.renderTable();
+        this.hideDeleteFileModal();
+        
+        Swal.fire({ 
+          icon: 'success', 
+          title: 'Moved to Recycle Bin', 
+          text: 'File and all its revisions have been moved to recycle bin.', 
+          timer: 2000, 
+          showConfirmButton: false 
+        });
+      }
+
+
+      // ===== RECYCLE BIN =====
+      updateRecycleBinBadge() {
+        const count = this.storage.recycleBin.length;
+        if (count > 0) {
+          this.recycleBinCount.innerText = count;
+          this.recycleBinCount.classList.remove('hidden');
+          this.recycleBinCount.classList.add('flex');
+        } else {
+          this.recycleBinCount.classList.add('hidden');
+          this.recycleBinCount.classList.remove('flex');
+        }
+      }
+
+      showRecycleBinModal() {
+        this.renderRecycleBinTable();
+        this.recycleBinModal.classList.remove('hidden');
+        this.recycleBinModal.classList.add('flex');
+      }
+
+      hideRecycleBinModal() {
+        this.recycleBinModal.classList.add('hidden');
+        this.recycleBinModal.classList.remove('flex');
+      }
+
+      renderRecycleBinTable() {
+        const bin = this.storage.recycleBin;
+        const totalSize = bin.reduce((sum, item) => sum + (parseInt(item.size) || 0), 0);
+        this.recycleBinSize.innerText = `Size: ${totalSize} KB`;
+
+        if (bin.length === 0) {
+          this.recycleBinTableBody.innerHTML = `<tr><td colspan="7" class="px-4 py-12 text-center text-gray-400 italic font-medium">Recycle Bin is empty.</td></tr>`;
+          return;
+        }
+
+        this.recycleBinTableBody.innerHTML = bin.map((item, idx) => `
+          <tr class="hover:bg-blue-50/30 transition-all duration-150 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}">
+            <td class="px-3 py-2.5 text-center font-black text-[#2d68c4] border-r border-gray-200">${item.rev}</td>
+            <td class="px-3 py-2.5 border-r border-gray-200">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                  <i class="ph-fill ph-file-pdf text-red-500 text-xs"></i>
+                </div>
+                <span class="text-blue-600 font-bold cursor-pointer hover:underline" title="From: ${item.originPath}">${item.name}</span>
+              </div>
+            </td>
+            <td class="px-3 py-2.5 text-gray-600 border-r border-gray-200 leading-relaxed">${item.comment}</td>
+            <td class="px-3 py-2.5 text-center font-bold text-gray-700 border-r border-gray-200">${item.date}</td>
+            <td class="px-3 py-2.5 text-center text-gray-500 border-r border-gray-200">${item.time}</td>
+            <td class="px-3 py-2.5 text-center font-black text-[#2d68c4] border-r border-gray-200 uppercase tracking-tighter">${item.by}</td>
+            <td class="px-3 py-2.5 text-center">
+              <div class="flex items-center justify-center gap-1">
+                <button class="w-6 h-6 flex items-center justify-center rounded-full text-green-500 hover:bg-green-100 transition-all btn-restore-item border border-transparent hover:border-green-200" data-idx="${idx}" title="Restore to ${item.originPath}">
+                  <i class="ph-bold ph-arrow-counter-clockwise text-[13px]"></i>
+                </button>
+                <button class="w-6 h-6 flex items-center justify-center rounded-full text-blue-500 hover:bg-blue-100 transition-all btn-download-bin-item border border-transparent hover:border-blue-200" data-idx="${idx}" title="Download">
+                  <i class="ph-bold ph-download-simple text-[13px]"></i>
+                </button>
+                <button class="w-6 h-6 flex items-center justify-center rounded-full text-red-400 hover:bg-red-100 transition-all btn-perm-delete-item border border-transparent hover:border-red-200" data-idx="${idx}" title="Permanently Delete">
+                  <i class="ph-bold ph-x-circle text-[13px]"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      handleRecycleBinClick(e) {
+        const restoreBtn = e.target.closest('.btn-restore-item');
+        const downloadBtn = e.target.closest('.btn-download-bin-item');
+        const permDeleteBtn = e.target.closest('.btn-perm-delete-item');
+
+        if (restoreBtn) {
+          const idx = parseInt(restoreBtn.dataset.idx);
+          const item = this.storage.recycleBin[idx];
+          this.storage.restoreItem(idx);
+          this.renderRecycleBinTable();
+          this.updateRecycleBinBadge();
+          this.renderTable();
+          
+          Swal.fire({
+            icon: 'success',
+            title: 'File Restored',
+            text: `"${item.name}" was successfully restored to ${item.originPath}`,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+          });
+        } else if (downloadBtn) {
+          Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Downloading deleted file...', showConfirmButton: false, timer: 1500 });
+        } else if (permDeleteBtn) {
+          const idx = parseInt(permDeleteBtn.dataset.idx);
+          const item = this.storage.recycleBin[idx];
+          Swal.fire({
+            title: 'Permanently Delete?',
+            text: `"${item.name}" will be permanently removed and cannot be recovered.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete permanently'
+          }).then(result => {
+            if (result.isConfirmed) {
+              this.storage.recycleBin.splice(idx, 1);
+              this.renderRecycleBinTable();
+              this.updateRecycleBinBadge();
+              Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Permanently deleted', showConfirmButton: false, timer: 1500 });
+            }
+          });
+        }
+      }
+
+      handleEmptyBin() {
+        if (this.storage.recycleBin.length === 0) {
+          Swal.fire({ icon: 'info', title: 'Empty', text: 'Recycle Bin is already empty.' });
+          return;
+        }
         Swal.fire({
-          width: '900px',
-          html: `
-            <div class="text-left font-sans p-2 border-2 border-gray-400 bg-gray-50/30" style="min-height: 350px;">
-              <h2 class="text-2xl font-black text-red-600 uppercase border-b border-gray-300 pb-2 mb-8 tracking-tighter">DELETE FILE !!!</h2>
-              
-              <div class="space-y-4 mb-10">
-                <p class="text-[0.95rem] font-bold text-dark-text">File Name : <span class="text-blue-900 font-bold ml-2">${fullPath}</span></p>
-                <p class="text-[0.95rem] font-bold text-dark-text">Revision : <span class="text-dark-text ml-2">${currentRev}</span></p>
-              </div>
-
-              <div class="flex items-start gap-2 text-red-700 font-bold text-[0.9rem] mb-12">
-                 <span class="text-red-600 flex-shrink-0">Alert -></span>
-                 <p class="leading-relaxed">Revisions of the document will be deleted along with this delete !! Check and save revisions of the document. To view revision click <button id="delete-modal-view-history" class="text-blue-600 underline hover:text-blue-500 font-black">Here</button></p>
-              </div>
-
-              <div class="text-center mb-10 text-green-700 font-bold text-lg italic tracking-tight">
-                You can still retrieve deleted documents from recycle bin ...
-              </div>
-
-              <div class="flex justify-center gap-4">
-                <button id="delete-modal-confirm" class="px-8 py-2.5 bg-gray-300 hover:bg-gray-400 text-dark-text font-black text-[0.8rem] border border-gray-400 rounded-sm shadow-sm transition-all uppercase tracking-widest">Delete</button>
-                <button id="delete-modal-cancel" class="px-8 py-2.5 bg-gray-300 hover:bg-gray-400 text-dark-text font-black text-[0.8rem] border border-gray-400 rounded-sm shadow-sm transition-all uppercase tracking-widest">Cancel</button>
-              </div>
-            </div>
-          `,
-          showConfirmButton: false,
-          background: '#f8f9fa',
-          didOpen: () => {
-             const popup = Swal.getPopup();
-             popup.querySelector('#delete-modal-view-history').onclick = () => {
-               this.showRevisionHistory(name);
-             };
-             popup.querySelector('#delete-modal-cancel').onclick = () => {
-               Swal.close();
-             };
-             popup.querySelector('#delete-modal-confirm').onclick = () => {
-                this.storage.deleteItem(name);
-                this.renderTable();
-                Swal.fire({ 
-                  icon: 'success', 
-                  title: 'Deleted permanently', 
-                  text: 'File and all its revisions have been moved to recycle bin.', 
-                  timer: 2000, 
-                  showConfirmButton: false 
-                });
-             };
+          title: 'Empty Recycle Bin?',
+          text: 'All deleted files will be permanently removed and cannot be recovered.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Yes, empty all'
+        }).then(result => {
+          if (result.isConfirmed) {
+            this.storage.emptyBin();
+            this.renderRecycleBinTable();
+            this.updateRecycleBinBadge();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Recycle Bin emptied', showConfirmButton: false, timer: 1500 });
           }
         });
       }
@@ -1997,10 +2482,17 @@
         const date = this.getCurrentDate();
         const time = this.getCurrentTime();
 
-        this.storage.sentItems.unshift({
+        const emailData = {
           id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
           to, file: fileName, subject, message, linkOnly, date, time
-        });
+        };
+
+        this.storage.sentItems.unshift(emailData);
+        this.storage.logEmail(emailData);
+        
+        this.storage.saveSentItems();
+        this.storage.incrementTotalSentCount();
+        this.renderTable(); // This will also call updateSentEmailBadge() via the fixed code above
 
         this.storage.addLog({
           rev: "-", item: fileName, location: this.storage.getCurrentPathLabel(),
@@ -2012,26 +2504,36 @@
         this.emailMessageInput.value = '';
         this.emailLinkOnly.checked = false;
         this.hideEmailModal();
+        this.updateSentEmailBadge();
         Swal.fire({ icon: 'success', title: 'Sent', text: 'Mail sent successfully. CC sent to sender email.' });
       }
 
       // Sent Items Modal Logic
       renderSentItemsTable() {
         if (!this.storage.sentItems.length) {
-          this.sentItemsTableBody.innerHTML = '<tr><td colspan="5" class="px-3 py-8 text-center text-[0.72rem] text-gray-400 italic">No sent items.</td></tr>';
+          this.sentItemsTableBody.innerHTML = '<tr><td colspan="6" class="px-4 py-12 text-center text-gray-400 italic font-medium">No sent items.</td></tr>';
           return;
         }
 
         this.sentItemsTableBody.innerHTML = this.storage.sentItems.map(item => `
-          <tr class="border-b border-gray-100">
-            <td class="px-3 py-2 text-[0.75rem] font-semibold text-gray-700">${item.to}</td>
-            <td class="px-3 py-2 text-[0.72rem] text-gray-600">${item.file}</td>
-            <td class="px-3 py-2 text-[0.72rem] text-gray-600">${item.subject}</td>
-            <td class="px-3 py-2 text-[0.7rem] text-gray-500">${item.date} ${item.time}</td>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-3 py-2 text-[0.7rem] font-semibold text-gray-700 border-r border-gray-100 truncate max-w-[150px]" title="${item.to}">${item.to}</td>
+            <td class="px-3 py-2 text-[0.7rem] font-semibold text-gray-700 border-r border-gray-100 truncate max-w-[200px]" title="${item.subject}">${item.subject}</td>
+            <td class="px-3 py-2 text-center border-r border-gray-100">
+               <i class="ph-bold ph-paperclip text-[14px] text-gray-500" title="${item.file}"></i>
+            </td>
+            <td class="px-3 py-2 text-center text-[0.65rem] font-bold text-gray-500 border-r border-gray-100">${item.date}<br>${item.time}</td>
+            <td class="px-3 py-2 text-center text-[0.7rem] font-black text-gray-600 border-r border-gray-100">(AMS)</td>
             <td class="px-3 py-2 text-center">
-              <div class="flex justify-center gap-1">
-                <button class="h-6 px-2 text-[0.58rem] font-black uppercase tracking-widest rounded-sm border border-gray-300 text-gray-600 hover:text-blue-600 hover:border-blue-400 transition-colors btn-resend-item" data-sent-id="${item.id}">Resend</button>
-                <button class="h-6 px-2 text-[0.58rem] font-black uppercase tracking-widest rounded-sm border border-red-300 text-red-500 hover:text-red-600 transition-colors btn-delete-sent-item" data-sent-id="${item.id}">Delete</button>
+              <div class="flex justify-center gap-2">
+                <button class="text-blue-600 hover:text-blue-500 transition-colors btn-resend-item" title="Re-send" data-sent-id="${item.id}">
+                  <i class="ph-bold ph-list-dashes text-[14px]"></i>
+                </button>
+                <button class="text-red-500 hover:text-red-600 transition-colors btn-delete-sent-item" title="Delete" data-sent-id="${item.id}">
+                  <div class="bg-red-500 text-white rounded-[2px] w-4 h-4 flex items-center justify-center">
+                    <i class="ph-bold ph-x text-[10px]"></i>
+                  </div>
+                </button>
               </div>
             </td>
           </tr>
@@ -2047,6 +2549,52 @@
       hideSentItemsModal() {
         this.sentItemsModal.classList.add('hidden');
         this.sentItemsModal.classList.remove('flex');
+      }
+
+      showEmailHistoryModal() {
+        this.renderEmailHistoryTable();
+        this.emailHistoryModal.classList.remove('hidden');
+        this.emailHistoryModal.classList.add('flex');
+      }
+
+      hideEmailHistoryModal() {
+        this.emailHistoryModal.classList.add('hidden');
+        this.emailHistoryModal.classList.remove('flex');
+      }
+
+      renderEmailHistoryTable() {
+        if (!this.emailHistoryTableBody) return;
+        const history = this.storage.emailHistory;
+        this.emailHistoryTableBody.innerHTML = '';
+        
+        if (history.length === 0) {
+          this.emailHistoryTableBody.innerHTML = `<tr><td colspan="4" class="py-12 text-center text-gray-400 font-medium italic">No email history found</td></tr>`;
+          return;
+        }
+
+        history.forEach(item => {
+          const row = document.createElement('tr');
+          row.className = "hover:bg-amber-50/30 transition-colors duration-150";
+          row.innerHTML = `
+            <td class="px-4 py-3 border-r border-gray-100">
+              <div class="text-[0.8rem] font-bold text-gray-700">${item.to}</div>
+            </td>
+            <td class="px-4 py-3 border-r border-gray-100">
+              <div class="flex flex-col gap-0.5">
+                <div class="text-[0.7rem] font-black text-amber-600 uppercase tracking-tight">${item.file}</div>
+                <div class="text-[0.75rem] font-medium text-gray-500">${item.subject}</div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-center border-r border-gray-100">
+              <div class="text-[0.75rem] font-bold text-gray-600">${item.date}</div>
+              <div class="text-[0.65rem] font-medium text-gray-400">${item.time}</div>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[0.6rem] font-bold bg-green-100 text-green-700 uppercase tracking-tighter">SUCCESS</span>
+            </td>
+          `;
+          this.emailHistoryTableBody.appendChild(row);
+        });
       }
 
       handleSentItemsClick(e) {
@@ -2066,7 +2614,9 @@
         } else if (deleteBtn) {
           const id = deleteBtn.dataset.sentId;
           this.storage.sentItems = this.storage.sentItems.filter(row => row.id !== id);
+          this.storage.saveSentItems();
           this.renderSentItemsTable();
+          this.updateSentEmailBadge();
         }
       }
 
