@@ -5,324 +5,403 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Operation Job Register | GNFC</title>
-  <link rel="stylesheet" href="/src/css/ios-fonts.css">
-  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
-  <script>window.activePage = 'opr_job_reg';</script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modern-gradient {
+      background: linear-gradient(135deg, #003366 0%, #008080 100%);
+    }
+
+    .page-bg {
+      background: #f8fafc;
+      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .dark .page-bg {
+      background: #0f172a;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+    }
+
+    /* Simple Pulse Animation on Hover */
+    .hover-glow:hover {
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.5);
+    }
+  </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900 h-screen flex overflow-hidden font-sans">
+<body
+  class="page-bg font-sans text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-gnfc-teal selection:text-white transition-colors duration-300">
+
   <script src="/src/js/theme_manager.js"></script>
-  <script src="/src/js/sidebar.js"></script>
-  <div id="sidebar-container"></div>
-  <script>renderSidebar('opr_job_reg');</script>
 
-  <main class="flex-1 flex flex-col h-screen overflow-hidden">
-    <div id="header-container"></div>
-    <script src="/src/js/header.js"></script>
-    <script>
-      renderHeader({
-        title: "Operation Job Register",
-        breadcrumbs: [
-          { label: "Dashboard", href: "/src/pages/dashboard.html" },
-          { label: "Operation Job Register" }
-        ],
-        backLink: "/src/pages/dashboard.html",
-        searchPlaceholder: "Search unit or register..."
-      });
-    </script>
-
-    <div class="flex-1 overflow-y-auto bg-slate-50 p-3 sm:p-4">
-      <!-- Premium Registry Card -->
-      <div class="relative overflow-hidden border border-slate-200 rounded-2xl bg-white shadow-lg transition-all duration-300">
-        
-        <div class="relative z-10 p-[0.85rem] sm:p-[1.1rem] flex flex-col gap-4 unit-panel">
-          
-          <!-- Hero Header Section -->
-          <div class="flex flex-wrap items-start justify-between gap-4 p-4 sm:p-[1.15rem] border border-slate-200 rounded-[0.9rem]  backdrop-blur-xl">
-            <div>
-              <p class="text-[0.72rem] font-extrabold tracking-[0.18em] uppercase text-blue-600">Instrument Department</p>
-              <h1 class="text-[clamp(1.45rem,2.4vw,2rem)] leading-none font-extrabold text-slate-900 mt-1.5">Unit Wise Operation Job Register</h1>
-            </div>
-          </div>
-
-          <!-- Department Band -->
-          <div class="font-bold text-center text-2xl text-slate-800">
-            Instrument Department
-          </div>
-
-          <!-- Unit Grid Navigation -->
-          <div id="opr-unit-grid" class="grid grid-cols-2 md-grid-cols-4 lg:grid-cols-7 gap-[0.85rem]" aria-label="Operation job register unit navigation">
-            <!-- Dynamic Content -->
-          </div>
-
-          <!-- Premium Theme-Based Bypass Parameter View (Hidden by default) -->
-          <div id="bypass-view-container" class="hidden flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <!-- Glass Header Section -->
-            <div class="relative overflow-hidden p-6 rounded-3xl bg-blue-600/10 border border-blue-200/50 backdrop-blur-xl group">
-              <div class="absolute inset-0 bg-linear-to-r from-blue-600/20 via-transparent to-blue-600/10 pointer-events-none"></div>
-              
-              <div class="relative z-10 flex flex-wrap items-center justify-between gap-6">
-                <div>
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="w-8 h-1 bg-fuchsia-500 rounded-full"></span>
-                    <span class="text-[0.7rem] font-black uppercase tracking-[0.2em] text-fuchsia-600">Register View</span>
-                  </div>
-                  <h2 class="text-3xl sm:text-4xl font-black text-slate-900 font-outfit tracking-tighter uppercase italic leading-none">
-                    Bypass <span class="text-blue-600">Parameter</span>
-                  </h2>
-                </div>
-
-                <div class="flex flex-col items-end gap-1">
-                  <div id="bypass-plant-name" class="text-3xl font-black text-slate-800 font-outfit italic uppercase tracking-tighter">BOILER</div>
-                  <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> Industrial Monitoring System
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Modern Interactive Navigation Bar -->
-            <div class="flex flex-wrap items-center justify-between gap-4 px-2">
-              <div class="flex flex-wrap items-center gap-2">
-                <button class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm flex items-center gap-2">
-                  <i class="ph-bold ph-list-numbers"></i> Bypassed parameters
-                </button>
-                <button class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm flex items-center gap-2">
-                  <i class="ph-bold ph-clock-counter-clockwise"></i> History
-                </button>
-                <button class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm flex items-center gap-2">
-                  <i class="ph-bold ph-arrows-left-right"></i> Shift
-                </button>
-              </div>
-
-              <div class="flex items-center gap-2">
-                <div class="ml-4 flex items-center gap-3 py-2 px-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-                  <div class="flex items-center gap-1.5 text-blue-600">
-                    <i class="ph-fill ph-calendar text-sm"></i>
-                    <span class="text-[11px] font-black text-slate-900">Year: 2026</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Premium Theme-Strict Table Container -->
-            <div class="relative overflow-hidden rounded-4xl border border-slate-200/60 bg-white/40 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
-              <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full text-left border-collapse">
-                  <thead class="sticky top-0 z-20">
-                    <tr class="bg-slate-50/80 backdrop-blur-3xl border-b border-slate-200/50">
-                      <th class="px-5 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 text-center w-16 border-r border-slate-100/50">Sr</th>
-                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 border-r border-slate-100/50">TAGNO</th>
-                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 border-r border-slate-100/50">ACTION</th>
-                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-blue-600/60 border-r border-slate-100/50">Bypass Request</th>
-                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 border-r border-slate-100/50">Bypassed On</th>
-                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-fuchsia-600/60 border-r border-slate-100/50">In-Line Request</th>
-                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400">Taken in Line</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-slate-100/30">
-                    <tr class="group hover:bg-white/60 transition-all duration-300">
-                      <td colspan="7" class="px-6 py-28 text-center bg-white/20">
-                        <div class="flex flex-col items-center gap-5">
-                          <div class="relative">
-                            <i class="ph ph-stack text-6xl text-slate-200/80"></i>
-                            <div class="absolute -top-1 -right-1 w-4 h-4 bg-fuchsia-500 rounded-full border-2 border-white shadow-lg animate-bounce"></div>
-                          </div>
-                          <div class="max-w-[280px]">
-                            <p class="text-2xl font-black text-slate-900 font-outfit italic tracking-tighter leading-tight">NO PARAMETERS FOUND</p>
-                            <p class="text-[0.68rem] font-bold text-slate-400 uppercase tracking-widest mt-2 px-4 py-1.5 rounded-full bg-slate-50 border border-slate-100 inline-block">SYSTEM IDLE</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- Premium Mode Selection Section -->
-          <div class="flex flex-col items-center gap-6 py-8 px-4">
-            <div class="flex flex-wrap justify-center gap-6 max-w-3xl w-full">
-              
-              <!-- Bypass Mode Card -->
-              <label class="relative group cursor-pointer flex-1 min-w-[260px]">
-                <input type="radio" name="opr_system" value="bypass" class="peer sr-only">
-                <div class="h-full p-6 rounded-2xl bg-white/40 backdrop-blur-xl border-2 border-slate-100 shadow-sm transition-all duration-300 peer-checked:border-fuchsia-500 peer-checked:bg-fuchsia-50/20 peer-checked:shadow-xl peer-checked:shadow-fuchsia-100 hover:bg-white/80 hover:border-slate-200">
-                  <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors peer-checked:bg-fuchsia-100 peer-checked:text-fuchsia-600">
-                      <i class="ph-bold ph-shield-warning text-2xl"></i>
-                    </div>
-                    <div>
-                      <h4 class="font-outfit font-black text-xl text-slate-900 tracking-tight">BYPASS</h4>
-                      <p class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">Override Protocol</p>
-                    </div>
-                  </div>
-                  <!-- Selection Indicator -->
-                  <div class="absolute top-4 right-4 w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-slate-300 peer-checked:border-fuchsia-500 transition-all">
-                    <div class="w-2.5 h-2.5 rounded-full bg-fuchsia-500 scale-0 peer-checked:scale-100 transition-transform duration-200"></div>
-                  </div>
-                </div>
-              </label>
-
-              <!-- GNFC Mode Card -->
-              <label class="relative group cursor-pointer flex-1 min-w-[260px]">
-                <input type="radio" name="opr_system" value="gnfc" class="peer sr-only">
-                <div class="h-full p-6 rounded-2xl bg-white/40 backdrop-blur-xl border-2 border-slate-100 shadow-sm transition-all duration-300 peer-checked:border-fuchsia-500 peer-checked:bg-fuchsia-50/20 peer-checked:shadow-xl peer-checked:shadow-fuchsia-100 hover:bg-white/80 hover:border-slate-200">
-                  <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors peer-checked:bg-fuchsia-100 peer-checked:text-fuchsia-600">
-                      <i class="ph-bold ph-buildings text-2xl"></i>
-                    </div>
-                    <div class="flex-1">
-                      <h4 class="font-outfit font-black text-xl text-slate-900 tracking-tight leading-tight">Gujarat Narmada Valley</h4>
-                      <p class="text-[10px] font-extrabold uppercase tracking-widest text-fuchsia-600 mt-1">Fertilizers Co. Ltd.</p>
-                    </div>
-                  </div>
-                  <!-- Selection Indicator -->
-                  <div class="absolute top-4 right-4 w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-slate-300 peer-checked:border-fuchsia-500 transition-all">
-                    <div class="w-2.5 h-2.5 rounded-full bg-fuchsia-500 scale-0 peer-checked:scale-100 transition-transform duration-200"></div>
-                  </div>
-                </div>
-              </label>
-
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.9fr] gap-4 mt-2">
-            <!-- Info Card -->
-            <div class="border border-slate-200 rounded-[0.9rem] bg-white p-4 sm:p-[1.1rem] backdrop-blur-sm">
-                <span class="inline-flex items-center gap-2 text-[0.72rem] font-extrabold tracking-widest uppercase text-slate-500">
-                    <i class="ph-fill ph-info"></i> Department Information
-                </span>
-                <h3 class="mt-3 text-2xl sm:text-3xl font-black text-fuchsia-600 leading-tight">Instrument Department</h3>
-                <p class="mt-2 text-slate-600 text-sm sm:text-[0.92rem] leading-relaxed max-w-2xl">
-                    Comprehensive operational management system for monitoring and tracking industrial processes across multiple specialized units.
-                </p>
-            </div>
-          </div>
-          
+  <!-- Top Navigation -->
+  <nav class="glass-card sticky top-0 z-50 shadow-sm transition-colors duration-300">
+    <div class="max-w-6xl mx-auto h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-lg bg-gnfc-navy flex items-center justify-center shadow-md">
+          <i class="ph-bold ph-clipboard-text text-white text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-outfit font-black text-xl text-gnfc-navy dark:text-teal-400 tracking-tight leading-none">OJR
+            System</h1>
+          <p class="font-14px font-bold text-slate-500 uppercase tracking-widest leading-none mt-2">Instrument Dept
+          </p>
         </div>
       </div>
+      <div class="flex items-center">
+        <!-- Optional Theme Toggle button can go here if needed -> theme_manager might handle it via standard class if present, otherwise no big deal -->
+        <a href="/index.html"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-16px font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border ">
+          <i class="ph-bold ph-house"></i>
+          <span>Home</span>
+        </a>
+      </div>
     </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="w-full modern-gradient py-10 relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 right-0 -m-32 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 -m-32 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl"></div>
+
+    <div class="max-w-6xl mx-auto relative z-10 text-center flex flex-col items-center">
+      <h2 class="font-outfit text-3xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-md">
+        Operation Job Register
+      </h2>
+      <p class="text-teal-50 text-lg max-w-2xl text-center font-medium leading-relaxed">
+        Select your plant unit to proceed with the job registration process, or login for full administrative and
+        operational access.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 w-full max-w-6xl mx-auto mt-10 relative z-20 pb-10">
+
+    <div class="glass-card rounded-2xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+
+      <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center">
+            <i class="ph-fill ph-buildings text-teal-600 dark:text-teal-400 text-sm"></i>
+          </div>
+          <div>
+            <h3 class="font-bold font-18 text-slate-800 dark:text-slate-200 uppercase tracking-widest leading-none">
+              Plant Units</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plant Units Grid -->
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
+        <!-- Generating buttons with a sleek hover effect -->
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">METH-1</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">METH-II</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">ACETIC</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">FORMIC</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">BOILER</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">CPSU</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">AMMONIA</span>
+        </button>
+
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">UREA</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">NITRO</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">EA</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">DM</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">BAGGING</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">ASGP</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
+          </div>
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">AAQM</span>
+        </button>
+      </div>
+
+      <div id="loginButtonContainer" class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+        <button id="showLoginFormBtn"
+          class="flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-bold rounded-xl transition-all duration-300 uppercase tracking-widest shadow-md hover:shadow-lg hover:-translate-y-0.5 group">
+          <i class="ph-bold ph-sign-in text-xl group-hover:translate-x-1 transition-transform"></i>
+          <span>Login</span>
+        </button>
+      </div>
+
+    </div>
+    </div>
+
+    <!-- Login Modal (Hidden by default) -->
+    <div id="loginModal"
+      class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm transition-all duration-300">
+      <div
+        class="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-8 transform transition-all scale-95 opacity-0"
+        id="loginModalContent">
+        <!-- Close Button -->
+        <button id="closeModalBtn"
+          class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-full p-1.5 transition-colors">
+          <i class="ph-bold ph-x text-lg w-5 h-5 flex items-center justify-center"></i>
+        </button>
+
+        <h4 class="text-center text-gnfc-navy dark:text-teal-400 font-bold mb-6 text-xl tracking-wide font-outfit">Enter
+          Plant code and Password</h4>
+
+        <form class="flex flex-col gap-5">
+          <div class="flex items-center gap-4">
+            <label class="w-28 text-right font-bold text-slate-700 dark:text-slate-300">Plant Code:</label>
+            <input type="text"
+              class="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-slate-700 dark:text-white transition-colors" />
+          </div>
+
+          <div class="flex items-center gap-4">
+            <label class="w-28 text-right font-bold text-slate-700 dark:text-slate-300">Password:</label>
+            <input type="password"
+              class="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-slate-700 dark:text-white transition-colors" />
+          </div>
+
+          <div>
+            <select
+              class="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-slate-700 dark:text-white text-sm font-semibold max-w-[200px] cursor-pointer">
+              <option>JOB REGISTER</option>
+              <option>BYPASS REQUEST</option>
+              <option>ALARM TRIP SETTING</option>
+            </select>
+          </div>
+
+          <div
+            class="flex flex-wrap items-center justify-center gap-3 mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <button type="button" id="loginGoBtn"
+              class="px-6 py-2 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white text-sm font-bold shadow-md rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all w-20">Go</button>
+            <button type="button" id="cancelLoginBtn"
+              class="px-6 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white text-sm font-bold shadow-sm rounded-lg hover:shadow transition-all w-20">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- Enhanced Footer -->
+    <div class="mt-12 text-center">
+      <h3
+        class="text-3xl md:text-xl font-outfit font-black tracking-wide text-gnfc-navy dark:text-white drop-shadow-sm mb-1.5">
+        Gujarat Narmada Valley Fertilizers Co. Ltd.
+      </h3>
+      <div class="flex items-center justify-center gap-2">
+        <span class="w-8 h-px bg-slate-300 dark:bg-slate-600"></span>
+        <p class="font-14px font-bold text-teal-600 dark:text-teal-400 uppercase tracking-[0.2em]">&copy; Instrument
+          Department</p>
+        <span class="w-8 h-px bg-slate-300 dark:bg-slate-600"></span>
+      </div>
+    </div>
+
   </main>
 
   <script>
-    const operationUnits = [
-      { name: "METH-I", icon: "ph-factory", caption: "Methanol Unit" },
-      { name: "METH-II", icon: "ph-factory", caption: "Methanol Unit" },
-      { name: "ACETIC", icon: "ph-drop", caption: "Acetic Plant" },
-      { name: "FORMIC", icon: "ph-beaker", caption: "Formic Acid" },
-      { name: "BOILER", icon: "ph-fire", caption: "Steam Systems" },
-      { name: "PSU", icon: "ph-lightning", caption: "Power Supply Unit" },
-      { name: "AMMONIA", icon: "ph-flask", caption: "Ammonia Plant" },
-      { name: "UREA", icon: "ph-hexagon", caption: "Urea Unit" },
-      { name: "NITRO", icon: "ph-wind", caption: "Nitro Section" },
-      { name: "EA", icon: "ph-gauge", caption: "EA Unit" },
-      { name: "DM", icon: "ph-drop-half", caption: "DM Water" },
-      { name: "BAGGING", icon: "ph-package", caption: "Packing Area" },
-      { name: "ASGP", icon: "ph-gear-six", caption: "Service Plant" },
-      { name: "AAQM", icon: "ph-chart-line", caption: "Quality Monitoring" }
-    ];
+    document.addEventListener('DOMContentLoaded', () => {
+      const showLoginFormBtn = document.getElementById('showLoginFormBtn');
+      const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const loginModal = document.getElementById('loginModal');
+      const loginModalContent = document.getElementById('loginModalContent');
 
-    const unitGrid = document.getElementById("opr-unit-grid");
-    const bypassView = document.getElementById("bypass-view-container");
-    const selectionPanel = document.querySelector('.flex-col.items-center.gap-6.py-8'); // Selection section
-    const bypassPlantTitle = document.getElementById("bypass-plant-name");
-    const backBtn = document.getElementById("back-to-units");
+      const loginFormContainer = loginModalContent.querySelector('form');
+      const modalHeaderTitle = loginModalContent.querySelector('h4');
+      const loginGoBtn = document.getElementById('loginGoBtn');
+      const bypassParameterSection = document.getElementById('bypassParameterSection');
+      const backToLoginBtn = document.getElementById('backToLoginBtn');
 
-    if (unitGrid) {
-      unitGrid.innerHTML = operationUnits.map((unit) => `
-        <div data-name="${unit.name}" class="unit-card flex items-center justify-between gap-3 min-h-[4.5rem] px-4 py-[0.95rem] rounded-[0.85rem] border border-slate-200 bg-white group shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer" aria-label="Open ${unit.name} operation job register">
-          <div class="flex flex-col gap-0.5 min-w-0">
-            <span class="text-[0.95rem] font-extrabold tracking-wider uppercase text-slate-800 leading-tight">${unit.name}</span>
-            <span class="text-[0.72rem] font-bold tracking-wider uppercase text-slate-500">${unit.caption}</span>
-          </div>
-          <span class="w-[2.3rem] h-[2.3rem] rounded-xl inline-flex items-center justify-center flex-shrink-0 bg-blue-50 text-blue-600 text-[1.05rem] group-hover:scale-110 transition-transform duration-200" aria-hidden="true">
-            <i class="ph-bold ${unit.icon}"></i>
-          </span>
-        </div>
-      `).join("");
+      const mainContentArea = document.querySelector('main');
+      const heroSectionArea = document.querySelector('.modern-gradient');
+      const bypassParameterDataView = document.getElementById('bypassParameterDataView');
+      const areaSelectGoBtn = bypassParameterSection.querySelector('button.ml-1');
+      const logoutBtn = document.getElementById('logoutBtn');
 
-      // Delegation for clicks
-      unitGrid.addEventListener('click', (e) => {
-        const card = e.target.closest('.unit-card');
-        if (!card) return;
+      // Helper function to show modal
+      const openModal = () => {
+        loginModal.classList.remove('hidden');
+        // Reset to initial login view if it was changed
+        resetToLoginView();
+        // Small delay to allow display block to apply before animating opacity/transform
+        setTimeout(() => {
+          loginModalContent.classList.remove('scale-95', 'opacity-0');
+          loginModalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      };
 
-        const currentMode = localStorage.getItem('gnfc_system_mode') || 'gnfc';
-        const name = card.dataset.name;
+      // Helper function to hide modal
+      const closeModal = () => {
+        loginModalContent.classList.remove('scale-100', 'opacity-100');
+        loginModalContent.classList.add('scale-95', 'opacity-0');
+        // Wait for animation to finish before hiding element
+        setTimeout(() => {
+          loginModal.classList.add('hidden');
+        }, 300);
+      };
 
-        if (currentMode === 'bypass') {
-          showBypassView(name);
-        } else {
-          // GNFC Mode: Currently no navigation defined per user request
-          console.log(`GNFC Mode clicked for ${name}`);
+      // Helper to return modal to initial state
+      const resetToLoginView = () => {
+        loginFormContainer.classList.remove('hidden');
+        modalHeaderTitle.classList.remove('hidden');
+        bypassParameterSection.classList.add('hidden');
+        // update padding
+        loginModalContent.classList.replace('p-6', 'p-8');
+      };
+
+      if (showLoginFormBtn && loginModal) {
+        showLoginFormBtn.addEventListener('click', openModal);
+
+        if (cancelLoginBtn) {
+          cancelLoginBtn.addEventListener('click', closeModal);
         }
-      });
-    }
 
-    function showBypassView(plantName) {
-      if (!bypassView || !unitGrid || !selectionPanel) return;
+        if (closeModalBtn) {
+          closeModalBtn.addEventListener('click', closeModal);
+        }
 
-      bypassPlantTitle.textContent = `BYPASS PARAMETER - ${plantName}`;
-      
-      // Hide standard UI
-      unitGrid.classList.add('hidden');
-      selectionPanel.classList.add('hidden');
-      
-      // Show Bypass UI
-      bypassView.classList.remove('hidden');
-      bypassView.classList.add('flex'); // Ensure it's flex when shown
-      
-      // Scroll to top of view
-      bypassView.scrollIntoView({ behavior: 'smooth' });
-    }
+        // Handle "Go" click on login form
+        if (loginGoBtn && bypassParameterSection) {
+          loginGoBtn.addEventListener('click', () => {
+            // Hide login form & header
+            loginFormContainer.classList.add('hidden');
+            modalHeaderTitle.classList.add('hidden');
 
-    function hideBypassView() {
-      if (!bypassView || !unitGrid || !selectionPanel) return;
+            // Adjust modal padding for the new view layout to match image aesthetic better
+            loginModalContent.classList.replace('p-8', 'p-6');
 
-      // Hide Bypass UI
-      bypassView.classList.add('hidden');
-      bypassView.classList.remove('flex');
-      
-      // Show standard UI
-      unitGrid.classList.remove('hidden');
-      selectionPanel.classList.remove('hidden');
-    }
+            // Show BYPASS PARAMETER section
+            bypassParameterSection.classList.remove('hidden');
+          });
+        }
 
-    if (backBtn) {
-      backBtn.addEventListener('click', hideBypassView);
-    }
+        // Handle "Go" click after selecting area
+        if (areaSelectGoBtn) {
+          areaSelectGoBtn.addEventListener('click', () => {
+            window.location.href = '/src/pages/bypass_parameter.html';
+          });
+        }
 
-    // --- State Persistence for System Mode Selection ---
-    const STORAGE_KEY = 'gnfc_system_mode';
-    const radioButtons = document.querySelectorAll('input[name="opr_system"]');
+        if (backToLoginBtn) {
+          backToLoginBtn.addEventListener('click', resetToLoginView);
+        }
 
-    function initSystemMode() {
-      const savedMode = localStorage.getItem(STORAGE_KEY) || 'gnfc'; // Default to GNFC
-      const targetRadio = document.querySelector(`input[name="opr_system"][value="${savedMode}"]`);
-      if (targetRadio) {
-        targetRadio.checked = true;
+        // Close when clicking outside
+        loginModal.addEventListener('click', (e) => {
+          if (e.target === loginModal) {
+            closeModal();
+          }
+        });
       }
-    }
-
-    radioButtons.forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          localStorage.setItem(STORAGE_KEY, e.target.value);
-          // If we are in bypass view and switch to GNFC, go back
-          if (e.target.value === 'gnfc') hideBypassView();
-        }
-      });
     });
-
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', initSystemMode);
-    initSystemMode();
   </script>
-
 </body>
 
 </html>

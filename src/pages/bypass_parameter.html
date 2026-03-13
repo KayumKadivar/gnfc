@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bypass Parameter | GNFC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Include GNFC Core CSS -->
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .dark .glass-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .page-bg {
+      background: #f8fafc;
+      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .dark .page-bg {
+      background: #0f172a;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+    }
+  </style>
+</head>
+
+<body
+  class="page-bg font-sans text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-gnfc-teal selection:text-white transition-colors duration-300">
+  <script src="/src/js/theme_manager.js"></script>
+
+  <!-- Top Navigation -->
+  <nav class="glass-card sticky top-0 z-50 shadow-sm transition-colors duration-300">
+    <div class=" mx-auto h-20 flex items-center justify-between px-4 xl:px-0">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-lg bg-gnfc-navy flex items-center justify-center shadow-md">
+          <i class="ph-bold ph-sliders text-white text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-outfit font-black text-2xl text-gnfc-navy dark:text-teal-400 tracking-tight leading-none">
+            Bypass Parameter</h1>
+          <p class="font-14px font-bold text-slate-500 uppercase tracking-widest leading-none mt-2">GNFC Operations</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <!-- Selected Area -->
+        <div class="flex items-center gap-2">
+          <span class="typo-label hidden sm:inline">Selected Area:</span>
+          <select
+            class="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-md px-3 py-1.5 text-sm font-bold outline-none focus:border-gnfc-teal transition-colors shadow-sm">
+            <option>ANP-R</option>
+            <option>METH-1</option>
+            <option>METH-2</option>
+            <option>AMMONIA</option>
+            <option>UREA</option>
+          </select>
+        </div>
+        <a href="/index.html"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-16px font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border">
+          <i class="ph-bold ph-house"></i>
+          <span class="hidden sm:inline">Home</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 w-full  mx-auto mt-6 relative z-20 pb-10 px-4 xl:px-0">
+    <div class="glass-card rounded-2xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+
+      <!-- Actions Bar -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div
+          class="flex flex-wrap items-center gap-3 border-b border-slate-200/50 dark:border-slate-700/50 pb-2 sm:border-0 sm:pb-0">
+          <button id="generateRequestBtn"
+            class="gnfc-modal-btn gnfc-modal-btn-primary rounded-lg px-4 py-2 hover:shadow-lg transition-all flex items-center gap-2">
+            <i class="ph-bold ph-plus-circle text-lg"></i>
+            <span>Generate Request</span>
+          </button>
+          <button id="bypassedParametersBtn"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary rounded-lg px-4 py-2 flex items-center gap-2">
+            <i class="ph-bold ph-list-dashes text-lg"></i>
+            <span>Bypassed parameters</span>
+          </button>
+          <button id="historyBtn"
+            class="gnfc-modal-btn gnfc-modal-btn-secondary rounded-lg px-4 py-2 flex items-center gap-2">
+            <i class="ph-bold ph-clock-counter-clockwise text-lg"></i>
+            <span>History</span>
+          </button>
+          <button class="gnfc-modal-btn gnfc-modal-btn-secondary rounded-lg px-4 py-2 flex items-center gap-2">
+            <i class="ph-bold ph-calendar text-lg"></i>
+            <span>Shift</span>
+          </button>
+        </div>
+
+        <!-- Year Bar & Logout -->
+        <div
+          class="flex items-center gap-4 bg-white/50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div class="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
+          <a href="/src/pages/operation_job_register.html"
+            class="flex items-center gap-1.5 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-bold text-sm tracking-tight transition-colors">
+            <i class="ph-bold ph-sign-out"></i> Logout
+          </a>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="gnfc-table-container rounded-lg border border-slate-200 dark:border-slate-700">
+        <div class="overflow-x-auto">
+          <table class="gnfc-table">
+            <thead class="gnfc-thead">
+              <tr>
+                <th class="gnfc-th w-12 text-center">Sr</th>
+                <th class="gnfc-th text-left px-4">TAGNO</th>
+                <th class="gnfc-th text-left px-4">ACTION</th>
+                <th class="gnfc-th text-left px-4 min-w-[220px]">BYPASS REQUEST</th>
+                <th class="gnfc-th text-left px-4 min-w-[220px]">BYPASSED ON</th>
+                <th class="gnfc-th text-left px-4">IN-LINE REQUEST</th>
+                <th class="gnfc-th text-left px-4">TAKEN IN LINE ON</th>
+              </tr>
+            </thead>
+            <tbody class="gnfc-tbody">
+              <!-- Row 1 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">1</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">36S002 _SP</span>
+                  <span class="text-xs text-slate-500">ANP-R</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> Shutdown<br>
+                    START PERMISSIVE (If you bypass this parameter you cannot stop it from EMG STOP of control room)<br>
+                    <span class="font-bold text-slate-500">Ref: 390</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/13/2026 8:40:00 AM<br><span
+                        class="text-slate-500 fw-normal">(DJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/13/2026 8:49:00 AM<br><span
+                        class="text-slate-500 fw-normal">(DCS)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">2</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">HSOV35018</span>
+                  <span class="text-xs text-slate-500">ANP-R</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> Shutdown<br><br>
+                    <span class="font-bold text-slate-500">Ref: 793</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 2:23:00 PM<br><span
+                        class="text-slate-500 fw-normal">(DJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 2:34:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">3</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">LSL35014</span>
+                  <span class="text-xs text-slate-500">ANP-R</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> Shutdown<br>
+                    35D005 LEVEL LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 101005</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 6:21:00 AM<br><span
+                        class="text-slate-500 fw-normal">(NRP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 6:26:00 AM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">4</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">FSL35035</span>
+                  <span class="text-xs text-slate-500">ANP-R</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> Shutdown<br>
+                    NPA FLOW V.LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 101372</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 6:21:00 AM<br><span
+                        class="text-slate-500 fw-normal">(NRP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 6:26:00 AM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+
+              <!-- Row 5 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">5</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">FSL35034</span>
+                  <span class="text-xs text-slate-500">ANP-R</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> Shutdown<br>
+                    NPA FLOW V.LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 101371</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 6:20:00 AM<br><span
+                        class="text-slate-500 fw-normal">(NRP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 6:26:00 AM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Generate Request Modal -->
+  <div id="generateRequestModal" class="gnfc-modal-overlay transition-opacity duration-300">
+    <div id="generateRequestForm"
+      class="gnfc-modal-shell gnfc-modal-shell--medium transition-all duration-300 transform scale-95 opacity-0">
+
+      <!-- Modal Header -->
+      <div class="gnfc-modal-header">
+        <div>
+          <h3 class="gnfc-modal-title">BYPASS PARAMETER REQUEST</h3>
+          <p class="gnfc-modal-subtitle">Generate a new bypass request</p>
+        </div>
+
+        <!-- Close button -->
+        <button id="closeGenerateModalBtn" class="gnfc-modal-close" title="Close">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="gnfc-modal-body">
+
+        <!-- Area Selection (Read-only for now) -->
+        <div class="flex items-center mb-6 gap-4">
+          <label class="typo-form-label w-32 shrink-0">SELECTED AREA:</label>
+          <div class="relative w-40">
+            <select disabled class="gnfc-modal-input cursor-not-allowed opacity-70 pr-8">
+              <option>ANP-R</option>
+            </select>
+            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+              <i class="ph-bold ph-caret-down text-xs"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-5 border-b border-slate-200/60 dark:border-slate-700/60"></div>
+
+        <!-- Filter -->
+        <div class="flex items-center mb-5 gap-4">
+          <label class="typo-form-label w-32 shrink-0">Filter</label>
+          <div class="relative flex-1 max-w-sm">
+            <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" class="gnfc-modal-input pl-10" placeholder="Search parameters...">
+          </div>
+        </div>
+
+        <!-- Parameter List -->
+        <div class="mb-6">
+          <div class="border-b border-slate-200/60 dark:border-slate-700/60 mb-4"></div>
+          <div class="gnfc-modal-label px-0 mb-2">Select Parameter:</div>
+          <select size="8"
+            class="gnfc-modal-input font-mono !p-0 overflow-y-auto border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-gnfc-navy/10 outline-none rounded-md">
+            <option
+              class="px-3 py-2 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+              LSH35001[35D003 LEVEL V.HIGH]</option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSH35016[35C001 LEVEL HIGH]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSH36601[36C060 LEVEL V.HIGH]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL35003[35P009 PIT LEVEL LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL35005[35R005 LEVEL V.LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL35014[35D005 LEVEL LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL36602[36T060 LEVEL LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL36701[36T070 LEVEL LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL36702[36T071 LEVEL LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL38217[36T002 LEVEL V.LOW]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LV35001 [LEVEL CONTROL OF 35D003]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">MOTOR FAULT 36S001[MOTOR FAULT
+              36S001]</option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PSOV38207[LP STEAM PRESS TO
+              35D005.]</option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PSOV38211[MP STEAM PRESS - 35D011]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PSOV38242[STEAM TO 42D002]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PT36002[DRYER (36S002) INLET
+              PRESS.]</option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">SSL36001[36H003 ZERO SPEED]
+            </option>
+            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">SSL36004[36W004 ZERO SPEED]
+            </option>
+            <option class="px-3 py-2">SSL36013[36H004 ZERO SPEED]</option>
+          </select>
+        </div>
+
+        <!-- Action selection -->
+        <div class="flex items-center mb-5 gap-4">
+          <label class="typo-form-label w-32 shrink-0">Action:</label>
+          <div class="relative w-48">
+            <select
+              class="gnfc-modal-input pr-10 font-bold text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20">
+              <option>BYPASS</option>
+              <option>FORCED OPEN</option>
+              <option>FORCED CLOSE</option>
+            </select>
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+              <i class="ph-bold ph-caret-down"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Purpose -->
+        <div class="flex items-center mb-5 gap-4">
+          <label class="typo-form-label w-32 shrink-0">Purpose:</label>
+          <input type="text" class="gnfc-modal-input flex-1 max-w-sm" placeholder="Enter reason for bypass...">
+        </div>
+
+        <!-- Name -->
+        <div class="flex items-center mb-2 gap-4">
+          <label class="typo-form-label w-32 shrink-0">Your name:</label>
+          <input type="text" maxlength="3"
+            class="gnfc-modal-input w-24 uppercase font-mono text-center tracking-widest border-slate-300"
+            placeholder="XYZ">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">(3 Chars)</span>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="gnfc-modal-footer">
+        <button class="gnfc-modal-btn gnfc-modal-btn-secondary" id="cancelRequestBtn">
+          Cancel
+        </button>
+        <button class="gnfc-modal-btn gnfc-modal-btn-primary">
+          <i class="ph-bold ph-paper-plane-right"></i>
+          Request bypass
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const generateRequestBtn = document.getElementById('generateRequestBtn');
+      const generateRequestModal = document.getElementById('generateRequestModal');
+      const generateRequestForm = document.getElementById('generateRequestForm');
+      const closeGenerateModalBtn = document.getElementById('closeGenerateModalBtn');
+
+      // Helper function to open modal
+      const openModal = (e) => {
+        if (e) e.preventDefault();
+        generateRequestModal.classList.add('is-open');
+        // Small delay to allow display block to apply before animating opacity/transform
+        setTimeout(() => {
+          generateRequestForm.classList.remove('scale-95', 'opacity-0');
+          generateRequestForm.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      };
+
+      // Helper function to close modal
+      const closeModal = () => {
+        generateRequestForm.classList.remove('scale-100', 'opacity-100');
+        generateRequestForm.classList.add('scale-95', 'opacity-0');
+        // Wait for animation to finish before hiding element
+        setTimeout(() => {
+          generateRequestModal.classList.remove('is-open');
+        }, 300);
+      };
+
+      if (generateRequestBtn && generateRequestModal) {
+        generateRequestBtn.addEventListener('click', openModal);
+      }
+
+      if (closeGenerateModalBtn) {
+        closeGenerateModalBtn.addEventListener('click', closeModal);
+      }
+
+      const cancelRequestBtn = document.getElementById('cancelRequestBtn');
+      if (cancelRequestBtn) {
+        cancelRequestBtn.addEventListener('click', closeModal);
+      }
+
+      // Close modal on outside click
+      generateRequestModal.addEventListener('click', (e) => {
+        if (e.target === generateRequestModal) {
+          closeModal();
+        }
+      });
+
+      // --- Bypassed Parameters Modal Logic ---
+      const bypassedParametersBtn = document.getElementById('bypassedParametersBtn');
+      const bypassedParamsModal = document.getElementById('bypassedParamsModal');
+      const bypassedParamsModalContent = document.getElementById('bypassedParamsModalContent');
+      const closeBypassedModalBtn = document.getElementById('closeBypassedModalBtn');
+
+      const openBypassedModal = (e) => {
+        if (e) e.preventDefault();
+        bypassedParamsModal.classList.add('is-open');
+        setTimeout(() => {
+          bypassedParamsModalContent.classList.remove('scale-95', 'opacity-0');
+          bypassedParamsModalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      };
+
+      const closeBypassedModal = () => {
+        bypassedParamsModalContent.classList.remove('scale-100', 'opacity-100');
+        bypassedParamsModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          bypassedParamsModal.classList.remove('is-open');
+        }, 300);
+      };
+
+      if (bypassedParametersBtn && bypassedParamsModal) {
+        bypassedParametersBtn.addEventListener('click', openBypassedModal);
+      }
+      if (closeBypassedModalBtn) {
+        closeBypassedModalBtn.addEventListener('click', closeBypassedModal);
+      }
+      bypassedParamsModal.addEventListener('click', (e) => {
+        if (e.target === bypassedParamsModal) {
+          closeBypassedModal();
+        }
+      });
+
+      // --- History Modal Logic ---
+      const historyBtn = document.getElementById('historyBtn');
+      const historyModal = document.getElementById('historyModal');
+      const historyModalContent = document.getElementById('historyModalContent');
+      const closeHistoryModalBtn = document.getElementById('closeHistoryModalBtn');
+
+      const openHistoryModal = (e) => {
+        if (e) e.preventDefault();
+        historyModal.classList.add('is-open');
+        setTimeout(() => {
+          historyModalContent.classList.remove('scale-95', 'opacity-0');
+          historyModalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      };
+
+      const closeHistoryModal = () => {
+        historyModalContent.classList.remove('scale-100', 'opacity-100');
+        historyModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          historyModal.classList.remove('is-open');
+        }, 300);
+      };
+
+      if (historyBtn && historyModal) {
+        historyBtn.addEventListener('click', openHistoryModal);
+      }
+      if (closeHistoryModalBtn) {
+        closeHistoryModalBtn.addEventListener('click', closeHistoryModal);
+      }
+      historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) {
+          closeHistoryModal();
+        }
+      });
+
+    });
+  </script>
+
+  <!-- Bypassed Parameters Modal -->
+  <div id="bypassedParamsModal" class="gnfc-modal-overlay transition-opacity duration-300">
+    <div id="bypassedParamsModalContent"
+      class="gnfc-modal-shell gnfc-modal-shell--2xl transition-all duration-300 transform scale-95 opacity-0">
+
+      <!-- Modal Header -->
+      <div class="gnfc-modal-header flex justify-between items-center px-4 py-3">
+        <div>
+          <h2 class="text-gnfc-navy italic font-bold text-xl tracking-wider font-serif m-0 leading-none">BYPASSED
+            PARAMETER</h2>
+        </div>
+        <div class="flex items-center gap-6">
+          <span class="text-gnfc-navy italic font-bold text-xl font-serif leading-none">NPP/AREA:CAN</span>
+          <button id="closeBypassedModalBtn"
+            class="text-slate-400 hover:text-red-500 transition-colors bg-slate-100 p-1.5 rounded-md border border-slate-200">
+            <i class="ph-bold ph-x text-xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="gnfc-modal-body p-0 bg-white">
+        <div class="gnfc-table-container rounded-none border-0 h-[60vh] overflow-y-auto">
+          <table class="gnfc-table">
+            <thead class="gnfc-thead sticky top-0 z-10 shadow-sm">
+              <tr>
+                <th class="gnfc-th w-12 text-center">Sr</th>
+                <th class="gnfc-th text-left px-4">TAGNO</th>
+                <th class="gnfc-th text-left px-4 min-w-[320px]">ACTION</th>
+                <th class="gnfc-th text-left px-4 min-w-[200px]">BYPASS REQUEST</th>
+                <th class="gnfc-th text-left px-4 min-w-[200px]">BYPASSED ON</th>
+                <th class="gnfc-th text-left px-4">IN-LINE REQUEST</th>
+                <th class="gnfc-th text-left px-4">TAKEN IN LINE ON</th>
+              </tr>
+            </thead>
+            <tbody class="gnfc-tbody">
+              <!-- Row 1 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">1</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">LSL50010</span>
+                  <span class="text-xs text-slate-500">CAN</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> TANK EMPTIED OUT<br>
+                    50D008 LEVEL V.LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 100841</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">7/16/2019 9:10:00 AM<br><span
+                        class="text-slate-500 fw-normal">(bmm)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">7/16/2019 9:12:00 AM<br><span
+                        class="text-slate-500 fw-normal">(HDP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">2</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">LSL50010</span>
+                  <span class="text-xs text-slate-500">CAN</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> water run<br>
+                    50D008 LEVEL V.LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 100841</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">10/25/2018 4:11:00 PM<br><span
+                        class="text-slate-500 fw-normal">(bmm)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">10/25/2018 4:34:00 PM<br><span
+                        class="text-slate-500 fw-normal">(HDP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">3</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">LSL50010</span>
+                  <span class="text-xs text-slate-500">CAN</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> s/d (tank emptying)<br>
+                    50D008 LEVEL V.LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 100841</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">12/26/2017 10:53:00 AM<br><span
+                        class="text-slate-500 fw-normal">(bmm)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">12/27/2017 9:35:00 AM<br><span
+                        class="text-slate-500 fw-normal">(HDP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td"></td>
+                <td class="gnfc-td"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="gnfc-modal-overlay transition-opacity duration-300">
+    <div id="historyModalContent"
+      class="gnfc-modal-shell gnfc-modal-shell--2xl transition-all duration-300 transform scale-95 opacity-0">
+
+      <!-- Modal Header -->
+      <div class="gnfc-modal-header flex justify-between items-center px-4 py-3">
+        <div>
+          <h2 class="text-gnfc-navy italic font-bold text-xl tracking-wider font-serif m-0 leading-none">
+            BNPP/AREA:ANP-F</h2>
+        </div>
+        <div>
+          <button id="closeHistoryModalBtn"
+            class="text-slate-400 hover:text-red-500 transition-colors bg-slate-100 p-1.5 rounded-md border border-slate-200">
+            <i class="ph-bold ph-x text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Data Table -->
+      <div class="gnfc-modal-body p-0 bg-white">
+        <div class="gnfc-table-container rounded-none border-0 h-[65vh] overflow-y-auto">
+          <table class="gnfc-table">
+            <thead class="gnfc-thead sticky top-0 z-10 shadow-sm">
+              <tr>
+                <th class="gnfc-th w-12 text-center">Sr</th>
+                <th class="gnfc-th text-left px-4">TAGNO</th>
+                <th class="gnfc-th text-left px-4 min-w-[320px]">ACTION</th>
+                <th class="gnfc-th text-left px-4 min-w-[200px]">BYPASS REQUEST</th>
+                <th class="gnfc-th text-left px-4 min-w-[200px]">BYPASSED ON</th>
+                <th class="gnfc-th text-left px-4 min-w-[200px]">IN-LINE REQUEST</th>
+                <th class="gnfc-th text-left px-4 min-w-[200px]">TAKEN IN LINE ON</th>
+              </tr>
+            </thead>
+            <tbody class="gnfc-tbody">
+              <!-- Row 1 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">1</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">XV32005</span>
+                  <span class="text-xs text-slate-500">ANP-F</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status over mb-1">FORCED OPEN</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> 32F001 FLUSHING SAND DISCHARGE<br>
+                    <span class="font-bold text-slate-500">Ref: 646</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/11/2026 10:28:00 PM<br><span
+                        class="text-slate-500 fw-normal">(PJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/11/2026 10:30:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 1:54:00 PM<br><span
+                        class="text-slate-500 fw-normal">(GDP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 1:58:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">2</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">XV32004</span>
+                  <span class="text-xs text-slate-500">ANP-F</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status over mb-1">FORCED OPEN</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> 32F001 FLUSHING SAND DISCHARGE TO 32N006<br>
+                    <span class="font-bold text-slate-500">Ref: 645</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/11/2026 10:28:00 PM<br><span
+                        class="text-slate-500 fw-normal">(PJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/11/2026 10:30:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 1:54:00 PM<br><span
+                        class="text-slate-500 fw-normal">(GDP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/12/2026 1:58:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">3</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">42P010A_SP</span>
+                  <span class="text-xs text-slate-500">ANP-F</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> NO LOAD TRIAL 42 P 010 A START PERMISSIVE<br>
+                    <span class="font-bold text-slate-500">Ref: 319</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/9/2026 4:17:00 PM<br><span
+                        class="text-slate-500 fw-normal">(PJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/9/2026 4:20:00 PM<br><span
+                        class="text-slate-500 fw-normal">(MIS)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/9/2026 4:22:00 PM<br><span
+                        class="text-slate-500 fw-normal">(PJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/9/2026 4:24:00 PM<br><span
+                        class="text-slate-500 fw-normal">(MIS)</span></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">4</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">FSL41001</span>
+                  <span class="text-xs text-slate-500">ANP-F</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status pending mb-1">BYPASS</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> AN Synthesis CO2 FLOW LOW<br>
+                    <span class="font-bold text-slate-500">Ref: 100877</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/6/2026 12:26:00 AM<br><span
+                        class="text-slate-500 fw-normal">(PJP)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/6/2026 12:50:00 AM<br><span
+                        class="text-slate-500 fw-normal">(MIS)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/6/2026 6:50:00 AM<br><span
+                        class="text-slate-500 fw-normal">(MPK)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/6/2026 6:53:00 AM<br><span
+                        class="text-slate-500 fw-normal">(MIS)</span></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 5 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">5</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">XV32005</span>
+                  <span class="text-xs text-slate-500">ANP-F</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status over mb-1">FORCED OPEN</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> 32F001 FLUSHING SAND DISCHARGE<br>
+                    <span class="font-bold text-slate-500">Ref: 646</span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 9:00:00 AM<br><span
+                        class="text-slate-500 fw-normal">(MPK)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 9:38:00 AM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 12:19:00 PM<br><span
+                        class="text-slate-500 fw-normal">(MPK)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 1:07:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 6 -->
+              <tr class="gnfc-tr group">
+                <td class="gnfc-td text-center font-bold text-slate-500">6</td>
+                <td class="gnfc-td font-medium text-slate-800 dark:text-slate-200">
+                  <span class="block text-gnfc-navy dark:text-teal-400 font-bold">XV32004</span>
+                  <span class="text-xs text-slate-500">ANP-F</span>
+                </td>
+                <td class="gnfc-td">
+                  <span class="gnfc-status over mb-1">FORCED OPEN</span><br>
+                  <div class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    <span class="font-bold">Purpose:</span> 32F001 FLUSHING SAND
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 9:00:00 AM<br><span
+                        class="text-slate-500 fw-normal">(MPK)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 9:38:00 AM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 12:19:00 PM<br><span
+                        class="text-slate-500 fw-normal">(MPK)</span></span>
+                  </div>
+                </td>
+                <td class="gnfc-td">
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0">
+                    </div>
+                    <span class="text-xs font-semibold">3/3/2026 1:07:00 PM<br><span
+                        class="text-slate-500 fw-normal">(ABC)</span></span>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

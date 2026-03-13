@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Register | GNFC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+  <style>
+    .glass-card {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid #e2e8f0;
+    }
+
+    .dark .glass-card {
+      background-color: rgba(30, 41, 59, 0.9);
+      border-color: #334155;
+    }
+
+    .page-bg {
+      background-color: #f8fafc;
+      transition: background-color 0.3s ease;
+      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .dark .page-bg {
+      background-color: #020617;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+    }
+
+    .label-pill {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #000000;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .dark .label-pill {
+      color: #64748b;
+    }
+
+    /* Accessibility focus state */
+    .accessible-input {
+      width: 100%;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.375rem;
+      /* rounded-md */
+      padding: 0.75rem 1rem;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .dark .accessible-input {
+      background-color: #0f172a;
+      border-color: #000000;
+      color: #f1f5f9;
+    }
+
+    .accessible-input:focus {
+      border: 1px solid #555353;
+
+    }
+
+    .accessible-textarea {
+      width: 100%;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.375rem;
+      /* rounded-md */
+      padding: 1rem;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.625;
+      color: #334155;
+      outline: none;
+      transition: all 0.2s ease;
+      resize: none;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .dark .accessible-textarea {
+      background-color: #0f172a;
+      border-color: #334155;
+      color: #e2e8f0;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .accessible-textarea:focus {
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+    }
+
+    .dark .accessible-textarea:focus {
+      border-color: #2dd4bf;
+      box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.05);
+    }
+
+    /* Remove focus ring from select on mobile */
+    select {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+
+<body
+  class="page-bg font-sans text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+  <script src="/src/js/theme_manager.js"></script>
+
+  <!-- Navigation -->
+  <nav class="glass-card sticky top-0 z-50 shadow-sm border-b overflow-hidden">
+    <div class="w-full px-6 md:px-10 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-md bg-gnfc-navy flex items-center justify-center shadow-lg">
+          <i class="ph-bold ph-note-pencil text-white text-[24px]"></i>
+        </div>
+        <div>
+          <h1
+            class="font-outfit font-black text-[22px] text-gnfc-navy dark:text-teal-400 tracking-tight leading-none uppercase">
+            Job Register</h1>
+          <p
+            class="text-[14px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1.5">
+            Instrument Department</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/src/pages/operation_job_register.html"
+          class="flex items-center gap-2 px-5 py-2.5 rounded-md text-[16px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600 shadow-sm">
+          <i class="ph-bold ph-arrow-left text-[18px]"></i>
+          <span>Back to Portal</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-1 w-full p-6">
+    <div class="glass-card rounded-md overflow-hidden shadow-lg">
+
+      <!-- Clean, Professional Header Bar (Proper Structure with Actions) -->
+      <div
+        class="p-6 border-b border-slate-200 dark:border-slate-700 flex flex-row items-start xl:items-center justify-between gap-6 bg-slate-50/50 dark:bg-slate-800/10">
+        <div class="flex items-center gap-5">
+          <div
+            class="bg-teal-50 dark:bg-teal-900/30 p-3 rounded-md transition-colors shadow-md border border-teal-100 dark:border-teal-800">
+            <i class="ph-fill ph-factory text-teal-600 dark:text-teal-400 text-3xl"></i>
+          </div>
+          <div>
+            <h2
+              class="text-slate-900 dark:text-white font-outfit font-black text-[26px] tracking-tight leading-none uppercase">
+              Nitro Phosphate Instrument</h2>
+            <p class="text-teal-600 dark:text-teal-400 text-[14px] font-black uppercase tracking-[0.1em] mt-2">Operation
+              Job Register System</p>
+          </div>
+        </div>
+
+        <!-- Search & Actions Moved to Top -->
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="relative group shadow-md rounded-md">
+            <i
+              class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 group-focus-within:text-teal-500 dark:group-focus-within:text-teal-400 transition-colors text-[20px]"></i>
+            <input type="text"
+              class="w-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md pl-12 pr-20 py-3 text-[18px] font-bold placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:border-teal-500 dark:focus:border-teal-400 outline-none transition-all"
+              placeholder="Find JOB NO...">
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 bg-teal-600 dark:bg-teal-500 text-white text-[14px] font-black uppercase tracking-widest px-4 py-1.5 rounded-md hover:bg-teal-500 dark:hover:bg-teal-400 transition-all shadow-sm">Go</button>
+          </div>
+
+          <button id="addNewJobBtn" class="flex items-center gap-2 px-6 py-3 bg-white border shadow-sm">
+            <i class="ph-bold ph-plus-circle text-[22px]"></i>
+            <span>Add New</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Form Area -->
+      <div class="p-6">
+
+        <!-- Metadata Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
+
+          <!-- Operation Info -->
+          <div
+            class="md:col-span-7 bg-white dark:bg-slate-900/40 rounded-md p-6 border border-slate-200 dark:border-slate-700 shadow-md transition-all duration-300">
+            <div class="flex items-center gap-2.5 mb-4 text-dark font-18px">
+              <i class="ph-bold ph-user-gear text-lg"></i>
+              <span class="font-18px font-black uppercase tracking-[0.2em]">Operation Details</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+              <div>
+                <label class="label-pill">Tag No</label>
+                <input type="text" class="accessible-input uppercase tracking-wider" value="NOTAG">
+              </div>
+              <div>
+                <label class="label-pill">Date (M/D/Y)</label>
+                <input type="text" class="accessible-input" value="1/9/2013">
+              </div>
+              <div>
+                <label class="label-pill">Shift</label>
+                <select class="accessible-input appearance-none cursor-pointer">
+                  <option selected>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                  <option>G</option>
+                </select>
+              </div>
+              <div>
+                <label class="label-pill">SE</label>
+                <input type="text" class="accessible-input uppercase tracking-widest" value="AMP">
+              </div>
+            </div>
+          </div>
+
+          <!-- Instrument Info -->
+          <div class="md:col-span-5 border rounded-md p-6 shadow-md transition-all">
+            <div class="flex items-center gap-2.5 mb-4">
+              <i class="ph-bold ph-wrench text-lg"></i>
+              <span class="font-18px font-black uppercase tracking-[0.2em]">Instrument Status</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div>
+                <label class="label-pill">Date (M/D/Y)</label>
+                <input type="text" class="accessible-input" placeholder="--/--/----">
+              </div>
+              <div>
+                <label class="label-pill">IE</label>
+                <input type="text" class="accessible-input" placeholder="---">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="label-pill">Status</label>
+                <input type="text"
+                  class="accessible-input border-teal-100 dark:border-teal-900/50 !text-teal-700 dark:!text-teal-300 !font-black"
+                  placeholder="PENDING / COMPLETED">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Large Content Inputs -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div class="flex flex-col">
+            <div class="flex items-center gap-3 mb-4">
+              <h3 class="font-outfit font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] font-18px">Job
+                Description</h3>
+              <div class="h-px flex-1 bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+            <textarea class="accessible-textarea h-64"
+              placeholder="Enter detailed job description here...">PG129503 Machine exhaust pressure showing erratics.</textarea>
+          </div>
+
+          <div class="flex flex-col">
+            <div class="flex items-center gap-3 mb-4">
+              <h3 class="font-outfit font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] font-18x">
+                Remarks</h3>
+              <div class="h-px flex-1 bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+            <textarea class="accessible-textarea h-64"
+              placeholder="Add operational or administrative remarks..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- High-Contrast Form Toolbar (Simplified) -->
+      <div
+        class="bg-white/50 dark:bg-slate-900/50 border-t border-slate-200/60 dark:border-slate-700/60 px-10 py-6 flex flex-col lg:flex-row items-center justify-between gap-8">
+
+        <!-- Pagination Controls -->
+        <div class="flex items-center gap-4">
+          <button
+            class="w-12 h-12 rounded-md bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all group"
+            title="Previous Record">
+            <i class="ph-bold ph-caret-left text-[24px] group-hover:-translate-x-1 transition-transform"></i>
+          </button>
+
+          <div
+            class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-md px-6 py-2 flex items-center gap-6 shadow-md">
+            <span
+              class="text-[14px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">Record
+              Counter</span>
+            <div class="flex items-center gap-4">
+              <input type="text"
+                class="w-16 text-center font-black text-[22px] text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 rounded-md border-transparent outline-none py-1 shadow-inner"
+                value="109">
+              <span class="text-slate-300 dark:text-slate-600 font-light text-[22px]">/</span>
+              <span class="font-bold text-[22px] text-slate-400 dark:text-slate-500">109</span>
+            </div>
+          </div>
+
+          <button
+            class="w-12 h-12 rounded-md bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all group"
+            title="Next Record">
+            <i class="ph-bold ph-caret-right text-[24px] group-hover:translate-x-1 transition-transform"></i>
+          </button>
+        </div>
+
+        <!-- Close Action -->
+        <div class="flex items-center gap-5">
+          <button
+            class="flex items-center gap-3 px-8 py-4 bg-slate-900 dark:bg-slate-100 rounded-md font-black text-[16px] uppercase tracking-widest text-white dark:text-slate-900 hover:bg-black dark:hover:bg-white transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+            <i class="ph-bold ph-x text-[24px]"></i>
+            <span>Close</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Institutional Footer -->
+    <div class="mt-16 text-center pb-16">
+      <h3
+        class="text-2xl font-outfit font-black tracking-tight text-gnfc-navy dark:text-white drop-shadow-sm mb-2 transition-colors">
+        Gujarat Narmada Valley Fertilizers Co. Ltd.
+      </h3>
+      <div class="flex items-center justify-center gap-4">
+        <span class="w-12 h-px bg-slate-300 dark:bg-slate-700"></span>
+        <p class="text-xs font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.4em]">&copy; Instrument
+          Department</p>
+        <span class="w-12 h-px bg-slate-300 dark:bg-slate-700"></span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Job Modal -->
+  <div id="addJobModal"
+    class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 backdrop-blur-sm transition-all duration-300 p-4">
+    <div id="addJobModalContent"
+      class="relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-md shadow-2xl border border-slate-200 dark:border-slate-800 transform scale-95 opacity-0 transition-all duration-300 overflow-hidden">
+
+      <!-- Modal Header -->
+      <div
+        class="px-8 py-6 border-b border flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-md bg-teal-600 dark:bg-teal-500 flex items-center justify-center shadow-lg">
+            <i class="ph-bold ph-plus text-white text-[24px]"></i>
+          </div>
+          <div>
+            <h4 class="font-outfit font-black text-[24px] text-slate-900 dark:text-white uppercase tracking-tight">Nitro
+              Phosphate Instrument <span class="text-teal-600 dark:text-teal-400 font-medium">(Add)</span></h4>
+            <p class="text-[14px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">
+              Operation Job Entry</p>
+          </div>
+        </div>
+        <button id="closeAddModalBtn"
+          class="w-12 h-12 rounded-md bg-white border transition-all flex items-center justify-center">
+          <i class="ph-bold ph-x text-[20px]"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6">
+        <form id="addJobForm" class="flex flex-col gap-8">
+
+          <!-- Section Heading -->
+          <div class="flex items-center gap-3">
+            <h5 class="font-16px font-black uppercase tracking-[0.2em] text-teal-600 dark:text-teal-400">Operation
+            </h5>
+            <div class="h-px flex-1 bg-teal-100 dark:bg-teal-900/30"></div>
+          </div>
+
+          <!-- Metadata Fields -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="md:col-span-2">
+              <label class="label-pill">Tag No</label>
+              <div class="relative shadow-sm rounded-md">
+                <input type="text" class="accessible-input pl-12 uppercase" placeholder="Search or Enter Tag...">
+                <i
+                  class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-slate-400"></i>
+              </div>
+            </div>
+            <div>
+              <label class="label-pill">Date</label>
+              <input type="date" class="accessible-input shadow-sm" value="2026-03-13">
+            </div>
+            <div>
+              <label class="label-pill">Shift</label>
+              <select class="accessible-input shadow-sm appearance-none cursor-pointer">
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option selected>G</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="md:col-span-1">
+              <label class="label-pill">SE</label>
+              <input type="text" class="accessible-input shadow-sm uppercase" placeholder="SE Code">
+            </div>
+            <div class="md:col-span-3">
+              <label class="label-pill">Job Description</label>
+              <input type="text" class="accessible-input shadow-sm" placeholder="Short summary of the issue...">
+            </div>
+          </div>
+
+          <!-- Long Description -->
+          <div>
+            <label class="label-pill">Detailed Description</label>
+            <textarea class="accessible-textarea h-48 shadow-sm" placeholder="Describe the job in detail..."></textarea>
+          </div>
+
+          <!-- Footer Fields -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="md:col-span-2">
+              <label class="label-pill">Area</label>
+              <select class="accessible-input shadow-sm appearance-none cursor-pointer">
+                <option selected>ALL</option>
+                <option>METH-I</option>
+                <option>METH-II</option>
+                <option>BOILER</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer / Actions -->
+      <div
+        class="px-8 py-6 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <button id="cancelAddJobBtn"
+          class="w-full md:w-auto px-8 py-3.5 rounded-md font-black text-[16px] uppercase tracking-widest text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-all border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 shadow-sm hover:shadow-md">
+          Cancel
+        </button>
+
+        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+          <button
+            class="w-full md:w-auto px-8 py-3.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-md font-black text-[16px] uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-900/20 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800 transition-all shadow-md">
+            Alarm/Trip Settings
+          </button>
+          <button id="saveJobBtn"
+            class="w-full md:w-auto px-12 py-3.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-md font-black text-[16px] uppercase tracking-widest shadow-lg hover:-translate-y-1 transition-all hover:shadow-xl hover:bg-black dark:hover:bg-white border text-center border-slate-900 dark:border-slate-100">
+            Save Job
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const addNewJobBtn = document.getElementById('addNewJobBtn');
+      const addJobModal = document.getElementById('addJobModal');
+      const addJobModalContent = document.getElementById('addJobModalContent');
+      const closeAddModalBtn = document.getElementById('closeAddModalBtn');
+      const cancelAddJobBtn = document.getElementById('cancelAddJobBtn');
+      const saveJobBtn = document.getElementById('saveJobBtn');
+
+      const openModal = () => {
+        addJobModal.classList.remove('hidden');
+        setTimeout(() => {
+          addJobModalContent.classList.remove('scale-95', 'opacity-0');
+          addJobModalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      };
+
+      const closeModal = () => {
+        addJobModalContent.classList.remove('scale-100', 'opacity-100');
+        addJobModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          addJobModal.classList.add('hidden');
+        }, 300);
+      };
+
+      if (addNewJobBtn) addNewJobBtn.addEventListener('click', openModal);
+      if (closeAddModalBtn) closeAddModalBtn.addEventListener('click', closeModal);
+      if (cancelAddJobBtn) cancelAddJobBtn.addEventListener('click', closeModal);
+
+      if (saveJobBtn) {
+        saveJobBtn.addEventListener('click', () => {
+          console.log('Saving new job...');
+          closeModal();
+        });
+      }
+
+      // Close on outside click
+      addJobModal.addEventListener('click', (e) => {
+        if (e.target === addJobModal) closeModal();
+      });
+    });
+  </script>
+</body>
+
+</html>

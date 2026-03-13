@@ -1,12 +1,4 @@
-/**
- * Plant Navigation Bar — Grafana-Style Grouped Industrial Dashboard Nav
- * -  Logically grouped items to avoid scrollbar overflow
- * -  Portal-pattern dropdowns (appended to document.body) to avoid
- *    backdrop-filter / transform containing-block issues
- * -  Responsive: no scrollbar at any breakpoint
- *
- * @param {string} activePageId - The ID of the current active page
- */
+
 function renderPlantNav(activePageId) {
     const navContainer = document.getElementById('plant-nav-container');
     if (!navContainer) return;
