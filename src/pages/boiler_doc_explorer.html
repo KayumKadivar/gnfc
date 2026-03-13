@@ -63,10 +63,7 @@
             <div class="flex flex-wrap items-center mt-3 text-[0.7rem] font-medium text-dark-muted divide-x divide-dark-border" id="explorer-statistics">
               <div class="pr-4 tracking-wide"><span class="font-bold text-dark-text">Total:</span> <span id="stat-total-cnt">0</span> (<span id="stat-total-kb">0</span> Kb)</div>
               <div class="px-4 tracking-wide"><span class="font-bold text-dark-text">Folders:</span> <span id="stat-folder-cnt">0</span> (<span id="stat-folder-kb">0</span> Kb)</div>
-              <div class="px-4 tracking-wide"><span class="font-bold text-dark-text">Files:</span> <span id="stat-file-cnt">0</span> (<span id="stat-file-kb">0</span> Kb)</div>
-              <div class="px-4 tracking-wide text-amber-600 cursor-pointer hover:underline" id="btn-view-email-history">
-                <span class="font-bold">Sent Mails:</span> <span id="stat-sent-cnt">0</span>
-              </div>
+              <div class="pl-4 tracking-wide"><span class="font-bold text-dark-text">Files:</span> <span id="stat-file-cnt">0</span> (<span id="stat-file-kb">0</span> Kb)</div>
             </div>
           </div>
 
@@ -90,7 +87,7 @@
               <span class="font-14px font-extrabold uppercase tracking-widest">Upload</span>
             </button>
             <button id="btn-send-email"
-              class="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-700 rounded transition-colors"
+              class="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-700 rounded transition-colors"
               title="Send Mail">
               <i class="ph-bold ph-envelope-simple text-lg"></i>
               <span class="font-14px font-extrabold uppercase tracking-widest">Send Mail</span>
@@ -745,55 +742,6 @@
     </div>
   </div>
 
-  <!-- Email History Modal (Lifetime log) -->
-  <div id="email-history-modal" class="gnfc-modal-overlay">
-    <div class="gnfc-modal-shell w-[900px] max-w-[96vw]">
-      <!-- Header -->
-      <div class="gnfc-modal-header">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
-            <i class="ph-bold ph-calendar text-lg"></i>
-          </div>
-          <h3 class="gnfc-modal-title text-amber-700 font-black tracking-tighter uppercase italic">LIFETIME EMAIL LOG</h3>
-        </div>
-        <button id="btn-close-email-history" class="gnfc-modal-close text-gray-400 hover:text-red-500 transition-colors">
-          <i class="ph-bold ph-x text-lg"></i>
-        </button>
-      </div>
-
-      <!-- Body -->
-      <div class="gnfc-modal-body p-0">
-        <div class="max-h-[60vh] overflow-auto 
-          [&::-webkit-scrollbar]:w-[6px] 
-          [&::-webkit-scrollbar-track]:bg-transparent 
-          [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-sm
-          [&::-webkit-scrollbar-thumb:hover]:bg-gray-400">
-          <table class="w-full border-collapse">
-            <thead class="sticky top-0 z-10">
-              <tr class="bg-gray-50 border-b border-gray-200 font-16px font-black uppercase tracking-widest text-amber-700 text-left">
-                <th class="px-4 py-3 w-40 border-r border-gray-200">Recipient (To)</th>
-                <th class="px-4 py-3 border-r border-gray-200">File & Subject</th>
-                <th class="px-4 py-3 w-32 text-center border-r border-gray-200">Date/Time</th>
-                <th class="px-4 py-3 w-20 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody id="email-history-table-body" class="divide-y divide-gray-100 bg-white">
-              <!-- JS Injected -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-      
-      <!-- Footer -->
-      <div class="gnfc-modal-footer justify-between bg-gray-50 items-center">
-        <div class="text-[0.65rem] text-dark-muted font-bold tracking-tight uppercase">
-          Note: This is a permanent log of all communications and cannot be modified.
-        </div>
-        <button id="btn-close-email-history-footer" class="gnfc-modal-btn gnfc-modal-btn-secondary px-6">Close History</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Documentation Log Modal -->
   <div id="doc-log-modal"
     class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-gray-800">
@@ -1161,12 +1109,7 @@
         this.currentPath = ["BOILER_INST"];
         this.clipboard = null;
         this.pendingSaveFiles = [];
-        const savedSentItems = localStorage.getItem('gnfc_sent_items');
-        this.sentItems = savedSentItems ? JSON.parse(savedSentItems) : [];
-        const savedTotalSent = localStorage.getItem('gnfc_total_sent_count');
-        this.totalSentCount = savedTotalSent ? parseInt(savedTotalSent, 10) : 0;
-        const savedEmailHistory = localStorage.getItem('gnfc_email_history');
-        this.emailHistory = savedEmailHistory ? JSON.parse(savedEmailHistory) : [];
+        this.sentItems = [];
         this.recycleBin = [];
 
         this.mockData = {
@@ -1312,20 +1255,6 @@
       emptyBin() {
         this.recycleBin = [];
       }
-
-      saveSentItems() {
-        localStorage.setItem('gnfc_sent_items', JSON.stringify(this.sentItems));
-      }
-
-      incrementTotalSentCount() {
-        this.totalSentCount++;
-        localStorage.setItem('gnfc_total_sent_count', this.totalSentCount.toString());
-      }
-
-      logEmail(emailData) {
-        this.emailHistory.unshift(emailData);
-        localStorage.setItem('gnfc_email_history', JSON.stringify(this.emailHistory));
-      }
     }
 
     class UIController {
@@ -1334,18 +1263,6 @@
         this.cacheDOM();
         this.bindEvents();
         this.renderTable();
-        this.updateSentEmailBadge();
-      }
-
-      updateSentEmailBadge() {
-        if (!this.sentEmailBadge) return;
-        const count = this.storage.sentItems.length;
-        this.sentEmailBadge.innerText = count;
-        if (count > 0) {
-          this.sentEmailBadge.style.display = 'flex';
-        } else {
-          this.sentEmailBadge.style.display = 'none';
-        }
       }
 
       cacheDOM() {
@@ -1358,7 +1275,6 @@
         this.btnNewFolder = document.getElementById('btn-new-folder');
         this.btnSaveFiles = document.getElementById('btn-save-files');
         this.btnSendEmail = document.getElementById('btn-send-email');
-        this.sentEmailBadge = document.getElementById('sent-email-badge');
         
         // Statistics
         this.statTotalCnt = document.getElementById('stat-total-cnt');
@@ -1367,14 +1283,6 @@
         this.statFolderKb = document.getElementById('stat-folder-kb');
         this.statFileCnt = document.getElementById('stat-file-cnt');
         this.statFileKb = document.getElementById('stat-file-kb');
-        this.statSentCnt = document.getElementById('stat-sent-cnt');
-        this.btnViewEmailHistory = document.getElementById('btn-view-email-history');
-
-        // Email History Modal
-        this.emailHistoryModal = document.getElementById('email-history-modal');
-        this.emailHistoryTableBody = document.getElementById('email-history-table-body');
-        this.btnCloseEmailHistory = document.getElementById('btn-close-email-history');
-        this.btnCloseEmailHistoryFooter = document.getElementById('btn-close-email-history-footer');
 
         // Modals
         this.createModal = document.getElementById('create-folder-modal');
@@ -1455,22 +1363,7 @@
 
         this.tableScrollContainer.classList.add('opacity-0');
 
-        let folderCount = 0;
-        let folderKb = 0;
-        let fileCount = 0;
-        let fileKb = 0;
-
-        items.forEach(item => {
-          if (item.type === 'Folder') {
-            folderCount++;
-            folderKb += parseInt(item.size || '0', 10);
-          } else {
-            fileCount++;
-            fileKb += parseInt(item.size || '0', 10);
-          }
-        });
-
-        const hasFiles = items.some(item => item.type === 'File');
+        const hasFiles = items. some(item => item.type === 'File');
         if (hasFiles) {
           this.thRev.classList.remove('hidden');
         } else {
@@ -1537,13 +1430,9 @@
           this.statFolderKb.innerText = folderKb.toLocaleString();
           this.statFileCnt.innerText = fileCount;
           this.statFileKb.innerText = fileKb.toLocaleString();
-          this.statTotalCnt.innerText = (folderCount + fileCount);
+          this.statTotalCnt.innerText = folderCount + fileCount;
           this.statTotalKb.innerText = (folderKb + fileKb).toLocaleString();
-          
-          if (this.statSentCnt) {
-            this.statSentCnt.innerText = this.storage.totalSentCount;
-          }
-          this.updateSentEmailBadge();
+
         }, 50);
 
         const currentPathLabel = this.storage.getCurrentPathLabel();
@@ -1570,9 +1459,6 @@
         this.btnNewFolder.addEventListener('click', () => this.showCreateFolderModal());
         this.btnSaveFiles.addEventListener('click', () => this.showSaveFilesModal());
         this.btnSendEmail.addEventListener('click', () => this.showEmailModal());
-        if (this.btnViewEmailHistory) {
-          this.btnViewEmailHistory.addEventListener('click', () => this.showEmailHistoryModal());
-        }
 
         // Create Folder Modal
         this.folderInput.addEventListener('input', () => {
@@ -1607,10 +1493,6 @@
         document.getElementById('btn-close-sent-items').addEventListener('click', () => this.hideSentItemsModal());
         document.getElementById('btn-close-sent-items-footer').addEventListener('click', () => this.hideSentItemsModal());
         this.sentItemsTableBody.addEventListener('click', (e) => this.handleSentItemsClick(e));
-        
-        // Email History Modal Events
-        this.btnCloseEmailHistory.addEventListener('click', () => this.hideEmailHistoryModal());
-        this.btnCloseEmailHistoryFooter.addEventListener('click', () => this.hideEmailHistoryModal());
 
         // Doc Log Modal
         document.getElementById('btn-apply-log-filter').addEventListener('click', () => this.renderLogTable());
@@ -1658,7 +1540,6 @@
             this.hideEmailModal();
             this.hideSentItemsModal();
             this.hideDeleteFileModal();
-            this.hideEmailHistoryModal();
           }
           if (e.key === 'Enter' && !this.createModal.classList.contains('hidden')) {
             this.handleCreateFolder();
@@ -2482,17 +2363,10 @@
         const date = this.getCurrentDate();
         const time = this.getCurrentTime();
 
-        const emailData = {
+        this.storage.sentItems.unshift({
           id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
           to, file: fileName, subject, message, linkOnly, date, time
-        };
-
-        this.storage.sentItems.unshift(emailData);
-        this.storage.logEmail(emailData);
-        
-        this.storage.saveSentItems();
-        this.storage.incrementTotalSentCount();
-        this.renderTable(); // This will also call updateSentEmailBadge() via the fixed code above
+        });
 
         this.storage.addLog({
           rev: "-", item: fileName, location: this.storage.getCurrentPathLabel(),
@@ -2504,7 +2378,6 @@
         this.emailMessageInput.value = '';
         this.emailLinkOnly.checked = false;
         this.hideEmailModal();
-        this.updateSentEmailBadge();
         Swal.fire({ icon: 'success', title: 'Sent', text: 'Mail sent successfully. CC sent to sender email.' });
       }
 
@@ -2551,52 +2424,6 @@
         this.sentItemsModal.classList.remove('flex');
       }
 
-      showEmailHistoryModal() {
-        this.renderEmailHistoryTable();
-        this.emailHistoryModal.classList.remove('hidden');
-        this.emailHistoryModal.classList.add('flex');
-      }
-
-      hideEmailHistoryModal() {
-        this.emailHistoryModal.classList.add('hidden');
-        this.emailHistoryModal.classList.remove('flex');
-      }
-
-      renderEmailHistoryTable() {
-        if (!this.emailHistoryTableBody) return;
-        const history = this.storage.emailHistory;
-        this.emailHistoryTableBody.innerHTML = '';
-        
-        if (history.length === 0) {
-          this.emailHistoryTableBody.innerHTML = `<tr><td colspan="4" class="py-12 text-center text-gray-400 font-medium italic">No email history found</td></tr>`;
-          return;
-        }
-
-        history.forEach(item => {
-          const row = document.createElement('tr');
-          row.className = "hover:bg-amber-50/30 transition-colors duration-150";
-          row.innerHTML = `
-            <td class="px-4 py-3 border-r border-gray-100">
-              <div class="text-[0.8rem] font-bold text-gray-700">${item.to}</div>
-            </td>
-            <td class="px-4 py-3 border-r border-gray-100">
-              <div class="flex flex-col gap-0.5">
-                <div class="text-[0.7rem] font-black text-amber-600 uppercase tracking-tight">${item.file}</div>
-                <div class="text-[0.75rem] font-medium text-gray-500">${item.subject}</div>
-              </div>
-            </td>
-            <td class="px-4 py-3 text-center border-r border-gray-100">
-              <div class="text-[0.75rem] font-bold text-gray-600">${item.date}</div>
-              <div class="text-[0.65rem] font-medium text-gray-400">${item.time}</div>
-            </td>
-            <td class="px-4 py-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[0.6rem] font-bold bg-green-100 text-green-700 uppercase tracking-tighter">SUCCESS</span>
-            </td>
-          `;
-          this.emailHistoryTableBody.appendChild(row);
-        });
-      }
-
       handleSentItemsClick(e) {
         const resendBtn = e.target.closest('.btn-resend-item');
         const deleteBtn = e.target.closest('.btn-delete-sent-item');
@@ -2614,9 +2441,7 @@
         } else if (deleteBtn) {
           const id = deleteBtn.dataset.sentId;
           this.storage.sentItems = this.storage.sentItems.filter(row => row.id !== id);
-          this.storage.saveSentItems();
           this.renderSentItemsTable();
-          this.updateSentEmailBadge();
         }
       }
 

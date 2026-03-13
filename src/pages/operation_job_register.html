@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operation Job Register | GNFC</title>
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'opr_job_reg';</script>
+</head>
+
+<body class="bg-slate-50 text-slate-900 h-screen flex overflow-hidden font-sans">
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('opr_job_reg');</script>
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="header-container"></div>
+    <script src="/src/js/header.js"></script>
+    <script>
+      renderHeader({
+        title: "Operation Job Register",
+        breadcrumbs: [
+          { label: "Dashboard", href: "/src/pages/dashboard.html" },
+          { label: "Operation Job Register" }
+        ],
+        backLink: "/src/pages/dashboard.html",
+        searchPlaceholder: "Search unit or register..."
+      });
+    </script>
+
+    <div class="flex-1 overflow-y-auto bg-slate-50 p-3 sm:p-4">
+      <!-- Premium Registry Card -->
+      <div class="relative overflow-hidden border border-slate-200 rounded-2xl bg-white shadow-lg transition-all duration-300">
+        
+        <div class="relative z-10 p-[0.85rem] sm:p-[1.1rem] flex flex-col gap-4 unit-panel">
+          
+          <!-- Hero Header Section -->
+          <div class="flex flex-wrap items-start justify-between gap-4 p-4 sm:p-[1.15rem] border border-slate-200 rounded-[0.9rem]  backdrop-blur-xl">
+            <div>
+              <p class="text-[0.72rem] font-extrabold tracking-[0.18em] uppercase text-blue-600">Instrument Department</p>
+              <h1 class="text-[clamp(1.45rem,2.4vw,2rem)] leading-none font-extrabold text-slate-900 mt-1.5">Unit Wise Operation Job Register</h1>
+            </div>
+          </div>
+
+          <!-- Department Band -->
+          <div class="font-bold text-center text-2xl text-slate-800">
+            Instrument Department
+          </div>
+
+          <!-- Unit Grid Navigation -->
+          <div id="opr-unit-grid" class="grid grid-cols-2 md-grid-cols-4 lg:grid-cols-7 gap-[0.85rem]" aria-label="Operation job register unit navigation">
+            <!-- Dynamic Content -->
+          </div>
+
+          <!-- Premium Theme-Based Bypass Parameter View (Hidden by default) -->
+          <div id="bypass-view-container" class="hidden flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <!-- Glass Header Section -->
+            <div class="relative overflow-hidden p-6 rounded-3xl bg-blue-600/10 border border-blue-200/50 backdrop-blur-xl group">
+              <div class="absolute inset-0 bg-linear-to-r from-blue-600/20 via-transparent to-blue-600/10 pointer-events-none"></div>
+              
+              <div class="relative z-10 flex flex-wrap items-center justify-between gap-6">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="w-8 h-1 bg-fuchsia-500 rounded-full"></span>
+                    <span class="text-[0.7rem] font-black uppercase tracking-[0.2em] text-fuchsia-600">Register View</span>
+                  </div>
+                  <h2 class="text-3xl sm:text-4xl font-black text-slate-900 font-outfit tracking-tighter uppercase italic leading-none">
+                    Bypass <span class="text-blue-600">Parameter</span>
+                  </h2>
+                </div>
+
+                <div class="flex flex-col items-end gap-1">
+                  <div id="bypass-plant-name" class="text-3xl font-black text-slate-800 font-outfit italic uppercase tracking-tighter">BOILER</div>
+                  <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> Industrial Monitoring System
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modern Interactive Navigation Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 px-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <button class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm flex items-center gap-2">
+                  <i class="ph-bold ph-list-numbers"></i> Bypassed parameters
+                </button>
+                <button class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm flex items-center gap-2">
+                  <i class="ph-bold ph-clock-counter-clockwise"></i> History
+                </button>
+                <button class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm flex items-center gap-2">
+                  <i class="ph-bold ph-arrows-left-right"></i> Shift
+                </button>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <div class="ml-4 flex items-center gap-3 py-2 px-4 rounded-xl bg-white border border-slate-200 shadow-sm">
+                  <div class="flex items-center gap-1.5 text-blue-600">
+                    <i class="ph-fill ph-calendar text-sm"></i>
+                    <span class="text-[11px] font-black text-slate-900">Year: 2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Premium Theme-Strict Table Container -->
+            <div class="relative overflow-hidden rounded-4xl border border-slate-200/60 bg-white/40 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
+              <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left border-collapse">
+                  <thead class="sticky top-0 z-20">
+                    <tr class="bg-slate-50/80 backdrop-blur-3xl border-b border-slate-200/50">
+                      <th class="px-5 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 text-center w-16 border-r border-slate-100/50">Sr</th>
+                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 border-r border-slate-100/50">TAGNO</th>
+                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 border-r border-slate-100/50">ACTION</th>
+                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-blue-600/60 border-r border-slate-100/50">Bypass Request</th>
+                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400 border-r border-slate-100/50">Bypassed On</th>
+                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-fuchsia-600/60 border-r border-slate-100/50">In-Line Request</th>
+                      <th class="px-7 py-6 text-[0.62rem] font-black uppercase tracking-[0.25em] text-slate-400">Taken in Line</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100/30">
+                    <tr class="group hover:bg-white/60 transition-all duration-300">
+                      <td colspan="7" class="px-6 py-28 text-center bg-white/20">
+                        <div class="flex flex-col items-center gap-5">
+                          <div class="relative">
+                            <i class="ph ph-stack text-6xl text-slate-200/80"></i>
+                            <div class="absolute -top-1 -right-1 w-4 h-4 bg-fuchsia-500 rounded-full border-2 border-white shadow-lg animate-bounce"></div>
+                          </div>
+                          <div class="max-w-[280px]">
+                            <p class="text-2xl font-black text-slate-900 font-outfit italic tracking-tighter leading-tight">NO PARAMETERS FOUND</p>
+                            <p class="text-[0.68rem] font-bold text-slate-400 uppercase tracking-widest mt-2 px-4 py-1.5 rounded-full bg-slate-50 border border-slate-100 inline-block">SYSTEM IDLE</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Premium Mode Selection Section -->
+          <div class="flex flex-col items-center gap-6 py-8 px-4">
+            <div class="flex flex-wrap justify-center gap-6 max-w-3xl w-full">
+              
+              <!-- Bypass Mode Card -->
+              <label class="relative group cursor-pointer flex-1 min-w-[260px]">
+                <input type="radio" name="opr_system" value="bypass" class="peer sr-only">
+                <div class="h-full p-6 rounded-2xl bg-white/40 backdrop-blur-xl border-2 border-slate-100 shadow-sm transition-all duration-300 peer-checked:border-fuchsia-500 peer-checked:bg-fuchsia-50/20 peer-checked:shadow-xl peer-checked:shadow-fuchsia-100 hover:bg-white/80 hover:border-slate-200">
+                  <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors peer-checked:bg-fuchsia-100 peer-checked:text-fuchsia-600">
+                      <i class="ph-bold ph-shield-warning text-2xl"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-outfit font-black text-xl text-slate-900 tracking-tight">BYPASS</h4>
+                      <p class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">Override Protocol</p>
+                    </div>
+                  </div>
+                  <!-- Selection Indicator -->
+                  <div class="absolute top-4 right-4 w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-slate-300 peer-checked:border-fuchsia-500 transition-all">
+                    <div class="w-2.5 h-2.5 rounded-full bg-fuchsia-500 scale-0 peer-checked:scale-100 transition-transform duration-200"></div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- GNFC Mode Card -->
+              <label class="relative group cursor-pointer flex-1 min-w-[260px]">
+                <input type="radio" name="opr_system" value="gnfc" class="peer sr-only">
+                <div class="h-full p-6 rounded-2xl bg-white/40 backdrop-blur-xl border-2 border-slate-100 shadow-sm transition-all duration-300 peer-checked:border-fuchsia-500 peer-checked:bg-fuchsia-50/20 peer-checked:shadow-xl peer-checked:shadow-fuchsia-100 hover:bg-white/80 hover:border-slate-200">
+                  <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors peer-checked:bg-fuchsia-100 peer-checked:text-fuchsia-600">
+                      <i class="ph-bold ph-buildings text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="font-outfit font-black text-xl text-slate-900 tracking-tight leading-tight">Gujarat Narmada Valley</h4>
+                      <p class="text-[10px] font-extrabold uppercase tracking-widest text-fuchsia-600 mt-1">Fertilizers Co. Ltd.</p>
+                    </div>
+                  </div>
+                  <!-- Selection Indicator -->
+                  <div class="absolute top-4 right-4 w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-slate-300 peer-checked:border-fuchsia-500 transition-all">
+                    <div class="w-2.5 h-2.5 rounded-full bg-fuchsia-500 scale-0 peer-checked:scale-100 transition-transform duration-200"></div>
+                  </div>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.9fr] gap-4 mt-2">
+            <!-- Info Card -->
+            <div class="border border-slate-200 rounded-[0.9rem] bg-white p-4 sm:p-[1.1rem] backdrop-blur-sm">
+                <span class="inline-flex items-center gap-2 text-[0.72rem] font-extrabold tracking-widest uppercase text-slate-500">
+                    <i class="ph-fill ph-info"></i> Department Information
+                </span>
+                <h3 class="mt-3 text-2xl sm:text-3xl font-black text-fuchsia-600 leading-tight">Instrument Department</h3>
+                <p class="mt-2 text-slate-600 text-sm sm:text-[0.92rem] leading-relaxed max-w-2xl">
+                    Comprehensive operational management system for monitoring and tracking industrial processes across multiple specialized units.
+                </p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const operationUnits = [
+      { name: "METH-I", icon: "ph-factory", caption: "Methanol Unit" },
+      { name: "METH-II", icon: "ph-factory", caption: "Methanol Unit" },
+      { name: "ACETIC", icon: "ph-drop", caption: "Acetic Plant" },
+      { name: "FORMIC", icon: "ph-beaker", caption: "Formic Acid" },
+      { name: "BOILER", icon: "ph-fire", caption: "Steam Systems" },
+      { name: "PSU", icon: "ph-lightning", caption: "Power Supply Unit" },
+      { name: "AMMONIA", icon: "ph-flask", caption: "Ammonia Plant" },
+      { name: "UREA", icon: "ph-hexagon", caption: "Urea Unit" },
+      { name: "NITRO", icon: "ph-wind", caption: "Nitro Section" },
+      { name: "EA", icon: "ph-gauge", caption: "EA Unit" },
+      { name: "DM", icon: "ph-drop-half", caption: "DM Water" },
+      { name: "BAGGING", icon: "ph-package", caption: "Packing Area" },
+      { name: "ASGP", icon: "ph-gear-six", caption: "Service Plant" },
+      { name: "AAQM", icon: "ph-chart-line", caption: "Quality Monitoring" }
+    ];
+
+    const unitGrid = document.getElementById("opr-unit-grid");
+    const bypassView = document.getElementById("bypass-view-container");
+    const selectionPanel = document.querySelector('.flex-col.items-center.gap-6.py-8'); // Selection section
+    const bypassPlantTitle = document.getElementById("bypass-plant-name");
+    const backBtn = document.getElementById("back-to-units");
+
+    if (unitGrid) {
+      unitGrid.innerHTML = operationUnits.map((unit) => `
+        <div data-name="${unit.name}" class="unit-card flex items-center justify-between gap-3 min-h-[4.5rem] px-4 py-[0.95rem] rounded-[0.85rem] border border-slate-200 bg-white group shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer" aria-label="Open ${unit.name} operation job register">
+          <div class="flex flex-col gap-0.5 min-w-0">
+            <span class="text-[0.95rem] font-extrabold tracking-wider uppercase text-slate-800 leading-tight">${unit.name}</span>
+            <span class="text-[0.72rem] font-bold tracking-wider uppercase text-slate-500">${unit.caption}</span>
+          </div>
+          <span class="w-[2.3rem] h-[2.3rem] rounded-xl inline-flex items-center justify-center flex-shrink-0 bg-blue-50 text-blue-600 text-[1.05rem] group-hover:scale-110 transition-transform duration-200" aria-hidden="true">
+            <i class="ph-bold ${unit.icon}"></i>
+          </span>
+        </div>
+      `).join("");
+
+      // Delegation for clicks
+      unitGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.unit-card');
+        if (!card) return;
+
+        const currentMode = localStorage.getItem('gnfc_system_mode') || 'gnfc';
+        const name = card.dataset.name;
+
+        if (currentMode === 'bypass') {
+          showBypassView(name);
+        } else {
+          // GNFC Mode: Currently no navigation defined per user request
+          console.log(`GNFC Mode clicked for ${name}`);
+        }
+      });
+    }
+
+    function showBypassView(plantName) {
+      if (!bypassView || !unitGrid || !selectionPanel) return;
+
+      bypassPlantTitle.textContent = `BYPASS PARAMETER - ${plantName}`;
+      
+      // Hide standard UI
+      unitGrid.classList.add('hidden');
+      selectionPanel.classList.add('hidden');
+      
+      // Show Bypass UI
+      bypassView.classList.remove('hidden');
+      bypassView.classList.add('flex'); // Ensure it's flex when shown
+      
+      // Scroll to top of view
+      bypassView.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideBypassView() {
+      if (!bypassView || !unitGrid || !selectionPanel) return;
+
+      // Hide Bypass UI
+      bypassView.classList.add('hidden');
+      bypassView.classList.remove('flex');
+      
+      // Show standard UI
+      unitGrid.classList.remove('hidden');
+      selectionPanel.classList.remove('hidden');
+    }
+
+    if (backBtn) {
+      backBtn.addEventListener('click', hideBypassView);
+    }
+
+    // --- State Persistence for System Mode Selection ---
+    const STORAGE_KEY = 'gnfc_system_mode';
+    const radioButtons = document.querySelectorAll('input[name="opr_system"]');
+
+    function initSystemMode() {
+      const savedMode = localStorage.getItem(STORAGE_KEY) || 'gnfc'; // Default to GNFC
+      const targetRadio = document.querySelector(`input[name="opr_system"][value="${savedMode}"]`);
+      if (targetRadio) {
+        targetRadio.checked = true;
+      }
+    }
+
+    radioButtons.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          localStorage.setItem(STORAGE_KEY, e.target.value);
+          // If we are in bypass view and switch to GNFC, go back
+          if (e.target.value === 'gnfc') hideBypassView();
+        }
+      });
+    });
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', initSystemMode);
+    initSystemMode();
+  </script>
+
+</body>
+
+</html>
