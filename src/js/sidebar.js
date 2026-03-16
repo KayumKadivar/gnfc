@@ -149,7 +149,7 @@ class SidebarManager {
             ${this.createLink("utility", "#", "ph-lightning", "UTILITY")}
             ${this.createLink("cms", "#", "ph-monitor", "CMS")}
             ${this.createLink("inst_ws", "#", "ph-desktop", "INST WS")}
-            ${this.createLink("opr_job_reg", "/src/pages/operation_job_register.html", "ph-clipboard-text", "OPR. Job Reg")}
+            ${this.createLink("opr_job_reg", "/src/pages/op_job_reg.html", "ph-clipboard-text", "OPR. Job Reg")}
             ${this.createLink("job_analysis", "#", "ph-chart-bar", "Job Analysis")}
 
             <!-- Communication & Helpers -->

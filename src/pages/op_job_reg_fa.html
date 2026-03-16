@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Operation Job Register | GNFC</title>
+
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script src="/src/js/tailwind_config.js"></script>
+
+  <script>
+    window.activePage = 'opr_job_reg';
+  </script>
+</head>
+
+<body class="bg-dark-bg text-dark-text h-screen flex flex-col font-sans overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+
+  <div class="flex flex-1 overflow-hidden">
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container" class="border-dark-border"></div>
+    <script>renderSidebar('opr_job_reg');</script>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <div id="header-container"></div>
+      <script src="/src/js/header.js"></script>
+      <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const plantName = urlParams.get('plant') || 'AMM';
+
+        renderHeader({
+          title: `Operation Job Register - ${plantName}`,
+          breadcrumbs: [
+            { label: "Dashboard", href: "/src/pages/dashboard.html" },
+            { label: "Operation Job Register", href: "/src/pages/op_job_reg.html" },
+            { label: plantName }
+          ],
+          backLink: "/src/pages/op_job_reg.html"
+        });
+      </script>
+
+      <div class="flex-1 overflow-auto p-5">
+        <div class="gnfc-table-container rounded-md shadow-sm border-dark-border bg-dark-panel">
+
+          <!-- HEADER BAR -->
+          <div class="flex items-center justify-between bg-dark-header border-b border-dark-border px-8 py-5">
+            <div>
+              <h2 class="text-xl font-bold tracking-widest ">
+                OPERATION JOB REGISTER
+              </h2>
+            </div>
+
+            <div class="flex items-center gap-8">
+              <!-- Professional Metadata Row -->
+              <div class="flex items-center gap-6 text-[11px] font-bold tracking-wider uppercase text-dark-muted">
+                <!-- Plant Info -->
+                <div class="flex items-center gap-2">
+                  <span class="opacity-70">Plant Section:</span>
+                  <span id="plant-display" class="text-dark-text font-black tracking-normal"></span>
+                </div>
+              </div>
+
+              <!-- Report Filter -->
+              <div class="flex items-center gap-3 ml-auto">
+                <div class="text-[10px] font-black text-dark-muted uppercase tracking-widest">Report View:</div>
+                <select
+                  class="bg-dark-panel border border-dark-border text-dark-text rounded px-3 py-1.5 text-xs outline-none focus:border-blue-500 font-bold transition-all hover:bg-dark-header">
+                  <option value="WEEKLY">WEEKLY</option>
+                  <option value="MONTHLY">MONTHLY</option>
+                  <option value="WEEKLYPENDING">WEEKLYPENDING</option>
+                  <option value="MONTHLYPENDING" selected>MONTHLYPENDING</option>
+                  <option value="YEARLY">YEARLY</option>
+                  <option value="YEARLYPENDING">YEARLYPENDING</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTROL BAR -->
+
+          <!-- COMPLEX TABLE -->
+          <div class="overflow-x-auto">
+            <table class="gnfc-table w-full border-collapse">
+              <thead class="gnfc-thead text-xs uppercase tracking-wider">
+                <tr class="border-b border-dark-border">
+                  <th rowspan="2" class="gnfc-th w-14 border-r border-dark-border text-center">Sr</th>
+                  <th rowspan="2" class="gnfc-th w-36 border-r border-dark-border py-5">
+                    <div class="flex flex-col gap-1">
+                      <span>JOB NO</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">TAG NO</div>
+                    </div>
+                  </th>
+                  <th rowspan="2" class="gnfc-th w-36 border-r border-dark-border py-5">
+                    <div class="flex flex-col gap-1">
+                      <span>AREA</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">DATE</div>
+                    </div>
+                  </th>
+                  <th rowspan="2" class="gnfc-th text-left border-r border-dark-border">DESCRIPTION</th>
+                  <th rowspan="2" class="gnfc-th w-16 border-r border-dark-border text-center">SE</th>
+                  <th colspan="2" class="gnfc-th border-b border-dark-border text-center bg-dark-header/40 py-2">
+                    OPERATION</th>
+                  <th colspan="3" class="gnfc-th border-b border-dark-border text-center bg-dark-header/40 py-2">
+                    INSTRUMENT</th>
+                </tr>
+                <tr class="border-b border-dark-border">
+                  <th class="gnfc-th w-24 border-r border-dark-border text-center">SHIFT</th>
+                  <th class="gnfc-th w-32 border-r border-dark-border text-center ">DATE</th>
+                  <th class="gnfc-th w-32 border-r border-dark-border text-center ">STATUS</th>
+                  <th class="gnfc-th border-r border-dark-border text-center ">REMARK</th>
+                  <th class="gnfc-th w-24 text-center  font-bold">ENG</th>
+                </tr>
+              </thead>
+              <tbody id="fa-table-body" class="gnfc-tbody text-sm">
+                <tr class="hover:bg-blue-900/10 transition-colors border-b border-dark-border group cursor-pointer"
+                  onclick="openEditModal(1)">
+                  <td
+                    class="gnfc-td text-center border-r border-dark-border font-bold text-blue-500 group-hover:text-blue-400 underline decoration-blue-500/30">
+                    1</td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    <div class="flex flex-col gap-1">
+                      <span class="font-semibold">M2-2026-001</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">PS-7037L</div>
+                    </div>
+                  </td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    <div class="flex flex-col gap-1">
+                      <span>METH-II</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">3/16/2026</div>
+                    </div>
+                  </td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    Checking C.O. pressure switch calibration and feedback loop
+                  </td>
+                  <td class="gnfc-td text-center border-r border-dark-border">NKP</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">G</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">3/16/2026</td>
+                  <td class="gnfc-td text-center border-r border-dark-border ">OPEN</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">In progress</td>
+                  <td class="gnfc-td text-center font-bold">ENG-1</td>
+                </tr>
+                <tr class="hover:bg-blue-900/10 transition-colors border-b border-dark-border /80 group cursor-pointer"
+                  onclick="openEditModal(2)">
+                  <td
+                    class="gnfc-td text-center border-r border-dark-border font-bold text-blue-500 group-hover:text-blue-400 underline decoration-blue-500/30">
+                    2</td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    <div class="flex flex-col gap-1">
+                      <span class="font-semibold">M2-2026-005</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">LT-791B</div>
+                    </div>
+                  </td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    <div class="flex flex-col gap-1">
+                      <span>METH-II</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">3/15/2026</div>
+                    </div>
+                  </td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    Level transmitter E703M maintenance and cleaning
+                  </td>
+                  <td class="gnfc-td text-center border-r border-dark-border">MAJ</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">B</td>
+                  <td class="gnfc-td text-center border-r border-dark-border ">3/15/2026</td>
+                  <td class="gnfc-td text-center border-r border-dark-border ">PENDING</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">Waiting for spare</td>
+                  <td class="gnfc-td text-center font-bold">ENG-2</td>
+                </tr>
+                <tr class="hover:bg-blue-900/10 transition-colors border-b border-dark-border /80 group cursor-pointer"
+                  onclick="openEditModal(3)">
+                  <td
+                    class="gnfc-td text-center border-r border-dark-border font-bold text-blue-500 group-hover:text-blue-400 underline decoration-blue-500/30">
+                    3</td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    <div class="flex flex-col gap-1">
+                      <span class="font-semibold">M2-2026-012</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">FT-0210BA</div>
+                    </div>
+                  </td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    <div class="flex flex-col gap-1">
+                      <span>METH-II</span>
+                      <div class="border-t border-dark-border pt-1 opacity-70">3/14/2026</div>
+                    </div>
+                  </td>
+                  <td class="gnfc-td border-r border-dark-border">
+                    Overall oil flow sensor R201B bypass for stroke checking
+                  </td>
+                  <td class="gnfc-td text-center border-r border-dark-border">DKV</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">A</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">3/14/2026</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">CLOSED</td>
+                  <td class="gnfc-td text-center border-r border-dark-border">Task completed</td>
+                  <td class="gnfc-td text-center font-bold">ENG-1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById("plant-display").textContent = plantName;
+
+    function openEditModal(sr) {
+      document.getElementById('modal-edit-job').classList.add('is-open');
+    }
+
+    function closeEditModal() {
+      document.getElementById('modal-edit-job').classList.remove('is-open');
+    }
+
+    // Close on overlay click
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('modal-edit-job');
+      if (e.target === modal) {
+        closeEditModal();
+      }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeEditModal();
+      }
+    });
+  </script>
+
+  <!-- EDIT MODAL (Custom GNFC Overlay) -->
+  <div class="gnfc-modal-overlay" id="modal-edit-job">
+    <div class="gnfc-modal-shell gnfc-modal-shell--xl">
+
+      <header class="gnfc-modal-header py-4 bg-dark-header">
+        <div class="flex flex-col">
+          <h2 class="gnfc-modal-title text-blue-500" id="modal-edit-job-title">
+            INSTRUMENT (Edit)
+          </h2>
+          <p class="gnfc-modal-subtitle text-dark-muted">Update job details and remarks</p>
+        </div>
+        <button class="gnfc-modal-close" aria-label="Close modal" onclick="closeEditModal()">
+          <i class="ph ph-x"></i>
+        </button>
+      </header>
+
+      <main class="gnfc-modal-body p-6">
+        <!-- TOP SECTIONS: OPERATION & INSTRUMENT -->
+        <div class="grid grid-cols-2 gap-8">
+          <!-- OPERATION -->
+          <div class="space-y-4">
+            <h3
+              class="text-[10px] font-black tracking-[0.2em] text-blue-400 uppercase border-b border-blue-500/20 pb-2">
+              OPERATION SECTION</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="gnfc-modal-label">Job No</label>
+                <input type="text" class="gnfc-modal-input" value="10">
+              </div>
+              <div class="space-y-1.5">
+                <label class="gnfc-modal-label">Date (M/D/Y)</label>
+                <input type="text" class="gnfc-modal-input" value="19/09/2003">
+              </div>
+              <div class="space-y-1.5">
+                <label class="gnfc-modal-label">Shift</label>
+                <input type="text" class="gnfc-modal-input" value="G">
+              </div>
+              <div class="space-y-1.5">
+                <label class="gnfc-modal-label">SE</label>
+                <input type="text" class="gnfc-modal-input" value="RGP">
+              </div>
+            </div>
+          </div>
+
+          <!-- INSTRUMENT -->
+          <div class="space-y-4">
+            <h3
+              class="text-[10px] font-black tracking-[0.2em] text-orange-400 uppercase border-b border-orange-500/20 pb-2">
+              INSTRUMENT SECTION</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="gnfc-modal-label">Date (M/D/Y)</label>
+                <input type="text" class="gnfc-modal-input" value="3/16/2026">
+              </div>
+              <div class="space-y-1.5">
+                <label class="gnfc-modal-label">Engineer</label>
+                <input type="text" class="gnfc-modal-input" value="ENG_TEST">
+              </div>
+              <div class="col-span-2 space-y-1.5">
+                <label class="gnfc-modal-label">Status</label>
+                <select class="gnfc-modal-input font-bold text-blue-400">
+                  <option value="OVER">OVER</option>
+                  <option value="NO PERMIT">NO PERMIT</option>
+                  <option value="SD">SD</option>
+                  <option value="U/O">U/O</option>
+                  <option value="U/P" selected>U/P (Under Progress)</option>
+                  <option value="HOLD">HOLD</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESCRIPTION & REMARK -->
+        <div class="grid grid-cols-2 gap-8 pt-4">
+          <div class="space-y-2">
+            <label class="gnfc-modal-label text-blue-400/80">Job Description</label>
+            <textarea class="gnfc-modal-input h-32 resize-none leading-relaxed"
+              placeholder="Enter job description...">METHANOL DRIER SECTION INSTRUMENTATION TO BE REMOVED.</textarea>
+          </div>
+          <div class="space-y-2">
+            <label class="gnfc-modal-label text-orange-400/80">Remark</label>
+            <textarea class="gnfc-modal-input h-32 resize-none leading-relaxed"
+              placeholder="Enter remarks...">TV-4037, AMPC-5016, 6 NOS TW, removed, Other TW removal job is under progress,</textarea>
+          </div>
+        </div>
+      </main>
+
+      <footer
+        class="gnfc-modal-footer py-4 bg-dark-header border-t border-dark-border flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button class="gnfc-modal-btn gnfc-modal-btn-secondary px-8 h-10" onclick="closeEditModal()">Cancel</button>
+          <button class="gnfc-modal-btn gnfc-modal-btn-primary px-10 h-10 shadow-lg shadow-blue-500/20"
+            onclick="closeEditModal()">Save Changes</button>
+        </div>
+
+        <!-- Records counter inspired by legacy UI -->
+        <div class="flex items-center gap-3 px-4 py-1.5 bg-dark-bg/20 border border-dark-border/30 rounded">
+          <span class="text-[10px] font-black text-dark-muted uppercase tracking-[0.15em]">Records:</span>
+          <div class="flex items-center gap-2">
+            <input type="text"
+              class="w-10 h-6 bg-dark-panel border border-dark-border rounded text-center text-[10px] font-black text-blue-500"
+              value="34" readonly>
+            <span class="text-dark-muted font-black opacity-40">/</span>
+            <input type="text"
+              class="w-10 h-6 bg-dark-panel border border-dark-border rounded text-center text-[10px] font-black text-dark-text"
+              value="34" readonly>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+</body>
+
+</html>

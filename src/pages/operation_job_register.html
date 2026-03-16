@@ -237,6 +237,7 @@
                 <select id="terminalModeSelect"
                   class="gnfc-modal-input h-11 border-slate-300 dark:border-slate-600 font-bold cursor-pointer appearance-none pr-10">
                   <option value="JOB REGISTER">JOB REGISTER</option>
+                  <option value="OPERATION JOB">OPERATION JOB</option>
                   <option value="BYPASS REQUEST">BYPASS REQUEST</option>
                   <option value="ALARM TRIP SETTING">ALARM TRIP SETTING</option>
                 </select>
@@ -315,6 +316,8 @@
 
             if (selectedMode === 'JOB REGISTER') {
               window.location.href = '/src/pages/job_register.html';
+            } else if (selectedMode === 'OPERATION JOB') {
+              window.location.href = '/src/pages/op_job_reg.html';
             } else if (selectedMode === 'BYPASS REQUEST') {
               window.location.href = '/src/pages/bypass_parameter.html';
             } else if (selectedMode === 'ALARM TRIP SETTING') {

@@ -19,6 +19,7 @@
     width: 100%;
     text-align: left;
     border-collapse: collapse;
+    border: 1px solid var(--app-border, #d1d5db);
   }
 
   .gnfc-thead {

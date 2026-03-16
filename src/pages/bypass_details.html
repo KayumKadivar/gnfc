@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Bypass Detail | GNFC</title>
+
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+  <link rel="stylesheet" href="/src/css/table-style.css">
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+
+  <script src="/src/js/tailwind_config.js"></script>
+
+  <script>
+    window.activePage = 'opr_job_reg';
+  </script>
+
+</head>
+
+
+
+<body class="bg-dark-bg text-dark-text h-screen flex flex-col font-sans overflow-hidden">
+
+  <script src="/src/js/theme_manager.js"></script>
+
+
+  <div class="flex flex-1 overflow-hidden">
+
+    <script src="/src/js/sidebar.js"></script>
+    <div id="sidebar-container" class="border-dark-border"></div>
+
+    <script>
+      renderSidebar('opr_job_reg');
+    </script>
+
+
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+
+      <div id="header-container"></div>
+
+      <script src="/src/js/header.js"></script>
+
+      <script>
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const plantName = urlParams.get('plant') || 'AMM';
+
+        renderHeader({
+          title: `Bypass Detail - ${plantName}`,
+          breadcrumbs: [
+            { label: "Dashboard", href: "/src/pages/dashboard.html" },
+            { label: "Operation Job Register", href: "/src/pages/op_job_reg.html" },
+            { label: plantName }
+          ],
+          backLink: "/src/pages/op_job_reg.html"
+        });
+
+      </script>
+
+
+
+      <div class="flex-1 overflow-auto p-5">
+
+        <div class="gnfc-table-container rounded-md shadow-sm border-dark-border">
+
+
+
+          <!-- HEADER BAR -->
+
+          <div class="flex items-center justify-between bg-blue-900 text-white px-6 py-4">
+
+            <h2 class="text-lg font-semibold tracking-wide">
+              BYPASS PARAMETER
+            </h2>
+
+            <div class="text-yellow-300 font-semibold text-base">
+              Plant : <span id="plant-display"></span>
+            </div>
+
+          </div>
+
+
+
+          <!-- CONTROL BAR -->
+
+          <div class="bg-dark-header border-b border-dark-border px-6 py-3 flex items-center gap-3 text-sm font-medium">
+
+            <button onclick="BypassModal.open(plant, mockData)" class="px-4 py-2 rounded bg-dark-panel border-dark-border border hover:bg-dark-header text-dark-text transition-colors">
+              Bypassed Parameters
+            </button>
+
+            <button onclick="HistoryModal.open(plant, mockHistoryData)" class="px-4 py-2 rounded bg-dark-panel border-dark-border border hover:bg-dark-header text-dark-text transition-colors">
+              History
+            </button>
+
+            <button class="px-4 py-2 rounded bg-dark-panel border-dark-border border hover:bg-dark-header text-dark-text transition-colors">
+              Shift
+            </button>
+
+            <div class="ml-auto flex items-center gap-2">
+              <span class="text-dark-muted">Year:</span>
+              <select id="year-filter" class="bg-dark-panel border border-dark-border text-dark-text rounded px-2 py-1 outline-none text-xs font-semibold focus:border-blue-500">
+                <option value="2026" selected>2026</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="overflow-x-auto ">
+
+            <table class="gnfc-table border ">
+
+              <thead class="gnfc-thead">
+
+                <tr>
+
+                  <th class="gnfc-th w-14">Sr</th>
+
+                  <th class="gnfc-th text-left w-40">Tag No</th>
+
+                  <th class="gnfc-th text-left">Action</th>
+
+                  <th class="gnfc-th text-left w-64">Bypass Request</th>
+
+                  <th class="gnfc-th text-left w-56">Bypassed On</th>
+
+                  <th class="gnfc-th text-left w-56">Inline Request</th>
+
+                  <th class="gnfc-th text-left w-56">Taken Inline</th>
+
+                </tr>
+
+              </thead>
+
+
+
+              <tbody id="bypass-table-body" class="gnfc-tbody">
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+
+  <script>
+
+    var mockData = [
+
+      {
+        tag: "P1324",
+        spec: "1300",
+        action: "BYPASS",
+        purpose: "ps1563l ASU REVAMP STOP LOGIC ON BOILER TRIP",
+        requestDate: "3/16/2026 12:16 PM",
+        requestBy: "DVP/MVB",
+        bypassDate: "3/16/2026 1:08 PM",
+        bypassBy: "MAJ"
+      },
+
+      {
+        tag: "LIS115LL",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "operation SECURITY LVL P103R",
+        requestDate: "3/16/2026 8:36 AM",
+        requestBy: "DVP/MVB",
+        bypassDate: "3/16/2026 8:57 AM",
+        bypassBy: "NKP"
+      },
+
+      {
+        tag: "LIS114LL",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "operation SECURITY LEVEL P103",
+        requestDate: "3/16/2026 8:36 AM",
+        requestBy: "DVP/MVB",
+        bypassDate: "3/16/2026 8:57 AM",
+        bypassBy: "NKP"
+      },
+
+      {
+        tag: "P0203C",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "P203C motor trouble contact disconnected from I/M",
+        requestDate: "3/12/2026 10:11 AM",
+        requestBy: "HHB",
+        bypassDate: "3/12/2026 11:35 AM",
+        bypassBy: "MAJ"
+      },
+
+      {
+        tag: "TIS87H",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "checking C20 discharge temperature",
+        requestDate: "3/10/2026 12:02 PM",
+        requestBy: "DVP/MVB/JYP",
+        bypassDate: "3/10/2026 12:02 PM",
+        bypassBy: "DKV"
+      },
+      
+      {
+        tag: "OLD-TAG-1",
+        spec: "500",
+        action: "BYPASS",
+        purpose: "Legacy parameter testing",
+        requestDate: "12/15/2025 10:00 AM",
+        requestBy: "USR",
+        bypassDate: "12/15/2025 11:00 AM",
+        bypassBy: "MAJ"
+      }
+    ];
+
+
+
+    const tableBody = document.getElementById("bypass-table-body");
+    const plantDisplay = document.getElementById("plant-display");
+    const yearFilter = document.getElementById("year-filter");
+
+    const params = new URLSearchParams(window.location.search);
+    var plant = params.get("plant") || "AMM";
+
+    plantDisplay.textContent = plant;
+
+    function renderTable(filterYear) {
+      const filteredData = mockData.filter(item => {
+        // Extract year from requestDate (assuming format M/D/YYYY ...) or check if requestDate contains filterYear
+        return item.requestDate.includes(filterYear);
+      });
+
+      tableBody.innerHTML = filteredData.map((item, index) => `
+        <tr class="gnfc-tr">
+          <td class="gnfc-td text-center font-medium">${index + 1}</td>
+          <td class="gnfc-td">
+            <div class="font-semibold text-dark-text">${item.tag}</div>
+            <div class="text-xs text-dark-muted">${item.spec}</div>
+          </td>
+          <td class="gnfc-td">
+            <div class="font-semibold text-red-600">${item.action}</div>
+            <div class="text-xs text-dark-muted mt-1">${item.purpose}</div>
+          </td>
+          <td class="gnfc-td text-xs">
+            <div class="flex items-start gap-2">
+              <i class="ph-fill ph-circle text-red-600 mt-1 text-[10px]"></i>
+              <div class="text-dark-text">
+                ${item.requestDate}
+                <br>
+                <span class="text-dark-muted">${item.requestBy}</span>
+              </div>
+            </div>
+          </td>
+          <td class="gnfc-td text-xs">
+            <div class="flex items-start gap-2">
+              <i class="ph-fill ph-circle text-green-600 mt-1 text-[10px]"></i>
+              <div class="text-dark-text">
+                ${item.bypassDate}
+                <br>
+                <span class="text-dark-muted">${item.bypassBy}</span>
+              </div>
+            </div>
+          </td>
+          <td class="gnfc-td"></td>
+          <td class="gnfc-td"></td>
+        </tr>
+      `).join("");
+    }
+
+    // Initial render
+    renderTable(yearFilter.value);
+
+    // Filter listener
+    yearFilter.addEventListener('change', (e) => {
+      renderTable(e.target.value);
+    });
+
+  </script>
+
+
+  <!-- MODAL STRUCTURE (FIXED & CENTRALLY POSITIONED) -->
+  <div id="modal-bypass-parameters" class="gnfc-modal-overlay" onclick="if(event.target === this) BypassModal.close()">
+    <div class="gnfc-modal-shell gnfc-modal-shell--2xl">
+      
+      <!-- HEADER -->
+      <div class="gnfc-modal-header">
+        <div class="flex flex-col">
+          <h2 class="gnfc-modal-title">BYPASSED PARAMETER</h2>
+          <div class="gnfc-modal-subtitle">
+            <span id="modal-plant-display">AMM</span>/AREA:
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <button onclick="BypassModal.close()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="gnfc-modal-body gnfc-modal-body--flush">
+        <table class="gnfc-table border-collapse w-full">
+          <thead class="gnfc-thead sticky top-0 z-10">
+            <tr>
+              <th class="gnfc-th w-14">Sr</th>
+              <th class="gnfc-th text-left w-44">TAGNO</th>
+              <th class="gnfc-th text-left">ACTION</th>
+              <th class="gnfc-th text-left w-64">BYPASS REQUEST</th>
+              <th class="gnfc-th text-left w-64">BYPASSED ON</th>
+              <th class="gnfc-th text-left w-48">IN-LINE REQUEST</th>
+              <th class="gnfc-th text-left w-48">TAKEN IN LINE ON</th>
+            </tr>
+          </thead>
+          <tbody id="modal-bypass-table-body" class="gnfc-tbody">
+            <!-- Dynamic Content -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="gnfc-modal-footer">
+        <button type="button" onclick="BypassModal.close()" class="gnfc-modal-btn gnfc-modal-btn-secondary px-8">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY MODAL STRUCTURE -->
+  <div id="modal-history" class="gnfc-modal-overlay" onclick="if(event.target === this) HistoryModal.close()">
+    <div class="gnfc-modal-shell gnfc-modal-shell--2xl">
+      
+      <!-- HEADER -->
+      <div class="gnfc-modal-header">
+        <div class="flex flex-col">
+          <h2 class="gnfc-modal-title">BYPASS PARAMETERS HISTORY</h2>
+          <div class="gnfc-modal-subtitle">
+            <span id="modal-history-plant-display">AMM</span>/AREA:
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <button onclick="HistoryModal.close()" class="gnfc-modal-close" aria-label="Close">
+            <i class="ph-bold ph-x"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="gnfc-modal-body gnfc-modal-body--flush">
+        <table class="gnfc-table border-collapse w-full">
+          <thead class="gnfc-thead sticky top-0 z-10">
+            <tr>
+              <th class="gnfc-th w-14">Sr</th>
+              <th class="gnfc-th text-left w-44">TAGNO</th>
+              <th class="gnfc-th text-left">ACTION</th>
+              <th class="gnfc-th text-left w-64">BYPASS REQUEST</th>
+              <th class="gnfc-th text-left w-64">BYPASSED ON</th>
+              <th class="gnfc-th text-left w-64">IN-LINE REQUEST</th>
+              <th class="gnfc-th text-left w-64">TAKEN IN LINE ON</th>
+            </tr>
+          </thead>
+          <tbody id="modal-history-table-body" class="gnfc-tbody">
+            <!-- Dynamic Content -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="gnfc-modal-footer">
+        <button type="button" onclick="HistoryModal.close()" class="gnfc-modal-btn gnfc-modal-btn-secondary px-8">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    const BypassModal = {
+      open(plantName, data) {
+        const modal = document.getElementById('modal-bypass-parameters');
+        const plantDisp = document.getElementById('modal-plant-display');
+        const timeDisp = document.getElementById('modal-timestamp');
+        const modalTableBody = document.getElementById('modal-bypass-table-body');
+
+        if (plantDisp) plantDisp.textContent = plantName || 'AMM';
+        if (timeDisp) timeDisp.textContent = new Date().toLocaleString();
+        
+        if (modalTableBody && data) {
+          modalTableBody.innerHTML = data.map((item, index) => `
+            <tr class="gnfc-tr">
+              <td class="gnfc-td text-center font-medium">${index + 1}</td>
+              <td class="gnfc-td">
+                <div class="font-semibold text-dark-text">${item.tag}</div>
+                <div class="text-xs text-dark-muted">${item.spec || ''}</div>
+              </td>
+              <td class="gnfc-td">
+                <div class="font-semibold text-red-600">${item.action}</div>
+                <div class="text-xs text-dark-muted mt-1">Purpose: ${item.purpose}</div>
+                <div class="text-[10px] text-dark-muted mt-1">Ref :</div>
+              </td>
+              <td class="gnfc-td text-xs">
+                <div class="flex items-start gap-2">
+                  <i class="ph-fill ph-circle text-red-600 mt-1 text-[10px]"></i>
+                  <div class="text-dark-text">
+                    ${item.requestDate}
+                    <br>
+                    <span class="text-dark-muted">(${item.requestBy})</span>
+                  </div>
+                </div>
+              </td>
+              <td class="gnfc-td text-xs">
+                <div class="flex items-start gap-2">
+                  <i class="ph-fill ph-circle text-green-600 mt-1 text-[10px]"></i>
+                  <div class="text-dark-text">
+                    ${item.bypassDate}
+                    <br>
+                    <span class="text-dark-muted">(${item.bypassBy})</span>
+                  </div>
+                </div>
+              </td>
+              <td class="gnfc-td"></td>
+              <td class="gnfc-td"></td>
+            </tr>
+          `).join("");
+        }
+
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      },
+
+      close() {
+        const modal = document.getElementById('modal-bypass-parameters');
+        modal.classList.remove('is-open');
+        document.body.style.overflow = ''; // Restore scrolling
+      }
+    };
+
+    var mockHistoryData = [
+      {
+        tag: "PS7037L",
+        spec: "7000",
+        action: "BYPASS",
+        purpose: "PS7037L/PS7037BL to be bypassed for checking C.O. PRESS",
+        requestDate: "3/14/2026 6:36:00 PM",
+        requestBy: "AAS/NMP",
+        bypassDate: "3/15/2026 8:40:00 AM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "3/15/2026 8:42:00 AM",
+        inlineRequestBy: "MVB/DVP",
+        takenInlineDate: "3/15/2026 8:42:00 AM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "LIS115LL",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "OPERATION SECURITY LVL P103R",
+        requestDate: "3/11/2026 2:28:00 PM",
+        requestBy: "DVP/NMP",
+        bypassDate: "3/11/2026 2:30:00 PM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/11/2026 4:56:00 PM",
+        inlineRequestBy: "dvp/hmp",
+        takenInlineDate: "3/11/2026 5:01:00 PM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "LIS114LL",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "OPERATION SECURITY LEVEL P103",
+        requestDate: "3/11/2026 2:27:00 PM",
+        requestBy: "DVP/NMP",
+        bypassDate: "3/11/2026 2:30:00 PM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/11/2026 5:02:00 PM",
+        inlineRequestBy: "dvp/hmp",
+        takenInlineDate: "3/11/2026 5:02:00 PM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "C10",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "TIS44H bypassed for checking",
+        requestDate: "3/11/2026 9:56:00 AM",
+        requestBy: "JYP/NMP",
+        bypassDate: "3/11/2026 10:20:00 AM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "3/11/2026 11:01:00 AM",
+        inlineRequestBy: "JYP/NMP",
+        takenInlineDate: "3/11/2026 11:42:00 AM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "FT0210BA",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "BYPASS FSL210BL OVERALL R201B OIL FLOW",
+        requestDate: "3/9/2026 2:41:00 PM",
+        requestBy: "DVP MVB",
+        bypassDate: "3/9/2026 4:52:00 PM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/10/2026 1:30:00 AM",
+        inlineRequestBy: "AAS/NMP",
+        takenInlineDate: "3/10/2026 8:36:00 AM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "TIS90HL",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "FOR IUBE OIL COOLER BACKFLUSHING CX20 LO TEMP",
+        requestDate: "3/9/2026 1:49:00 PM",
+        requestBy: "JYP/MVB/ALG",
+        bypassDate: "3/9/2026 2:14:00 PM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/9/2026 2:16:00 PM",
+        inlineRequestBy: "MVB/JYP",
+        takenInlineDate: "3/9/2026 3:07:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "TIS87H",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "TIS87H to be bypassed for checking C20 DISCH TEMP",
+        requestDate: "3/9/2026 10:11:00 AM",
+        requestBy: "MVB/JYP",
+        bypassDate: "3/9/11:04:00 AM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "3/9/2026 3:04:00 PM",
+        inlineRequestBy: "dvp",
+        takenInlineDate: "3/9/2026 3:07:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "V6B-FV0215B",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "V6B SOV to be bypassed for stroke checking R201B STEAM TO O2 CNTRL VALVE",
+        requestDate: "3/9/2026 8:46:00 AM",
+        requestBy: "JYP/MVB/ALG",
+        bypassDate: "3/9/2026 9:55:00 AM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/9/2026 9:57:00 AM",
+        inlineRequestBy: "MVB/JYP",
+        takenInlineDate: "3/9/2026 10:19:00 AM",
+        takenInlineBy: "DKV"
+      },
+      {
+        tag: "TIS05HL",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "TIS18 to be forced for checking E40 HP N2 I/L",
+        requestDate: "3/7/2026 6:16:00 PM",
+        requestBy: "HHB",
+        bypassDate: "3/9/2026 3:08:00 PM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "3/9/2026 3:09:00 PM",
+        inlineRequestBy: "dvp/MVB",
+        takenInlineDate: "3/9/2026 3:10:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "LS8113L",
+        spec: "8000",
+        action: "BYPASS",
+        purpose: "CHECKING D714 LEVEL",
+        requestDate: "3/5/2026 10:54:00 AM",
+        requestBy: "NGG/AAS",
+        bypassDate: "3/5/2026 10:55:00 AM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/5/2026 11:07:00 AM",
+        inlineRequestBy: "NGG/AAS",
+        takenInlineDate: "3/5/2026 11:52:00 AM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "LT791B",
+        spec: "700",
+        action: "BYPASS",
+        purpose: "LS791L/BL to be bypassed for m/m job LEVEL OF E703M",
+        requestDate: "3/5/2026 10:30:00 AM",
+        requestBy: "aas",
+        bypassDate: "3/5/2026 10:55:00 AM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/5/2026 10:57:00 AM",
+        inlineRequestBy: "aas",
+        takenInlineDate: "3/5/2026 11:53:00 AM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "LS8105L",
+        spec: "8000",
+        action: "BYPASS",
+        purpose: "faulty appeared related checking D713 LEVEL",
+        requestDate: "3/4/2026 11:23:00 PM",
+        requestBy: "JYP/JKP",
+        bypassDate: "3/5/2026 10:55:00 AM",
+        bypassBy: "NKP",
+        inlineRequestDate: "3/5/2026 11:44:00 AM",
+        inlineRequestBy: "NGG/AAS",
+        takenInlineDate: "3/5/2026 11:52:00 AM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "PDT0244CA",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "individual PDT244CA forced healthy R201C STM TO GAS PDI",
+        requestDate: "2/27/2026 4:57:00 PM",
+        requestBy: "JKP/JYP",
+        bypassDate: "2/28/2026 8:13:00 AM",
+        bypassBy: "NKP",
+        inlineRequestDate: "2/28/2026 12:00:00 PM",
+        inlineRequestBy: "AAS/JKP",
+        takenInlineDate: "2/28/2026 12:01:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "PDT0244CA",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "Bypass PDS244CA for m/m job R201C STM TO GAS PDI",
+        requestDate: "2/27/2026 2:44:00 PM",
+        requestBy: "JYP/JKP",
+        bypassDate: "2/27/2026 3:06:00 PM",
+        bypassBy: "NKP",
+        inlineRequestDate: "2/27/2026 4:46:00 PM",
+        inlineRequestBy: "JKP/JYP",
+        takenInlineDate: "2/27/2026 4:51:00 PM",
+        takenInlineBy: "DKV"
+      },
+      {
+        tag: "LT791C",
+        spec: "700",
+        action: "BYPASS",
+        purpose: "LS0791L bypass for LT791C LP tapping 2nd i/v bonnet leakage job LEVEL OF E703M",
+        requestDate: "2/19/2026 10:46:00 AM",
+        requestBy: "HHB/MVB",
+        bypassDate: "2/19/2026 10:49:00 AM",
+        bypassBy: "DKV",
+        inlineRequestDate: "2/19/2026 11:00:00 AM",
+        inlineRequestBy: "HHB/MVB",
+        takenInlineDate: "2/19/2026 11:52:00 AM",
+        takenInlineBy: "DKV"
+      },
+      {
+        tag: "PDIS5112L",
+        spec: "500",
+        action: "BYPASS",
+        purpose: "FOR TUBING LEAKAGE JOB PDI ACRS PV5112",
+        requestDate: "2/10/2026 10:40:00 AM",
+        requestBy: "AAS",
+        bypassDate: "2/10/2026 10:59:00 AM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "2/10/2026 11:26:00 AM",
+        inlineRequestBy: "aas",
+        takenInlineDate: "2/10/2026 2:12:00 PM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "PDT0244CA",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "PDIS244CA/CB/CC overall bypass for m/m job R201C STM TO GAS PDI",
+        requestDate: "1/20/2026 2:55:00 PM",
+        requestBy: "ALG/JYP/MSV",
+        bypassDate: "1/20/2026 3:07:00 PM",
+        bypassBy: "DKV",
+        inlineRequestDate: "1/20/2026 4:16:00 PM",
+        inlineRequestBy: "JYP/ALG/MSV",
+        takenInlineDate: "1/20/2026 4:27:00 PM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "C501A SOV",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "Testing C501A SOV performance",
+        requestDate: "1/19/2026 4:12:00 PM",
+        requestBy: "ALG/JYP/NGG",
+        bypassDate: "1/19/2026 4:19:00 PM",
+        bypassBy: "DKV",
+        inlineRequestDate: "1/19/2026 6:59:00 PM",
+        inlineRequestBy: "ALG/JYP",
+        takenInlineDate: "1/20/2026 8:36:00 AM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "LT791A",
+        spec: "700",
+        action: "BYPASS",
+        purpose: "OVERALL BYAPSS FOR online sealing job LEVEL OF E703M",
+        requestDate: "1/13/2026 9:26:00 AM",
+        requestBy: "DVP/MVB/JKP",
+        bypassDate: "1/13/2026 11:15:00 AM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "1/13/2026 11:42:00 AM",
+        inlineRequestBy: "DVP/MVB/JKP",
+        takenInlineDate: "1/13/2026 11:43:00 AM",
+        takenInlineBy: "DKV"
+      },
+      {
+        tag: "MV3",
+        spec: "3000",
+        action: "BYPASS",
+        purpose: "MV-2 :: XS3103H is to bypassed for its limit switch replacement CX101 DISCHARGE",
+        requestDate: "1/10/2026 2:37:00 PM",
+        requestBy: "aas/NMP",
+        bypassDate: "1/10/2026 2:49:00 PM",
+        bypassBy: "DKV",
+        inlineRequestDate: "1/10/2026 3:11:00 PM",
+        inlineRequestBy: "AAS/NMP",
+        takenInlineDate: "1/10/2026 3:22:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "PDT0244CA",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "PDS244C overall to be bypassed for PDT244CA steam side both i/v gland leakage job R201C STM TO GAS PDI",
+        requestDate: "1/10/2026 2:34:00 PM",
+        requestBy: "AAS/NMP",
+        bypassDate: "1/10/2026 2:52:00 PM",
+        bypassBy: "DKV",
+        inlineRequestDate: "1/10/2026 4:14:00 PM",
+        inlineRequestBy: "aas",
+        takenInlineDate: "1/12/2026 8:03:00 AM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "PDT0244CA",
+        spec: "200",
+        action: "BYPASS",
+        purpose: "PDS244C overall to be bypassed for PDT244CA steam side both i/v gland leakage job R201C STM TO GAS PDI",
+        requestDate: "1/10/2026 10:10:00 AM",
+        requestBy: "MVB/JKP",
+        bypassDate: "1/10/2026 10:37:00 AM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "1/10/2026 11:34:00 AM",
+        inlineRequestBy: "MVB/JKP",
+        takenInlineDate: "1/10/2026 11:42:00 AM",
+        takenInlineBy: "NKP"
+      },
+      {
+        tag: "GI7112A",
+        spec: "7000",
+        action: "BYPASS",
+        purpose: "GS7110/GS7111/GS7112/GS7001 bypass for card replacement 1ST STAGE AXIAL DISPLACEMENT",
+        requestDate: "1/6/2026 2:39:00 PM",
+        requestBy: "DVP/MVB/JKP",
+        bypassDate: "1/6/2026 4:00:00 PM",
+        bypassBy: "MAJ",
+        inlineRequestDate: "1/6/2026 4:08:00 PM",
+        inlineRequestBy: "DVP/MVB/JKP",
+        takenInlineDate: "1/6/2026 4:12:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "LT791C",
+        spec: "700",
+        action: "BYPASS",
+        purpose: "LS0791L bypass for LT791C LP tapping gland online tightening LEVEL OF E703M",
+        requestDate: "1/6/2026 10:46:00 AM",
+        requestBy: "JYP/NMP",
+        bypassDate: "1/6/2026 11:20:00 AM",
+        bypassBy: "NKP",
+        inlineRequestDate: "1/6/2026 11:20:00 AM",
+        inlineRequestBy: "JYP/NMP",
+        takenInlineDate: "1/6/2026 1:45:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "C10",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "HS05_1 C10 loading logic to be bypassed for X20 deriming",
+        requestDate: "1/5/2026 7:47:00 PM",
+        requestBy: "DVP/NMP",
+        bypassDate: "1/6/2026 8:48:00 AM",
+        bypassBy: "DKV",
+        inlineRequestDate: "1/6/2026 1:46:00 PM",
+        inlineRequestBy: "JYP/NMP/MSV",
+        takenInlineDate: "1/6/2026 4:00:00 PM",
+        takenInlineBy: "MAJ"
+      },
+      {
+        tag: "C10",
+        spec: "100",
+        action: "BYPASS",
+        purpose: "PDB FAN 2 alarm bypass for checking/replacement",
+        requestDate: "1/1/2026 11:00:00 AM",
+        requestBy: "HHB",
+        bypassDate: "1/1/2026 11:05:00 AM",
+        bypassBy: "DKV",
+        inlineRequestDate: "1/2/2026 2:54:00 PM",
+        inlineRequestBy: "AAS/MVB",
+        takenInlineDate: "1/2/2026 3:04:00 PM",
+        takenInlineBy: "DKV"
+      }
+    ];
+
+    const HistoryModal = {
+      open(plantName, data) {
+        const modal = document.getElementById('modal-history');
+        const plantDisp = document.getElementById('modal-history-plant-display');
+        const timeDisp = document.getElementById('modal-history-timestamp');
+        const modalTableBody = document.getElementById('modal-history-table-body');
+
+        if (plantDisp) plantDisp.textContent = plantName || 'AMM';
+        if (timeDisp) timeDisp.textContent = new Date().toLocaleString();
+        
+        if (modalTableBody && data) {
+          modalTableBody.innerHTML = data.map((item, index) => `
+            <tr class="gnfc-tr">
+              <td class="gnfc-td text-center font-medium">${index + 1}</td>
+              <td class="gnfc-td">
+                <div class="font-semibold text-dark-text">${item.tag}</div>
+                <div class="text-xs text-dark-muted">${item.spec || ''}</div>
+              </td>
+              <td class="gnfc-td">
+                <div class="font-semibold text-red-600">${item.action}</div>
+                <div class="text-xs text-dark-muted mt-1">Purpose: ${item.purpose}</div>
+                <div class="text-[10px] text-dark-muted mt-1">Ref :</div>
+              </td>
+              <td class="gnfc-td text-xs">
+                <div class="flex items-start gap-2">
+                  <i class="ph-fill ph-circle text-red-600 mt-1 text-[10px]"></i>
+                  <div class="text-dark-text">
+                    ${item.requestDate}
+                    <br>
+                    <span class="text-dark-muted">(${item.requestBy})</span>
+                  </div>
+                </div>
+              </td>
+              <td class="gnfc-td text-xs">
+                <div class="flex items-start gap-2">
+                  <i class="ph-fill ph-circle text-green-600 mt-1 text-[10px]"></i>
+                  <div class="text-dark-text">
+                    ${item.bypassDate}
+                    <br>
+                    <span class="text-dark-muted">(${item.bypassBy})</span>
+                  </div>
+                </div>
+              </td>
+              <td class="gnfc-td text-xs">
+                ${item.inlineRequestDate ? `
+                <div class="flex items-start gap-2">
+                  <i class="ph-fill ph-circle text-red-600 mt-1 text-[10px]"></i>
+                  <div class="text-dark-text">
+                    ${item.inlineRequestDate}
+                    <br>
+                    <span class="text-dark-muted">(${item.inlineRequestBy})</span>
+                  </div>
+                </div>` : ''}
+              </td>
+              <td class="gnfc-td text-xs">
+                ${item.takenInlineDate ? `
+                <div class="flex items-start gap-2">
+                  <i class="ph-fill ph-circle text-green-600 mt-1 text-[10px]"></i>
+                  <div class="text-dark-text">
+                    ${item.takenInlineDate}
+                    <br>
+                    <span class="text-dark-muted">(${item.takenInlineBy})</span>
+                  </div>
+                </div>` : ''}
+              </td>
+            </tr>
+          `).join("");
+        }
+
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      },
+
+      close() {
+        const modal = document.getElementById('modal-history');
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+    };
+  </script>
+</body>
+
+</html>

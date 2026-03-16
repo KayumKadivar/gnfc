@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Operation Job Register | GNFC</title>
+
+  <link rel="stylesheet" href="/src/css/ios-fonts.css">
+  <link rel="stylesheet" href="/src/css/typography.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script src="/src/js/tailwind_config.js"></script>
+  <script>window.activePage = 'opr_job_reg';</script>
+
+</head>
+
+
+<body class="bg-slate-100 text-slate-900 h-screen flex overflow-hidden font-sans">
+
+  <script src="/src/js/theme_manager.js"></script>
+  <script src="/src/js/sidebar.js"></script>
+
+  <div id="sidebar-container"></div>
+  <script>renderSidebar('opr_job_reg');</script>
+
+
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <div id="header-container"></div>
+
+    <script src="/src/js/header.js"></script>
+
+    <script>
+      renderHeader({
+        title: "Operation Job Register",
+        breadcrumbs: [
+          { label: "Dashboard", href: "/src/pages/dashboard.html" },
+          { label: "Operation Job Register" }
+        ],
+        backLink: "/src/pages/dashboard.html",
+        searchPlaceholder: "Search unit..."
+      });
+    </script>
+
+
+    <div class="flex-1 overflow-y-auto p-5">
+
+      <div class="mx-auto space-y-6">
+        <!-- PAGE HEADER -->
+        <div class="bg-white border rounded-md px-6 py-4 flex items-center justify-between shadow-sm">
+          <div>
+            <h1 class="text-xl font-semibold text-slate-800">
+              Operation Job Register
+            </h1>
+            <p class="text-sm text-slate-500">
+              Instrument Department
+            </p>
+          </div>
+        </div>
+
+        <!-- SYSTEM MODE -->
+        <div class="bg-white border rounded-md shadow-sm p-5">
+          <h3 class="text-sm font-semibold text-slate-700 mb-4">
+            Select System Mode
+          </h3>
+          <div class="flex flex-wrap gap-4">
+            <label class="flex items-center gap-3 border rounded-md px-4 py-3 cursor-pointer hover:border-blue-500">
+              <input type="radio" name="opr_system" value="bypass" class="accent-blue-600">
+              <span class="text-sm font-medium text-slate-700">
+                Bypass System
+              </span>
+            </label>
+            <label class="flex items-center gap-3 border rounded-md px-4 py-3 cursor-pointer hover:border-blue-500">
+              <input type="radio" name="opr_system" value="gnfc" class="accent-blue-600">
+              <span class="text-sm font-medium text-slate-700">
+                GNFC System
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- UNIT GRID -->
+        <div class="bg-white border rounded-md shadow-smbypass_details p-5">
+          <h3 class="text-sm font-semibold text-slate-700 mb-4">
+            Plant Units
+          </h3>
+          <div id="opr-unit-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+
+          </div>
+        </div>
+        <!-- BYPASS VIEW REMOVED - NOW IN A SEPARATE PAGE -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+
+    const operationUnits = [
+
+      { name: "METH-I", icon: "ph-factory", caption: "Methanol Unit" },
+      { name: "METH-II", icon: "ph-factory", caption: "Methanol Unit" },
+      { name: "ACETIC", icon: "ph-drop", caption: "Acetic Plant" },
+      { name: "FORMIC", icon: "ph-beaker", caption: "Formic Acid" },
+      { name: "BOILER", icon: "ph-fire", caption: "Steam Systems" },
+      { name: "PSU", icon: "ph-lightning", caption: "Power Supply" },
+      { name: "AMMONIA", icon: "ph-flask", caption: "Ammonia Plant" },
+      { name: "UREA", icon: "ph-hexagon", caption: "Urea Unit" },
+      { name: "NITRO", icon: "ph-wind", caption: "Nitro Section" },
+      { name: "EA", icon: "ph-gauge", caption: "EA Unit" },
+      { name: "DM", icon: "ph-drop-half", caption: "DM Water" },
+      { name: "BAGGING", icon: "ph-package", caption: "Packing Area" },
+      { name: "ASGP", icon: "ph-gear-six", caption: "Service Plant" },
+      { name: "AAQM", icon: "ph-chart-line", caption: "Quality Monitoring" }
+
+    ];
+
+
+    const unitGrid = document.getElementById("opr-unit-grid");
+    const bypassView = document.getElementById("bypass-view-container");
+    const bypassPlantTitle = document.getElementById("bypass-plant-name");
+    const backBtn = document.getElementById("back-to-units");
+
+
+
+    unitGrid.innerHTML = operationUnits.map(unit => `
+
+<div data-name="${unit.name}"
+class="unit-card flex items-center justify-between p-3 border rounded-md bg-white hover:border-blue-500 hover:shadow-sm cursor-pointer transition">
+
+<div>
+
+<p class="text-sm font-semibold text-slate-800">
+${unit.name}
+</p>
+
+<p class="text-xs text-slate-500">
+${unit.caption}
+</p>
+
+</div>
+
+<div class="text-blue-600 text-lg">
+<i class="ph ${unit.icon}"></i>
+</div>
+
+</div>
+
+`).join("");
+
+    unitGrid.addEventListener("click", (e) => {
+      const card = e.target.closest(".unit-card");
+      if (!card) return;
+
+      const currentMode = localStorage.getItem("gnfc_system_mode") || "gnfc";
+      const name = card.dataset.name;
+
+      if (currentMode === "bypass") {
+        // Navigate to the new detail page
+        window.location.href = `bypass_details.html?plant=${encodeURIComponent(name)}`;
+      } else {
+        // Navigate to the new FA page
+        window.location.href = `op_job_reg_fa.html?plant=${encodeURIComponent(name)}`;
+      }
+    });
+
+    if (backBtn) {
+    }
+
+    const STORAGE_KEY = "gnfc_system_mode";
+
+    const radioButtons = document.querySelectorAll('input[name="opr_system"]');
+
+    function initSystemMode() {
+
+      const savedMode = localStorage.getItem(STORAGE_KEY) || "gnfc";
+
+      const targetRadio = document.querySelector(`input[name="opr_system"][value="${savedMode}"]`);
+
+      if (targetRadio) targetRadio.checked = true;
+
+    }
+
+    radioButtons.forEach(radio => {
+
+      radio.addEventListener("change", (e) => {
+
+        if (e.target.checked) {
+
+          localStorage.setItem(STORAGE_KEY, e.target.value);
+
+          if (e.target.value === "gnfc") {
+          }
+
+        }
+
+      });
+
+    });
+
+    document.addEventListener("DOMContentLoaded", initSystemMode);
+
+    initSystemMode();
+
+  </script>
+
+</body>
+
+</html>
