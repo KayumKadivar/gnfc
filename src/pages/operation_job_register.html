@@ -16,28 +16,22 @@
   <link rel="stylesheet" href="/src/css/modal-ui.css">
   <style>
     .glass-card {
-      background: rgba(255, 255, 255, 0.98); 
+      background: var(--app-panel, rgba(255, 255, 255, 0.98));
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(226, 232, 240, 1);
-    }
-
-    .dark .glass-card {
-      background: rgba(30, 41, 59, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--app-border, rgba(226, 232, 240, 1));
     }
 
     .modern-gradient {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
 
-    .dark .page-bg {
-      background: #0f172a;
-      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+    .dark .modern-gradient {
+      background: var(--app-panel-alt, #1e293b);
     }
 
     .hover-glow:hover {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      border-color: #cbd5e1;
+      border-color: var(--app-border, #cbd5e1);
     }
   </style>
 </head>
