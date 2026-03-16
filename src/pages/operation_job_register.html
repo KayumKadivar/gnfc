@@ -48,7 +48,7 @@
   <script src="/src/js/theme_manager.js"></script>
 
   <nav class="glass-card sticky top-0 z-50 shadow-sm transition-colors duration-300">
-    <div class="max-w-6xl mx-auto h-20 flex items-center justify-between px-4">
+    <div class="max-w-7xl mx-auto h-20 flex items-center justify-between px-4">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center shadow-md">
           <i class="ph-bold ph-clipboard-text text-white text-lg"></i>
@@ -85,7 +85,7 @@
     </div>
   </div>
 
-  <main class="flex-1 w-full max-w-6xl mx-auto mt-10 relative z-20 pb-10 px-4">
+  <main class="flex-1 w-full max-w-7xl mx-auto mt-10 relative z-20 pb-10">
 
     <div id="bypassParameterDataView" class="hidden"></div>
     <button id="logoutBtn" class="hidden">Logout</button>
@@ -181,7 +181,7 @@
         <button id="showLoginFormBtn"
           class="flex items-center justify-center gap-2 py-3 px-6 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition-all duration-300 uppercase tracking-widest shadow hover:shadow-md mx-auto group">
           <i class="ph-bold ph-sign-in text-xl group-hover:translate-x-1 transition-transform"></i>
-          <span>Login for Access</span>
+          <span>Login</span>
         </button>
       </div>
 
@@ -323,8 +323,8 @@
               window.location.href = '/src/pages/job_register.html';
             } else if (selectedMode === 'BYPASS REQUEST') {
               window.location.href = '/src/pages/bypass_parameter.html';
-            } else {
-              alert("Routing for " + selectedMode + " is not yet implemented.");
+            } else if (selectedMode === 'ALARM TRIP SETTING') {
+              window.location.href = '/src/pages/alarm_trip_settings.html';
             }
           });
         }
