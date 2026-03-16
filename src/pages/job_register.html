@@ -28,7 +28,7 @@
     }
 
     .label-pill {
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -83,7 +83,7 @@
     }
 
     .dark .accessible-textarea {
-      background-color: #0f172a / 50;
+      background-color: rgba(15, 23, 42, 0.5);
       border-color: #334155;
       color: #e2e8f0;
     }
@@ -100,6 +100,44 @@
     /* Hide scrollbar but allow scrolling */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Searchable Dropdown Styles */
+    .dropdown-option {
+      padding: 0.625rem 1rem;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+    }
+    .dark .dropdown-option { border-bottom-color: rgba(51, 65, 85, 0.4); }
+    .dropdown-option:last-child { border-bottom: none; }
+    .dropdown-option:hover { 
+      background-color: #f8fafc; 
+      color: #0f766e;
+      padding-left: 1.25rem;
+    }
+    .dark .dropdown-option:hover { 
+      background-color: #1e293b; 
+      color: #2dd4bf;
+    }
+    .dropdown-option.selected { 
+      background-color: #f1f5f9; 
+      color: #0d9488; 
+      font-weight: 800; 
+    }
+    .dark .dropdown-option.selected { 
+      background-color: #334155; 
+      color: #5eead4; 
+    }
+    .no-results {
+      padding: 1rem;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      font-style: italic;
+    }
   </style>
 </head>
 
@@ -119,9 +157,9 @@
         </div>
       </div>
       <div class="flex items-center gap-4">
-        <a href="/src/pages/operation_job_register.html" class="flex items-center gap-2 px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-          <i class="ph-bold ph-arrow-left text-base"></i>
-          <span>Portal Gateway</span>
+        <a href="/src/pages/operation_job_register.html" class="flex items-center gap-2 px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 transition-colors border shadow-sm">
+          <i class="ph-bold ph-house text-base"></i>
+          <span>Home</span>
         </a>
       </div>
     </div>
@@ -155,32 +193,40 @@
 
     <!-- Main Dashboard Container -->
     <div class="flex-1 flex flex-col gap-4 min-h-0">
-      <!-- Metadata Grid -->
-      <div class="glass-card rounded-lg p-4 grid grid-cols-1 xl:grid-cols-4 gap-6 shrink-0 border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
-        <!-- Operation Details Cluster -->
-        <div class="xl:col-span-2 grid grid-cols-4 gap-4">
-          <div class="col-span-4 flex items-center gap-2 mb-1">
+      <!-- Metadata Grid (Increased Z-index for Dropdowns) -->
+      <div class="glass-card rounded-lg p-4 grid grid-cols-1 xl:grid-cols-4Alarm/Trip Settings Report
+
+ gap-6 shrink-0 border border-slate-200 dark:border-slate-800 dark:bg-slate-900/50 relative z-20">
+        <!-- Operation Details Cluster (Expanded for Tag No) -->
+        <div class="xl:col-span-2 grid grid-cols-12 gap-4">
+          <div class="col-span-12 flex items-center gap-2 mb-1">
             <i class="ph-bold ph-user-gear text-teal-600"></i>
             <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Operation Details</span>
           </div>
-          <div>
+          <div class="col-span-5 relative searchable-tag-container h-full">
             <label class="label-pill">Tag No</label>
-            <input type="text" class="accessible-input uppercase" value="NOTAG">
+            <div class="relative">
+              <input type="text" class="accessible-input uppercase pr-10 tag-search-input" value="NOTAG" autocomplete="off" placeholder="Search Tag...">
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none transition-transform duration-200"></i>
+            </div>
+            <div class="tag-dropdown-list hidden absolute left-0 right-0 z-[100] mt-1.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-lg shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] max-h-64 overflow-y-auto no-scrollbar ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-200">
+              <!-- Options populated by JS -->
+            </div>
           </div>
-          <div>
+          <div class="col-span-3">
             <label class="label-pill">Date</label>
             <input type="text" class="accessible-input" value="1/9/2013">
           </div>
-          <div>
+          <div class="col-span-2">
             <label class="label-pill">Shift</label>
-            <select class="accessible-input appearance-none bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1em_1em]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220%22%3E%3Cpath fill=%22%2394a3b8%22 d=%22M21.5 13.5l-5.5 5.5-5.5-5.5%22/%3E%3C/svg%3E');">
+            <select class="accessible-input appearance-none bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1em_1em]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22%3E%3Cpath fill=%22%2394a3b8%22 d=%22M21.5 13.5l-5.5 5.5-5.5-5.5%22/%3E%3C/svg%3E');">
               <option selected>A</option>
               <option>B</option>
               <option>C</option>
               <option>G</option>
             </select>
           </div>
-          <div>
+          <div class="col-span-2">
             <label class="label-pill">SE</label>
             <input type="text" class="accessible-input uppercase" value="AMP">
           </div>
@@ -202,7 +248,7 @@
           </div>
           <div>
             <label class="label-pill">Status</label>
-            <select class="accessible-input appearance-none font-bold text-teal-600 dark:text-teal-400 bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1em_1em]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220%22%3E%3Cpath fill=%22%2394a3b8%22 d=%22M21.5 13.5l-5.5 5.5-5.5-5.5%22/%3E%3C/svg%3E');">
+            <select class="accessible-input appearance-none font-bold text-teal-600 dark:text-teal-400 bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1em_1em]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22%3E%3Cpath fill=%22%2394a3b8%22 d=%22M21.5 13.5l-5.5 5.5-5.5-5.5%22/%3E%3C/svg%3E');">
               <option selected disabled>Select...</option>
               <option>PENDING</option>
               <option>COMPLETED</option>
@@ -211,8 +257,8 @@
         </div>
       </div>
 
-      <!-- Split-Screen Textareas (Reduced Height) -->
-      <div class="h-72 flex gap-4 shrink-0">
+      <!-- Split-Screen Textareas (Strictly Compact) -->
+      <div class="h-60 flex gap-4 shrink-0">
         <!-- Description -->
         <div class="flex-1 flex flex-col glass-card rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
           <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
@@ -225,7 +271,7 @@
         </div>
 
         <!-- Remarks -->
-        <div class="w-1/3 flex flex-col glass-card rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/70 shadow-sm overflow-hidden">
+        <div class="w-1/3 flex flex-col glass-card rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-900/70 shadow-sm overflow-hidden">
           <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
             <h3 class="font-outfit font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-widest text-[10px]">Remarks</h3>
             <i class="ph-bold ph-chats-circle text-lg text-slate-400 opacity-50"></i>
@@ -261,7 +307,7 @@
   </main>
 
   <!-- Add Job Modal -->
-  <div id="addJobModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/70 backdrop-blur-md transition-all duration-300 p-4">
+  <div id="addJobModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/70 transition-all duration-300 p-4">
     <div id="addJobModalContent" class="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 transform scale-95 opacity-0 transition-all duration-300 overflow-hidden flex flex-col max-h-[90vh]">
       <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
         <div class="flex items-center gap-3">
@@ -273,16 +319,22 @@
             <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Nitro Phosphate Instrument</p>
           </div>
         </div>
-        <button id="closeAddModalBtn" class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">
+        <button id="closeAddModalBtn" class="w-10 h-10 rounded-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">
           <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
 
       <div class="p-6 overflow-y-auto no-scrollbar">
         <form class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="md:col-span-2">
+          <div class="md:col-span-2 relative searchable-tag-container">
             <label class="label-pill">Tag Identification</label>
-            <input type="text" class="accessible-input" placeholder="Enter TAG NO (e.g. PG129503)">
+            <div class="relative">
+              <input type="text" class="accessible-input tag-search-input" placeholder="Search or Enter TAG NO..." autocomplete="off">
+              <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none transition-transform duration-200"></i>
+            </div>
+            <div class="tag-dropdown-list hidden absolute left-0 right-0 z-[150] mt-1.5 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-lg shadow-2xl max-h-64 overflow-y-auto no-scrollbar ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 duration-200">
+              <!-- Options populated by JS -->
+            </div>
           </div>
           <div>
             <label class="label-pill">Entry Date</label>
@@ -312,9 +364,83 @@
         </form>
       </div>
 
-      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
-        <button id="cancelAddJobBtn" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-all">Cancel</button>
-        <button id="saveJobBtn" class="px-8 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded font-black text-[10px] uppercase tracking-widest shadow-lg transition-all">Save Entry</button>
+      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+        <div class="flex gap-3">
+          <button id="alarmSettingsBtn" class="px-5 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white rounded font-black text-[10px] uppercase tracking-widest shadow-md transition-all flex items-center gap-2">
+            <i class="ph-bold ph-bell-ringing text-sm text-yellow-400"></i>
+            <span>Alarm/Trip Settings</span>
+          </button>
+        </div>
+        <div class="flex gap-3">
+          <button id="cancelAddJobBtn" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-all border bg-gray-200">Cancel</button>
+          <button id="saveJobBtn" class="px-8 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded font-black text-[10px] uppercase tracking-widest shadow-lg transition-all">Save Entry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alarm Settings Report Modal (Premium GNFC Styled) -->
+  <div id="alarmSettingsModal" class="hidden fixed inset-0 z-[160] flex items-center justify-center bg-slate-900/80 transition-all duration-300 p-4">
+    <div id="alarmSettingsModalContent" class="relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-md shadow-2xl border border-slate-200 dark:border-slate-800 transform scale-95 opacity-0 transition-all duration-300 overflow-hidden flex flex-col max-h-[85vh]">
+      
+      <!-- Modal Header -->
+      <div class="gnfc-modal-header px-6 py-4 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-teal-600 dark:bg-teal-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
+            <i class="ph-bold ph-file-text text-white text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-outfit font-black text-lg text-slate-800 dark:text-white uppercase tracking-tight">Alarm/Trip Settings Report</h4>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Gujarat Narmada Valley Fertilizers Company Ltd.</p>
+          </div>
+        </div>
+        <button id="closeAlarmModalBtn" class="gnfc-modal-close-btn w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Report Content -->
+      <div class="flex-1 overflow-hidden flex flex-col bg-slate-50/50 dark:bg-slate-900/50">
+        <div class="p-6 overflow-y-auto no-scrollbar flex-1">
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-slate-800 dark:bg-slate-950 text-white">
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest border-r border-white/5">Tag No</th>
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest border-r border-white/5">Area</th>
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest border-r border-white/5">Tag Description</th>
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest border-r border-white/5">Trip_L_LL</th>
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest border-r border-white/5">Trip_H_HH</th>
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest border-r border-white/5">Location</th>
+                  <th class="px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest">Function</th>
+                </tr>
+              </thead>
+              <tbody id="alarmSettingsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800 text-[13px] font-semibold text-slate-600 dark:text-slate-400">
+                <!-- Data will be populated by JS -->
+                <tr class="hover:bg-teal-50/30 dark:hover:bg-teal-900/10 transition-colors">
+                  <td colspan="7" class="px-6 py-24 text-center">
+                    <div class="flex flex-col items-center gap-4">
+                      <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                        <i class="ph-bold ph-database text-slate-300 dark:text-slate-600 text-4xl"></i>
+                      </div>
+                      <div>
+                        <p class="text-base font-outfit font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest">No record found.</p>
+                        <p class="text-xs font-medium text-slate-400 mt-1">Please try again after selecting a specific TAG NO.</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Report Footer Branding -->
+        <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex justify-center">
+          <p class="text-[10px] font-black text-red-500/80 uppercase tracking-[0.2em] animate-pulse">
+            Gujarat Narmada Valley Fertilizers Company Ltd.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -327,6 +453,37 @@
       const closeAddModalBtn = document.getElementById('closeAddModalBtn');
       const cancelAddJobBtn = document.getElementById('cancelAddJobBtn');
       const saveJobBtn = document.getElementById('saveJobBtn');
+
+      const alarmSettingsBtn = document.getElementById('alarmSettingsBtn');
+      const alarmSettingsModal = document.getElementById('alarmSettingsModal');
+      const alarmSettingsModalContent = document.getElementById('alarmSettingsModalContent');
+      const closeAlarmModalBtn = document.getElementById('closeAlarmModalBtn');
+      const alarmSettingsTableBody = document.getElementById('alarmSettingsTableBody');
+
+      const SAMPLE_ALARM_DATA = [
+        { tag: "ZSL41062", area: "41N003B", desc: "JET TUBE C/V CLOSE LIMIT SWITCH", l_ll: "5%", h_hh: "95%", loc: "FIELD", func: "LIMIT SWITCH" },
+        { tag: "ZSL41064", area: "HS41064", desc: "VALVE OPEN LIMIT SWITCH", l_ll: "CLOSED", h_hh: "OPEN", loc: "LOCAL", func: "VALVE STATUS" },
+        { tag: "ZT129201A", area: "BULL GEAR", desc: "COMPANDER BULL GEAR VIB MONITOR", l_ll: "25um", h_hh: "75um", loc: "MCC", func: "VIBRATION" },
+        { tag: "ZSL42101", area: "HV42101", desc: "HV42101 LIMIT SWITCH INTERLOCK", l_ll: "LOW", h_hh: "HIGH", loc: "CONTROL ROOM", func: "INTERLOCK" },
+        { tag: "ZSS52003", area: "52H002", desc: "ZERO SPEED SWITCH MONITOR", l_ll: "0 RPM", h_hh: "1500 RPM", loc: "FIELD", func: "SPEED" },
+        { tag: "ZT129701", area: "TURBINE", desc: "AXIAL DISPL STEAM TURBINE NDE", l_ll: "-0.5mm", h_hh: "+0.5mm", loc: "MCC", func: "AXIAL DISPL" }
+      ];
+
+      function populateAlarmTable() {
+        if (!alarmSettingsTableBody) return;
+        
+        alarmSettingsTableBody.innerHTML = SAMPLE_ALARM_DATA.map(data => `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-50 dark:border-slate-800 last:border-0">
+            <td class="px-5 py-3 border-r border-slate-100 dark:border-slate-800 text-teal-600 dark:text-teal-400 font-bold">${data.tag}</td>
+            <td class="px-5 py-3 border-r border-slate-100 dark:border-slate-800">${data.area}</td>
+            <td class="px-5 py-3 border-r border-slate-100 dark:border-slate-800 text-xs">${data.desc}</td>
+            <td class="px-5 py-3 border-r border-slate-100 dark:border-slate-800 font-mono text-xs text-red-500">${data.l_ll}</td>
+            <td class="px-5 py-3 border-r border-slate-100 dark:border-slate-800 font-mono text-xs text-orange-500">${data.h_hh}</td>
+            <td class="px-5 py-3 border-r border-slate-100 dark:border-slate-800">${data.loc}</td>
+            <td class="px-5 py-3 font-mono text-[11px] text-slate-400 capitalize">${data.func}</td>
+          </tr>
+        `).join('');
+      }
 
       const openModal = () => {
         addJobModal.classList.remove('hidden');
@@ -344,14 +501,121 @@
         }, 300);
       };
 
+      const openAlarmModal = () => {
+        populateAlarmTable();
+        alarmSettingsModal.classList.remove('hidden');
+        setTimeout(() => {
+          alarmSettingsModalContent.classList.remove('scale-95', 'opacity-0');
+          alarmSettingsModalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      };
+
+      const closeAlarmModal = () => {
+        alarmSettingsModalContent.classList.remove('scale-100', 'opacity-100');
+        alarmSettingsModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          alarmSettingsModal.classList.add('hidden');
+        }, 300);
+      };
+
       if (addNewJobBtn) addNewJobBtn.addEventListener('click', openModal);
       if (closeAddModalBtn) closeAddModalBtn.addEventListener('click', closeModal);
       if (cancelAddJobBtn) cancelAddJobBtn.addEventListener('click', closeModal);
       if (saveJobBtn) saveJobBtn.addEventListener('click', closeModal);
 
+      if (alarmSettingsBtn) alarmSettingsBtn.addEventListener('click', openAlarmModal);
+      if (closeAlarmModalBtn) closeAlarmModalBtn.addEventListener('click', closeAlarmModal);
+
+      alarmSettingsModal.addEventListener('click', (e) => {
+        if (e.target === alarmSettingsModal) closeAlarmModal();
+      });
+
       addJobModal.addEventListener('click', (e) => {
         if (e.target === addJobModal) closeModal();
       });
+
+      // --- Searchable Tag Dropdown Logic ---
+      const TAGS = [
+        "NOTAG",
+        "ZSL41062(BEFORE 41N003B JET TUBE C/V CLOSE LIMIT SWITCH)",
+        "ZSL41064(HS41064 VALVE OPEN)",
+        "ZSL41065(HS41065 VALVE CLOSE)",
+        "ZSL41066(HS41066 VALVE CLOSE )",
+        "ZSL41067(HS41067 VALVE CLOSE)",
+        "ZSL41071(HS41071 VALVE CLOSE)",
+        "ZSL41072(HS41072 VALVE CLOSE)",
+        "ZSL41074(HS41074 VALVE CLOSE)",
+        "ZSL41075(AFTER 41N003C PREPARATION C/V CLOSE LIMIT SWITCH)",
+        "ZSL41076(HS41076 VALVE CLOSE)",
+        "ZSL41077(HS41077 VALVE CLOSE)",
+        "ZSL42101(HV42101 LIMIT SWITCH)",
+        "ZSL42102(FV42101 LIMIT SWITCH)",
+        "ZSL42103(FV42102 LIMIT SWITCH)",
+        "ZSL42104(TV42101 LIMIT SWITCH)",
+        "ZSL42105(AV42101 LIMIT SWITCH)",
+        "ZSL42106(DV42101 LIMIT SWITCH)",
+        "ZSL42107(TV42103 LIMIT SWITCH)",
+        "ZSL42108(HV42105 LIMIT SWITCH)",
+        "ZSL42110(HV42104 LIMIT SWITCH)",
+        "ZSL42111(HV42106 LIMIT SWITCH)",
+        "ZSS52003(52H002 ZERO SPEED )",
+        "ZT10629(KEY PHASOR OF 10MT02)",
+        "ZT129201A(COMPANDER BULL GEAR)",
+        "ZT129201B(COMPANDER BULL GEAR)",
+        "ZT129201C(AXIAL DISP BULL GEAR)",
+        "ZT129701(AXIAL DISPLACE MENT STEAM TURBINE NDE)",
+        "ZT129702(AXIAL DISP STEAM TURBINE NDE)"
+      ];
+
+      function initTagDropdowns() {
+        const containers = document.querySelectorAll('.searchable-tag-container');
+        
+        containers.forEach(container => {
+          const input = container.querySelector('.tag-search-input');
+          const list = container.querySelector('.tag-dropdown-list');
+          const icon = container.querySelector('.ph-caret-down');
+
+          const renderOptions = (filter = '') => {
+            const filtered = TAGS.filter(tag => tag.toLowerCase().includes(filter.toLowerCase()));
+            
+            if (filtered.length > 0) {
+              list.innerHTML = filtered.map(tag => `
+                <div class="dropdown-option ${input.value === tag ? 'selected' : ''}" data-value="${tag}">${tag}</div>
+              `).join('');
+              list.classList.remove('hidden');
+              icon?.classList.add('rotate-180');
+            } else {
+              list.innerHTML = `<div class="no-results">No tags matching "${filter}"</div>`;
+              list.classList.remove('hidden');
+              icon?.classList.add('rotate-180');
+            }
+          };
+
+          input.addEventListener('focus', () => {
+            // If the value is "NOTAG", show all options by passing empty filter
+            renderOptions(input.value === 'NOTAG' ? '' : input.value);
+          });
+          input.addEventListener('input', (e) => renderOptions(e.target.value));
+          
+          container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('dropdown-option')) {
+              input.value = e.target.dataset.value;
+              list.classList.add('hidden');
+              icon?.classList.remove('rotate-180');
+              input.dispatchEvent(new Event('change'));
+            }
+          });
+
+          document.addEventListener('click', (e) => {
+            if (!container.contains(e.target)) {
+              list.classList.add('hidden');
+              icon?.classList.remove('rotate-180');
+            }
+          });
+        });
+      }
+
+      initTagDropdowns();
     });
   </script>
 </body>
