@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Register | GNFC</title>
+  <title>Job Register | GNFC Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -17,444 +17,305 @@
   <link rel="stylesheet" href="/src/css/modal-ui.css">
   <style>
     .glass-card {
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(12px);
-      border: 1px solid #e2e8f0;
+      border: 1px solid #cbd5e1;
     }
 
     .dark .glass-card {
-      background-color: rgba(30, 41, 59, 0.9);
+      background-color: rgba(30, 41, 59, 0.95);
       border-color: #334155;
     }
 
-    .page-bg {
-      background-color: #f8fafc;
-      transition: background-color 0.3s ease;
-      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
-
-    .dark .page-bg {
-      background-color: #020617;
-      background-image: radial-gradient(#1e293b 1px, transparent 1px);
-    }
-
     .label-pill {
-      font-size: 18px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #000000;
-      margin-bottom: 0.5rem;
+      color: #64748b;
+      margin-bottom: 0.25rem;
       display: block;
     }
 
     .dark .label-pill {
-      color: #64748b;
+      color: #94a3b8;
     }
 
-    /* Accessibility focus state */
     .accessible-input {
       width: 100%;
       background-color: #ffffff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #cbd5e1;
       border-radius: 0.375rem;
-      /* rounded-md */
-      padding: 0.75rem 1rem;
-      font-size: 18px;
-      font-weight: 700;
+      padding: 0.5rem 0.75rem;
+      font-size: 14px;
+      font-weight: 600;
       color: #1e293b;
       outline: none;
       transition: all 0.2s ease;
+      box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
 
     .dark .accessible-input {
-      background-color: #0f172a;
-      border-color: #000000;
+      background-color: #1e293b;
+      border-color: #475569;
       color: #f1f5f9;
     }
 
     .accessible-input:focus {
-      border: 1px solid #555353;
-
+      border-color: #0f766e;
+      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.1);
     }
 
     .accessible-textarea {
       width: 100%;
       background-color: #ffffff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #cbd5e1;
       border-radius: 0.375rem;
-      /* rounded-md */
-      padding: 1rem;
-      font-size: 18px;
+      padding: 0.75rem;
+      font-size: 14px;
       font-weight: 500;
-      line-height: 1.625;
+      line-height: 1.5;
       color: #334155;
       outline: none;
       transition: all 0.2s ease;
       resize: none;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      height: 100%;
     }
 
     .dark .accessible-textarea {
-      background-color: #0f172a;
+      background-color: #0f172a / 50;
       border-color: #334155;
       color: #e2e8f0;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     }
 
     .accessible-textarea:focus {
       border-color: #14b8a6;
-      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+      background-color: #fff;
     }
 
     .dark .accessible-textarea:focus {
-      border-color: #2dd4bf;
-      box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.05);
+      background-color: #1e293b;
     }
 
-    /* Remove focus ring from select on mobile */
-    select {
-      -webkit-tap-highlight-color: transparent;
-    }
+    /* Hide scrollbar but allow scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 
-<body
-  class="page-bg font-sans text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+<body class="page-bg font-sans text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex flex-col transition-colors duration-300">
   <script src="/src/js/theme_manager.js"></script>
 
-  <!-- Navigation -->
-  <nav class="glass-card sticky top-0 z-50 shadow-sm border-b overflow-hidden">
-    <div class="w-full px-6 md:px-10 h-20 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-md bg-gnfc-navy flex items-center justify-center shadow-lg">
-          <i class="ph-bold ph-note-pencil text-white text-[24px]"></i>
+  <!-- Compact Nav -->
+  <nav class="glass-card shrink-0 z-50 shadow-sm border-b overflow-hidden h-16 flex items-center px-6">
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-md bg-slate-800 flex items-center justify-center shadow-md">
+          <i class="ph-bold ph-note-pencil text-white text-xl"></i>
         </div>
         <div>
-          <h1
-            class="font-outfit font-black text-[22px] text-gnfc-navy dark:text-teal-400 tracking-tight leading-none uppercase">
-            Job Register</h1>
-          <p
-            class="text-[14px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1.5">
-            Instrument Department</p>
+          <h1 class="font-outfit font-black text-lg text-slate-800 dark:text-teal-400 tracking-tight leading-none uppercase">Job Register</h1>
+          <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none mt-1">Instrument Department</p>
         </div>
       </div>
       <div class="flex items-center gap-4">
-        <a href="/src/pages/operation_job_register.html"
-          class="flex items-center gap-2 px-5 py-2.5 rounded-md text-[16px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600 shadow-sm">
-          <i class="ph-bold ph-arrow-left text-[18px]"></i>
-          <span>Back to Portal</span>
+        <a href="/src/pages/operation_job_register.html" class="flex items-center gap-2 px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          <i class="ph-bold ph-arrow-left text-base"></i>
+          <span>Portal Gateway</span>
         </a>
       </div>
     </div>
   </nav>
 
-  <main class="flex-1 w-full p-6">
-    <div class="glass-card rounded-md overflow-hidden shadow-lg">
-
-      <!-- Clean, Professional Header Bar (Proper Structure with Actions) -->
-      <div
-        class="p-6 border-b border-slate-200 dark:border-slate-700 flex flex-row items-start xl:items-center justify-between gap-6 bg-slate-50/50 dark:bg-slate-800/10">
-        <div class="flex items-center gap-5">
-          <div
-            class="bg-teal-50 dark:bg-teal-900/30 p-3 rounded-md transition-colors shadow-md border border-teal-100 dark:border-teal-800">
-            <i class="ph-fill ph-factory text-teal-600 dark:text-teal-400 text-3xl"></i>
-          </div>
-          <div>
-            <h2
-              class="text-slate-900 dark:text-white font-outfit font-black text-[26px] tracking-tight leading-none uppercase">
-              Nitro Phosphate Instrument</h2>
-            <p class="text-teal-600 dark:text-teal-400 text-[14px] font-black uppercase tracking-[0.1em] mt-2">Operation
-              Job Register System</p>
-          </div>
+  <main class="flex-1 overflow-hidden flex flex-col p-4 gap-4">
+    <!-- Top Action Bar -->
+    <div class="glass-card rounded-lg p-3 flex flex-wrap items-center justify-between gap-4 shadow-sm border border-slate-200 dark:border-slate-800 shrink-0">
+      <div class="flex items-center gap-4">
+        <div class="bg-teal-600/10 dark:bg-teal-400/10 p-2 rounded border border-teal-500/20">
+          <i class="ph-fill ph-factory text-teal-600 dark:text-teal-400 text-xl"></i>
         </div>
-
-        <!-- Search & Actions Moved to Top -->
-        <div class="flex flex-wrap items-center gap-4">
-          <div class="relative group shadow-md rounded-md">
-            <i
-              class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 group-focus-within:text-teal-500 dark:group-focus-within:text-teal-400 transition-colors text-[20px]"></i>
-            <input type="text"
-              class="w-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md pl-12 pr-20 py-3 text-[18px] font-bold placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:border-teal-500 dark:focus:border-teal-400 outline-none transition-all"
-              placeholder="Find JOB NO...">
-            <button
-              class="absolute right-2 top-1/2 -translate-y-1/2 bg-teal-600 dark:bg-teal-500 text-white text-[14px] font-black uppercase tracking-widest px-4 py-1.5 rounded-md hover:bg-teal-500 dark:hover:bg-teal-400 transition-all shadow-sm">Go</button>
-          </div>
-
-          <button id="addNewJobBtn" class="flex items-center gap-2 px-6 py-3 bg-white border shadow-sm">
-            <i class="ph-bold ph-plus-circle text-[22px]"></i>
-            <span>Add New</span>
-          </button>
+        <div>
+          <h2 class="text-slate-800 dark:text-white font-outfit font-bold text-base tracking-tight leading-none uppercase">Nitro Phosphate Instrument</h2>
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Live Job Status Monitor</p>
         </div>
       </div>
 
-      <!-- Main Form Area -->
-      <div class="p-6">
-
-        <!-- Metadata Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
-
-          <!-- Operation Info -->
-          <div
-            class="md:col-span-7 bg-white dark:bg-slate-900/40 rounded-md p-6 border border-slate-200 dark:border-slate-700 shadow-md transition-all duration-300">
-            <div class="flex items-center gap-2.5 mb-4 text-dark font-18px">
-              <i class="ph-bold ph-user-gear text-lg"></i>
-              <span class="font-18px font-black uppercase tracking-[0.2em]">Operation Details</span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-              <div>
-                <label class="label-pill">Tag No</label>
-                <input type="text" class="accessible-input uppercase tracking-wider" value="NOTAG">
-              </div>
-              <div>
-                <label class="label-pill">Date (M/D/Y)</label>
-                <input type="text" class="accessible-input" value="1/9/2013">
-              </div>
-              <div>
-                <label class="label-pill">Shift</label>
-                <select class="accessible-input appearance-none cursor-pointer">
-                  <option selected>A</option>
-                  <option>B</option>
-                  <option>C</option>
-                  <option>G</option>
-                </select>
-              </div>
-              <div>
-                <label class="label-pill">SE</label>
-                <input type="text" class="accessible-input uppercase tracking-widest" value="AMP">
-              </div>
-            </div>
-          </div>
-
-          <!-- Instrument Info -->
-          <div class="md:col-span-5 border rounded-md p-6 shadow-md transition-all">
-            <div class="flex items-center gap-2.5 mb-4">
-              <i class="ph-bold ph-wrench text-lg"></i>
-              <span class="font-18px font-black uppercase tracking-[0.2em]">Instrument Status</span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div>
-                <label class="label-pill">Date (M/D/Y)</label>
-                <input type="text" class="accessible-input" placeholder="--/--/----">
-              </div>
-              <div>
-                <label class="label-pill">IE</label>
-                <input type="text" class="accessible-input" placeholder="---">
-              </div>
-              <div class="sm:col-span-2">
-                <label class="label-pill">Status</label>
-                <input type="text"
-                  class="accessible-input border-teal-100 dark:border-teal-900/50 !text-teal-700 dark:!text-teal-300 !font-black"
-                  placeholder="PENDING / COMPLETED">
-              </div>
-            </div>
-          </div>
-
+      <div class="flex items-center gap-3">
+        <div class="relative group">
+          <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors text-base"></i>
+          <input type="text" class="w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded pl-9 pr-14 py-2 text-xs font-bold focus:border-teal-500 outline-none transition-all shadow-sm" placeholder="FIND JOB NO...">
+          <button class="absolute right-1 top-1/2 -translate-y-1/2 bg-slate-800 dark:bg-slate-700 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded hover:bg-teal-600 transition-all">Go</button>
         </div>
-
-        <!-- Large Content Inputs -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div class="flex flex-col">
-            <div class="flex items-center gap-3 mb-4">
-              <h3 class="font-outfit font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] font-18px">Job
-                Description</h3>
-              <div class="h-px flex-1 bg-slate-200 dark:bg-slate-700"></div>
-            </div>
-            <textarea class="accessible-textarea h-64"
-              placeholder="Enter detailed job description here...">PG129503 Machine exhaust pressure showing erratics.</textarea>
-          </div>
-
-          <div class="flex flex-col">
-            <div class="flex items-center gap-3 mb-4">
-              <h3 class="font-outfit font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] font-18x">
-                Remarks</h3>
-              <div class="h-px flex-1 bg-slate-200 dark:bg-slate-700"></div>
-            </div>
-            <textarea class="accessible-textarea h-64"
-              placeholder="Add operational or administrative remarks..."></textarea>
-          </div>
-        </div>
-
+        <button id="addNewJobBtn" class="flex items-center gap-2 px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded font-black text-[10px] uppercase tracking-widest shadow-sm transition-all">
+          <i class="ph-bold ph-plus-circle text-base"></i>
+          <span>Add New</span>
+        </button>
       </div>
-
-      <!-- High-Contrast Form Toolbar (Simplified) -->
-      <div
-        class="bg-white/50 dark:bg-slate-900/50 border-t border-slate-200/60 dark:border-slate-700/60 px-10 py-6 flex flex-col lg:flex-row items-center justify-between gap-8">
-
-        <!-- Pagination Controls -->
-        <div class="flex items-center gap-4">
-          <button
-            class="w-12 h-12 rounded-md bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all group"
-            title="Previous Record">
-            <i class="ph-bold ph-caret-left text-[24px] group-hover:-translate-x-1 transition-transform"></i>
-          </button>
-
-          <div
-            class="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-md px-6 py-2 flex items-center gap-6 shadow-md">
-            <span
-              class="text-[14px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">Record
-              Counter</span>
-            <div class="flex items-center gap-4">
-              <input type="text"
-                class="w-16 text-center font-black text-[22px] text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 rounded-md border-transparent outline-none py-1 shadow-inner"
-                value="109">
-              <span class="text-slate-300 dark:text-slate-600 font-light text-[22px]">/</span>
-              <span class="font-bold text-[22px] text-slate-400 dark:text-slate-500">109</span>
-            </div>
-          </div>
-
-          <button
-            class="w-12 h-12 rounded-md bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all group"
-            title="Next Record">
-            <i class="ph-bold ph-caret-right text-[24px] group-hover:translate-x-1 transition-transform"></i>
-          </button>
-        </div>
-
-        <!-- Close Action -->
-        <div class="flex items-center gap-5">
-          <button
-            class="flex items-center gap-3 px-8 py-4 bg-slate-900 dark:bg-slate-100 rounded-md font-black text-[16px] uppercase tracking-widest text-white dark:text-slate-900 hover:bg-black dark:hover:bg-white transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
-            <i class="ph-bold ph-x text-[24px]"></i>
-            <span>Close</span>
-          </button>
-        </div>
-
-      </div>
-
     </div>
 
-    <!-- Institutional Footer -->
-    <div class="mt-16 text-center pb-16">
-      <h3
-        class="text-2xl font-outfit font-black tracking-tight text-gnfc-navy dark:text-white drop-shadow-sm mb-2 transition-colors">
-        Gujarat Narmada Valley Fertilizers Co. Ltd.
-      </h3>
-      <div class="flex items-center justify-center gap-4">
-        <span class="w-12 h-px bg-slate-300 dark:bg-slate-700"></span>
-        <p class="text-xs font-black text-teal-600 dark:text-teal-400 uppercase tracking-[0.4em]">&copy; Instrument
-          Department</p>
-        <span class="w-12 h-px bg-slate-300 dark:bg-slate-700"></span>
+    <!-- Main Dashboard Container -->
+    <div class="flex-1 flex flex-col gap-4 min-h-0">
+      <!-- Metadata Grid -->
+      <div class="glass-card rounded-lg p-4 grid grid-cols-1 xl:grid-cols-4 gap-6 shrink-0 border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
+        <!-- Operation Details Cluster -->
+        <div class="xl:col-span-2 grid grid-cols-4 gap-4">
+          <div class="col-span-4 flex items-center gap-2 mb-1">
+            <i class="ph-bold ph-user-gear text-teal-600"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Operation Details</span>
+          </div>
+          <div>
+            <label class="label-pill">Tag No</label>
+            <input type="text" class="accessible-input uppercase" value="NOTAG">
+          </div>
+          <div>
+            <label class="label-pill">Date</label>
+            <input type="text" class="accessible-input" value="1/9/2013">
+          </div>
+          <div>
+            <label class="label-pill">Shift</label>
+            <select class="accessible-input appearance-none bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1em_1em]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220%22%3E%3Cpath fill=%22%2394a3b8%22 d=%22M21.5 13.5l-5.5 5.5-5.5-5.5%22/%3E%3C/svg%3E');">
+              <option selected>A</option>
+              <option>B</option>
+              <option>C</option>
+              <option>G</option>
+            </select>
+          </div>
+          <div>
+            <label class="label-pill">SE</label>
+            <input type="text" class="accessible-input uppercase" value="AMP">
+          </div>
+        </div>
+
+        <!-- Status Cluster -->
+        <div class="xl:col-span-2 grid grid-cols-3 gap-4 border-l border-slate-200 dark:border-slate-800 pl-6">
+          <div class="col-span-3 flex items-center gap-2 mb-1">
+            <i class="ph-bold ph-wrench text-teal-600"></i>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Instrument Status</span>
+          </div>
+          <div>
+            <label class="label-pill">Target Date</label>
+            <input type="text" class="accessible-input" placeholder="--/--/----">
+          </div>
+          <div>
+            <label class="label-pill">IE Code</label>
+            <input type="text" class="accessible-input uppercase" placeholder="---">
+          </div>
+          <div>
+            <label class="label-pill">Status</label>
+            <select class="accessible-input appearance-none font-bold text-teal-600 dark:text-teal-400 bg-no-repeat bg-position-[right_0.5rem_center] bg-size-[1em_1em]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220%22%3E%3Cpath fill=%22%2394a3b8%22 d=%22M21.5 13.5l-5.5 5.5-5.5-5.5%22/%3E%3C/svg%3E');">
+              <option selected disabled>Select...</option>
+              <option>PENDING</option>
+              <option>COMPLETED</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Split-Screen Textareas (Reduced Height) -->
+      <div class="h-72 flex gap-4 shrink-0">
+        <!-- Description -->
+        <div class="flex-1 flex flex-col glass-card rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+          <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
+            <h3 class="font-outfit font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-widest text-[10px]">Job Description</h3>
+            <i class="ph-bold ph-pencil-circle text-lg text-teal-500 opacity-50"></i>
+          </div>
+          <div class="flex-1 p-3">
+            <textarea class="accessible-textarea" placeholder="Enter job description...">PG129503 Machine exhaust pressure showing erratics.</textarea>
+          </div>
+        </div>
+
+        <!-- Remarks -->
+        <div class="w-1/3 flex flex-col glass-card rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/70 shadow-sm overflow-hidden">
+          <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30">
+            <h3 class="font-outfit font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-widest text-[10px]">Remarks</h3>
+            <i class="ph-bold ph-chats-circle text-lg text-slate-400 opacity-50"></i>
+          </div>
+          <div class="flex-1 p-3">
+            <textarea class="accessible-textarea bg-transparent" placeholder="Operational remarks..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Action Bar -->
+      <div class="glass-card shrink-0 px-6 py-3 flex items-center justify-between border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 rounded-lg shadow-sm">
+        <div class="flex items-center gap-3">
+          <button class="w-9 h-9 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-teal-600 transition-all shadow-sm" title="Prev">
+            <i class="ph-bold ph-caret-left text-lg"></i>
+          </button>
+          
+          <div class="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-1.5 rounded shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Record</span>
+            <div class="flex items-center gap-1.5 font-mono">
+              <input type="text" class="w-10 text-center font-bold text-sm text-teal-600 bg-transparent outline-none" value="109">
+              <span class="text-slate-300">/</span>
+              <span class="font-bold text-sm text-slate-500">109</span>
+            </div>
+          </div>
+
+          <button class="w-9 h-9 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-teal-600 transition-all shadow-sm" title="Next">
+            <i class="ph-bold ph-caret-right text-lg"></i>
+          </button>
+        </div>
       </div>
     </div>
   </main>
 
   <!-- Add Job Modal -->
-  <div id="addJobModal"
-    class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 backdrop-blur-sm transition-all duration-300 p-4">
-    <div id="addJobModalContent"
-      class="relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-md shadow-2xl border border-slate-200 dark:border-slate-800 transform scale-95 opacity-0 transition-all duration-300 overflow-hidden">
-
-      <!-- Modal Header -->
-      <div
-        class="px-8 py-6 border-b border flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-md bg-teal-600 dark:bg-teal-500 flex items-center justify-center shadow-lg">
-            <i class="ph-bold ph-plus text-white text-[24px]"></i>
+  <div id="addJobModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/70 backdrop-blur-md transition-all duration-300 p-4">
+    <div id="addJobModalContent" class="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 transform scale-95 opacity-0 transition-all duration-300 overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-teal-600 flex items-center justify-center shadow-lg">
+            <i class="ph-bold ph-plus text-white text-xl"></i>
           </div>
           <div>
-            <h4 class="font-outfit font-black text-[24px] text-slate-900 dark:text-white uppercase tracking-tight">Nitro
-              Phosphate Instrument <span class="text-teal-600 dark:text-teal-400 font-medium">(Add)</span></h4>
-            <p class="text-[14px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">
-              Operation Job Entry</p>
+            <h4 class="font-outfit font-black text-lg text-slate-800 dark:text-white uppercase tracking-tight">New Job Entry</h4>
+            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Nitro Phosphate Instrument</p>
           </div>
         </div>
-        <button id="closeAddModalBtn"
-          class="w-12 h-12 rounded-md bg-white border transition-all flex items-center justify-center">
-          <i class="ph-bold ph-x text-[20px]"></i>
+        <button id="closeAddModalBtn" class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">
+          <i class="ph-bold ph-x text-lg"></i>
         </button>
       </div>
 
-      <!-- Modal Body -->
-      <div class="p-6">
-        <form id="addJobForm" class="flex flex-col gap-8">
-
-          <!-- Section Heading -->
-          <div class="flex items-center gap-3">
-            <h5 class="font-16px font-black uppercase tracking-[0.2em] text-teal-600 dark:text-teal-400">Operation
-            </h5>
-            <div class="h-px flex-1 bg-teal-100 dark:bg-teal-900/30"></div>
+      <div class="p-6 overflow-y-auto no-scrollbar">
+        <form class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="md:col-span-2">
+            <label class="label-pill">Tag Identification</label>
+            <input type="text" class="accessible-input" placeholder="Enter TAG NO (e.g. PG129503)">
           </div>
-
-          <!-- Metadata Fields -->
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="md:col-span-2">
-              <label class="label-pill">Tag No</label>
-              <div class="relative shadow-sm rounded-md">
-                <input type="text" class="accessible-input pl-12 uppercase" placeholder="Search or Enter Tag...">
-                <i
-                  class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-slate-400"></i>
-              </div>
-            </div>
-            <div>
-              <label class="label-pill">Date</label>
-              <input type="date" class="accessible-input shadow-sm" value="2026-03-13">
-            </div>
-            <div>
-              <label class="label-pill">Shift</label>
-              <select class="accessible-input shadow-sm appearance-none cursor-pointer">
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-                <option selected>G</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="md:col-span-1">
-              <label class="label-pill">SE</label>
-              <input type="text" class="accessible-input shadow-sm uppercase" placeholder="SE Code">
-            </div>
-            <div class="md:col-span-3">
-              <label class="label-pill">Job Description</label>
-              <input type="text" class="accessible-input shadow-sm" placeholder="Short summary of the issue...">
-            </div>
-          </div>
-
-          <!-- Long Description -->
           <div>
-            <label class="label-pill">Detailed Description</label>
-            <textarea class="accessible-textarea h-48 shadow-sm" placeholder="Describe the job in detail..."></textarea>
+            <label class="label-pill">Entry Date</label>
+            <input type="date" class="accessible-input">
           </div>
-
-          <!-- Footer Fields -->
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="md:col-span-2">
-              <label class="label-pill">Area</label>
-              <select class="accessible-input shadow-sm appearance-none cursor-pointer">
-                <option selected>ALL</option>
-                <option>METH-I</option>
-                <option>METH-II</option>
-                <option>BOILER</option>
-              </select>
-            </div>
+          <div>
+            <label class="label-pill">Shift</label>
+            <select class="accessible-input">
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+              <option selected>G</option>
+            </select>
+          </div>
+          <div class="md:col-span-4">
+            <label class="label-pill">Problem Description</label>
+            <textarea class="accessible-input h-32 leading-relaxed font-medium" placeholder="Describe the problem in detail..."></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label class="label-pill">Area Code</label>
+            <input type="text" class="accessible-input uppercase" value="ANP-R">
+          </div>
+          <div class="md:col-span-2">
+            <label class="label-pill">Assign SE</label>
+            <input type="text" class="accessible-input uppercase" placeholder="Enter Engineer Code">
           </div>
         </form>
       </div>
 
-      <!-- Modal Footer / Actions -->
-      <div
-        class="px-8 py-6 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/10 flex flex-col md:flex-row items-center justify-between gap-6">
-        <button id="cancelAddJobBtn"
-          class="w-full md:w-auto px-8 py-3.5 rounded-md font-black text-[16px] uppercase tracking-widest text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-all border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 shadow-sm hover:shadow-md">
-          Cancel
-        </button>
-
-        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <button
-            class="w-full md:w-auto px-8 py-3.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-md font-black text-[16px] uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-900/20 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200 dark:hover:border-teal-800 transition-all shadow-md">
-            Alarm/Trip Settings
-          </button>
-          <button id="saveJobBtn"
-            class="w-full md:w-auto px-12 py-3.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-md font-black text-[16px] uppercase tracking-widest shadow-lg hover:-translate-y-1 transition-all hover:shadow-xl hover:bg-black dark:hover:bg-white border text-center border-slate-900 dark:border-slate-100">
-            Save Job
-          </button>
-        </div>
+      <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
+        <button id="cancelAddJobBtn" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-all">Cancel</button>
+        <button id="saveJobBtn" class="px-8 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded font-black text-[10px] uppercase tracking-widest shadow-lg transition-all">Save Entry</button>
       </div>
-
     </div>
   </div>
 
@@ -486,15 +347,8 @@
       if (addNewJobBtn) addNewJobBtn.addEventListener('click', openModal);
       if (closeAddModalBtn) closeAddModalBtn.addEventListener('click', closeModal);
       if (cancelAddJobBtn) cancelAddJobBtn.addEventListener('click', closeModal);
+      if (saveJobBtn) saveJobBtn.addEventListener('click', closeModal);
 
-      if (saveJobBtn) {
-        saveJobBtn.addEventListener('click', () => {
-          console.log('Saving new job...');
-          closeModal();
-        });
-      }
-
-      // Close on outside click
       addJobModal.addEventListener('click', (e) => {
         if (e.target === addJobModal) closeModal();
       });

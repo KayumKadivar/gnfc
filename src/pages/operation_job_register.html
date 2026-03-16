@@ -13,26 +13,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="/src/js/tailwind_config.js"></script>
+  <link rel="stylesheet" href="/src/css/modal-ui.css">
   <style>
     .glass-card {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.98); 
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(226, 232, 240, 1);
     }
 
     .dark .glass-card {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .modern-gradient {
-      background: linear-gradient(135deg, #003366 0%, #008080 100%);
-    }
-
-    .page-bg {
-      background: #f8fafc;
-      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-      background-size: 24px 24px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
 
     .dark .page-bg {
@@ -40,9 +35,9 @@
       background-image: radial-gradient(#1e293b 1px, transparent 1px);
     }
 
-    /* Simple Pulse Animation on Hover */
     .hover-glow:hover {
-      box-shadow: 0 0 15px rgba(20, 184, 166, 0.5);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border-color: #cbd5e1;
     }
   </style>
 </head>
@@ -52,22 +47,20 @@
 
   <script src="/src/js/theme_manager.js"></script>
 
-  <!-- Top Navigation -->
   <nav class="glass-card sticky top-0 z-50 shadow-sm transition-colors duration-300">
-    <div class="max-w-6xl mx-auto h-20 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto h-20 flex items-center justify-between px-4">
       <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-lg bg-gnfc-navy flex items-center justify-center shadow-md">
+        <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center shadow-md">
           <i class="ph-bold ph-clipboard-text text-white text-lg"></i>
         </div>
         <div>
-          <h1 class="font-outfit font-black text-xl text-gnfc-navy dark:text-teal-400 tracking-tight leading-none">OJR
+          <h1 class="font-outfit font-black text-xl text-slate-800 dark:text-teal-400 tracking-tight leading-none">OJR
             System</h1>
           <p class="font-14px font-bold text-slate-500 uppercase tracking-widest leading-none mt-2">Instrument Dept
           </p>
         </div>
       </div>
       <div class="flex items-center">
-        <!-- Optional Theme Toggle button can go here if needed -> theme_manager might handle it via standard class if present, otherwise no big deal -->
         <a href="/index.html"
           class="flex items-center gap-1.5 px-3 py-1.5 rounded-md font-16px font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border ">
           <i class="ph-bold ph-house"></i>
@@ -77,32 +70,32 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
   <div class="w-full modern-gradient py-10 relative overflow-hidden">
-    <!-- Decorative background elements -->
-    <div class="absolute top-0 right-0 -m-32 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 -m-32 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl"></div>
+    <div class="absolute top-0 right-0 -m-32 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 -m-32 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
-    <div class="max-w-6xl mx-auto relative z-10 text-center flex flex-col items-center">
+    <div class="max-w-6xl mx-auto relative z-10 text-center flex flex-col items-center px-4">
       <h2 class="font-outfit text-3xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-md">
         Operation Job Register
       </h2>
-      <p class="text-teal-50 text-lg max-w-2xl text-center font-medium leading-relaxed">
+      <p class="text-slate-300 text-lg max-w-2xl text-center font-medium leading-relaxed">
         Select your plant unit to proceed with the job registration process, or login for full administrative and
         operational access.
       </p>
     </div>
   </div>
 
-  <!-- Main Content Area -->
-  <main class="flex-1 w-full max-w-6xl mx-auto mt-10 relative z-20 pb-10">
+  <main class="flex-1 w-full max-w-6xl mx-auto mt-10 relative z-20 pb-10 px-4">
 
-    <div class="glass-card rounded-2xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+    <div id="bypassParameterDataView" class="hidden"></div>
+    <button id="logoutBtn" class="hidden">Logout</button>
+
+    <div class="glass-card rounded-2xl p-6 shadow-md border border-slate-300 dark:border-slate-700/50">
 
       <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-200 dark:border-slate-700">
         <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center">
-            <i class="ph-fill ph-buildings text-teal-600 dark:text-teal-400 text-sm"></i>
+          <div class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-300">
+            <i class="ph-fill ph-buildings text-slate-700 dark:text-teal-400 text-sm"></i>
           </div>
           <div>
             <h3 class="font-bold font-18 text-slate-800 dark:text-slate-200 uppercase tracking-widest leading-none">
@@ -111,199 +104,160 @@
         </div>
       </div>
 
-      <!-- Plant Units Grid -->
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 md:gap-3">
-        <!-- Generating buttons with a sleek hover effect -->
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4">
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">METH-1</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">METH-1</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">METH-II</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">METH-II</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">ACETIC</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">ACETIC</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">FORMIC</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">FORMIC</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">BOILER</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">BOILER</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">CPSU</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">CPSU</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">AMMONIA</span>
-        </button>
-
-        <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
-          <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">UREA</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">AMMONIA</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">NITRO</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">UREA</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">EA</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">NITRO</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">DM</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">EA</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">BAGGING</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">DM</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">ASGP</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">BAGGING</span>
         </button>
         <button
-          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2.5 px-2 transition-all duration-200  hover-glow hover:border-teal-400 dark:hover:border-teal-500 hover:bg-white dark:hover:bg-slate-750">
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-teal-50 to-transparent dark:from-teal-900/20 opacity-0 group-hover:opacity-100 transition-opacity">
-          </div>
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
           <span
-            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400 tracking-wide uppercase">AAQM</span>
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">ASGP</span>
+        </button>
+        <button
+          class="group relative overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 py-3 px-2 transition-all duration-200 shadow-sm hover:shadow-md hover:bg-slate-200 dark:hover:bg-slate-700">
+          <span
+            class="relative z-10 font-bold font-18px text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white tracking-wide uppercase">AAQM</span>
         </button>
       </div>
 
       <div id="loginButtonContainer" class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
         <button id="showLoginFormBtn"
-          class="flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-bold rounded-xl transition-all duration-300 uppercase tracking-widest shadow-md hover:shadow-lg hover:-translate-y-0.5 group">
+          class="flex items-center justify-center gap-2 py-3 px-6 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition-all duration-300 uppercase tracking-widest shadow hover:shadow-md mx-auto group">
           <i class="ph-bold ph-sign-in text-xl group-hover:translate-x-1 transition-transform"></i>
-          <span>Login</span>
+          <span>Login for Access</span>
         </button>
       </div>
 
     </div>
-    </div>
 
-    <!-- Login Modal (Hidden by default) -->
-    <div id="loginModal"
-      class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm transition-all duration-300">
-      <div
-        class="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-8 transform transition-all scale-95 opacity-0"
-        id="loginModalContent">
-        <!-- Close Button -->
-        <button id="closeModalBtn"
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-full p-1.5 transition-colors">
-          <i class="ph-bold ph-x text-lg w-5 h-5 flex items-center justify-center"></i>
-        </button>
-
-        <h4 class="text-center text-gnfc-navy dark:text-teal-400 font-bold mb-6 text-xl tracking-wide font-outfit">Enter
-          Plant code and Password</h4>
-
-        <form class="flex flex-col gap-5">
-          <div class="flex items-center gap-4">
-            <label class="w-28 text-right font-bold text-slate-700 dark:text-slate-300">Plant Code:</label>
-            <input type="text"
-              class="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-slate-700 dark:text-white transition-colors" />
-          </div>
-
-          <div class="flex items-center gap-4">
-            <label class="w-28 text-right font-bold text-slate-700 dark:text-slate-300">Password:</label>
-            <input type="password"
-              class="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-slate-700 dark:text-white transition-colors" />
-          </div>
-
-          <div>
-            <select
-              class="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-slate-700 dark:text-white text-sm font-semibold max-w-[200px] cursor-pointer">
-              <option>JOB REGISTER</option>
-              <option>BYPASS REQUEST</option>
-              <option>ALARM TRIP SETTING</option>
-            </select>
-          </div>
-
-          <div
-            class="flex flex-wrap items-center justify-center gap-3 mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
-            <button type="button" id="loginGoBtn"
-              class="px-6 py-2 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white text-sm font-bold shadow-md rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all w-20">Go</button>
-            <button type="button" id="cancelLoginBtn"
-              class="px-6 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white text-sm font-bold shadow-sm rounded-lg hover:shadow transition-all w-20">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-
-    <!-- Enhanced Footer -->
     <div class="mt-12 text-center">
       <h3
-        class="text-3xl md:text-xl font-outfit font-black tracking-wide text-gnfc-navy dark:text-white drop-shadow-sm mb-1.5">
+        class="text-3xl md:text-xl font-outfit font-bold tracking-wide text-slate-800 dark:text-white drop-shadow-sm mb-1.5">
         Gujarat Narmada Valley Fertilizers Co. Ltd.
       </h3>
       <div class="flex items-center justify-center gap-2">
         <span class="w-8 h-px bg-slate-300 dark:bg-slate-600"></span>
-        <p class="font-14px font-bold text-teal-600 dark:text-teal-400 uppercase tracking-[0.2em]">&copy; Instrument
+        <p class="font-14px font-bold text-slate-500 dark:text-teal-400 uppercase tracking-[0.2em]">&copy; Instrument
           Department</p>
         <span class="w-8 h-px bg-slate-300 dark:bg-slate-600"></span>
       </div>
     </div>
 
   </main>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="gnfc-modal-overlay">
+    <div id="loginModalContent" class="gnfc-modal-shell gnfc-modal-shell--narrow transform scale-95 opacity-0 transition-all duration-300">
+      
+      <div class="gnfc-modal-header">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center shadow-md">
+                <i class="ph-bold ph-shield-check text-white text-sm"></i>
+            </div>
+            <div>
+                <h4 class="gnfc-modal-title">Security Gateway</h4>
+                <p class="gnfc-modal-subtitle">Authorized Administration Access Only</p>
+            </div>
+        </div>
+        <button id="closeModalBtn" class="gnfc-modal-close" title="Close">
+          <i class="ph-bold ph-x text-lg w-5 h-5 flex items-center justify-center"></i>
+        </button>
+      </div>
+
+      <div class="gnfc-modal-body">
+        <form class="flex flex-col gap-3">
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Plant Identity Code</label>
+            <input type="text"
+              placeholder="ENTER CODE"
+              class="gnfc-modal-input h-11 border-slate-300 dark:border-slate-600 font-bold tracking-widest" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Administrative Password</label>
+            <input type="password"
+              placeholder="••••••••"
+              class="gnfc-modal-input h-11 border-slate-300 dark:border-slate-600 font-bold" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="gnfc-modal-label">Terminal Operation Mode</label>
+            <div class="relative">
+                <select id="terminalModeSelect"
+                  class="gnfc-modal-input h-11 border-slate-300 dark:border-slate-600 font-bold cursor-pointer appearance-none pr-10">
+                  <option value="JOB REGISTER">JOB REGISTER</option>
+                  <option value="BYPASS REQUEST">BYPASS REQUEST</option>
+                  <option value="ALARM TRIP SETTING">ALARM TRIP SETTING</option>
+                </select>
+                <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="gnfc-modal-footer">
+        <button type="button" id="cancelLoginBtn" class="gnfc-modal-btn gnfc-modal-btn-secondary px-6">Return</button>
+        <button type="button" id="loginGoBtn" class="gnfc-modal-btn gnfc-modal-btn-primary px-8 bg-slate-800 hover:bg-slate-700 border-none">Initialize Access</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -322,37 +276,30 @@
       const mainContentArea = document.querySelector('main');
       const heroSectionArea = document.querySelector('.modern-gradient');
       const bypassParameterDataView = document.getElementById('bypassParameterDataView');
-      const areaSelectGoBtn = bypassParameterSection.querySelector('button.ml-1');
+      const areaSelectGoBtn = bypassParameterSection?.querySelector('button.ml-1');
       const logoutBtn = document.getElementById('logoutBtn');
 
-      // Helper function to show modal
       const openModal = () => {
-        loginModal.classList.remove('hidden');
-        // Reset to initial login view if it was changed
+        loginModal.classList.add('is-open');
         resetToLoginView();
-        // Small delay to allow display block to apply before animating opacity/transform
         setTimeout(() => {
           loginModalContent.classList.remove('scale-95', 'opacity-0');
           loginModalContent.classList.add('scale-100', 'opacity-100');
         }, 10);
       };
 
-      // Helper function to hide modal
       const closeModal = () => {
         loginModalContent.classList.remove('scale-100', 'opacity-100');
         loginModalContent.classList.add('scale-95', 'opacity-0');
-        // Wait for animation to finish before hiding element
         setTimeout(() => {
-          loginModal.classList.add('hidden');
+          loginModal.classList.remove('is-open');
         }, 300);
       };
 
-      // Helper to return modal to initial state
       const resetToLoginView = () => {
         loginFormContainer.classList.remove('hidden');
         modalHeaderTitle.classList.remove('hidden');
-        bypassParameterSection.classList.add('hidden');
-        // update padding
+        bypassParameterSection?.classList.add('hidden');
         loginModalContent.classList.replace('p-6', 'p-8');
       };
 
@@ -367,22 +314,21 @@
           closeModalBtn.addEventListener('click', closeModal);
         }
 
-        // Handle "Go" click on login form
-        if (loginGoBtn && bypassParameterSection) {
+        if (loginGoBtn) {
           loginGoBtn.addEventListener('click', () => {
-            // Hide login form & header
-            loginFormContainer.classList.add('hidden');
-            modalHeaderTitle.classList.add('hidden');
+            const terminalModeSelect = document.getElementById('terminalModeSelect');
+            const selectedMode = terminalModeSelect ? terminalModeSelect.value : '';
 
-            // Adjust modal padding for the new view layout to match image aesthetic better
-            loginModalContent.classList.replace('p-8', 'p-6');
-
-            // Show BYPASS PARAMETER section
-            bypassParameterSection.classList.remove('hidden');
+            if (selectedMode === 'JOB REGISTER') {
+              window.location.href = '/src/pages/job_register.html';
+            } else if (selectedMode === 'BYPASS REQUEST') {
+              window.location.href = '/src/pages/bypass_parameter.html';
+            } else {
+              alert("Routing for " + selectedMode + " is not yet implemented.");
+            }
           });
         }
 
-        // Handle "Go" click after selecting area
         if (areaSelectGoBtn) {
           areaSelectGoBtn.addEventListener('click', () => {
             window.location.href = '/src/pages/bypass_parameter.html';
@@ -393,7 +339,6 @@
           backToLoginBtn.addEventListener('click', resetToLoginView);
         }
 
-        // Close when clicking outside
         loginModal.addEventListener('click', (e) => {
           if (e.target === loginModal) {
             closeModal();

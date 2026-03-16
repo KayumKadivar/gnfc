@@ -284,6 +284,12 @@ html[data-theme-mode="light"] {
   border-color: #1d4ed8;
 }
 
+.gnfc-modal-btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
 /* Danger (Delete) */
 .gnfc-modal-btn-danger {
   background: transparent;
@@ -313,7 +319,7 @@ html[data-theme-mode="light"] {
 /* ── Form helpers (labels, inputs inside modal body) ─────── */
 .gnfc-modal-label {
   display: block;
-  font-size: 0.625rem;
+  font-size: 16px;
   font-weight: 700;
   color: var(--gnfc-modal-subtitle-color);
   text-transform: uppercase;

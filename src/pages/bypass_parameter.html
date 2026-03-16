@@ -30,11 +30,6 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .page-bg {
-      background: #f8fafc;
-      background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
 
     .dark .page-bg {
       background: #0f172a;
@@ -44,12 +39,12 @@
 </head>
 
 <body
-  class="page-bg font-sans text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-gnfc-teal selection:text-white transition-colors duration-300">
+  class="text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-gnfc-teal selection:text-white transition-colors duration-300">
   <script src="/src/js/theme_manager.js"></script>
 
   <!-- Top Navigation -->
   <nav class="glass-card sticky top-0 z-50 shadow-sm transition-colors duration-300">
-    <div class=" mx-auto h-20 flex items-center justify-between px-4 xl:px-0">
+    <div class="px-4 mx-auto h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 rounded-lg bg-gnfc-navy flex items-center justify-center shadow-md">
           <i class="ph-bold ph-sliders text-white text-xl"></i>
@@ -83,47 +78,49 @@
   </nav>
 
   <!-- Main Content Area -->
-  <main class="flex-1 w-full  mx-auto mt-6 relative z-20 pb-10 px-4 xl:px-0">
-    <div class="glass-card rounded-2xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
-
+  <main class="flex-1 w-full m-4 relative z-20 px-4 mx-auto">
       <!-- Actions Bar -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
         <div
           class="flex flex-wrap items-center gap-3 border-b border-slate-200/50 dark:border-slate-700/50 pb-2 sm:border-0 sm:pb-0">
+
           <button id="generateRequestBtn"
-            class="gnfc-modal-btn gnfc-modal-btn-primary rounded-lg px-4 py-2 hover:shadow-lg transition-all flex items-center gap-2">
+            class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold border border-slate-300 dark:border-slate-600 shadow-sm rounded-md px-4 py-2 hover:bg-blue-600 dark:hover:bg-blue-900/30 hover:text-white dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all duration-200 flex items-center gap-2">
             <i class="ph-bold ph-plus-circle text-lg"></i>
             <span>Generate Request</span>
           </button>
+
           <button id="bypassedParametersBtn"
-            class="gnfc-modal-btn gnfc-modal-btn-secondary rounded-lg px-4 py-2 flex items-center gap-2">
+            class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold border border-slate-300 dark:border-slate-600 shadow-sm rounded-md px-4 py-2 hover:bg-blue-600 dark:hover:bg-blue-900/30 hover:text-white dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all duration-200 flex items-center gap-2">
             <i class="ph-bold ph-list-dashes text-lg"></i>
             <span>Bypassed parameters</span>
           </button>
+
           <button id="historyBtn"
-            class="gnfc-modal-btn gnfc-modal-btn-secondary rounded-lg px-4 py-2 flex items-center gap-2">
+            class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold border border-slate-300 dark:border-slate-600 shadow-sm rounded-md px-4 py-2 hover:bg-blue-600 dark:hover:bg-blue-900/30 hover:text-white dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all duration-200 flex items-center gap-2">
             <i class="ph-bold ph-clock-counter-clockwise text-lg"></i>
             <span>History</span>
           </button>
-          <button class="gnfc-modal-btn gnfc-modal-btn-secondary rounded-lg px-4 py-2 flex items-center gap-2">
+
+          <button
+            class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold border border-slate-300 dark:border-slate-600 shadow-sm rounded-md px-4 py-2 hover:bg-blue-600 dark:hover:bg-blue-900/30 hover:text-white dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all duration-200 flex items-center gap-2">
             <i class="ph-bold ph-calendar text-lg"></i>
             <span>Shift</span>
           </button>
+
         </div>
 
-        <!-- Year Bar & Logout -->
         <div
-          class="flex items-center gap-4 bg-white/50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-          <div class="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
+          class="flex items-center gap-4 bg-white/50 dark:bg-slate-800/50 p-2 rounded-md border border-slate-200 dark:border-slate-700 shadow-sm">
           <a href="/src/pages/operation_job_register.html"
-            class="flex items-center gap-1.5 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-bold text-sm tracking-tight transition-colors">
+            class="flex items-center gap-1.5 px-2 py-1 rounded-md text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/30 font-bold text-sm tracking-tight transition-all duration-200">
             <i class="ph-bold ph-sign-out"></i> Logout
           </a>
         </div>
       </div>
 
       <!-- Data Table -->
-      <div class="gnfc-table-container rounded-lg border border-slate-200 dark:border-slate-700">
+      <div class="gnfc-table-container rounded-md border dark:border-slate-700">
         <div class="overflow-x-auto">
           <table class="gnfc-table">
             <thead class="gnfc-thead">
@@ -320,146 +317,123 @@
           </table>
         </div>
       </div>
-    </div>
   </main>
 
   <!-- Generate Request Modal -->
-  <div id="generateRequestModal" class="gnfc-modal-overlay transition-opacity duration-300">
-    <div id="generateRequestForm"
-      class="gnfc-modal-shell gnfc-modal-shell--medium transition-all duration-300 transform scale-95 opacity-0">
+<div id="generateRequestModal" class="gnfc-modal-overlay transition-opacity duration-300">
+  <div id="generateRequestForm"
+    class="gnfc-modal-shell gnfc-modal-shell--medium transition-all duration-300 transform scale-95 opacity-0">
 
-      <!-- Modal Header -->
-      <div class="gnfc-modal-header">
-        <div>
-          <h3 class="gnfc-modal-title">BYPASS PARAMETER REQUEST</h3>
-          <p class="gnfc-modal-subtitle">Generate a new bypass request</p>
-        </div>
-
-        <!-- Close button -->
-        <button id="closeGenerateModalBtn" class="gnfc-modal-close" title="Close">
-          <i class="ph-bold ph-x text-lg"></i>
-        </button>
+    <div class="gnfc-modal-header">
+      <div>
+        <h3 class="gnfc-modal-title">BYPASS PARAMETER REQUEST</h3>
+        <p class="gnfc-modal-subtitle">Generate a new bypass request</p>
       </div>
 
-      <!-- Modal Body -->
-      <div class="gnfc-modal-body">
+      <button id="closeGenerateModalBtn" class="gnfc-modal-close" title="Close">
+        <i class="ph-bold ph-x text-lg"></i>
+      </button>
+    </div>
 
-        <!-- Area Selection (Read-only for now) -->
-        <div class="flex items-center mb-6 gap-4">
-          <label class="typo-form-label w-32 shrink-0">SELECTED AREA:</label>
-          <div class="relative w-40">
-            <select disabled class="gnfc-modal-input cursor-not-allowed opacity-70 pr-8">
-              <option>ANP-R</option>
-            </select>
-            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-              <i class="ph-bold ph-caret-down text-xs"></i>
-            </div>
-          </div>
-        </div>
+    <div class="gnfc-modal-body flex flex-col gap-5">
 
-        <div class="mb-5 border-b border-slate-200/60 dark:border-slate-700/60"></div>
-
-        <!-- Filter -->
-        <div class="flex items-center mb-5 gap-4">
-          <label class="typo-form-label w-32 shrink-0">Filter</label>
-          <div class="relative flex-1 max-w-sm">
-            <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="text" class="gnfc-modal-input pl-10" placeholder="Search parameters...">
-          </div>
-        </div>
-
-        <!-- Parameter List -->
-        <div class="mb-6">
-          <div class="border-b border-slate-200/60 dark:border-slate-700/60 mb-4"></div>
-          <div class="gnfc-modal-label px-0 mb-2">Select Parameter:</div>
-          <select size="8"
-            class="gnfc-modal-input font-mono !p-0 overflow-y-auto border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-gnfc-navy/10 outline-none rounded-md">
-            <option
-              class="px-3 py-2 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
-              LSH35001[35D003 LEVEL V.HIGH]</option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSH35016[35C001 LEVEL HIGH]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSH36601[36C060 LEVEL V.HIGH]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL35003[35P009 PIT LEVEL LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL35005[35R005 LEVEL V.LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL35014[35D005 LEVEL LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL36602[36T060 LEVEL LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL36701[36T070 LEVEL LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL36702[36T071 LEVEL LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LSL38217[36T002 LEVEL V.LOW]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">LV35001 [LEVEL CONTROL OF 35D003]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">MOTOR FAULT 36S001[MOTOR FAULT
-              36S001]</option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PSOV38207[LP STEAM PRESS TO
-              35D005.]</option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PSOV38211[MP STEAM PRESS - 35D011]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PSOV38242[STEAM TO 42D002]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">PT36002[DRYER (36S002) INLET
-              PRESS.]</option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">SSL36001[36H003 ZERO SPEED]
-            </option>
-            <option class="px-3 py-2 border-b border-slate-100 dark:border-slate-800">SSL36004[36W004 ZERO SPEED]
-            </option>
-            <option class="px-3 py-2">SSL36013[36H004 ZERO SPEED]</option>
+      <div class="flex items-center gap-4">
+        <label class="typo-form-label w-36 shrink-0  font-bold text-slate-600 dark:text-slate-400">SELECTED AREA:</label>
+        <div class="relative w-full sm:w-48">
+          <select disabled class="gnfc-modal-input w-full bg-slate-100 dark:bg-slate-800/50 cursor-not-allowed opacity-70 pr-8 font-semibold text-slate-500 shadow-sm border-slate-200 dark:border-slate-700">
+            <option>ANP-R</option>
           </select>
-        </div>
-
-        <!-- Action selection -->
-        <div class="flex items-center mb-5 gap-4">
-          <label class="typo-form-label w-32 shrink-0">Action:</label>
-          <div class="relative w-48">
-            <select
-              class="gnfc-modal-input pr-10 font-bold text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20">
-              <option>BYPASS</option>
-              <option>FORCED OPEN</option>
-              <option>FORCED CLOSE</option>
-            </select>
-            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
-              <i class="ph-bold ph-caret-down"></i>
-            </div>
+          <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+            <i class="ph-bold ph-lock-key text-sm"></i>
           </div>
         </div>
+      </div>
 
-        <!-- Purpose -->
-        <div class="flex items-center mb-5 gap-4">
-          <label class="typo-form-label w-32 shrink-0">Purpose:</label>
-          <input type="text" class="gnfc-modal-input flex-1 max-w-sm" placeholder="Enter reason for bypass...">
+      <div class="border-b border-slate-200/60 dark:border-slate-700/60 -mx-2"></div>
+
+      <div class="flex items-center gap-4">
+        <label class="typo-form-label w-36 shrink-0  font-bold text-slate-700 dark:text-slate-300">Filter:</label>
+        <div class="relative w-full">
+          <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" class="gnfc-modal-input w-full pl-10  focus:ring-2 focus:ring-teal-500/20 shadow-sm transition-all outline-none" placeholder="Search parameters...">
         </div>
+      </div>
 
-        <!-- Name -->
-        <div class="flex items-center mb-2 gap-4">
-          <label class="typo-form-label w-32 shrink-0">Your name:</label>
+      <div class="flex items-start gap-4">
+        <label class="typo-form-label w-36 shrink-0  font-bold text-slate-700 dark:text-slate-300 mt-3">Select Parameter:</label>
+        <div class="relative w-full">
+          <select
+            class="gnfc-modal-input w-full font-mono h-11 border-slate-300 dark:border-slate-600  focus:ring-2 focus:ring-teal-500/20 outline-none rounded-md appearance-none pr-10 shadow-sm transition-all cursor-pointer">
+            <option disabled selected>-- Choose a parameter --</option>
+            <option>LSH35001 [35D003 LEVEL V.HIGH]</option>
+            <option>LSH35016 [35C001 LEVEL HIGH]</option>
+            <option>LSH36601 [36C060 LEVEL V.HIGH]</option>
+            <option>LSL35003 [35P009 PIT LEVEL LOW]</option>
+            <option>LSL35005 [35R005 LEVEL V.LOW]</option>
+            <option>LSL35014 [35D005 LEVEL LOW]</option>
+            <option>LSL36602 [36T060 LEVEL LOW]</option>
+            <option>LSL36701 [36T070 LEVEL LOW]</option>
+            <option>LSL36702 [36T071 LEVEL LOW]</option>
+            <option>LSL38217 [36T002 LEVEL V.LOW]</option>
+            <option>LV35001 [LEVEL CONTROL OF 35D003]</option>
+            <option>MOTOR FAULT 36S001 [MOTOR FAULT 36S001]</option>
+            <option>PSOV38207 [LP STEAM PRESS TO 35D005]</option>
+            <option>PSOV38211 [MP STEAM PRESS - 35D011]</option>
+            <option>PSOV38242 [STEAM TO 42D002]</option>
+            <option>PT36002 [DRYER (36S002) INLET PRESS]</option>
+            <option>SSL36001 [36H003 ZERO SPEED]</option>
+            <option>SSL36004 [36W004 ZERO SPEED]</option>
+            <option>SSL36013 [36H004 ZERO SPEED]</option>
+          </select>
+          <i class="ph-bold ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <label class="typo-form-label w-36 shrink-0  font-bold text-slate-700 dark:text-slate-300">Action:</label>
+        <div class="relative w-full sm:w-56">
+          <select
+            class="gnfc-modal-input w-full appearance-none pr-10 font-bold text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20 focus:ring-2 focus:ring-blue-500/20 outline-none shadow-sm transition-all cursor-pointer">
+            <option>BYPASS</option>
+            <option>FORCED OPEN</option>
+            <option>FORCED CLOSE</option>
+          </select>
+          <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-blue-500">
+            <i class="ph-bold ph-caret-down"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <label class="typo-form-label w-36 shrink-0  font-bold text-slate-700 dark:text-slate-300">Purpose:</label>
+        <div class="w-full relative">
+          <input type="text" class="gnfc-modal-input w-full  focus:ring-2 focus:ring-teal-500/20 outline-none shadow-sm transition-all" placeholder="Enter reason for bypass...">
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 mb-2">
+        <label class="typo-form-label w-36 shrink-0  font-bold text-slate-700 dark:text-slate-300">Your Name:</label>
+        <div class="flex items-center gap-3">
           <input type="text" maxlength="3"
-            class="gnfc-modal-input w-24 uppercase font-mono text-center tracking-widest border-slate-300"
+            class="gnfc-modal-input w-24 uppercase font-mono text-center tracking-widest border-slate-300 dark:border-slate-600  focus:ring-2 focus:ring-teal-500/20 outline-none shadow-sm transition-all"
             placeholder="XYZ">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">(3 Chars)</span>
+          <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-700 shadow-sm">(3 Chars)</span>
         </div>
-
       </div>
 
-      <!-- Modal Footer -->
-      <div class="gnfc-modal-footer">
-        <button class="gnfc-modal-btn gnfc-modal-btn-secondary" id="cancelRequestBtn">
-          Cancel
-        </button>
-        <button class="gnfc-modal-btn gnfc-modal-btn-primary">
-          <i class="ph-bold ph-paper-plane-right"></i>
-          Request bypass
-        </button>
-      </div>
+    </div>
+
+    <div class="gnfc-modal-footer">
+      <button class="gnfc-modal-btn gnfc-modal-btn-secondary" id="cancelRequestBtn">
+        Cancel
+      </button>
+      <button class="gnfc-modal-btn gnfc-modal-btn-primary">
+        <i class="ph-bold ph-paper-plane-right"></i>
+        Request bypass
+      </button>
     </div>
   </div>
+</div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
