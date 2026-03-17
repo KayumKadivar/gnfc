@@ -1,7 +1,4 @@
-/**
- * Admin Sidebar — Dark-themed navigation
- * Matches the main portal sidebar style with Phosphor icons.
- */
+
 function initAdminSidebar() {
   'use strict';
 

@@ -14,7 +14,7 @@
   --gnfc-modal-footer-bg: var(--app-panel-alt, #22252b);
 
   --gnfc-modal-title-color: #5794f2;
-  --gnfc-modal-subtitle-color: var(--app-muted, #8e8e9e);
+  --gnfc-modal-subtitle-color: var(--app-muted, #ffffff);
   --gnfc-modal-close-color: var(--app-muted, #8e8e9e);
   --gnfc-modal-close-hover-bg: rgba(255, 255, 255, 0.08);
   --gnfc-modal-close-hover-color: var(--app-text, #ffffff);
@@ -162,10 +162,11 @@ html[data-theme-mode="light"] {
 .gnfc-modal-subtitle {
   margin: 0;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--gnfc-modal-subtitle-color);
   font-family: monospace;
   margin-top: 0.125rem;
+  letter-spacing: 0.08em;
 }
 
 .gnfc-modal-close {

@@ -1,7 +1,4 @@
-/**
- * Admin Dashboard — Home/Overview View
- * Shows KPI cards, quick-action navigation, and system overview.
- */
+
 (() => {
     'use strict';
 

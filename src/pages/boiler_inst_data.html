@@ -52,7 +52,7 @@
               class="ph-bold ph-clock-counter-clockwise"></i> Job History</button>
           <button class="inline-flex items-center gap-1.5 h-9 px-3.5 bg-white/5 border border-white/10 rounded-md text-[0.8125rem] font-bold text-dark-text transition-all duration-200 cursor-pointer whitespace-nowrap hover:bg-white/10 hover:border-blue-400/50 hover:text-blue-400 hover:-translate-y-px hover:shadow-[0_2px_8px_-2px_rgba(87,148,242,0.2)]"
             onclick="window.location.href='/src/pages/boiler_job_detail.html?tag=' + encodeURIComponent(document.getElementById('f-tag_no')?.value || 'L_110VDCBF')"><i
-              class="ph-bold ph-list-dashes"></i> JOB Detail</button>
+              class="ph-bold ph-list-dashes"></i> Junction Box Detail</button>
           <span class="w-px h-7 bg-dark-border mx-1"></span>
           <button class="inline-flex items-center gap-1.5 h-9 px-6 bg-gradient-to-br from-emerald-600 to-emerald-500 border-none rounded-md text-[0.8125rem] font-bold text-white shadow-[0_2px_8px_-2px_rgba(16,185,129,0.4)] transition-all duration-200 cursor-pointer whitespace-nowrap hover:from-emerald-500 hover:to-emerald-400 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_-2px_rgba(16,185,129,0.5)]" onclick="window.location.href='/src/pages/boiler_inst_add.html'"><i
               class="ph-bold ph-plus"></i>
@@ -230,7 +230,7 @@
                 class="ph-bold ph-clock-counter-clockwise"></i> Job History</button>
             <button class="inline-flex items-center gap-1.5 h-9 px-3.5 bg-white/5 border border-white/10 rounded-md text-[0.8125rem] font-bold text-dark-text transition-all duration-200 cursor-pointer whitespace-nowrap hover:bg-white/10 hover:border-blue-400/50 hover:text-blue-400 hover:-translate-y-px hover:shadow-[0_2px_8px_-2px_rgba(87,148,242,0.2)]"
               onclick="window.location.href='/src/pages/boiler_job_detail.html?tag=' + encodeURIComponent(document.getElementById('f-tag_no')?.value || 'L_110VDCBF')"><i
-                class="ph-bold ph-list-dashes"></i> JOB Detail</button>
+                class="ph-bold ph-list-dashes"></i> Junction Box Detail</button>
             <span class="w-px h-7 bg-dark-border mx-1"></span>
             <button class="inline-flex items-center gap-1.5 h-9 px-6 bg-gradient-to-br from-emerald-600 to-emerald-500 border-none rounded-md text-[0.8125rem] font-bold text-white shadow-[0_2px_8px_-2px_rgba(16,185,129,0.4)] transition-all duration-200 cursor-pointer whitespace-nowrap hover:from-emerald-500 hover:to-emerald-400 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_-2px_rgba(16,185,129,0.5)]" onclick="window.location.href='/src/pages/boiler_inst_add.html'"><i
                 class="ph-bold ph-plus"></i> Add</button>
@@ -917,9 +917,6 @@
       };
     })();
 
-    // ==========================================
-    //    JOB DETAIL MODAL (opens on SR click)
-    // ==========================================
     const DETAIL_MODAL_ID = 'modal-job-detail';
     const ATTACH_MODAL_ID = 'modal-history-attach';
     let currentAttachSlot = null;
