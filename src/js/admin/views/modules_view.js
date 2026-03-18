@@ -1,6 +1,3 @@
-/**
- * Modules View — Module Master management
- */
 const ModulesView = (() => {
   'use strict';
 

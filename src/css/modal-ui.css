@@ -1,7 +1,4 @@
-/* ============================================================
-   Shared modal UI classes for consistent GNFC popups
-   Include via: <link rel="stylesheet" href="/src/css/modal-ui.css">
-   ============================================================ */
+
 
 /* Theme-aware tokens driven by ThemeManager (--app-*) */
 :root {
