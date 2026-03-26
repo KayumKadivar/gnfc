@@ -32,18 +32,7 @@ function renderHeader(config) {
       </div>
 
       <!-- Right: Actions -->
-      <div class="flex items-center gap-4">
-        
-        <!-- Search -->
-        <div class="relative hidden md:block group">
-          <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 color-hint group-focus-within-color-blue transition-colors"></i>
-          <input type="text" placeholder="${searchPlaceholder}"
-            class="bg-gray-50 dark:bg-[#0b0c0e] border border-gray-200 dark:border-[#2c3235] color-primary font-14px rounded-md pl-9 pr-10 h-9 w-64 focus:border-blue-500 dark:focus:border-gnfc-blue focus:ring-1 focus:ring-blue-500/20 dark:focus:ring-gnfc-blue/20 focus:outline-none transition-all placeholder-dark-muted">
-          <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
-             <kbd class="hidden font-sans font-13px fw-bold color-hint bg-gray-100 dark:bg-[#1a1d21] border border-gray-200 dark:border-[#2c3235] px-1.5 py-0.5 rounded">AUTO</kbd>
-          </div>
-        </div>
-        
+      <div class="flex items-center gap-4">   
         <div class="flex items-center gap-2">
 
         <!-- Utility Group -->
