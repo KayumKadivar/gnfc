@@ -131,7 +131,6 @@ class SidebarManager {
           <nav class="flex-1 overflow-y-auto overflow-x-hidden">
             <!-- Dashboard  -->
             ${this.createLink("dashboard", "/src/pages/dashboard.html", "ph-squares-four", "Dashboard")}
-            ${this.createLink("admin", "/src/pages/admin_login.html", "ph-squares-four", "Admin")}
             
             <!-- Plants -->
             ${this.createLink("spp", "#", "ph-plant", "SPP")}
@@ -160,6 +159,8 @@ class SidebarManager {
             ${this.createLink("user_info", "/src/pages/user_info.html", "ph-user", "USER INFO")}
             ${this.createLink("settings", "/src/pages/settings.html", "ph-gear", "Settings")}
             ${this.createLink("help", "#", "ph-question", "Help")}
+            ${this.createLink("admin", "/src/pages/admin_login.html", "ph-squares-four", "Admin")}
+
           </nav>
   
           <div class="${this.isCollapsed ? "p-2" : "px-4 py-2"} border-t border-[#2c3235] bg-[#0b0c0e]">
